@@ -1,0 +1,280 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.game {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  height: 98%;
+  width: 98%;
+  /*border: 1px solid black;*/
+
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-around;
+}
+
+.sections {
+  position: relative;
+  height: 98%;
+  border: 3px solid black;
+}
+
+.miner {
+  background: url('./assets/miner.gif');
+  height: 64px;
+  width: 64px;
+  background-repeat: no-repeat;
+  position: fixed;
+  transform: translateY(-50%);
+
+}
+
+.tabs .tab {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.tabs {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  margin-bottom: 20px;
+}
+
+.tab {
+  padding: 20px 0px;
+  width: 25%;
+  text-align: center;
+  border-bottom: 1px solid black;
+  border-right: 1px solid black;
+  cursor: pointer;
+}
+
+.tabs .selected {
+  background: white;
+  border-bottom: none;
+}
+
+.tab:last-child {
+  border-right: none;
+}
+
+
+.tab:hover {
+  text-decoration: underline;
+}
+
+#left {
+  width: 66%;
+  background: darkgrey;
+}
+
+.ore-section {
+  position: relative;
+  background: rgba(0, 0, 0, 0.7);
+  top: 15%;
+}
+
+.ore-section {
+  color: white;
+  text-align: center;
+  padding: 15px 0px;
+  font-size: 30px;
+}
+
+#right {
+  width: 30%;
+  overflow: scroll;
+}
+
+.ore {
+  position: absolute;
+  left: 50%;
+  top: 55%;
+  transform: translateX(-50%);
+  user-drag: none;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-drag: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  height: 300px;
+  background-repeat: no-repeat;
+  image-rendering: pixelated;
+  cursor: pointer;
+}
+
+.ore:hover {
+  height: 310px;
+}
+
+.ore:active {
+  height: 300px;
+}
+
+.ore-click-area {
+  position: fixed;
+  height: 25px;
+  width: 25px;
+  border-radius: 50%;
+  border: 2px solid red;
+  background: rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+}
+
+.upgrades {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+}
+
+.button {
+  text-align: center;
+  width: 96%;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 1px solid black;
+  margin-bottom: 3%;
+  height: 130px;
+  box-shadow: 0px 2px black;
+}
+
+.button:hover {
+  background: rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+}
+
+.rising-number {
+  z-index: 1;
+  font-size: 30px;
+  animation-name: moveUp;
+  animation-iteration-count: 1;
+  animation-timing-function: ease-out;
+  animation-duration: 3s;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.achievement {
+  border: 1px solid black;
+  background: white;
+  padding: 20px;
+  position: fixed;
+  z-index: 999;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 5%;
+}
+
+.tabs .locked {
+  cursor: not-allowed;
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.furnace {
+  height: 300px;
+  width: 90%;
+  background: grey;
+  border: 5px double black;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+}
+
+.furnace-top {
+  position: relative;
+  background: #4d555e;
+  height: 60%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+}
+
+.furnace-amount {
+  position: relative;
+  height: 50%;
+  width: 60%;
+  font-size: 40px;
+  text-align: center;
+  top: 50%;
+  transform: translateY(-50%);
+  margin-right: 5%;
+  outline: none;
+  background-color: #4d555e;
+  border: 1px solid white;
+  color: white;
+}
+
+.furnace-button {
+  position: relative;
+  height: 50%;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 15px;
+  padding: 0px 25px;
+  background: #4d555e;
+  color: white;
+  border: 1px solid white;
+  outline: none;
+  cursor: pointer;
+}
+
+.furnace-bottom {
+  position: relative;
+  background: #383e45;
+  height: 40%;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: center;
+}
+
+.furnace-progress-bar {
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #383e45;
+  border: 1px solid white;
+  height: 40px;
+  line-height: 40px;
+  width: 90%;
+  text-align: center;
+  margin-bottom: 5%;
+  color: white;
+}
+
+.furnace-progress {
+  position: relative;
+  height: 100%;
+  left: 0%;
+  background: darkred;
+}
+
+.furnace-estimated-time {
+  text-align: center;
+  color: white;
+}
+
+@keyframes moveUp {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-200px);
+    opacity: 0;
+  }
+}
