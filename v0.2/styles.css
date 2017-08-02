@@ -45,12 +45,13 @@ body {
   flex-flow: column nowrap;
   justify-content: space-between;
   align-items: center;
+  background: #777;
 }
 
 #inventory {
   height: 60px;
   width: 100%;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(0, 0, 0, 0.3);
   display: flex;
   flex-flow: row;
   align-items: center;
@@ -160,5 +161,33 @@ body {
 #zone {
   visibility: hidden;
 }
+
+.rising-number {
+  z-index: 1;
+  font-size: 30px;
+  animation-name: moveUp;
+  animation-iteration-count: 1;
+  animation-timing-function: ease-out;
+  animation-duration: 3s;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  color: rgba(255, 255, 255, 0.9);
+  position: fixed;
+  font-family: 'Raleway';
+}
+
+@keyframes moveUp {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-200px);
+    opacity: 0;
+  }
+}
+
 
 

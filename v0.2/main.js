@@ -18,6 +18,7 @@ Game.Launch = () => {
 
   Game.earn = (amt, type) => {
     Game[type] += amt
+    Game.risingNumber(amt)
   }
 
   Game.spend = (amt, type) => {
@@ -63,6 +64,28 @@ Game.Launch = () => {
     // no idea for now
   }
 
+  Game.risingNumber = (amt) => {
+    let randomNumber = Math.floor(Math.random() * 100)
+    let X = event.clientX+(randomNumber)-100
+    let Y = event.clientY-100
+
+    let div = document.createElement('div')
+    div.classList.add('rising-number')
+    div.innerHTML = `+${amt}`
+    div.style.position = 'absolute'
+    div.style.left = X + 'px'
+    div.style.top = Y + 'px'
+
+    s('.rising-numbers').append(div)
+
+    let allRisingNumbers = document.querySelectorAll('.rising-number')
+    allRisingNumbers.forEach((number) => {
+      setTimeout(() => {
+        number.remove()
+      }, 2.9 * 1000) //MAKE SURE SECONDS ARE LESS THAN CSS
+    })
+  }
+
   Game.items = []
   Game.item = function(itemName, itemDesc, fillerText, price, priceMaterial) {
     this.name = itemName
@@ -75,7 +98,7 @@ Game.Launch = () => {
     this.changeText = (number) => {
       s(`#store-button${number}`).innerHTML = `
         <div style='height: 100%; width: 100%' onclick='Game.items[${number}].buy()'>
-          <h1 onclick='Game.items[${number}].buy()'>${this.name} <span style='font-size: 15px'>[owned: ${this.owned}]</span> <span style='font-size: 25px; float: right'>${this.price} ${this.priceMaterial}</span></h1>
+          <h1 onclick='Game.items[${number}].buy()'>${this.name} <span style='font-size: 15px;'>[owned: ${this.owned}]</span> <span style='font-size: 25px; float: right'>${this.price} ${this.priceMaterial}</span></h1>
           <hr >
           <p style='font-weight: bold'>${this.desc}</p>
           <p style='font-style: italic'>${this.filler}</p>
@@ -135,12 +158,14 @@ Game.Launch = () => {
         console.log('you are currently in the mines')
         s('#ore').style.display = 'initial'
         s('#wood').style.display = 'none'
+        s('#left').style.background = '#777'
       }
 
       if (value == 'wood') {
         console.log('you are currently in the woods')
         s('#wood').style.display = 'initial'
         s('#ore').style.display = 'none'
+        s('#left').style.background = 'darkgreen'
       }
     }
   }
