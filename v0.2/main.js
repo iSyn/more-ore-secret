@@ -19,6 +19,7 @@ Game.Launch = () => {
   Game.earn = (amt, type) => {
     Game[type] += amt
     Game.risingNumber(amt)
+    Game.unlockStuff()
   }
 
   Game.spend = (amt, type) => {
@@ -67,7 +68,7 @@ Game.Launch = () => {
   Game.risingNumber = (amt) => {
     let randomNumber = Math.floor(Math.random() * 100)
     let X = event.clientX+(randomNumber)-100
-    let Y = event.clientY-100
+    let Y = event.clientY-50
 
     let div = document.createElement('div')
     div.classList.add('rising-number')
@@ -87,13 +88,15 @@ Game.Launch = () => {
   }
 
   Game.items = []
-  Game.item = function(itemName, itemDesc, fillerText, price, priceMaterial) {
+  Game.item = function(itemName, itemDesc, fillerText, price, priceMaterial, maximumAmount, hidden) {
     this.name = itemName
     this.desc = itemDesc
     this.filler = fillerText
     this.price = price
     this.priceMaterial = priceMaterial
     this.owned = 0
+    this.maximumAmount = maximumAmount
+    this.hidden = hidden
 
     this.changeText = (number) => {
       s(`#store-button${number}`).innerHTML = `
@@ -105,8 +108,6 @@ Game.Launch = () => {
         </div>
       `
     }
-
-
 
     this.buy = () => {
       console.log('buy firing')
@@ -124,20 +125,24 @@ Game.Launch = () => {
     Game.items.push(this)
   }
 
-  new Game.item('Axe', 'Allows for the chopping of wood','Sharp and sturdy', 20, 'ores' )
-  new Game.item('X-Ray Goggles', 'Detects weak spots within the ore. Mine for extra resources','Why is everything so swirly', 50, 'refined' )
+  // itemName, itemDesc, fillerText, price, priceMaterial, maximumAmount, hidden
+  new Game.item('Axe', 'Allows for the chopping of wood','Sharp and sturdy', 20, 'ores', 1, false)
+  new Game.item('X-Ray Goggles', 'Detects weak spots within the ore. Mine for extra resources','Why is everything so swirly', 50, 'refined', 1, false)
+  new Game.item('Workshop', 'Build things...', 'Wood... and lots of it', 100, 'wood', 1, true)
 
   Game.rebuildStore = () => {
     console.log('rebuilding store')
     let items = ''
     for (i = 0; i < Game.items.length; i++) {
       let item = Game.items[i]
-      items += `
-        <div class='store-button' id='store-button${i}' onclick='Game.items[${i}].buy()' onmouseover='Game.items[${i}].changeText(${i})' onmouseout='Game.rebuildStore()'>
-          <h1 class='item-name'>${item.name}</h1>
-          <p class='item-price'>cost: ${item.price} ${item.priceMaterial}</p>
-        </div>
-      `
+      if (item.owned < item.maximumAmount && item.hidden == false) {
+        items += `
+          <div class='store-button' id='store-button${i}' onclick='Game.items[${i}].buy()' onmouseover='Game.items[${i}].changeText(${i})' onmouseout='Game.rebuildStore()'>
+            <h1 class='item-name'>${item.name}</h1>
+            <p class='item-price'>cost: ${item.price} ${item.priceMaterial}</p>
+          </div>
+        `
+      }
     }
 
     items += `
@@ -168,6 +173,12 @@ Game.Launch = () => {
         s('#left').style.background = 'darkgreen'
       }
     }
+  }
+
+  Game.unlockStuff = () => {
+    console.log('unlock stuff firing')
+    if (Game.wood > 0 && Game.items[2].hidden == true) Game.items[2].hidden = false
+    Game.rebuildStore()
   }
 
   Game.rebuildStore()

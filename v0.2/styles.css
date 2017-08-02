@@ -160,6 +160,7 @@ body {
 
 #zone {
   visibility: hidden;
+  margin-bottom: 15px;
 }
 
 .rising-number {
