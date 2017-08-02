@@ -9,6 +9,7 @@ Game.Launch = () => {
   Game.ores = 40
   Game.refined = 0
   Game.wood = 0
+  Game.gold = 0
 
   Game.oresPerClick = 1
   Game.woodPerClick = 30
@@ -58,6 +59,7 @@ Game.Launch = () => {
     s('#inventory-ore').innerHTML = 'Ore: ' + Game.ores
     s('#inventory-refined').innerHTML = 'Refined: ' + Game.refined
     s('#inventory-wood').innerHTML = 'Wood: ' + Game.wood
+    s('#inventory-gold').innerHTML = 'Gold: ' + Game.gold
   }
 
   Game.rebuildInventory()
@@ -148,8 +150,10 @@ Game.Launch = () => {
   new Game.item(0, 'Axe', 'Allows for the chopping of wood','Sharp and sturdy', 20, 'ores', 1, false)
   new Game.item(0, 'X-Ray Goggles', 'Detects weak spots within the ore. Mine for extra resources','Why is everything so swirly', 50, 'refined', 1, false)
   new Game.item(0, 'Workshop', 'Build things...', 'Wood... and lots of it', 50, 'wood', 1, true)
-  new Game.item(1, 'Blacksmiths Hut', 'Allows for the smelting of raw ore', 'fire burn good', 100, 'wood', 1, false)
-  new Game.item(1, 'Tavern', 'Hire workers to make your life easier', 'slavery for cheap', 100, 'wood', 1, false)
+  new Game.item(1, 'Blacksmiths Hut', 'Gives you access to furnaces', 'fire burn good', 100, 'wood', 1, false)
+  new Game.item(1, 'Tavern', 'Hire workers and trade goods', 'slavery for cheap', 100, 'wood', 1, false)
+  new Game.item(1, 'Shed', 'Increase max storage for wood', 'Got wood?', 50, 'wood', 999, false)
+  new Game.item(1, 'Wheelbarrow', 'Increase max storage for ores', 'Ore my!', 50, 'wood', 999, false)
 
   Game.rebuildStore = () => {
     let items = ''
@@ -216,7 +220,7 @@ Game.Launch = () => {
   Game.unlockStuff = () => {
     if (Game.wood > 0 && Game.items[2].hidden == true) Game.items[2].hidden = false
     if (Game.items[2].owned == 1 && Game.unlockedTabs == 1) Game.unlockedTabs++; Game.rebuildTabs()
-
+    // if (Game.items[3].owned == 1 && Game.unlockTabs ==
 
 
 
