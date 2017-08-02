@@ -39,7 +39,10 @@ Game.Launch = () => {
   Game.rebuildInventory = () => {
     s('#inventory-ore').innerHTML = 'Ores: ' + Game.ores
     s('#inventory-refined').innerHTML = 'Refined: ' + Game.refinedOres
+    s('#inventory-wood').innerHTML = 'Wood: ' + Game.wood
   }
+
+  Game.rebuildInventory()
 
 }
 
