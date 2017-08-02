@@ -62,13 +62,11 @@ Game.Launch = () => {
 
     this.changeText = (number) => {
       s(`#store-button${number}`).innerHTML = `
-        <div>
-          <h1>${this.name}</h1>
+        <div style='height: 100%; width: 100%' onclick='Game.items[${number}].buy()'>
+          <h1>${this.name} <span style='font-size: 15px'>[owned: ${this.owned}]</span> <span style='font-size: 25px; float: right'>${this.price} ${this.priceMaterial}</span></h1>
           <hr>
-          <h3>${this.desc}</h3>
+          <p style='font-weight: bold'>${this.desc}</p>
           <p style='font-style: italic'>${this.filler}</p>
-          <p>cost: ${this.price} ${this.priceMaterial}</p>
-          <p>owned: ${this.owned}</p>
         </div>
       `
     }
@@ -76,6 +74,7 @@ Game.Launch = () => {
 
 
     this.buy = () => {
+      console.log('buy firing')
       if (Game[this.priceMaterial] >= this.price) {
         console.log('price increase:', Math.floor(Math.pow(Game.priceIncrease, this.owned)))
         Game.spend(this.price, this.priceMaterial)
