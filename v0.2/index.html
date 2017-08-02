@@ -15,14 +15,26 @@
     <div id="game">
 
       <div id="left" class='section'>
+
         <div id="inventory">
           <div id="inventory-ore" class='inventory'></div>
           <div id="inventory-refined" class='inventory'></div>
           <div id="inventory-wood" class='inventory'></div>
         </div>
-        <div id="ore">
+
+        <div id="ore" class='click'>
           <div id="ore-click-area"></div>
         </div>
+
+        <div id="wood" class='click'>
+          <div id="wood-click-area"></div>
+        </div>
+
+        <select name="" id="zone" style='width: 60%' onchange="Game.drawZone()">
+          <option value="mine">Mines</option>
+          <option value="wood">Woods</option>
+        </select>
+
       </div> <!-- left -->
 
       <div id="right" class='section'>
