@@ -37,12 +37,65 @@ Game.Launch = () => {
   }
 
   Game.rebuildInventory = () => {
-    s('#inventory-ore').innerHTML = 'Ores: ' + Game.ores
+    s('#inventory-ore').innerHTML = 'Ore: ' + Game.ores
     s('#inventory-refined').innerHTML = 'Refined: ' + Game.refinedOres
     s('#inventory-wood').innerHTML = 'Wood: ' + Game.wood
   }
 
   Game.rebuildInventory()
+
+  Game.rebuildTabs = () => {
+    // no idea for now
+  }
+
+  Game.items = []
+  Game.item = function(whichTab, itemName, itemDesc, price, priceMaterial) {
+    this.tab = whichTab
+    this.name = itemName
+    this.desc = itemDesc
+    this.price = price
+    this.priceMaterial = priceMaterial
+
+    Game.items.push(this)
+  }
+
+  new Game.item('store', 'Axe', 'Sharp and sturdy', 20, 'ores' )
+  new Game.item('store', 'Axe', 'Sharp and sturdy', 20, 'ores' )
+  new Game.item('store', 'Axe', 'Sharp and sturdy', 20, 'ores' )
+  new Game.item('store', 'Axe', 'Sharp and sturdy', 20, 'ores' )
+  new Game.item('store', 'Axe', 'Sharp and sturdy', 20, 'ores' )
+  new Game.item('store', 'Axe', 'Sharp and sturdy', 20, 'ores' )
+  new Game.item('store', 'Axe', 'Sharp and sturdy', 20, 'ores' )
+  new Game.item('store', 'Axe', 'Sharp and sturdy', 20, 'ores' )
+  new Game.item('store', 'Axe', 'Sharp and sturdy', 20, 'ores' )
+  new Game.item('store', 'Axe', 'Sharp and sturdy', 20, 'ores' )
+  new Game.item('store', 'Axe', 'Sharp and sturdy', 20, 'ores' )
+  new Game.item('store', 'Axe', 'Sharp and sturdy', 20, 'ores' )
+  new Game.item('store', 'Axe', 'Sharp and sturdy', 20, 'ores' )
+  new Game.item('store', 'Axe', 'Sharp and sturdy', 20, 'ores' )
+  new Game.item('store', 'Axe', 'Sharp and sturdy', 20, 'ores' )
+  new Game.item('store', 'Axe', 'Sharp and sturdy', 20, 'ores' )
+
+  Game.rebuildStore = (tab) => {
+    let items = ''
+    for (i = 0; i < Game.items.length; i++) {
+      let item = Game.items[i]
+      items += `
+        <div class='store-button'>
+          <p>${item.name}</p>
+          <p>${item.desc}</p>
+          <p>${item.price} ${item.priceMaterial}</p>
+        </div>
+      `
+    }
+
+    items += `
+      <div id="store-spacer"></div>
+    `
+    s('#store-content').innerHTML = items
+  }
+
+  Game.rebuildStore()
 
 }
 

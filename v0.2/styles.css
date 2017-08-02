@@ -2,6 +2,12 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  user-drag: none;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-drag: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
 }
 
 body {
@@ -30,9 +36,6 @@ body {
   width: 47%;
   border: 2px solid black;
   border-radius: 5%;
-}
-
-#left {
   overflow: hidden;
 }
 
@@ -42,11 +45,10 @@ body {
   display: flex;
   flex-flow: row;
   align-items: center;
+  justify-content: space-around;
 }
 
 .inventory {
-  width: 33.3%;
-  text-align: center;
   color: white;
 }
 
@@ -72,5 +74,51 @@ body {
   height: 250px;
   width: 300px;
 }
+
+#tabs {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-around;
+  align-items: center;
+  height: 40px;
+  width: 100%;
+}
+
+.tab:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.selected {
+  text-decoration: underline;
+}
+
+.store-button {
+  /*position: relative;*/
+  width: 90%;
+  height: 60px;
+  border: 1px solid black;
+}
+
+#tabs-content-container {
+  position: relative;
+  overflow-y: scroll;
+  height: 100%;
+}
+
+#store-spacer {
+  height: 60px;
+}
+
+#store-content {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+}
+
+.store-button {
+  margin-bottom: 10px;
+}
+
 
 
