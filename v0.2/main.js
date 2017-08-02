@@ -15,6 +15,7 @@ Game.Launch = () => {
 
   Game.selectedZone = 'mine'
   Game.priceIncrease = 1.15
+  Game.selectedTab = 0
 
   Game.earn = (amt, type) => {
     Game[type] += amt
@@ -61,9 +62,26 @@ Game.Launch = () => {
 
   Game.rebuildInventory()
 
+  Game.tabs = ['store', 'workshop', 'blacksmith', 'tavern']
+  Game.unlockedTabs = 2
   Game.rebuildTabs = () => {
-    // no idea for now
+    let str = ''
+    for (i = 0; i < Game.unlockedTabs; i++) {
+      let tab = Game.tabs[i]
+      str += `
+        <div id='${tab}-tab' class='tab' onclick='Game.changeTabs(${i})'>${tab}</div>
+      `
+    }
+
+    s('#tabs').innerHTML = str
   }
+
+  Game.changeTabs = (tabNumber) => {
+    Game.selectedTab = tabNumber
+    Game.rebuildStore()
+  }
+
+  Game.rebuildTabs()
 
   Game.risingNumber = (amt) => {
     let randomNumber = Math.floor(Math.random() * 100)
@@ -88,7 +106,8 @@ Game.Launch = () => {
   }
 
   Game.items = []
-  Game.item = function(itemName, itemDesc, fillerText, price, priceMaterial, maximumAmount, hidden) {
+  Game.item = function(whichTab, itemName, itemDesc, fillerText, price, priceMaterial, maximumAmount, hidden) {
+    this.tab = whichTab
     this.name = itemName
     this.desc = itemDesc
     this.filler = fillerText
@@ -110,14 +129,13 @@ Game.Launch = () => {
     }
 
     this.buy = () => {
-      console.log('buy firing')
       if (Game[this.priceMaterial] >= this.price) {
-        console.log('price increase:', Math.floor(Math.pow(Game.priceIncrease, this.owned)))
         Game.spend(this.price, this.priceMaterial)
         this.price += Math.floor(Math.pow(Game.priceIncrease, this.owned))
         this.owned++
         Game.rebuildInventory()
         Game.rebuildStore()
+        Game.unlockStuff()
         Game.drawZone()
       }
     }
@@ -126,22 +144,24 @@ Game.Launch = () => {
   }
 
   // itemName, itemDesc, fillerText, price, priceMaterial, maximumAmount, hidden
-  new Game.item('Axe', 'Allows for the chopping of wood','Sharp and sturdy', 20, 'ores', 1, false)
-  new Game.item('X-Ray Goggles', 'Detects weak spots within the ore. Mine for extra resources','Why is everything so swirly', 50, 'refined', 1, false)
-  new Game.item('Workshop', 'Build things...', 'Wood... and lots of it', 100, 'wood', 1, true)
+  new Game.item(1, 'Axe', 'Allows for the chopping of wood','Sharp and sturdy', 20, 'ores', 1, false)
+  new Game.item(1, 'X-Ray Goggles', 'Detects weak spots within the ore. Mine for extra resources','Why is everything so swirly', 50, 'refined', 1, false)
+  new Game.item(1, 'Workshop', 'Build things...', 'Wood... and lots of it', 50, 'wood', 1, true)
 
   Game.rebuildStore = () => {
-    console.log('rebuilding store')
     let items = ''
-    for (i = 0; i < Game.items.length; i++) {
-      let item = Game.items[i]
-      if (item.owned < item.maximumAmount && item.hidden == false) {
-        items += `
-          <div class='store-button' id='store-button${i}' onclick='Game.items[${i}].buy()' onmouseover='Game.items[${i}].changeText(${i})' onmouseout='Game.rebuildStore()'>
-            <h1 class='item-name'>${item.name}</h1>
-            <p class='item-price'>cost: ${item.price} ${item.priceMaterial}</p>
-          </div>
-        `
+
+    if (Game.selectedTab == 0) { // If store is selected
+      for (i = 0; i < Game.items.length; i++) {
+        let item = Game.items[i]
+        if (item.owned < item.maximumAmount && item.hidden == false) {
+          items += `
+            <div class='store-button' id='store-button${i}' onclick='Game.items[${i}].buy()' onmouseover='Game.items[${i}].changeText(${i})' onmouseout='Game.rebuildStore()'>
+              <h1 class='item-name'>${item.name}</h1>
+              <p class='item-price'>cost: ${item.price} ${item.priceMaterial}</p>
+            </div>
+          `
+        }
       }
     }
 
@@ -160,14 +180,12 @@ Game.Launch = () => {
       let value = el.options[el.selectedIndex].value
 
       if (value == 'mine') {
-        console.log('you are currently in the mines')
         s('#ore').style.display = 'initial'
         s('#wood').style.display = 'none'
         s('#left').style.background = '#777'
       }
 
       if (value == 'wood') {
-        console.log('you are currently in the woods')
         s('#wood').style.display = 'initial'
         s('#ore').style.display = 'none'
         s('#left').style.background = 'darkgreen'
@@ -176,8 +194,12 @@ Game.Launch = () => {
   }
 
   Game.unlockStuff = () => {
-    console.log('unlock stuff firing')
     if (Game.wood > 0 && Game.items[2].hidden == true) Game.items[2].hidden = false
+    if (Game.items[2].owned == 1 && Game.unlockedTabs == 1) Game.unlockedTabs++; Game.rebuildTabs()
+
+
+
+
     Game.rebuildStore()
   }
 
