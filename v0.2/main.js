@@ -55,6 +55,7 @@ Game.Launch = () => {
   Game.item = function(itemName, itemDesc, fillerText, price, priceMaterial) {
     this.name = itemName
     this.desc = itemDesc
+    this.filler = fillerText
     this.price = price
     this.priceMaterial = priceMaterial
     this.owned = 0
@@ -62,14 +63,12 @@ Game.Launch = () => {
     this.changeText = (number) => {
       s(`#store-button${number}`).innerHTML = `
         <div>
-          <h1>${this.name} ${this.price}</h1>
-          <p>test</p>
-          <p>test</p>
-          <p>test</p>
-          <p>test</p>
-          <p>test</p>
-          <p>test</p>
-          <p>test</p>
+          <h1>${this.name}</h1>
+          <hr>
+          <h3>${this.desc}</h3>
+          <p style='font-style: italic'>${this.filler}</p>
+          <p>cost: ${this.price} ${this.priceMaterial}</p>
+          <p>owned: ${this.owned}</p>
         </div>
       `
     }
@@ -101,7 +100,7 @@ Game.Launch = () => {
       items += `
         <div class='store-button' id='store-button${i}' onclick='Game.items[${i}].buy()' onmouseover='Game.items[${i}].changeText(${i})' onmouseout='Game.rebuildStore()'>
           <h1 class='item-name'>${item.name}</h1>
-          <p class='item-price'>cost: ${item.price} ${item.priceMaterial} <br> owned: ${item.owned}</p>
+          <p class='item-price'>cost: ${item.price} ${item.priceMaterial}</p>
         </div>
       `
     }
