@@ -37,6 +37,7 @@ body {
   border: 2px solid black;
   border-radius: 5%;
   overflow: hidden;
+  background: white;
 }
 
 #inventory {
@@ -102,6 +103,7 @@ body {
   padding: 10px 15px;
   cursor: pointer;
   margin-bottom: 10px;
+  border-radius: 5px;
 }
 
 .item-name {

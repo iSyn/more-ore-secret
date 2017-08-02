@@ -7,7 +7,7 @@ Game.Launch = () => {
   console.log('Game loaded and launched')
 
   Game.ores = 0
-  Game.refinedOres = 0
+  Game.refined = 0
   Game.wood = 0
 
   Game.oresPerClick = 1
@@ -41,7 +41,7 @@ Game.Launch = () => {
 
   Game.rebuildInventory = () => {
     s('#inventory-ore').innerHTML = 'Ore: ' + Game.ores
-    s('#inventory-refined').innerHTML = 'Refined: ' + Game.refinedOres
+    s('#inventory-refined').innerHTML = 'Refined: ' + Game.refined
     s('#inventory-wood').innerHTML = 'Wood: ' + Game.wood
   }
 
@@ -59,6 +59,23 @@ Game.Launch = () => {
     this.priceMaterial = priceMaterial
     this.owned = 0
 
+    this.changeText = (number) => {
+      s(`#store-button${number}`).innerHTML = `
+        <div>
+          <h1>${this.name} ${this.price}</h1>
+          <p>test</p>
+          <p>test</p>
+          <p>test</p>
+          <p>test</p>
+          <p>test</p>
+          <p>test</p>
+          <p>test</p>
+        </div>
+      `
+    }
+
+
+
     this.buy = () => {
       if (Game[this.priceMaterial] >= this.price) {
         console.log('price increase:', Math.floor(Math.pow(Game.priceIncrease, this.owned)))
@@ -74,7 +91,7 @@ Game.Launch = () => {
   }
 
   new Game.item('Axe', 'Allows for the chopping of wood','Sharp and sturdy', 20, 'ores' )
-  new Game.item('X-Ray Goggles', 'Detects weak spots within the ore. Mine for extra resources','Why is everything so swirly', 50, 'refinedOres' )
+  new Game.item('X-Ray Goggles', 'Detects weak spots within the ore. Mine for extra resources','Why is everything so swirly', 50, 'refined' )
 
   Game.rebuildStore = () => {
     console.log('rebuilding store')
@@ -82,7 +99,7 @@ Game.Launch = () => {
     for (i = 0; i < Game.items.length; i++) {
       let item = Game.items[i]
       items += `
-        <div class='store-button' id='store-button${i}' onclick='Game.items[${i}].buy()'>
+        <div class='store-button' id='store-button${i}' onclick='Game.items[${i}].buy()' onmouseover='Game.items[${i}].changeText(${i})' onmouseout='Game.rebuildStore()'>
           <h1 class='item-name'>${item.name}</h1>
           <p class='item-price'>cost: ${item.price} ${item.priceMaterial} <br> owned: ${item.owned}</p>
         </div>
