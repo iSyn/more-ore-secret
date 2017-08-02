@@ -74,6 +74,7 @@ Game.Launch = () => {
   }
 
   new Game.item('Axe', 'Allows for the chopping of wood','Sharp and sturdy', 20, 'ores' )
+  new Game.item('X-Ray Goggles', 'Detects weak spots within the ore. Mine for extra resources','Why is everything so swirly', 50, 'refinedOres' )
 
   Game.rebuildStore = () => {
     console.log('rebuilding store')
