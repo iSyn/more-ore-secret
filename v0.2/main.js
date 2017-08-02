@@ -11,7 +11,7 @@ Game.Launch = () => {
   Game.wood = 0
 
   Game.oresPerClick = 1
-  Game.woodPerClick = 1
+  Game.woodPerClick = 30
 
   Game.selectedZone = 'mine'
   Game.priceIncrease = 1.15
@@ -63,8 +63,9 @@ Game.Launch = () => {
   Game.rebuildInventory()
 
   Game.tabs = ['store', 'workshop', 'blacksmith', 'tavern']
-  Game.unlockedTabs = 2
+  Game.unlockedTabs = 1
   Game.rebuildTabs = () => {
+
     let str = ''
     for (i = 0; i < Game.unlockedTabs; i++) {
       let tab = Game.tabs[i]
@@ -143,10 +144,12 @@ Game.Launch = () => {
     Game.items.push(this)
   }
 
-  // itemName, itemDesc, fillerText, price, priceMaterial, maximumAmount, hidden
-  new Game.item(1, 'Axe', 'Allows for the chopping of wood','Sharp and sturdy', 20, 'ores', 1, false)
-  new Game.item(1, 'X-Ray Goggles', 'Detects weak spots within the ore. Mine for extra resources','Why is everything so swirly', 50, 'refined', 1, false)
-  new Game.item(1, 'Workshop', 'Build things...', 'Wood... and lots of it', 50, 'wood', 1, true)
+  // whichTab, itemName, itemDesc, fillerText, price, priceMaterial, maximumAmount, hidden
+  new Game.item(0, 'Axe', 'Allows for the chopping of wood','Sharp and sturdy', 20, 'ores', 1, false)
+  new Game.item(0, 'X-Ray Goggles', 'Detects weak spots within the ore. Mine for extra resources','Why is everything so swirly', 50, 'refined', 1, false)
+  new Game.item(0, 'Workshop', 'Build things...', 'Wood... and lots of it', 50, 'wood', 1, true)
+  new Game.item(1, 'Blacksmiths Hut', 'Allows for the smelting of raw ore', 'fire burn good', 100, 'wood', 1, false)
+  new Game.item(1, 'Tavern', 'Hire workers to make your life easier', 'slavery for cheap', 100, 'wood', 1, false)
 
   Game.rebuildStore = () => {
     let items = ''
@@ -155,12 +158,29 @@ Game.Launch = () => {
       for (i = 0; i < Game.items.length; i++) {
         let item = Game.items[i]
         if (item.owned < item.maximumAmount && item.hidden == false) {
-          items += `
-            <div class='store-button' id='store-button${i}' onclick='Game.items[${i}].buy()' onmouseover='Game.items[${i}].changeText(${i})' onmouseout='Game.rebuildStore()'>
-              <h1 class='item-name'>${item.name}</h1>
-              <p class='item-price'>cost: ${item.price} ${item.priceMaterial}</p>
-            </div>
-          `
+          if (item.tab == 0) {
+            items += `
+              <div class='store-button' id='store-button${i}' onclick='Game.items[${i}].buy()' onmouseover='Game.items[${i}].changeText(${i})' onmouseout='Game.rebuildStore()'>
+                <h1 class='item-name'>${item.name}</h1>
+                <p class='item-price'>cost: ${item.price} ${item.priceMaterial}</p>
+              </div>
+            `
+          }
+        }
+      }
+    }
+    if (Game.selectedTab == 1) {
+      for (i = 0; i < Game.items.length; i++) {
+        let item = Game.items[i]
+        if (item.owned < item.maximumAmount && item.hidden == false) {
+          if (item.tab == 1) {
+            items += `
+              <div class='store-button' id='store-button${i}' onclick='Game.items[${i}].buy()' onmouseover='Game.items[${i}].changeText(${i})' onmouseout='Game.rebuildStore()'>
+                <h1 class='item-name'>${item.name}</h1>
+                <p class='item-price'>cost: ${item.price} ${item.priceMaterial}</p>
+              </div>
+            `
+          }
         }
       }
     }
