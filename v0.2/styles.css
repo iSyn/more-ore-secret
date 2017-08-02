@@ -16,7 +16,7 @@ body {
 
 #game {
   position: absolute;
-  height: 95%;
+  height: 90%;
   width: 95%;
   border: 5px solid black;
   border-radius: 5%;
@@ -94,10 +94,23 @@ body {
 }
 
 .store-button {
-  /*position: relative;*/
+  position: relative;
   width: 90%;
-  height: 60px;
   border: 1px solid black;
+  display: flex;
+  flex-flow: row nowrap;
+  padding: 10px 15px;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.item-name {
+  flex-grow: 1;
+}
+
+.item-price {
+  align-self: center;
+  height: 100%;
 }
 
 #tabs-content-container {
@@ -107,17 +120,13 @@ body {
 }
 
 #store-spacer {
-  height: 60px;
+  height: 100px;
 }
 
 #store-content {
   display: flex;
   flex-flow: column nowrap;
   align-items: center;
-}
-
-.store-button {
-  margin-bottom: 10px;
 }
 
 

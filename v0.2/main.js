@@ -13,6 +13,9 @@ Game.Launch = () => {
   Game.oresPerClick = 1
   Game.woodPerClick = 0
 
+  Game.selectedZone = 'mine'
+  Game.priceIncrease = 1.15
+
   Game.earn = (amt, type) => {
     Game[type] += amt
   }
@@ -49,42 +52,38 @@ Game.Launch = () => {
   }
 
   Game.items = []
-  Game.item = function(whichTab, itemName, itemDesc, price, priceMaterial) {
-    this.tab = whichTab
+  Game.item = function(itemName, itemDesc, fillerText, price, priceMaterial) {
     this.name = itemName
     this.desc = itemDesc
     this.price = price
     this.priceMaterial = priceMaterial
+    this.owned = 0
+
+    this.buy = () => {
+      if (Game[this.priceMaterial] >= this.price) {
+        console.log('price increase:', Math.floor(Math.pow(Game.priceIncrease, this.owned)))
+        Game.spend(this.price, this.priceMaterial)
+        this.price += Math.floor(Math.pow(Game.priceIncrease, this.owned))
+        this.owned++
+        Game.rebuildInventory()
+        Game.rebuildStore()
+      }
+    }
 
     Game.items.push(this)
   }
 
-  new Game.item('store', 'Axe', 'Sharp and sturdy', 20, 'ores' )
-  new Game.item('store', 'Axe', 'Sharp and sturdy', 20, 'ores' )
-  new Game.item('store', 'Axe', 'Sharp and sturdy', 20, 'ores' )
-  new Game.item('store', 'Axe', 'Sharp and sturdy', 20, 'ores' )
-  new Game.item('store', 'Axe', 'Sharp and sturdy', 20, 'ores' )
-  new Game.item('store', 'Axe', 'Sharp and sturdy', 20, 'ores' )
-  new Game.item('store', 'Axe', 'Sharp and sturdy', 20, 'ores' )
-  new Game.item('store', 'Axe', 'Sharp and sturdy', 20, 'ores' )
-  new Game.item('store', 'Axe', 'Sharp and sturdy', 20, 'ores' )
-  new Game.item('store', 'Axe', 'Sharp and sturdy', 20, 'ores' )
-  new Game.item('store', 'Axe', 'Sharp and sturdy', 20, 'ores' )
-  new Game.item('store', 'Axe', 'Sharp and sturdy', 20, 'ores' )
-  new Game.item('store', 'Axe', 'Sharp and sturdy', 20, 'ores' )
-  new Game.item('store', 'Axe', 'Sharp and sturdy', 20, 'ores' )
-  new Game.item('store', 'Axe', 'Sharp and sturdy', 20, 'ores' )
-  new Game.item('store', 'Axe', 'Sharp and sturdy', 20, 'ores' )
+  new Game.item('Axe', 'Allows for the chopping of wood','Sharp and sturdy', 20, 'ores' )
 
-  Game.rebuildStore = (tab) => {
+  Game.rebuildStore = () => {
+    console.log('rebuilding store')
     let items = ''
     for (i = 0; i < Game.items.length; i++) {
       let item = Game.items[i]
       items += `
-        <div class='store-button'>
-          <p>${item.name}</p>
-          <p>${item.desc}</p>
-          <p>${item.price} ${item.priceMaterial}</p>
+        <div class='store-button' id='store-button${i}' onclick='Game.items[${i}].buy()'>
+          <h1 class='item-name'>${item.name}</h1>
+          <p class='item-price'>cost: ${item.price} ${item.priceMaterial} <br> owned: ${item.owned}</p>
         </div>
       `
     }
