@@ -12,6 +12,7 @@
 
 body {
   background: darkgrey;
+  background-image: url('./assets/tiny-rock.png');
 }
 
 #game {
@@ -65,19 +66,19 @@ body {
 #ore {
   background: url('./assets/ore.png');
   background-size: 100% 100%;
-  height: 250px;
+  height: 350px;
   width: 300px;
   image-rendering: pixelated;
   cursor: pointer;
 }
 
 #ore:hover {
-  height: 260px;
+  height: 360px;
   width: 310px;
 }
 
 #ore:active {
-  height: 250px;
+  height: 350px;
   width: 300px;
 }
 
