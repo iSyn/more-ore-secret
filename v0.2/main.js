@@ -176,25 +176,38 @@ Game.Launch = () => {
         if (item.owned < item.maximumAmount && item.hidden == false) {
           if (item.tab == 0) {
             items += `
-              <div class='store-button' id='store-button${i}' onclick='Game.items[${i}].buy()' onmouseover='Game.items[${i}].changeText(${i})' onmouseout='Game.rebuildStore()'>
-                <h1 class='item-name'>${item.name}</h1>
-                <p class='item-price'>cost: ${item.price} ${item.priceMaterial}</p>
-
+              <div class='store-button' id='store-button${i}' onclick='Game.items[${i}].buy()'>
+                <div class="button-top">
+                  <h1 class='item-name'>${item.name}</h1>
+                  <p class='item-price'>cost: ${item.price} ${item.priceMaterial}</p>
+                </div>
+                <div class="button-bottom">
+                  <hr/>
+                  <h3>${item.desc}</h3>
+                  <p>${item.filler}</p>
+                </div>
               </div>
             `
           }
         }
       }
     }
-    if (Game.selectedTab == 1) {
+    if (Game.selectedTab == 1) { // If workshop is selected
       for (i = 0; i < Game.items.length; i++) {
         let item = Game.items[i]
         if (item.owned < item.maximumAmount && item.hidden == false) {
           if (item.tab == 1) {
             items += `
-              <div class='store-button' id='store-button${i}' onclick='Game.items[${i}].buy()' onmouseover='Game.items[${i}].changeText(${i})' onmouseout='Game.rebuildStore()'>
-                <h1 class='item-name'>${item.name}</h1>
-                <p class='item-price'>cost: ${item.price} ${item.priceMaterial}</p>
+               <div class='store-button' id='store-button${i}' onclick='Game.items[${i}].buy()'>
+                <div class="button-top">
+                  <h1 class='item-name'>${item.name}</h1>
+                  <p class='item-price'>cost: ${item.price} ${item.priceMaterial}</p>
+                </div>
+                <div class="button-bottom">
+                  <hr/>
+                  <h3>${item.desc}</h3>
+                  <p>${item.filler}</p>
+                </div>
               </div>
             `
           }
