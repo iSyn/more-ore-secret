@@ -13,11 +13,14 @@
 body {
   background: darkgrey;
   background-image: url('./assets/tiny-rock.png');
+  background-size: 150px 100px;
+  background-repeat: repeat;
+  image-rendering: pixelated;
 }
 
 #game {
   position: absolute;
-  height: 90%;
+  height: 85%;
   width: 95%;
   border: 5px solid black;
   border-radius: 20px;
