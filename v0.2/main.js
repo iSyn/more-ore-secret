@@ -161,12 +161,13 @@ Game.Launch = () => {
 
   // whichTab, itemName, itemPic, itemDesc, fillerText, price, priceMaterial, maximumAmount, hidden
   new Game.item(0, 'Axe', 'axe.png', 'Allows for the chopping of wood','Sharp and sturdy', 20, 'ores', 1, false)
-  new Game.item(0, 'X-Ray Glasses', 'xray-glasses.png', 'Detects weak spots within the ore. Mine for extra resources','Why is everything so swirly', 50, 'refined', 1, false)
+  new Game.item(0, 'X-Ray Glasses', 'xray-glasses.png', 'Detects weak spots within the ore', 'Why is everything so swirly', 50, 'refined', 1, false)
   new Game.item(0, 'Workshop', 'workbench.png', 'Build things...', 'Wood... and lots of it', 50, 'wood', 1, true)
   new Game.item(1, 'Blacksmiths Hut', 'nothing.png', 'Gives you access to furnaces', 'fire burn good', 100, 'wood', 1, false)
   new Game.item(1, 'Tavern', 'nothing.png', 'Hire workers and trade goods', 'slavery for cheap', 100, 'wood', 1, false)
   new Game.item(1, 'Shed', 'nothing.png', 'Increase max storage for wood', 'Got wood?', 50, 'wood', 999, false)
   new Game.item(1, 'Wheelbarrow', 'nothing.png', 'Increase max storage for ores', 'Ore my!', 50, 'wood', 999, false)
+  new Game.item(2, 'Furnace', 'furnace.png', 'Smelt raw ores to create refined ores', 'Caution... hot!', 50, 'ores', 999, false)
 
   Game.rebuildStore = () => {
     let str = ''
