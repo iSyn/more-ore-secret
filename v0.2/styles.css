@@ -50,6 +50,9 @@ body {
   justify-content: space-between;
   align-items: center;
   background: #777;
+  background: url('assets/mine-bg.png');
+  image-rendering: pixelated;
+  background-size: cover;
 }
 
 #inventory {

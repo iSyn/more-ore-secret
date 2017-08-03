@@ -218,7 +218,9 @@ Game.Launch = () => {
       if (value == 'mine') {
         s('#ore').style.display = 'initial'
         s('#wood').style.display = 'none'
-        s('#left').style.background = '#777'
+        // s('#left').style.background = '#777'
+        s('#left').style.background = "url('./assets/mine-bg.png')"
+        s('#left').style.backgroundSize = 'cover'
       }
 
       if (value == 'wood') {
