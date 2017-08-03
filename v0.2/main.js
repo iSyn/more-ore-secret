@@ -224,7 +224,7 @@ Game.Launch = () => {
       if (value == 'wood') {
         s('#wood').style.display = 'initial'
         s('#ore').style.display = 'none'
-        s('#left').style.background = 'darkgreen'
+        s('#left').style.background = "url('./assets/forest-bg.png')"
       }
     }
   }

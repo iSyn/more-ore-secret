@@ -85,20 +85,20 @@ body {
   display: none;
   background: url('./assets/tree.png');
   background-size: 100% 100%;
-  height: 300px;
-  width: 250px;
+  height: 350px;
+  width: 300px;
   image-rendering: pixelated;
   cursor: pointer;
 }
 
 #wood:hover {
-  height: 310px;
-  width: 260px;
+  height: 360px;
+  width: 310px;
 }
 
 #wood:active {
-  height: 300px;
-  width: 250px;
+  height: 350px;
+  width: 300px;
 }
 
 
