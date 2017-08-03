@@ -12,7 +12,7 @@ Game.Launch = () => {
   Game.gold = 0
 
   Game.oresPerClick = 1
-  Game.woodPerClick = 1
+  Game.woodPerClick = 20
 
   Game.selectedZone = 'mine'
   Game.priceIncrease = 1.15
@@ -121,9 +121,10 @@ Game.Launch = () => {
   }
 
   Game.items = []
-  Game.item = function(whichTab, itemName, itemDesc, fillerText, price, priceMaterial, maximumAmount, hidden) {
+  Game.item = function(whichTab, itemName, itemPic, itemDesc, fillerText, price, priceMaterial, maximumAmount, hidden) {
     this.tab = whichTab
     this.name = itemName
+    this.pic = itemPic
     this.desc = itemDesc
     this.filler = fillerText
     this.price = price
@@ -158,17 +159,42 @@ Game.Launch = () => {
     Game.items.push(this)
   }
 
-  // whichTab, itemName, itemDesc, fillerText, price, priceMaterial, maximumAmount, hidden
-  new Game.item(0, 'Axe', 'Allows for the chopping of wood','Sharp and sturdy', 20, 'ores', 1, false)
-  new Game.item(0, 'X-Ray Goggles', 'Detects weak spots within the ore. Mine for extra resources','Why is everything so swirly', 50, 'refined', 1, false)
-  new Game.item(0, 'Workshop', 'Build things...', 'Wood... and lots of it', 50, 'wood', 1, true)
-  new Game.item(1, 'Blacksmiths Hut', 'Gives you access to furnaces', 'fire burn good', 100, 'wood', 1, false)
-  new Game.item(1, 'Tavern', 'Hire workers and trade goods', 'slavery for cheap', 100, 'wood', 1, false)
-  new Game.item(1, 'Shed', 'Increase max storage for wood', 'Got wood?', 50, 'wood', 999, false)
-  new Game.item(1, 'Wheelbarrow', 'Increase max storage for ores', 'Ore my!', 50, 'wood', 999, false)
+  // whichTab, itemName, itemPic, itemDesc, fillerText, price, priceMaterial, maximumAmount, hidden
+  new Game.item(0, 'Axe', 'axe.png', 'Allows for the chopping of wood','Sharp and sturdy', 20, 'ores', 1, false)
+  new Game.item(0, 'X-Ray Glasses', 'xray-glasses.png', 'Detects weak spots within the ore. Mine for extra resources','Why is everything so swirly', 50, 'refined', 1, false)
+  new Game.item(0, 'Workshop', 'nothing.png', 'Build things...', 'Wood... and lots of it', 50, 'wood', 1, true)
+  new Game.item(1, 'Blacksmiths Hut', 'nothing.png', 'Gives you access to furnaces', 'fire burn good', 100, 'wood', 1, false)
+  new Game.item(1, 'Tavern', 'nothing.png', 'Hire workers and trade goods', 'slavery for cheap', 100, 'wood', 1, false)
+  new Game.item(1, 'Shed', 'nothing.png', 'Increase max storage for wood', 'Got wood?', 50, 'wood', 999, false)
+  new Game.item(1, 'Wheelbarrow', 'nothing.png', 'Increase max storage for ores', 'Ore my!', 50, 'wood', 999, false)
 
   Game.rebuildStore = () => {
     let items = ''
+
+    // FIGURE WHY THIS ISNT WORKING
+    // for (i = 0; i < Game.items.length; i++) {
+    //   let item = Game.items[i]
+    //   if (item.owned < item.maximumAmount && item.hidden == false) {
+    //     if (Game.selectedTab == item.tab) {
+    //       item += `
+    //         <div class='store-button' id='store-button${i}' onclick='Game.items[${i}].buy()'>
+    //           <div class="button-top">
+    //             <h1 class='item-name'>${item.name}</h1>
+    //             <p class='item-price'>cost: ${item.price} ${item.priceMaterial}</p>
+    //           </div>
+    //           <div class="button-bottom">
+    //             <hr/>
+    //             <h3>${item.desc}</h3>
+    //             <p style='font-style: oblique'>${item.filler}</p>
+    //             <br>
+    //             <p>owned: ${item.owned}</p>
+    //           </div>
+    //         </div>
+    //       `
+    //     }
+    //   }
+    // }
+
 
     if (Game.selectedTab == 0) { // If store is selected
       for (i = 0; i < Game.items.length; i++) {
@@ -178,13 +204,16 @@ Game.Launch = () => {
             items += `
               <div class='store-button' id='store-button${i}' onclick='Game.items[${i}].buy()'>
                 <div class="button-top">
+                  <img src="./assets/${item.pic}" alt="" />
                   <h1 class='item-name'>${item.name}</h1>
                   <p class='item-price'>cost: ${item.price} ${item.priceMaterial}</p>
                 </div>
                 <div class="button-bottom">
                   <hr/>
                   <h3>${item.desc}</h3>
-                  <p>${item.filler}</p>
+                  <p style='font-style: oblique'>${item.filler}</p>
+                  <br>
+                  <p>owned: ${item.owned}</p>
                 </div>
               </div>
             `
@@ -206,7 +235,9 @@ Game.Launch = () => {
                 <div class="button-bottom">
                   <hr/>
                   <h3>${item.desc}</h3>
-                  <p>${item.filler}</p>
+                  <p style='font-style: oblique'>${item.filler}</p>
+                  <br>
+                  <p>owned: ${item.owned}</p>
                 </div>
               </div>
             `

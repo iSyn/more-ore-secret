@@ -139,6 +139,7 @@ body {
   margin-bottom: 10px;
   border-radius: 5px;
   box-shadow: 0px 3px #222;
+  background-color: #e3b8b8;
 }
 
 .store-button:hover .button-bottom {
@@ -148,6 +149,10 @@ body {
 .button-top {
   display: flex;
   flex-flow: row nowrap;
+}
+
+.button-top h1 {
+  font-size: 40px;
 }
 
 .button-bottom {
