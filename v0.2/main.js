@@ -96,8 +96,8 @@ Game.Launch = () => {
   Game.rebuildTabs()
 
   Game.risingNumber = (amt, type) => {
-    let randomNumber = Math.floor(Math.random() * 100)
-    let X = event.clientX+(randomNumber)-100
+    let randomNumber = Math.floor((Math.random() * 40) - 20) //picks a random number from -20 to 20
+    let X = event.clientX+randomNumber
     let Y = event.clientY-50
 
     let div = document.createElement('div')
