@@ -20,7 +20,7 @@ Game.Launch = () => {
 
   Game.earn = (amt, type) => {
     Game[type] += amt
-    Game.risingNumber(amt)
+    Game.risingNumber(amt, type)
     Game.unlockStuff()
   }
 
@@ -28,10 +28,18 @@ Game.Launch = () => {
     Game[type] -= amt
   }
 
+  Game.getGold = () => {
+    let number = Math.random()
+    if (number > .9) {
+      Game.earn(1, 'gold')
+    }
+  }
+
   Game.oreClick = () => {
     Game.calculateClick()
     Game.earn(Game.oresPerClick, 'ores')
     Game.rebuildInventory()
+    Game.getGold()
   }
 
   s('#ore').onclick = Game.oreClick
@@ -64,16 +72,17 @@ Game.Launch = () => {
 
   Game.rebuildInventory()
 
-  Game.tabs = ['store', 'workshop', 'blacksmith', 'tavern']
-  Game.unlockedTabs = 1
+  Game.tabs = [{name: 'store', unlocked: true}, {name: 'workshop', unlocked: false}, {name: 'blacksmith', unlocked: false}, {name: 'tavern', unlocked: false}]
   Game.rebuildTabs = () => {
 
     let str = ''
-    for (i = 0; i < Game.unlockedTabs; i++) {
+    for (i = 0; i < Game.tabs.length; i++) {
       let tab = Game.tabs[i]
-      str += `
-        <div id='${tab}-tab' class='tab' onclick='Game.changeTabs(${i})'>${tab}</div>
-      `
+      if (tab.unlocked == true) {
+        str += `
+          <div id='${tab.name}-tab' class='tab' onclick='Game.changeTabs(${i})'>${tab.name}</div>
+        `
+      }
     }
 
     s('#tabs').innerHTML = str
@@ -86,13 +95,16 @@ Game.Launch = () => {
 
   Game.rebuildTabs()
 
-  Game.risingNumber = (amt) => {
+  Game.risingNumber = (amt, type) => {
     let randomNumber = Math.floor(Math.random() * 100)
     let X = event.clientX+(randomNumber)-100
     let Y = event.clientY-50
 
     let div = document.createElement('div')
     div.classList.add('rising-number')
+    if (type == 'gold') {
+      div.classList.add('gold')
+    }
     div.innerHTML = `+${amt}`
     div.style.position = 'absolute'
     div.style.left = X + 'px'
@@ -218,9 +230,10 @@ Game.Launch = () => {
   }
 
   Game.unlockStuff = () => {
-    if (Game.wood > 0 && Game.items[2].hidden == true) Game.items[2].hidden = false
-    if (Game.items[2].owned == 1 && Game.unlockedTabs == 1) Game.unlockedTabs++; Game.rebuildTabs()
-    // if (Game.items[3].owned == 1 && Game.unlockTabs ==
+    if (Game.wood > 0 && Game.items[2].hidden == true) {Game.items[2].hidden = false}
+    if (Game.items[2].owned == 1 && Game.tabs[1].unlocked == false) {Game.tabs[1].unlocked = true; Game.rebuildTabs()}
+    if (Game.items[3].owned == 1 && Game.tabs[2].unlocked == false) {Game.tabs[2].unlocked = true; Game.rebuildTabs()}
+    if (Game.items[4].owned == 1 && Game.tabs[3].unlocked == false) {Game.tabs[3].unlocked = true; Game.rebuildTabs()}
 
 
 

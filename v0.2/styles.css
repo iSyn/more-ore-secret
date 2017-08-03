@@ -177,6 +177,10 @@ body {
   font-family: 'Raleway';
 }
 
+.gold {
+  color: yellow;
+}
+
 @keyframes moveUp {
   0% {
     transform: translateY(0);
