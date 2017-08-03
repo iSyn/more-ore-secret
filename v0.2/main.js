@@ -12,7 +12,7 @@ Game.Launch = () => {
   Game.gold = 0
 
   Game.oresPerClick = 1
-  Game.woodPerClick = 30
+  Game.woodPerClick = 1
 
   Game.selectedZone = 'mine'
   Game.priceIncrease = 1.15
@@ -179,6 +179,7 @@ Game.Launch = () => {
               <div class='store-button' id='store-button${i}' onclick='Game.items[${i}].buy()' onmouseover='Game.items[${i}].changeText(${i})' onmouseout='Game.rebuildStore()'>
                 <h1 class='item-name'>${item.name}</h1>
                 <p class='item-price'>cost: ${item.price} ${item.priceMaterial}</p>
+
               </div>
             `
           }
@@ -227,6 +228,7 @@ Game.Launch = () => {
         s('#wood').style.display = 'initial'
         s('#ore').style.display = 'none'
         s('#left').style.background = "url('./assets/forest-bg.png')"
+        s('#left').style.backgroundSize = 'cover'
       }
     }
   }
@@ -238,7 +240,6 @@ Game.Launch = () => {
     if (Game.items[4].owned == 1 && Game.tabs[3].unlocked == false) {Game.tabs[3].unlocked = true; Game.rebuildTabs()}
 
 
-
     Game.rebuildStore()
   }
 
@@ -247,3 +248,7 @@ Game.Launch = () => {
 }
 
 window.onload = () => {Game.Launch()}
+
+
+
+
