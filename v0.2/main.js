@@ -6,22 +6,24 @@ let Game = {}
 Game.Launch = () => {
   console.log('Game loaded and launched')
 
-  Game.ores = 9999
-  Game.refined = 9999
-  Game.wood = 99999
+  Game.ores = 999
+  Game.refined = 999
+  Game.wood = 999
   Game.gold = 0
 
   Game.totalOreClicks = 0
+  Game.totalTreeClicks = 0
 
   Game.oresPerClick = 50
   Game.woodPerClick = 50
 
   Game.priceIncrease = 1.15
+  Game.smeltTime = 2
   Game.selectedTab = 0
+  Game.sessionTime = 0
 
   Game.earn = (amt, type) => {
     Game[type] += amt
-    Game.risingNumber(amt, type)
     Game.unlockStuff()
   }
 
@@ -40,6 +42,7 @@ Game.Launch = () => {
     Game.totalOreClicks++
     Game.calculateClick()
     Game.earn(Game.oresPerClick, 'ores')
+    Game.risingNumber(Game.oresPerClick, 'ores')
     Game.rebuildInventory()
     Game.getGold()
   }
@@ -47,6 +50,7 @@ Game.Launch = () => {
   s('#ore').onclick = Game.oreClick
 
   Game.woodClick = () => {
+    Game.totalTreeClicks++
     Game.calculateClick()
     Game.earn(Game.woodPerClick, 'wood')
     Game.rebuildInventory()
@@ -169,7 +173,42 @@ Game.Launch = () => {
     this.inUse = false
     this.amount = null
 
+    this.setAmount = () => {
+      this.amount = parseInt(s(`#furnace${this.id}-amount`).value)
+    }
 
+    this.start = () => {
+      let amountLeft = this.amount
+      if (this.inUse == false) {
+        let price = this.amount * 10
+        if (Game.ores >= price) {
+
+          s(`#furnace${this.id}-amount`).disabled = true
+          s(`#furnace${this.id}-button`).style.cursor = 'not-allowed'
+          s(`#furnace${this.id}-button`).innerHTML = 'Cancel'
+          s(`#furnace${this.id}-button`).disabled = true
+
+          this.inUse = true
+          Game.spend(price, 'ores')
+          for (i = 0; i < this.amount; i++) {
+            setTimeout(() => {
+              console.log('hi')
+              amountLeft--
+              console.log(amountLeft)
+              s(`#furnace${this.id}-amount`).value = amountLeft
+              Game.earn(1, 'refined')
+              Game.rebuildInventory()
+            }, Game.smeltTime * 1000 * (i + 1))
+          }
+          this.inUse = false
+          s(`#furnace${this.id}-amount`).disabled = false
+          s(`#furnace${this.id}-amount`).value = null
+          s(`#furnace${this.id}-button`).style.cursor = 'pointer'
+          s(`#furnace${this.id}-button`).innerHTML = 'Smelt'
+          s(`#furnace${this.id}-button`).disabled = false
+        }
+      }
+    }
 
     Game.furnaces.push(this)
   }
@@ -178,10 +217,8 @@ Game.Launch = () => {
   new Game.item(0, 'Axe', 'axe.png', 'Allows for the chopping of wood','Sharp and sturdy', 20, 'ores', 1, false)
   new Game.item(0, 'X-Ray Glasses', 'xray-glasses.png', 'Detects weak spots within the ore', 'Why is everything so swirly', 50, 'refined', 1, false)
   new Game.item(0, 'Workshop', 'workbench.png', 'Build things...', 'Wood... and lots of it', 50, 'wood', 1, true)
-  new Game.item(1, 'Blacksmiths Hut', 'nothing.png', 'Gives you access to furnaces', 'fire burn good', 100, 'wood', 1, false)
-  new Game.item(1, 'Tavern', 'nothing.png', 'Hire workers and trade goods', 'slavery for cheap', 100, 'wood', 1, false)
-  new Game.item(1, 'Shed', 'nothing.png', 'Increase max storage for wood', 'Got wood?', 50, 'wood', 999, false)
-  new Game.item(1, 'Wheelbarrow', 'nothing.png', 'Increase max storage for ores', 'Ore my!', 50, 'wood', 999, false)
+  new Game.item(1, 'Blacksmiths Hut', 'anvil.png', 'Gives you access to furnaces', 'fire burn good', 100, 'wood', 1, false)
+  new Game.item(1, 'Tavern', 'beer.png', 'Hire workers and trade goods', 'slavery for cheap', 100, 'wood', 1, false)
   new Game.item(2, 'Furnace', 'furnace.png', 'Smelt raw ores to create refined ores', 'Caution... hot!', 50, 'ores', 999, false, () => {
     new Game.furnace()
   })
@@ -215,8 +252,8 @@ Game.Launch = () => {
         str += `
           <div id='furnace${j}' class='furnace'>
             <div class="furnace-top">
-              <input type="number"/>
-              <button class="start-furnace-button">Start</button>
+              <input id='furnace${j}-amount' type="number" onchange='Game.furnaces[${j}].setAmount()'/>
+              <button id='furnace${j}-button' class="start-furnace-button" onclick='Game.furnaces[${j}].start()'>Start</button>
             </div>
             <div class="furnace-bottom">
               <div class="progress-bar-container">
@@ -259,17 +296,27 @@ Game.Launch = () => {
     }
   }
 
+  setInterval(() => {
+    Game.sessionTime++
+    Game.unlockStuff()
+  }, 1000)
+
   Game.unlockStuff = () => {
     if (Game.totalOreClicks >= 1) Game.win('Your First Click')
     if (Game.totalOreClicks >= 2) Game.win('Double Click')
     if (Game.totalOreClicks >= 50) Game.win('Carpal Tunnel')
-    if (Game.wood > 0 && Game.items[2].hidden == true) {Game.items[2].hidden = false}
-    if (Game.items[2].owned == 1 && Game.tabs[1].unlocked == false) {Game.tabs[1].unlocked = true; Game.rebuildTabs()}
-    if (Game.items[3].owned == 1 && Game.tabs[2].unlocked == false) {Game.tabs[2].unlocked = true; Game.rebuildTabs()}
-    if (Game.items[4].owned == 1 && Game.tabs[3].unlocked == false) {Game.tabs[3].unlocked = true; Game.rebuildTabs()}
+    if (Game.totalTreeClicks >= 1) Game.win('Morning Wood')
+    if (Game.sessionTime >= 10) Game.win('Milestone 1')
+    if (Game.sessionTime >= 30) Game.win('Milestone 2')
+    if (Game.sessionTime >= 60) Game.win('Milestone 3')
+    if (Game.wood > 0 && Game.items[2].hidden == true) {Game.items[2].hidden = false; Game.rebuildStore()}
+    if (Game.items[2].owned == 1 && Game.tabs[1].unlocked == false) {Game.tabs[1].unlocked = true; Game.rebuildTabs(); Game.rebuildStore()}
+    if (Game.items[3].owned == 1 && Game.tabs[2].unlocked == false) {Game.tabs[2].unlocked = true; Game.rebuildTabs(); Game.rebuildStore()}
+    if (Game.items[4].owned == 1 && Game.tabs[3].unlocked == false) {Game.tabs[3].unlocked = true; Game.rebuildTabs(); Game.rebuildStore()}
 
-    Game.rebuildStore()
   }
+
+  Game.unlockStuff()
 
   Game.achievements = []
   Game.achievement = function(name, howToUnlock, desc) {
@@ -281,10 +328,15 @@ Game.Launch = () => {
       Game.achievements[this.name] = this
   }
 
-  new Game.achievement('Your First Click', 'Have your first click', '<q>Wont be your last though...</q>')
-  new Game.achievement('Double Click', 'Click a second time', '<q>I told you so</q>')
-  new Game.achievement('Carpal Tunnel', 'Click a total of 10 times', '<q>Wheres the Bengay</q>')
-  new Game.achievement('Morning Wood')
+  new Game.achievement('Your First Click', 'Have your first click', 'Wont be your last though...')
+  new Game.achievement('Double Click', 'Click a second time', 'I told you so')
+  new Game.achievement('Carpal Tunnel', 'Click a total of 50 times', 'Wheres the Bengay')
+
+  new Game.achievement('Morning Wood', 'Cut your first tree', '-insert dick pun here-')
+
+  new Game.achievement('Milestone 1', 'Stay on More Ore for more than 10 seconds', "You're still here?")
+  new Game.achievement('Milestone 2', 'Stay on More Ore for more than 30 seconds', "Why are you still here...")
+  new Game.achievement('Milestone 3', 'Stay on More Ore for more than 1 minute', "Ahhh... afk")
 
   Game.win = (achievement) => {
     if (Game.achievements[achievement]) {
@@ -295,10 +347,10 @@ Game.Launch = () => {
         div.innerHTML = `
           <h3>Achievement Unlocked</h3>
           <hr size='2px' color='black'>
-          <h1>${Game.achievements[achievement].name}</h1>
+          <h1 style='font-size: 40px;'>${Game.achievements[achievement].name}</h1>
           <hr size='2px' color='black'>
-          <p>${Game.achievements[achievement].howToUnlock}</p>
-          <p>${Game.achievements[achievement].desc}</p>
+          <p style='font-size: 25px'>${Game.achievements[achievement].howToUnlock}</p>
+          <p style='font-style: italic; font-size:25px'>"${Game.achievements[achievement].desc}"</p>
         `
         s('#achievements').append(div)
 
