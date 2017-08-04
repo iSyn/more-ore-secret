@@ -139,7 +139,7 @@ body {
   margin-bottom: 10px;
   border-radius: 5px;
   box-shadow: 0px 3px #222;
-  background-color: #e3b8b8;
+  background-color: #fff670;
 }
 
 .store-button:hover .button-bottom {
@@ -225,6 +225,35 @@ body {
   width: 350px;
   border: 1px solid black;
   margin-bottom: 10px;
+}
+
+#achievements {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+}
+
+.achievement {
+  position: relative;
+  bottom: 10px;
+  right: 10px;
+  border: 1px solid black;
+  z-index: 9999;
+  background-color: white;
+  margin-bottom: 10px;
+  text-align: center;
+  padding: 10px 40px;
+  animation: fadeOut 4s;
+  background: #91ffa6;
+}
+
+@keyframes fadeOut {
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0
+  }
 }
 
 

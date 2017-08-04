@@ -11,6 +11,8 @@ Game.Launch = () => {
   Game.wood = 99999
   Game.gold = 0
 
+  Game.totalOreClicks = 0
+
   Game.oresPerClick = 50
   Game.woodPerClick = 50
 
@@ -35,6 +37,7 @@ Game.Launch = () => {
   }
 
   Game.oreClick = () => {
+    Game.totalOreClicks++
     Game.calculateClick()
     Game.earn(Game.oresPerClick, 'ores')
     Game.rebuildInventory()
@@ -209,7 +212,8 @@ Game.Launch = () => {
       for (j = 0; j < Game.furnaces.length; j++) {
         Game.furnaces[j].id = j
         str += `
-          <div id='furnace${j}' class='furnace'></div>
+          <div id='furnace${j}' class='furnace'>
+          </div>
         `
       }
     }
@@ -245,6 +249,7 @@ Game.Launch = () => {
   }
 
   Game.unlockStuff = () => {
+    if (Game.totalOreClicks > 0) Game.win('Your First Click')
     if (Game.wood > 0 && Game.items[2].hidden == true) {Game.items[2].hidden = false}
     if (Game.items[2].owned == 1 && Game.tabs[1].unlocked == false) {Game.tabs[1].unlocked = true; Game.rebuildTabs()}
     if (Game.items[3].owned == 1 && Game.tabs[2].unlocked == false) {Game.tabs[2].unlocked = true; Game.rebuildTabs()}
@@ -252,6 +257,42 @@ Game.Launch = () => {
 
     Game.rebuildStore()
   }
+
+  Game.achievements = []
+  Game.achievement = function(name, desc) {
+      this.name = name
+      this.desc = desc
+      this.won = 0
+
+      Game.achievements[this.name] = this
+  }
+
+  new Game.achievement('Your First Click', 'wont be your last though...')
+
+  Game.win = (achievement) => {
+    console.log(achievement)
+    if (Game.achievements[achievement]) {
+      if (Game.achievements[achievement].won == 0) {
+        Game.achievements[achievement].won = 1
+        let div = document.createElement('div')
+        div.classList.add('achievement')
+        div.innerHTML = `
+          <h1>Achievement Unlocked</h1>
+          <hr>
+          <h3>${Game.achievements[achievement].name}</h3>
+          <p>${Game.achievements[achievement].desc}</p>
+        `
+        s('#achievements').append(div)
+
+        setTimeout(() => {
+          div.remove()
+        }, 3000)
+      }
+    }
+  }
+
+
+
 
   Game.rebuildStore()
 
