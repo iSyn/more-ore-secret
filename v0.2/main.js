@@ -182,30 +182,41 @@ Game.Launch = () => {
       if (this.inUse == false) {
         let price = this.amount * 10
         if (Game.ores >= price) {
-
-          s(`#furnace${this.id}-amount`).disabled = true
-          s(`#furnace${this.id}-button`).style.cursor = 'not-allowed'
-          s(`#furnace${this.id}-button`).innerHTML = 'Cancel'
-          s(`#furnace${this.id}-button`).disabled = true
-
           this.inUse = true
           Game.spend(price, 'ores')
-          for (i = 0; i < this.amount; i++) {
-            setTimeout(() => {
-              console.log('hi')
-              amountLeft--
-              console.log(amountLeft)
-              s(`#furnace${this.id}-amount`).value = amountLeft
-              Game.earn(1, 'refined')
-              Game.rebuildInventory()
-            }, Game.smeltTime * 1000 * (i + 1))
-          }
-          this.inUse = false
-          s(`#furnace${this.id}-amount`).disabled = false
-          s(`#furnace${this.id}-amount`).value = null
-          s(`#furnace${this.id}-button`).style.cursor = 'pointer'
-          s(`#furnace${this.id}-button`).innerHTML = 'Smelt'
-          s(`#furnace${this.id}-button`).disabled = false
+
+          s(`#furnace${this.id}-amount`).disabled = true
+          s(`#furnace${this.id}-amount`).style.cursor = 'not-allowed'
+          s(`#furnace${this.id}-button`).disabled = true
+          s(`#furnace${this.id}-button`).style.cursor = 'not-allowed'
+
+          let smeltInterval = setInterval(() => {
+            amountLeft--
+            s(`#furnace${this.id}-amount`).value = amountLeft
+            Game.earn(1, 'refined')
+            Game.rebuildInventory()
+          }, Game.smeltTime * 1000)
+
+          let timer = Game.smeltTime * this.amount
+          s(`#furnace${this.id}-time-remaining`).innerHTML = `[seconds left until completed: ${timer}]`
+          let smeltTimer = setInterval(() => {
+            timer--
+            s(`#furnace${this.id}-time-remaining`).innerHTML = `[seconds left until completed: ${timer}]`
+          }, 1000)
+
+          setTimeout(() => {
+            clearInterval(smeltInterval)
+            clearInterval(smeltTimer)
+            this.inUse = false
+            s(`#furnace${this.id}-amount`).disabled = false
+            s(`#furnace${this.id}-amount`).style.cursor = 'initial'
+            s(`#furnace${this.id}-amount`).value = null
+            s(`#furnace${this.id}-button`).disabled = false
+            s(`#furnace${this.id}-button`).style.cursor = 'pointer'
+            s(`#furnace${this.id}-time-remaining`).innerHTML = `[seconds left until completed: not in use]`
+          }, Game.smeltTime * 1000 * this.amount)
+
+
         }
       }
     }
@@ -259,7 +270,7 @@ Game.Launch = () => {
               <div class="progress-bar-container">
                 <div class="progress-bar"></div>
               </div>
-              <p class="time-remaining"> [seconds left until completed: not in use]</p>
+              <p id='furnace${j}-time-remaining' class="time-remaining"> [seconds left until completed: not in use]</p>
             </div>
           </div>
         `
