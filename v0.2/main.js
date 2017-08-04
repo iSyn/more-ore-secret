@@ -261,17 +261,18 @@ Game.Launch = () => {
   }
 
   Game.achievements = []
-  Game.achievement = function(name, desc) {
+  Game.achievement = function(name, howToUnlock, desc) {
       this.name = name
+      this.howToUnlock = howToUnlock
       this.desc = desc
       this.won = 0
 
       Game.achievements[this.name] = this
   }
 
-  new Game.achievement('Your First Click', 'Have your first click <br> <q>Wont be your last though...</q>')
-  new Game.achievement('Double Click', 'Click a second time <br> <q>I told you so</q>')
-  new Game.achievement('Carpal Tunnel', 'Click a total of 10 times <br> <q>Wheres the Bengay</q>')
+  new Game.achievement('Your First Click', 'Have your first click', '<q>Wont be your last though...</q>')
+  new Game.achievement('Double Click', 'Click a second time', '<q>I told you so</q>')
+  new Game.achievement('Carpal Tunnel', 'Click a total of 10 times', '<q>Wheres the Bengay</q>')
 
   Game.win = (achievement) => {
     console.log(achievement)
@@ -284,13 +285,14 @@ Game.Launch = () => {
           <h3>Achievement Unlocked</h3>
           <hr>
           <h1>${Game.achievements[achievement].name}</h1>
+          <p>${Game.achievements[achievement].howToUnlock}</p>
           <p>${Game.achievements[achievement].desc}</p>
         `
         s('#achievements').append(div)
 
         setTimeout(() => {
           div.remove()
-        }, 2500)
+        }, 2800)
       }
     }
   }
