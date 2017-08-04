@@ -204,6 +204,20 @@ Game.Launch = () => {
             s(`#furnace${this.id}-time-remaining`).innerHTML = `[seconds left until completed: ${timer}]`
           }, 1000)
 
+          let currentWidth = 0
+          let ammountOfTimeNeeded = this.amount * Game.smeltTime
+          startProgress = setInterval(() => {
+            currentWidth += (100/ammountOfTimeNeeded) * .01
+            s(`#furnace${this.id}-progress-bar`).style.width = currentWidth + '%'
+          }, 10)
+
+          setTimeout(() => {
+            clearInterval(startProgress)
+            s(`#furnace${this.id}-progress-bar`).style.width = '0%'
+          }, ammountOfTimeNeeded * 1000)
+
+
+
           setTimeout(() => {
             clearInterval(smeltInterval)
             clearInterval(smeltTimer)
@@ -258,6 +272,7 @@ Game.Launch = () => {
       }
     }
     if (Game.selectedTab == 2) { // If on furnace tab, also build furnaces
+      str += '<h1>10 Raw Ores = 1 Refined Ore</h1>'
       for (j = 0; j < Game.furnaces.length; j++) {
         Game.furnaces[j].id = j
         str += `
@@ -267,8 +282,8 @@ Game.Launch = () => {
               <button id='furnace${j}-button' class="start-furnace-button" onclick='Game.furnaces[${j}].start()'>Start</button>
             </div>
             <div class="furnace-bottom">
-              <div class="progress-bar-container">
-                <div class="progress-bar"></div>
+              <div id='furnace${j}-progress-bar-container' class="progress-bar-container">
+                <div id='furnace${j}-progress-bar' class="progress-bar"></div>
               </div>
               <p id='furnace${j}-time-remaining' class="time-remaining"> [seconds left until completed: not in use]</p>
             </div>
@@ -380,7 +395,3 @@ Game.Launch = () => {
 }
 
 window.onload = () => {Game.Launch()}
-
-
-
-

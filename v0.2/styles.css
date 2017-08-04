@@ -287,10 +287,11 @@ body {
   margin-bottom: 5px;
 }
 
-.furnace-bottom .time-remaining {
-
+.progress-bar {
+  height: 100%;
+  background: red;
+  width: 0%;
 }
-
 
 
 #achievements {
