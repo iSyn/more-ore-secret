@@ -225,7 +225,63 @@ body {
   width: 350px;
   border: 1px solid black;
   margin-bottom: 10px;
+  display: flex;
+  flex-flow: column nowrap;
 }
+
+#furnace0 {
+  margin-top: 30px;
+}
+
+.furnace-top {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: center;
+  background: gray;
+  height: 70%;
+}
+
+.furnace-top input {
+  height: 50%;
+  width: 60%;
+  border: 1px solid black;
+  outline: none;
+  text-align: center;
+  font-size: 30px;
+  margin-right: 4%;
+}
+
+.furnace-top .start-furnace-button {
+  height: 50%;
+  /*width: 20%;*/
+  padding: 0px 20px;
+  border: 1px solid black;
+  cursor: pointer;
+  font-size: 15px;
+}
+
+.furnace-bottom {
+  background: darkgrey;
+  height: 30%;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  justify-content: center;
+}
+
+.furnace-bottom .progress-bar-container {
+  height: 30%;
+  width: 90%;
+  border: 1px solid black;
+  margin-bottom: 5px;
+}
+
+.furnace-bottom .time-remaining {
+
+}
+
+
 
 #achievements {
   position: absolute;
@@ -235,18 +291,20 @@ body {
 
 .achievement {
   position: relative;
-  bottom: 10px;
+  /*bottom: 10px;*/
   right: 10px;
-  border: 1px solid black;
+  border: 2px solid black;
+  border-radius: 15px;
   z-index: 9999;
   background-color: white;
   margin-bottom: 10px;
   text-align: center;
   padding: 10px 40px;
   animation: fadeOut 3s linear;
-  background: #91ffa6;
+  /*background: #91ffa6;*/
   box-shadow: 0px 2px #222;
   width: 400px;
+  pointer-events: none;
 }
 
 @keyframes fadeOut {

@@ -213,6 +213,16 @@ Game.Launch = () => {
         Game.furnaces[j].id = j
         str += `
           <div id='furnace${j}' class='furnace'>
+            <div class="furnace-top">
+              <input type="number"/>
+              <button class="start-furnace-button">Start</button>
+            </div>
+            <div class="furnace-bottom">
+              <div class="progress-bar-container">
+                <div class="progress-bar"></div>
+              </div>
+              <p class="time-remaining"> [seconds left until completed: 0]</p>
+            </div>
           </div>
         `
       }
@@ -251,7 +261,7 @@ Game.Launch = () => {
   Game.unlockStuff = () => {
     if (Game.totalOreClicks >= 1) Game.win('Your First Click')
     if (Game.totalOreClicks >= 2) Game.win('Double Click')
-    if (Game.totalOreClicks >= 10) Game.win('Carpal Tunnel')
+    if (Game.totalOreClicks >= 50) Game.win('Carpal Tunnel')
     if (Game.wood > 0 && Game.items[2].hidden == true) {Game.items[2].hidden = false}
     if (Game.items[2].owned == 1 && Game.tabs[1].unlocked == false) {Game.tabs[1].unlocked = true; Game.rebuildTabs()}
     if (Game.items[3].owned == 1 && Game.tabs[2].unlocked == false) {Game.tabs[2].unlocked = true; Game.rebuildTabs()}
@@ -273,9 +283,9 @@ Game.Launch = () => {
   new Game.achievement('Your First Click', 'Have your first click', '<q>Wont be your last though...</q>')
   new Game.achievement('Double Click', 'Click a second time', '<q>I told you so</q>')
   new Game.achievement('Carpal Tunnel', 'Click a total of 10 times', '<q>Wheres the Bengay</q>')
+  new Game.achievement('Morning Wood')
 
   Game.win = (achievement) => {
-    console.log(achievement)
     if (Game.achievements[achievement]) {
       if (Game.achievements[achievement].won == 0) {
         Game.achievements[achievement].won = 1
