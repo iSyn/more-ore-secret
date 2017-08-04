@@ -25,6 +25,7 @@ Game.Launch = () => {
   Game.earn = (amt, type) => {
     Game[type] += amt
     Game.unlockStuff()
+    Game.risingNumber(amt, type)
   }
 
   Game.spend = (amt, type) => {
@@ -42,7 +43,6 @@ Game.Launch = () => {
     Game.totalOreClicks++
     Game.calculateClick()
     Game.earn(Game.oresPerClick, 'ores')
-    Game.risingNumber(Game.oresPerClick, 'ores')
     Game.rebuildInventory()
     Game.getGold()
   }
