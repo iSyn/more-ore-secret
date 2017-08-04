@@ -142,17 +142,25 @@ body {
   background-color: #fff670;
 }
 
-.store-button:hover .button-bottom {
+.hide {
+  display: none;
+}
+
+.store-button:hover .button-bottom{
   display: block;
+}
+
+.store-button:hover .hide {
+  display: initial;
+}
+
+.store-button:hover .item-price {
+  font-weight: bold;
 }
 
 .button-top {
   display: flex;
   flex-flow: row nowrap;
-}
-
-.button-top h1 {
-  font-size: 40px;
 }
 
 .button-bottom {
@@ -161,6 +169,7 @@ body {
 
 .item-name {
   flex-grow: 1;
+  font-size: 40px;
 }
 
 .item-price {
@@ -293,7 +302,7 @@ body {
   position: relative;
   /*bottom: 10px;*/
   right: 10px;
-  border: 2px solid black;
+  border: 3px solid black;
   border-radius: 15px;
   z-index: 9999;
   background-color: white;
@@ -302,9 +311,10 @@ body {
   padding: 10px 40px;
   animation: fadeOut 3s linear;
   /*background: #91ffa6;*/
-  box-shadow: 0px 2px #222;
+  box-shadow: 0px 4px #222;
   width: 400px;
   pointer-events: none;
+  color: black;
 }
 
 @keyframes fadeOut {

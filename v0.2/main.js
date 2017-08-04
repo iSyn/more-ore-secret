@@ -165,9 +165,12 @@ Game.Launch = () => {
 
   Game.furnaces = []
   Game.furnace = function() {
-    this.id = 0
+    this.id = Game.furnaces.length
     this.inUse = false
     this.amount = null
+
+
+
     Game.furnaces.push(this)
   }
 
@@ -193,15 +196,13 @@ Game.Launch = () => {
             <div class='store-button' id='store-button${i}' onclick='Game.items[${i}].buy()'>
               <div class="button-top">
                 <img src="./assets/${item.pic}" alt="" />
-                <h1 class='item-name'>${item.name}</h1>
+                <h1 class='item-name'>${item.name} <span class='hide' style='font-size: 15px'>[owned: ${item.owned}]</span></h1>
                 <p class='item-price'>cost: ${item.price} ${item.priceMaterial}</p>
               </div>
               <div class="button-bottom">
                 <hr/>
                 <h3>${item.desc}</h3>
                 <p style='font-style: oblique'>${item.filler}</p>
-                <br>
-                <p>owned: ${item.owned}</p>
               </div>
             </div>
           `
@@ -221,7 +222,7 @@ Game.Launch = () => {
               <div class="progress-bar-container">
                 <div class="progress-bar"></div>
               </div>
-              <p class="time-remaining"> [seconds left until completed: 0]</p>
+              <p class="time-remaining"> [seconds left until completed: not in use]</p>
             </div>
           </div>
         `
@@ -293,8 +294,9 @@ Game.Launch = () => {
         div.classList.add('achievement')
         div.innerHTML = `
           <h3>Achievement Unlocked</h3>
-          <hr>
+          <hr size='2px' color='black'>
           <h1>${Game.achievements[achievement].name}</h1>
+          <hr size='2px' color='black'>
           <p>${Game.achievements[achievement].howToUnlock}</p>
           <p>${Game.achievements[achievement].desc}</p>
         `
