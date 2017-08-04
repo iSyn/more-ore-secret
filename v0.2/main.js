@@ -249,7 +249,9 @@ Game.Launch = () => {
   }
 
   Game.unlockStuff = () => {
-    if (Game.totalOreClicks > 0) Game.win('Your First Click')
+    if (Game.totalOreClicks >= 1) Game.win('Your First Click')
+    if (Game.totalOreClicks >= 2) Game.win('Double Click')
+    if (Game.totalOreClicks >= 10) Game.win('Carpal Tunnel')
     if (Game.wood > 0 && Game.items[2].hidden == true) {Game.items[2].hidden = false}
     if (Game.items[2].owned == 1 && Game.tabs[1].unlocked == false) {Game.tabs[1].unlocked = true; Game.rebuildTabs()}
     if (Game.items[3].owned == 1 && Game.tabs[2].unlocked == false) {Game.tabs[2].unlocked = true; Game.rebuildTabs()}
@@ -267,7 +269,9 @@ Game.Launch = () => {
       Game.achievements[this.name] = this
   }
 
-  new Game.achievement('Your First Click', 'wont be your last though...')
+  new Game.achievement('Your First Click', 'Have your first click <br> <q>Wont be your last though...</q>')
+  new Game.achievement('Double Click', 'Click a second time <br> <q>I told you so</q>')
+  new Game.achievement('Carpal Tunnel', 'Click a total of 10 times <br> <q>Wheres the Bengay</q>')
 
   Game.win = (achievement) => {
     console.log(achievement)
@@ -277,16 +281,16 @@ Game.Launch = () => {
         let div = document.createElement('div')
         div.classList.add('achievement')
         div.innerHTML = `
-          <h1>Achievement Unlocked</h1>
+          <h3>Achievement Unlocked</h3>
           <hr>
-          <h3>${Game.achievements[achievement].name}</h3>
+          <h1>${Game.achievements[achievement].name}</h1>
           <p>${Game.achievements[achievement].desc}</p>
         `
         s('#achievements').append(div)
 
         setTimeout(() => {
           div.remove()
-        }, 3000)
+        }, 2500)
       }
     }
   }
