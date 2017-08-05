@@ -419,6 +419,7 @@ body {
 }
 
 .quest-modal-image {
+  margin: 10px 0px;
   border: 1px solid black;
   background-size: cover;
   height: 300px;
