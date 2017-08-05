@@ -10,6 +10,9 @@ Game.Launch = () => {
   Game.refined = 999
   Game.wood = 999
   Game.gold = 999
+  Game.miners = 0
+  Game.lumberjacks = 0
+  Game.heroes = 0
 
   Game.totalOreClicks = 0
   Game.totalTreeClicks = 0
@@ -155,11 +158,9 @@ Game.Launch = () => {
 
     this.buy = () => {
       if (Game[this.priceMaterial] >= this.price) {
-        console.log('you have enough money')
         Game.spend(this.price, this.priceMaterial)
-        console.log('spending', this.price, this.priceMaterial)
+        this.owned++
         this.price += Math.floor(Math.pow(Game.priceIncrease, this.owned))
-        console.log(this.price)
         if (this.buyFunction) this.buyFunction()
         Game.rebuildInventory()
         Game.rebuildStore()
@@ -213,6 +214,7 @@ Game.Launch = () => {
           startProgress = setInterval(() => {
             currentWidth += (100/ammountOfTimeNeeded) * .01
             s(`#furnace${this.id}-progress-bar`).style.width = currentWidth + '%'
+            Game.rebuildInventory()
           }, 10)
 
           setTimeout(() => {
@@ -256,9 +258,18 @@ Game.Launch = () => {
     Game.smeltTime *= .9
   })
   new Game.item(3, 'Hire Miner', 'hardhat.png', 'Increases idle ore gain', 'mine mine mine', 5, 'gold', 999, false)
+  new Game.item(3, 'Hire Smelter', 'mask.png', 'Allows for idle smelting', 'smelt smelt smelt', 5, 'gold', 999, false)
   new Game.item(3, 'Hire Lumberjack', 'lumberjack.png', 'Increases idle wood gain', 'chop chop chop', 5, 'gold', 999, false)
-  new Game.item(3, 'Hire Hero', 'shield.png', 'Fight baddies', 'Time for an adventure', '1000', 'gold', 999, false)
+  new Game.item(3, 'Hire Hero', 'shield.png', 'Fight baddies', 'Time for an adventure', 1000, 'gold', 999, false)
   new Game.item(0, 'Metal Detector', 'metaldetector.png', 'Increases chance of gold', 'beep... beep', 100, 'gold', 999, false)
+
+  Game.trade = (item1amount, item1Material, item2amount, item2Materiaal) => {
+    if (Game[item1Material] >= item1amount) {
+      Game[item1Material] -= item1amount
+      Game[item2Materiaal] += item2amount
+    }
+    Game.rebuildInventory()
+  }
 
   Game.rebuildStore = () => {
     let str = ''
@@ -308,6 +319,20 @@ Game.Launch = () => {
       str += `
         <div id='trade-hall'>
           <h1>Trade Hall</h1>
+          <div class="trade-container">
+            <div class="trade">
+              <p>Trade 50 raw ores for 1 refined ore</p>
+              <button onclick='Game.trade(50,"ores", 1, "refined")'>Trade</button>
+            </div>
+            <div class="trade">
+              <p>Trade 100 raw ores for 1 gold</p>
+              <button onclick='Game.trade(100,"ores", 1, "gold")'>Trade</button>
+            </div>
+            <div class="trade">
+              <p>Trade 2 gold for 50 raw ores</p>
+              <button onclick='Game.trade(2,"gold", 50, "ores")'>Trade</button>
+            </div>
+          </div>
         </div>
 
       `
@@ -351,11 +376,11 @@ Game.Launch = () => {
   Game.unlockStuff = () => {
     if (Game.totalOreClicks >= 1) Game.win('Your First Click')
     if (Game.totalOreClicks >= 2) Game.win('Double Click')
-    if (Game.totalOreClicks >= 50) Game.win('Carpal Tunnel')
+    if (Game.totalOreClicks >= 100) Game.win('Carpal Tunnel')
     if (Game.totalTreeClicks >= 1) Game.win('Morning Wood')
-    if (Game.sessionTime >= 10) Game.win('Milestone 1')
-    if (Game.sessionTime >= 30) Game.win('Milestone 2')
-    if (Game.sessionTime >= 60) Game.win('Milestone 3')
+    if (Game.sessionTime >= 30) Game.win('Milestone 1')
+    if (Game.sessionTime >= 60) Game.win('Milestone 2')
+    if (Game.sessionTime >= 300) Game.win('Milestone 3')
     if (Game.wood > 0 && Game.items[2].hidden == true) {Game.items[2].hidden = false; Game.rebuildStore()}
     if (Game.items[2].owned == 1 && Game.tabs[1].unlocked == false) {Game.tabs[1].unlocked = true; Game.rebuildTabs(); Game.rebuildStore()}
     if (Game.items[3].owned == 1 && Game.tabs[2].unlocked == false) {Game.tabs[2].unlocked = true; Game.rebuildTabs(); Game.rebuildStore()}
@@ -377,13 +402,13 @@ Game.Launch = () => {
 
   new Game.achievement('Your First Click', 'Have your first click', 'Wont be your last though...')
   new Game.achievement('Double Click', 'Click a second time', 'I told you so')
-  new Game.achievement('Carpal Tunnel', 'Click a total of 50 times', 'Wheres the Bengay')
+  new Game.achievement('Carpal Tunnel', 'Click a total of 100 times', 'Wheres the Bengay')
 
   new Game.achievement('Morning Wood', 'Cut your first tree', '-insert dick pun here-')
 
-  new Game.achievement('Milestone 1', 'Stay on More Ore for more than 10 seconds', "You're still here?")
-  new Game.achievement('Milestone 2', 'Stay on More Ore for more than 30 seconds', "Why are you still here...")
-  new Game.achievement('Milestone 3', 'Stay on More Ore for more than 1 minute', "Ahhh... afk")
+  new Game.achievement('Milestone 1', 'Stay on More Ore for more than 30 seconds', "You're still here?")
+  new Game.achievement('Milestone 2', 'Stay on More Ore for more than 1 minute', "Why are you still here...")
+  new Game.achievement('Milestone 3', 'Stay on More Ore for more than 5 minute', "Ahhh... afk")
 
   Game.win = (achievement) => {
     if (Game.achievements[achievement]) {
