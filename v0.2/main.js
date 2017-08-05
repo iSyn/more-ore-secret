@@ -198,10 +198,10 @@ Game.Launch = () => {
           }, Game.smeltTime * 1000)
 
           let timer = Game.smeltTime * this.amount
-          s(`#furnace${this.id}-time-remaining`).innerHTML = `[seconds left until completed: ${timer}]`
+          s(`#furnace${this.id}-time-remaining`).innerHTML = `[seconds left until completed: ${Math.ceil(timer)}]`
           let smeltTimer = setInterval(() => {
             timer--
-            s(`#furnace${this.id}-time-remaining`).innerHTML = `[seconds left until completed: ${timer}]`
+            s(`#furnace${this.id}-time-remaining`).innerHTML = `[seconds left until completed: ${Math.ceil(timer)}]`
           }, 1000)
 
           let currentWidth = 0
@@ -243,9 +243,13 @@ Game.Launch = () => {
   new Game.item(0, 'X-Ray Glasses', 'xray-glasses.png', 'Detects weak spots within the ore', 'Why is everything so swirly', 50, 'refined', 1, false)
   new Game.item(0, 'Workshop', 'workbench.png', 'Build things...', 'Wood... and lots of it', 50, 'wood', 1, true)
   new Game.item(1, 'Blacksmiths Hut', 'anvil.png', 'Gives you access to furnaces', 'fire burn good', 100, 'wood', 1, false)
-  new Game.item(1, 'Tavern', 'beer.png', 'Hire workers and trade goods', 'slavery for cheap', 100, 'wood', 1, false)
+  new Game.item(1, 'Tavern', 'beer.png', 'Trade goods and hire workers', 'slavery for cheap', 100, 'wood', 1, false)
   new Game.item(2, 'Furnace', 'furnace.png', 'Smelt raw ores to create refined ores', 'Caution... hot!', 50, 'ores', 999, false, () => {
     new Game.furnace()
+    if (Game.items[6].hidden == true) Game.items[6].hidden = false
+  })
+  new Game.item(2, 'Upgrade Furnace Speed', 'nothing.png', 'Decreases the amount of time needed to smelt', 'Add more fire', 5, 'refined', 999, true, () => {
+    Game.smeltTime *= .9
   })
 
   Game.rebuildStore = () => {
