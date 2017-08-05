@@ -248,7 +248,7 @@ Game.Launch = () => {
     new Game.furnace()
     if (Game.items[6].hidden == true) Game.items[6].hidden = false
   })
-  new Game.item(2, 'Upgrade Furnace Speed', 'nothing.png', 'Decreases the amount of time needed to smelt', 'Add more fire', 5, 'refined', 999, true, () => {
+  new Game.item(2, 'Upgrade Furnace Speed', 'fire.png', 'Decreases the amount of time needed to smelt', 'Add more fire', 5, 'refined', 999, true, () => {
     Game.smeltTime *= .9
   })
 
