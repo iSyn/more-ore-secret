@@ -45,7 +45,7 @@ Game.Launch = () => {
     Game.earn(Game.oresPerClick, 'ores')
     Game.rebuildInventory()
     Game.getGold()
-    Game.drawParticles()
+    Game.drawParticles('ore')
   }
 
   s('#ore').onclick = Game.oreClick
@@ -55,6 +55,7 @@ Game.Launch = () => {
     Game.calculateClick()
     Game.earn(Game.woodPerClick, 'wood')
     Game.rebuildInventory()
+    Game.drawParticles('wood')
   }
 
   s('#wood').onclick = Game.woodClick
@@ -392,10 +393,16 @@ Game.Launch = () => {
     }
   }
 
-  Game.drawParticles = () => {
+  Game.drawParticles = (material) => {
     for (i = 0; i < 3; i++) {
       let div = document.createElement('div')
       div.classList.add('particle')
+      if (material == 'ore') {
+        div.style.background = 'silver'
+      }
+      if (material == 'wood') {
+        div.style.background = 'brown'
+      }
       let x = event.clientX
       let y = event.clientY
       div.style.left = x + 'px'

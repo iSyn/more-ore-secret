@@ -334,12 +334,10 @@ body {
 
 .particle {
   position: absolute;
-  background: silver;
   border: 1px solid black;
   z-index: 9999999;
   height: 5px;
   width: 5px;
   pointer-events: none;
 }
-
 
