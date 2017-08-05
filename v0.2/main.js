@@ -324,6 +324,7 @@ Game.Launch = () => {
         <hr/>
         <img class='quest-modal-image' src="./assets/${this.image}" alt="" />
         <p>${this.desc}</p>
+        <p>Possible Artifacts: ${this.artifact1}, ${this.artifact2}, ${this.artifact3}</p>
       `
 
       s('body').appendChild(div2)
