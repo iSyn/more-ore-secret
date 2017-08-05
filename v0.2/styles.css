@@ -412,6 +412,17 @@ body {
   z-index: 99;
   background: #e5e5c1;
   border: 1px solid black;
+  padding: 10px;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+}
+
+.quest-modal-image {
+  border: 1px solid black;
+  background-size: cover;
+  height: 300px;
+  width: 450px;
 }
 
 .cover {

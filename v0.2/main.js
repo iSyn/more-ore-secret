@@ -301,8 +301,10 @@ Game.Launch = () => {
   }
 
   Game.quests = []
-  Game.quest = function(name, artifacts) {
+  Game.quest = function(name, image, desc, artifacts) {
     this.name = name
+    this.desc = desc
+    this.image = image
     this.cleared = false
     this.timesCleared = 0
     artifacts.split('|')
@@ -320,7 +322,8 @@ Game.Launch = () => {
         <p style='text-align: center;'>&bull;</p>
         <h1 style='text-align: center;'>${this.name}</h1>
         <hr/>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Optio eius harum nihil est incidunt, eligendi, magni itaque quidem repellendus sunt fuga non tenetur aliquam! Corporis pariatur fugiat, ipsum quas! Perferendis.</p>
+        <img class='quest-modal-image' src="./assets/${this.image}" alt="" />
+        <p>${this.desc}</p>
       `
 
       s('body').appendChild(div2)
@@ -330,12 +333,11 @@ Game.Launch = () => {
     Game.quests.push(this)
   }
 
-  new Game.quest('Hu Man Woods', 'test1|test2|test3')
-  new Game.quest('Sin Mountain', 'test1|test2|test3')
-  new Game.quest('Kong Caves', 'test1|test2|test3')
-  new Game.quest('Jasok Lake', 'test1|test2|test3')
-  new Game.quest('Rusty Forest', 'test1|test2|test3')
-  new Game.quest('Lantiguen Mineshaft', 'test1|test2|test3')
+  new Game.quest('Hu Man Woods', 'nothing.png', 'Less than 2% of the total amount of people who went inside the Hu Man Woods lived to tell the tale. Survivors said they saw their loved ones in the shadows beckon them deeper and deeper into the woods, only to find out it was just some branches.','test1|test2|test3')
+  new Game.quest('Kong Caves', 'nothing.png', 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ea aliquam velit omnis, assumenda temporibus voluptate quaerat quidem, tenetur nobis ducimus officiis fugit culpa eaque dolorem impedit! Aperiam corporis amet, earum!','test1|test2|test3')
+  new Game.quest('Jasok Lake', 'nothing.png', 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fugiat cum id libero veritatis quaerat saepe sequi doloremque esse obcaecati soluta quidem, atque dolorum rerum error, asperiores explicabo, alias laboriosam voluptate.','test1|test2|test3')
+  new Game.quest('Rusty Forest', 'nothing.png', 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Officiis illum ducimus architecto, itaque earum est expedita, repudiandae maxime sit natus deleniti atque eum vitae quas totam rem at inventore et.','test1|test2|test3')
+  new Game.quest('Lantiguen Mineshaft', 'nothing.png', 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestiae unde harum a placeat. Harum expedita, reiciendis veritatis voluptates, possimus illum. Tempora rem quaerat, eum nemo quos exercitationem et sequi nobis!','test1|test2|test3')
 
   Game.rebuildStore = () => {
     let str = ''
