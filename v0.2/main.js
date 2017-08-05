@@ -450,20 +450,44 @@ Game.Launch = () => {
 
       let particleY = y
       let particleX = x
+
       let randomNumber = Math.random()
       let randomSign = Math.round(Math.random()) * 2 - 1
 
-      let particleFall = setInterval(() => {
+      let particleUp = setInterval(() => {
         particleX += randomNumber * randomSign
-        particleY += 2
+        particleY -= 1
         div.style.top = particleY + 'px'
         div.style.left = particleX + 'px'
       }, 10)
 
       setTimeout(() => {
-        clearInterval(particleFall)
-        div.remove()
-      }, 1000)
+        clearInterval(particleUp)
+
+        let particleDown = setInterval(() => {
+          particleX += randomNumber * randomSign
+          particleY += 1
+          div.style.top = particleY + 'px'
+          div.style.left = particleX + 'px'
+        }, 10)
+
+        setTimeout(() => {
+          clearInterval(particleDown)
+          div.remove()
+        }, 1000)
+      }, 100)
+
+      // let particleFall = setInterval(() => {
+      //   particleX += randomNumber * randomSign
+      //   particleY += 2
+      //   div.style.top = particleY + 'px'
+      //   div.style.left = particleX + 'px'
+      // }, 10)
+
+      // setTimeout(() => {
+      //   clearInterval(particleFall)
+      //   div.remove()
+      // }, 1000)
 
 
       s('#particles').append(div)
