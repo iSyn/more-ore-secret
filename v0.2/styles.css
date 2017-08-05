@@ -233,10 +233,13 @@ body {
 .furnace {
   height: 350px;
   width: 350px;
-  border: 1px solid black;
+  border: 3px solid black;
   margin-bottom: 30px;
   display: flex;
   flex-flow: column nowrap;
+  box-shadow: 0px 5px #222;
+  border-radius: 15px;
+  overflow: hidden;
 }
 
 #furnace0 {
@@ -260,15 +263,21 @@ body {
   text-align: center;
   font-size: 30px;
   margin-right: 4%;
+  box-shadow: 0px 5px #222;
 }
 
-.furnace-top .start-furnace-button {
+.start-furnace-button {
   height: 50%;
   /*width: 20%;*/
   padding: 0px 20px;
   border: 1px solid black;
   cursor: pointer;
   font-size: 15px;
+  box-shadow: 0px 4px #222;
+}
+
+.start-furnace-button:hover {
+  filter: brightness(85%)
 }
 
 .furnace-bottom {
@@ -341,3 +350,11 @@ body {
   pointer-events: none;
 }
 
+#trade-hall {
+  margin-top: 30px;
+  width: 85%;
+  height: 400px;
+  border: 5px solid black;
+  border-radius: 10px;
+  text-align: center;
+}
