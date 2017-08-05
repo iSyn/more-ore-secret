@@ -376,7 +376,49 @@ body {
   font-size: 20px;
 }
 
+.quest-board {
+  height: 350px;
+  overflow-y: scroll;
+  margin-top: 30px;
+  width: 90%;
+  border: 3px solid black;
+  border-radius: 15px;
+  padding: 20px;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  background: #e5ad64;
+  box-shadow: 0px 3px #222;
+}
+
 .quest {
   width: 90%;
   border: 1px solid black;
+  margin-bottom: 10px;
+  cursor: pointer;
+  padding: 10px 10px 20px 10px;
+  text-align: center;
+  background: white;
+  box-shadow: 0 2px #222;
 }
+
+.quest-modal {
+  height: 600px;
+  width: 500px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 99;
+  background: #e5e5c1;
+  border: 1px solid black;
+}
+
+.cover {
+  position: absolute;
+  height: 100vh;
+  width: 100vw;
+  background: rgba(0, 0, 0, 0.9);
+  z-index: 98;
+}
+

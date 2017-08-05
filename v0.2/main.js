@@ -13,7 +13,7 @@ Game.Launch = () => {
   Game.miners = 0
   Game.smelters = 0
   Game.lumberjacks = 0
-  Game.heroes = 0
+  Game.adventurers = 0
 
   Game.totalOreClicks = 0
   Game.totalTreeClicks = 0
@@ -281,9 +281,9 @@ Game.Launch = () => {
     Game.lumberjacks++
     if (Game.lumberjacks >= 0) {Game.win('Your First Lumberjack')}
   })
-  new Game.item(3, 'Hire Hero', 'shield.png', 'Fight baddies', 'Time for an adventure', 1000, 'gold', 999, false, () => {
-    Game.heroes++
-    if (Game.heroes >= 0) {Game.win('Your First Hero')}
+  new Game.item(3, 'Hire Adventurer', 'shield.png', 'Fight baddies', 'Time for an adventure', 1000, 'gold', 999, false, () => {
+    Game.adventurers++
+    if (Game.adventurers >= 0) {Game.win('Your First Adventurer')}
     if (Game.tabs[4].unlocked == false) {Game.tabs[4].unlocked = true; Game.rebuildTabs()}
   })
   new Game.item(0, 'Metal Detector', 'metaldetector.png', 'Increases chance of gold on click', 'beep... beep', 10, 'gold', 999, false, () => {
@@ -299,6 +299,43 @@ Game.Launch = () => {
     }
     Game.rebuildInventory()
   }
+
+  Game.quests = []
+  Game.quest = function(name, artifacts) {
+    this.name = name
+    this.cleared = false
+    this.timesCleared = 0
+    artifacts.split('|')
+    this.artifact1 = artifacts[0]
+    this.artifact2 = artifacts[1]
+    this.artifact3 = artifacts[2]
+
+    this.openModal = () => {
+      let div = document.createElement('div')
+      let div2 = document.createElement('div')
+      div2.classList.add('cover')
+      div2.onclick = () => {div2.remove(); div.remove()}
+      div.classList.add('quest-modal')
+      div.innerHTML = `
+        <p style='text-align: center;'>&bull;</p>
+        <h1 style='text-align: center;'>${this.name}</h1>
+        <hr/>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Optio eius harum nihil est incidunt, eligendi, magni itaque quidem repellendus sunt fuga non tenetur aliquam! Corporis pariatur fugiat, ipsum quas! Perferendis.</p>
+      `
+
+      s('body').appendChild(div2)
+      s('#modals').append(div)
+    }
+
+    Game.quests.push(this)
+  }
+
+  new Game.quest('Hu Man Woods', 'test1|test2|test3')
+  new Game.quest('Sin Mountain', 'test1|test2|test3')
+  new Game.quest('Kong Caves', 'test1|test2|test3')
+  new Game.quest('Jasok Lake', 'test1|test2|test3')
+  new Game.quest('Rusty Forest', 'test1|test2|test3')
+  new Game.quest('Lantiguen Mineshaft', 'test1|test2|test3')
 
   Game.rebuildStore = () => {
     let str = ''
@@ -369,9 +406,19 @@ Game.Launch = () => {
 
     if (Game.selectedTab == 4) {
       str += `
-        <h1>Available Amount of Heroes: ${Game.heroes}</h1>
-        <div class="quest">
-          <h1>Dark Forest</h1>
+        <h1 style='margin-top: 20px'>Available Amount of Adventurers: ${Game.adventurers}</h1>
+        <div class="quest-board">
+      `
+      for (k = 0; k < Game.quests.length; k++) {
+        str += `
+          <div class='quest' onclick='Game.quests[${k}].openModal()'>
+            <p style='text-align: center;'>&bull;</p>
+            <h1>${Game.quests[k].name}</h1>
+          </div>
+        `
+      }
+
+      str += `
         </div>
       `
     }
@@ -451,7 +498,7 @@ Game.Launch = () => {
   new Game.achievement('Your First Miner', 'Hire your first miner', 'Off to mine I guess...')
   new Game.achievement('Your First Smelter', 'Hire your first smelter', 'Off to smelt I guess...')
   new Game.achievement('Your First Lumberjack', 'Hire your first lumberjack', 'Off to chop wood I guess...')
-  new Game.achievement('Your First Hero', 'Hire your first hero', 'Chaaaaarrrgeeee')
+  new Game.achievement('Your First Adventurer', 'Hire your first adventurer', 'Off to adventure')
 
   Game.win = (achievement) => {
     if (Game.achievements[achievement]) {
