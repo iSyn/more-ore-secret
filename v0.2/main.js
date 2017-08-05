@@ -6,10 +6,10 @@ let Game = {}
 Game.Launch = () => {
   console.log('Game loaded and launched')
 
-  Game.ores = 999
-  Game.refined = 999
-  Game.wood = 999
-  Game.gold = 999
+  Game.ores = 99999
+  Game.refined = 99999
+  Game.wood = 99999
+  Game.gold = 99999
   Game.miners = 0
   Game.smelters = 0
   Game.lumberjacks = 0
@@ -85,7 +85,7 @@ Game.Launch = () => {
 
   Game.rebuildInventory()
 
-  Game.tabs = [{name: 'store', unlocked: true}, {name: 'workshop', unlocked: false}, {name: 'blacksmith', unlocked: false}, {name: 'tavern', unlocked: false}]
+  Game.tabs = [{name: 'store', unlocked: true}, {name: 'workshop', unlocked: false}, {name: 'blacksmith', unlocked: false}, {name: 'tavern', unlocked: false}, {name: 'quests', unlocked: false}]
   Game.rebuildTabs = () => {
 
     let str = ''
@@ -284,6 +284,7 @@ Game.Launch = () => {
   new Game.item(3, 'Hire Hero', 'shield.png', 'Fight baddies', 'Time for an adventure', 1000, 'gold', 999, false, () => {
     Game.heroes++
     if (Game.heroes >= 0) {Game.win('Your First Hero')}
+    if (Game.tabs[4].unlocked == false) {Game.tabs[4].unlocked = true; Game.rebuildTabs()}
   })
   new Game.item(0, 'Metal Detector', 'metaldetector.png', 'Increases chance of gold on click', 'beep... beep', 10, 'gold', 999, false, () => {
     Game.goldChance *= 1.25
@@ -322,7 +323,7 @@ Game.Launch = () => {
         }
       }
     }
-    if (Game.selectedTab == 2) { // If on furnace tab, also build furnaces
+    if (Game.selectedTab == 2) {
       str += '<h1>10 Raw Ores = 1 Refined Ore</h1>'
       for (j = 0; j < Game.furnaces.length; j++) {
         Game.furnaces[j].id = j
@@ -365,6 +366,16 @@ Game.Launch = () => {
 
       `
     }
+
+    if (Game.selectedTab == 4) {
+      str += `
+        <h1>Available Amount of Heroes: ${Game.heroes}</h1>
+        <div class="quest">
+          <h1>Dark Forest</h1>
+        </div>
+      `
+    }
+
     str += `
       <div id="store-spacer"></div>
     `
@@ -413,7 +424,6 @@ Game.Launch = () => {
     if (Game.items[2].owned == 1 && Game.tabs[1].unlocked == false) {Game.tabs[1].unlocked = true; Game.rebuildTabs(); Game.rebuildStore()}
     if (Game.items[3].owned == 1 && Game.tabs[2].unlocked == false) {Game.tabs[2].unlocked = true; Game.rebuildTabs(); Game.rebuildStore()}
     if (Game.items[4].owned == 1 && Game.tabs[3].unlocked == false) {Game.tabs[3].unlocked = true; Game.rebuildTabs(); Game.rebuildStore()}
-
   }
 
   Game.unlockStuff()
@@ -509,19 +519,6 @@ Game.Launch = () => {
           div.remove()
         }, 1000)
       }, 100)
-
-      // let particleFall = setInterval(() => {
-      //   particleX += randomNumber * randomSign
-      //   particleY += 2
-      //   div.style.top = particleY + 'px'
-      //   div.style.left = particleX + 'px'
-      // }, 10)
-
-      // setTimeout(() => {
-      //   clearInterval(particleFall)
-      //   div.remove()
-      // }, 1000)
-
 
       s('#particles').append(div)
     }

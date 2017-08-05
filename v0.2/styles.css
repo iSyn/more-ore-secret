@@ -375,3 +375,8 @@ body {
 .trade p {
   font-size: 20px;
 }
+
+.quest {
+  width: 90%;
+  border: 1px solid black;
+}
