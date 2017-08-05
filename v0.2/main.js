@@ -307,7 +307,7 @@ Game.Launch = () => {
     this.image = image
     this.cleared = false
     this.timesCleared = 0
-    artifacts.split('|')
+    artifacts = artifacts.split('|')
     this.artifact1 = artifacts[0]
     this.artifact2 = artifacts[1]
     this.artifact3 = artifacts[2]
@@ -324,6 +324,7 @@ Game.Launch = () => {
         <hr/>
         <img class='quest-modal-image' src="./assets/${this.image}" alt="" />
         <p>${this.desc}</p>
+        <br>
         <p>Possible Artifacts: ${this.artifact1}, ${this.artifact2}, ${this.artifact3}</p>
       `
 
