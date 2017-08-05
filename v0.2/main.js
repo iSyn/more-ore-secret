@@ -333,7 +333,7 @@ Game.Launch = () => {
     Game.quests.push(this)
   }
 
-  new Game.quest('Hu Man Woods', 'nothing.png', 'Less than 2% of the total amount of people who went inside the Hu Man Woods lived to tell the tale. Survivors said they saw their loved ones in the shadows beckon them deeper and deeper into the woods, only to find out it was just some branches.','test1|test2|test3')
+  new Game.quest('Hu Man Woods', 'huManWoods.png', 'Less than 2% of the total amount of people who went inside the Hu Man Woods lived to tell the tale. Survivors said they saw their loved ones in the shadows beckon them deeper and deeper into the woods, only to find out it was just some branches.','test1|test2|test3')
   new Game.quest('Kong Caves', 'nothing.png', 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ea aliquam velit omnis, assumenda temporibus voluptate quaerat quidem, tenetur nobis ducimus officiis fugit culpa eaque dolorem impedit! Aperiam corporis amet, earum!','test1|test2|test3')
   new Game.quest('Jasok Lake', 'nothing.png', 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fugiat cum id libero veritatis quaerat saepe sequi doloremque esse obcaecati soluta quidem, atque dolorum rerum error, asperiores explicabo, alias laboriosam voluptate.','test1|test2|test3')
   new Game.quest('Rusty Forest', 'nothing.png', 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Officiis illum ducimus architecto, itaque earum est expedita, repudiandae maxime sit natus deleniti atque eum vitae quas totam rem at inventore et.','test1|test2|test3')
