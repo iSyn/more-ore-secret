@@ -45,6 +45,7 @@ Game.Launch = () => {
     Game.earn(Game.oresPerClick, 'ores')
     Game.rebuildInventory()
     Game.getGold()
+    Game.drawParticles()
   }
 
   s('#ore').onclick = Game.oreClick
@@ -390,6 +391,38 @@ Game.Launch = () => {
       }
     }
   }
+
+  Game.drawParticles = () => {
+    for (i = 0; i < 3; i++) {
+      let div = document.createElement('div')
+      div.classList.add('particle')
+      let x = event.clientX
+      let y = event.clientY
+      div.style.left = x + 'px'
+      div.style.top = y + 'px'
+
+      let particleY = y
+      let particleX = x
+      let randomNumber = Math.random()
+      let randomSign = Math.round(Math.random()) * 2 - 1
+
+      let particleFall = setInterval(() => {
+        particleX += randomNumber * randomSign
+        particleY += 2
+        div.style.top = particleY + 'px'
+        div.style.left = particleX + 'px'
+      }, 10)
+
+      setTimeout(() => {
+        clearInterval(particleFall)
+        div.remove()
+      }, 1000)
+
+
+      s('#particles').append(div)
+    }
+  }
+
 
 
 
