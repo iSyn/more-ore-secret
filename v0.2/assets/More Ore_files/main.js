@@ -106,11 +106,6 @@ Game.Launch = () => {
   Game.changeTabs = (tabNumber) => {
     Game.selectedTab = tabNumber
     Game.rebuildStore()
-    let tabs = document.querySelectorAll('.tab')
-    tabs.forEach((tab) => {
-      tab.classList.remove('selected')
-    })
-    s(`#${Game.tabs[tabNumber].name}-tab`).classList.add('selected')
   }
 
   Game.rebuildTabs()
@@ -407,11 +402,7 @@ Game.Launch = () => {
     if (Game.selectedTab == 3) {
 
       if (Game.adventurers >= 1) {
-        str += `
-          <div id="quest-board">
-            <h1 style='text-align: center'>Quest Board</h1>
-            <div class='quests-container'>
-        `
+        str += `<div id="quest-board"> <h1>Quest Board</h1>`
 
         for (k = 0; k < Game.quests.length; k++) {
           Game.quests[k].id = k
@@ -423,7 +414,7 @@ Game.Launch = () => {
           `
         }
 
-        str += '</div></div>'
+        str += '</div>'
       }
 
       str += `
@@ -446,13 +437,6 @@ Game.Launch = () => {
         </div>
         `
     }
-
-    if (Game.selectedTab == 4) {
-      if (Game.currentQuest == null) {
-        str += 'No quest in progress. Select one from the Quest Board'
-      }
-    }
-
     str += `
       <div id="store-spacer"></div>
     `
@@ -606,7 +590,6 @@ Game.Launch = () => {
 
 
   Game.rebuildStore()
-  s(`#store-tab`).classList.add('selected')
 
 }
 
