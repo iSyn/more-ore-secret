@@ -9,7 +9,7 @@ Game.Launch = () => {
   Game.ores = 999
   Game.refined = 999
   Game.wood = 999
-  Game.gold = 0
+  Game.gold = 999
 
   Game.totalOreClicks = 0
   Game.totalTreeClicks = 0
@@ -155,9 +155,11 @@ Game.Launch = () => {
 
     this.buy = () => {
       if (Game[this.priceMaterial] >= this.price) {
+        console.log('you have enough money')
         Game.spend(this.price, this.priceMaterial)
+        console.log('spending', this.price, this.priceMaterial)
         this.price += Math.floor(Math.pow(Game.priceIncrease, this.owned))
-        this.owned++
+        console.log(this.price)
         if (this.buyFunction) this.buyFunction()
         Game.rebuildInventory()
         Game.rebuildStore()
@@ -241,8 +243,8 @@ Game.Launch = () => {
   }
 
   // whichTab, itemName, itemPic, itemDesc, fillerText, price, priceMaterial, maximumAmount, hidden
-  new Game.item(0, 'Axe', 'axe.png', 'Allows for the chopping of wood','Sharp and sturdy', 20, 'ores', 1, false)
-  new Game.item(0, 'X-Ray Glasses', 'xray-glasses.png', 'Detects weak spots within the ore', 'Why is everything so swirly', 50, 'refined', 1, false)
+  new Game.item(0, 'Axe', 'axe.png', 'Allows for the chopping of wood','Sharp and sturdy', 1, 'gold', 1, false)
+  new Game.item(0, 'X-Ray Glasses', 'xray-glasses.png', 'Detects weak spots within the ore', 'Why is everything so swirly', 30, 'gold', 1, false)
   new Game.item(0, 'Workshop', 'workbench.png', 'Build things...', 'Wood... and lots of it', 50, 'wood', 1, true)
   new Game.item(1, 'Blacksmiths Hut', 'anvil.png', 'Gives you access to furnaces', 'fire burn good', 100, 'wood', 1, false)
   new Game.item(1, 'Tavern', 'beer.png', 'Trade goods and hire workers', 'slavery for cheap', 100, 'wood', 1, false)
@@ -253,9 +255,10 @@ Game.Launch = () => {
   new Game.item(2, 'Upgrade Furnace Speed', 'fire.png', 'Decreases the amount of time needed to smelt', 'Add more fire', 5, 'refined', 999, true, () => {
     Game.smeltTime *= .9
   })
-  new Game.item(3, 'Hire Miner', 'hardhat.png', 'Increases idle ore gain', 'mine mine mine', '5', 'gold', 999, false)
-  new Game.item(3, 'Hire Lumberjack', 'lumberjack.png', 'Increases idle wood gain', 'chop chop chop', '5', 'gold', 999, false)
+  new Game.item(3, 'Hire Miner', 'hardhat.png', 'Increases idle ore gain', 'mine mine mine', 5, 'gold', 999, false)
+  new Game.item(3, 'Hire Lumberjack', 'lumberjack.png', 'Increases idle wood gain', 'chop chop chop', 5, 'gold', 999, false)
   new Game.item(3, 'Hire Hero', 'shield.png', 'Fight baddies', 'Time for an adventure', '1000', 'gold', 999, false)
+  new Game.item(0, 'Metal Detector', 'metaldetector.png', 'Increases chance of gold', 'beep... beep', 100, 'gold', 999, false)
 
   Game.rebuildStore = () => {
     let str = ''
