@@ -6,10 +6,10 @@ let Game = {}
 Game.Launch = () => {
   console.log('Game loaded and launched')
 
-  Game.ores = 999
-  Game.refined = 999
-  Game.wood = 999
-  Game.gold = 999
+  Game.ores = 0
+  Game.refined = 0
+  Game.wood = 0
+  Game.gold = 0
   Game.miners = 0
   Game.lumberjacks = 0
   Game.heroes = 0
@@ -17,8 +17,8 @@ Game.Launch = () => {
   Game.totalOreClicks = 0
   Game.totalTreeClicks = 0
 
-  Game.oresPerClick = 50
-  Game.woodPerClick = 50
+  Game.oresPerClick = 1
+  Game.woodPerClick = 1
 
   Game.priceIncrease = 1.15
   Game.smeltTime = 2
@@ -438,7 +438,7 @@ Game.Launch = () => {
       let div = document.createElement('div')
       div.classList.add('particle')
       if (material == 'ore') {
-        div.style.background = 'silver'
+        div.style.background = 'lightgrey'
       }
       if (material == 'wood') {
         div.style.background = 'brown'
@@ -465,7 +465,7 @@ Game.Launch = () => {
         clearInterval(particleUp)
 
         let particleDown = setInterval(() => {
-          particleX += randomNumber * randomSign
+          particleX += randomNumber * randomSign / 2
           particleY += 1
           div.style.top = particleY + 'px'
           div.style.left = particleX + 'px'
