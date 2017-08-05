@@ -6,22 +6,24 @@ let Game = {}
 Game.Launch = () => {
   console.log('Game loaded and launched')
 
-  Game.ores = 0
-  Game.refined = 0
-  Game.wood = 0
-  Game.gold = 0
+  Game.ores = 999
+  Game.refined = 999
+  Game.wood = 999
+  Game.gold = 999
   Game.miners = 0
+  Game.smelters = 0
   Game.lumberjacks = 0
   Game.heroes = 0
 
   Game.totalOreClicks = 0
   Game.totalTreeClicks = 0
 
-  Game.oresPerClick = 1
-  Game.woodPerClick = 1
+  Game.oresPerClick = 50
+  Game.woodPerClick = 50
 
   Game.priceIncrease = 1.15
   Game.smeltTime = 2
+  Game.goldChance = .1
   Game.selectedTab = 0
   Game.sessionTime = 0
 
@@ -37,7 +39,7 @@ Game.Launch = () => {
 
   Game.getGold = () => {
     let number = Math.random()
-    if (number > .9) {
+    if (number < Game.goldChance) {
       Game.earn(1, 'gold')
     }
   }
@@ -105,6 +107,16 @@ Game.Launch = () => {
   }
 
   Game.rebuildTabs()
+
+  Game.itemsPerSecond = () => {
+    setInterval(() => {
+      Game.ores += Game.miners
+      Game.wood += Game.lumberjacks
+      Game.rebuildInventory()
+    }, 1000)
+  }
+
+  Game.itemsPerSecond()
 
   Game.risingNumber = (amt, type) => {
     let randomNumber = Math.floor((Math.random() * 40) - 20) //picks a random number from -20 to 20
@@ -246,7 +258,7 @@ Game.Launch = () => {
 
   // whichTab, itemName, itemPic, itemDesc, fillerText, price, priceMaterial, maximumAmount, hidden
   new Game.item(0, 'Axe', 'axe.png', 'Allows for the chopping of wood','Sharp and sturdy', 1, 'gold', 1, false)
-  new Game.item(0, 'X-Ray Glasses', 'xray-glasses.png', 'Detects weak spots within the ore', 'Why is everything so swirly', 30, 'gold', 1, false)
+  new Game.item(0, 'X-Ray Glasses', 'xray-glasses.png', 'Detects weak spots within the ore', 'Why is everything so swirly', 20, 'gold', 1, false)
   new Game.item(0, 'Workshop', 'workbench.png', 'Build things...', 'Wood... and lots of it', 50, 'wood', 1, true)
   new Game.item(1, 'Blacksmiths Hut', 'anvil.png', 'Gives you access to furnaces', 'fire burn good', 100, 'wood', 1, false)
   new Game.item(1, 'Tavern', 'beer.png', 'Trade goods and hire workers', 'slavery for cheap', 100, 'wood', 1, false)
@@ -257,11 +269,27 @@ Game.Launch = () => {
   new Game.item(2, 'Upgrade Furnace Speed', 'fire.png', 'Decreases the amount of time needed to smelt', 'Add more fire', 5, 'refined', 999, true, () => {
     Game.smeltTime *= .9
   })
-  new Game.item(3, 'Hire Miner', 'hardhat.png', 'Increases idle ore gain', 'mine mine mine', 5, 'gold', 999, false)
-  new Game.item(3, 'Hire Smelter', 'mask.png', 'Allows for idle smelting', 'smelt smelt smelt', 5, 'gold', 999, false)
-  new Game.item(3, 'Hire Lumberjack', 'lumberjack.png', 'Increases idle wood gain', 'chop chop chop', 5, 'gold', 999, false)
-  new Game.item(3, 'Hire Hero', 'shield.png', 'Fight baddies', 'Time for an adventure', 1000, 'gold', 999, false)
-  new Game.item(0, 'Metal Detector', 'metaldetector.png', 'Increases chance of gold', 'beep... beep', 100, 'gold', 999, false)
+  new Game.item(3, 'Hire Miner', 'hardhat.png', 'Increases idle ore gain', 'mine mine mine', 5, 'gold', 999, false, () => {
+    Game.miners++
+    if (Game.miners >= 0) {Game.win('Your First Miner')}
+  })
+  new Game.item(3, 'Hire Smelter', 'mask.png', 'Allows for idle smelting', 'smelt smelt smelt', 5, 'gold', 999, false, () => {
+    Game.smelters++
+    if (Game.smelters >= 0) {Game.win('Your First Smelter')}
+  })
+  new Game.item(3, 'Hire Lumberjack', 'lumberjack.png', 'Increases idle wood gain', 'chop chop chop', 5, 'gold', 999, false, () => {
+    Game.lumberjacks++
+    if (Game.lumberjacks >= 0) {Game.win('Your First Lumberjack')}
+  })
+  new Game.item(3, 'Hire Hero', 'shield.png', 'Fight baddies', 'Time for an adventure', 1000, 'gold', 999, false, () => {
+    Game.heroes++
+    if (Game.heroes >= 0) {Game.win('Your First Hero')}
+  })
+  new Game.item(0, 'Metal Detector', 'metaldetector.png', 'Increases chance of gold on click', 'beep... beep', 10, 'gold', 999, false, () => {
+    Game.goldChance *= 1.25
+  })
+  new Game.item(1, 'Mass Production', 'nothing.png', 'Unlock items to be mass produced (items for workers)', 'You get a car... You get a car!', 10, 'refined', 1, false)
+  new Game.item(0, 'Piggy Bank', 'nothing.png', 'Increases the amount of gold get', 'oink oink', 10, 'gold', 999, false)
 
   Game.trade = (item1amount, item1Material, item2amount, item2Materiaal) => {
     if (Game[item1Material] >= item1amount) {
@@ -378,9 +406,9 @@ Game.Launch = () => {
     if (Game.totalOreClicks >= 2) Game.win('Double Click')
     if (Game.totalOreClicks >= 100) Game.win('Carpal Tunnel')
     if (Game.totalTreeClicks >= 1) Game.win('Morning Wood')
-    if (Game.sessionTime >= 30) Game.win('Milestone 1')
-    if (Game.sessionTime >= 60) Game.win('Milestone 2')
-    if (Game.sessionTime >= 300) Game.win('Milestone 3')
+    if (Game.sessionTime >= 60) Game.win('Milestone 1')
+    if (Game.sessionTime >= 300) Game.win('Milestone 2')
+    if (Game.sessionTime >= 6000) Game.win('Milestone 3')
     if (Game.wood > 0 && Game.items[2].hidden == true) {Game.items[2].hidden = false; Game.rebuildStore()}
     if (Game.items[2].owned == 1 && Game.tabs[1].unlocked == false) {Game.tabs[1].unlocked = true; Game.rebuildTabs(); Game.rebuildStore()}
     if (Game.items[3].owned == 1 && Game.tabs[2].unlocked == false) {Game.tabs[2].unlocked = true; Game.rebuildTabs(); Game.rebuildStore()}
@@ -406,9 +434,14 @@ Game.Launch = () => {
 
   new Game.achievement('Morning Wood', 'Cut your first tree', '-insert dick pun here-')
 
-  new Game.achievement('Milestone 1', 'Stay on More Ore for more than 30 seconds', "You're still here?")
-  new Game.achievement('Milestone 2', 'Stay on More Ore for more than 1 minute', "Why are you still here...")
-  new Game.achievement('Milestone 3', 'Stay on More Ore for more than 5 minute', "Ahhh... afk")
+  new Game.achievement('Milestone 1', 'Stay on More Ore for more than 1 minute', "You're still here?")
+  new Game.achievement('Milestone 2', 'Stay on More Ore for more than 3 minutes', "Why are you still here...")
+  new Game.achievement('Milestone 3', 'Stay on More Ore for more than 10 minutes', "Ahhh... afk")
+
+  new Game.achievement('Your First Miner', 'Hire your first miner', 'Off to mine I guess...')
+  new Game.achievement('Your First Smelter', 'Hire your first smelter', 'Off to smelt I guess...')
+  new Game.achievement('Your First Lumberjack', 'Hire your first lumberjack', 'Off to chop wood I guess...')
+  new Game.achievement('Your First Hero', 'Hire your first hero', 'Chaaaaarrrgeeee')
 
   Game.win = (achievement) => {
     if (Game.achievements[achievement]) {
