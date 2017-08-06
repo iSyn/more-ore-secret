@@ -114,13 +114,15 @@ body {
   display: none;
   /*display: flex;*/
   flex-flow: column nowrap;
+  justify-content: space-around;
   align-items: center;
+  width: 100%;
 }
 
 .enemy-health-bar {
   border: 2px solid black;
   background: grey;
-  width: 200px;
+  width: 60%;
   height: 25px;
   align-self: center;
 }
@@ -131,12 +133,20 @@ body {
   background: darkred;
 }
 
+.enemy-container {
+  height: 250px;
+  width: 250px;
+  display: flex;
+  justify-content: center;
+}
+
 .enemy {
   background: darkgreen;
   border: 2px solid white;
   height: 200px;
   width: 200px;
   margin-bottom: 10px;
+  align-self: center;
 }
 
 .enemy:hover {
@@ -147,6 +157,12 @@ body {
 .enemy:active {
   height: 200px;
   width: 200px;
+}
+
+.info {
+  height: 100px;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.7);
 }
 
 #tabs {
@@ -426,7 +442,7 @@ body {
   max-height: 350px;
   overflow-y: scroll;
   margin-top: 30px;
-  width: 90%;
+  width: 60%;
   border: 5px double black;
   border-radius: 15px;
   padding: 20px;

@@ -21,6 +21,7 @@ Game.Launch = () => {
   Game.oresPerClick = 50
   Game.woodPerClick = 50
   Game.goldPerClick = 1
+  Game.damagePerClick = 1
 
   Game.priceIncrease = 1.15
   Game.smeltTime = 2
@@ -28,7 +29,6 @@ Game.Launch = () => {
   Game.selectedTab = 0
   Game.sessionTime = 0
 
-  Game.currentQuest = null
   Game.hasQuested = false
 
   Game.earn = (amt, type) => {
@@ -333,18 +333,18 @@ Game.Launch = () => {
     this.activateQuest = (id) => {
       s('.cover').remove()
       s('.quest-modal').remove()
-      Game.currentQuest = Game.quests[id].name
 
+      // Add separator into select element
       let select = s('#zone')
       let selectSeparator = document.createElement('option')
       selectSeparator.disabled = true
       selectSeparator.innerHTML = '-Quests-'
-
       if (Game.hasQuested == false) {
         Game.hasQuested = true
         select.add(selectSeparator)
       }
 
+      // Add zone
       if (this.zoneHidden == true) {
         this.zoneHidden = false
         this.inProgress = true
@@ -357,9 +357,10 @@ Game.Launch = () => {
         s('#zone').style.boxShadow = '0 0 50px 3px yellow'
         setTimeout(() => {
           s('#zone').style.boxShadow = 'none'
-        }, 3000)
+        }, 3500)
       }
 
+      Game.startQuest(this)
       Game.rebuildStore()
     }
 
@@ -387,6 +388,62 @@ Game.Launch = () => {
 
     Game.quests.push(this)
   }
+
+  Game.startQuest = (quest) => {
+    let currentHealth = quest.enemyHealth
+    let minusHealthbarAmount = (Game.damagePerClick/quest.enemyHealth) * 100
+    let currentHealthPercentage = 100
+
+    s('.enemy-health').style.width = currentHealthPercentage + '%'
+
+    //Draws time
+    let timeLimit = quest.timeLimit * 60000 // amount of time in ms
+    let minutes = Math.floor(timeLimit / 60000);
+    let seconds = ((timeLimit % 60000) / 1000).toFixed(0);
+    let prettySeconds = null
+    let prettyMinutes = null
+
+    let timeLeft = setInterval(() => {
+      if (seconds == 0 && minutes > 0) {
+        minutes--
+        seconds = 60
+      }
+      seconds--
+      seconds < 10 ? (prettySeconds = '0' + seconds) : (prettySeconds = seconds)
+      minutes < 10 ? (prettyMinutes = '0' + minutes) : (prettyMinutes = minutes)
+      if (seconds <= 0 && minutes <= 0) {
+        clearInterval(timeLeft)
+      }
+      if (s('#zone').value == 'Hu Man Woods') {
+        s('.info').innerHTML = `<p style='text-align: center; color: white'>${prettyMinutes}:${prettySeconds}</p>`
+      } //
+    }, 1000)
+
+    // kill enemies
+    s('.enemy').addEventListener('click', () => { // If you click on the enemy
+
+      if (quest.amountOfEnemies > 0) { // if there are enemies left
+        if (currentHealth > 0) { // If the health is more than 0
+          console.log('OVER HERE', minusHealthbarAmount)
+          currentHealthPercentage -= minusHealthbarAmount
+          currentHealth -= Game.damagePerClick
+          s('.enemy-health').style.width = currentHealthPercentage + '%'
+          console.log(`Health left: ${currentHealth}`)
+          if (currentHealth <= 0) { // If health is less than 0
+            console.log(`Enemies left: ${quest.amountOfEnemies}`)
+            quest.amountOfEnemies--
+            currentHealth = quest.enemyHealth
+            currentHealthPercentage = 100
+          }
+        }
+      } else {
+        console.log('QUEST OVER')
+      }
+    })
+
+
+  }
+
   //name, image, desc, artifacts, timeLimit, amountOfEnemies, enemyHealth, bossHealth, locked
   new Game.quest('Hu Man Woods',
                   'huManWoods.png',
@@ -394,7 +451,7 @@ Game.Launch = () => {
                   '???|???|???',
                   5,
                   10,
-                  100,
+                  50,
                   1000,
                   false)
   new Game.quest('Kong Caves',
@@ -405,7 +462,7 @@ Game.Launch = () => {
                   10,
                   500,
                   5000,
-                  true)
+                  false)
   new Game.quest('Jasok Lake',
                   'nothing.png',
                   'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fugiat cum id libero veritatis quaerat saepe sequi doloremque esse obcaecati soluta quidem, atque dolorum rerum error, asperiores explicabo, alias laboriosam voluptate.',
@@ -536,14 +593,6 @@ Game.Launch = () => {
           </div>
         </div>
         `
-    }
-
-    if (Game.selectedTab == 4) {
-      if (Game.currentQuest == null) {
-        str += 'No quest in progress. Select one from the Quest Board'
-      } else {
-        str += `${Game.currentQuest}`
-      }
     }
 
     str += `
