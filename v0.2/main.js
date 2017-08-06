@@ -310,7 +310,7 @@ Game.Launch = () => {
   }
 
   Game.quests = []
-  Game.quest = function(name, image, desc, artifacts) {
+  Game.quest = function(name, image, desc, artifacts, locked) {
     this.id = null
     this.name = name
     this.desc = desc
@@ -321,6 +321,8 @@ Game.Launch = () => {
     this.artifact1 = artifacts[0]
     this.artifact2 = artifacts[1]
     this.artifact3 = artifacts[2]
+    this.locked = locked
+    this.inProgress = false
 
     this.activateQuest = (id) => {
       console.log('ACTIVATE QUEST:', id)
@@ -344,9 +346,9 @@ Game.Launch = () => {
       newQuest.innerHTML = Game.quests[id].name
       select.add(newQuest)
 
-      s('#zone').style.border = '5px solid yellow'
+      s('#zone').style.boxShadow = '0 0 50px yellow'
       setTimeout(() => {
-        s('#zone').style.border = 'inherit'
+        s('#zone').style.boxShadow = 'none'
       }, 2000)
     }
 
@@ -375,11 +377,11 @@ Game.Launch = () => {
     Game.quests.push(this)
   }
 
-  new Game.quest('Hu Man Woods', 'huManWoods.png', 'Less than 2% of the total amount of people who went inside the Hu Man Woods lived to tell the tale. Survivors said they saw their loved ones in the shadows beckon them deeper and deeper into the woods, only to find out it was just some branches.','???|???|???')
-  new Game.quest('Kong Caves', 'nothing.png', 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ea aliquam velit omnis, assumenda temporibus voluptate quaerat quidem, tenetur nobis ducimus officiis fugit culpa eaque dolorem impedit! Aperiam corporis amet, earum!','???|???|???')
-  // new Game.quest('Jasok Lake', 'nothing.png', 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fugiat cum id libero veritatis quaerat saepe sequi doloremque esse obcaecati soluta quidem, atque dolorum rerum error, asperiores explicabo, alias laboriosam voluptate.','???|???|???')
-  // new Game.quest('Rusty Forest', 'nothing.png', 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Officiis illum ducimus architecto, itaque earum est expedita, repudiandae maxime sit natus deleniti atque eum vitae quas totam rem at inventore et.','???|???|???')
-  // new Game.quest('Lantiguen Mineshaft', 'nothing.png', 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestiae unde harum a placeat. Harum expedita, reiciendis veritatis voluptates, possimus illum. Tempora rem quaerat, eum nemo quos exercitationem et sequi nobis!','???|???|???')
+  new Game.quest('Hu Man Woods', 'huManWoods.png', 'Less than 2% of the total amount of people who went inside the Hu Man Woods lived to tell the tale. Survivors said they saw their loved ones in the shadows beckon them deeper and deeper into the woods, only to find out it was just some branches.','???|???|???', false)
+  new Game.quest('Kong Caves', 'nothing.png', 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ea aliquam velit omnis, assumenda temporibus voluptate quaerat quidem, tenetur nobis ducimus officiis fugit culpa eaque dolorem impedit! Aperiam corporis amet, earum!','???|???|???', true)
+  new Game.quest('Jasok Lake', 'nothing.png', 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fugiat cum id libero veritatis quaerat saepe sequi doloremque esse obcaecati soluta quidem, atque dolorum rerum error, asperiores explicabo, alias laboriosam voluptate.','???|???|???', true)
+  new Game.quest('Rusty Forest', 'nothing.png', 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Officiis illum ducimus architecto, itaque earum est expedita, repudiandae maxime sit natus deleniti atque eum vitae quas totam rem at inventore et.','???|???|???', true)
+  new Game.quest('Lantiguen Mineshaft', 'nothing.png', 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestiae unde harum a placeat. Harum expedita, reiciendis veritatis voluptates, possimus illum. Tempora rem quaerat, eum nemo quos exercitationem et sequi nobis!','???|???|???', true)
 
   Game.rebuildStore = () => {
     let str = ''
@@ -436,12 +438,21 @@ Game.Launch = () => {
 
         for (k = 0; k < Game.quests.length; k++) {
           Game.quests[k].id = k
-          str += `
-            <div class='quest' onclick='Game.quests[${k}].openModal(${k})' id='quests[${k}]'>
-              <p style='text-align: center;'>&bull;</p>
-              <p>${Game.quests[k].name}</p>
-            </div>
-          `
+          if (Game.quests[k].locked == true) {
+            str += `
+              <div class='quest'>
+                <p style='text-align: center;'>&bull;</p>
+                <p>???</p>
+              </div>
+            `
+          } else {
+            str += `
+              <div class='quest' onclick='Game.quests[${k}].openModal(${k})' id='quests[${k}]'>
+                <p style='text-align: center;'>&bull;</p>
+                <p>${Game.quests[k].name}</p>
+              </div>
+            `
+          }
         }
 
         str += '</div></div>'
@@ -493,6 +504,7 @@ Game.Launch = () => {
       if (value == 'mine') {
         s('#ore').style.display = 'initial'
         s('#wood').style.display = 'none'
+        s('#enemy').style.display = 'none'
         // s('#left').style.background = '#777'
         s('#left').style.background = "url('./assets/mine-bg.png')"
         s('#left').style.backgroundSize = 'cover'
@@ -501,6 +513,7 @@ Game.Launch = () => {
       if (value == 'wood') {
         s('#wood').style.display = 'initial'
         s('#ore').style.display = 'none'
+        s('#enemy').style.display = 'none'
         s('#left').style.background = "url('./assets/forest-bg.png')"
         s('#left').style.backgroundSize = 'cover'
       }
@@ -508,6 +521,7 @@ Game.Launch = () => {
       if (value == 'Hu Man Woods') {
         s('#wood').style.display = 'none'
         s('#ore').style.display = 'none'
+        s('#enemy').style.display = 'initial'
         s('#left').style.background = "url('./assets/huManWoods.png')"
         s('#left').style.backgroundSize = 'cover'
       }

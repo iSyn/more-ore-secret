@@ -70,13 +70,16 @@ body {
   color: white;
 }
 
+.click {
+  image-rendering: pixelated;
+  cursor: pointer;
+}
+
 #ore {
   background: url('./assets/ore.png');
   background-size: 100% 100%;
   height: 350px;
   width: 300px;
-  image-rendering: pixelated;
-  cursor: pointer;
 }
 
 #ore:hover {
@@ -95,8 +98,6 @@ body {
   background-size: 100% 100%;
   height: 350px;
   width: 300px;
-  image-rendering: pixelated;
-  cursor: pointer;
 }
 
 #wood:hover {
@@ -109,6 +110,26 @@ body {
   width: 300px;
 }
 
+#enemy {
+  display: none;
+}
+
+.enemy {
+  background: darkgreen;
+  border: 2px solid white;
+  height: 200px;
+  width: 200px;
+}
+
+.enemy:hover {
+  height: 210px;
+  width: 210px;
+}
+
+.enemy:active {
+  height: 200px;
+  width: 200px;
+}
 
 #tabs {
   display: flex;
