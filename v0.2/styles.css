@@ -194,6 +194,13 @@ body {
   align-items: center;
 }
 
+#bottom {
+  width: 100%;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+}
+
 #zone {
   visibility: hidden;
   margin-bottom: 15px;
@@ -377,7 +384,7 @@ body {
 }
 
 #quest-board {
-  height: 350px;
+  max-height: 350px;
   overflow-y: scroll;
   margin-top: 30px;
   width: 90%;
@@ -391,7 +398,8 @@ body {
 .quests-container {
   margin-top: 20px;
   display: flex;
-  flex-flow: row nowrap;
+  flex-flow: row wrap;
+  justify-content: center;
 }
 
 .quest {
@@ -437,3 +445,6 @@ body {
   z-index: 98;
 }
 
+#left2 {
+  display: none;
+}

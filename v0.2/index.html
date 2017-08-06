@@ -39,12 +39,16 @@
           <div id="wood-click-area"></div>
         </div>
 
-        <select name="" id="zone" style='width: 60%; padding: 15px; font-size: 15px;' onchange="Game.drawZone()">
-          <option value="mine">The Mine</option>
-          <option value="wood">The Forest</option>
-        </select>
-
+        <div id="bottom">
+          <select name="" id="zone" style='width: 60%; padding: 15px; font-size: 15px;' onchange="Game.drawZone()">
+            <option disabled>-Zones-</option>
+            <option value="mine">The Mine</option>
+            <option value="wood">The Forest</option>
+          </select>
+        </div>
       </div> <!-- left -->
+
+      <div id="left2" class='section'></div>
 
       <div id="right" class='section'>
         <div id="tabs"></div>

@@ -20,6 +20,7 @@ Game.Launch = () => {
 
   Game.oresPerClick = 50
   Game.woodPerClick = 50
+  Game.goldPerClick = 1
 
   Game.priceIncrease = 1.15
   Game.smeltTime = 2
@@ -28,6 +29,7 @@ Game.Launch = () => {
   Game.sessionTime = 0
 
   Game.currentQuest = null
+  Game.hasQuested = false
 
   Game.earn = (amt, type) => {
     Game[type] += amt
@@ -42,7 +44,7 @@ Game.Launch = () => {
   Game.getGold = () => {
     let number = Math.random()
     if (number < Game.goldChance) {
-      Game.earn(1, 'gold')
+      Game.earn(Game.goldPerClick, 'gold')
     }
   }
 
@@ -87,7 +89,7 @@ Game.Launch = () => {
 
   Game.rebuildInventory()
 
-  Game.tabs = [{name: 'store', unlocked: true}, {name: 'workshop', unlocked: false}, {name: 'blacksmith', unlocked: false}, {name: 'tavern', unlocked: false}, {name: 'quests', unlocked: false}]
+  Game.tabs = [{name: 'store', unlocked: true}, {name: 'workshop', unlocked: false}, {name: 'blacksmith', unlocked: false}, {name: 'tavern', unlocked: false}, {name: 'quest', unlocked: false}]
   Game.rebuildTabs = () => {
 
     let str = ''
@@ -106,11 +108,6 @@ Game.Launch = () => {
   Game.changeTabs = (tabNumber) => {
     Game.selectedTab = tabNumber
     Game.rebuildStore()
-    let tabs = document.querySelectorAll('.tab')
-    tabs.forEach((tab) => {
-      tab.classList.remove('selected')
-    })
-    s(`#${Game.tabs[tabNumber].name}-tab`).classList.add('selected')
   }
 
   Game.rebuildTabs()
@@ -291,7 +288,7 @@ Game.Launch = () => {
   new Game.item(3, 'Hire Adventurer', 'shield.png', 'Fight baddies', 'Time for an adventure', 1000, 'gold', 999, false, () => {
     Game.adventurers++
     if (Game.adventurers >= 0) {Game.win('Your First Adventurer')}
-    if (Game.tabs[4].unlocked == false) {Game.tabs[4].unlocked = true; Game.rebuildTabs()}
+    // if (Game.tabs[4].unlocked == false) {Game.tabs[4].unlocked = true; Game.rebuildTabs()}
   })
   new Game.item(0, 'Metal Detector', 'metaldetector.png', 'Increases chance of gold on click', 'beep... beep', 10, 'gold', 999, false, () => {
     Game.goldChance *= 1.25
@@ -299,7 +296,9 @@ Game.Launch = () => {
   new Game.item(1, 'Mass Production', 'nothing.png', 'Unlock items to be mass produced (items for workers)', 'You get a car... You get a car!', 10, 'refined', 1, false, () => {
     if (Game.items[14].hidden == true) Game.items[14].hidden = false
   })
-  new Game.item(0, 'Piggy Bank', 'nothing.png', 'Increases the amount of gold get', 'oink oink', 10, 'gold', 999, false)
+  new Game.item(0, 'Piggy Bank', 'nothing.png', 'Increases the amount of gold get', 'oink oink', 10, 'gold', 999, false, () => {
+    Game.goldPerClick++
+  })
   new Game.item(0, 'Mass Produced Metal Detector', 'nothing.png', 'Increase chance for miners to strike gold', 'clink clink', 15, 'gold', 999, true)
 
   Game.trade = (item1amount, item1Material, item2amount, item2Materiaal) => {
@@ -324,9 +323,31 @@ Game.Launch = () => {
     this.artifact3 = artifacts[2]
 
     this.activateQuest = (id) => {
-        s('.cover').remove()
-        s('.quest-modal').remove()
-        console.log('yo', id)
+      console.log('ACTIVATE QUEST:', id)
+      s('.cover').remove()
+      s('.quest-modal').remove()
+      Game.currentQuest = Game.quests[id].name
+      // if (Game.tabs[4].unlocked == false) {Game.tabs[4].unlocked = true; Game.rebuildTabs()}
+
+      let select = s('#zone')
+      let selectSeparator = document.createElement('option')
+      selectSeparator.disabled = true
+      selectSeparator.innerHTML = '-Quests-'
+      let newQuest = document.createElement('option')
+
+      if (Game.hasQuested == false) {
+        Game.hasQuested = true
+        select.add(selectSeparator)
+      }
+
+      newQuest.value = Game.quests[id].name
+      newQuest.innerHTML = Game.quests[id].name
+      select.add(newQuest)
+
+      s('#zone').style.border = '5px solid yellow'
+      setTimeout(() => {
+        s('#zone').style.border = 'inherit'
+      }, 2000)
     }
 
     this.openModal = (id) => {
@@ -344,7 +365,7 @@ Game.Launch = () => {
         <br>
         <p>Possible Artifacts: ${this.artifact1}, ${this.artifact2}, ${this.artifact3}</p>
         <br>
-        <button onclick='Game.quests[${id}].activateQuest(Game.actualQuest${id})'>Activate Quest</button>
+        <button onclick='Game.quests[${id}].activateQuest(${id})'>Activate Quest <br/> (req. at least 1 adventurer)</button>
       `
 
       s('body').appendChild(div2)
@@ -356,9 +377,9 @@ Game.Launch = () => {
 
   new Game.quest('Hu Man Woods', 'huManWoods.png', 'Less than 2% of the total amount of people who went inside the Hu Man Woods lived to tell the tale. Survivors said they saw their loved ones in the shadows beckon them deeper and deeper into the woods, only to find out it was just some branches.','???|???|???')
   new Game.quest('Kong Caves', 'nothing.png', 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ea aliquam velit omnis, assumenda temporibus voluptate quaerat quidem, tenetur nobis ducimus officiis fugit culpa eaque dolorem impedit! Aperiam corporis amet, earum!','???|???|???')
-  new Game.quest('Jasok Lake', 'nothing.png', 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fugiat cum id libero veritatis quaerat saepe sequi doloremque esse obcaecati soluta quidem, atque dolorum rerum error, asperiores explicabo, alias laboriosam voluptate.','???|???|???')
-  new Game.quest('Rusty Forest', 'nothing.png', 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Officiis illum ducimus architecto, itaque earum est expedita, repudiandae maxime sit natus deleniti atque eum vitae quas totam rem at inventore et.','???|???|???')
-  new Game.quest('Lantiguen Mineshaft', 'nothing.png', 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestiae unde harum a placeat. Harum expedita, reiciendis veritatis voluptates, possimus illum. Tempora rem quaerat, eum nemo quos exercitationem et sequi nobis!','???|???|???')
+  // new Game.quest('Jasok Lake', 'nothing.png', 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fugiat cum id libero veritatis quaerat saepe sequi doloremque esse obcaecati soluta quidem, atque dolorum rerum error, asperiores explicabo, alias laboriosam voluptate.','???|???|???')
+  // new Game.quest('Rusty Forest', 'nothing.png', 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Officiis illum ducimus architecto, itaque earum est expedita, repudiandae maxime sit natus deleniti atque eum vitae quas totam rem at inventore et.','???|???|???')
+  // new Game.quest('Lantiguen Mineshaft', 'nothing.png', 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestiae unde harum a placeat. Harum expedita, reiciendis veritatis voluptates, possimus illum. Tempora rem quaerat, eum nemo quos exercitationem et sequi nobis!','???|???|???')
 
   Game.rebuildStore = () => {
     let str = ''
@@ -450,6 +471,8 @@ Game.Launch = () => {
     if (Game.selectedTab == 4) {
       if (Game.currentQuest == null) {
         str += 'No quest in progress. Select one from the Quest Board'
+      } else {
+        str += `${Game.currentQuest}`
       }
     }
 
@@ -479,6 +502,13 @@ Game.Launch = () => {
         s('#wood').style.display = 'initial'
         s('#ore').style.display = 'none'
         s('#left').style.background = "url('./assets/forest-bg.png')"
+        s('#left').style.backgroundSize = 'cover'
+      }
+
+      if (value == 'Hu Man Woods') {
+        s('#wood').style.display = 'none'
+        s('#ore').style.display = 'none'
+        s('#left').style.background = "url('./assets/huManWoods.png')"
         s('#left').style.backgroundSize = 'cover'
       }
     }
@@ -606,7 +636,6 @@ Game.Launch = () => {
 
 
   Game.rebuildStore()
-  s(`#store-tab`).classList.add('selected')
 
 }
 
