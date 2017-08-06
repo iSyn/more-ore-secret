@@ -431,9 +431,14 @@ Game.Launch = () => {
           console.log(`Health left: ${currentHealth}`)
           if (currentHealth <= 0) { // If health is less than 0
             console.log(`Enemies left: ${quest.amountOfEnemies}`)
+            s('.enemy').style.visibility = 'hidden'
+            setTimeout(() => {
+              s('.enemy').style.visibility = 'visible'
+            }, 200)
             quest.amountOfEnemies--
             currentHealth = quest.enemyHealth
             currentHealthPercentage = 100
+            s('.enemy-health').style.width = currentHealthPercentage + '%'
           }
         }
       } else {
@@ -456,7 +461,7 @@ Game.Launch = () => {
                   false)
   new Game.quest('Kong Caves',
                   'nothing.png',
-                  'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ea aliquam velit omnis, assumenda temporibus voluptate quaerat quidem, tenetur nobis ducimus officiis fugit culpa eaque dolorem impedit! Aperiam corporis amet, earum!',
+                  'Legends of a giant 32 foot gorilla lies deep within these caves. The locals have nicknamed the gorilla "Dino"',
                   '???|???|???',
                   30,
                   10,
