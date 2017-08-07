@@ -6,10 +6,10 @@ let Game = {}
 Game.Launch = () => {
   console.log('Game loaded and launched')
 
-  Game.ores = 0
-  Game.refined = 0
-  Game.wood = 0
-  Game.gold = 0
+  Game.ores = 9999
+  Game.refined = 9999
+  Game.wood = 9999
+  Game.gold = 9999
   Game.miners = 0
   Game.smelters = 0
   Game.lumberjacks = 0
@@ -18,8 +18,8 @@ Game.Launch = () => {
   Game.totalOreClicks = 0
   Game.totalTreeClicks = 0
 
-  Game.oresPerClick = 1
-  Game.woodPerClick = 1
+  Game.oresPerClick = 99
+  Game.woodPerClick = 99
   Game.goldPerClick = 1
   Game.damagePerClick = 1
   Game.damagePerSeconds = 0
@@ -431,9 +431,24 @@ Game.Launch = () => {
         clearInterval(timeLeft)
       }
       if (s('#zone').value == 'Hu Man Woods') {
-        s('.time-remaining').innerHTML = `<p style='text-align: center; color: white'>${prettyMinutes}:${prettySeconds}</p>`
+        s('.time-remaining').innerHTML = `<p style='text-align: center; color: white'>Time Remaining: ${prettyMinutes}:${prettySeconds}</p>`
       } //
     }, 1000)
+
+    setTimeout(() => {
+      if (quest.inProgress == true) {
+        s('#zone').value = 'mine'
+        let remove = s('#zone').querySelector(`option[value="${quest.name}"]`)
+        let removeSeparator = s('#zone').querySelector(`option[value="separator"]`)
+        s('#zone').removeChild(remove)
+        s('#zone').removeChild(removeSeparator)
+        quest.inProgress = false
+        quest.zoneHidden = true
+        Game.hasQuests = false
+        Game.drawZone()
+        Game.rebuildStore()
+      }
+    }, timeLimit)
 
     // kill enemies
 
@@ -485,7 +500,7 @@ Game.Launch = () => {
                   1000,
                   false)
   new Game.quest('Kong Caves',
-                  'nothing.png',
+                  'kongcaves.png',
                   'Legends of a giant 32 foot gorilla lies deep within these caves. The locals have nicknamed the gorilla "Dino"',
                   '???|???|???',
                   30,
@@ -660,9 +675,19 @@ Game.Launch = () => {
         s('#wood').style.display = 'none'
         s('#ore').style.display = 'none'
         s('#enemy').style.display = 'flex'
+        s('.enemy').style.background = "url('./assets/treeMonster.png')"
         s('#left').style.background = "url('./assets/huManWoods.png')"
         s('#left').style.backgroundSize = 'cover'
       }
+
+      if (value == 'Kong Caves') {
+        s('#wood').style.display = 'none'
+        s('#ore').style.display = 'none'
+        s('#enemy').style.display = 'flex'
+        s('#left').style.background = "url('./assets/kongcaves.png')"
+        s('#left').style.backgroundSize = 'cover'
+      }
+
     }
   }
 
