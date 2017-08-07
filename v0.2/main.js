@@ -6,10 +6,10 @@ let Game = {}
 Game.Launch = () => {
   console.log('Game loaded and launched')
 
-  Game.ores = 99999
-  Game.refined = 99999
-  Game.wood = 99999
-  Game.gold = 99999
+  Game.ores = 0
+  Game.refined = 0
+  Game.wood = 0
+  Game.gold = 0
   Game.miners = 0
   Game.smelters = 0
   Game.lumberjacks = 0
@@ -18,10 +18,11 @@ Game.Launch = () => {
   Game.totalOreClicks = 0
   Game.totalTreeClicks = 0
 
-  Game.oresPerClick = 50
-  Game.woodPerClick = 50
+  Game.oresPerClick = 1
+  Game.woodPerClick = 1
   Game.goldPerClick = 1
   Game.damagePerClick = 1
+  Game.damagePerSeconds = 0
 
   Game.priceIncrease = 1.15
   Game.smeltTime = 2
@@ -29,7 +30,7 @@ Game.Launch = () => {
   Game.selectedTab = 0
   Game.sessionTime = 0
 
-  Game.hasQuested = false
+  Game.hasQuests = false
 
   Game.earn = (amt, type) => {
     Game[type] += amt
@@ -129,10 +130,18 @@ Game.Launch = () => {
 
     let div = document.createElement('div')
     div.classList.add('rising-number')
+
     if (type == 'gold') {
       div.classList.add('gold')
     }
+
     div.innerHTML = `+${amt}`
+
+    if (type == 'damage') {
+      div.classList.add('damage')
+      div.innerHTML = `-${amt}`
+    }
+
     div.style.position = 'absolute'
     div.style.left = X + 'px'
     div.style.top = Y + 'px'
@@ -337,10 +346,11 @@ Game.Launch = () => {
       // Add separator into select element
       let select = s('#zone')
       let selectSeparator = document.createElement('option')
+      selectSeparator.value = 'separator'
       selectSeparator.disabled = true
       selectSeparator.innerHTML = '-Quests-'
-      if (Game.hasQuested == false) {
-        Game.hasQuested = true
+      if (Game.hasQuests == false) {
+        Game.hasQuests = true
         select.add(selectSeparator)
       }
 
@@ -390,6 +400,12 @@ Game.Launch = () => {
   }
 
   Game.startQuest = (quest) => {
+    console.log('START QUEST:', quest)
+
+    let amountOfEnemies = quest.amountOfEnemies
+
+    s('.enemies-left').innerHTML = amountOfEnemies
+
     let currentHealth = quest.enemyHealth
     let minusHealthbarAmount = (Game.damagePerClick/quest.enemyHealth) * 100
     let currentHealthPercentage = 100
@@ -415,38 +431,47 @@ Game.Launch = () => {
         clearInterval(timeLeft)
       }
       if (s('#zone').value == 'Hu Man Woods') {
-        s('.info').innerHTML = `<p style='text-align: center; color: white'>${prettyMinutes}:${prettySeconds}</p>`
+        s('.time-remaining').innerHTML = `<p style='text-align: center; color: white'>${prettyMinutes}:${prettySeconds}</p>`
       } //
     }, 1000)
 
     // kill enemies
-    s('.enemy').addEventListener('click', () => { // If you click on the enemy
 
-      if (quest.amountOfEnemies > 0) { // if there are enemies left
+    s('.enemy').onclick = () => {
+      if (amountOfEnemies > 0) { // if there are enemies left
+        console.log('YES')
         if (currentHealth > 0) { // If the health is more than 0
-          console.log('OVER HERE', minusHealthbarAmount)
+          Game.risingNumber(Game.damagePerClick, 'damage')
           currentHealthPercentage -= minusHealthbarAmount
           currentHealth -= Game.damagePerClick
           s('.enemy-health').style.width = currentHealthPercentage + '%'
-          console.log(`Health left: ${currentHealth}`)
           if (currentHealth <= 0) { // If health is less than 0
-            console.log(`Enemies left: ${quest.amountOfEnemies}`)
             s('.enemy').style.visibility = 'hidden'
             setTimeout(() => {
               s('.enemy').style.visibility = 'visible'
             }, 200)
-            quest.amountOfEnemies--
+            amountOfEnemies--
+            s('.enemies-left').innerHTML = amountOfEnemies
             currentHealth = quest.enemyHealth
             currentHealthPercentage = 100
             s('.enemy-health').style.width = currentHealthPercentage + '%'
           }
         }
       } else {
-        console.log('QUEST OVER')
+        console.log('NO')
+        console.log('quest end')
+        s('#zone').value = 'mine'
+        let remove = s('#zone').querySelector(`option[value="${quest.name}"]`)
+        let removeSeparator = s('#zone').querySelector(`option[value="separator"]`)
+        s('#zone').removeChild(remove)
+        s('#zone').removeChild(removeSeparator)
+        quest.inProgress = false
+        quest.zoneHidden = true
+        Game.hasQuests = false
+        Game.drawZone()
+        Game.rebuildStore()
       }
-    })
-
-
+    }
   }
 
   //name, image, desc, artifacts, timeLimit, amountOfEnemies, enemyHealth, bossHealth, locked

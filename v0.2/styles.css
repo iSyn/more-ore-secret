@@ -163,6 +163,7 @@ body {
   height: 100px;
   width: 100%;
   background: rgba(0, 0, 0, 0.7);
+  color: white;
 }
 
 #tabs {
@@ -241,6 +242,11 @@ body {
 
 #store-spacer {
   height: 100px;
+}
+
+.damage {
+  color: red !important;
+  font-size: 30px;
 }
 
 #store-content {
