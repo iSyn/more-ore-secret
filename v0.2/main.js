@@ -6,10 +6,10 @@ let Game = {}
 Game.Launch = () => {
   console.log('Game loaded and launched')
 
-  Game.ores = 9999
-  Game.refined = 9999
-  Game.wood = 9999
-  Game.gold = 9999
+  Game.ores = 0
+  Game.refined = 0
+  Game.wood = 0
+  Game.gold = 0
   Game.miners = 0
   Game.smelters = 0
   Game.lumberjacks = 0
@@ -18,8 +18,8 @@ Game.Launch = () => {
   Game.totalOreClicks = 0
   Game.totalTreeClicks = 0
 
-  Game.oresPerClick = 99
-  Game.woodPerClick = 99
+  Game.oresPerClick = 1
+  Game.woodPerClick = 1
   Game.goldPerClick = 1
   Game.damagePerClick = 1
   Game.damagePerSeconds = 0
@@ -31,6 +31,100 @@ Game.Launch = () => {
   Game.sessionTime = 0
 
   Game.hasQuests = false
+
+  Game.reset = () => {
+    Game.ores = 0
+    Game.refined = 0
+    Game.wood = 0
+    Game.gold = 0
+    Game.miners = 0
+    Game.smelters = 0
+    Game.lumberjacks = 0
+    Game.adventurers = 0
+
+    Game.totalOreClicks = 0
+    Game.totalTreeClicks = 0
+
+    Game.oresPerClick = 1
+    Game.woodPerClick = 1
+    Game.goldPerClick = 1
+    Game.damagePerClick = 1
+    Game.damagePerSeconds = 0
+
+    Game.priceIncrease = 1.15
+    Game.smeltTime = 2
+    Game.goldChance = .1
+    Game.selectedTab = 0
+    Game.sessionTime = 0
+
+    Game.hasQuests = false
+
+    Game.items = []
+    Game.quests = []
+    Game.achievements = []
+    Game.furnaces = []
+
+    Game.rebuildInventory()
+    Game.rebuildStore()
+  }
+
+  Game.save = () => {
+    localStorage.setItem("Game.ores", Game.ores)
+    localStorage.setItem("Game.refined", Game.refined)
+    localStorage.setItem("Game.wood", Game.wood)
+    localStorage.setItem("Game.gold", Game.gold)
+    localStorage.setItem("Game.miners", Game.miners)
+    localStorage.setItem("Game.smelters", Game.smelters)
+    localStorage.setItem("Game.lumberjacks", Game.lumberjacks)
+    localStorage.setItem("Game.adventurers", Game.adventurers)
+    localStorage.setItem("Game.totalOreClicks", Game.totalOreClicks)
+    localStorage.setItem("Game.totalTreeClicks", Game.totalTreeClicks)
+    localStorage.setItem("Game.oresPerClick", Game.oresPerClick)
+    localStorage.setItem("Game.woodPerClick", Game.woodPerClick)
+    localStorage.setItem("Game.goldPerClick", Game.goldPerClick)
+    localStorage.setItem("Game.damagePerClick", Game.damagePerClick)
+    localStorage.setItem("Game.damagePerSeconds", Game.damagePerSeconds)
+    localStorage.setItem("Game.smeltTime", Game.smeltTime)
+    localStorage.setItem("Game.goldChance", Game.goldChance)
+    localStorage.setItem("Game.smeltTime", Game.smeltTime)
+    localStorage.setItem('Game.items', Game.items)
+    // localStorage.setItem('Game.furnaces', Game.furnaces)
+    // localStorage.setItem('Game.quests', Game.quests)
+    // localStorage.setItem('Game.achievements', Game.achievements)
+  }
+
+  Game.load = () => {
+    console.log('loading save')
+    Game.ores = parseInt(localStorage.getItem('Game.ores'))
+    Game.refined = parseInt(localStorage.getItem('Game.refined'))
+    Game.wood = parseInt(localStorage.getItem('Game.wood'))
+    Game.gold = parseInt(localStorage.getItem('Game.gold'))
+    Game.miners = parseInt(localStorage.getItem('Game.miners'))
+    Game.smelters = parseInt(localStorage.getItem('Game.smelters'))
+    Game.lumberjacks = parseInt(localStorage.getItem('Game.lumberjacks'))
+    Game.adventurers = parseInt(localStorage.getItem('Game.adventurers'))
+    Game.totalOreClicks = parseInt(localStorage.getItem('Game.totalOreClicks'))
+    Game.totalTreeClicks = parseInt(localStorage.getItem('Game.totalTreeClicks'))
+    Game.oresPerClick = parseInt(localStorage.getItem('Game.oresPerClick'))
+    Game.woodPerClick = parseInt(localStorage.getItem('Game.woodPerClick'))
+    Game.goldPerClick = parseInt(localStorage.getItem('Game.goldPerClick'))
+    Game.damagePerClick = parseInt(localStorage.getItem('Game.damagePerClick'))
+    Game.damagePerSeconds = parseInt(localStorage.getItem('Game.damagePerSeconds'))
+    Game.smeltTime = parseInt(localStorage.getItem('Game.smeltTime'))
+    Game.goldChance = parseFloat(localStorage.getItem('Game.goldChance'))
+    Game.smeltTime = parseInt(localStorage.getItem('Game.smeltTime'))
+    Game.items = JSON.parse(localStorage.getItem('Game.items'))
+    // Game.furnaces = localStorage.getItem('Game.furnaces')
+    // Game.quests = localStorage.getItem('Game.quests')
+    // Game.achievements = localStorage.getItem('Game.achievements')
+
+    Game.rebuildInventory()
+    Game.rebuildStore()
+  }
+
+  setInterval(() => {
+    Game.save()
+  }, 60 * 1000)
 
   Game.earn = (amt, type) => {
     Game[type] += amt
@@ -302,13 +396,13 @@ Game.Launch = () => {
   new Game.item(0, 'Metal Detector', 'metaldetector.png', 'Increases chance of gold on click', 'beep... beep', 10, 'gold', 999, false, () => {
     Game.goldChance *= 1.25
   })
-  new Game.item(1, 'Mass Production', 'nothing.png', 'Unlock items to be mass produced (items for workers)', 'You get a car... You get a car!', 10, 'refined', 1, false, () => {
+  new Game.item(1, 'Mass Production', 'wip.png', 'Unlock items to be mass produced (items for workers)', 'You get a car... You get a car!', 10, 'refined', 1, false, () => {
     if (Game.items[14].hidden == true) Game.items[14].hidden = false
   })
-  new Game.item(0, 'Piggy Bank', 'nothing.png', 'Increases the amount of gold get', 'oink oink', 10, 'gold', 999, false, () => {
+  new Game.item(0, 'Piggy Bank', 'wip.png', 'Increases the amount of gold get', 'oink oink', 10, 'gold', 999, false, () => {
     Game.goldPerClick++
   })
-  new Game.item(0, 'Mass Produced Metal Detector', 'nothing.png', 'Increase chance for miners to strike gold', 'clink clink', 15, 'gold', 999, true)
+  new Game.item(0, 'Mass Produced Metal Detector', 'wip.png', 'Increase chance for miners to strike gold', 'clink clink', 15, 'gold', 999, true)
 
   Game.trade = (item1amount, item1Material, item2amount, item2Materiaal) => {
     if (Game[item1Material] >= item1amount) {
@@ -370,7 +464,112 @@ Game.Launch = () => {
         }, 3500)
       }
 
-      Game.startQuest(this)
+      let amountOfEnemies = this.amountOfEnemies
+      s('.enemies-left').innerHTML = `Enemies Left: ${amountOfEnemies}`
+      let currentHealth = this.enemyHealth
+      let minusHealthbarAmount = (Game.damagePerClick/this.enemyHealth) * 100
+      let currentHealthPercentage = 100
+       s('.enemy-health').style.width = currentHealthPercentage + '%'
+
+       //Draws time
+      let timeLimit = this.timeLimit * 60000 // amount of time in ms
+      let minutes = Math.floor(timeLimit / 60000);
+      let seconds = ((timeLimit % 60000) / 1000).toFixed(0);
+      let prettySeconds = null
+      let prettyMinutes = null
+
+      let timeLeft = setInterval(() => {
+        if (seconds == 0 && minutes > 0) {
+          minutes--
+          seconds = 60
+        }
+        seconds--
+        seconds < 10 ? (prettySeconds = '0' + seconds) : (prettySeconds = seconds)
+        minutes < 10 ? (prettyMinutes = '0' + minutes) : (prettyMinutes = minutes)
+        if (seconds <= 0 && minutes <= 0) {
+          clearInterval(timeLeft)
+        }
+        if (s('#zone').value == 'Hu Man Woods') {
+          s('.time-remaining').innerHTML = `Time Remaining: ${prettyMinutes}:${prettySeconds}</p>`
+          s('.time-remaining').innerHTML = `Time Remaining: ${prettyMinutes}:${prettySeconds}</p>`
+        } //
+      }, 1000)
+
+      let adventurerDPS = setInterval(() => {
+        s('.enemy-health').style.width = currentHealthPercentage + '%'
+        if (amountOfEnemies > 0) {
+          if (currentHealth > 0) {
+            console.log('currentHealth:', currentHealth)
+            currentHealth -= Game.adventurers
+            currentHealthPercentage -= Game.adventurers/this.enemyHealth * 100
+            s('.enemy-health').style.width = currentHealthPercentage + '%'
+
+            if (currentHealth <= 0) {
+              s('.enemy').style.visibility = 'hidden'
+              setTimeout(() => {
+                s('.enemy').style.visibility = 'visible'
+              }, 200)
+              currentHealth = this.enemyHealth
+              amountOfEnemies--
+              currentHealthPercentage = 100
+              s('.enemy-health').style.width = currentHealthPercentage + '%'
+              s('.enemies-left').innerHTML = `Enemies Left: ${amountOfEnemies}`
+            }
+          }
+        }
+      }, 1000)
+
+      setTimeout(() => {
+        if (this.inProgress == true) {
+          s('#zone').value = 'mine'
+          let remove = s('#zone').querySelector(`option[value="${this.name}"]`)
+          let removeSeparator = s('#zone').querySelector(`option[value="separator"]`)
+          s('#zone').removeChild(remove)
+          s('#zone').removeChild(removeSeparator)
+          this.inProgress = false
+          this.zoneHidden = true
+          Game.hasQuests = false
+          Game.drawZone()
+          Game.rebuildStore()
+          clearInterval(adventurerDPS)
+        }
+      }, timeLimit)
+
+      s('.enemy').onclick = () => {
+        if (amountOfEnemies > 0) { // if there are enemies left
+          if (currentHealth > 0) { // If the health is more than 0
+            Game.risingNumber(Game.damagePerClick, 'damage')
+            currentHealthPercentage -= minusHealthbarAmount
+            currentHealth -= Game.damagePerClick
+            s('.enemy-health').style.width = currentHealthPercentage + '%'
+            if (currentHealth <= 0) { // If health is less than 0
+              s('.enemy').style.visibility = 'hidden'
+              setTimeout(() => {
+                s('.enemy').style.visibility = 'visible'
+              }, 200)
+              amountOfEnemies--
+              s('.enemies-left').innerHTML = `Enemies Left: ${amountOfEnemies}`
+              currentHealth = this.enemyHealth
+              currentHealthPercentage = 100
+              s('.enemy-health').style.width = currentHealthPercentage + '%'
+            }
+          }
+        } else {
+          s('#zone').value = 'mine'
+          let remove = s('#zone').querySelector(`option[value="${this.name}"]`)
+          let removeSeparator = s('#zone').querySelector(`option[value="separator"]`)
+          s('#zone').removeChild(remove)
+          s('#zone').removeChild(removeSeparator)
+          clearInterval(adventurerDPS)
+          this.inProgress = false
+          this.zoneHidden = true
+          Game.hasQuests = false
+          Game.drawZone()
+          Game.rebuildStore()
+        }
+      }
+
+      // Game.startQuest(this)
       Game.rebuildStore()
     }
 
@@ -401,102 +600,102 @@ Game.Launch = () => {
 
   Game.startQuest = (quest) => {
 
-    // DRAW SPRITE
+    // // DRAW SPRITE
 
-    let amountOfEnemies = quest.amountOfEnemies
+    // let amountOfEnemies = quest.amountOfEnemies
 
-    s('.enemies-left').innerHTML = `Enemies Left: ${amountOfEnemies}`
+    // s('.enemies-left').innerHTML = `Enemies Left: ${amountOfEnemies}`
 
-    let currentHealth = quest.enemyHealth
-    let minusHealthbarAmount = (Game.damagePerClick/quest.enemyHealth) * 100
-    let currentHealthPercentage = 100
+    // let currentHealth = quest.enemyHealth
+    // let minusHealthbarAmount = (Game.damagePerClick/quest.enemyHealth) * 100
+    // let currentHealthPercentage = 100
 
-    s('.enemy-health').style.width = currentHealthPercentage + '%'
+    // s('.enemy-health').style.width = currentHealthPercentage + '%'
 
-    //Draws time
-    let timeLimit = quest.timeLimit * 60000 // amount of time in ms
-    let minutes = Math.floor(timeLimit / 60000);
-    let seconds = ((timeLimit % 60000) / 1000).toFixed(0);
-    let prettySeconds = null
-    let prettyMinutes = null
+    // // Draws time
+    // let timeLimit = quest.timeLimit * 60000 // amount of time in ms
+    // let minutes = Math.floor(timeLimit / 60000);
+    // let seconds = ((timeLimit % 60000) / 1000).toFixed(0);
+    // let prettySeconds = null
+    // let prettyMinutes = null
 
-    let timeLeft = setInterval(() => {
-      if (seconds == 0 && minutes > 0) {
-        minutes--
-        seconds = 60
-      }
-      seconds--
-      seconds < 10 ? (prettySeconds = '0' + seconds) : (prettySeconds = seconds)
-      minutes < 10 ? (prettyMinutes = '0' + minutes) : (prettyMinutes = minutes)
-      if (seconds <= 0 && minutes <= 0) {
-        clearInterval(timeLeft)
-      }
-      if (s('#zone').value == 'Hu Man Woods') {
-        s('.time-remaining').innerHTML = `Time Remaining: ${prettyMinutes}:${prettySeconds}</p>`
-        s('.time-remaining').innerHTML = `Time Remaining: ${prettyMinutes}:${prettySeconds}</p>`
-      } //
-    }, 1000)
+    // let timeLeft = setInterval(() => {
+    //   if (seconds == 0 && minutes > 0) {
+    //     minutes--
+    //     seconds = 60
+    //   }
+    //   seconds--
+    //   seconds < 10 ? (prettySeconds = '0' + seconds) : (prettySeconds = seconds)
+    //   minutes < 10 ? (prettyMinutes = '0' + minutes) : (prettyMinutes = minutes)
+    //   if (seconds <= 0 && minutes <= 0) {
+    //     clearInterval(timeLeft)
+    //   }
+    //   if (s('#zone').value == 'Hu Man Woods') {
+    //     s('.time-remaining').innerHTML = `Time Remaining: ${prettyMinutes}:${prettySeconds}</p>`
+    //     s('.time-remaining').innerHTML = `Time Remaining: ${prettyMinutes}:${prettySeconds}</p>`
+    //   } //
+    // }, 1000)
 
-    let adventurerDPS = setInterval(() => {
-      console.log(currentHealth)
-      currentHealth -= Game.adventurers
-      currentHealthPercentage -= (Game.adventurers/quest.enemyHealth) * 100
-      s('.enemy-health').style.width = currentHealthPercentage + '%'
-    }, 1000)
+    // let adventurerDPS = setInterval(() => {
+    //   console.log(currentHealth)
+    //   currentHealth -= Game.adventurers
+    //   currentHealthPercentage -= (Game.adventurers/quest.enemyHealth) * 100
+    //   s('.enemy-health').style.width = currentHealthPercentage + '%'
+    // }, 1000)
 
-    setTimeout(() => {
-      if (quest.inProgress == true) {
-        s('#zone').value = 'mine'
-        let remove = s('#zone').querySelector(`option[value="${quest.name}"]`)
-        let removeSeparator = s('#zone').querySelector(`option[value="separator"]`)
-        s('#zone').removeChild(remove)
-        s('#zone').removeChild(removeSeparator)
-        quest.inProgress = false
-        quest.zoneHidden = true
-        Game.hasQuests = false
-        Game.drawZone()
-        Game.rebuildStore()
-        clearInterval(adventurerDPS)
-      }
-    }, timeLimit)
+    // setTimeout(() => {
+    //   if (quest.inProgress == true) {
+    //     s('#zone').value = 'mine'
+    //     let remove = s('#zone').querySelector(`option[value="${quest.name}"]`)
+    //     let removeSeparator = s('#zone').querySelector(`option[value="separator"]`)
+    //     s('#zone').removeChild(remove)
+    //     s('#zone').removeChild(removeSeparator)
+    //     quest.inProgress = false
+    //     quest.zoneHidden = true
+    //     Game.hasQuests = false
+    //     Game.drawZone()
+    //     Game.rebuildStore()
+    //     clearInterval(adventurerDPS)
+    //   }
+    // }, timeLimit)
 
     // kill enemies
 
-    s('.enemy').onclick = () => {
-      if (amountOfEnemies > 0) { // if there are enemies left
-        if (currentHealth > 0) { // If the health is more than 0
-          Game.risingNumber(Game.damagePerClick, 'damage')
-          currentHealthPercentage -= minusHealthbarAmount
-          currentHealth -= Game.damagePerClick
-          s('.enemy-health').style.width = currentHealthPercentage + '%'
-          if (currentHealth <= 0) { // If health is less than 0
-            s('.enemy').style.visibility = 'hidden'
-            setTimeout(() => {
-              s('.enemy').style.visibility = 'visible'
-            }, 200)
-            amountOfEnemies--
-            s('.enemies-left').innerHTML = `Enemies Left: ${amountOfEnemies}`
-            currentHealth = quest.enemyHealth
-            currentHealthPercentage = 100
-            s('.enemy-health').style.width = currentHealthPercentage + '%'
-          }
-        }
-      } else {
-        console.log('NO')
-        console.log('quest end')
-        s('#zone').value = 'mine'
-        let remove = s('#zone').querySelector(`option[value="${quest.name}"]`)
-        let removeSeparator = s('#zone').querySelector(`option[value="separator"]`)
-        s('#zone').removeChild(remove)
-        s('#zone').removeChild(removeSeparator)
-        clearInterval(adventurerDPS)
-        quest.inProgress = false
-        quest.zoneHidden = true
-        Game.hasQuests = false
-        Game.drawZone()
-        Game.rebuildStore()
-      }
-    }
+    // s('.enemy').onclick = () => {
+    //   if (amountOfEnemies > 0) { // if there are enemies left
+    //     if (currentHealth > 0) { // If the health is more than 0
+    //       Game.risingNumber(Game.damagePerClick, 'damage')
+    //       currentHealthPercentage -= minusHealthbarAmount
+    //       currentHealth -= Game.damagePerClick
+    //       s('.enemy-health').style.width = currentHealthPercentage + '%'
+    //       if (currentHealth <= 0) { // If health is less than 0
+    //         s('.enemy').style.visibility = 'hidden'
+    //         setTimeout(() => {
+    //           s('.enemy').style.visibility = 'visible'
+    //         }, 200)
+    //         amountOfEnemies--
+    //         s('.enemies-left').innerHTML = `Enemies Left: ${amountOfEnemies}`
+    //         currentHealth = quest.enemyHealth
+    //         currentHealthPercentage = 100
+    //         s('.enemy-health').style.width = currentHealthPercentage + '%'
+    //       }
+    //     }
+    //   } else {
+    //     console.log('NO')
+    //     console.log('quest end')
+    //     s('#zone').value = 'mine'
+    //     let remove = s('#zone').querySelector(`option[value="${quest.name}"]`)
+    //     let removeSeparator = s('#zone').querySelector(`option[value="separator"]`)
+    //     s('#zone').removeChild(remove)
+    //     s('#zone').removeChild(removeSeparator)
+    //     clearInterval(adventurerDPS)
+    //     quest.inProgress = false
+    //     quest.zoneHidden = true
+    //     Game.hasQuests = false
+    //     Game.drawZone()
+    //     Game.rebuildStore()
+    //   }
+    // }
   }
 
   //name, image, desc, artifacts, timeLimit, amountOfEnemies, enemyHealth, bossHealth, locked
@@ -519,7 +718,7 @@ Game.Launch = () => {
                   5000,
                   false)
   new Game.quest('Jasok Lake',
-                  'nothing.png',
+                  'wip.png',
                   'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fugiat cum id libero veritatis quaerat saepe sequi doloremque esse obcaecati soluta quidem, atque dolorum rerum error, asperiores explicabo, alias laboriosam voluptate.',
                   '???|???|???',
                   999,
@@ -528,7 +727,7 @@ Game.Launch = () => {
                   999,
                   true)
   new Game.quest('Rusty Forest',
-                  'nothing.png',
+                  'wip.png',
                   'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Officiis illum ducimus architecto, itaque earum est expedita, repudiandae maxime sit natus deleniti atque eum vitae quas totam rem at inventore et.',
                   '???|???|???',
                   999,
@@ -537,7 +736,7 @@ Game.Launch = () => {
                   999,
                   true)
   new Game.quest('Lantiguen Mineshaft',
-                  'nothing.png',
+                  'wip.png',
                   'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestiae unde harum a placeat. Harum expedita, reiciendis veritatis voluptates, possimus illum. Tempora rem quaerat, eum nemo quos exercitationem et sequi nobis!',
                   '???|???|???',
                   999,
@@ -658,11 +857,14 @@ Game.Launch = () => {
 
   Game.drawSprites = () => {
     let adventurerSprite = document.createElement('div')
+    adventurerSprite.classList.add('adventurer-sprite')
     adventurerSprite.style.background = 'url("./assets/punching.gif")'
     adventurerSprite.style.height = '200px'
     adventurerSprite.style.width = '200px'
     adventurerSprite.style.position = 'absolute'
     adventurerSprite.style.backgroundSize = 'cover'
+    adventurerSprite.style.userDrag = 'none'
+    adventurerSprite.style.userSelect = 'none'
 
     let enemyPos = s('.enemy').getBoundingClientRect()
     adventurerSprite.style.left = enemyPos.left - 100 + 'px'
@@ -711,6 +913,7 @@ Game.Launch = () => {
         s('#wood').style.display = 'none'
         s('#ore').style.display = 'none'
         s('#enemy').style.display = 'flex'
+        s('.enemy').style.background = "url('./assets/wip.png')"
         s('#left').style.background = "url('./assets/kongcaves.png')"
         s('#left').style.backgroundSize = 'cover'
 
@@ -838,9 +1041,11 @@ Game.Launch = () => {
 
 
 
-
-
+  // Game.save()
+  // Game.load();
+  Game.rebuildInventory()
   Game.rebuildStore()
+
 
 }
 
