@@ -400,7 +400,8 @@ Game.Launch = () => {
   }
 
   Game.startQuest = (quest) => {
-    console.log('START QUEST:', quest)
+
+    // DRAW SPRITE
 
     let amountOfEnemies = quest.amountOfEnemies
 
@@ -436,6 +437,13 @@ Game.Launch = () => {
       } //
     }, 1000)
 
+    let adventurerDPS = setInterval(() => {
+      console.log(currentHealth)
+      currentHealth -= Game.adventurers
+      currentHealthPercentage -= (Game.adventurers/quest.enemyHealth) * 100
+      s('.enemy-health').style.width = currentHealthPercentage + '%'
+    }, 1000)
+
     setTimeout(() => {
       if (quest.inProgress == true) {
         s('#zone').value = 'mine'
@@ -448,6 +456,7 @@ Game.Launch = () => {
         Game.hasQuests = false
         Game.drawZone()
         Game.rebuildStore()
+        clearInterval(adventurerDPS)
       }
     }, timeLimit)
 
@@ -455,7 +464,6 @@ Game.Launch = () => {
 
     s('.enemy').onclick = () => {
       if (amountOfEnemies > 0) { // if there are enemies left
-        console.log('YES')
         if (currentHealth > 0) { // If the health is more than 0
           Game.risingNumber(Game.damagePerClick, 'damage')
           currentHealthPercentage -= minusHealthbarAmount
@@ -481,6 +489,7 @@ Game.Launch = () => {
         let removeSeparator = s('#zone').querySelector(`option[value="separator"]`)
         s('#zone').removeChild(remove)
         s('#zone').removeChild(removeSeparator)
+        clearInterval(adventurerDPS)
         quest.inProgress = false
         quest.zoneHidden = true
         Game.hasQuests = false
@@ -647,6 +656,21 @@ Game.Launch = () => {
     s('#store-content').innerHTML = str
   }
 
+  Game.drawSprites = () => {
+    let adventurerSprite = document.createElement('div')
+    adventurerSprite.style.background = 'url("./assets/punching.gif")'
+    adventurerSprite.style.height = '200px'
+    adventurerSprite.style.width = '200px'
+    adventurerSprite.style.position = 'absolute'
+    adventurerSprite.style.backgroundSize = 'cover'
+
+    let enemyPos = s('.enemy').getBoundingClientRect()
+    adventurerSprite.style.left = enemyPos.left - 100 + 'px'
+    adventurerSprite.style.top = enemyPos.top + 'px'
+
+    s('body').append(adventurerSprite)
+  }
+
   Game.drawZone = () => {
     let el = s('#zone')
     if (Game.items[0].owned == 1) {
@@ -679,6 +703,8 @@ Game.Launch = () => {
         s('.enemy').style.background = "url('./assets/treeMonster.png')"
         s('#left').style.background = "url('./assets/huManWoods.png')"
         s('#left').style.backgroundSize = 'cover'
+
+        Game.drawSprites()
       }
 
       if (value == 'Kong Caves') {
@@ -687,6 +713,7 @@ Game.Launch = () => {
         s('#enemy').style.display = 'flex'
         s('#left').style.background = "url('./assets/kongcaves.png')"
         s('#left').style.backgroundSize = 'cover'
+
       }
 
     }
