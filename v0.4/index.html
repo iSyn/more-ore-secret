@@ -5,15 +5,33 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title> More Ore </title>
-    <link rel="stylesheet" href="styles.scs">
+    <title>More Ore</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css">
+    <link rel="stylesheet" href="styles.css">
   </head>
 
   <body>
 
-    <h1>Yo</h1>
+    <div id="game">
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.js"></script>
+      <div id="left">
+        <div id="inventory">
+          <div id="ores"></div>
+          <div id="level"></div>
+        </div>
+        <div id="mines"></div>
+        <!-- <div id="fight"></div> -->
+        <canvas id="miners"></canvas>
+      </div>
+
+      <div class="vertical-separator"></div>
+
+      <div id="right">
+
+      </div>
+
+    </div>
+
     <script src="main.js"></script>
 
   </body>

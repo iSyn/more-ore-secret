@@ -1,0 +1,33 @@
+* {
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
+  user-drag: none;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-drag: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+}
+
+#game {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-flow: row nowrap;
+}
+
+#left {
+  width: 73%;
+  background-color: yellow;
+}
+
+.vertical-separator {
+  width: 1%;
+  background-color: brown;
+}
+
+#right {
+  width: 26%;
+  background-color: blue;
+}

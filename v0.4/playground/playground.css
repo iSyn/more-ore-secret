@@ -1,0 +1,41 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+
+#container {
+  height: 600px;
+  width: 600px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 1px solid black;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+}
+
+#container div {
+  height: 33%;
+  border-bottom: 1px solid black;
+  overflow: auto
+}
+
+#container div:last-child {
+  border-bottom: none;
+}
+
+#bottom-canvas {
+  height: 100%;
+  width: 100%;
+  overflow: auto
+}
+
+#button {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 1%;
+  padding: 10px;
+}
