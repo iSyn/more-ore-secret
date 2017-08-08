@@ -294,7 +294,7 @@ Game.Launch = () => {
     Game.lumberjacks++
     if (Game.lumberjacks >= 0) {Game.win('Your First Lumberjack')}
   })
-  new Game.item(3, 'Hire Adventurer', 'shield.png', 'Fight baddies', 'Time for an adventure', 1000, 'gold', 999, false, () => {
+  new Game.item(3, 'Hire Adventurer', 'shield.png', 'Fight baddies', 'Time for an adventure', 20, 'gold', 999, false, () => {
     Game.adventurers++
     if (Game.adventurers >= 0) {Game.win('Your First Adventurer')}
     // if (Game.tabs[4].unlocked == false) {Game.tabs[4].unlocked = true; Game.rebuildTabs()}
@@ -404,7 +404,7 @@ Game.Launch = () => {
 
     let amountOfEnemies = quest.amountOfEnemies
 
-    s('.enemies-left').innerHTML = amountOfEnemies
+    s('.enemies-left').innerHTML = `Enemies Left: ${amountOfEnemies}`
 
     let currentHealth = quest.enemyHealth
     let minusHealthbarAmount = (Game.damagePerClick/quest.enemyHealth) * 100
@@ -431,7 +431,8 @@ Game.Launch = () => {
         clearInterval(timeLeft)
       }
       if (s('#zone').value == 'Hu Man Woods') {
-        s('.time-remaining').innerHTML = `<p style='text-align: center; color: white'>Time Remaining: ${prettyMinutes}:${prettySeconds}</p>`
+        s('.time-remaining').innerHTML = `Time Remaining: ${prettyMinutes}:${prettySeconds}</p>`
+        s('.time-remaining').innerHTML = `Time Remaining: ${prettyMinutes}:${prettySeconds}</p>`
       } //
     }, 1000)
 
@@ -466,7 +467,7 @@ Game.Launch = () => {
               s('.enemy').style.visibility = 'visible'
             }, 200)
             amountOfEnemies--
-            s('.enemies-left').innerHTML = amountOfEnemies
+            s('.enemies-left').innerHTML = `Enemies Left: ${amountOfEnemies}`
             currentHealth = quest.enemyHealth
             currentHealthPercentage = 100
             s('.enemy-health').style.width = currentHealthPercentage + '%'

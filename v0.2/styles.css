@@ -164,6 +164,11 @@ body {
   width: 100%;
   background: rgba(0, 0, 0, 0.7);
   color: white;
+  text-align: center;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center
 }
 
 #tabs {
