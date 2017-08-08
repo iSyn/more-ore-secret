@@ -120,8 +120,8 @@ body {
 }
 
 .enemy-health-bar {
-  border: 2px solid black;
-  background: grey;
+  border: 2px solid white;
+  /*background: grey;*/
   width: 60%;
   height: 25px;
   align-self: center;
