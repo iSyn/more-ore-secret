@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 
 <html>
 
@@ -6,69 +6,39 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>More Ore</title>
-    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css"> -->
     <link rel="stylesheet" href="styles.css">
-    <link rel="shortcut icon" href="assets/tiny-rock.ico" />
-    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
   </head>
 
   <body>
 
-    <div class="rising-numbers"></div>
-    <div id="particles"></div>
-    <div id="achievements"></div>
-    <div id="modals"></div>
+    <div class='game'>
 
-    <div id="game">
+      <div class="rising-numbers"></div>
 
-      <div id="left" class='section'>
+      <div id='left' class='sections'>
+        <div class="ore-section">
+          <p class='ore-amount'></p>
+          <p class="refined-ore-amount"></p>
+          <p class='gold-amount'></p>
+        </div>
+        <div class="miners"></div>
+        <img class='ore' src="assets/ore.png" alt="ore">
+        <div class="ore-click-area"></div>
+      </div>
 
-        <div id="inventory">
-          <div id="inventory-ore" class='inventory'></div>
-          <div id="inventory-refined" class='inventory'></div>
-          <div id="inventory-wood" class='inventory'></div>
-          <div id="inventory-gold" class='inventory'></div>
+      <div id='right' class='sections'>
+        <div class="tabs">
+          <div class="upgrades-tab tab selected">Upgrades</div>
+          <div class="furnace-tab tab locked">???</div>
+          <div class="tavern-tab tab locked">???</div>
+          <div class="quests-tab tab locked">???</div>
         </div>
 
-        <div id="ore" class='click'>
-          <div id="ore-click-area"></div>
-        </div>
-
-        <div id="wood" class='click'>
-          <div id="wood-click-area"></div>
-        </div>
-
-        <div id="enemy" class='click'>
-          <div class="enemy-health-bar">
-            <div class="enemy-health"></div>
-          </div>
-          <div class="enemy-container">
-            <div class='enemy'></div>
-          </div>
-          <div class="info">
-            <p class='time-remaining'></p>
-            <p class="enemies-left"></p>
-          </div>
-        </div>
-
-        <div id="bottom">
-          <select name="" id="zone" style='width: 60%; padding: 15px; font-size: 15px;' onchange="Game.drawZone()">
-            <option disabled>-Zones-</option>
-            <option value="mine">The Mine</option>
-            <option value="wood">The Forest</option>
-          </select>
-        </div>
-      </div> <!-- left -->
-
-      <div id="left2" class='section'></div>
-
-      <div id="right" class='section'>
-        <div id="tabs"></div>
-        <div id="tabs-content-container">
-          <div id="store-content"></div>
-        </div>
-      </div> <!-- right -->
+        <div class="upgrades-content"></div>
+        <div class="furnace-content"></div>
+        <div class="tavern-content"></div>
+        <div class="quests-content"></div>
+      </div>
     </div>
 
     <script src="main.js"></script>
@@ -76,3 +46,7 @@
   </body>
 
 </html>
+
+<div class="progress-bar">
+  <div class="progress"></div>
+</div>
