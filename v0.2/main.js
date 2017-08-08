@@ -6,10 +6,10 @@ let Game = {}
 Game.Launch = () => {
   console.log('Game loaded and launched')
 
-  Game.ores = 0
-  Game.refined = 0
-  Game.wood = 0
-  Game.gold = 0
+  Game.ores = 9999
+  Game.refined = 9999
+  Game.wood = 9999
+  Game.gold = 9999
   Game.miners = 0
   Game.smelters = 0
   Game.lumberjacks = 0
@@ -18,9 +18,9 @@ Game.Launch = () => {
   Game.totalOreClicks = 0
   Game.totalTreeClicks = 0
 
-  Game.oresPerClick = 1
-  Game.woodPerClick = 1
-  Game.goldPerClick = 1
+  Game.oresPerClick = 999
+  Game.woodPerClick = 999
+  Game.goldPerClick = 999
   Game.damagePerClick = 1
   Game.damagePerSeconds = 0
 
