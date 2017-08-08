@@ -5,9 +5,12 @@ let x = 0
 let y = 0
 
 s('#button').onclick = () => {
+  let image = new Image()
+  image.src = '../assets/treeMonster.png'
+
   let canvas = s('#bottom-canvas')
   let canvasContext = canvas.getContext("2d")
-  let image = s('#image')
+  // let image = s('#image')
   canvasContext.drawImage(image, x, y)
   x += 10
   y = Math.floor(Math.random() * 20) + 1

@@ -10,6 +10,16 @@
   -ms-user-select: none;
 }
 
+.vertical-separator {
+  width: 1%;
+  background-color: brown;
+}
+
+.horizontal-separator {
+  height: 1%;
+  background-color: brown;
+}
+
 #game {
   height: 100vh;
   width: 100vw;
@@ -17,15 +27,55 @@
   flex-flow: row nowrap;
 }
 
+/*LEFT SIDE*/
+
 #left {
   width: 73%;
   background-color: yellow;
+  display: flex;
+  flex-flow: column nowrap;
 }
 
-.vertical-separator {
-  width: 1%;
-  background-color: brown;
+#inventory {
+  height: 10%;
+  background: rgba(0, 0, 0, 0.4);
 }
+
+#mines {
+  height: 70%;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: center;
+}
+
+#ore-sprite {
+  height: 300px;
+  width: 300px;
+  background: url('../v0.3/assets/ore.png');
+  background-size: cover;
+  image-rendering: pixelated;
+  cursor: pointer;
+}
+
+#ore-sprite:hover {
+  height: 310px;
+  width: 310px;
+}
+
+#ore-sprite:active {
+  height: 300px;
+  width: 300px;
+}
+
+#canvas-area {
+  height: 19%;
+  background: rgba(0, 0, 0, 0.7);
+}
+
+
+/*RIGHT SIDE*/
+
 
 #right {
   width: 26%;
