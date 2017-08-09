@@ -11,6 +11,7 @@
 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Asap+Condensed" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Abel" rel="stylesheet">
   </head>
 
   <body>
@@ -25,7 +26,9 @@
         </div>
 
         <div id="mines">
-          <div id="ore-sprite"></div>
+          <div id="ore-sprite">
+            <div id="ore-sprite-click-area"></div>
+          </div>
         </div>
 
         <div class="horizontal-separator"></div>
@@ -36,11 +39,17 @@
       <div class="vertical-separator"></div>
 
       <div id="right">
+
         <div id="tabs">
-          <div id="store-tab" class='tab'>store</div>
+          <div id="store-tab" class='tab selected-tab'>store</div>
           <div id="blacksmith-tab" class='tab'>blacksmith</div>
           <div id="stats-tab" class='tab'>stats</div>
         </div>
+
+        <div id="store-content"></div>
+        <div id="blacksmith-content"></div>
+        <div id="stats-content"></div>
+
       </div>
 
     </div>

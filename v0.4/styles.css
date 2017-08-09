@@ -11,12 +11,12 @@
 }
 
 .vertical-separator {
-  width: 1%;
+  width: 8px;
   background-color: saddlebrown;
 }
 
 .horizontal-separator {
-  height: 1%;
+  height: 8px;
   background-color: saddlebrown;
 }
 
@@ -47,7 +47,7 @@
   justify-content: space-around;
   align-items: center;
   color: white;
-  font-family: 'Asap Condensed'
+  font-family: 'Abel'
 }
 
 #mines {
@@ -77,6 +77,17 @@
   width: 300px;
 }
 
+#ore-sprite-click-area {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  height: 20px;
+  width: 20px;
+  border: 1px solid black;
+  background: rgba(255, 0, 0, 0.3);
+  border-radius: 50%;
+}
+
 #canvas-area {
   height: 19%;
   background: black;
@@ -87,15 +98,41 @@
 
 
 #right {
-  width: 26%;
+  flex-grow: 100;
   background-color: white;
 }
 
 #tabs {
-  height: 100px;
-  background: green;
   display: flex;
   flex-flow: row nowrap;
-  justify-content: space-around;
   align-items: center;
+  font-family: 'Asap Condensed';
+  justify-content: space-around;
+  width: 100%:;
 }
+
+.tab {
+  width: 33.3%;
+  text-align: center;
+  height: 100px;
+  line-height: 100px;
+  border-bottom: 1px solid black;
+}
+
+.tab:not(:last-child) {
+  border-right: 1px solid black;
+}
+
+.selected-tab {
+  border-bottom: none;
+}
+
+/*.tab {
+  position: relative;
+  height: 100px;
+  width: 33.3%;
+  border-bottom: 1px solid black;
+  border-right: 1px solid black;
+  text-align: center;
+  line-height: 100px;
+}*/
