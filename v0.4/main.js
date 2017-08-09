@@ -28,19 +28,22 @@ Game.Launch = () => {
 
   Game.risingNumber = (amount, type) => {
     let mouseX = event.clientX
-    let mouseY = event.clientY
+    let randomNumber = Math.floor(Math.random() * 20) + 1
+    let randomSign = Math.round(Math.random()) * 2 - 1
+    let randomMouseX = mouseX + (randomNumber * randomSign)
+    let mouseY = event.clientY - 20
 
     let risingNumber = document.createElement('div')
     risingNumber.classList.add('rising-number')
     risingNumber.innerHTML = `+${amount}`
-    risingNumber.style.left = mouseX + 'px'
+    risingNumber.style.left = randomMouseX + 'px'
     risingNumber.style.top = mouseY + 'px'
 
     s('#particles').append(risingNumber)
 
     setTimeout(() => {
       risingNumber.remove()
-    }, 1000)
+    }, 2000)
   }
 
   Game.oreClickArea = () => {
@@ -62,7 +65,6 @@ Game.Launch = () => {
 
   // CLICKS
   s('#ore-sprite').onclick = () => {
-    if
     Game.earn(Game.oresPerClick, 'ores')
   }
 
@@ -75,7 +77,7 @@ Game.Launch = () => {
     Game.oreClickArea()
   }
 
-  //THINGS TO DO
+  //MISC SHIT
   Game.oreClickArea()
 
 }
