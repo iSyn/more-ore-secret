@@ -6,7 +6,7 @@ let y = 0
 
 s('#button').onclick = () => {
   let image = new Image()
-  image.src = '../assets/treeMonster.png'
+  image.src = '../../assets/treeMonster.png'
 
   let canvas = s('#bottom-canvas')
   let canvasContext = canvas.getContext("2d")

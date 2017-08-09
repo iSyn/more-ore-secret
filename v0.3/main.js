@@ -583,7 +583,7 @@ Game.Launch = () => {
         <p style='text-align: center;'>&bull;</p>
         <h1 style='text-align: center;'>${this.name}</h1>
         <hr/>
-        <img class='quest-modal-image' src="./assets/${this.image}" alt="" />
+        <img class='quest-modal-image' src="../assets/${this.image}" alt="" />
         <p style='text-align: center'>${this.desc}</p>
         <br>
         <p>Possible Artifacts: ${this.artifact1}, ${this.artifact2}, ${this.artifact3}</p>
@@ -754,7 +754,7 @@ Game.Launch = () => {
           str += `
             <div class='store-button' id='store-button${i}' onclick='Game.items[${i}].buy()'>
               <div class="button-top">
-                <img src="./assets/${item.pic}" alt="" />
+                <img src="../assets/${item.pic}" alt="" />
                 <h1 class='item-name'>${item.name} <span class='hide' style='font-size: 15px'>[owned: ${item.owned}]</span></h1>
                 <p class='item-price'>cost: ${item.price} ${item.priceMaterial}</p>
               </div>
@@ -858,7 +858,7 @@ Game.Launch = () => {
   Game.drawSprites = () => {
     let adventurerSprite = document.createElement('div')
     adventurerSprite.classList.add('adventurer-sprite')
-    adventurerSprite.style.background = 'url("./assets/punching.gif")'
+    adventurerSprite.style.background = 'url("../assets/punching.gif")'
     adventurerSprite.style.height = '200px'
     adventurerSprite.style.width = '200px'
     adventurerSprite.style.position = 'absolute'
@@ -886,7 +886,7 @@ Game.Launch = () => {
         s('#wood').style.display = 'none'
         s('#enemy').style.display = 'none'
         // s('#left').style.background = '#777'
-        s('#left').style.background = "url('./assets/mine-bg.png')"
+        s('#left').style.background = "url('../assets/mine-bg.png')"
         s('#left').style.backgroundSize = 'cover'
       }
 
@@ -894,7 +894,7 @@ Game.Launch = () => {
         s('#wood').style.display = 'initial'
         s('#ore').style.display = 'none'
         s('#enemy').style.display = 'none'
-        s('#left').style.background = "url('./assets/forest-bg.png')"
+        s('#left').style.background = "url('../assets/forest-bg.png')"
         s('#left').style.backgroundSize = 'cover'
       }
 
@@ -902,8 +902,8 @@ Game.Launch = () => {
         s('#wood').style.display = 'none'
         s('#ore').style.display = 'none'
         s('#enemy').style.display = 'flex'
-        s('.enemy').style.background = "url('./assets/treeMonster.png')"
-        s('#left').style.background = "url('./assets/huManWoods.png')"
+        s('.enemy').style.background = "url('../assets/treeMonster.png')"
+        s('#left').style.background = "url('../assets/huManWoods.png')"
         s('#left').style.backgroundSize = 'cover'
 
         Game.drawSprites()
@@ -913,8 +913,8 @@ Game.Launch = () => {
         s('#wood').style.display = 'none'
         s('#ore').style.display = 'none'
         s('#enemy').style.display = 'flex'
-        s('.enemy').style.background = "url('./assets/wip.png')"
-        s('#left').style.background = "url('./assets/kongcaves.png')"
+        s('.enemy').style.background = "url('../assets/wip.png')"
+        s('#left').style.background = "url('../assets/kongcaves.png')"
         s('#left').style.backgroundSize = 'cover'
 
       }

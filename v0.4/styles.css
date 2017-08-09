@@ -12,12 +12,12 @@
 
 .vertical-separator {
   width: 1%;
-  background-color: brown;
+  background-color: saddlebrown;
 }
 
 .horizontal-separator {
   height: 1%;
-  background-color: brown;
+  background-color: saddlebrown;
 }
 
 #game {
@@ -34,11 +34,20 @@
   background-color: yellow;
   display: flex;
   flex-flow: column nowrap;
+  background: url('../assets/mine-bg.png');
+  /*background-size: cover;*/
+  background-size: contain;
 }
 
 #inventory {
   height: 10%;
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-around;
+  align-items: center;
+  color: white;
+  font-family: 'Asap Condensed'
 }
 
 #mines {
@@ -52,7 +61,7 @@
 #ore-sprite {
   height: 300px;
   width: 300px;
-  background: url('../v0.3/assets/ore.png');
+  background: url('../assets/ore.png');
   background-size: cover;
   image-rendering: pixelated;
   cursor: pointer;
@@ -70,7 +79,7 @@
 
 #canvas-area {
   height: 19%;
-  background: rgba(0, 0, 0, 0.7);
+  background: black;
 }
 
 
@@ -79,5 +88,14 @@
 
 #right {
   width: 26%;
-  background-color: blue;
+  background-color: white;
+}
+
+#tabs {
+  height: 100px;
+  background: green;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-around;
+  align-items: center;
 }
