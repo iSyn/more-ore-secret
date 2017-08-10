@@ -44,7 +44,7 @@ Game.Launch = () => {
     risingNumber.style.top = mouseY + 'px'
 
     if (type == 'ores-special') {
-      risingNumber.style.fontSize = 'x-large'
+      risingNumber.style.fontSize = 'xx-large'
     }
 
     s('#particles').append(risingNumber)
@@ -100,7 +100,7 @@ Game.Launch = () => {
                     <p>cost: ${item.price.toFixed(0)} ores</p>
                   </div>
                   <div class="button-right">
-                    <p>${item.owned}</p>
+                    <p style='font-size: xx-large'>${item.owned}</p>
                   </div>
                 </div>
                 <div class="button-bottom">
@@ -162,10 +162,10 @@ Game.Launch = () => {
   }
 
   // name, tab, pic, desc, fillerText, fillerQuote, price, hidden, buyFunction
-  new Game.item('Whetstone', 'Whetstone', 'store', 'wip.png', 'Increase ore per click by 1.5', 'filler text goes here', 'filler quote goes here', 10, false, () => {
+  new Game.item('Whetstone', 'Whetstone', 'store', 'whetstone.png', 'Increase ore per click by 1.5', 'filler text goes here', 'filler quote goes here', 10, false, () => {
     Game.oresPerClick *= 1.5
   })
-  new Game.item('Magnifying Glass', 'MagnifyingGlass', 'store', 'wip.png', 'Increase ore crit hit multiplier', 'This is useful I swear', 'I can see... I... can... FIGHT', 100, false)
+  new Game.item('Magnifying Glass', 'MagnifyingGlass', 'store', 'magnifying-glass.png', 'Increase ore crit hit multiplier', 'This is useful I swear', 'I can see... I... can... FIGHT', 100, false)
   new Game.item('Hungry Man', 'HungryMan', 'store', 'wip.png', 'Increases ore per second by 0.1', 'Extracted from District 12', 'Help me Katniss', 5, false)
   new Game.item('The Map', 'TheMap', 'store', 'wip.png', 'Unlocks RPG', 'This is what maps do IRL', 'filler quote here', 50, false)
 
