@@ -69,7 +69,63 @@ Game.Launch = () => {
       tab.classList.remove('selected')
     })
     s(`#${selectedTab}-tab`).classList.add('selected')
+    Game.rebuildTabContent(selectedTab)
   }
+
+  Game.rebuildTabContent = (tab) => {
+    let str = ''
+
+    if (tab == 'store') {
+      for (var i in Game.items) {
+        let item = Game.items[i]
+        if (item.tab == 'store') {
+          if (item.hidden == false) {
+            str += `
+              <div class="button" onclick="Game.items.${item.name}.buy()">
+                <p>${item.name}</p>
+              </div>
+            `
+          }
+        }
+      }
+    }
+    if (tab == 'blacksmith') {
+      //
+    }
+    if (tab == 'stats') {
+      str += `
+        <p>
+          Current Amount of Ores: ${Game.ores} <br/>
+          Ore Clicks: ${Game.oreClicks} <br/>
+          Total Clicks: ${Game.totalClicks} <br/>
+        </p>
+      `
+    }
+
+    s('#tab-content').innerHTML = str
+  }
+
+  Game.items = []
+  Game.item = function(name, tab, pic, desc, fillerText, price, hidden, buyFunction) {
+    this.name = name
+    this.tab = tab
+    this.pic = pic
+    this.desc = desc
+    this.fillerText = fillerText
+    this.price = price
+    this.owned = 0
+    this.hidden = hidden
+    this.buyFunction = buyFunction
+
+    this.buy = () => {
+      console.log('buying', this.name)
+    }
+
+    Game.items[this.name] = this
+  }
+
+  new Game.item('Whetstone', 'store', 'wip.png', 'Increase ore per click', 'filler text goes here', 10, false)
+  new Game.item('Miner', 'store', 'wip.png', 'Increase ore per click', 'filler text goes here', 10, false)
 
   // CLICKS
   s('#ore-sprite').onclick = () => {
@@ -87,7 +143,7 @@ Game.Launch = () => {
 
   //MISC SHIT
   Game.oreClickArea()
-
+  Game.rebuildTabContent('store')
 }
 
 window.onload = () => {Game.Launch()}

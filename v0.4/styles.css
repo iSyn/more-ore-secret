@@ -173,6 +173,9 @@
   padding-top: 20px;
   height: 87%;
   overflow-y: auto;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
 }
 
 .selected {
@@ -181,14 +184,9 @@
   background: white;
 }
 
-#store-content {
-  display: flex;
-  flex-flow: column nowrap;
-  align-items: center;
-}
-
-button {
+.button {
   height: 150px;
   width: 90%;
   margin-bottom: 20px;
+  border: 1px solid black;
 }
