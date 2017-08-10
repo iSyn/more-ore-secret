@@ -15,15 +15,20 @@ Game.Launch = () => {
   Game.oreClicks = 0
   Game.monsterClicks = 0
   Game.sessionTime = 0
-
+  Game.selectedTab = 'store'
+  Game.priceIncrease = 1.15
   Game.oresPerClick = 0.1
   Game.criticalOreClickMulti = 5
 
   Game.earn = (amount, type) => {
     Game[type] += amount
-    console.log(Game.ores)
     Game.rebuildInventory()
     Game.risingNumber(amount, type)
+  }
+
+  Game.spend = (amount, type) => {
+    Game[type] -= amount
+    Game.rebuildInventory()
   }
 
   Game.risingNumber = (amount, type) => {
@@ -35,7 +40,7 @@ Game.Launch = () => {
 
     let risingNumber = document.createElement('div')
     risingNumber.classList.add('rising-number')
-    risingNumber.innerHTML = `+${amount}`
+    risingNumber.innerHTML = `+${amount.toFixed(1)}`
     risingNumber.style.left = randomMouseX + 'px'
     risingNumber.style.top = mouseY + 'px'
 
@@ -69,33 +74,52 @@ Game.Launch = () => {
       tab.classList.remove('selected')
     })
     s(`#${selectedTab}-tab`).classList.add('selected')
-    Game.rebuildTabContent(selectedTab)
+    Game.selectedTab = selectedTab
+    Game.rebuildTabContent()
   }
 
-  Game.rebuildTabContent = (tab) => {
+  Game.rebuildTabContent = () => {
     let str = ''
 
-    if (tab == 'store') {
+    if (Game.selectedTab == 'store') {
       for (var i in Game.items) {
         let item = Game.items[i]
         if (item.tab == 'store') {
           if (item.hidden == false) {
             str += `
-              <div class="button" onclick="Game.items.${item.name}.buy()">
-                <p>${item.name}</p>
+              <div class="button" onclick="Game.items.${item.functionName}.buy()">
+                <div class="button-top">
+                  <div class="button-left">
+                    <img src="../assets/${item.pic}"/>
+                  </div>
+                  <div class="button-middle">
+                    <h3>${item.name}</h3>
+                    <p>cost: ${item.price.toFixed(0)} ores</p>
+                  </div>
+                  <div class="button-right">
+                    <p>${item.owned}</p>
+                  </div>
+                </div>
+                <div class="button-bottom">
+                  <hr/>
+                  <p>${item.desc}</p>
+                  <p>${item.fillerText}</p>
+                  <br/>
+                  <p style='font-style: italic; text-align: center'>“${item.fillerQuote}”</p>
+                </div>
               </div>
             `
           }
         }
       }
     }
-    if (tab == 'blacksmith') {
+    if (Game.selectedTab == 'blacksmith') {
       //
     }
-    if (tab == 'stats') {
+    if (Game.selectedTab == 'stats') {
       str += `
         <p>
-          Current Amount of Ores: ${Game.ores} <br/>
+          Current Amount of Ores: ${Game.ores.toFixed(1)} <br/>
           Ore Clicks: ${Game.oreClicks} <br/>
           Total Clicks: ${Game.totalClicks} <br/>
         </p>
@@ -106,30 +130,46 @@ Game.Launch = () => {
   }
 
   Game.items = []
-  Game.item = function(name, tab, pic, desc, fillerText, price, hidden, buyFunction) {
+  Game.item = function(name, functionName, tab, pic, desc, fillerText, fillerQuote, price, hidden, buyFunction) {
     this.name = name
+    this.functionName = functionName
     this.tab = tab
     this.pic = pic
     this.desc = desc
     this.fillerText = fillerText
+    this.fillerQuote = fillerQuote
+    this.basePrice = price
     this.price = price
     this.owned = 0
     this.hidden = hidden
     this.buyFunction = buyFunction
 
     this.buy = () => {
-      console.log('buying', this.name)
+      if (Game.ores >= this.price) {
+        Game.spend(this.price, 'ores')
+        this.owned++
+        this.price += this.basePrice * Math.pow(Game.priceIncrease, this.owned)
+        if (this.buyFunction) buyFunction()
+        Game.rebuildInventory()
+        Game.rebuildTabContent()
+      }
     }
 
-    Game.items[this.name] = this
+    Game.items[this.functionName] = this
   }
 
-  new Game.item('Whetstone', 'store', 'wip.png', 'Increase ore per click', 'filler text goes here', 10, false)
-  new Game.item('Miner', 'store', 'wip.png', 'Increase ore per click', 'filler text goes here', 10, false)
+  // name, tab, pic, desc, fillerText, fillerQuote, price, hidden, buyFunction
+  new Game.item('Whetstone', 'Whetstone', 'store', 'wip.png', 'Increase ore per click by 1.5', 'filler text goes here', 'filler quote goes here', 10, false, () => {
+    Game.oresPerClick *= 1.5
+  })
+  new Game.item('Magnifying Glass', 'MagnifyingGlass', 'store', 'wip.png', 'Increase ore crit hit multiplier', 'This is useful I swear', 'I can see... I... can... FIGHT', 100, false)
+  new Game.item('Hungry Man', 'HungryMan', 'store', 'wip.png', 'Increases ore per second by 0.1', 'Extracted from District 12', 'Help me Katniss', 5, false)
+  new Game.item('The Map', 'TheMap', 'store', 'wip.png', 'Unlocks RPG', 'This is what maps do IRL', 'filler quote here', 50, false)
 
   // CLICKS
   s('#ore-sprite').onclick = () => {
     Game.earn(Game.oresPerClick, 'ores')
+    Game.oreClicks++
   }
 
   s('#ore-sprite-click-area').onclick = () => {
@@ -143,7 +183,7 @@ Game.Launch = () => {
 
   //MISC SHIT
   Game.oreClickArea()
-  Game.rebuildTabContent('store')
+  Game.rebuildTabContent()
 }
 
 window.onload = () => {Game.Launch()}
