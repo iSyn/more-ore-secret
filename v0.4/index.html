@@ -44,13 +44,22 @@
       <div id="right">
 
         <div id="tabs">
-          <div id="store-tab" class='tab selected-tab'>store</div>
-          <div id="blacksmith-tab" class='tab'>blacksmith</div>
-          <div id="stats-tab" class='tab'>stats</div>
+          <div id="store-tab" class='tab selected' onclick='Game.switchTab("store")'>
+            <p>store</p>
+          </div>
+          <div id="blacksmith-tab" class='tab' onclick='Game.switchTab("blacksmith")'>
+            <p>blacksmith</p>
+          </div>
+          <div id="stats-tab" class='tab' onclick='Game.switchTab("stats")'>
+            <p>stats</p>
+          </div>
         </div>
 
         <div id="tab-content">
           <div id="store-content">
+            <button></button>
+            <button></button>
+            <button></button>
             <button></button>
             <button></button>
             <button></button>

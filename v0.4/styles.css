@@ -112,7 +112,7 @@
   left: 0px;
   height: 20px;
   width: 20px;
-  border: 1px solid red;
+  border: 1px solid white;
   background: rgba(255, 255, 255, 0.2);
   border-radius: 50%;
   cursor: pointer;
@@ -132,7 +132,7 @@
 
 #right {
   flex-grow: 1;
-  background-color: #4d4d4d;
+  /*background-color: #4d4d4d;*/
   display: flex;
   flex-flow: column nowrap;
 }
@@ -140,48 +140,55 @@
 #tabs {
   display: flex;
   flex-flow: row nowrap;
-  align-items: center;
-  font-family: 'Asap Condensed';
   justify-content: space-around;
-  width: 100%;
-  height: 150px;
+  align-items: center;
+  height: 13%;
 }
 
 .tab {
+  height: 100%;
   width: 33.3%;
   text-align: center;
-  line-height: 100px;
   border-bottom: 1px solid black;
-}
-
-.tab:not(:last-child) {
   border-right: 1px solid black;
+  cursor: pointer;
+  background-color: darkgrey;
 }
 
-.selected-tab {
-  border-bottom: none;
+.tab p {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.tab:hover p {
+  text-decoration: underline;
+}
+
+.tab:last-child {
+  border-right: none;
 }
 
 #tab-content {
-  flex-grow: 1;
-  overflow-y: scroll;
+  padding-top: 20px;
+  height: 87%;
+  overflow-y: auto;
+}
+
+.selected {
+  border-bottom: none;
+  text-decoration: underline;
+  background: white;
 }
 
 #store-content {
-  position: relative;
-  height: 100%;
   display: flex;
   flex-flow: column nowrap;
   align-items: center;
 }
 
-#store-content:first-child {
-  margin-top: 20px;
-}
-
-#store-content button {
-  height: 200px;
+button {
+  height: 150px;
   width: 90%;
-  margin-bottom: 10px;
-
+  margin-bottom: 20px;
 }

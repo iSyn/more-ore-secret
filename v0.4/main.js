@@ -63,6 +63,14 @@ Game.Launch = () => {
     s('#ores').innerHTML = 'Ores: ' + Math.floor(Game.ores)
   }
 
+  Game.switchTab = (selectedTab) => {
+    let tabs = document.querySelectorAll('.tab')
+    tabs.forEach((tab) => {
+      tab.classList.remove('selected')
+    })
+    s(`#${selectedTab}-tab`).classList.add('selected')
+  }
+
   // CLICKS
   s('#ore-sprite').onclick = () => {
     Game.earn(Game.oresPerClick, 'ores')
