@@ -21,9 +21,8 @@ Game.Launch = () => {
   Game.criticalOreClickMulti = 5
 
   Game.earn = (amount, type) => {
-    Game[type] += amount
+    Game.ores += amount
     Game.rebuildInventory()
-    Game.risingNumber(amount, type)
   }
 
   Game.spend = (amount, type) => {
@@ -43,6 +42,10 @@ Game.Launch = () => {
     risingNumber.innerHTML = `+${amount.toFixed(1)}`
     risingNumber.style.left = randomMouseX + 'px'
     risingNumber.style.top = mouseY + 'px'
+
+    if (type == 'ores-special') {
+      risingNumber.style.fontSize = 'x-large'
+    }
 
     s('#particles').append(risingNumber)
 
@@ -168,13 +171,15 @@ Game.Launch = () => {
 
   // CLICKS
   s('#ore-sprite').onclick = () => {
-    Game.earn(Game.oresPerClick, 'ores')
+    Game.earn(Game.oresPerClick)
+    Game.risingNumber(Game.oresPerClick)
     Game.oreClicks++
   }
 
   s('#ore-sprite-click-area').onclick = () => {
     Game.oreClickArea()
-    Game.earn(Game.oresPerClick * Game.criticalOreClickMulti, 'ores')
+    Game.earn(Game.oresPerClick * Game.criticalOreClickMulti)
+    Game.risingNumber(Game.oresPerClick * Game.criticalOreClickMulti, 'ores-special')
   }
 
   window.onresize = () => {
