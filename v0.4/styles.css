@@ -63,9 +63,10 @@
   background-color: yellow;
   display: flex;
   flex-flow: column nowrap;
-  background: url('../assets/mine-bg.png');
+  background: url('../assets/main-bg.png');
   /*background-size: cover;*/
-  background-size: contain;
+  background-size: auto 100%;
+  image-rendering: pixelated;
 }
 
 #inventory {
