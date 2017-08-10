@@ -60,7 +60,7 @@ Game.Launch = () => {
   }
 
   Game.rebuildInventory = () => {
-    s('#ores').innerHTML = 'Ores: ' + Math.floor(Game.ores)
+    s('#ores').innerHTML = 'Ores: ' + Game.ores.toFixed(1)
   }
 
   Game.switchTab = (selectedTab) => {
