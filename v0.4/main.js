@@ -200,7 +200,7 @@ Game.Launch = () => {
     Game.ops += 0.1
     Game.addCanvasSprite('oldman.png')
   })
-  new Game.item('The Map', 'TheMap', 'store', 'wip.png', 'Unlocks quests', 'This is what maps do IRL', 'filler quote here', 50, false, () => {
+  new Game.item('The Map', 'TheMap', 'store', 'map.png', 'Unlocks quests', 'This is what maps do IRL', 'filler quote here', 50, false, () => {
     Game.items.TheMap.hidden = true
     Game.tabs[2].hidden = false
     Game.items.Blacksmith.hidden = false
