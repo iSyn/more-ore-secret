@@ -8,7 +8,7 @@ Game.Launch = () => {
 
   console.log('Game Launched')
 
-  Game.ores = 0
+  Game.ores = 9999
   Game.currentLevel = 1
   Game.currentXP = 0
   Game.totalClicks = 0
@@ -171,12 +171,27 @@ Game.Launch = () => {
   new Game.item('Magnifying Glass', 'MagnifyingGlass', 'store', 'magnifying-glass.png', 'Increase ore crit hit multiplier', 'This is useful I swear', 'I can see... I... can... FIGHT', 30, false, () => {
     Game.criticalOreClickMulti += .3
   })
-  new Game.item('Hungry Man', 'HungryMan', 'store', 'wip.png', 'Increases ore per second by 0.1', 'Extracted from District 12', 'Help me Katniss', 5, false, () => {
+  new Game.item('Old Man', 'OldMan', 'store', 'oldmanbig.png', 'Increases ore per second by 0.1', 'Extracted from District 12', 'Help me Katniss', 5, false, () => {
     Game.ops += 0.1
+    Game.addCanvasSprite('oldman.png')
   })
   new Game.item('The Map', 'TheMap', 'store', 'wip.png', 'Unlocks RPG', 'This is what maps do IRL', 'filler quote here', 50, false, () => {
     Game.items.TheMap.hidden = true
   })
+
+  let spriteX = 30
+  let spriteY = 0
+
+  Game.addCanvasSprite = (sprite) => {
+    let image = document.createElement('img')
+    image.src = `../assets/${sprite}`
+    image.style.height = '70%'
+    image.style.width = 'auto'
+    image.style.imageRendering = 'pixelated'
+    image.style.paddingRight = '15px'
+    spriteY += 10
+    s('#canvas').append(image)
+  }
 
   // CLICKS
   s('#ore-sprite').onclick = () => {

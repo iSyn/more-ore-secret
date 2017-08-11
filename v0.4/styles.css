@@ -127,12 +127,13 @@
   overflow-x: auto;
 }
 
-canvas {
+#canvas {
   background: url('../assets/mineshaft.png');
   background-size: auto 100%;
   height: 100%;
   width: 500%;
 }
+
 
 /*RIGHT SIDE*/
 
@@ -209,6 +210,11 @@ canvas {
 
 .button:hover .button-bottom {
   display: block;
+}
+
+.sprite {
+  height: 40px;
+  width: 40px;
 }
 
 .button-top {
