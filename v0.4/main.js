@@ -183,13 +183,14 @@ Game.Launch = () => {
   let spriteY = 0
 
   Game.addCanvasSprite = (sprite) => {
+    let randomNumber = Math.floor(Math.random() * 10) + 1
     let image = document.createElement('img')
     image.src = `../assets/${sprite}`
     image.style.height = '70%'
     image.style.width = 'auto'
     image.style.imageRendering = 'pixelated'
     image.style.paddingRight = '15px'
-    spriteY += 10
+    image.style.marginBottom = randomNumber + 'px'
     s('#canvas').append(image)
   }
 
