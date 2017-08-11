@@ -91,7 +91,7 @@
 #ore-sprite {
   height: 300px;
   width: 300px;
-  background: url('../assets/ore.png');
+  background: url('../assets/rock.png');
   background-size: cover;
   image-rendering: pixelated;
   cursor: pointer;
