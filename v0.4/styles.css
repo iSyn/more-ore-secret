@@ -11,7 +11,7 @@
 }
 
 .vertical-separator {
-  width: 25px;
+  width: 35px;
   background: url('../assets/verticalseparator.png');
   background-size: 100% auto;
   background-color: saddlebrown;
@@ -59,7 +59,7 @@
 /*LEFT SIDE*/
 
 #left {
-  width: 70%;
+  width: 65%;
   background-color: yellow;
   display: flex;
   flex-flow: column nowrap;
@@ -155,23 +155,24 @@
 
 .tab {
   height: 100%;
-  width: 33.3%;
   text-align: center;
   border-bottom: 1px solid black;
   border-right: 1px solid black;
   cursor: pointer;
   background-color: #4d4d4d;
+  flex-grow: 1;
+}
+
+.tab:hover {
+  text-decoration: underline;
+  background: lightgrey;
+
 }
 
 .tab p {
   position: relative;
   top: 50%;
   transform: translateY(-50%);
-  font-family: 'Asap Condensed'
-}
-
-.tab:hover p {
-  text-decoration: underline;
 }
 
 .tab:last-child {

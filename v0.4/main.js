@@ -21,6 +21,13 @@ Game.Launch = () => {
   Game.criticalOreClickMulti = 5
   Game.fps = 30
   Game.ops = 0
+  Game.tabs = [
+    {name: 'store', hidden: false},
+    {name: 'blacksmith', hidden: false},
+    {name: 'quests', hidden: false},
+    {name: 'stats', hidden: false}
+  ]
+
 
   Game.earn = (amount) => {
     Game.ores += amount
@@ -72,6 +79,24 @@ Game.Launch = () => {
   Game.rebuildInventory = () => {
     s('#ores').innerHTML = 'Ores: ' + Game.ores.toFixed(1)
     s('#ores').innerHTML = `Ores: ${Game.ores.toFixed(1)} (${Game.ops.toFixed(1)}/sec)`
+  }
+
+  Game.buildTabs = () => {
+
+    let str = ''
+
+    for (i = 0; i < Game.tabs.length; i++) {
+      let tab = Game.tabs[i]
+      if (tab.hidden == false) {
+        str += `
+          <div id='${tab.name}-tab' class='tab' onclick='Game.switchTab("${tab.name}")'>
+            <p>${tab.name}</p>
+          </div>
+        `
+      }
+    }
+
+    s('#tabs').innerHTML = str
   }
 
   Game.switchTab = (selectedTab) => {
@@ -175,7 +200,7 @@ Game.Launch = () => {
     Game.ops += 0.1
     Game.addCanvasSprite('oldman.png')
   })
-  new Game.item('The Map', 'TheMap', 'store', 'wip.png', 'Unlocks RPG', 'This is what maps do IRL', 'filler quote here', 50, false, () => {
+  new Game.item('The Map', 'TheMap', 'store', 'wip.png', 'Unlocks quests', 'This is what maps do IRL', 'filler quote here', 50, false, () => {
     Game.items.TheMap.hidden = true
   })
 
@@ -213,6 +238,8 @@ Game.Launch = () => {
 
   //MISC SHIT
   Game.oreClickArea()
+  Game.buildTabs()
+  Game.switchTab('store')
   Game.rebuildTabContent()
   setInterval(() => {
     Game.earn(Game.ops / Game.fps)
