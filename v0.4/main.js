@@ -109,7 +109,7 @@ Game.Launch = () => {
     Game.rebuildTabContent()
   }
 
-  Game.rebuildTabContent = () => {
+  Game.rebuildTabContent = (tab) => {
     let str = ''
 
     if (Game.selectedTab == 'store') {
@@ -144,6 +144,77 @@ Game.Launch = () => {
         }
       }
     }
+
+    if (Game.selectedTab == 'quests') {
+      for (i = 0; i < Game.quests.length; i++) {
+        let quest = Game.quests[i]
+        if (quest.show == 1) {
+          str += `
+            <div class="button">
+              <div class="button-top">
+                <div class="button-left">
+                  <img src="../assets/${quest.pic}"/>
+                </div>
+                <div class="button-middle">
+                  <h3>${quest.name}</h3>
+                </div>
+                <div class="button-right">
+
+                </div>
+              </div>
+              <div class="button-bottom">
+                <hr/>
+                <p>${quest.desc}</p>
+              </div>
+            </div>
+          `
+        }
+        if (quest.show == 2) {
+          str += `
+            <div class="button" style='cursor: not-allowed'>
+              <div class="button-top">
+                <div class="button-left">
+                  <img src="../assets/${quest.pic}"/>
+                </div>
+                <div class="button-middle">
+                  <h3>${quest.name}</h3>
+                </div>
+                <div class="button-right">
+
+                </div>
+              </div>
+              <div class="button-bottom">
+                <hr/>
+                <p>${quest.desc}</p>
+              </div>
+            </div>
+          `
+        }
+        if (quest.show == 3) {
+          str += `
+            <div class="button" style='cursor: not-allowed'>
+              <div class="button-top">
+                <div class="button-left">
+                  <img src="../assets/mystery.png"/>
+                </div>
+                <div class="button-middle">
+                  <h3>???</h3>
+                </div>
+                <div class="button-right">
+
+                </div>
+              </div>
+              <div class="button-bottom">
+                <hr/>
+                <p>???</p>
+              </div>
+            </div>
+          `
+        }
+      }
+      console.log(str)
+    }
+
     if (Game.selectedTab == 'blacksmith') {
       //
     }
@@ -208,7 +279,31 @@ Game.Launch = () => {
     Game.buildTabs()
     Game.switchTab('store')
   })
-  new Game.item('Blacksmith', 'Blacksmith', 'store', 'wip.png', 'Unlocks the blacksmith', 'Purchase upgrades for weapons', 'filler quote here', 50, true)
+  new Game.item('Blacksmith', 'Blacksmith', 'store', 'wip.png', 'Unlocks the blacksmith', 'Purchase upgrades for weapons', 'filler quote here', 50, true, () => {
+    Game.items.Blacksmith.hidden = true
+    Game.tabs[1].hidden = false
+    Game.rebuildTabContent()
+    Game.buildTabs()
+    Game.switchTab('store')
+  })
+
+  Game.quests = []
+  Game.quest = function(name, functionName, pic, desc, show) {
+    this.name = name
+    this.functionName = functionName
+    this.pic = pic
+    this.desc = desc
+    this.show = show
+
+    // Game.quests[this.functionName] = this
+    Game.quests.push(this)
+  }
+
+  new Game.quest('Kong Caves', 'KongCaves', 'wip.png', 'desc text goes here', 1)
+  new Game.quest('disabled', 'test', 'wip.png', 'desc text goes here', 2)
+  new Game.quest('mystery', 'test', 'wip.png', 'desc text goes here', 3)
+  new Game.quest('hidden', 'test', 'wip.png', 'desc text goes here', 4)
+
 
   let spriteX = 30
   let spriteY = 0
