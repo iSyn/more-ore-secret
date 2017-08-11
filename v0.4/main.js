@@ -171,7 +171,7 @@ Game.Launch = () => {
         }
         if (quest.show == 2) {
           str += `
-            <div class="button" style='cursor: not-allowed'>
+            <div class="button" style='cursor: not-allowed; background: rgba(0,0,0,0.3)' >
               <div class="button-top">
                 <div class="button-left">
                   <img src="../assets/${quest.pic}"/>
@@ -179,20 +179,13 @@ Game.Launch = () => {
                 <div class="button-middle">
                   <h3>${quest.name}</h3>
                 </div>
-                <div class="button-right">
-
-                </div>
-              </div>
-              <div class="button-bottom">
-                <hr/>
-                <p>${quest.desc}</p>
               </div>
             </div>
           `
         }
         if (quest.show == 3) {
           str += `
-            <div class="button" style='cursor: not-allowed'>
+            <div class="button" style='cursor: not-allowed; background: rgba(0,0,0,0.3);'>
               <div class="button-top">
                 <div class="button-left">
                   <img src="../assets/mystery.png"/>
@@ -200,13 +193,6 @@ Game.Launch = () => {
                 <div class="button-middle">
                   <h3>???</h3>
                 </div>
-                <div class="button-right">
-
-                </div>
-              </div>
-              <div class="button-bottom">
-                <hr/>
-                <p>???</p>
               </div>
             </div>
           `
@@ -294,13 +280,15 @@ Game.Launch = () => {
     this.pic = pic
     this.desc = desc
     this.show = show
+    this.cleared = false
+
 
     // Game.quests[this.functionName] = this
     Game.quests.push(this)
   }
 
-  new Game.quest('Kong Caves', 'KongCaves', 'wip.png', 'desc text goes here', 1)
-  new Game.quest('disabled', 'test', 'wip.png', 'desc text goes here', 2)
+  new Game.quest('Baby Forest', 'BabyForest', 'wip.png', 'desc text goes here', 1)
+  new Game.quest('Kong Caves', 'KongCaves', 'wip.png', 'desc text goes here', 2)
   new Game.quest('mystery', 'test', 'wip.png', 'desc text goes here', 3)
   new Game.quest('hidden', 'test', 'wip.png', 'desc text goes here', 4)
 
