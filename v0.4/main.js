@@ -19,14 +19,16 @@ Game.Launch = () => {
   Game.priceIncrease = 1.15
   Game.oresPerClick = 0.1
   Game.criticalOreClickMulti = 5
+  Game.fps = 30
+  Game.ops = 0
 
-  Game.earn = (amount, type) => {
+  Game.earn = (amount) => {
     Game.ores += amount
     Game.rebuildInventory()
   }
 
-  Game.spend = (amount, type) => {
-    Game[type] -= amount
+  Game.spend = (amount) => {
+    Game.ores -= amount
     Game.rebuildInventory()
   }
 
@@ -69,6 +71,7 @@ Game.Launch = () => {
 
   Game.rebuildInventory = () => {
     s('#ores').innerHTML = 'Ores: ' + Game.ores.toFixed(1)
+    s('#ores').innerHTML = `Ores: ${Game.ores.toFixed(1)} (${Game.ops.toFixed(1)}/sec)`
   }
 
   Game.switchTab = (selectedTab) => {
@@ -165,9 +168,15 @@ Game.Launch = () => {
   new Game.item('Whetstone', 'Whetstone', 'store', 'whetstone.png', 'Increase ore per click by 1.5', 'filler text goes here', 'filler quote goes here', 10, false, () => {
     Game.oresPerClick *= 1.5
   })
-  new Game.item('Magnifying Glass', 'MagnifyingGlass', 'store', 'magnifying-glass.png', 'Increase ore crit hit multiplier', 'This is useful I swear', 'I can see... I... can... FIGHT', 100, false)
-  new Game.item('Hungry Man', 'HungryMan', 'store', 'wip.png', 'Increases ore per second by 0.1', 'Extracted from District 12', 'Help me Katniss', 5, false)
-  new Game.item('The Map', 'TheMap', 'store', 'wip.png', 'Unlocks RPG', 'This is what maps do IRL', 'filler quote here', 50, false)
+  new Game.item('Magnifying Glass', 'MagnifyingGlass', 'store', 'magnifying-glass.png', 'Increase ore crit hit multiplier', 'This is useful I swear', 'I can see... I... can... FIGHT', 30, false, () => {
+    Game.criticalOreClickMulti += .3
+  })
+  new Game.item('Hungry Man', 'HungryMan', 'store', 'wip.png', 'Increases ore per second by 0.1', 'Extracted from District 12', 'Help me Katniss', 5, false, () => {
+    Game.ops += 0.1
+  })
+  new Game.item('The Map', 'TheMap', 'store', 'wip.png', 'Unlocks RPG', 'This is what maps do IRL', 'filler quote here', 50, false, () => {
+    Game.items.TheMap.hidden = true
+  })
 
   // CLICKS
   s('#ore-sprite').onclick = () => {
@@ -189,6 +198,9 @@ Game.Launch = () => {
   //MISC SHIT
   Game.oreClickArea()
   Game.rebuildTabContent()
+  setInterval(() => {
+    Game.earn(Game.ops / Game.fps)
+  }, 1000 / Game.fps)
 }
 
 window.onload = () => {Game.Launch()}
