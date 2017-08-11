@@ -23,8 +23,8 @@ Game.Launch = () => {
   Game.ops = 0
   Game.tabs = [
     {name: 'store', hidden: false},
-    {name: 'blacksmith', hidden: false},
-    {name: 'quests', hidden: false},
+    {name: 'blacksmith', hidden: true},
+    {name: 'quests', hidden: true},
     {name: 'stats', hidden: false}
   ]
 
@@ -202,7 +202,13 @@ Game.Launch = () => {
   })
   new Game.item('The Map', 'TheMap', 'store', 'wip.png', 'Unlocks quests', 'This is what maps do IRL', 'filler quote here', 50, false, () => {
     Game.items.TheMap.hidden = true
+    Game.tabs[2].hidden = false
+    Game.items.Blacksmith.hidden = false
+    Game.rebuildTabContent()
+    Game.buildTabs()
+    Game.switchTab('store')
   })
+  new Game.item('Blacksmith', 'Blacksmith', 'store', 'wip.png', 'Unlocks the blacksmith', 'Purchase upgrades for weapons', 'filler quote here', 50, true)
 
   let spriteX = 30
   let spriteY = 0
