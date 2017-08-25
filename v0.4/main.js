@@ -305,14 +305,16 @@ Game.Launch = () => {
   let spriteY = 0
 
   Game.addCanvasSprite = (sprite) => {
-    let randomNumber = Math.floor(Math.random() * 10) + 1
+    let randomNumber = Math.floor(Math.random() * 5) + 1
+    let randomNumber2 = Math.floor(Math.random() * 5) + 1
     let image = document.createElement('img')
     image.src = `../assets/${sprite}`
     image.style.height = '70%'
     image.style.width = 'auto'
     image.style.imageRendering = 'pixelated'
     image.style.paddingRight = '15px'
-    image.style.marginBottom = randomNumber + 'px'
+    image.style.paddingBottom = randomNumber + 'px'
+    image.style.paddingTop = randomNumber2 + 'px'
     s('#canvas').append(image)
   }
 
@@ -340,11 +342,55 @@ Game.Launch = () => {
   }
   s('body').append(changeZoneBtn)
 
+  Game.drawParticles = () => {
+    for (i = 0; i < 3; i++) {
+      let div = document.createElement('div')
+      div.classList.add('particle')
+      div.style.background = 'lightgrey'
+      let x = event.clientX
+      let y = event.clientY
+      div.style.left = x + 'px'
+      div.style.top = y + 'px'
+
+      let particleY = y
+      let particleX = x
+
+      let randomNumber = Math.random()
+      let randomSign = Math.round(Math.random()) * 2 - 1
+
+      let particleUp = setInterval(() => {
+        particleX += randomNumber * randomSign
+        particleY -= 1
+        div.style.top = particleY + 'px'
+        div.style.left = particleX + 'px'
+      }, 10)
+
+      setTimeout(() => {
+        clearInterval(particleUp)
+
+        let particleDown = setInterval(() => {
+          particleX += randomNumber * randomSign / 2
+          particleY += 1.5
+          div.style.top = particleY + 'px'
+          div.style.left = particleX + 'px'
+        }, 10)
+
+        setTimeout(() => {
+          clearInterval(particleDown)
+          div.remove()
+        }, 1000)
+      }, 100)
+
+      s('#particles').append(div)
+    }
+  }
+
   // CLICKS
   s('#ore-sprite').onclick = () => {
     Game.earn(Game.oresPerClick)
     Game.risingNumber(Game.oresPerClick)
     Game.oreClicks++
+    Game.drawParticles()
   }
 
   s('#ore-sprite-click-area').onclick = () => {

@@ -33,6 +33,16 @@
   flex-flow: row nowrap;
 }
 
+.particle {
+  position: absolute;
+  z-index: 9999999;
+  height: 8px;
+  width: 8px;
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0.1;
+}
+
 .rising-number {
   position: absolute;
   font-family: 'Asap Condensed';
