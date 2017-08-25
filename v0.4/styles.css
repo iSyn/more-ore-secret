@@ -135,6 +135,14 @@
   width: 500%;
 }
 
+.change-zone-btn {
+  width: 150px;
+  height: 50px;
+  position: absolute;
+  background: white;
+  outline: none;
+}
+
 
 /*RIGHT SIDE*/
 

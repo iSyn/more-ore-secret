@@ -150,7 +150,7 @@ Game.Launch = () => {
         let quest = Game.quests[i]
         if (quest.show == 1) {
           str += `
-            <div class="button">
+            <div class="button" onclick="Game.quests[${i}].click()">
               <div class="button-top">
                 <div class="button-left">
                   <img src="../assets/${quest.pic}"/>
@@ -198,7 +198,6 @@ Game.Launch = () => {
           `
         }
       }
-      console.log(str)
     }
 
     if (Game.selectedTab == 'blacksmith') {
@@ -261,6 +260,7 @@ Game.Launch = () => {
     Game.items.TheMap.hidden = true
     Game.tabs[2].hidden = false
     Game.items.Blacksmith.hidden = false
+    s('.change-zone-btn').style.visibility = 'visible'
     Game.rebuildTabContent()
     Game.buildTabs()
     Game.switchTab('store')
@@ -274,20 +274,26 @@ Game.Launch = () => {
   })
 
   Game.quests = []
-  Game.quest = function(name, functionName, pic, desc, show) {
+  Game.quest = function(name, functionName, pic, desc, show, clickFunction) {
     this.name = name
     this.functionName = functionName
     this.pic = pic
     this.desc = desc
     this.show = show
     this.cleared = false
+    this.clickFunction = clickFunction
 
+    this.click = () => {
+      Game.buttonChangeLocation(this.name)
+    }
 
     // Game.quests[this.functionName] = this
     Game.quests.push(this)
   }
 
-  new Game.quest('Baby Forest', 'BabyForest', 'wip.png', 'desc text goes here', 1)
+  new Game.quest('Baby Forest', 'BabyForest', 'wip.png', 'desc text goes here', 1, () => {
+
+  })
   new Game.quest('Kong Caves', 'KongCaves', 'wip.png', 'desc text goes here', 2)
   new Game.quest('mystery', 'test', 'wip.png', 'desc text goes here', 3)
   new Game.quest('hidden', 'test', 'wip.png', 'desc text goes here', 4)
@@ -308,6 +314,27 @@ Game.Launch = () => {
     s('#canvas').append(image)
   }
 
+
+  let changeZoneBtn = document.createElement('button')
+  changeZoneBtn.classList.add('change-zone-btn')
+  Game.buttonChangeLocation = (location) => {
+    let anchor = s('#middle-separator').getBoundingClientRect()
+    changeZoneBtn.style.left = anchor.left - 150 + 'px'
+    changeZoneBtn.style.top = s('#inventory').getBoundingClientRect().bottom + 20 + 'px'
+    changeZoneBtn.style.visibility = 'hidden';
+    if (!location) {
+      changeZoneBtn.innerHTML = 'Select a quest'
+      changeZoneBtn.disabled = true
+      changeZoneBtn.style.cursor = 'not-allowed'
+    } else {
+      changeZoneBtn.style.visibility = 'visible';
+      changeZoneBtn.innerHTML = `Go To ${location}`
+      changeZoneBtn.disabled = false
+      changeZoneBtn.style.cursor = 'default'
+    }
+  }
+  s('body').append(changeZoneBtn)
+
   // CLICKS
   s('#ore-sprite').onclick = () => {
     Game.earn(Game.oresPerClick)
@@ -323,11 +350,13 @@ Game.Launch = () => {
 
   window.onresize = () => {
     Game.oreClickArea()
+    Game.buttonChangeLocation()
   }
 
   //MISC SHIT
   Game.oreClickArea()
   Game.buildTabs()
+  Game.buttonChangeLocation()
   Game.switchTab('store')
   Game.rebuildTabContent()
   setInterval(() => {
