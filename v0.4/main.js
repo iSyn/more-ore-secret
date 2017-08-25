@@ -260,10 +260,12 @@ Game.Launch = () => {
     Game.items.TheMap.hidden = true
     Game.tabs[2].hidden = false
     Game.items.Blacksmith.hidden = false
+    Game.items.TheMap.owned = 1
     s('.change-zone-btn').style.visibility = 'visible'
     Game.rebuildTabContent()
     Game.buildTabs()
     Game.switchTab('store')
+    Game.buttonChangeLocation()
   })
   new Game.item('Blacksmith', 'Blacksmith', 'store', 'wip.png', 'Unlocks the blacksmith', 'Purchase upgrades for weapons', 'filler quote here', 50, true, () => {
     Game.items.Blacksmith.hidden = true
@@ -321,16 +323,19 @@ Game.Launch = () => {
     let anchor = s('#middle-separator').getBoundingClientRect()
     changeZoneBtn.style.left = anchor.left - 150 + 'px'
     changeZoneBtn.style.top = s('#inventory').getBoundingClientRect().bottom + 20 + 'px'
-    changeZoneBtn.style.visibility = 'hidden';
-    if (!location) {
-      changeZoneBtn.innerHTML = 'Select a quest'
-      changeZoneBtn.disabled = true
-      changeZoneBtn.style.cursor = 'not-allowed'
-    } else {
-      changeZoneBtn.style.visibility = 'visible';
-      changeZoneBtn.innerHTML = `Go To ${location}`
-      changeZoneBtn.disabled = false
-      changeZoneBtn.style.cursor = 'default'
+    changeZoneBtn.style.visibility = 'hidden'
+    if (Game.items.TheMap.owned == 1) {
+      if (!location) {
+        changeZoneBtn.style.visibility = 'visible'
+        changeZoneBtn.innerHTML = 'Select a quest'
+        changeZoneBtn.disabled = true
+        changeZoneBtn.style.cursor = 'not-allowed'
+      } else {
+        changeZoneBtn.style.visibility = 'visible'
+        changeZoneBtn.innerHTML = `Go To ${location}`
+        changeZoneBtn.disabled = false
+        changeZoneBtn.style.cursor = 'pointer'
+      }
     }
   }
   s('body').append(changeZoneBtn)
