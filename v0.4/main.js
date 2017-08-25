@@ -9,8 +9,14 @@ Game.Launch = () => {
   console.log('Game Launched')
 
   Game.ores = 9999
-  Game.currentLevel = 1
-  Game.currentXP = 0
+  Game.level = {
+    currentLevel: 1,
+    currentStrength: 1,
+    currentLuck: 1,
+    currentXP: 0,
+    XPNeeded: 20,
+    availableSP: 0
+  }
   Game.totalClicks = 0
   Game.oreClicks = 0
   Game.monsterClicks = 0
@@ -204,11 +210,28 @@ Game.Launch = () => {
       //
     }
     if (Game.selectedTab == 'stats') {
-      str += `
-        <p>
-          Current Amount of Ores: ${Game.ores.toFixed(1)} <br/>
-          Ore Clicks: ${Game.oreClicks} <br/>
-          Total Clicks: ${Game.totalClicks} <br/>
+       str += `
+
+        <div style='display: flex; flex-flow: column nowrap; width: 100%; padding: 20px; font-size: 20px;'>
+          <div style='display: flex; flex-flow: row nowrap;'>
+            <p style='flex-grow: 1'>Level:</p>
+            <p>${Game.level.currentLevel}</p>
+          </div>
+          <p style='text-align: center; font-size: 15px; font-style: italic;'>Available Skill Points: ${Game.level.availableSP}</p>
+          <div style='display: flex; flex-flow: row nowrap;'>
+            <p style='flex-grow: 1'>Strength</p>
+            <p>${Game.level.currentStrength}<button>+</button></p>
+          </div>
+          <div style='display: flex; flex-flow: row nowrap;'>
+            <p style='flex-grow: 1'>Luck:</p>
+            <p>${Game.level.currentLuck}<button>+</button></p>
+          </div>
+        </div>
+
+        <p style='width: 100%; padding: 20px'>
+          Current Amount of Ores: <span style='float: right'>${Game.ores.toFixed(1)}</span> <br/>
+          Ore Clicks: <span style='float: right'>${Game.oreClicks}</span> <br/>
+          Total Clicks: <span style='float: right'>${Game.totalClicks}</span> <br/>
         </p>
       `
     }
@@ -385,18 +408,34 @@ Game.Launch = () => {
     }
   }
 
+  Game.updateXP = () => {
+
+    if (Game.level.currentXP < Game.level.XPNeeded) {
+      Game.level.currentXP++
+    } else {
+      Game.level.currentXP = 0
+      Game.level.XPNeeded *= 1.5
+      Game.level.currentLevel++
+      Game.level.availableSP++
+    }
+
+    s('#level').innerHTML = `Level: ${Game.level.currentLevel} (${Game.level.currentXP}/${Math.floor(Game.level.XPNeeded)}xp)`
+  }
+
   // CLICKS
   s('#ore-sprite').onclick = () => {
     Game.earn(Game.oresPerClick)
     Game.risingNumber(Game.oresPerClick)
     Game.oreClicks++
     Game.drawParticles()
+    Game.updateXP()
   }
 
   s('#ore-sprite-click-area').onclick = () => {
     Game.oreClickArea()
     Game.earn(Game.oresPerClick * Game.criticalOreClickMulti)
     Game.risingNumber(Game.oresPerClick * Game.criticalOreClickMulti, 'ores-special')
+    Game.updateXP()
   }
 
   window.onresize = () => {
