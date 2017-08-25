@@ -247,3 +247,8 @@
 #tab-content {
   font-family: 'Asap Condensed';
 }
+
+.outskirts {
+  display: none;
+  background: green;
+}

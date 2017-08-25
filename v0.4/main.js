@@ -355,13 +355,11 @@ Game.Launch = () => {
 
   window.onresize = () => {
     Game.oreClickArea()
-    Game.buttonChangeLocation()
   }
 
   //MISC SHIT
   Game.oreClickArea()
   Game.buildTabs()
-  Game.buttonChangeLocation()
   Game.switchTab('store')
   Game.rebuildTabContent()
   setInterval(() => {
