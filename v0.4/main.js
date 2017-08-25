@@ -115,6 +115,19 @@ Game.Launch = () => {
     Game.rebuildTabContent()
   }
 
+  Game.addSP = (selectedStat) => {
+    if (Game.level.availableSP > 0) {
+      Game.level.availableSP--
+      if (selectedStat == 'strength') {
+        Game.level.currentStrength++
+      }
+      if (selectedStat == 'luck') {
+        Game.level.currentLuck++
+      }
+      Game.rebuildTabContent('stats')
+    }
+  }
+
   Game.rebuildTabContent = (tab) => {
     let str = ''
 
@@ -220,11 +233,11 @@ Game.Launch = () => {
           <p style='text-align: center; font-size: 15px; font-style: italic;'>Available Skill Points: ${Game.level.availableSP}</p>
           <div style='display: flex; flex-flow: row nowrap;'>
             <p style='flex-grow: 1'>Strength</p>
-            <p>${Game.level.currentStrength}<button>+</button></p>
+            <p>${Game.level.currentStrength}<button onclick=Game.addSP("strength")>+</button></p>
           </div>
           <div style='display: flex; flex-flow: row nowrap;'>
             <p style='flex-grow: 1'>Luck:</p>
-            <p>${Game.level.currentLuck}<button>+</button></p>
+            <p>${Game.level.currentLuck}<button onclick=Game.addSP("luck")>+</button></p>
           </div>
         </div>
 
@@ -416,7 +429,7 @@ Game.Launch = () => {
       Game.level.currentXP = 0
       Game.level.XPNeeded *= 1.5
       Game.level.currentLevel++
-      Game.level.availableSP++
+      Game.level.availableSP += 3
     }
 
     s('#level').innerHTML = `Level: ${Game.level.currentLevel} (${Game.level.currentXP}/${Math.floor(Game.level.XPNeeded)}xp)`
