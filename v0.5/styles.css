@@ -117,6 +117,47 @@
 /* RIGHT SECTION */
 
 .right-section {
-  background: lightgrey;
   flex-grow: 1;
+  background: lightgrey;
+  display: flex;
+  flex-flow: column nowrap;
 }
+
+.tabs {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  height: 10%;
+  padding-top: 10px;
+  background-color: black;
+}
+
+.tab {
+  height: 100%;
+  text-align: center;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  /*border-bottom: 1px solid black;
+  border-right: 1px solid black;*/
+  border: 1px solid black;
+  cursor: pointer;
+  flex-grow: 1;
+  background-color: darkgrey;
+}
+
+.selected {
+  background-color: lightgrey;
+  border-bottom: none;
+}
+
+.tab-content-container {
+  padding-top: 20px;
+  height: 90%;
+  overflow-y: auto;
+}
+
+.tab-content {
+  display: flex;
+  flex-flow: column nowrap;
+}
+

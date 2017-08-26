@@ -16,6 +16,18 @@ Game.launch = () => {
     XPNeeded: 20,
     availableSP: 0
   }
+  Game.tabs = [
+    {
+      name: 'store',
+      locked: false
+    }, {
+      name: 'upgrades',
+      locked: true
+    }, {
+      name: 'stats',
+      locked: false
+    }
+  ]
 
   Game.earn = (amount) => {
     Game.ores += amount
@@ -57,6 +69,28 @@ Game.launch = () => {
     s('.ore-click-area').style.top = randomY + 'px'
   }
 
+  Game.buildTabs = () => {
+    let str = ''
+    for (i = 0; i < Game.tabs.length; i++) {
+      if (Game.tabs[i].locked == false) {
+        str += `
+          <div id='${Game.tabs[i].name}-tab' class='tab' onclick='Game.switchTab("${Game.tabs[i].name}")'  style='display: flex; align-items: center; justify-content: center;'>
+            <p>${Game.tabs[i].name}</p>
+          </div>
+        `
+      }
+    }
+    s('.tabs').innerHTML = str
+  }
+
+  Game.switchTab = (selectedTab) => {
+    let tabs = document.querySelectorAll('.tab')
+    tabs.forEach((tab) => {
+      tab.classList.remove('selected')
+    })
+    s(`#${selectedTab}-tab`).classList.add('selected')
+  }
+
 
   s('.ore').onclick = () => {
     Game.earn(Game.orePerClick)
@@ -71,6 +105,8 @@ Game.launch = () => {
 
   //Init Shit
   Game.oreClickArea()
+  Game.buildTabs()
+  Game.switchTab('store')
   window.onresize = () => Game.oreClickArea()
 
 }
