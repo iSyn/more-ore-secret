@@ -1,5 +1,3 @@
-console.log('risingNumbers.js connected')
-
 let risingNumber = (amount) => {
   let mouseX = event.clientX
   let randomNumber = Math.floor(Math.random() * 20) + 1

@@ -7,7 +7,7 @@ Game.launch = () => {
 
   Game.ores = 0
   Game.oreHp = 50
-  Game.orePerClick = 1
+  Game.orePerClick = 5
   Game.level = {
     currentLevel: 1,
     currentStrength: 1,
@@ -23,17 +23,17 @@ Game.launch = () => {
   }
 
   Game.rebuildInventory = () => {
-    // s('.ores').innerHTML = 'Ores: ' + Game.ores.toFixed(1)
     s('.ores').innerHTML = 'Ores: ' + Game.ores
   }
 
   let currentHp = Game.oreHp
   Game.updatePercentage = () => {
     if (currentHp > 0) {
-      currentHp--
+      currentHp -= Game.orePerClick
       s('.ore-hp').innerHTML = `${((currentHp/Game.oreHp)*100).toFixed(0)}%`
+      // s('.ore-hp').innerHTML = Math.ceil(currentHp)
     } else {
-      Game.oreHp *= 1.5
+      Game.oreHp = Math.pow(Game.oreHp, 1.15)
       currentHp = Game.oreHp
     }
   }
