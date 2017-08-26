@@ -3,3 +3,35 @@
   padding: 0;
   box-sizing: border-box;
 }
+
+.game {
+  height: 100vh;
+  width: 100vw;
+  background: grey;
+
+  display: flex;
+  flex-flow: row nowrap;
+}
+
+/* LEFT SECTION */
+
+.left-section {
+  width: 65%;
+  background: red;
+}
+
+.inventory-section {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-around;
+  align-items: center;
+  background: yellow;
+  height: 50px;
+}
+
+/* RIGHT SECTION */
+
+.right-section {
+  background: green;
+  flex-grow: 1;
+}
