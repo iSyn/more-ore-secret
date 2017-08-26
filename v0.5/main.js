@@ -7,7 +7,7 @@ Game.launch = () => {
 
   Game.ores = 0
   Game.oreHp = 50
-  Game.orePerClick = 5
+  Game.orePerClick = 1
   Game.level = {
     currentLevel: 1,
     currentStrength: 1,
@@ -27,21 +27,43 @@ Game.launch = () => {
   }
 
   let currentHp = Game.oreHp
-  Game.updatePercentage = () => {
+  Game.updatePercentage = (amount) => {
     if (currentHp > 0) {
-      currentHp -= Game.orePerClick
+      currentHp -= amount
       s('.ore-hp').innerHTML = `${((currentHp/Game.oreHp)*100).toFixed(0)}%`
-      // s('.ore-hp').innerHTML = Math.ceil(currentHp)
     } else {
       Game.oreHp = Math.pow(Game.oreHp, 1.15)
       currentHp = Game.oreHp
     }
   }
 
+  Game.oreClickArea = () => {
+    let randomNumber = () => Math.floor(Math.random() * 80) + 1
+    let orePos = s('.ore').getBoundingClientRect()
+    let randomSign = Math.round(Math.random()) * 2 - 1
+    let centerX = (orePos.left + orePos.right) / 2
+    let centerY = (orePos.top + orePos.bottom) / 2
+    let randomX = centerX + (randomNumber() * randomSign)
+    let randomY = centerY + (randomNumber() * randomSign)
+
+    s('.ore-click-area').style.left = randomX + 'px'
+    s('.ore-click-area').style.top = randomY + 'px'
+  }
+
+
   s('.ore').onclick = () => {
     Game.earn(Game.orePerClick)
-    Game.updatePercentage()
+    Game.updatePercentage(Game.orePerClick)
   }
+
+  s('.ore-click-area').onclick = () => {
+    Game.earn(Game.orePerClick * 5)
+    Game.updatePercentage(Game.orePerClick * 5)
+    Game.oreClickArea()
+  }
+
+  //Init Shit
+  Game.oreClickArea()
 
 
 }

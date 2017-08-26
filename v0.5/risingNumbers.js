@@ -1,4 +1,4 @@
-let risingNumber = (amount) => {
+let risingNumber = (amount, type) => {
   let mouseX = event.clientX
   let randomNumber = Math.floor(Math.random() * 20) + 1
   let randomSign = Math.round(Math.random()) * 2 - 1
@@ -18,9 +18,9 @@ let risingNumber = (amount) => {
   risingNumber.style.pointerEvents = 'none'
   risingNumber.style.color = 'white'
 
-  // if (type == 'ores-special') {
-  //   risingNumber.style.fontSize = 'xx-large'
-  // }
+  if (type == 'special') {
+    risingNumber.style.fontSize = 'xx-large'
+  }
 
   s('.particles').append(risingNumber)
 
@@ -30,7 +30,13 @@ let risingNumber = (amount) => {
 }
 
 let ore = document.querySelector('.ore')
+let oreClickArea = document.querySelector('.ore-click-area')
 
 ore.addEventListener('click', () => {
   risingNumber(Game.orePerClick)
 })
+
+oreClickArea.addEventListener('click', () => {
+  risingNumber(Game.orePerClick * 5, 'special')
+})
+
