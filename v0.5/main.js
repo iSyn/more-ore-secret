@@ -58,8 +58,8 @@ Game.launch = () => {
   }
 
   s('.ore-click-area').onclick = () => {
-    Game.earn(Game.orePerClick * 10)
-    Game.updatePercentage(Game.orePerClick * 10)
+    Game.earn(Game.orePerClick * 5)
+    Game.updatePercentage(Game.orePerClick * 5)
     Game.oreClickArea()
   }
 
