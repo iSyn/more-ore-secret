@@ -37,6 +37,6 @@ ore.addEventListener('click', () => {
 })
 
 oreClickArea.addEventListener('click', () => {
-  risingNumber(Game.orePerClick * 5, 'special')
+  risingNumber(Game.orePerClick * 10, 'special')
 })
 

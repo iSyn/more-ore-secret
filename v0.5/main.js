@@ -34,6 +34,7 @@ Game.launch = () => {
     } else {
       Game.oreHp = Math.pow(Game.oreHp, 1.15)
       currentHp = Game.oreHp
+      s('.ore-hp').innerHTML = `${((currentHp/Game.oreHp)*100).toFixed(0)}%`
     }
   }
 
@@ -57,14 +58,13 @@ Game.launch = () => {
   }
 
   s('.ore-click-area').onclick = () => {
-    Game.earn(Game.orePerClick * 5)
-    Game.updatePercentage(Game.orePerClick * 5)
+    Game.earn(Game.orePerClick * 10)
+    Game.updatePercentage(Game.orePerClick * 10)
     Game.oreClickArea()
   }
 
   //Init Shit
   Game.oreClickArea()
-
 
 }
 

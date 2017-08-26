@@ -92,9 +92,9 @@
   position: absolute;
   top: 0px;
   left: 0px;
-  height: 20px;
-  width: 20px;
-  border: 1px solid white;
+  height: 15px;
+  width: 15px;
+  border: 1px solid red;
   background: rgba(255, 255, 255, 0.2);
   border-radius: 50%;
   cursor: pointer;
@@ -103,6 +103,6 @@
 /* RIGHT SECTION */
 
 .right-section {
-  background: green;
+  background: lightgrey;
   flex-grow: 1;
 }
