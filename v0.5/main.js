@@ -89,6 +89,11 @@ Game.launch = () => {
       tab.classList.remove('selected')
     })
     s(`#${selectedTab}-tab`).classList.add('selected')
+    Game.buildTabContent(selectedTab)
+  }
+
+  Game.buildTabContent = (tab) => {
+
   }
 
 
