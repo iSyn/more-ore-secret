@@ -28,9 +28,19 @@ Game.launch = () => {
       locked: false
     }
   ]
+  Game.stats = {
+    oreClicks: 0,
+    oreCritClick: 0,
+    rocksDestroyed: 0
+  }
 
   Game.earn = (amount) => {
     Game.ores += amount
+    Game.rebuildInventory()
+  }
+
+  Game.spend = (amount) => {
+    Game.ores -= amount
     Game.rebuildInventory()
   }
 
@@ -40,7 +50,6 @@ Game.launch = () => {
 
   let currentHp = Game.oreHp
   Game.updatePercentage = (amount) => {
-    console.log(currentHp)
     if (currentHp > 0) {
       if (currentHp - amount > 0) {
         currentHp -= amount
@@ -50,6 +59,7 @@ Game.launch = () => {
         s('.ore-hp').innerHTML = `0%`
       }
     } else {
+      Game.stats.rocksDestroyed++
       Game.oreHp = Math.pow(Game.oreHp, 1.15)
       currentHp = Game.oreHp
       s('.ore-hp').innerHTML = `${((currentHp/Game.oreHp)*100).toFixed(0)}%`
@@ -59,7 +69,6 @@ Game.launch = () => {
       s('.ore').style.background = 'url("../assets/rock.png")'
       s('.ore').style.backgroundSize = 'cover'
     }
-
     if (currentHp/Game.oreHp <= 0.8) {
       s('.ore').style.background = 'url("../assets/rock1-2.png")'
       s('.ore').style.backgroundSize = 'cover'
@@ -76,10 +85,6 @@ Game.launch = () => {
       s('.ore').style.background = 'url("../assets/rock1-5.png")'
       s('.ore').style.backgroundSize = 'cover'
     }
-
-
-
-
   }
 
   Game.oreClickArea = () => {
@@ -123,7 +128,6 @@ Game.launch = () => {
     if (tab == 'store') {
       for (var i in Game.items) {
         let item = Game.items[i]
-        console.log(item)
         if (item.tab == 'store') {
           if (item.hidden == false) {
             str += `
@@ -153,6 +157,15 @@ Game.launch = () => {
         }
       }
     }
+
+    if (tab == 'stats') {
+      str += `
+        <p>Ore Clicks: ${Game.stats.oreClicks}</p>
+        <p>Ore Crit Clicks: ${Game.stats.oreCritClick} </p>
+        <p>Rocks Destroyed: ${Game.stats.rocksDestroyed}</p>
+      `
+    }
+
     s('.tab-content').innerHTML = str
   }
 
@@ -200,12 +213,15 @@ Game.launch = () => {
   s('.ore').onclick = () => {
     Game.earn(Game.orePerClick)
     Game.updatePercentage(Game.orePerClick)
+    Game.stats.oreClicks++
   }
 
   s('.ore-click-area').onclick = () => {
     Game.earn(Game.orePerClick * 5)
     Game.updatePercentage(Game.orePerClick * 5)
     Game.oreClickArea()
+    Game.stats.oreClicks++
+    Game.stats.oreCritClick++
   }
 
   //Init Shit
