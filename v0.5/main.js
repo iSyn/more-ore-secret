@@ -6,7 +6,7 @@ Game.launch = () => {
   console.log('Game launched')
 
   Game.ores = 0
-  Game.oreHp = 10
+  Game.oreHp = 50
   Game.orePerClick = 1
   Game.level = {
     currentLevel: 1,
@@ -27,13 +27,20 @@ Game.launch = () => {
     s('.ores').innerHTML = 'Ores: ' + Game.ores
   }
 
+  let currentHp = Game.oreHp
   Game.updatePercentage = () => {
-    let percentage = s('.ore-hp')
-
+    if (currentHp > 0) {
+      currentHp--
+      s('.ore-hp').innerHTML = `${((currentHp/Game.oreHp)*100).toFixed(0)}%`
+    } else {
+      Game.oreHp *= 1.5
+      currentHp = Game.oreHp
+    }
   }
 
   s('.ore').onclick = () => {
     Game.earn(Game.orePerClick)
+    Game.updatePercentage()
   }
 
 
