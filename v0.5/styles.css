@@ -20,6 +20,13 @@
   background-size: 100% auto;
 }
 
+.horizontal-separator {
+  height: 20px;
+  width: 100%;
+  background: url('../assets/horizontalseparator.png');
+  background-size: auto 100%;
+}
+
 @keyframes risingNumber {
   0% {
     transform: translateY(0);
@@ -38,7 +45,7 @@
 .left-section {
   width: 70%;
   background: url('../assets/main-bg.png');
-  background-size: cover;
+  background-size: auto 80%;
   background-repeat: no-repeat;
   image-rendering: pixelated;
   display: flex;
@@ -98,6 +105,12 @@
   background: rgba(255, 255, 255, 0.2);
   border-radius: 50%;
   cursor: pointer;
+}
+
+.bottom {
+  height: 20%;
+  background: url('../assets/mineshaft.png');
+  background-size: auto 100%;
 }
 
 /* RIGHT SECTION */
