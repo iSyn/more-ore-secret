@@ -345,11 +345,6 @@ Game.launch = () => {
   new Game.item('Magnifying Glass', 'MagnifyingGlass', 'store', 'magnifying-glass.png', 'Increase ore crit hit multiplier', 'This is useful I swear', 'I can see... I... can... FIGHT', 30, false, () => {
     Game.criticalOreClickMulti += .3
   })
-  new Game.item('Old Man', 'OldMan', 'store', 'oldmanbig.png', 'Increases ore per second by 0.1', 'Extracted from District 12', 'Help me Katniss', 5, false, () => {
-    Game.ops += 0.1
-    Game.addCanvasSprite('oldman.png')
-  })
-
 
   s('.ore').onclick = () => {
     if (currentHp > 0) {
