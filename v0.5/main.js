@@ -28,9 +28,15 @@ Game.launch = () => {
 
   let currentHp = Game.oreHp
   Game.updatePercentage = (amount) => {
+    console.log(currentHp)
     if (currentHp > 0) {
-      currentHp -= amount
-      s('.ore-hp').innerHTML = `${((currentHp/Game.oreHp)*100).toFixed(0)}%`
+      if (currentHp - amount > 0) {
+        currentHp -= amount
+        s('.ore-hp').innerHTML = `${((currentHp/Game.oreHp)*100).toFixed(0)}%`
+      } else {
+        currentHp = 0
+        s('.ore-hp').innerHTML = `0%`
+      }
     } else {
       Game.oreHp = Math.pow(Game.oreHp, 1.15)
       currentHp = Game.oreHp
