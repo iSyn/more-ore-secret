@@ -34,6 +34,11 @@ Game.launch = () => {
     rocksDestroyed: 0
   }
 
+  Game.clickSound = () => {
+    let sound = new Audio('../assets/ore-hit.wav')
+    sound.play()
+  }
+
   Game.earn = (amount) => {
     Game.ores += amount
     Game.rebuildInventory()
@@ -239,6 +244,7 @@ Game.launch = () => {
     Game.earn(Game.orePerClick)
     Game.updatePercentage(Game.orePerClick)
     Game.stats.oreClicks++
+    Game.clickSound()
   }
 
   s('.ore-click-area').onclick = () => {
@@ -247,6 +253,7 @@ Game.launch = () => {
     Game.oreClickArea()
     Game.stats.oreClicks++
     Game.stats.oreCritClick++
+    Game.clickSound()
   }
 
   //Init Shit

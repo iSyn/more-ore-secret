@@ -228,6 +228,7 @@
   background-repeat: no-repeat;
   background-size: cover;
   image-rendering: pixelated;
+  background-color: grey;
 }
 
 .stats-container {
