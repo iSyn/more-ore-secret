@@ -13,11 +13,23 @@
   flex-flow: row nowrap;
 }
 
+.vertical-separator {
+  height: 100vw;
+  width: 20px;
+  background: url('../assets/verticalseparator.png');
+  background-size: 100% auto;
+}
+
 /* LEFT SECTION */
 
 .left-section {
-  width: 65%;
-  background: red;
+  width: 70%;
+  background: url('../assets/main-bg.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  image-rendering: pixelated;
+  display: flex;
+  flex-flow: column nowrap;
 }
 
 .inventory-section {
@@ -25,8 +37,42 @@
   flex-flow: row nowrap;
   justify-content: space-around;
   align-items: center;
-  background: yellow;
-  height: 50px;
+  background: rgba(0, 0, 0, 0.5);
+  height: 60px;
+  color: white;
+}
+
+.ore-container {
+  flex-grow: 1;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.ore {
+  background: url('../assets/rock.png');
+  background-size: cover;
+  image-rendering: pixelated;
+  height: 300px;
+  width: 300px;
+  cursor: pointer;
+}
+
+.ore:hover {
+  height: 310px;
+  width: 310px;
+}
+
+.ore:active {
+  height: 300px;
+  width: 300px;
+}
+
+.ore-hp {
+  margin-top: 10px;
+  font-size: 20px;
+  color: white;
 }
 
 /* RIGHT SECTION */
