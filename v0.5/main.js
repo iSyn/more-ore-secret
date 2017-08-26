@@ -54,6 +54,32 @@ Game.launch = () => {
       currentHp = Game.oreHp
       s('.ore-hp').innerHTML = `${((currentHp/Game.oreHp)*100).toFixed(0)}%`
     }
+
+    if (currentHp/Game.oreHp > 0.8) {
+      s('.ore').style.background = 'url("../assets/rock.png")'
+      s('.ore').style.backgroundSize = 'cover'
+    }
+
+    if (currentHp/Game.oreHp <= 0.8) {
+      s('.ore').style.background = 'url("../assets/rock1-2.png")'
+      s('.ore').style.backgroundSize = 'cover'
+    }
+    if (currentHp/Game.oreHp <= 0.6) {
+      s('.ore').style.background = 'url("../assets/rock1-3.png")'
+      s('.ore').style.backgroundSize = 'cover'
+    }
+    if (currentHp/Game.oreHp <= 0.4) {
+      s('.ore').style.background = 'url("../assets/rock1-4.png")'
+      s('.ore').style.backgroundSize = 'cover'
+    }
+    if (currentHp/Game.oreHp <= 0.2) {
+      s('.ore').style.background = 'url("../assets/rock1-5.png")'
+      s('.ore').style.backgroundSize = 'cover'
+    }
+
+
+
+
   }
 
   Game.oreClickArea = () => {
@@ -162,9 +188,14 @@ Game.launch = () => {
   new Game.item('Whetstone', 'Whetstone', 'store', 'whetstone.png', 'Increase ore per click by 1.5', 'filler text goes here', 'filler quote goes here', 10, false, () => {
     Game.oresPerClick *= 1.5
   })
-  new Game.item('Whetstdone', 'Whetsdtone', 'store', 'whetstone.png', 'Increase ore per click by 1.5', 'filler text goes here', 'filler quote goes here', 10, false, () => {
-    Game.oresPerClick *= 1.5
+  new Game.item('Magnifying Glass', 'MagnifyingGlass', 'store', 'magnifying-glass.png', 'Increase ore crit hit multiplier', 'This is useful I swear', 'I can see... I... can... FIGHT', 30, false, () => {
+    Game.criticalOreClickMulti += .3
   })
+  new Game.item('Old Man', 'OldMan', 'store', 'oldmanbig.png', 'Increases ore per second by 0.1', 'Extracted from District 12', 'Help me Katniss', 5, false, () => {
+    Game.ops += 0.1
+    Game.addCanvasSprite('oldman.png')
+  })
+
 
   s('.ore').onclick = () => {
     Game.earn(Game.orePerClick)
