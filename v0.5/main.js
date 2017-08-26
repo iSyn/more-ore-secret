@@ -82,18 +82,25 @@ Game.launch = () => {
 
   Game.pickUpItem = (item) => {
     console.log('picking up')
-    item.remove()
-    let itemModal = document.createElement('div')
-    itemModal.classList.add('item-modal-container')
-    itemModal.innerHTML = `
-      <div class='item-modal'>
-        <h1>New Item</h1>
-        <div class="item-modal-left"></div>
-        <div class="item-modal-right"></div>
-      </div>
 
-    `
-    s('body').append(itemModal)
+    s('.item-drop').classList.add('item-pickup-animation')
+
+    setTimeout(() => {
+      item.remove()
+      let itemModal = document.createElement('div')
+      itemModal.classList.add('item-modal-container')
+      itemModal.innerHTML = `
+        <div class='item-modal'>
+          <h1>New Item</h1>
+          <div class="item-modal-left">
+            <p>You Found:</p>
+          </div>
+          <div class="item-modal-right"></div>
+        </div>
+
+      `
+      s('body').append(itemModal)
+    }, 800)
   }
 
   let currentHp = Game.oreHp
