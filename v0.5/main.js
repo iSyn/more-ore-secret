@@ -278,6 +278,7 @@ Game.launch = () => {
       Game.updatePercentage(Game.orePerClick)
       Game.risingNumber(Game.orePerClick)
     }
+    Game.updatePercentage(0)
     Game.stats.oreClicks++
     Game.clickSound()
   }
@@ -289,6 +290,7 @@ Game.launch = () => {
       Game.oreClickArea()
       Game.risingNumber(Game.orePerClick * 5, 'special')
     }
+    Game.updatePercentage(0)
     Game.stats.oreClicks++
     Game.stats.oreCritClick++
     Game.clickSound()
