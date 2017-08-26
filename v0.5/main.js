@@ -90,17 +90,46 @@ Game.launch = () => {
       let itemModal = document.createElement('div')
       itemModal.classList.add('item-modal-container')
       itemModal.innerHTML = `
-        <div class='item-modal'>
-          <h1>New Item</h1>
-          <div class="item-modal-left">
-            <p>You Found:</p>
+
+        <div class="item-modal">
+          <div class="item-modal-top">
+            <h1>New Item</h1>
           </div>
-          <div class="item-modal-right"></div>
+          <div class="item-modal-middle">
+            <div class="item-modal-middle-left">
+              <p>You Found</p>
+              <div class='item-modal-img'></div>
+              <div class="item-stats">
+                <h2>Slightly Less Shitty Pickaxe</h2>
+                <p>Ore Per Click: 2</p>
+                <p>Strength Bonus: 3%</p>
+                <p>Luck Bonus: 3%</p>
+              </div>
+            </div>
+            <div class="item-modal-middle-right">
+              <p>Equipped</p>
+              <div class='item-modal-img'></div>
+              <div class="item-stats">
+                <h2>Shitty Pickaxe</h2>
+                <p>Ore Per Click: 1</p>
+              </div>
+            </div>
+          </div>
+          <div class="item-modal-bottom">
+            <button style='margin-right: 10px;' onclick=Game.modalButtonClick()>Equip</button>
+            <button style='margin-left: 10px;' onclick=Game.modalButtonClick()>Discard</button>
+          </div>
         </div>
+
+
 
       `
       s('body').append(itemModal)
     }, 800)
+  }
+
+  Game.modalButtonClick = () => {
+    s('.item-modal-container').remove()
   }
 
   let currentHp = Game.oreHp
