@@ -71,6 +71,7 @@ Game.launch = () => {
 
   //Init Shit
   Game.oreClickArea()
+  window.onresize = () => Game.oreClickArea()
 
 }
 
