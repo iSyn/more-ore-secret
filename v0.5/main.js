@@ -36,6 +36,7 @@ Game.launch = () => {
 
   Game.clickSound = () => {
     let sound = new Audio('../assets/ore-hit.wav')
+    sound.volume = 0.3
     sound.play()
   }
 
@@ -90,6 +91,37 @@ Game.launch = () => {
       s('.ore').style.background = 'url("../assets/rock1-5.png")'
       s('.ore').style.backgroundSize = 'cover'
     }
+  }
+
+  Game.risingNumber = (amount, type) => {
+    let mouseX = event.clientX
+    let randomNumber = Math.floor(Math.random() * 20) + 1
+    let randomSign = Math.round(Math.random()) * 2 - 1
+    let randomMouseX = mouseX + (randomNumber * randomSign)
+    let mouseY = event.clientY - 20
+
+    let risingNumber = document.createElement('div')
+    risingNumber.classList.add('rising-number')
+    risingNumber.innerHTML = `+${amount}`
+    risingNumber.style.left = randomMouseX + 'px'
+    risingNumber.style.top = mouseY + 'px'
+
+    risingNumber.style.position = 'absolute'
+    risingNumber.style.fontSize = '15px'
+    risingNumber.style.animation = 'risingNumber 2s ease-out'
+    risingNumber.style.animationFillMode = 'forwards'
+    risingNumber.style.pointerEvents = 'none'
+    risingNumber.style.color = 'white'
+
+    if (type == 'special') {
+      risingNumber.style.fontSize = 'xx-large'
+    }
+
+    s('.particles').append(risingNumber)
+
+    setTimeout(() => {
+      risingNumber.remove()
+    }, 2000)
   }
 
   Game.oreClickArea = () => {
@@ -241,16 +273,22 @@ Game.launch = () => {
 
 
   s('.ore').onclick = () => {
-    Game.earn(Game.orePerClick)
-    Game.updatePercentage(Game.orePerClick)
+    if (currentHp > 0) {
+      Game.earn(Game.orePerClick)
+      Game.updatePercentage(Game.orePerClick)
+      Game.risingNumber(Game.orePerClick)
+    }
     Game.stats.oreClicks++
     Game.clickSound()
   }
 
   s('.ore-click-area').onclick = () => {
-    Game.earn(Game.orePerClick * 5)
-    Game.updatePercentage(Game.orePerClick * 5)
-    Game.oreClickArea()
+    if (currentHp > 0) {
+      Game.earn(Game.orePerClick * 5)
+      Game.updatePercentage(Game.orePerClick * 5)
+      Game.oreClickArea()
+      Game.risingNumber(Game.orePerClick * 5, 'special')
+    }
     Game.stats.oreClicks++
     Game.stats.oreCritClick++
     Game.clickSound()
