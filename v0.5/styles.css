@@ -41,6 +41,21 @@
   }
 }
 
+.item-drop {
+  height: 40px;
+  width: 40px;
+  position: absolute;
+  background: url('../assets/item.png');
+  background-size: cover;
+  image-rendering: pixelated;
+  cursor: pointer;
+}
+
+.item-drop:hover {
+  height: 43px;
+  width: 43px;
+}
+
 /* LEFT SECTION */
 
 .left-section {

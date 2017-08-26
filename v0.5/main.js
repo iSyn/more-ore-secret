@@ -7,7 +7,7 @@ Game.launch = () => {
 
   Game.ores = 0
   Game.oreHp = 50
-  Game.orePerClick = 1
+  Game.orePerClick = 10
   Game.level = {
     currentLevel: 1,
     currentStrength: 1,
@@ -54,6 +54,37 @@ Game.launch = () => {
     s('.ores').innerHTML = 'Ores: ' + Game.ores
   }
 
+  Game.dropItems = () => {
+    console.log('drop item')
+
+    let randomSign = Math.round(Math.random()) * 2 - 1
+    let randomNumber = (Math.floor(Math.random() * 200) + 1) * randomSign
+
+    console.log(randomNumber)
+    if (Game.stats.rocksDestroyed == 1) {
+      console.log('first item')
+      let item = document.createElement('div')
+      item.classList.add('item-drop')
+      item.style.position = 'absolute'
+
+      let orePos = s('.ore').getBoundingClientRect()
+      console.log(orePos)
+      item.style.top = orePos.bottom + 30 + 'px'
+      item.style.left = (orePos.left + orePos.right)/2 + randomNumber + 'px'
+
+      item.addEventListener('click', () => {
+        Game.pickUpItem(item)
+      })
+
+      s('body').append(item)
+    }
+  }
+
+  Game.pickUpItem = (item) => {
+    console.log('picking up')
+    item.remove()
+  }
+
   let currentHp = Game.oreHp
   Game.updatePercentage = (amount) => {
     if (currentHp > 0) {
@@ -68,6 +99,7 @@ Game.launch = () => {
       Game.stats.rocksDestroyed++
       Game.oreHp = Math.pow(Game.oreHp, 1.15)
       currentHp = Game.oreHp
+      Game.dropItems()
       s('.ore-hp').innerHTML = `${((currentHp/Game.oreHp)*100).toFixed(0)}%`
     }
 
