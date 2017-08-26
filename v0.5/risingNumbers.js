@@ -1,4 +1,4 @@
-console.log('particles connected')
+console.log('risingNumbers.js connected')
 
 let risingNumber = (amount) => {
   let mouseX = event.clientX
@@ -12,6 +12,13 @@ let risingNumber = (amount) => {
   risingNumber.innerHTML = `+${amount}`
   risingNumber.style.left = randomMouseX + 'px'
   risingNumber.style.top = mouseY + 'px'
+
+  risingNumber.style.position = 'absolute'
+  risingNumber.style.fontSize = '15px'
+  risingNumber.style.animation = 'risingNumber 2s ease-out'
+  risingNumber.style.animationFillMode = 'forwards'
+  risingNumber.style.pointerEvents = 'none'
+  risingNumber.style.color = 'white'
 
   // if (type == 'ores-special') {
   //   risingNumber.style.fontSize = 'xx-large'

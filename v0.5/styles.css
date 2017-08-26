@@ -20,15 +20,6 @@
   background-size: 100% auto;
 }
 
-.rising-number {
-  position: absolute;
-  font-size: 15px;
-  animation: risingNumber 2s ease-out;
-  animation-fill-mode: forwards;
-  pointer-events: none;
-  color: white;
-}
-
 @keyframes risingNumber {
   0% {
     transform: translateY(0);
