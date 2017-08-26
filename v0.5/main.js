@@ -160,6 +160,31 @@ Game.launch = () => {
 
     if (tab == 'stats') {
       str += `
+
+        <div class='stat-sheet'>
+          <div class="stat-sheet-left">
+            <div class="stat-sheet-img"></div>
+          </div>
+          <div class="stat-sheet-right">
+            <div class="stats-container">
+              <div class="single-stat" style='font-size: x-large'>
+                <p class='stat-left'>Level: </p>
+                <p>${Game.level.currentLevel}</p>
+              </div>
+              <hr/>
+              <div class="single-stat">
+                <p class='stat-left'>Strength: </p>
+                <p>${Game.level.currentStrength}</p>
+              </div>
+              <div class="single-stat">
+                <p class='stat-left'>Luck: </p>
+                <p>${Game.level.currentLuck}</p>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
         <p>Ore Clicks: ${Game.stats.oreClicks}</p>
         <p>Ore Crit Clicks: ${Game.stats.oreCritClick} </p>
         <p>Rocks Destroyed: ${Game.stats.rocksDestroyed}</p>

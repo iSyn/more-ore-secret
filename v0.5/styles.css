@@ -203,3 +203,47 @@
   display: none;
 }
 
+.stat-sheet {
+  width: 90%;
+  height: 200px;
+  border: 1px solid black;
+  display: flex;
+  flex-flow: row nowrap;
+  background: snow;
+  margin-bottom: 15px;
+}
+
+.stat-sheet-left, .stat-sheet-right {
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.stat-sheet-img {
+  background: url('../assets/oldman.png');
+  height: 85%;
+  width: 85%;
+  border: 1px solid black;
+  background-repeat: no-repeat;
+  background-size: cover;
+  image-rendering: pixelated;
+}
+
+.stats-container {
+  height: 85%;
+  width: 85%;
+}
+
+.single-stat {
+  display: flex;
+  flex-flow: row nowrap;
+}
+
+.single-stat:first-child {
+  flex-grow: 1;
+}
+
+.stat-left {
+  flex-grow: 1;
+}
