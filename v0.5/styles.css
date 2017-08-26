@@ -101,6 +101,7 @@
   display: flex;
   flex-flow: column nowrap;
   padding: 20px;
+  box-shadow: 0 0 20px rgb(225, 225, 0);
 }
 
 .item-modal-top h1 {
@@ -126,10 +127,12 @@
   width: 80%;
   left: 50%;
   transform: translateX(-50%);
+  background: url('../assets/wip.png');
+  background-repeat: no-repeat;
 }
 
 .item-modal-bottom {
-  padding: 20px 0;
+  padding-top: 50px;
   display: flex;
   flex-flow: row nowrap;
   justify-content: center;
