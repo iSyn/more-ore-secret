@@ -40,6 +40,18 @@ Game.launch = () => {
     sound.play()
   }
 
+  Game.rockDamagedSound = () => {
+    let sound = new Audio('../assets/explosion.wav')
+    sound.volume = 0.1
+    sound.play()
+  }
+
+  Game.rockDamagedSound2 = () => {
+    let sound = new Audio('../assets/explosion2.wav')
+    sound.volume = 0.2
+    sound.play()
+  }
+
   Game.earn = (amount) => {
     Game.ores += amount
     Game.rebuildInventory()
@@ -52,17 +64,30 @@ Game.launch = () => {
 
   Game.rebuildInventory = () => {
     s('.ores').innerHTML = 'Ores: ' + Game.ores
+    s('.level').innerHTML = `Level: ${Game.level.currentLevel} (${Game.level.currentXP}/${Game.level.XPNeeded}xp)`
   }
 
   Game.dropItems = () => {
-    console.log('drop item')
-
     let randomSign = Math.round(Math.random()) * 2 - 1
     let randomNumber = (Math.floor(Math.random() * 200) + 1) * randomSign
 
-    console.log(randomNumber)
     if (Game.stats.rocksDestroyed == 1) {
-      console.log('first item')
+      let item = document.createElement('div')
+      item.classList.add('item-drop')
+      item.style.position = 'absolute'
+
+      let orePos = s('.ore').getBoundingClientRect()
+      item.style.top = orePos.bottom + 30 + 'px'
+      item.style.left = (orePos.left + orePos.right)/2 + randomNumber + 'px'
+
+      item.addEventListener('click', () => {
+        Game.pickUpItem(item)
+      })
+
+      s('body').append(item)
+    }
+
+    if (Math.random() <= .3) {
       let item = document.createElement('div')
       item.classList.add('item-drop')
       item.style.position = 'absolute'
@@ -132,6 +157,11 @@ Game.launch = () => {
     s('.item-modal-container').remove()
   }
 
+  let soundPlayed1 = false
+  let soundPlayed2 = false
+  let soundPlayed3 = false
+  let soundPlayed4 = false
+  let soundPlayed5 = false
   let currentHp = Game.oreHp
   Game.updatePercentage = (amount) => {
     if (currentHp > 0) {
@@ -148,6 +178,11 @@ Game.launch = () => {
       currentHp = Game.oreHp
       Game.dropItems()
       s('.ore-hp').innerHTML = `${((currentHp/Game.oreHp)*100).toFixed(0)}%`
+      soundPlayed1 = false
+      soundPlayed2 = false
+      soundPlayed3 = false
+      soundPlayed4 = false
+      soundPlayed5 = false
     }
 
     if (currentHp/Game.oreHp > 0.8) {
@@ -157,18 +192,41 @@ Game.launch = () => {
     if (currentHp/Game.oreHp <= 0.8) {
       s('.ore').style.background = 'url("../assets/rock1-2.png")'
       s('.ore').style.backgroundSize = 'cover'
+      if (soundPlayed1 == false) {
+        Game.rockDamagedSound()
+        soundPlayed1 = true
+      }
     }
     if (currentHp/Game.oreHp <= 0.6) {
       s('.ore').style.background = 'url("../assets/rock1-3.png")'
       s('.ore').style.backgroundSize = 'cover'
+      if (soundPlayed2 == false) {
+        Game.rockDamagedSound()
+        soundPlayed2 = true
+      }
     }
     if (currentHp/Game.oreHp <= 0.4) {
       s('.ore').style.background = 'url("../assets/rock1-4.png")'
       s('.ore').style.backgroundSize = 'cover'
+      if (soundPlayed3 == false) {
+        Game.rockDamagedSound()
+        soundPlayed3 = true
+      }
     }
     if (currentHp/Game.oreHp <= 0.2) {
       s('.ore').style.background = 'url("../assets/rock1-5.png")'
       s('.ore').style.backgroundSize = 'cover'
+      if (soundPlayed4 == false) {
+        Game.rockDamagedSound()
+        soundPlayed4 = true
+      }
+    }
+    if (currentHp/Game.oreHp <= 0) {
+      s('.ore').style.background = 'url("../assets/nothing.png")'
+      if (soundPlayed5 == false) {
+        Game.rockDamagedSound2()
+        soundPlayed5 = true
+      }
     }
   }
 
@@ -345,12 +403,25 @@ Game.launch = () => {
   new Game.item('Magnifying Glass', 'MagnifyingGlass', 'store', 'magnifying-glass.png', 'Increase ore crit hit multiplier', 'This is useful I swear', 'I can see... I... can... FIGHT', 30, false, () => {
     Game.criticalOreClickMulti += .3
   })
+  new Game.item('Old Man', 'OldMan', 'store', 'oldmanbig.png', 'Increases ore per second by 0.1', 'Extracted from District 12', 'Help me Katniss', 5, false)
+
+  Game.gainXp = () => {
+    if (Game.level.currentXP < Game.level.XPNeeded) {
+      Game.level.currentXP++
+    } else {
+      Game.level.currentXP = 0
+      Game.level.XPNeeded = Math.ceil(Math.pow(Game.level.XPNeeded, 1.15))
+      Game.level.currentLevel++
+      Game.level.availableSP += 3
+    }
+  }
 
   s('.ore').onclick = () => {
     if (currentHp > 0) {
       Game.earn(Game.orePerClick)
       Game.updatePercentage(Game.orePerClick)
       Game.risingNumber(Game.orePerClick)
+      Game.gainXp()
     }
     Game.updatePercentage(0)
     Game.stats.oreClicks++
@@ -363,6 +434,7 @@ Game.launch = () => {
       Game.updatePercentage(Game.orePerClick * 5)
       Game.oreClickArea()
       Game.risingNumber(Game.orePerClick * 5, 'special')
+      Game.gainXp()
     }
     Game.updatePercentage(0)
     Game.stats.oreClicks++
