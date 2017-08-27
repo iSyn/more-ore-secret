@@ -33,10 +33,11 @@ Game.launch = () => {
     oreCritClick: 0,
     rocksDestroyed: 0
   }
+  Game.selectedTab = 'store'
 
   Game.playSound = (sound) => {
     let sfx = new Audio(`../assets/${sound}.wav`)
-    sfx.volume = 0.2
+    sfx.volume = 0.1
     sfx.play()
   }
 
@@ -283,6 +284,7 @@ Game.launch = () => {
     })
     s(`#${selectedTab}-tab`).classList.add('selected')
     Game.buildTabContent(selectedTab)
+    Game.selectedTab = selectedTab
   }
 
   Game.buildTabContent = (tab) => {
@@ -334,13 +336,31 @@ Game.launch = () => {
                 <p>${Game.level.currentLevel}</p>
               </div>
               <hr/>
+              <p style='text-align: center;'>Available SP: ${Game.level.availableSP}</p>
+              <br/>
               <div class="single-stat">
                 <p class='stat-left'>Strength: </p>
                 <p>${Game.level.currentStrength}</p>
+                `
+
+                if (Game.level.availableSP > 0) {
+                  str += `<button class='level-up-btn' onclick='Game.addStat("str")'>+</button>`
+                }
+
+              str += `
+              <br/>
               </div>
               <div class="single-stat">
                 <p class='stat-left'>Luck: </p>
                 <p>${Game.level.currentLuck}</p>
+
+                `
+                if (Game.level.availableSP > 0) {
+                  str += `<button class='level-up-btn' onclick='Game.addStat("luk")'>+</button>`
+                }
+
+                str += `
+
               </div>
 
             </div>
@@ -354,6 +374,15 @@ Game.launch = () => {
     }
 
     s('.tab-content').innerHTML = str
+  }
+
+  Game.addStat = (stat) => {
+    if (Game.level.availableSP > 0) {
+      Game.level.availableSP--
+      if (stat == 'str') Game.level.currentStrength++
+      if (stat == 'luk') Game.level.currentLuck++
+      Game.buildTabContent(Game.selectedTab)
+    }
   }
 
   Game.items = []
@@ -424,6 +453,9 @@ Game.launch = () => {
     Game.updatePercentage(0)
     Game.stats.oreClicks++
     Game.playSound('ore-hit')
+    if (Game.selectedTab === 'stats') {
+      Game.buildTabContent('stats')
+    }
   }
 
 
@@ -437,6 +469,9 @@ Game.launch = () => {
     Game.stats.oreClicks++
     Game.stats.oreCritClick++
     Game.playSound('ore-hit')
+    if (Game.selectedTab === 'stats') {
+      Game.buildTabContent('stats')
+    }
   }
 
   //Init Shit
