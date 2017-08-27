@@ -434,11 +434,11 @@ Game.launch = () => {
   }
 
   Game.calculatePerClick = (type) => {
-    let amount = 1
+    let amount = 0
+    amount += Game.orePerClick
+    amount += (Game.level.currentStrength * .3)
     if (type === 'special') {
-      amount *= (Game.orePerClick + Game.level.currentStrength * 0.5) * 5
-    } else {
-      amount *= Game.orePerClick + Game.level.currentStrength * 0.5
+      amount *= 5
     }
     Game.earn(amount)
     Game.risingNumber(amount, type)
