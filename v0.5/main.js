@@ -48,7 +48,7 @@ Game.launch = () => {
 
   Game.rockDamagedSound2 = () => {
     let sound = new Audio('../assets/explosion2.wav')
-    sound.volume = 0.2
+    sound.volume = 0.1
     sound.play()
   }
 
