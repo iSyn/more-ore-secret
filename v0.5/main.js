@@ -38,6 +38,7 @@ Game.launch = () => {
   Game.newItem = {}
   Game.currentPickaxe = {
     damage: .1,
+    synonym: 'Shitty',
     rarity: 'Common',
     itemLevel: 1
   }
@@ -129,23 +130,18 @@ Game.launch = () => {
       bonus = 10
     }
 
+    let shittySynonyms = ['Shitty', 'Shoddy', 'Broken']
+    let synonym = shittySynonyms[Math.floor(Math.random() * shittySynonyms.length)];
+
     let itemDmg = (Math.random() / 2) * bonus * Game.oreHp
     let itemLevel = Game.stats.rocksDestroyed
 
     Game.newItem = {
       damage: itemDmg,
+      synonym: synonym,
       rarity: rarity,
       itemLevel: itemLevel
     }
-
-    console.log('rarity', rarity)
-    console.log('randomNum', randomNum)
-    console.log('bonus', bonus)
-    console.log('itemDmg', itemDmg)
-    console.log('itemLevel', itemLevel)
-
-
-
 
     setTimeout(() => {
       item.remove()
@@ -163,7 +159,7 @@ Game.launch = () => {
               <p>You Found</p>
               <div class='item-modal-img'></div>
               <div class="item-stats">
-                <h2>${rarity} Pickaxe</h2>
+                <h2>${rarity} ${synonym} Pickaxe</h2>
                 <p>Item Level: ${Game.newItem.itemLevel}</p>
                 <p>Damage: ${itemDmg.toFixed(1)}</p>
               </div>
@@ -172,7 +168,7 @@ Game.launch = () => {
               <p>Equipped</p>
               <div class='item-modal-img'></div>
               <div class="item-stats">
-                <h2>${Game.currentPickaxe.rarity} Pickaxe</h2>
+                <h2>${Game.currentPickaxe.rarity} ${Game.currentPickaxe.synonym} Pickaxe</h2>
                 <p>Item Level: ${Game.currentPickaxe.itemLevel}</p>
                 <p>Damage: ${Game.currentPickaxe.damage.toFixed(1)}</p>
               </div>
