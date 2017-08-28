@@ -7,12 +7,12 @@ Game.launch = () => {
 
   Game.ores = 0
   Game.oreHp = 50
-  Game.oresPerClick = .1
+  Game.oresPerClick = 1
   Game.oresPerSecond = 0
   Game.level = {
     currentLevel: 1,
-    currentStrength: 1,
-    currentLuck: 1,
+    currentStrength: 0,
+    currentLuck: 0,
     currentXP: 0,
     XPNeeded: 20,
     availableSP: 0
@@ -38,7 +38,7 @@ Game.launch = () => {
   Game.selectedTab = 'store'
   Game.newItem = {}
   Game.currentPickaxe = {
-    damage: .1,
+    damage: 0,
     synonym: 'Shitty',
     rarity: 'Common',
     itemLevel: 1
