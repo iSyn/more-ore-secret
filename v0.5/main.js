@@ -31,7 +31,8 @@ Game.launch = () => {
   Game.stats = {
     oreClicks: 0,
     oreCritClick: 0,
-    rocksDestroyed: 0
+    rocksDestroyed: 0,
+    itemsPickedUp: 0
   }
   Game.selectedTab = 'store'
 
@@ -95,12 +96,23 @@ Game.launch = () => {
   }
 
   Game.pickUpItem = (item) => {
-    console.log('picking up')
 
     s('.item-drop').classList.add('item-pickup-animation')
 
+    // GENERATE RANDOM ITEM
+    let oreHp = Game.oreHp
+    let lv1to10Range = ['Broken', 'Destroyed']
+
+
+
+
+
+
+
+
     setTimeout(() => {
       item.remove()
+      Game.stats.itemsPickedUp++
       let itemModal = document.createElement('div')
       itemModal.classList.add('item-modal-container')
       itemModal.innerHTML = `
@@ -269,7 +281,7 @@ Game.launch = () => {
       if (Game.tabs[i].locked == false) {
         str += `
           <div id='${Game.tabs[i].name}-tab' class='tab' onclick='Game.switchTab("${Game.tabs[i].name}")'  style='display: flex; align-items: center; justify-content: center;'>
-            <p>${Game.tabs[i].name}</p>
+            <p style='font-size: x-large'>${Game.tabs[i].name}</p>
           </div>
         `
       }
@@ -370,6 +382,7 @@ Game.launch = () => {
         <p>Ore Clicks: ${Game.stats.oreClicks}</p>
         <p>Ore Crit Clicks: ${Game.stats.oreCritClick} </p>
         <p>Rocks Destroyed: ${Game.stats.rocksDestroyed}</p>
+        <p>Items Picked Up: ${Game.stats.itemsPickedUp}</p>
       `
     }
 
@@ -421,6 +434,18 @@ Game.launch = () => {
     Game.criticalOreClickMulti += .3
   })
   new Game.item('Old Man', 'OldMan', 'store', 'oldmanbig.png', 'Increases ore per second by 0.1', 'Extracted from District 12', 'Help me Katniss', 5, false)
+
+  Game.equipment = function(name, type, rarity, pic, stats) {
+    this.name = name
+    this.type = type
+    this.rarity = rarity
+    this.pic = pic
+    this.stats = stats
+  }
+
+  new Game.equipment('Slightly Less Shitty Pickaxe', 'pickaxe', 'common', 'wip.png', )
+
+
 
   Game.gainXp = () => {
     if (Game.level.currentXP < Game.level.XPNeeded) {
