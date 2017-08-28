@@ -38,7 +38,8 @@ Game.launch = () => {
   Game.newItem = {}
   Game.currentPickaxe = {
     damage: .1,
-    rarity: 'Common'
+    rarity: 'Common',
+    itemLevel: 1
   }
 
   Game.playSound = (sound) => {
@@ -81,7 +82,7 @@ Game.launch = () => {
 
       s('body').append(item)
     } else {
-      if (Math.random() <= .2) {
+      if (Math.random() <= .3) { // 30% chance
         let item = document.createElement('div')
         item.classList.add('item-drop')
         item.style.position = 'absolute'
@@ -109,7 +110,7 @@ Game.launch = () => {
 
     // DETERMINE RARITY BONUS
     let rarity = ''
-    let bonus = 0
+    let bonus = 1
     let randomNum = Math.random()
     if (randomNum >= .4) { // if number is between .4 and 1
       rarity = 'Common'
@@ -129,11 +130,21 @@ Game.launch = () => {
     }
 
     let itemDmg = (Math.random() / 2) * bonus * Game.oreHp
+    let itemLevel = Game.stats.rocksDestroyed
 
     Game.newItem = {
       damage: itemDmg,
-      rarity: rarity
+      rarity: rarity,
+      itemLevel: itemLevel
     }
+
+    console.log('rarity', rarity)
+    console.log('randomNum', randomNum)
+    console.log('bonus', bonus)
+    console.log('itemDmg', itemDmg)
+    console.log('itemLevel', itemLevel)
+
+
 
 
     setTimeout(() => {
@@ -153,6 +164,7 @@ Game.launch = () => {
               <div class='item-modal-img'></div>
               <div class="item-stats">
                 <h2>${rarity} Pickaxe</h2>
+                <p>Item Level: ${Game.newItem.itemLevel}</p>
                 <p>Damage: ${itemDmg.toFixed(1)}</p>
               </div>
             </div>
@@ -161,6 +173,7 @@ Game.launch = () => {
               <div class='item-modal-img'></div>
               <div class="item-stats">
                 <h2>${Game.currentPickaxe.rarity} Pickaxe</h2>
+                <p>Item Level: ${Game.currentPickaxe.itemLevel}</p>
                 <p>Damage: ${Game.currentPickaxe.damage.toFixed(1)}</p>
               </div>
             </div>
@@ -184,6 +197,7 @@ Game.launch = () => {
       Game.oresPerClick = item.damage
       Game.currentPickaxe.rarity = item.rarity
       Game.currentPickaxe.damage = item.damage
+      Game.currentPickaxe.itemLevel = item.itemLevel
     }
 
 
