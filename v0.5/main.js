@@ -7,7 +7,7 @@ Game.launch = () => {
 
   Game.ores = 0
   Game.oreHp = 50
-  Game.orePerClick = .1
+  Game.oresPerClick = .1
   Game.level = {
     currentLevel: 1,
     currentStrength: 1,
@@ -35,6 +35,11 @@ Game.launch = () => {
     itemsPickedUp: 0
   }
   Game.selectedTab = 'store'
+  Game.newItem = {}
+  Game.currentPickaxe = {
+    damage: .1,
+    rarity: 'Common'
+  }
 
   Game.playSound = (sound) => {
     let sfx = new Audio(`../assets/${sound}.wav`)
@@ -100,14 +105,35 @@ Game.launch = () => {
     s('.item-drop').classList.add('item-pickup-animation')
 
     // GENERATE RANDOM ITEM
-    let oreHp = Game.oreHp
-    let lv1to10Range = ['Broken', 'Destroyed']
+    // -------------------
 
+    // DETERMINE RARITY BONUS
+    let rarity = ''
+    let bonus = 0
+    let randomNum = Math.random()
+    if (randomNum >= .4) { // if number is between .4 and 1
+      rarity = 'Common'
+      bonus = .05
+    } else if (randomNum >= .2 && randomNum < .4) {
+      rarity = 'Uncommon'
+      bonus = .1
+    } else if (randomNum >= .1 && randomNum < .2) {
+      rarity = 'Unique'
+      bonus = 1
+    } else if (randomNum >= .05 && randomNum < .1) {
+      rarity = 'Rare'
+      bonus = 5
+    } else if (randomNum >= 0 && randomNum < .05) {
+      rarity = 'Legendary'
+      bonus = 10
+    }
 
+    let itemDmg = (Math.random() / 2) * bonus * Game.oreHp
 
-
-
-
+    Game.newItem = {
+      damage: itemDmg,
+      rarity: rarity
+    }
 
 
     setTimeout(() => {
@@ -126,23 +152,21 @@ Game.launch = () => {
               <p>You Found</p>
               <div class='item-modal-img'></div>
               <div class="item-stats">
-                <h2>Slightly Less Shitty Pickaxe</h2>
-                <p>Ore Per Click: 2</p>
-                <p>Strength Bonus: 3%</p>
-                <p>Luck Bonus: 3%</p>
+                <h2>${rarity} Pickaxe</h2>
+                <p>Damage: ${itemDmg.toFixed(1)}</p>
               </div>
             </div>
             <div class="item-modal-middle-right">
               <p>Equipped</p>
               <div class='item-modal-img'></div>
               <div class="item-stats">
-                <h2>Shitty Pickaxe</h2>
-                <p>Ore Per Click: 1</p>
+                <h2>${Game.currentPickaxe.rarity} Pickaxe</h2>
+                <p>Damage: ${Game.currentPickaxe.damage.toFixed(1)}</p>
               </div>
             </div>
           </div>
           <div class="item-modal-bottom">
-            <button style='margin-right: 10px;' onclick=Game.modalButtonClick()>Equip</button>
+            <button style='margin-right: 10px;' onclick=Game.modalButtonClick(Game.newItem)>Equip</button>
             <button style='margin-left: 10px;' onclick=Game.modalButtonClick()>Discard</button>
           </div>
         </div>
@@ -154,7 +178,17 @@ Game.launch = () => {
     }, 800)
   }
 
-  Game.modalButtonClick = () => {
+  Game.modalButtonClick = (item) => {
+
+    if (item) {
+      Game.oresPerClick = item.damage
+      Game.currentPickaxe.rarity = item.rarity
+      Game.currentPickaxe.damage = item.damage
+    }
+
+
+
+
     s('.item-modal-container').remove()
   }
 
@@ -175,7 +209,7 @@ Game.launch = () => {
       }
     } else {
       Game.stats.rocksDestroyed++
-      Game.oreHp = Math.pow(Game.oreHp, 1.15)
+      Game.oreHp = Math.pow(Game.oreHp, 1.05)
       currentHp = Game.oreHp
       Game.dropItems()
       s('.ore-hp').innerHTML = `${((currentHp/Game.oreHp)*100).toFixed(0)}%`
@@ -240,7 +274,7 @@ Game.launch = () => {
 
     let risingNumber = document.createElement('div')
     risingNumber.classList.add('rising-number')
-    risingNumber.innerHTML = `+${amount}`
+    risingNumber.innerHTML = `+${amount.toFixed(1)}`
     risingNumber.style.left = randomMouseX + 'px'
     risingNumber.style.top = mouseY + 'px'
 
@@ -460,7 +494,7 @@ Game.launch = () => {
 
   Game.calculatePerClick = (type) => {
     let amount = 0
-    amount += Game.orePerClick
+    amount += Game.oresPerClick
     amount += (Game.level.currentStrength * .3)
     if (type === 'special') {
       amount *= 5
