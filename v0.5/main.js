@@ -7,7 +7,8 @@ Game.launch = () => {
 
   Game.ores = 0
   Game.oreHp = 50
-  Game.oresPerClick = .1
+  Game.oresPerClick = 1
+  Game.oresPerSecond = 0
   Game.level = {
     currentLevel: 1,
     currentStrength: 1,
@@ -190,7 +191,7 @@ Game.launch = () => {
   Game.modalButtonClick = (item) => {
 
     if (item) {
-      Game.oresPerClick = item.damage
+      // Game.oresPerClick = item.damage
       Game.currentPickaxe.rarity = item.rarity
       Game.currentPickaxe.damage = item.damage
       Game.currentPickaxe.itemLevel = item.itemLevel
@@ -317,6 +318,7 @@ Game.launch = () => {
 
     s('.ore-click-area').style.left = randomX + 'px'
     s('.ore-click-area').style.top = randomY + 'px'
+    s('.ore-click-area').style.display = 'block'
   }
 
   Game.buildTabs = () => {
@@ -459,53 +461,51 @@ Game.launch = () => {
 
     this.buy = () => {
       if (Game.ores >= this.price) {
-        Game.spend(this.price, 'ores')
+        Game.spend(this.price)
         this.owned++
-        this.price += this.basePrice * Math.pow(Game.priceIncrease, this.owned)
+        this.price += this.basePrice * Math.pow(1.15, this.owned)
         if (this.buyFunction) buyFunction()
         Game.rebuildInventory()
-        Game.rebuildTabContent()
+        Game.buildTabContent(Game.selectedTab)
       }
     }
 
     Game.items[this.functionName] = this
   }
 
+  // name, functionName, tab, pic, desc, fillerText, fillerQuote, price, hidden, buyFunction
   new Game.item('Whetstone', 'Whetstone', 'store', 'whetstone.png', 'Increase ore per click by 1.5', 'filler text goes here', 'filler quote goes here', 10, false, () => {
     Game.oresPerClick *= 1.5
   })
-  new Game.item('Magnifying Glass', 'MagnifyingGlass', 'store', 'magnifying-glass.png', 'Increase ore crit hit multiplier', 'This is useful I swear', 'I can see... I... can... FIGHT', 30, false, () => {
-    Game.criticalOreClickMulti += .3
+  new Game.item('Magnifying Glass', 'MagnifyingGlass', 'store', 'magnifying-glass.png', 'Allows for critical hits on ore', 'This is useful I swear', 'I can see... I... can... FIGHT', 30, false, () => {
+    Game.oreClickArea()
+    Game.items.MagnifyingGlass.hidden = true
+    if (Game.tabs[1].locked == true) { Game.tabs[1].locked = false; Game.buildTabs(); Game.switchTab(Game.selectedTab)}
   })
-  new Game.item('Old Man', 'OldMan', 'store', 'oldmanbig.png', 'Increases ore per second by 0.1', 'Extracted from District 12', 'Help me Katniss', 5, false)
-
-  Game.equipment = function(name, type, rarity, pic, stats) {
-    this.name = name
-    this.type = type
-    this.rarity = rarity
-    this.pic = pic
-    this.stats = stats
-  }
-
-  new Game.equipment('Slightly Less Shitty Pickaxe', 'pickaxe', 'common', 'wip.png', )
-
-
+  new Game.item('Old Man', 'OldMan', 'store', 'wip.png', 'Increases ore per second by 0.1', 'Extracted from District 12', 'Help me Katniss', 20, false, () => {
+    Game.oresPerSecond += .5
+    if (Game.tabs[1].locked == true) { Game.tabs[1].locked = false; Game.buildTabs(); Game.switchTab(Game.selectedTab)}
+  })
 
   Game.gainXp = () => {
     if (Game.level.currentXP < Game.level.XPNeeded) {
       Game.level.currentXP++
     } else {
       Game.level.currentXP = 0
-      Game.level.XPNeeded = Math.ceil(Math.pow(Game.level.XPNeeded, 1.15))
       Game.level.currentLevel++
+      Game.level.XPNeeded = Math.ceil(Math.pow(Game.level.XPNeeded, 1.15))
+      // Game.level.XPNeeded = Math.ceil(20 * Math.pow(1.15, Game.level.currentLevel))
       Game.level.availableSP += 3
     }
   }
 
   Game.calculatePerClick = (type) => {
     let amount = 0
-    amount += Game.oresPerClick
-    amount += (Game.level.currentStrength * .3)
+
+    amount += (Game.oresPerClick + Game.currentPickaxe.damage) * (Game.level.currentStrength * .3)
+
+    // amount += Game.oresPerClick * (Game.level.currentStrength * .1)
+
     if (type === 'special') {
       amount *= 5
     }
@@ -544,10 +544,13 @@ Game.launch = () => {
   }
 
   //Init Shit
-  Game.oreClickArea()
+  // Game.oreClickArea()
   Game.buildTabs()
   Game.switchTab('store')
   window.onresize = () => Game.oreClickArea()
+  setInterval(() => {
+    Game.earn(Game.oresPerSecond / 30)
+  }, 1000 / 30)
 
 }
 
