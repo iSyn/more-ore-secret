@@ -158,6 +158,15 @@
   cursor: pointer;
 }
 
+.particle {
+  position: absolute;
+  z-index: 9999999;
+  height: 3px;
+  width: 3px;
+  border-radius: 5px;
+  pointer-events: none;
+  opacity: 0.5;
+}
 
 
 /* LEFT SECTION */

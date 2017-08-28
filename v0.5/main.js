@@ -7,7 +7,7 @@ Game.launch = () => {
 
   Game.ores = 0
   Game.oreHp = 50
-  Game.oresPerClick = 10.1 // originally 1
+  Game.oresPerClick = .1
   Game.oresPerSecond = 0
   Game.level = {
     currentLevel: 1,
@@ -528,11 +528,55 @@ Game.launch = () => {
     Game.updatePercentage(amount)
   }
 
+    Game.drawParticles = () => {
+    for (i = 0; i < 3; i++) {
+      let div = document.createElement('div')
+      div.classList.add('particle')
+      div.style.background = 'lightgrey'
+      let x = event.clientX
+      let y = event.clientY
+      div.style.left = x + 'px'
+      div.style.top = y + 'px'
+
+      let particleY = y
+      let particleX = x
+
+      let randomNumber = Math.random()
+      let randomSign = Math.round(Math.random()) * 2 - 1
+
+      let particleUp = setInterval(() => {
+        particleX += randomNumber * randomSign
+        particleY -= 1
+        div.style.top = particleY + 'px'
+        div.style.left = particleX + 'px'
+      }, 10)
+
+      setTimeout(() => {
+        clearInterval(particleUp)
+
+        let particleDown = setInterval(() => {
+          particleX += randomNumber * randomSign / 2
+          particleY += 1.5
+          div.style.top = particleY + 'px'
+          div.style.left = particleX + 'px'
+        }, 10)
+
+        setTimeout(() => {
+          clearInterval(particleDown)
+          div.remove()
+        }, 1000)
+      }, 100)
+
+      s('body').append(div)
+    }
+  }
+
   s('.ore').onclick = () => {
     if (currentHp > 0) {
       Game.calculatePerClick()
       Game.gainXp()
     }
+    Game.drawParticles()
     Game.updatePercentage(0)
     Game.stats.oreClicks++
     Game.playSound('ore-hit')
