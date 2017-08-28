@@ -7,7 +7,7 @@ Game.launch = () => {
 
   Game.ores = 0
   Game.oreHp = 50
-  Game.oresPerClick = 100 // originally 1
+  Game.oresPerClick = 10.1 // originally 1
   Game.oresPerSecond = 0
   Game.level = {
     currentLevel: 1,
@@ -219,6 +219,7 @@ Game.launch = () => {
   let soundPlayed4 = false
   let soundPlayed5 = false
   let currentHp = Game.oreHp
+  let whichPic = Math.floor(Math.random() * 2) + 1
   Game.updatePercentage = (amount) => {
     if (currentHp > 0) {
       if (currentHp - amount > 0) {
@@ -239,14 +240,17 @@ Game.launch = () => {
       soundPlayed3 = false
       soundPlayed4 = false
       soundPlayed5 = false
+
+      whichPic = Math.floor(Math.random() * 2) + 1
+      console.log(whichPic)
     }
 
     if (currentHp/Game.oreHp > 0.8) {
-      s('.ore').style.background = 'url("../assets/rock.png")'
+      s('.ore').style.background = `url("../assets/ore${whichPic}-1.png")`
       s('.ore').style.backgroundSize = 'cover'
     }
     if (currentHp/Game.oreHp <= 0.8) {
-      s('.ore').style.background = 'url("../assets/rock1-2.png")'
+      s('.ore').style.background = `url("../assets/ore${whichPic}-2.png")`
       s('.ore').style.backgroundSize = 'cover'
       if (soundPlayed1 == false) {
         Game.playSound('explosion')
@@ -254,7 +258,7 @@ Game.launch = () => {
       }
     }
     if (currentHp/Game.oreHp <= 0.6) {
-      s('.ore').style.background = 'url("../assets/rock1-3.png")'
+      s('.ore').style.background = `url("../assets/ore${whichPic}-3.png")`
       s('.ore').style.backgroundSize = 'cover'
       if (soundPlayed2 == false) {
         Game.playSound('explosion')
@@ -262,7 +266,7 @@ Game.launch = () => {
       }
     }
     if (currentHp/Game.oreHp <= 0.4) {
-      s('.ore').style.background = 'url("../assets/rock1-4.png")'
+      s('.ore').style.background = `url("../assets/ore${whichPic}-4.png")`
       s('.ore').style.backgroundSize = 'cover'
       if (soundPlayed3 == false) {
         Game.playSound('explosion')
@@ -270,7 +274,7 @@ Game.launch = () => {
       }
     }
     if (currentHp/Game.oreHp <= 0.2) {
-      s('.ore').style.background = 'url("../assets/rock1-5.png")'
+      s('.ore').style.background = `url("../assets/ore${whichPic}-5.png")`
       s('.ore').style.backgroundSize = 'cover'
       if (soundPlayed4 == false) {
         Game.playSound('explosion')
@@ -512,7 +516,7 @@ Game.launch = () => {
   Game.calculatePerClick = (type) => {
     let amount = 0
 
-    amount += (Game.oresPerClick + Game.currentPickaxe.damage) * (Game.level.currentStrength * .3)
+    amount += (Game.oresPerClick + Game.currentPickaxe.damage) + ((Game.oresPerClick + Game.currentPickaxe.damage) * Game.level.currentStrength * .3)
 
     // amount += Game.oresPerClick * (Game.level.currentStrength * .1)
 
@@ -557,6 +561,7 @@ Game.launch = () => {
   // Game.oreClickArea()
   Game.buildTabs()
   Game.switchTab('store')
+  Game.updatePercentage(0)
   window.onresize = () => Game.oreClickArea()
   setInterval(() => {
     Game.earn(Game.oresPerSecond / 30)

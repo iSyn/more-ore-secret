@@ -191,7 +191,7 @@
 }
 
 .ore {
-  background: url('../assets/rock.png');
+  /*background: url('../assets/rock.png');*/
   background-size: cover;
   image-rendering: pixelated;
   height: 300px;
