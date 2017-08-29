@@ -3,8 +3,14 @@
 let s = ((el) => {return document.querySelector(el)})
 
 let beautify = (num) => {
-  if (num >= 1000) {
-    return (num/1000).toFixed(1) + 'k'
+  if (num >= 1000 && num < 1000000) {
+    return (num/1000).toFixed(1) + 'a'
+  } else if (num >= 1000000 && num < 1000000000) {
+    return (num/1000000).toFixed(1) + 'b'
+  } else if (num >= 1000000000 && num < 1000000000000) {
+    return (num/1000000000).toFixed(1) + 'c'
+  } else if (num >= 1000000000000) {
+    return (num/1000000000000).toFixed(1) + 'd'
   }
   return num
 }
@@ -184,7 +190,7 @@ Game.launch = () => {
               <div class="item-stats">
                 <h2>${rarity} ${synonym} Pickaxe</h2>
                 <p>Item Level: ${Game.newItem.itemLevel}</p>
-                <p>Damage: ${itemDmg.toFixed(1)}</p>
+                <p>Damage: ${beautify(itemDmg.toFixed(1))}</p>
               </div>
             </div>
             <div class="item-modal-middle-right">
@@ -193,7 +199,7 @@ Game.launch = () => {
               <div class="item-stats">
                 <h2>${Game.currentPickaxe.rarity} ${Game.currentPickaxe.synonym} Pickaxe</h2>
                 <p>Item Level: ${Game.currentPickaxe.itemLevel}</p>
-                <p>Damage: ${Game.currentPickaxe.damage.toFixed(1)}</p>
+                <p>Damage: ${beautify(Game.currentPickaxe.damage.toFixed(1))}</p>
               </div>
             </div>
           </div>
@@ -310,7 +316,7 @@ Game.launch = () => {
 
     let risingNumber = document.createElement('div')
     risingNumber.classList.add('rising-number')
-    risingNumber.innerHTML = `+${amount.toFixed(1)}`
+    risingNumber.innerHTML = `+${beautify(amount.toFixed(1))}`
     risingNumber.style.left = randomMouseX + 'px'
     risingNumber.style.top = mouseY + 'px'
 
