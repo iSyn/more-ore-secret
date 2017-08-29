@@ -25,7 +25,7 @@ Game.launch = () => {
 
   Game.ores = 0
   Game.oreHp = 50
-  Game.oresPerClick = 1
+  Game.oresPerClick = 9999
   Game.oresPerSecond = 0
   Game.level = {
     currentLevel: 1,
@@ -86,7 +86,9 @@ Game.launch = () => {
   Game.dropItems = () => {
     let randomSign = Math.round(Math.random()) * 2 - 1
     let randomNumber = (Math.floor(Math.random() * 200) + 1) * randomSign
+    let randomY = Math.floor(Math.random() * 50) + 1
     let thisItemClicked = false
+    let itemLevel = Game.stats.rocksDestroyed
 
     if (Game.stats.rocksDestroyed == 1) {
       let item = document.createElement('div')
@@ -94,16 +96,17 @@ Game.launch = () => {
       item.style.position = 'absolute'
 
       let orePos = s('.ore').getBoundingClientRect()
-      item.style.top = orePos.bottom + 30 + 'px'
+      item.style.top = orePos.bottom + randomY + 'px'
       item.style.left = (orePos.left + orePos.right)/2 + randomNumber + 'px'
 
-      item.onclick = () => {
+      item.addEventListener('click', () => {
         if (thisItemClicked == false) {
           thisItemClicked = true
           s('.item-drop').classList.add('item-pickup-animation')
+          console.log(itemLevel)
           Game.pickUpItem(item)
         }
-      }
+      })
 
 
       s('body').append(item)
@@ -115,16 +118,17 @@ Game.launch = () => {
 
         let orePos = s('.ore').getBoundingClientRect()
         console.log(orePos)
-        item.style.top = orePos.bottom + 30 + 'px'
+        item.style.top = orePos.bottom + randomY + 'px'
         item.style.left = (orePos.left + orePos.right)/2 + randomNumber + 'px'
 
-        item.onclick = () => {
+        item.addEventListener('click', () => {
           if (thisItemClicked == false) {
             thisItemClicked = true
             s('.item-drop').classList.add('item-pickup-animation')
+            console.log(itemLevel)
             Game.pickUpItem(item)
           }
-        }
+        })
 
         s('body').append(item)
       }

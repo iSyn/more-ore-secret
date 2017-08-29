@@ -60,7 +60,7 @@
   position: absolute;
   background: url('../assets/item-pouch.png');
   background-size: cover;
-  image-rendering: pixelated;
+  image-rendering: auto;
   cursor: pointer;
 }
 
