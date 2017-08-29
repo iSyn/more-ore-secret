@@ -25,7 +25,7 @@ Game.launch = () => {
 
   Game.ores = 0
   Game.oreHp = 50
-  Game.oresPerClick = 9999
+  Game.oresPerClick = 1
   Game.oresPerSecond = 0
   Game.level = {
     currentLevel: 1,
