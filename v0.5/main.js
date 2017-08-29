@@ -88,7 +88,6 @@ Game.launch = () => {
     let randomNumber = (Math.floor(Math.random() * 200) + 1) * randomSign
     let randomY = Math.floor(Math.random() * 50) + 1
     let thisItemClicked = false
-    let itemLevel = Game.stats.rocksDestroyed
 
     if (Game.stats.rocksDestroyed == 1) {
       let item = document.createElement('div')
@@ -103,7 +102,7 @@ Game.launch = () => {
         if (thisItemClicked == false) {
           thisItemClicked = true
           s('.item-drop').classList.add('item-pickup-animation')
-          Game.pickUpItem(item, itemLevel)
+          Game.pickUpItem(item)
         }
       })
 
@@ -123,7 +122,7 @@ Game.launch = () => {
           if (thisItemClicked == false) {
             thisItemClicked = true
             s('.item-drop').classList.add('item-pickup-animation')
-            Game.pickUpItem(item, itemLevel)
+            Game.pickUpItem(item)
           }
         })
 
@@ -132,7 +131,7 @@ Game.launch = () => {
     }
   }
 
-  Game.pickUpItem = (item, itemLevel) => {
+  Game.pickUpItem = (item) => {
 
 
 
