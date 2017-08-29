@@ -331,6 +331,11 @@ Game.launch = () => {
       risingNumber.style.fontSize = 'xx-large'
     }
 
+    if (type == 'level') {
+      risingNumber.style.fontSize = 'xx-large'
+      risingNumber.innerHTML = 'LEVEL UP'
+    }
+
     s('.particles').append(risingNumber)
 
     setTimeout(() => {
@@ -524,6 +529,7 @@ Game.launch = () => {
     } else {
       Game.level.currentXP = 0
       Game.level.currentLevel++
+      Game.risingNumber(0, 'level')
       s('#stats-tab').style.boxShadow = '0px 0px 50px yellow'
       setTimeout(() => {
         s('#stats-tab').style.boxShadow = 'none'
