@@ -25,7 +25,7 @@ Game.launch = () => {
 
   Game.ores = 0
   Game.oreHp = 50
-  Game.oresPerClick = 100
+  Game.oresPerClick = 1
   Game.oresPerSecond = 0
   Game.level = {
     currentLevel: 1,
@@ -524,6 +524,11 @@ Game.launch = () => {
     } else {
       Game.level.currentXP = 0
       Game.level.currentLevel++
+      s('#stats-tab').style.boxShadow = '0px 0px 50px yellow'
+      setTimeout(() => {
+        s('#stats-tab').style.boxShadow = 'none'
+      }, 1000)
+      Game.playSound('levelup')
       Game.level.XPNeeded = Math.ceil(Math.pow(Game.level.XPNeeded, 1.15))
       // Game.level.XPNeeded = Math.ceil(20 * Math.pow(1.15, Game.level.currentLevel))
       Game.level.availableSP += 3
