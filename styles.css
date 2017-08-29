@@ -11,8 +11,16 @@
   -ms-user-select: none;
 }
 
+a {
+  color: white;
+}
+
+a:visited {
+  color: white;
+}
+
 .game {
-  height: 100vh;
+  height: 98vh;
   width: 100vw;
   background: grey;
 
@@ -20,8 +28,20 @@
   flex-flow: row nowrap;
 }
 
+footer {
+  height: 2vh;
+  line-height: 2vh;
+  background: #222;
+  /*background: #444;*/
+  /*background: rgba(34, 34, 34, 0.3);*/
+  color: #9d9d9d;
+  padding: 0 10px;
+  font-size: small;
+  text-align: center;
+}
+
 .vertical-separator {
-  height: 100vh;
+  height: 100%;
   width: 20px;
   background: url('./assets/verticalseparator.png');
   background-size: 100% auto;
