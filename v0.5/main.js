@@ -3,13 +3,12 @@
 let s = ((el) => {return document.querySelector(el)})
 
 let beautify = (num) => {
-  // if (num >= 1000) {
-  //   let firstNum = num[0]
-  //   let secondNum = num[1]
-  //   return firstNum + '.' + secondNum + 'k'
-  // }
-  // return num
+  if (num >= 1000) {
+    return (num/1000).toFixed(1) + 'k'
+  }
+  return num
 }
+
 
 // Game
 
@@ -20,7 +19,7 @@ Game.launch = () => {
 
   Game.ores = 0
   Game.oreHp = 50
-  Game.oresPerClick = 1
+  Game.oresPerClick = 100
   Game.oresPerSecond = 0
   Game.level = {
     currentLevel: 1,
@@ -74,7 +73,7 @@ Game.launch = () => {
   }
 
   Game.rebuildInventory = () => {
-    s('.ores').innerHTML = 'Ores: ' + Game.ores.toFixed(1)
+    s('.ores').innerHTML = 'Ores: ' + beautify(Game.ores.toFixed(1))
     s('.level').innerHTML = `Level: ${Game.level.currentLevel} (${Game.level.currentXP}/${Game.level.XPNeeded}xp)`
   }
 
