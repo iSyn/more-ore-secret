@@ -58,7 +58,7 @@
   height: 40px;
   width: 40px;
   position: absolute;
-  background: url('../assets/item.png');
+  background: url('../assets/item-pouch.png');
   background-size: cover;
   image-rendering: pixelated;
   cursor: pointer;

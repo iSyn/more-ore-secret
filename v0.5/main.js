@@ -1,4 +1,17 @@
+// Helper Shit
+
 let s = ((el) => {return document.querySelector(el)})
+
+let beautify = (num) => {
+  // if (num >= 1000) {
+  //   let firstNum = num[0]
+  //   let secondNum = num[1]
+  //   return firstNum + '.' + secondNum + 'k'
+  // }
+  // return num
+}
+
+// Game
 
 let Game = {}
 
@@ -219,7 +232,7 @@ Game.launch = () => {
   let soundPlayed4 = false
   let soundPlayed5 = false
   let currentHp = Game.oreHp
-  let whichPic = Math.floor(Math.random() * 2) + 1
+  let whichPic = Math.floor(Math.random() * 3) + 1
   Game.updatePercentage = (amount) => {
     if (currentHp > 0) {
       if (currentHp - amount > 0) {
@@ -241,8 +254,7 @@ Game.launch = () => {
       soundPlayed4 = false
       soundPlayed5 = false
 
-      whichPic = Math.floor(Math.random() * 2) + 1
-      console.log(whichPic)
+      whichPic = Math.floor(Math.random() * 3) + 1
     }
 
     if (currentHp/Game.oreHp > 0.8) {
