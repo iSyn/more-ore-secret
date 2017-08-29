@@ -103,15 +103,13 @@ Game.launch = () => {
         if (thisItemClicked == false) {
           thisItemClicked = true
           s('.item-drop').classList.add('item-pickup-animation')
-          console.log(itemLevel)
-          Game.pickUpItem(item)
+          Game.pickUpItem(item, itemLevel)
         }
       })
 
-
       s('body').append(item)
     } else {
-      if (Math.random() <= .3) { // 30% chance
+      if (Math.random() <= .2) { // 20% chance
         let item = document.createElement('div')
         item.classList.add('item-drop')
         item.style.position = 'absolute'
@@ -125,8 +123,7 @@ Game.launch = () => {
           if (thisItemClicked == false) {
             thisItemClicked = true
             s('.item-drop').classList.add('item-pickup-animation')
-            console.log(itemLevel)
-            Game.pickUpItem(item)
+            Game.pickUpItem(item, itemLevel)
           }
         })
 
@@ -135,7 +132,7 @@ Game.launch = () => {
     }
   }
 
-  Game.pickUpItem = (item) => {
+  Game.pickUpItem = (item, itemLevel) => {
 
 
 
