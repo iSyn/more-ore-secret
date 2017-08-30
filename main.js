@@ -4,13 +4,13 @@ let s = ((el) => {return document.querySelector(el)})
 
 let beautify = (num) => {
   if (num >= 1000 && num < 1000000) {
-    return (num/1000).toFixed(1) + 'a'
+    return (num/1000).toFixed(1) + 'K'
   } else if (num >= 1000000 && num < 1000000000) {
-    return (num/1000000).toFixed(1) + 'b'
+    return (num/1000000).toFixed(1) + 'M'
   } else if (num >= 1000000000 && num < 1000000000000) {
-    return (num/1000000000).toFixed(1) + 'c'
+    return (num/1000000000).toFixed(1) + 'B'
   } else if (num >= 1000000000000) {
-    return (num/1000000000000).toFixed(1) + 'd'
+    return (num/1000000000000).toFixed(1) + 'T'
   }
   return num
 }
@@ -25,14 +25,14 @@ Game.launch = () => {
 
   Game.ores = 0
   Game.oreHp = 50
-  Game.oresPerClick = .1
+  Game.oresPerClick = 100.1
   Game.oresPerSecond = 0
   Game.level = {
     currentLevel: 1,
     currentStrength: 0,
     currentLuck: 0,
     currentXP: 0,
-    XPNeeded: 20,
+    XPNeeded: 100,
     availableSP: 0
   }
   Game.tabs = [
@@ -56,9 +56,10 @@ Game.launch = () => {
   Game.selectedTab = 'store'
   Game.newItem = {}
   Game.currentPickaxe = {
-    name: 'Beginners Wooden Pickaxe',
+    name: 'Beginners Wood Pickaxe',
     rarity: 'Common',
     itemLevel: 1,
+    material: 'Wood',
     stats: {
       damage: .1,
       hasPrefix: false
@@ -82,7 +83,7 @@ Game.launch = () => {
   }
 
   Game.rebuildInventory = () => {
-    s('.ores').innerHTML = 'Ores: ' + beautify(Game.ores.toFixed(1))
+    s('.ores').innerHTML = 'Ores: ' + beautify(Game.ores.toFixed(1)) + ` (${Game.oresPerSecond}/s)`
     s('.level').innerHTML = `Level: ${Game.level.currentLevel} (${Game.level.currentXP}/${Game.level.XPNeeded}xp)`
   }
 
@@ -336,6 +337,7 @@ Game.launch = () => {
     Game.newItem = {
       name: itemName,
       rarity: selectedRarity.name,
+      material: selectedMaterial.name,
       itemLevel: iLvl,
       stats: {
         damage: calculateDmg,
@@ -368,10 +370,13 @@ Game.launch = () => {
         <div class="item-modal-middle">
           <div class="item-modal-middle-left">
             <p>You Found</p>
-            <div class="item-modal-img"></div>
+            <h2 class='${item.rarity}'>${item.name}</h2>
+            <div class="item-modal-img">
+              <div class="pickaxe-top ${item.material}"></div>
+              <div class="pickaxe-bottom"></div>
+            </div>
             <div class="item-stats">
-              <h2>${item.name}</h2>
-              <p>${item.rarity}</p>
+              <p style='font-style: italic; font-size: small'>${item.rarity}</p>
               <p>Item Level: ${item.itemLevel}</p>
               <p>Damage: ${beautify(item.stats.damage)}</p>
               `
@@ -384,11 +389,14 @@ Game.launch = () => {
             </div>
           </div>
           <div class="item-modal-middle-right">
-            <p>Current Equipped</p>
-            <div class="item-modal-img"></div>
+            <p>Currently Equipped</p>
+            <h2 class='${Game.currentPickaxe.rarity}'>${Game.currentPickaxe.name}</h2>
+            <div class="item-modal-img">
+              <div class="pickaxe-top ${Game.currentPickaxe.material}"></div>
+              <div class="pickaxe-bottom"></div>
+            </div>
             <div class="item-stats">
-              <h2>${Game.currentPickaxe.name}</h2>
-              <p>${Game.currentPickaxe.rarity}</p>
+              <p style='font-style: italic; font-size: small'>${Game.currentPickaxe.rarity}</p>
               <p>Item Level: ${Game.currentPickaxe.itemLevel}</p>
               <p>Damage: ${beautify(Game.currentPickaxe.stats.damage)}</p>
               `
@@ -416,7 +424,6 @@ Game.launch = () => {
 
     if (str == 'equip') {
       Game.currentPickaxe = Game.newItem
-      console.log(Game.currentPickaxe)
     }
     s('.item-modal-container').remove()
   }
@@ -708,7 +715,7 @@ Game.launch = () => {
     Game.items.MagnifyingGlass.hidden = true
     if (Game.tabs[1].locked == true) { Game.tabs[1].locked = false; Game.buildTabs(); Game.switchTab(Game.selectedTab)}
   })
-  new Game.item('Old Man', 'OldMan', 'store', 'wip.png', 'Increases ore per second by 0.1', 'Extracted from District 12', 'Help me Katniss', 20, false, () => {
+  new Game.item('Old Man', 'OldMan', 'store', 'wip.png', 'Increases ore per second by 0.51', 'Extracted from District 12', 'Help me Katniss', 10, false, () => {
     Game.oresPerSecond += .5
     if (Game.tabs[1].locked == true) { Game.tabs[1].locked = false; Game.buildTabs(); Game.switchTab(Game.selectedTab)}
   })
@@ -827,6 +834,7 @@ Game.launch = () => {
   window.onresize = () => Game.oreClickArea()
   setInterval(() => {
     Game.earn(Game.oresPerSecond / 30)
+    Game.updatePercentage(Game.oresPerSecond / 30)
   }, 1000 / 30)
 
 }
