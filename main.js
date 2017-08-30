@@ -25,7 +25,7 @@ Game.launch = () => {
 
   Game.ores = 0
   Game.oreHp = 50
-  Game.oresPerClick = 1
+  Game.oresPerClick = 1000
   Game.oresPerSecond = 0
   Game.level = {
     currentLevel: 1,
@@ -88,6 +88,7 @@ Game.launch = () => {
     let randomNumber = (Math.floor(Math.random() * 200) + 1) * randomSign
     let randomY = Math.floor(Math.random() * 50) + 1
     let thisItemClicked = false
+    let amountOfRocksDestroyed = Game.stats.rocksDestroyed
 
     if (Game.stats.rocksDestroyed == 1) {
       let item = document.createElement('div')
@@ -102,7 +103,7 @@ Game.launch = () => {
         if (thisItemClicked == false) {
           thisItemClicked = true
           s('.item-drop').classList.add('item-pickup-animation')
-          Game.pickUpItem(item)
+          Game.pickUpItem(item, amountOfRocksDestroyed)
         }
       })
 
@@ -122,7 +123,7 @@ Game.launch = () => {
           if (thisItemClicked == false) {
             thisItemClicked = true
             s('.item-drop').classList.add('item-pickup-animation')
-            Game.pickUpItem(item)
+            Game.pickUpItem(item, amountOfRocksDestroyed)
           }
         })
 
@@ -131,12 +132,182 @@ Game.launch = () => {
     }
   }
 
-  Game.pickUpItem = (item) => {
+  Game.rarity = [
+    {
+      name: 'Common',
+      mult: 1
+    }, {
+      name: 'Uncommon',
+      mult: 1.5
+    }, {
+      name: 'Unique',
+      mult: 2
+    }, {
+      name: 'Rare',
+      mult: 3
+    }, {
+      name: 'Legendary',
+      mult: 5
+    }
+  ]
+  Game.prefixes = [
+    {
+      name: 'Lucky',
+      stat: 'Luck',
+      mult: 1
+    }, {
+      name: 'Unlucky',
+      stat: 'Luck',
+      mult: -1
+    }, {
+      name: 'Fortuitous',
+      stat: 'Luck',
+      mult: 2
+    }, {
+      name: 'Poor',
+      stat: 'Luck',
+      mult: -1
+    }, {
+      name: 'Strong',
+      stat: 'Strength',
+      mult: 1
+    }, {
+      name: 'Weak',
+      stat: 'Strength',
+      mult: -1
+    }, {
+      name: 'Big',
+      stat: 'Strength',
+      mult: 1
+    }, {
+      name: 'Small',
+      stat: 'Strength',
+      mult: -1
+    }, {
+      name: 'Baby',
+      stat: 'Strength',
+      mult: -2
+    }, {
+      name: 'Gigantic',
+      stat: 'Strength',
+      mult: 2
+    },   {
+      name: 'Durable',
+      stat: 'Strength',
+      mult: 1
+    }, {
+      name: 'Frail',
+      stat: 'Strength',
+      mult: -1.5
+    }, {
+      name: 'Hard',
+      stat: 'Strength',
+      mult: 1
+    }, {
+      name: 'Weak',
+      stat: '',
+      mult: -1
+    }, {
+      name: 'Broken',
+      stat: '',
+      mult: -2
+    }, {
+      name: 'Shoddy',
+      stat: '',
+      mult: -1
+    }
+  ]
+  Game.materials = [
+    {
+      name: 'Wood',
+      mult: 1
+    }, {
+      name: 'Stone',
+      mult: 2
+    }, {
+      name: 'Iron',
+      mult: 3
+    }, {
+      name: 'Steel',
+      mult: 5
+    }, {
+      name: 'Diamond',
+      mult: 10
+    }
+  ]
+  Game.suffixes = [
+    {
+      name: 'of the Giant',
+      stat: 'strength',
+      mult: 10
+    }, {
+      name: 'of the Leprechaun',
+      stat: 'luck',
+      mult: 10
+    }
+  ]
+
+  Game.pickUpItem = (item, iLvl) => {
+
+    // GENERATE A RANDOM ITEM
+    let range = Math.ceil((Math.random() * iLvl/2) + iLvl/2) // Picks a random whole number from 1 to iLvl
+
+    let chooseRarity = () => {
+      let rarity
+      let randomNum = Math.random()
+      if (randomNum >= 0) {
+        rarity = Game.rarity[0]
+      }
+      if (randomNum >= .5) {
+        rarity = Game.rarity[1]
+      }
+      if (randomNum >= .7) {
+        rarity = Game.rarity[2]
+      }
+      if (randomNum >= .9) {
+        rarity = Game.rarity[3]
+      }
+      if (randomNum >= .95) {
+        rarity = Game.rarity[4]
+      }
+      return rarity
+    }
+    let chooseMaterial = () => {
+      let material
+      let randomNum = Math.random()
+      if (randomNum >= 0) {
+        material = Game.materials[1]
+      }
+      if (randomNum >= .4) {
+        material = Game.materials[1]
+      }
+      if (randomNum >= .7) {
+        material = Game.materials[2]
+      }
+      if (randomNum >= .9) {
+        material = Game.materials[3]
+      }
+      if (randomNum >= .95) {
+        material = Game.materials[4]
+      }
+      return material
+    }
+
+    let selectedRarity = chooseRarity()
+    let selectedMaterial = chooseMaterial()
+    let totalMult = selectedRarity.mult + selectedMaterial.mult
+
+    if (Math.random() >= .6) {
+      let selectedPrefix = Game.prefixes[Math.floor(Math.random() * Game.prefixes.length)]
+      let selectedPrefixValue = (range * selectedPrefix.mult) * totalMult
+      let prefixStat = selectedPrefix.stat
+    }
+
 
 
 
     // GENERATE RANDOM ITEM
-    // -------------------
+    // -------------------'
 
     // DETERMINE RARITY BONUS
     let rarity = ''
