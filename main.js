@@ -25,7 +25,7 @@ Game.launch = () => {
 
   Game.ores = 0
   Game.oreHp = 50
-  Game.oresPerClick = 1000
+  Game.oresPerClick = .1
   Game.oresPerSecond = 0
   Game.level = {
     currentLevel: 1,
@@ -56,10 +56,13 @@ Game.launch = () => {
   Game.selectedTab = 'store'
   Game.newItem = {}
   Game.currentPickaxe = {
-    damage: 0,
-    synonym: 'Shitty',
+    name: 'Beginners Wooden Pickaxe',
     rarity: 'Common',
-    itemLevel: 1
+    itemLevel: 1,
+    stats: {
+      damage: .1,
+      hasPrefix: false
+    }
   }
 
   Game.playSound = (sound) => {
@@ -205,25 +208,25 @@ Game.launch = () => {
       mult: 1
     }, {
       name: 'Weak',
-      stat: '',
+      stat: 'Strength',
       mult: -1
     }, {
       name: 'Broken',
-      stat: '',
+      stat: 'Strength',
       mult: -2
     }, {
       name: 'Shoddy',
-      stat: '',
+      stat: 'Strength',
       mult: -1
     }
   ]
   Game.materials = [
     {
       name: 'Wood',
-      mult: 1
+      mult: .5
     }, {
       name: 'Stone',
-      mult: 2
+      mult: 1.5
     }, {
       name: 'Iron',
       mult: 3
@@ -249,6 +252,7 @@ Game.launch = () => {
 
   Game.pickUpItem = (item, iLvl) => {
 
+    Game.stats.itemsPickedUp++
     // GENERATE A RANDOM ITEM
     let range = Math.ceil((Math.random() * iLvl/2) + iLvl/2) // Picks a random whole number from 1 to iLvl
 
@@ -276,7 +280,7 @@ Game.launch = () => {
       let material
       let randomNum = Math.random()
       if (randomNum >= 0) {
-        material = Game.materials[1]
+        material = Game.materials[0]
       }
       if (randomNum >= .4) {
         material = Game.materials[1]
@@ -296,109 +300,124 @@ Game.launch = () => {
     let selectedRarity = chooseRarity()
     let selectedMaterial = chooseMaterial()
     let totalMult = selectedRarity.mult + selectedMaterial.mult
+    let itemName
+    let prefixName
+    let prefixVal
+    let prefixStat
+    let suffixName
+
+    if (selectedRarity.name == 'Legendary' || selectedRarity.name == 'Rare') {
+      let selectedSuffix = Game.suffixes[Math.floor(Math.random() * Game.suffixes.length)]
+      totalMult += selectedSuffix.mult
+      suffixName = selectedSuffix.name
+    }
 
     if (Math.random() >= .6) {
       let selectedPrefix = Game.prefixes[Math.floor(Math.random() * Game.prefixes.length)]
-      let selectedPrefixValue = (range * selectedPrefix.mult) * totalMult
-      let prefixStat = selectedPrefix.stat
+      prefixVal = (range * selectedPrefix.mult) * totalMult
+      prefixStat = selectedPrefix.stat
+      prefixName = selectedPrefix.name
     }
 
-
-
-
-    // GENERATE RANDOM ITEM
-    // -------------------'
-
-    // DETERMINE RARITY BONUS
-    let rarity = ''
-    let bonus = 1
-    let randomNum = Math.random()
-    if (randomNum >= .4) { // if number is between .4 and 1
-      rarity = 'Common'
-      bonus = .05
-    } else if (randomNum >= .2 && randomNum < .4) {
-      rarity = 'Uncommon'
-      bonus = .1
-    } else if (randomNum >= .1 && randomNum < .2) {
-      rarity = 'Unique'
-      bonus = 1
-    } else if (randomNum >= .05 && randomNum < .1) {
-      rarity = 'Rare'
-      bonus = 5
-    } else if (randomNum >= 0 && randomNum < .05) {
-      rarity = 'Legendary'
-      bonus = 10
+    if (prefixName) {
+      itemName = `${prefixName} ${selectedMaterial.name} Pickaxe`
+    } else {
+      itemName = `${selectedMaterial.name} Pickaxe`
     }
 
-    let shittySynonyms = ['Shitty', 'Shoddy', 'Broken']
-    let synonym = shittySynonyms[Math.floor(Math.random() * shittySynonyms.length)];
+    if (suffixName) {
+      itemName += ` ${suffixName}`
+    }
 
-    let itemDmg = (Math.random() / 2) * bonus * Game.oreHp
-    let itemLevel = Game.stats.rocksDestroyed
+    console.log(itemName)
+
+    let calculateDmg = iLvl * totalMult // GOTTA EDIT THIS <------------------
 
     Game.newItem = {
-      damage: itemDmg,
-      synonym: synonym,
-      rarity: rarity,
-      itemLevel: itemLevel
+      name: itemName,
+      rarity: selectedRarity.name,
+      itemLevel: iLvl,
+      stats: {
+        damage: calculateDmg,
+        hasPrefix: false
+      }
+    }
+
+    if (prefixName) {
+      Game.newItem.stats['hasPrefix'] = true
+      Game.newItem.stats['stat'] = prefixStat
+      Game.newItem.stats['statVal'] = (range * prefixVal) * totalMult
     }
 
     setTimeout(() => {
       item.remove()
-      Game.stats.itemsPickedUp++
-      let itemModal = document.createElement('div')
-      itemModal.classList.add('item-modal-container')
-      itemModal.innerHTML = `
-
-        <div class="item-modal">
-          <div class="item-modal-top">
-            <h1>New Item</h1>
-          </div>
-          <div class="item-modal-middle">
-            <div class="item-modal-middle-left">
-              <p>You Found</p>
-              <div class='item-modal-img'></div>
-              <div class="item-stats">
-                <h2>${rarity} ${synonym} Pickaxe</h2>
-                <p>Item Level: ${Game.newItem.itemLevel}</p>
-                <p>Damage: ${beautify(itemDmg.toFixed(1))}</p>
-              </div>
-            </div>
-            <div class="item-modal-middle-right">
-              <p>Equipped</p>
-              <div class='item-modal-img'></div>
-              <div class="item-stats">
-                <h2>${Game.currentPickaxe.rarity} ${Game.currentPickaxe.synonym} Pickaxe</h2>
-                <p>Item Level: ${Game.currentPickaxe.itemLevel}</p>
-                <p>Damage: ${beautify(Game.currentPickaxe.damage.toFixed(1))}</p>
-              </div>
-            </div>
-          </div>
-          <div class="item-modal-bottom">
-            <button style='margin-right: 10px;' onclick=Game.modalButtonClick(Game.newItem)>Equip</button>
-            <button style='margin-left: 10px;' onclick=Game.modalButtonClick()>Discard</button>
-          </div>
-        </div>
-
-
-
-      `
-      s('body').append(itemModal)
+      Game.itemModal(Game.newItem)
     }, 800)
   }
 
-  Game.modalButtonClick = (item) => {
+  Game.itemModal = (item) => {
+    console.log(item)
+    let itemModal = document.createElement('div')
+    itemModal.classList.add('item-modal-container')
 
-    if (item) {
-      // Game.oresPerClick = item.damage
-      Game.currentPickaxe.rarity = item.rarity
-      Game.currentPickaxe.damage = item.damage
-      Game.currentPickaxe.itemLevel = item.itemLevel
+    let str = `
+      <div class="item-modal">
+        <div class="item-modal-top">
+          <h1>New Item!</h1>
+        </div>
+        <div class="item-modal-middle">
+          <div class="item-modal-middle-left">
+            <p>You Found</p>
+            <div class="item-modal-img"></div>
+            <div class="item-stats">
+              <h2>${item.name}</h2>
+              <p>${item.rarity}</p>
+              <p>Item Level: ${item.itemLevel}</p>
+              <p>Damage: ${beautify(item.stats.damage)}</p>
+              `
+              if (item.stats.hasPrefix == true) {
+                str += `
+                  <p>${item.stats.stat}: ${Math.floor(item.stats.statVal)}</p>
+                `
+              }
+              str += `
+            </div>
+          </div>
+          <div class="item-modal-middle-right">
+            <p>Current Equipped</p>
+            <div class="item-modal-img"></div>
+            <div class="item-stats">
+              <h2>${Game.currentPickaxe.name}</h2>
+              <p>${Game.currentPickaxe.rarity}</p>
+              <p>Item Level: ${Game.currentPickaxe.itemLevel}</p>
+              <p>Damage: ${beautify(Game.currentPickaxe.stats.damage)}</p>
+              `
+              if (Game.currentPickaxe.stats.hasPrefix == true) {
+                str += `
+                  <p>${Game.currentPickaxe.stats.stat}: ${Math.floor(Game.currentPickaxe.stats.statVal)}</p>
+                `
+              }
+              str += `
+            </div>
+          </div>
+        </div>
+        <div class="item-modal-bottom">
+          <button style='margin-right: 10px;' onclick=Game.modalButtonClick('equip')>Equip</button>
+          <button style='margin-left: 10px;' onclick=Game.modalButtonClick()>Discard</button>
+        </div>
+      </div>
+    `
+
+    itemModal.innerHTML = str
+    s('body').append(itemModal)
+  }
+
+  Game.modalButtonClick = (str) => {
+
+    if (str == 'equip') {
+      Game.currentPickaxe = Game.newItem
+      console.log(Game.currentPickaxe)
     }
-
-
-
-
     s('.item-modal-container').remove()
   }
 
@@ -715,7 +734,7 @@ Game.launch = () => {
   Game.calculatePerClick = (type) => {
     let amount = 0
 
-    amount += (Game.oresPerClick + Game.currentPickaxe.damage) + ((Game.oresPerClick + Game.currentPickaxe.damage) * Game.level.currentStrength * .3)
+    amount += (Game.oresPerClick + Game.currentPickaxe.stats.damage) + ((Game.oresPerClick + Game.currentPickaxe.stats.damage) * Game.level.currentStrength * .3)
 
     // amount += Game.oresPerClick * (Game.level.currentStrength * .1)
 
