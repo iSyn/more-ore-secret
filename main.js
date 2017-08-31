@@ -534,6 +534,12 @@ Game.launch = () => {
       risingNumber.innerHTML = 'LEVEL UP'
     }
 
+    if (type == 'spendMoney') {
+      risingNumber.style.fontSize = 'xx-large'
+      risingNumber.innerHTML = '-$'
+      risingNumber.style.color = 'red'
+    }
+
     s('.particles').append(risingNumber)
 
     setTimeout(() => {
@@ -603,7 +609,16 @@ Game.launch = () => {
                 <div class="button-bottom">
                   <hr/>
                   <p>${item.desc}</p>
-                  <p>${item.fillerText}</p>
+                  <hr />
+                  `
+                  if (item.owned > 0) {
+                    str += `
+                      <p> ${item.owned} ${item.name} generating ${(item.perSecond * item.owned).toFixed(1)} ores per second</p>
+                    `
+                  }
+
+
+                  str += `
                   <br/>
                   <p style='font-style: italic; text-align: center'>“${item.fillerQuote}”</p>
                 </div>
@@ -677,13 +692,13 @@ Game.launch = () => {
   }
 
   Game.items = []
-  Game.item = function(name, functionName, tab, pic, desc, fillerText, fillerQuote, price, hidden, buyFunction) {
+  Game.item = function(name, functionName, tab, pic, perSecond, desc, fillerQuote, price, hidden, buyFunction) {
     this.name = name
     this.functionName = functionName
     this.tab = tab
     this.pic = pic
+    this.perSecond = perSecond
     this.desc = desc
-    this.fillerText = fillerText
     this.fillerQuote = fillerQuote
     this.basePrice = price
     this.price = price
@@ -698,6 +713,7 @@ Game.launch = () => {
         this.price += this.basePrice * Math.pow(1.15, this.owned)
         if (this.buyFunction) buyFunction()
         Game.rebuildInventory()
+        Game.risingNumber(0, 'spendMoney')
         Game.buildTabContent(Game.selectedTab)
       }
     }
@@ -705,15 +721,21 @@ Game.launch = () => {
     Game.items[this.functionName] = this
   }
 
-  // name, functionName, tab, pic, desc, fillerText, fillerQuote, price, hidden, buyFunction
-  new Game.item('Magnifying Glass', 'MagnifyingGlass', 'store', 'magnifying-glass.png', 'Allows for critical hits on ore', 'This is useful I swear', 'I can see... I... can... FIGHT', 5, false, () => {
+  // name, functionName, tab, pic, perSecond, desc, fillerText, fillerQuote, price, hidden, buyFunction
+  new Game.item('Magnifying Glass', 'MagnifyingGlass', 'store', 'magnifying-glass.png', 0, 'Allows you to spot weakpoints inside the rock', 'I can see... I... can... FIGHT', 5, false, () => {
     Game.oreClickArea()
     Game.items.MagnifyingGlass.hidden = true
     if (Game.tabs[1].locked == true) { Game.tabs[1].locked = false; Game.buildTabs(); Game.switchTab(Game.selectedTab)}
   })
-  new Game.item('Old Man', 'OldMan', 'store', 'oldmanbig.png', 'Generates 1 ore every 2 seconds', 'Extracted from District 12', 'Help me Katniss', 10, false, () => {
-    Game.oresPerSecond += .5
+  new Game.item('Old Man', 'OldMan', 'store', 'OldManBig.png', .2, 'He\'s just trying to feed his family', 'wip', 10, false, () => {
+    this.owned++
     if (Game.tabs[1].locked == true) { Game.tabs[1].locked = false; Game.buildTabs(); Game.switchTab(Game.selectedTab)}
+  })
+  new Game.item('Rock Farmer', 'RockFarmer', 'store', 'wip.png', 1, 'A farmer that farms rocks... it\'s a dying business', 'wip', 50, false, () => {
+    this.owned++
+  })
+  new Game.item('Rock Miner', 'RockMiner', 'store', 'wip.png', 5, 'This makes a lot more sense...', 'wip', 200, false, () => {
+    this.owned++
   })
 
   Game.gainXp = () => {
@@ -756,7 +778,7 @@ Game.launch = () => {
     Game.updatePercentage(amount)
   }
 
-    Game.drawParticles = () => {
+  Game.drawParticles = () => {
     for (i = 0; i < 3; i++) {
       let div = document.createElement('div')
       div.classList.add('particle')
@@ -836,8 +858,12 @@ Game.launch = () => {
   Game.updatePercentage(0)
   window.onresize = () => Game.oreClickArea()
   setInterval(() => {
-    Game.earn(Game.oresPerSecond / 30)
-    Game.updatePercentage(Game.oresPerSecond / 30)
+    let ops = 0
+    ops += Game.items.OldMan.owned * Game.items.OldMan.perSecond
+    ops += Game.items.RockFarmer.owned * Game.items.RockFarmer.perSecond
+    Game.earn(ops / 30)
+    Game.updatePercentage(ops / 30)
+    Game.oresPerSecond = ops
   }, 1000 / 30)
 
 }
