@@ -60,7 +60,7 @@ footer {
     transform: scale(1);
   }
   5% {
-    transform: scale(1.5);
+    transform: scale(1.8);
   }
   10% {
     transform: scale(1);
@@ -155,13 +155,19 @@ footer {
   text-align: center;
 }
 
-.pickaxe-top {
+.pickaxe-top, .pickaxe-bottom, .pickaxe-aura {
   position: absolute;
   image-rendering: pixelated;
   height: 250px;
   width: 250px;
   background-size: 100% 100%;
   z-index: 1;
+}
+
+.pickaxe-bottom {
+  background: url('./assets/pickaxe-bottom.png');
+  background-size: 100% 100%;
+  z-index: 0;
 }
 
 .Wood {
@@ -189,18 +195,34 @@ footer {
   background-size: 100% 100%;
 }
 
-.pickaxe-bottom {
-  position: absolute;
-  image-rendering: pixelated;
-  height: 250px;
-  width: 250px;
-  background: url('./assets/pickaxe-bottom.png');
+.aura-Common {
+  background: url('./assets/pickaxe-common-aura.png');
+  background-size: 100% 100%;
+}
+
+.aura-Uncommon {
+  background: url('./assets/pickaxe-uncommon-aura.png');
+  background-size: 100% 100%;
+}
+
+.aura-Unique {
+  background: url('./assets/pickaxe-unique-aura.png');
+  background-size: 100% 100%;
+}
+
+.aura-Rare {
+  background: url('./assets/pickaxe-rare-aura.png');
+  background-size: 100% 100%;
+}
+
+.aura-Legendary {
+  background: url('./assets/pickaxe-legendary-aura.png');
   background-size: 100% 100%;
 }
 
 .item-modal-img {
   position: relative;
-  height: 250px;
+  height: 260px;
   border: 2px solid white;
   width: 250px;
   left: 50%;
@@ -270,7 +292,7 @@ footer {
   flex-flow: row nowrap;
   justify-content: space-around;
   align-items: center;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(83, 83, 83, 0.4);
   height: 10%;
   color: white;
 }
@@ -378,20 +400,24 @@ footer {
 
 .button {
   font-family: 'Asap Condensed';
-  width: 90%;
+  width: 93%;
   margin-bottom: 10px;
   border: 1px solid black;
   cursor: pointer;
   padding: 10px 20px 10px 10px;
   display: flex;
   flex-flow: column nowrap;
-  box-shadow: 0 2px #222;
+  box-shadow: 0 4px #222;
   justify-content: center;
   background: snow;
 }
 
 .button:hover .button-bottom {
   display: block;
+}
+
+.button:hover {
+  box-shadow: 0 4px 5px black;
 }
 
 .sprite {

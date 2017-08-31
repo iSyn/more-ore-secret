@@ -25,7 +25,7 @@ Game.launch = () => {
 
   Game.ores = 0
   Game.oreHp = 50
-  Game.oresPerClick = 100.1
+  Game.oresPerClick = .1
   Game.oresPerSecond = 0
   Game.level = {
     currentLevel: 1,
@@ -372,6 +372,7 @@ Game.launch = () => {
             <p>You Found</p>
             <h2 class='${item.rarity}'>${item.name}</h2>
             <div class="item-modal-img">
+              <div class="pickaxe-aura aura-${item.rarity}"></div>
               <div class="pickaxe-top ${item.material}"></div>
               <div class="pickaxe-bottom"></div>
             </div>
@@ -392,6 +393,7 @@ Game.launch = () => {
             <p>Currently Equipped</p>
             <h2 class='${Game.currentPickaxe.rarity}'>${Game.currentPickaxe.name}</h2>
             <div class="item-modal-img">
+              <div class="pickaxe-aura aura-${Game.currentPickaxe.rarity}"></div>
               <div class="pickaxe-top ${Game.currentPickaxe.material}"></div>
               <div class="pickaxe-bottom"></div>
             </div>
@@ -586,13 +588,13 @@ Game.launch = () => {
         if (item.tab == 'store') {
           if (item.hidden == false) {
             str += `
-              <div class="button" onclick="Game.items.${item.functionName}.buy()">
+              <div class="button" onclick="Game.items.${item.functionName}.buy()" style='border-radius: 10px'>
                 <div class="button-top">
                   <div class="button-left">
                     <img src="./assets/${item.pic}"/>
                   </div>
                   <div class="button-middle">
-                    <h3>${item.name}</h3>
+                    <h3 style='font-size: larger'>${item.name}</h3>
                     <p>cost: ${item.price.toFixed(0)} ores</p>
                   </div>
                   <div class="button-right">
