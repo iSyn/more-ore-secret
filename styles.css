@@ -42,7 +42,8 @@ footer {
 
 .vertical-separator {
   height: 100%;
-  width: 20px;
+  /*width: 20px;*/
+  flex-grow: 1;
   background: url('./assets/verticalseparator.png');
   background-size: 100% auto;
 }
@@ -353,7 +354,8 @@ footer {
 /* RIGHT SECTION */
 
 .right-section {
-  flex-grow: 1;
+  width: 27%;
+  /*flex-grow: 1;*/
   background: lightgrey;
   display: flex;
   flex-flow: column nowrap;

@@ -3,18 +3,21 @@
 let s = ((el) => {return document.querySelector(el)})
 
 let beautify = (num) => {
-  if (num >= 1000 && num < 1000000) {
-    return (num/1000).toFixed(1) + 'K'
-  } else if (num >= 1000000 && num < 1000000000) {
-    return (num/1000000).toFixed(1) + 'M'
-  } else if (num >= 1000000000 && num < 1000000000000) {
-    return (num/1000000000).toFixed(1) + 'B'
-  } else if (num >= 1000000000000) {
-    return (num/1000000000000).toFixed(1) + 'T'
-  }
-  return num
-}
 
+  if (num < 1000000) {
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); //found on https://stackoverflow.com/questions/2901102/how-to-print-a-number-with-commas-as-thousands-separators-in-javascript
+  } else {
+    if (num >= 1000000 && num < 1000000000) {
+      return (num/1000000).toFixed(1) + 'M'
+    }
+    if (num >= 1000000000 && num < 1000000000000) {
+      return (num/1000000000).toFixed(1) + 'B'
+    }
+    if (num >= 1000000000000) {
+      return (num/1000000000000).toFixed(1) + 'T'
+    }
+  }
+}
 
 // Game
 
@@ -60,7 +63,7 @@ Game.launch = () => {
     itemLevel: 1,
     material: 'Wood',
     stats: {
-      damage: 10.1,
+      damage: .1,
       hasPrefix: false
     }
   }
@@ -377,6 +380,7 @@ Game.launch = () => {
             </div>
             <div class="item-stats">
               <p style='font-style: italic; font-size: small'>${item.rarity}</p>
+              <br/>
               <p>Item Level: ${item.itemLevel}</p>
               <p>Damage: ${beautify(item.stats.damage)}</p>
               `
@@ -398,6 +402,7 @@ Game.launch = () => {
             </div>
             <div class="item-stats">
               <p style='font-style: italic; font-size: small'>${Game.currentPickaxe.rarity}</p>
+              <br/>
               <p>Item Level: ${Game.currentPickaxe.itemLevel}</p>
               <p>Damage: ${beautify(Game.currentPickaxe.stats.damage)}</p>
               `
@@ -591,7 +596,7 @@ Game.launch = () => {
       for (var i in Game.items) {
         let item = Game.items[i]
         if (item.tab == 'store') {
-          if (item.hidden == false) {
+          if (item.hidden == 0) {
             str += `
               <div class="button" onclick="Game.items.${item.functionName}.buy()" style='border-radius: 10px'>
                 <div class="button-top">
@@ -600,7 +605,7 @@ Game.launch = () => {
                   </div>
                   <div class="button-middle">
                     <h3 style='font-size: larger'>${item.name}</h3>
-                    <p>cost: ${item.price.toFixed(0)} ores</p>
+                    <p>cost: ${beautify(item.price.toFixed(0))} ores</p>
                   </div>
                   <div class="button-right">
                     <p style='font-size: xx-large'>${item.owned}</p>
@@ -624,6 +629,24 @@ Game.launch = () => {
                 </div>
               </div>
             `
+          }
+          if (item.hidden == 1) {
+            str += `
+              <div class="button" onclick="Game.items.${item.functionName}.buy()" style='border-radius: 10px; cursor: not-allowed; box-shadow: 0 4px black;'>
+                <div class="button-top">
+                  <div class="button-left">
+                    <img src="./assets/mystery.png"/>
+                  </div>
+                  <div class="button-middle">
+                    <h3 style='font-size: larger'>???</h3>
+                    <p>cost: ??? ores</p>
+                  </div>
+                  <div class="button-right">
+
+                  </div>
+                </div>
+              </div>
+              `
           }
         }
       }
@@ -722,21 +745,30 @@ Game.launch = () => {
   }
 
   // name, functionName, tab, pic, perSecond, desc, fillerText, fillerQuote, price, hidden, buyFunction
-  new Game.item('Magnifying Glass', 'MagnifyingGlass', 'store', 'magnifying-glass.png', 0, 'Allows you to spot weakpoints inside the rock', 'I can see... I... can... FIGHT', 5, false, () => {
+  new Game.item('Magnifying Glass', 'MagnifyingGlass', 'store', 'magnifying-glass.png', 0, 'Allows you to spot weakpoints inside the rock', 'I can see... I... can... FIGHT', 5, 0, () => {
     Game.oreClickArea()
-    Game.items.MagnifyingGlass.hidden = true
+    Game.items.MagnifyingGlass.hidden = 3
     if (Game.tabs[1].locked == true) { Game.tabs[1].locked = false; Game.buildTabs(); Game.switchTab(Game.selectedTab)}
   })
-  new Game.item('Old Man', 'OldMan', 'store', 'OldManBig.png', .2, 'He\'s just trying to feed his family', 'wip', 10, false, () => {
+  new Game.item('Old Man', 'OldMan', 'store', 'OldManBig.png', .2, 'He\'s just trying to feed his family', 'wip', 10, 0, () => {
     this.owned++
     if (Game.tabs[1].locked == true) { Game.tabs[1].locked = false; Game.buildTabs(); Game.switchTab(Game.selectedTab)}
+    if (Game.items.RockFarmer.hidden == 1) {Game.items.RockFarmer.hidden = 0}
+    if (Game.items.RockMiner.hidden == 2) {Game.items.RockMiner.hidden = 1}
   })
-  new Game.item('Rock Farmer', 'RockFarmer', 'store', 'wip.png', 1, 'A farmer that farms rocks... it\'s a dying business', 'wip', 50, false, () => {
+  new Game.item('Rock Farmer', 'RockFarmer', 'store', 'wip.png', 1, 'A farmer that farms rocks... it\'s a dying business', 'wip', 100, 1, () => {
+    this.owned++
+    if (Game.items.RockMiner.hidden == 1) {Game.items.RockMiner.hidden = 0}
+    if (Game.items.HighSpeedAutoJackhammer.hidden == 2) {Game.items.HighSpeedAutoJackhammer.hidden = 1}
+  })
+  new Game.item('Rock Miner', 'RockMiner', 'store', 'wip.png', 5, 'This makes a lot more sense...', 'wip', 1500, 2, () => {
+    this.owned++
+    if (Game.items.HighSpeedAutoJackhammer.hidden == 1) {Game.items.HighSpeedAutoJackhammer.hidden = 0}
+  })
+  new Game.item('High Speed Auto Jackhammer','HighSpeedAutoJackhammer', 'store', 'wip.png', 30, 'This breaks many safety regulations', '0 days since last accident', 5000, 2, () => {
     this.owned++
   })
-  new Game.item('Rock Miner', 'RockMiner', 'store', 'wip.png', 5, 'This makes a lot more sense...', 'wip', 200, false, () => {
-    this.owned++
-  })
+
 
   Game.gainXp = () => {
     if (Game.level.currentXP < Game.level.XPNeeded) {
@@ -755,6 +787,10 @@ Game.launch = () => {
       Game.level.availableSP += 3
     }
   }
+
+  setInterval(() => {
+    Game.gainXp()
+  }, 1000)
 
   Game.calculatePerClick = (type) => {
     let amount = 0
@@ -861,6 +897,8 @@ Game.launch = () => {
     let ops = 0
     ops += Game.items.OldMan.owned * Game.items.OldMan.perSecond
     ops += Game.items.RockFarmer.owned * Game.items.RockFarmer.perSecond
+    ops += Game.items.RockMiner.owned * Game.items.RockMiner.perSecond
+    ops += Game.items.HighSpeedAutoJackhammer.owned * Game.items.HighSpeedAutoJackhammer.perSecond
     Game.earn(ops / 30)
     Game.updatePercentage(ops / 30)
     Game.oresPerSecond = ops
