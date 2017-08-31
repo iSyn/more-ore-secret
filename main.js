@@ -25,7 +25,6 @@ Game.launch = () => {
 
   Game.ores = 0
   Game.oreHp = 50
-  Game.oresPerClick = .1
   Game.oresPerSecond = 0
   Game.level = {
     currentLevel: 1,
@@ -61,7 +60,7 @@ Game.launch = () => {
     itemLevel: 1,
     material: 'Wood',
     stats: {
-      damage: .1,
+      damage: 10.1,
       hasPrefix: false
     }
   }
@@ -315,7 +314,7 @@ Game.launch = () => {
 
     if (Math.random() >= .6) {
       let selectedPrefix = Game.prefixes[Math.floor(Math.random() * Game.prefixes.length)]
-      prefixVal = (range * selectedPrefix.mult) * totalMult
+      prefixVal = range + selectedPrefix.mult + totalMult
       prefixStat = selectedPrefix.stat
       prefixName = selectedPrefix.name
     }
@@ -348,7 +347,7 @@ Game.launch = () => {
     if (prefixName) {
       Game.newItem.stats['hasPrefix'] = true
       Game.newItem.stats['stat'] = prefixStat
-      Game.newItem.stats['statVal'] = (range * prefixVal) * totalMult
+      Game.newItem.stats['statVal'] = prefixVal
     }
 
     setTimeout(() => {
@@ -370,7 +369,7 @@ Game.launch = () => {
         <div class="item-modal-middle">
           <div class="item-modal-middle-left">
             <p>You Found</p>
-            <h2 class='${item.rarity}'>${item.name}</h2>
+            <h2 class='${item.rarity}' style='font-size: xx-large'>${item.name}</h2>
             <div class="item-modal-img">
               <div class="pickaxe-aura aura-${item.rarity}"></div>
               <div class="pickaxe-top ${item.material}"></div>
@@ -391,7 +390,7 @@ Game.launch = () => {
           </div>
           <div class="item-modal-middle-right">
             <p>Currently Equipped</p>
-            <h2 class='${Game.currentPickaxe.rarity}'>${Game.currentPickaxe.name}</h2>
+            <h2 class='${Game.currentPickaxe.rarity}' style='font-size: xx-large'>${Game.currentPickaxe.name}</h2>
             <div class="item-modal-img">
               <div class="pickaxe-aura aura-${Game.currentPickaxe.rarity}"></div>
               <div class="pickaxe-top ${Game.currentPickaxe.material}"></div>
@@ -619,9 +618,7 @@ Game.launch = () => {
       str += `
 
         <div class='stat-sheet'>
-          <div class="stat-sheet-left">
-            <div class="stat-sheet-img"></div>
-          </div>
+
           <div class="stat-sheet-right">
             <div class="stats-container">
               <div class="single-stat" style='font-size: x-large'>
@@ -709,15 +706,12 @@ Game.launch = () => {
   }
 
   // name, functionName, tab, pic, desc, fillerText, fillerQuote, price, hidden, buyFunction
-  new Game.item('Whetstone', 'Whetstone', 'store', 'whetstone.png', 'Increase ore per click by 1.5', 'filler text goes here', 'filler quote goes here', 10, false, () => {
-    Game.oresPerClick *= 1.5
-  })
-  new Game.item('Magnifying Glass', 'MagnifyingGlass', 'store', 'magnifying-glass.png', 'Allows for critical hits on ore', 'This is useful I swear', 'I can see... I... can... FIGHT', 30, false, () => {
+  new Game.item('Magnifying Glass', 'MagnifyingGlass', 'store', 'magnifying-glass.png', 'Allows for critical hits on ore', 'This is useful I swear', 'I can see... I... can... FIGHT', 5, false, () => {
     Game.oreClickArea()
     Game.items.MagnifyingGlass.hidden = true
     if (Game.tabs[1].locked == true) { Game.tabs[1].locked = false; Game.buildTabs(); Game.switchTab(Game.selectedTab)}
   })
-  new Game.item('Old Man', 'OldMan', 'store', 'wip.png', 'Increases ore per second by 0.51', 'Extracted from District 12', 'Help me Katniss', 10, false, () => {
+  new Game.item('Old Man', 'OldMan', 'store', 'oldmanbig.png', 'Generates 1 ore every 2 seconds', 'Extracted from District 12', 'Help me Katniss', 10, false, () => {
     Game.oresPerSecond += .5
     if (Game.tabs[1].locked == true) { Game.tabs[1].locked = false; Game.buildTabs(); Game.switchTab(Game.selectedTab)}
   })
@@ -742,13 +736,20 @@ Game.launch = () => {
 
   Game.calculatePerClick = (type) => {
     let amount = 0
+    let totalStr = Game.level.currentStrength
 
-    amount += (Game.oresPerClick + Game.currentPickaxe.stats.damage) + ((Game.oresPerClick + Game.currentPickaxe.stats.damage) * Game.level.currentStrength * .3)
+    if (Game.currentPickaxe.stats.stat) {
+      if (Game.currentPickaxe.stats.stat == 'Strength') {
+        totalStr += Game.currentPickaxe.stats.statVal
+      }
+    }
 
-    // amount += Game.oresPerClick * (Game.level.currentStrength * .1)
+    amount += Game.currentPickaxe.stats.damage
+    amount += Game.currentPickaxe.stats.damage * totalStr * .1
+
 
     if (type === 'special') {
-      amount *= 5
+      amount *= 10
     }
     Game.earn(amount)
     Game.risingNumber(amount, type)
