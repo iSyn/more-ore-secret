@@ -19,6 +19,13 @@ let beautify = (num) => {
   }
 }
 
+formatTime = () => {
+  let time = new Date(null);
+  time.setSeconds(Game.stats.timePlayed); // specify value for SECONDS here
+  let result = time.toISOString().substr(11, 8);
+  return result
+}
+
 // Game
 
 let Game = {}
@@ -54,7 +61,8 @@ Game.launch = () => {
     oreClicks: 0,
     oreCritClick: 0,
     rocksDestroyed: 0,
-    itemsPickedUp: 0
+    itemsPickedUp: 0,
+    timePlayed: 0
   }
   Game.selectedTab = 'store'
   Game.newItem = {}
@@ -81,6 +89,8 @@ Game.launch = () => {
     localStorage.setItem('Game.tabs', JSON.stringify(Game.tabs))
     localStorage.setItem('Game.stats', JSON.stringify(Game.stats))
     localStorage.setItem('Game.currentPickaxe', JSON.stringify(Game.currentPickaxe))
+    for (let i in Game.items) { localStorage.setItem(`item-${i}`, JSON.stringify(Game.items[i])) }
+    for (let i in Game.achievements) { localStorage.setItem(`achievement-${i}`, JSON.stringify(Game.achievements[i])) }
   }
 
   Game.load = () => {
@@ -91,7 +101,8 @@ Game.launch = () => {
       Game.tabs = JSON.parse(localStorage.getItem('Game.tabs'))
       Game.stats = JSON.parse(localStorage.getItem('Game.stats'))
       Game.currentPickaxe = JSON.parse(localStorage.getItem('Game.currentPickaxe'))
-      Game.items = localStorage.getItem('Game.items')
+      for (let i in Game.items) { Game.items[i] = JSON.parse(localStorage.getItem(`item-${i}`)) }
+      for (let i in Game.achievements) { Game.achivements[i] = JSON.parse(localStorage.getItem(`achievement-${i}`)) }
     }
   }
 
@@ -759,6 +770,10 @@ Game.launch = () => {
         <p>Ore Crit Clicks: ${Game.stats.oreCritClick} </p>
         <p>Rocks Destroyed: ${Game.stats.rocksDestroyed}</p>
         <p>Items Picked Up: ${Game.stats.itemsPickedUp}</p>
+        <p>Time Played: ${formatTime()}</p>
+
+        <button onclick=Game.save()>Save</button>
+        <button onclick=Game.wipe()>Wipe Save</button>
       `
     }
 
@@ -1016,12 +1031,22 @@ Game.launch = () => {
     }
   }
 
+
+
+  setInterval(() => {
+    Game.stats.timePlayed += 1
+
+    if (Game.stats.timePlayed % 30 == 0) {
+      Game.save()
+    }
+  }, 1000)
+
   //Init Shit
+  Game.load()
   Game.buildTabs()
   Game.switchTab('store')
   Game.rebuildInventory()
   Game.updatePercentage(0)
-  // Game.load()
   window.onresize = () => Game.oreClickArea()
   setInterval(() => {
     let ops = 0
