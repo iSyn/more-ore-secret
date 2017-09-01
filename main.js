@@ -29,6 +29,7 @@ Game.launch = () => {
   Game.ores = 0
   Game.oreHp = 50
   Game.oresPerSecond = 0
+  Game.oreClickMultiplier = 5
   Game.level = {
     currentLevel: 1,
     currentStrength: 0,
@@ -111,7 +112,7 @@ Game.launch = () => {
   }
 
   Game.rebuildInventory = () => {
-    s('.ores').innerHTML = 'Ores: ' + beautify(Game.ores.toFixed(1)) + ` (${Game.oresPerSecond}/s)`
+    s('.ores').innerHTML = 'Ores: ' + beautify(Game.ores.toFixed(0)) + ` (${Game.oresPerSecond}/s)`
     s('.level').innerHTML = `Level: ${Game.level.currentLevel} (${Game.level.currentXP}/${Game.level.XPNeeded}xp)`
   }
 
@@ -147,7 +148,6 @@ Game.launch = () => {
         item.style.position = 'absolute'
 
         let orePos = s('.ore').getBoundingClientRect()
-        console.log(orePos)
         item.style.top = orePos.bottom + randomY + 'px'
         item.style.left = (orePos.left + orePos.right)/2 + randomNumber + 'px'
 
@@ -343,7 +343,7 @@ Game.launch = () => {
 
     if (Math.random() >= .6) {
       let selectedPrefix = Game.prefixes[Math.floor(Math.random() * Game.prefixes.length)]
-      prefixVal = range * selectedPrefix.mult + totalMult
+      prefixVal = (range + totalMult) * selectedPrefix.mult
       prefixStat = selectedPrefix.stat
       prefixName = selectedPrefix.name
     }
@@ -357,8 +357,6 @@ Game.launch = () => {
     if (suffixName) {
       itemName += ` ${suffixName}`
     }
-
-    console.log(itemName)
 
     let calculateDmg = iLvl * totalMult // GOTTA EDIT THIS <------------------
 
@@ -386,7 +384,6 @@ Game.launch = () => {
   }
 
   Game.itemModal = (item) => {
-    console.log(item)
     let itemModal = document.createElement('div')
     itemModal.classList.add('item-modal-container')
 
@@ -614,9 +611,11 @@ Game.launch = () => {
     s(`#${selectedTab}-tab`).classList.add('selected')
     Game.buildTabContent(selectedTab)
     Game.selectedTab = selectedTab
+    // Game.playSound('changetabsound')
   }
 
   Game.buildTabContent = (tab) => {
+    console.log(tab)
     let str = ''
     if (tab == 'store') {
       for (var i in Game.items) {
@@ -627,7 +626,7 @@ Game.launch = () => {
               <div class="button" onclick="Game.items.${item.functionName}.buy()" style='border-radius: 10px'>
                 <div class="button-top">
                   <div class="button-left">
-                    <img src="./assets/${item.pic}" style='filter: brightness(100%)'/>
+                    <img src="./assets/${item.pic}" style='filter: brightness(100%); image-rendering: pixelated'/>
                   </div>
                   <div class="button-middle">
                     <h3 style='font-size: larger'>${item.name}</h3>
@@ -644,7 +643,7 @@ Game.launch = () => {
                   `
                   if (item.owned > 0) {
                     str += `
-                      <p> ${item.owned} ${item.name} generating ${(item.perSecond * item.owned).toFixed(1)} ores per second</p>
+                      <p> <span class='bold'>${item.owned}</span> ${item.name} generating <span class='bold'>${(item.perSecond * item.owned).toFixed(1)}</span> ores per second</p>
                     `
                   }
 
@@ -673,6 +672,41 @@ Game.launch = () => {
                 </div>
               </div>
               `
+          }
+        }
+      }
+    }
+
+    if (tab == 'upgrades') {
+      for (var i in Game.items) {
+        let item = Game.items[i]
+        if (item.tab == 'upgrades') {
+          if (item.hidden == 0) {
+            str += `
+              <div class="button" onclick="Game.items.${item.functionName}.buy()" style='border-radius: 10px'>
+                <div class="button-top">
+                  <div class="button-left">
+                    <img src="./assets/${item.pic}" style='filter: brightness(100%); image-rendering: pixelated'/>
+                  </div>
+                  <div class="button-middle">
+                    <h3 style='font-size: larger'>${item.name}</h3>
+                    <p>cost: ${beautify(item.price.toFixed(0))} ores</p>
+                  </div>
+                  <div class="button-right">
+                    <p style='font-size: xx-large'>${item.owned}</p>
+                  </div>
+                </div>
+
+                <div class="button-bottom">
+                  <hr/>
+                  <p>${item.desc}</p>
+                  <hr />
+                  <br/>
+                  <p style='font-style: italic; text-align: center'>“${item.fillerQuote}”</p>
+                </div>
+
+              </div>
+            `
           }
         }
       }
@@ -757,6 +791,7 @@ Game.launch = () => {
 
     this.buy = () => {
       if (Game.ores >= this.price) {
+        Game.playSound('buysound')
         Game.spend(this.price)
         this.owned++
         this.price += this.basePrice * Math.pow(1.15, this.owned)
@@ -770,29 +805,49 @@ Game.launch = () => {
     Game.items[this.functionName] = this
   }
 
-  // name, functionName, tab, pic, perSecond, desc, fillerText, fillerQuote, price, hidden, buyFunction
+  // name, functionName, tab, pic, perSecond, desc, fillerQuote, price, hidden, buyFunction
   new Game.item('Magnifying Glass', 'MagnifyingGlass', 'store', 'magnifying-glass.png', 0, 'Allows you to spot weakpoints inside the rock', 'I can see... I... can... FIGHT', 5, 0, () => {
     Game.oreClickArea()
     Game.items.MagnifyingGlass.hidden = 3
     if (Game.tabs[1].locked == true) { Game.tabs[1].locked = false; Game.buildTabs(); Game.switchTab(Game.selectedTab)}
   })
-  new Game.item('Old Man', 'OldMan', 'store', 'OldManBig.png', .2, 'He\'s just trying to feed his family', 'wip', 10, 0, () => {
-    this.owned++
+  new Game.item('Old Man', 'OldMan', 'store', 'oldman.png', .2, 'He\'s just trying to feed his family', 'wip', 10, 0, () => {
     if (Game.tabs[1].locked == true) { Game.tabs[1].locked = false; Game.buildTabs(); Game.switchTab(Game.selectedTab)}
     if (Game.items.RockFarmer.hidden == 1) {Game.items.RockFarmer.hidden = 0}
     if (Game.items.RockMiner.hidden == 2) {Game.items.RockMiner.hidden = 1}
   })
-  new Game.item('Rock Farmer', 'RockFarmer', 'store', 'wip.png', 1, 'A farmer that farms rocks... it\'s a dying business', 'wip', 100, 1, () => {
-    this.owned++
+  new Game.item('Rock Farmer', 'RockFarmer', 'store', 'rock-farmer.png', 1, 'A farmer that farms rocks... it\'s a dying business', 'wip', 100, 1, () => {
     if (Game.items.RockMiner.hidden == 1) {Game.items.RockMiner.hidden = 0}
     if (Game.items.HighSpeedAutoJackhammer.hidden == 2) {Game.items.HighSpeedAutoJackhammer.hidden = 1}
   })
-  new Game.item('Rock Miner', 'RockMiner', 'store', 'wip.png', 5, 'This makes a lot more sense...', 'wip', 1500, 2, () => {
-    this.owned++
+  new Game.item('Rock Miner', 'RockMiner', 'store', 'rock-miner.png', 5, 'This makes a lot more sense...', 'wip', 1500, 2, () => {
     if (Game.items.HighSpeedAutoJackhammer.hidden == 1) {Game.items.HighSpeedAutoJackhammer.hidden = 0}
   })
   new Game.item('High Speed Auto Jackhammer','HighSpeedAutoJackhammer', 'store', 'wip.png', 30, 'This breaks many safety regulations', '0 days since last accident', 5000, 2, () => {
-    this.owned++
+  })
+
+
+  // UPGRADES
+  new Game.item('Clean Magnifying Glass', 'CleanMagnifyingGlass', 'upgrades', 'wip.png', 0, 'Increases critical hit multiplier to 10x', 'wip', 100, 0, () => {
+    if (Game.items.CleanMagnifyingGlass.owned > 0) {Game.items.CleanMagnifyingGlass.hidden = 1}
+    Game.oreClickMultiplier = 10
+    Game.items.PolishMagnifyingGlass.hidden = 0
+  })
+
+  new Game.item('Polish Magnifying Glass', 'PolishMagnifyingGlass', 'upgrades', 'wip.png', 0, 'Increases critical hit multiplier to 15x', 'wip', 10000, 1, () => {
+    if (Game.items.PolishMagnifyingGlass.owned > 0) {Game.items.PolishMagnifyingGlass.hidden = 1}
+    Game.oreClickMultiplier = 15
+  Game.items.RefineMagnifyingGlass.hidden = 0
+  })
+
+  new Game.item('Refine Magnifying Glass', 'RefineMagnifyingGlass', 'upgrades', 'wip.png', 0, 'Increases critical hit multiplier to 20x', 'wip', 1000000, 1, () => {
+    if (Game.items.RefineMagnifyingGlass.owned > 0) {Game.items.RefineMagnifyingGlass.hidden = 1}
+    Game.oreClickMultiplier = 20
+  })
+
+  new Game.item('Near-Sighted Glasses','NearSightedGlasses', 'upgrades', 'glasses.png', 0, 'Doubles the amount of ores generated by the Old Men', 'wip', 500, 0, () => {
+    if (Game.items.NearSightedGlasses.owned > 0) {Game.items.NearSightedGlasses.hidden = 1}
+    Game.items.OldMan.perSecond *= 2
   })
 
 
@@ -802,15 +857,21 @@ Game.launch = () => {
     } else {
       Game.level.currentXP = 0
       Game.level.currentLevel++
-      Game.risingNumber(0, 'level')
-      s('#stats-tab').style.boxShadow = '0px 0px 50px yellow'
+      Game.level.availableSP += 3
+      Game.playSound('levelup')
+      Game.level.XPNeeded = Math.ceil(Math.pow(Game.level.XPNeeded, 1.15))
       setTimeout(() => {
         s('#stats-tab').style.boxShadow = 'none'
       }, 1000)
-      Game.playSound('levelup')
-      Game.level.XPNeeded = Math.ceil(Math.pow(Game.level.XPNeeded, 1.15))
-      // Game.level.XPNeeded = Math.ceil(20 * Math.pow(1.15, Game.level.currentLevel))
-      Game.level.availableSP += 3
+      s('#stats-tab').style.boxShadow = '0px 0px 50px yellow'
+      Game.risingNumber(0, 'level')
+    }
+    if (Game.level.availableSP > 0) {
+      s('#stats-tab').innerHTML = 'stats [!]'
+      s('#stats-tab').style.fontSize = 'x-large'
+    } else {
+      s('#stats-tab').innerHTML = 'stats'
+      s('#stats-tab').style.fontSize = 'x-large'
     }
   }
 
@@ -875,7 +936,7 @@ Game.launch = () => {
 
 
     if (type === 'special') {
-      amount *= 10
+      amount *= Game.oreClickMultiplier
     }
     Game.earn(amount)
     Game.risingNumber(amount, type)
@@ -945,6 +1006,7 @@ Game.launch = () => {
       Game.oreClickArea()
       Game.gainXp()
     }
+    Game.drawParticles()
     Game.updatePercentage(0)
     Game.stats.oreClicks++
     Game.stats.oreCritClick++
@@ -957,18 +1019,19 @@ Game.launch = () => {
   //Init Shit
   Game.buildTabs()
   Game.switchTab('store')
+  Game.rebuildInventory()
   Game.updatePercentage(0)
   // Game.load()
   window.onresize = () => Game.oreClickArea()
   setInterval(() => {
-    // let ops = 0
-    // ops += Game.items.OldMan.owned * Game.items.OldMan.perSecond
-    // ops += Game.items.RockFarmer.owned * Game.items.RockFarmer.perSecond
-    // ops += Game.items.RockMiner.owned * Game.items.RockMiner.perSecond
-    // ops += Game.items.HighSpeedAutoJackhammer.owned * Game.items.HighSpeedAutoJackhammer.perSecond
-    // Game.earn(ops / 30)
-    // Game.updatePercentage(ops / 30)
-    // Game.oresPerSecond = ops
+    let ops = 0
+    ops += Game.items.OldMan.owned * Game.items.OldMan.perSecond
+    ops += Game.items.RockFarmer.owned * Game.items.RockFarmer.perSecond
+    ops += Game.items.RockMiner.owned * Game.items.RockMiner.perSecond
+    ops += Game.items.HighSpeedAutoJackhammer.owned * Game.items.HighSpeedAutoJackhammer.perSecond
+    Game.earn(ops / 30)
+    Game.updatePercentage(ops / 30)
+    Game.oresPerSecond = ops
   }, 1000 / 30)
 
 }

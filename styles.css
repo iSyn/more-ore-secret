@@ -337,11 +337,12 @@ footer {
   flex-flow: row nowrap;
   justify-content: space-around;
   align-items: center;
-  background: rgba(83, 83, 83, 0.4);
+  background: rgba(83, 83, 83, 0.1);
   /*background: url('./assets/inventory-bg.png');*/
   background-size: auto 100%;
   height: 10%;
   color: white;
+  font-size: x-large;
 }
 
 .ore-container {
@@ -446,8 +447,13 @@ footer {
   align-items: center;
 }
 
-.button {
+.bold {
   font-family: 'Asap Condensed';
+  font-weight: bold;
+}
+
+.button {
+  font-family: 'Abel';
   width: 93%;
   margin-bottom: 10px;
   border: 1px solid black;
@@ -462,10 +468,12 @@ footer {
 
 .button:hover .button-bottom {
   display: block;
+
 }
 
 .button:hover {
   box-shadow: 0 4px 5px black;
+  border: 2px solid black;
 }
 
 .sprite {
