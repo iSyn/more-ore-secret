@@ -63,8 +63,34 @@ Game.launch = () => {
     itemLevel: 1,
     material: 'Wood',
     stats: {
-      damage: .1,
+      damage: 1,
       hasPrefix: false
+    }
+  }
+
+  Game.wipe = () => {
+    localStorage.clear()
+    location.reload()
+  }
+
+  Game.save = () => {
+    localStorage.setItem('Game.ores', Game.ores)
+    localStorage.setItem('Game.oreHp', Game.oreHp)
+    localStorage.setItem('Game.level', JSON.stringify(Game.level))
+    localStorage.setItem('Game.tabs', JSON.stringify(Game.tabs))
+    localStorage.setItem('Game.stats', JSON.stringify(Game.stats))
+    localStorage.setItem('Game.currentPickaxe', JSON.stringify(Game.currentPickaxe))
+  }
+
+  Game.load = () => {
+    if (localStorage.getItem('Game.ores') !== null) {
+      Game.ores = parseFloat(localStorage.getItem('Game.ores'))
+      Game.oreHp = parseFloat(localStorage.getItem('Game.oreHp'))
+      Game.level = JSON.parse(localStorage.getItem('Game.level'))
+      Game.tabs = JSON.parse(localStorage.getItem('Game.tabs'))
+      Game.stats = JSON.parse(localStorage.getItem('Game.stats'))
+      Game.currentPickaxe = JSON.parse(localStorage.getItem('Game.currentPickaxe'))
+      Game.items = localStorage.getItem('Game.items')
     }
   }
 
@@ -317,7 +343,7 @@ Game.launch = () => {
 
     if (Math.random() >= .6) {
       let selectedPrefix = Game.prefixes[Math.floor(Math.random() * Game.prefixes.length)]
-      prefixVal = range + selectedPrefix.mult + totalMult
+      prefixVal = range * selectedPrefix.mult + totalMult
       prefixStat = selectedPrefix.stat
       prefixName = selectedPrefix.name
     }
@@ -601,7 +627,7 @@ Game.launch = () => {
               <div class="button" onclick="Game.items.${item.functionName}.buy()" style='border-radius: 10px'>
                 <div class="button-top">
                   <div class="button-left">
-                    <img src="./assets/${item.pic}"/>
+                    <img src="./assets/${item.pic}" style='filter: brightness(100%)'/>
                   </div>
                   <div class="button-middle">
                     <h3 style='font-size: larger'>${item.name}</h3>
@@ -632,10 +658,10 @@ Game.launch = () => {
           }
           if (item.hidden == 1) {
             str += `
-              <div class="button" onclick="Game.items.${item.functionName}.buy()" style='border-radius: 10px; cursor: not-allowed; box-shadow: 0 4px black;'>
+              <div class="button" onclick="Game.items.${item.functionName}.buy()" style='border-radius: 10px; cursor: not-allowed; box-shadow: 0 4px black; filter: brightness(50%)'>
                 <div class="button-top">
                   <div class="button-left">
-                    <img src="./assets/mystery.png"/>
+                    <img src="./assets/${item.pic}" style='filter: brightness(0%)'/>
                   </div>
                   <div class="button-middle">
                     <h3 style='font-size: larger'>???</h3>
@@ -792,6 +818,48 @@ Game.launch = () => {
     Game.gainXp()
   }, 1000)
 
+
+  Game.achievements = []
+  Game.achievement = function(name, img, howToUnlock) {
+    this.name = name
+    this.img = img
+    this.howToUnlock = howToUnlock
+    this.won = 0
+
+    Game.achievements[this.name] = this
+  }
+
+  Game.win = (achievement) => {
+    if (Game.achievements[achievement]) {
+      if (Game.achievements[achievement].won == 0) {
+        Game.achievements[achievement].won = 1
+        let div = document.createElement('div')
+        div.classList.add('achievement')
+        div.innerHTML = `
+          <img class='achievement-img' src="./assets/${Game.achievements[achievement].img}" alt="" />
+          <div class="achievement-right">
+            <h3>Achievement Unlocked</h3>
+            <h1>${Game.achievements[achievement].name}</h1>
+            <p>${Game.achievements[achievement].howToUnlock}</p>
+          </div>
+        `
+        s('body').append(div)
+
+        setTimeout(() => {
+          div.remove()
+        }, 2800)
+      }
+    }
+  }
+
+  new Game.achievement('Your First Ore', 'wip.png', 'Mine your first ore')
+  new Game.achievement('Bucket Full of Ore', 'wip', 'Mine a total of 500 ores')
+
+
+  new Game.achievement('Level 2', 'Reach lvl 2', 'wip')
+
+
+
   Game.calculatePerClick = (type) => {
     let amount = 0
     let totalStr = Game.level.currentStrength
@@ -869,9 +937,8 @@ Game.launch = () => {
     if (Game.selectedTab === 'stats') {
       Game.buildTabContent('stats')
     }
+    if (Game.achievements['Your First Ore'].won == 0) {Game.win('Your First Ore')}
   }
-
-
   s('.ore-click-area').onclick = () => {
     if (currentHp > 0) {
       Game.calculatePerClick('special')
@@ -888,20 +955,20 @@ Game.launch = () => {
   }
 
   //Init Shit
-  // Game.oreClickArea()
   Game.buildTabs()
   Game.switchTab('store')
   Game.updatePercentage(0)
+  // Game.load()
   window.onresize = () => Game.oreClickArea()
   setInterval(() => {
-    let ops = 0
-    ops += Game.items.OldMan.owned * Game.items.OldMan.perSecond
-    ops += Game.items.RockFarmer.owned * Game.items.RockFarmer.perSecond
-    ops += Game.items.RockMiner.owned * Game.items.RockMiner.perSecond
-    ops += Game.items.HighSpeedAutoJackhammer.owned * Game.items.HighSpeedAutoJackhammer.perSecond
-    Game.earn(ops / 30)
-    Game.updatePercentage(ops / 30)
-    Game.oresPerSecond = ops
+    // let ops = 0
+    // ops += Game.items.OldMan.owned * Game.items.OldMan.perSecond
+    // ops += Game.items.RockFarmer.owned * Game.items.RockFarmer.perSecond
+    // ops += Game.items.RockMiner.owned * Game.items.RockMiner.perSecond
+    // ops += Game.items.HighSpeedAutoJackhammer.owned * Game.items.HighSpeedAutoJackhammer.perSecond
+    // Game.earn(ops / 30)
+    // Game.updatePercentage(ops / 30)
+    // Game.oresPerSecond = ops
   }, 1000 / 30)
 
 }

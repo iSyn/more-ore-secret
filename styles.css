@@ -275,6 +275,51 @@ footer {
   color: orange;
 }
 
+.achievement {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  border: 3px solid black;
+  z-index: 9999;
+  background-color: white;
+  text-align: center;
+  padding: 10px 20px;
+  animation: fadeOut 3s linear;
+  /*background: #91ffa6;*/
+  pointer-events: none;
+  color: black;
+  display: flex;
+  flex-flow: row nowrap;
+}
+
+.achievement-img {
+  height: 90px;
+  width: 90px;
+  margin-right: 20px;
+}
+
+.achievement-right {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  text-align: center;
+  flex-grow: 1;
+}
+
+@keyframes fadeOut {
+  0%{
+    transform: translateY(0);
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-300px)
+  }
+}
+
+
 
 /* LEFT SECTION */
 
