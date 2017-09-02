@@ -105,6 +105,9 @@ Game.launch = () => {
       for (let i in Game.achievements) {
         Game.achievements[i] = JSON.parse(localStorage.getItem(`achievement-${i}`))
       }
+      if (Game.items.MagnifyingGlass.owned > 0) {
+        Game.oreClickArea()
+      }
     }
   }
 
@@ -481,7 +484,7 @@ Game.launch = () => {
   let soundPlayed4 = false
   let soundPlayed5 = false
   let currentHp = Game.oreHp
-  let whichPic = Math.floor(Math.random() * 3) + 1
+  let whichPic = Math.floor(Math.random() * 4) + 1
   Game.updatePercentage = (amount) => {
     if (currentHp > 0) {
       if (currentHp - amount > 0) {

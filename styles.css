@@ -81,13 +81,12 @@ footer {
   position: absolute;
   background: url('./assets/item-pouch.png');
   background-size: cover;
-  image-rendering: auto;
+  /*image-rendering: pixelated;*/
   cursor: pointer;
 }
 
 .item-drop:hover {
-  height: 43px;
-  width: 43px;
+  transform: scale(1.2)
 }
 
 .item-pickup-animation {
@@ -98,11 +97,11 @@ footer {
 @keyframes itemPickUp {
   from {
     opacity: 1;
-    transform: scale(1)
+    transform: scale(1.2)
   }
   to {
     opacity: 0;
-    transform: scale(1.5);
+    transform: scale(1.7);
   }
 }
 
