@@ -481,7 +481,7 @@ Game.launch = () => {
   let soundPlayed4 = false
   let soundPlayed5 = false
   let currentHp = Game.oreHp
-  let whichPic = Math.floor(Math.random() * 5) + 1
+  let whichPic = Math.floor(Math.random() * 3) + 1
   Game.updatePercentage = (amount) => {
     if (currentHp > 0) {
       if (currentHp - amount > 0) {
