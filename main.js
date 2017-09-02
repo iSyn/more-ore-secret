@@ -102,7 +102,9 @@ Game.launch = () => {
       Game.stats = JSON.parse(localStorage.getItem('Game.stats'))
       Game.currentPickaxe = JSON.parse(localStorage.getItem('Game.currentPickaxe'))
       for (let i in Game.items) { Game.items[i] = JSON.parse(localStorage.getItem(`item-${i}`)) }
-      for (let i in Game.achievements) { Game.achivements[i] = JSON.parse(localStorage.getItem(`achievement-${i}`)) }
+      for (let i in Game.achievements) {
+        Game.achievements[i] = JSON.parse(localStorage.getItem(`achievement-${i}`))
+      }
     }
   }
 
@@ -123,7 +125,12 @@ Game.launch = () => {
   }
 
   Game.rebuildInventory = () => {
-    s('.ores').innerHTML = 'Ores: ' + beautify(Game.ores.toFixed(0)) + ` (${Game.oresPerSecond}/s)`
+    let str = ''
+    str += `Ores: ${beautify(Game.ores.toFixed(0))}`
+    if (Game.oresPerSecond > 0) {
+      str += ` (${Game.oresPerSecond.toFixed(1)}/s)`
+    }
+    s('.ores').innerHTML = str
     s('.level').innerHTML = `Level: ${Game.level.currentLevel} (${Game.level.currentXP}/${Game.level.XPNeeded}xp)`
   }
 
@@ -474,7 +481,7 @@ Game.launch = () => {
   let soundPlayed4 = false
   let soundPlayed5 = false
   let currentHp = Game.oreHp
-  let whichPic = Math.floor(Math.random() * 3) + 1
+  let whichPic = Math.floor(Math.random() * 5) + 1
   Game.updatePercentage = (amount) => {
     if (currentHp > 0) {
       if (currentHp - amount > 0) {
@@ -626,7 +633,6 @@ Game.launch = () => {
   }
 
   Game.buildTabContent = (tab) => {
-    console.log(tab)
     let str = ''
     if (tab == 'store') {
       for (var i in Game.items) {
@@ -890,19 +896,16 @@ Game.launch = () => {
     }
   }
 
-  setInterval(() => {
-    Game.gainXp()
-  }, 1000)
-
-
   Game.achievements = []
   Game.achievement = function(name, img, howToUnlock) {
     this.name = name
     this.img = img
     this.howToUnlock = howToUnlock
     this.won = 0
+    this.functionName = name.replace(/ /g, '')
 
-    Game.achievements[this.name] = this
+
+    Game.achievements[this.functionName] = this
   }
 
   Game.win = (achievement) => {
@@ -1013,7 +1016,7 @@ Game.launch = () => {
     if (Game.selectedTab === 'stats') {
       Game.buildTabContent('stats')
     }
-    if (Game.achievements['Your First Ore'].won == 0) {Game.win('Your First Ore')}
+    if (Game.achievements['YourFirstOre'].won == 0) {Game.win('YourFirstOre')}
   }
   s('.ore-click-area').onclick = () => {
     if (currentHp > 0) {
@@ -1031,13 +1034,11 @@ Game.launch = () => {
     }
   }
 
-
-
   setInterval(() => {
+    Game.gainXp()
     Game.stats.timePlayed += 1
-
-    if (Game.stats.timePlayed % 30 == 0) {
-      Game.save()
+    if (Game.selectedTab == 'stats') {
+      Game.buildTabContent(Game.selectedTab)
     }
   }, 1000)
 

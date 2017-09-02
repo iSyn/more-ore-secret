@@ -355,7 +355,7 @@ footer {
 
 .ore {
   /*background: url('./assets/rock.png');*/
-  background-size: cover;
+  background-size: 100% 100%;
   image-rendering: pixelated;
   height: 300px;
   width: 300px;
@@ -542,4 +542,18 @@ footer {
 
 .stat-left {
   flex-grow: 1;
+}
+
+.achievements-container {
+  display: flex;
+  flex-flow: row wrap;
+}
+
+.achievement-box {
+  height: 50px;
+  width: 50px;
+  border: 1px solid black;
+  background: url('./assets/mystery.png');
+  background-size: contain;
+  margin: 5px;
 }
