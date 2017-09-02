@@ -89,7 +89,9 @@ Game.launch = () => {
     localStorage.setItem('Game.tabs', JSON.stringify(Game.tabs))
     localStorage.setItem('Game.stats', JSON.stringify(Game.stats))
     localStorage.setItem('Game.currentPickaxe', JSON.stringify(Game.currentPickaxe))
-    for (let i in Game.items) { localStorage.setItem(`item-${i}`, JSON.stringify(Game.items[i])) }
+    for (let i in Game.items) {
+      localStorage.setItem(`item-${i}`, JSON.stringify(Game.items[i]))
+    }
     for (let i in Game.achievements) { localStorage.setItem(`achievement-${i}`, JSON.stringify(Game.achievements[i])) }
   }
 
@@ -101,7 +103,9 @@ Game.launch = () => {
       Game.tabs = JSON.parse(localStorage.getItem('Game.tabs'))
       Game.stats = JSON.parse(localStorage.getItem('Game.stats'))
       Game.currentPickaxe = JSON.parse(localStorage.getItem('Game.currentPickaxe'))
-      for (let i in Game.items) { Game.items[i] = JSON.parse(localStorage.getItem(`item-${i}`)) }
+      for (let i in Game.items) {
+        Game.items[i] = JSON.parse(localStorage.getItem(`item-${i}`))
+      }
       for (let i in Game.achievements) {
         Game.achievements[i] = JSON.parse(localStorage.getItem(`achievement-${i}`))
       }
@@ -1046,7 +1050,7 @@ Game.launch = () => {
   }, 1000)
 
   //Init Shit
-  Game.load()
+  // Game.load()
   Game.buildTabs()
   Game.switchTab('store')
   Game.rebuildInventory()
