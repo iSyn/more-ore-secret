@@ -4,17 +4,10 @@ let s = ((el) => {return document.querySelector(el)})
 
 let beautify = (num) => {
 
-  if (num % 1 == 0) { // IF NUMBER IS AN INTEGER
-    return num
-
-  } else { // IF NUMBER IS A FLOAT
-    if (num < 1) {
-      return parseFloat(num).toFixed(1)
-    } else {
-      return num.toFixed(1)
-    }
+  let number = parseFloat(num)
+  if (number.toFixed(1) % 1 == 0) {
+    return number.toFixed(0)
   }
-
 
   if (num < 1000000) {
     return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); //found on https://stackoverflow.com/questions/2901102/how-to-print-a-number-with-commas-as-thousands-separators-in-javascript
@@ -40,6 +33,7 @@ Game.launch = () => {
   Game.state = {
     ores: 0,
     oreHp: 50,
+    oreCurrentHp: 50,
     oresPerSecond: 0,
     oreClickMultiplier: 5,
     player: {
@@ -56,7 +50,7 @@ Game.launch = () => {
         rarity: 'Common',
         itemLevel: 1,
         material: 'Wood',
-        damage: .2
+        damage: 1
       },
       accesory: {}
     },
@@ -508,7 +502,7 @@ Game.launch = () => {
 
   let buildInventory = () => {
     let str = ''
-    str += `Ores: ${beautify(Game.state.ores)}`
+    str += `Ores: ${beautify(Game.state.ores.toFixed(1))}`
     if (Game.state.oresPerSecond > 0) {
       str += ` (${Game.state.oresPerSecond.toFixed(1)}/s)`
     }
@@ -752,36 +746,35 @@ Game.launch = () => {
   let soundPlayed3 = false
   let soundPlayed4 = false
   let soundPlayed5 = false
-  let currentHp = Game.state.oreHp
   let whichPic = Math.floor(Math.random() * 4) + 1
   let updatePercentage = (amount) => {
-    if (currentHp - amount > 0) {
-      currentHp -= amount
-      s('.ore-hp').innerHTML = `${((currentHp/Game.state.oreHp)*100).toFixed(0)}%`
+    if (Game.state.oreCurrentHp - amount > 0) {
+      Game.state.oreCurrentHp -= amount
+      s('.ore-hp').innerHTML = `${((Game.state.oreCurrentHp/Game.state.oreHp)*100).toFixed(0)}%`
 
-      if (currentHp/Game.state.oreHp > .8 ) {
+      if (Game.state.oreCurrentHp/Game.state.oreHp > .8 ) {
         s('.ore').style.background = `url("./assets/ore${whichPic}-1.png")`
         s('.ore').style.backgroundSize = 'cover'
       }
-      if (currentHp/Game.state.oreHp <= .8 && soundPlayed1 == false) {
+      if (Game.state.oreCurrentHp/Game.state.oreHp <= .8 && soundPlayed1 == false) {
         s('.ore').style.background = `url("assets/ore${whichPic}-2.png")`
         s('.ore').style.backgroundSize = 'cover'
         playSound('explosion')
         soundPlayed1 = true
       }
-      if (currentHp/Game.state.oreHp <= .6 && soundPlayed2 == false) {
+      if (Game.state.oreCurrentHp/Game.state.oreHp <= .6 && soundPlayed2 == false) {
         s('.ore').style.background = `url("assets/ore${whichPic}-3.png")`
         s('.ore').style.backgroundSize = 'cover'
         playSound('explosion')
         soundPlayed2 = true
       }
-      if (currentHp/Game.state.oreHp <= .4 && soundPlayed3 == false) {
+      if (Game.state.oreCurrentHp/Game.state.oreHp <= .4 && soundPlayed3 == false) {
         s('.ore').style.background = `url("assets/ore${whichPic}-4.png")`
         s('.ore').style.backgroundSize = 'cover'
         playSound('explosion')
         soundPlayed3 = true
       }
-      if (currentHp/Game.state.oreHp <= .2 && soundPlayed4 == false) {
+      if (Game.state.oreCurrentHp/Game.state.oreHp <= .2 && soundPlayed4 == false) {
         s('.ore').style.background = `url("assets/ore${whichPic}-5.png")`
         s('.ore').style.backgroundSize = 'cover'
         playSound('explosion')
@@ -792,7 +785,7 @@ Game.launch = () => {
       playSound('explosion2')
       Game.state.oreHp = Math.pow(Game.state.oreHp, 1.15)
       console.log('hp', Game.state.oreHp)
-      currentHp = Game.state.oreHp
+      Game.state.oreCurrentHp = Game.state.oreHp
       dropItem()
       s('.ore-hp').innerHTML = '100%'
       soundPlayed1 = false
@@ -967,6 +960,9 @@ Game.launch = () => {
       buildTabContent()
     }
   }, 1000)
+  setInterval(() => {
+    Game.save()
+  }, 1000 * 30)
   updatePercentage(0)
   setInterval(() => {
     earnOPS()
