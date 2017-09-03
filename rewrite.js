@@ -50,7 +50,7 @@ Game.launch = () => {
         rarity: 'Common',
         itemLevel: 1,
         material: 'Wood',
-        damage: 100
+        damage: 1000
       },
       accesory: {}
     },
@@ -134,9 +134,11 @@ Game.launch = () => {
 
   let calculateOPS = () => {
     let ops = 0
-    ops += Game.state.items[1].production * Game.state.items[1].owned
-    ops += Game.state.items[2].production * Game.state.items[2].owned
-    ops += Game.state.items[3].production * Game.state.items[3].owned
+
+    for (i = 0; i < Game.state.items.length; i++) {
+      ops += Game.state.items[i].production * Game.state.items[i].owned
+    }
+
     Game.state.oresPerSecond = ops
     return ops
   }
@@ -150,44 +152,73 @@ Game.launch = () => {
     let iLvl = amountOfRocksDestroyed
 
     if (Game.state.stats.rocksDestroyed == 1) {
+
+      let itemContainer = document.createElement('div')
+      itemContainer.classList.add('item-container')
+      itemContainer.innerHTML = `
+        <div class="item-pouch-glow"></div>
+        <div class="item-pouch-glow2"></div>
+        <div class="item-pouch-glow3"></div>
+      `
+      let orePos = s('.ore').getBoundingClientRect()
+      itemContainer.style.position = 'absolute'
+      itemContainer.style.top = orePos.bottom + randomY + 'px'
+      itemContainer.style.left = (orePos.left + orePos.right)/2 + randomNumber + 'px'
+
       let item = document.createElement('div')
       item.classList.add('item-drop')
-      item.style.position = 'absolute'
+      item.style.position = 'relative'
 
-      let orePos = s('.ore').getBoundingClientRect()
-      item.style.top = orePos.bottom + randomY + 'px'
-      item.style.left = (orePos.left + orePos.right)/2 + randomNumber + 'px'
+      itemContainer.append(item)
 
       item.addEventListener('click', () => {
+        s('.item-pouch-glow').style.display = 'none'
+        s('.item-pouch-glow2').style.display = 'none'
+        s('.item-pouch-glow3').style.display = 'none'
         item.style.pointerEvents = 'none'
         s('.item-drop').classList.add('item-pickup-animation')
         setTimeout(() => {
-          item.remove()
+          itemContainer.remove()
           pickUpItem(iLvl)
         }, 800)
       })
-      s('body').append(item)
+
+      s('body').append(itemContainer)
     } else {
-      if (Math.random() <= .3) { // 30% chance
+      if (Math.random() < .3) { // 30% chance
+        let itemContainer = document.createElement('div')
+        console.log(itemContainer)
+        itemContainer.classList.add('item-container')
+        itemContainer.innerHTML = `
+          <div class="item-pouch-glow"></div>
+          <div class="item-pouch-glow2"></div>
+          <div class="item-pouch-glow3"></div>
+        `
+        let orePos = s('.ore').getBoundingClientRect()
+        itemContainer.style.position = 'absolute'
+        itemContainer.style.top = orePos.bottom + randomY + 'px'
+        itemContainer.style.left = (orePos.left + orePos.right)/2 + randomNumber + 'px'
+
         let item = document.createElement('div')
         item.classList.add('item-drop')
-        item.style.position = 'absolute'
+        item.style.position = 'relative'
 
-        let orePos = s('.ore').getBoundingClientRect()
-        item.style.top = orePos.bottom + randomY + 'px'
-        item.style.left = (orePos.left + orePos.right)/2 + randomNumber + 'px'
+        itemContainer.append(item)
 
         item.addEventListener('click', () => {
+          s('.item-pouch-glow').style.display = 'none'
+          s('.item-pouch-glow2').style.display = 'none'
+          s('.item-pouch-glow3').style.display = 'none'
           item.style.pointerEvents = 'none'
           s('.item-drop').classList.add('item-pickup-animation')
           setTimeout(() => {
-            item.remove()
+            itemContainer.remove()
             pickUpItem(iLvl)
           }, 800)
-        })
+          })
 
-        s('body').append(item)
-      }
+          s('body').append(itemContainer)
+        }
     }
   }
 
@@ -674,11 +705,29 @@ Game.launch = () => {
     }
     if (item.functionName == 'OldMan') {
       if (Game.state.tabs[1].locked == true) {Game.state.tabs[1].locked = false; buildTabs(); Game.switchTab(Game.selectedTab)}
-      Game.state.items[item.id + 1].hidden = 0
-      Game.state.items[item.id + 2].hidden = 1
+      if (item.owned == 1) {
+        Game.state.items[item.id + 1].hidden = 0
+        Game.state.items[item.id + 2].hidden = 1
+      }
     }
     if (item.functionName == 'RockFarmer') {
-      Game.state.items[item.id + 1].hidden = 0
+      if (item.owned == 1) {
+        Game.state.items[item.id + 1].hidden = 0
+        Game.state.items[item.id + 2].hidden = 1
+      }
+    }
+    if (item.functionName == 'RockMiner') {
+      if (item.owned == 1) {
+        Game.state.items[item.id + 1].hidden = 0
+        Game.state.items[item.id + 2].hidden = 1
+      }
+    }
+    if (item.functionName == 'RockCharmer') {
+      if (item.owned == 1) {
+        Game.state.items[item.id + 1].hidden = 0
+      }
+    }
+    if (item.functionName == 'RockHospital') {
       //
     }
     if (item.functionName == 'CleanMagnifyingGlass') {
@@ -697,31 +746,31 @@ Game.launch = () => {
     }
     if (item.functionName == 'NearSightedGlasses') {
       item.hidden = 1
-      Game.state.items[1].production *= 2
+      Game.state.items[1].production *= 3
       Game.state.items[item.id + 1].hidden = 0
     }
-    if (item.functionName == 'HigherPerscriptionLens') {
+    if (item.functionName == 'NewPerscriptionLens') {
       item.hidden = 1
-      Game.state.items[1].production *= 3
+      Game.state.items[1].production *= 4
     }
   }
 
-  let Item = function(obj) {
-    this.id = obj.id
+  let Item = function(obj, id) {
+    this.id = id
     this.name = obj.name
     this.functionName = obj.name.replace(/ /g, '')
     this.tab = obj.tab
     this.pic = obj.pic
-    this.production = obj.production
+    this.production = obj.production || 0
     this.desc = obj.desc
     this.fillerQuote = obj.fillerQuote
     this.basePrice = obj.price
     this.price = obj.price
-    this.owned = obj.owned
     this.hidden = obj.hidden
+    this.owned = obj.owned || 0
 
     this.buy = () => {
-     if (Game.state.ores >= this.price) {
+      if (Game.state.ores >= this.price) {
         spend(this.price)
         this.owned++
         playSound('buysound')
@@ -740,18 +789,14 @@ Game.launch = () => {
   Game.state.items = [
     // ITEMS
     {
-      id: 0,
       name: 'Magnifying Glass',
       tab: 'store',
       pic: 'magnifying-glass.png',
-      production: 0,
       desc: 'Allows you to spot weakpoints inside the rock',
       fillerQuote: 'wip',
       price: 5,
       hidden: 0,
-      owned: 0
     }, {
-      id: 1,
       name: 'Old Man',
       tab: 'store',
       pic: 'oldman.png',
@@ -760,92 +805,90 @@ Game.launch = () => {
       fillerQuote: 'wip',
       price: 10,
       hidden: 0,
-      owned: 0
     }, {
-      id: 2,
       name: 'Rock Farmer',
       tab: 'store',
       pic: 'rock-farmer.png',
-      production: 1,
+      production: 2,
       desc: 'A farmer that farms rocks... it\'s a dying business',
       fillerQuote: 'wip',
       price: 100,
       hidden: 1,
-      owned: 0
     }, {
-      id: 3,
       name: 'Rock Miner',
       tab: 'store',
       pic: 'rock-miner.png',
-      production: 5,
+      production: 10,
       desc: 'This makes a lot more sense',
       fillerQuote: 'wip',
       price: 1500,
       hidden: 2,
-      owned: 0
+    }, {
+      name: 'Rock Charmer',
+      tab: 'store',
+      pic: 'wip.png',
+      production: 60,
+      desc: 'Charming rocks straight out the ground',
+      fillerQuote: 'wip',
+      price: 13500,
+      hidden: 2
+    }, {
+      name: 'Rock Hospital',
+      tab: 'store',
+      pic: 'wip.png',
+      production: 300,
+      desc: 'Heals sick rocks back to healthy',
+      fillerQuote: 'wip',
+      price: 65000,
+      hidden: 2
     },
     //UPGRADES
     {
-      id: 4,
       name: 'Clean Magnifying Glass',
       tab: 'upgrades',
       pic: 'wip.png',
-      production: 0,
       desc: 'Increases critical hit multiplier to 10x',
       fillerQuote: 'wip',
       price: 100,
       hidden: 0,
-      owned: 0
     }, {
-      id: 5,
       name: 'Polish Magnifying Glass',
       tab: 'upgrades',
       pic: 'wip.png',
-      production: 0,
       desc: 'Increases critical hit multiplier to 15x',
       fillerQuote: 'wip',
       price: 15000,
       hidden: 1,
-      owned: 0
     }, {
-      id: 6,
       name: 'Refine Magnifying Glass',
       tab: 'upgrades',
       pic: 'wip.png',
-      production: 0,
       desc: 'Increases critical hit multiplier to 20x',
       fillerQuote: 'wip',
       price: 1000000,
       hidden: 1,
-      owned: 0
     }, {
-      id: 7,
       name: 'Near Sighted Glasses',
       tab: 'upgrades',
       pic: 'glasses.png',
-      production: 0,
-      desc: 'Doubles the production of Old Men',
+      desc: 'Triples the production of Old Men',
       fillerQuote: 'wip',
       price: 500,
       hidden: 0,
-      owned: 0
     }, {
-      id: 8,
-      name: 'Higher Perscription Lens',
+      name: 'New Perscription Lens',
       tab: 'upgrades',
       pic: 'wip.png',
-      production: 0,
-      desc: 'Triples the production of Old Men',
+      desc: 'Quadruples the production of Old Men',
       fillerQuote: 'wip',
       price: 3000,
       hidden: 1,
-      owned: 0
     }
   ]
 
   let generateStoreItems = () => {
     for (i = 0; i < Game.state.items.length; i++) {
-      new Item(Game.state.items[i])
+      new Item(Game.state.items[i], i)
     }
   }
 

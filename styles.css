@@ -75,14 +75,20 @@ footer {
   }
 }
 
+.item-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .item-drop {
-  height: 40px;
-  width: 40px;
-  position: absolute;
+  height: 50px;
+  width: 50px;
   background: url('./assets/item-pouch.png');
   background-size: cover;
-  /*image-rendering: pixelated;*/
+  image-rendering: pixelated;
   cursor: pointer;
+  transform: none;
 }
 
 .item-drop:hover {
@@ -92,6 +98,42 @@ footer {
 .item-pickup-animation {
   animation: itemPickUp .8s;
   animation-fill-mode: forwards;
+}
+
+.item-pouch-glow, .item-pouch-glow2, .item-pouch-glow3 {
+  height: 60px;
+  width: 60px;
+  position: absolute;
+  background: url('./assets/item-pouch-glow.png');
+  background-size: cover;
+  animation: clockwiseSpin 6s infinite linear;
+}
+
+.item-pouch-glow {
+  animation: clockwiseSpin 5s infinite linear;
+}
+
+.item-pouch-glow2 {
+  animation: counterClockwiseSpin 7s infinite linear;
+}
+
+
+@keyframes clockwiseSpin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes counterClockwiseSpin {
+  from {
+    transform: rotate(360deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
 }
 
 @keyframes itemPickUp {
