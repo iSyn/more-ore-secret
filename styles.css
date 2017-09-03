@@ -43,7 +43,7 @@ footer {
 .vertical-separator {
   height: 100%;
   /*width: 20px;*/
-  flex-grow: 1;
+  width: 15px;
   background: url('./assets/verticalseparator.png');
   background-size: 100% auto;
 }
@@ -365,7 +365,8 @@ footer {
 /* LEFT SECTION */
 
 .left-section {
-  width: 70%;
+  /*width: 70%;*/
+  flex-grow: 1;
   background: url('./assets/main-bg.png');
   background-size: auto 80%;
   image-rendering: pixelated;
@@ -441,7 +442,8 @@ footer {
 /* RIGHT SECTION */
 
 .right-section {
-  width: 27%;
+  /*width: 27%;*/
+  width: 350px;
   /*flex-grow: 1;*/
   background: lightgrey;
   display: flex;

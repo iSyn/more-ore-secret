@@ -4,22 +4,17 @@ let s = ((el) => {return document.querySelector(el)})
 
 let beautify = (num) => {
 
-  // let number = parseFloat(num)
-  // if (number.toFixed(1) % 1 == 0) {
-  //   return number.toFixed(0)
-  // }
-
   if (num < 1000000) {
     return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); //found on https://stackoverflow.com/questions/2901102/how-to-print-a-number-with-commas-as-thousands-separators-in-javascript
   } else {
     if (num >= 1000000 && num < 1000000000) {
-      return (num/1000000).toFixed(1) + 'M'
+      return (num/1000000).toFixed(3) + 'M'
     }
     if (num >= 1000000000 && num < 1000000000000) {
-      return (num/1000000000).toFixed(1) + 'B'
+      return (num/1000000000).toFixed(3) + 'B'
     }
     if (num >= 1000000000000) {
-      return (num/1000000000000).toFixed(1) + 'T'
+      return (num/1000000000000).toFixed(3) + 'T'
     }
   }
 }
@@ -126,7 +121,7 @@ Game.launch = () => {
     opc += Game.state.player.pickaxe.damage * str * .1
 
     if (type == 'crit') {
-      opc *= 5
+      opc *= Game.state.oreClickMultiplier
     }
 
     return opc
@@ -554,7 +549,7 @@ Game.launch = () => {
                     <img src="./assets/${item.pic}" style='filter: brightness(100%); image-rendering: pixelated'/>
                   </div>
                   <div class="button-middle">
-                    <h3 style='font-size: larger'>${item.name}</h3>
+                    <h3 style='font-size: x-large'>${item.name}</h3>
                     <p>cost: ${beautify(item.price.toFixed(0))} ores</p>
                   </div>
                   <div class="button-right">
@@ -736,7 +731,7 @@ Game.launch = () => {
     }
     if (item.functionName == 'RockFactory') {
       if (item.owned == 1) {
-        Game.state.items[item.id + 1].hidden = 1
+        Game.state.items[item.id + 1].hidden = 0
       }
     }
     if (item.functionName == 'RockScienceLab') {
@@ -1127,7 +1122,7 @@ Game.launch = () => {
 
 
   // INIT SHIT
-  // Game.load()
+  Game.load()
   buildInventory()
   generateStoreItems()
   buildTabs()
