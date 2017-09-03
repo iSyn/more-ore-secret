@@ -495,9 +495,11 @@ footer {
 
 .button {
   font-family: 'Abel';
-  width: 93%;
+  width: 95%;
   margin-bottom: 10px;
+  border-radius: 5px;
   border: 1px solid black;
+  border-collapse: collapse;
   cursor: pointer;
   padding: 10px 20px 10px 10px;
   display: flex;

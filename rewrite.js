@@ -548,7 +548,7 @@ Game.launch = () => {
         if (item.tab == 'store') {
           if (item.hidden == 0) {
             str += `
-              <div class="button" onclick="Game.state.items[${item.id}].buy()" style='border-radius: 10px'>
+              <div class="button" onclick="Game.state.items[${item.id}].buy()">
                 <div class="button-top">
                   <div class="button-left">
                     <img src="./assets/${item.pic}" style='filter: brightness(100%); image-rendering: pixelated'/>
@@ -581,7 +581,7 @@ Game.launch = () => {
           }
           if (item.hidden == 1) {
             str += `
-              <div class="button" style='border-radius: 10px; cursor: not-allowed; box-shadow: 0 4px black; filter: brightness(50%)'>
+              <div class="button" style='cursor: not-allowed; box-shadow: 0 4px black; filter: brightness(50%)'>
                 <div class="button-top">
                   <div class="button-left">
                     <img src="./assets/${item.pic}" style='filter: brightness(0%)'/>
@@ -605,7 +605,7 @@ Game.launch = () => {
         if (item.tab == 'upgrades') {
           if (item.hidden == 0) {
             str += `
-              <div class="button" onclick="Game.state.items[${item.id}].buy()" style='border-radius: 10px'>
+              <div class="button" onclick="Game.state.items[${item.id}].buy()">
                 <div class="button-top">
                   <div class="button-left">
                     <img src="./assets/${item.pic}" style='filter: brightness(100%); image-rendering: pixelated'/>
@@ -725,9 +725,21 @@ Game.launch = () => {
     if (item.functionName == 'RockCharmer') {
       if (item.owned == 1) {
         Game.state.items[item.id + 1].hidden = 0
+        Game.state.items[item.id + 2].hidden = 1
       }
     }
     if (item.functionName == 'RockHospital') {
+      if (item.owned == 1) {
+        Game.state.items[item.id + 1].hidden = 0
+        Game.state.items[item.id + 2].hidden = 1
+      }
+    }
+    if (item.functionName == 'RockFactory') {
+      if (item.owned == 1) {
+        Game.state.items[item.id + 1].hidden = 1
+      }
+    }
+    if (item.functionName == 'RockScienceLab') {
       //
     }
     if (item.functionName == 'CleanMagnifyingGlass') {
@@ -836,11 +848,27 @@ Game.launch = () => {
       name: 'Rock Hospital',
       tab: 'store',
       pic: 'wip.png',
-      production: 300,
+      production: 260,
       desc: 'Heals sick rocks back to healthy',
       fillerQuote: 'wip',
-      price: 65000,
+      price: 110000,
       hidden: 2
+    }, {
+      name: 'Rock Factory',
+      tab: 'store',
+      pic: 'wip.png',
+      production: 1000,
+      desc: 'Churn out artificial ores',
+      fillerQuote: 'wip',
+      price: 1300000
+    }, {
+      name: 'Rock Science Lab',
+      tab: 'store',
+      pic: 'wip.png',
+      production: 6100,
+      desc: 'Science shit up',
+      fillerQuote: 'wip',
+      price: 7000000
     },
     //UPGRADES
     {
@@ -1099,7 +1127,7 @@ Game.launch = () => {
 
 
   // INIT SHIT
-  Game.load()
+  // Game.load()
   buildInventory()
   generateStoreItems()
   buildTabs()
