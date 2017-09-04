@@ -8,22 +8,15 @@ let beautify = (num) => {
     return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); //found on https://stackoverflow.com/questions/2901102/how-to-print-a-number-with-commas-as-thousands-separators-in-javascript
   } else {
     if (num >= 1000000 && num < 1000000000) {
-      return (num/1000000).toFixed(1) + 'M'
+      return (num/1000000).toFixed(3) + 'M'
     }
     if (num >= 1000000000 && num < 1000000000000) {
-      return (num/1000000000).toFixed(1) + 'B'
+      return (num/1000000000).toFixed(3) + 'B'
     }
     if (num >= 1000000000000) {
-      return (num/1000000000000).toFixed(1) + 'T'
+      return (num/1000000000000).toFixed(3) + 'T'
     }
   }
-}
-
-formatTime = () => {
-  let time = new Date(null);
-  time.setSeconds(Game.stats.timePlayed); // specify value for SECONDS here
-  let result = time.toISOString().substr(11, 8);
-  return result
 }
 
 // Game
@@ -31,84 +24,52 @@ formatTime = () => {
 let Game = {}
 
 Game.launch = () => {
-  console.log('Game launched')
 
-  // Game.state = {
-  //   ores: 0,
-  //   oreHp: 50,
-  //   oresPerSecond: 0,
-  //   oreClickMultiplier: 5,
-  //   player: {
-  //     level: 1,
-  //     strength: 0,
-  //     luck: 0,
-  //     currentXP: 0,
-  //     XPNeeded: 100,
-  //     availableSp: 0
-  //   },
-  //   tabs: [
-  //     {
-  //       name: 'store',
-  //       locked: false
-  //     }, {
-  //       name: 'upgrades',
-  //       locked: true
-  //     }, {
-  //       name: 'stats',
-  //       locked: false
-  //     }
-  //   ],
-  //   stats: {
-  //     oreClicks: 0,
-  //     oreCritClicks: 0,
-  //     rocksDestroyed: 0,
-  //     itemsPickedUp: 0,
-  //     timePlayed: 0
-  //   },
-  // }
-
-  Game.ores = 0
-  Game.oreHp = 50
-  Game.oresPerSecond = 0
-  Game.oreClickMultiplier = 5
-  Game.level = {
-    currentLevel: 1,
-    currentStrength: 0,
-    currentLuck: 0,
-    currentXP: 0,
-    XPNeeded: 100,
-    availableSP: 0
-  }
-  Game.tabs = [
-    {
-      name: 'store',
-      locked: false
-    }, {
-      name: 'upgrades',
-      locked: true
-    }, {
-      name: 'stats',
-      locked: false
-    }
-  ]
-  Game.stats = {
-    oreClicks: 0,
-    oreCritClick: 0,
-    rocksDestroyed: 0,
-    itemsPickedUp: 0,
-    timePlayed: 0
-  }
-  Game.selectedTab = 'store'
-  Game.newItem = {}
-  Game.currentPickaxe = {
-    name: 'Beginners Wood Pickaxe',
-    rarity: 'Common',
-    itemLevel: 1,
-    material: 'Wood',
+  Game.state = {
+    ores: 0,
+    oreHp: 50,
+    oreCurrentHp: 50,
+    oresPerSecond: 0,
+    oreClickMultiplier: 5,
+    player: {
+      lvl: 1,
+      str: 0,
+      luk: 0,
+      int: 0,
+      dex: 0,
+      currentXp: 0,
+      xpNeeded: 100,
+      availableSp: 0,
+      pickaxe: {
+        name: 'Beginners Wood Pickaxe',
+        rarity: 'Common',
+        itemLevel: 1,
+        material: 'Wood',
+        damage: 1
+      },
+      accesory: {}
+    },
+    tabs: [
+      {
+        name: 'store',
+        locked: false
+      }, {
+        name: 'upgrades',
+        locked: true
+      }, {
+        name: 'stats',
+        locked: false
+      }
+    ],
     stats: {
-      damage: 1,
-      hasPrefix: false
-    }
+      totalOresMined: 0,
+      totalOresSpent: 0,
+      oreClicks: 0,
+      oreCritClicks: 0,
+      rocksDestroyed: 0,
+      itemsPickedUp: 0,
+      timePlayed: 0
+    },
   }
 
   Game.wipe = () => {
@@ -117,270 +78,313 @@ Game.launch = () => {
   }
 
   Game.save = () => {
-    localStorage.setItem('Game.ores', Game.ores)
-    localStorage.setItem('Game.oreHp', Game.oreHp)
-    localStorage.setItem('Game.level', JSON.stringify(Game.level))
-    localStorage.setItem('Game.tabs', JSON.stringify(Game.tabs))
-    localStorage.setItem('Game.stats', JSON.stringify(Game.stats))
-    localStorage.setItem('Game.currentPickaxe', JSON.stringify(Game.currentPickaxe))
-    for (let i in Game.items) { localStorage.setItem(`item-${i}`, JSON.stringify(Game.items[i])) }
-    for (let i in Game.achievements) { localStorage.setItem(`achievement-${i}`, JSON.stringify(Game.achievements[i])) }
-  }
-
-  Game.load = () => {
-    if (localStorage.getItem('Game.ores') !== null) {
-      Game.ores = parseFloat(localStorage.getItem('Game.ores'))
-      Game.oreHp = parseFloat(localStorage.getItem('Game.oreHp'))
-      Game.level = JSON.parse(localStorage.getItem('Game.level'))
-      Game.tabs = JSON.parse(localStorage.getItem('Game.tabs'))
-      Game.stats = JSON.parse(localStorage.getItem('Game.stats'))
-      Game.currentPickaxe = JSON.parse(localStorage.getItem('Game.currentPickaxe'))
-      for (let i in Game.items) {
-        Game.items[i] = JSON.parse(localStorage.getItem(`item-${i}`))
-      }
-      for (let i in Game.achievements) {
-        Game.achievements[i] = JSON.parse(localStorage.getItem(`achievement-${i}`))
-      }
-      if (Game.items.MagnifyingGlass.owned > 0) {
-        Game.oreClickArea()
-      }
+    localStorage.setItem('state', JSON.stringify(Game.state))
+    for (i in Game.items) {
+      localStorage.setItem(`item-${i}`, JSON.stringify(Game.items[i]))
     }
   }
 
-  Game.playSound = (sound) => {
-    let sfx = new Audio(`./assets/${sound}.wav`)
+  Game.load = () => {
+    if (localStorage.getItem('state') !== null) {
+      Game.state = JSON.parse(localStorage.getItem('state'))
+
+      for (i in Game.items) {
+        Game.items[i] = JSON.parse(localStorage.getItem(`item-${i}`))
+      }
+
+      generateStoreItems()
+    }
+  }
+
+  let playSound = (snd) => {
+    let sfx = new Audio(`./assets/${snd}.wav`)
     sfx.volume = 0.1
     sfx.play()
   }
 
-  Game.earn = (amount) => {
-    Game.ores += amount
-    Game.rebuildInventory()
+  let earn = (amt) => {
+    Game.state.ores += amt
+    Game.state.stats.totalOresMined += amt
+    buildInventory()
   }
 
-  Game.spend = (amount) => {
-    Game.ores -= amount
-    Game.rebuildInventory()
+  let earnOPS = () => {
+    let ops = calculateOPS()
+    earn(ops/30)
+    updatePercentage(ops/30)
   }
 
-  Game.rebuildInventory = () => {
-    let str = ''
-    str += `Ores: ${beautify(Game.ores.toFixed(0))}`
-    if (Game.oresPerSecond > 0) {
-      str += ` (${Game.oresPerSecond.toFixed(1)}/s)`
+  let spend = (amt) => {
+    Game.state.ores -= amt
+    Game.state.stats.totalOresSpent += amt
+  }
+
+  let calculateOPC = (type) => {
+    let opc = 0
+    let str = Game.state.player.str
+    if (Game.state.player.pickaxe.prefixStat) {
+      if (Game.state.player.pickaxe.prefixStat == 'Strength') {
+        str += Game.state.player.pickaxe.prefixStatVal
+      }
     }
-    s('.ores').innerHTML = str
-    s('.level').innerHTML = `Level: ${Game.level.currentLevel} (${Game.level.currentXP}/${Game.level.XPNeeded}xp)`
+    opc += Game.state.player.pickaxe.damage
+    opc += Game.state.player.pickaxe.damage * str * .1
+
+    if (type == 'crit') {
+      opc *= Game.state.oreClickMultiplier
+    }
+
+    return opc
   }
 
-  Game.dropItems = () => {
+  let calculateOPS = () => {
+    let ops = 0
+
+    for (i in Game.items) {
+      ops += Game.items[i].production * Game.items[i].owned
+    }
+
+    Game.state.oresPerSecond = ops
+    return ops
+  }
+
+  let dropItem = () => {
     let randomSign = Math.round(Math.random()) * 2 - 1
     let randomNumber = (Math.floor(Math.random() * 200) + 1) * randomSign
     let randomY = Math.floor(Math.random() * 50) + 1
     let thisItemClicked = false
-    let amountOfRocksDestroyed = Game.stats.rocksDestroyed
+    let amountOfRocksDestroyed = Game.state.stats.rocksDestroyed
+    let iLvl = amountOfRocksDestroyed
 
-    if (Game.stats.rocksDestroyed == 1) {
+    if (Game.state.stats.rocksDestroyed == 1) {
+
+      let itemContainer = document.createElement('div')
+      itemContainer.classList.add('item-container')
+      itemContainer.innerHTML = `
+        <div class="item-pouch-glow"></div>
+        <div class="item-pouch-glow2"></div>
+        <div class="item-pouch-glow3"></div>
+      `
+      let orePos = s('.ore').getBoundingClientRect()
+      itemContainer.style.position = 'absolute'
+      itemContainer.style.top = orePos.bottom + randomY + 'px'
+      itemContainer.style.left = (orePos.left + orePos.right)/2 + randomNumber + 'px'
+
       let item = document.createElement('div')
       item.classList.add('item-drop')
-      item.style.position = 'absolute'
+      item.style.position = 'relative'
 
-      let orePos = s('.ore').getBoundingClientRect()
-      item.style.top = orePos.bottom + randomY + 'px'
-      item.style.left = (orePos.left + orePos.right)/2 + randomNumber + 'px'
+      itemContainer.append(item)
 
       item.addEventListener('click', () => {
-        if (thisItemClicked == false) {
-          thisItemClicked = true
-          s('.item-drop').classList.add('item-pickup-animation')
-          Game.pickUpItem(item, amountOfRocksDestroyed)
-        }
+        s('.item-pouch-glow').style.display = 'none'
+        s('.item-pouch-glow2').style.display = 'none'
+        s('.item-pouch-glow3').style.display = 'none'
+        item.style.pointerEvents = 'none'
+        s('.item-drop').classList.add('item-pickup-animation')
+        setTimeout(() => {
+          itemContainer.remove()
+          pickUpItem(iLvl)
+        }, 800)
       })
 
-      s('body').append(item)
+      s('body').append(itemContainer)
     } else {
-      if (Math.random() <= .2) { // 20% chance
+      if (Math.random() < .3) { // 30% chance
+        let itemContainer = document.createElement('div')
+        console.log(itemContainer)
+        itemContainer.classList.add('item-container')
+        itemContainer.innerHTML = `
+          <div class="item-pouch-glow"></div>
+          <div class="item-pouch-glow2"></div>
+          <div class="item-pouch-glow3"></div>
+        `
+        let orePos = s('.ore').getBoundingClientRect()
+        itemContainer.style.position = 'absolute'
+        itemContainer.style.top = orePos.bottom + randomY + 'px'
+        itemContainer.style.left = (orePos.left + orePos.right)/2 + randomNumber + 'px'
+
         let item = document.createElement('div')
         item.classList.add('item-drop')
-        item.style.position = 'absolute'
+        item.style.position = 'relative'
 
-        let orePos = s('.ore').getBoundingClientRect()
-        item.style.top = orePos.bottom + randomY + 'px'
-        item.style.left = (orePos.left + orePos.right)/2 + randomNumber + 'px'
+        itemContainer.append(item)
 
         item.addEventListener('click', () => {
-          if (thisItemClicked == false) {
-            thisItemClicked = true
-            s('.item-drop').classList.add('item-pickup-animation')
-            Game.pickUpItem(item, amountOfRocksDestroyed)
-          }
-        })
+          s('.item-pouch-glow').style.display = 'none'
+          s('.item-pouch-glow2').style.display = 'none'
+          s('.item-pouch-glow3').style.display = 'none'
+          item.style.pointerEvents = 'none'
+          s('.item-drop').classList.add('item-pickup-animation')
+          setTimeout(() => {
+            itemContainer.remove()
+            pickUpItem(iLvl)
+          }, 800)
+          })
 
-        s('body').append(item)
-      }
+          s('body').append(itemContainer)
+        }
     }
   }
 
-  Game.rarity = [
-    {
-      name: 'Common',
-      mult: 1
-    }, {
-      name: 'Uncommon',
-      mult: 1.5
-    }, {
-      name: 'Unique',
-      mult: 2
-    }, {
-      name: 'Rare',
-      mult: 3
-    }, {
-      name: 'Legendary',
-      mult: 5
-    }
-  ]
-  Game.prefixes = [
-    {
-      name: 'Lucky',
-      stat: 'Luck',
-      mult: 1
-    }, {
-      name: 'Unlucky',
-      stat: 'Luck',
-      mult: -1
-    }, {
-      name: 'Fortuitous',
-      stat: 'Luck',
-      mult: 2
-    }, {
-      name: 'Poor',
-      stat: 'Luck',
-      mult: -1
-    }, {
-      name: 'Strong',
-      stat: 'Strength',
-      mult: 1
-    }, {
-      name: 'Weak',
-      stat: 'Strength',
-      mult: -1
-    }, {
-      name: 'Big',
-      stat: 'Strength',
-      mult: 1
-    }, {
-      name: 'Small',
-      stat: 'Strength',
-      mult: -1
-    }, {
-      name: 'Baby',
-      stat: 'Strength',
-      mult: -2
-    }, {
-      name: 'Gigantic',
-      stat: 'Strength',
-      mult: 2
-    },   {
-      name: 'Durable',
-      stat: 'Strength',
-      mult: 1
-    }, {
-      name: 'Frail',
-      stat: 'Strength',
-      mult: -1.5
-    }, {
-      name: 'Hard',
-      stat: 'Strength',
-      mult: 1
-    }, {
-      name: 'Weak',
-      stat: 'Strength',
-      mult: -1
-    }, {
-      name: 'Broken',
-      stat: 'Strength',
-      mult: -2
-    }, {
-      name: 'Shoddy',
-      stat: 'Strength',
-      mult: -1
-    }
-  ]
-  Game.materials = [
-    {
-      name: 'Wood',
-      mult: .5
-    }, {
-      name: 'Stone',
-      mult: 1.5
-    }, {
-      name: 'Iron',
-      mult: 3
-    }, {
-      name: 'Steel',
-      mult: 5
-    }, {
-      name: 'Diamond',
-      mult: 10
-    }
-  ]
-  Game.suffixes = [
-    {
-      name: 'of the Giant',
-      stat: 'strength',
-      mult: 10
-    }, {
-      name: 'of the Leprechaun',
-      stat: 'luck',
-      mult: 10
-    }
-  ]
+  let generateRandomItem = (iLvl) => {
 
-  Game.pickUpItem = (item, iLvl) => {
+    let rarity = [
+      {
+        name: 'Common',
+        mult: 1
+      }, {
+        name: 'Uncommon',
+        mult: 1.5
+      }, {
+        name: 'Unique',
+        mult: 2
+      }, {
+        name: 'Rare',
+        mult: 3
+      }, {
+        name: 'Legendary',
+        mult: 5
+      }
+    ]
+    let prefixes = [
+      {
+        name: 'Lucky',
+        stat: 'Luck',
+        mult: 1
+      }, {
+        name: 'Unlucky',
+        stat: 'Luck',
+        mult: -1
+      }, {
+        name: 'Fortuitous',
+        stat: 'Luck',
+        mult: 2
+      }, {
+        name: 'Poor',
+        stat: 'Luck',
+        mult: -1
+      }, {
+        name: 'Strong',
+        stat: 'Strength',
+        mult: 1
+      }, {
+        name: 'Weak',
+        stat: 'Strength',
+        mult: -1
+      }, {
+        name: 'Big',
+        stat: 'Strength',
+        mult: 1
+      }, {
+        name: 'Small',
+        stat: 'Strength',
+        mult: -1
+      }, {
+        name: 'Baby',
+        stat: 'Strength',
+        mult: -2
+      }, {
+        name: 'Gigantic',
+        stat: 'Strength',
+        mult: 2
+      },   {
+        name: 'Durable',
+        stat: 'Strength',
+        mult: 1
+      }, {
+        name: 'Frail',
+        stat: 'Strength',
+        mult: -1.5
+      }, {
+        name: 'Hard',
+        stat: 'Strength',
+        mult: 1
+      }, {
+        name: 'Weak',
+        stat: 'Strength',
+        mult: -1
+      }, {
+        name: 'Broken',
+        stat: 'Strength',
+        mult: -2
+      }, {
+        name: 'Shoddy',
+        stat: 'Strength',
+        mult: -1
+      }
+    ]
+    let materials = [
+      {
+        name: 'Wood',
+        mult: .5
+      }, {
+        name: 'Stone',
+        mult: 1.5
+      }, {
+        name: 'Iron',
+        mult: 3
+      }, {
+        name: 'Steel',
+        mult: 5
+      }, {
+        name: 'Diamond',
+        mult: 10
+      }
+    ]
+    let suffixes = [
+      {
+        name: 'of the Giant',
+        stat: 'strength',
+        mult: 10
+      }, {
+        name: 'of the Leprechaun',
+        stat: 'luck',
+        mult: 10
+      }
+    ]
 
-    Game.stats.itemsPickedUp++
-    // GENERATE A RANDOM ITEM
     let range = Math.ceil((Math.random() * iLvl/2) + iLvl/2) // Picks a random whole number from 1 to iLvl
 
     let chooseRarity = () => {
-      let rarity
+      let selectedRarity
       let randomNum = Math.random()
       if (randomNum >= 0) {
-        rarity = Game.rarity[0]
+        selectedRarity = rarity[0]
       }
       if (randomNum >= .5) {
-        rarity = Game.rarity[1]
+        selectedRarity = rarity[1]
       }
       if (randomNum >= .7) {
-        rarity = Game.rarity[2]
+        selectedRarity = rarity[2]
       }
       if (randomNum >= .9) {
-        rarity = Game.rarity[3]
+        selectedRarity = rarity[3]
       }
       if (randomNum >= .95) {
-        rarity = Game.rarity[4]
+        selectedRarity = rarity[4]
       }
-      return rarity
+      return selectedRarity
     }
     let chooseMaterial = () => {
-      let material
+      let selectedMaterial
       let randomNum = Math.random()
       if (randomNum >= 0) {
-        material = Game.materials[0]
+        selectedMaterial = materials[0]
       }
       if (randomNum >= .4) {
-        material = Game.materials[1]
+        selectedMaterial = materials[1]
       }
       if (randomNum >= .7) {
-        material = Game.materials[2]
+        selectedMaterial = materials[2]
       }
       if (randomNum >= .9) {
-        material = Game.materials[3]
+        selectedMaterial = materials[3]
       }
       if (randomNum >= .95) {
-        material = Game.materials[4]
+        selectedMaterial = materials[4]
       }
-      return material
+      return selectedMaterial
     }
 
     let selectedRarity = chooseRarity()
@@ -393,54 +397,47 @@ Game.launch = () => {
     let suffixName
 
     if (selectedRarity.name == 'Legendary' || selectedRarity.name == 'Rare') {
-      let selectedSuffix = Game.suffixes[Math.floor(Math.random() * Game.suffixes.length)]
+      let selectedSuffix = suffixes[Math.floor(Math.random() * suffixes.length)]
       totalMult += selectedSuffix.mult
       suffixName = selectedSuffix.name
     }
-
-    if (Math.random() >= .6) {
-      let selectedPrefix = Game.prefixes[Math.floor(Math.random() * Game.prefixes.length)]
+    if (Math.random() >= .6) { // 40% chance for a prefix
+      let selectedPrefix = prefixes[Math.floor(Math.random() * prefixes.length)]
       prefixVal = (range + totalMult) * selectedPrefix.mult
       prefixStat = selectedPrefix.stat
       prefixName = selectedPrefix.name
     }
-
     if (prefixName) {
       itemName = `${prefixName} ${selectedMaterial.name} Pickaxe`
     } else {
       itemName = `${selectedMaterial.name} Pickaxe`
     }
-
     if (suffixName) {
       itemName += ` ${suffixName}`
     }
 
-    let calculateDmg = iLvl * totalMult // GOTTA EDIT THIS <------------------
+    let calculateDmg = iLvl * totalMult
 
-    Game.newItem = {
+    let newItem = {
       name: itemName,
       rarity: selectedRarity.name,
       material: selectedMaterial.name,
       itemLevel: iLvl,
-      stats: {
-        damage: calculateDmg,
-        hasPrefix: false
-      }
+      damage: calculateDmg,
     }
 
     if (prefixName) {
-      Game.newItem.stats['hasPrefix'] = true
-      Game.newItem.stats['stat'] = prefixStat
-      Game.newItem.stats['statVal'] = prefixVal
+      newItem['hasPrefix'] = true
+      newItem['prefixStat'] = prefixStat
+      newItem['prefixStatVal'] = prefixVal
     }
 
-    setTimeout(() => {
-      item.remove()
-      Game.itemModal(Game.newItem)
-    }, 800)
+    return newItem
   }
 
-  Game.itemModal = (item) => {
+  let pickUpItem = (iLvl) => {
+    Game.state.stats.itemsPickedUp++
+    Game.newItem = generateRandomItem(iLvl)
     let itemModal = document.createElement('div')
     itemModal.classList.add('item-modal-container')
 
@@ -452,21 +449,21 @@ Game.launch = () => {
         <div class="item-modal-middle">
           <div class="item-modal-middle-left">
             <p>You Found</p>
-            <h2 class='${item.rarity}' style='font-size: xx-large'>${item.name}</h2>
+            <h2 class='${Game.newItem.rarity}' style='font-size: xx-large'>${Game.newItem.name}</h2>
             <div class="item-modal-img">
-              <div class="pickaxe-aura aura-${item.rarity}"></div>
-              <div class="pickaxe-top ${item.material}"></div>
+              <div class="pickaxe-aura aura-${Game.newItem.rarity}"></div>
+              <div class="pickaxe-top ${Game.newItem.material}"></div>
               <div class="pickaxe-bottom"></div>
             </div>
             <div class="item-stats">
-              <p style='font-style: italic; font-size: small'>${item.rarity}</p>
+              <p style='font-style: italic; font-size: small'>${Game.newItem.rarity}</p>
               <br/>
-              <p>Item Level: ${item.itemLevel}</p>
-              <p>Damage: ${beautify(item.stats.damage)}</p>
+              <p>Item Level: ${Game.newItem.itemLevel}</p>
+              <p>Damage: ${beautify(Game.newItem.damage)}</p>
               `
-              if (item.stats.hasPrefix == true) {
+              if (Game.newItem.hasPrefix == true) {
                 str += `
-                  <p>${item.stats.stat}: ${Math.floor(item.stats.statVal)}</p>
+                  <p>${Game.newItem.prefixStat}: ${Math.floor(Game.newItem.prefixStatVal)}</p>
                 `
               }
               str += `
@@ -474,21 +471,21 @@ Game.launch = () => {
           </div>
           <div class="item-modal-middle-right">
             <p>Currently Equipped</p>
-            <h2 class='${Game.currentPickaxe.rarity}' style='font-size: xx-large'>${Game.currentPickaxe.name}</h2>
+            <h2 class='${Game.state.player.pickaxe.rarity}' style='font-size: xx-large'>${Game.state.player.pickaxe.name}</h2>
             <div class="item-modal-img">
-              <div class="pickaxe-aura aura-${Game.currentPickaxe.rarity}"></div>
-              <div class="pickaxe-top ${Game.currentPickaxe.material}"></div>
+              <div class="pickaxe-aura aura-${Game.state.player.pickaxe.rarity}"></div>
+              <div class="pickaxe-top ${Game.state.player.pickaxe.material}"></div>
               <div class="pickaxe-bottom"></div>
             </div>
             <div class="item-stats">
-              <p style='font-style: italic; font-size: small'>${Game.currentPickaxe.rarity}</p>
+              <p style='font-style: italic; font-size: small'>${Game.state.player.pickaxe.rarity}</p>
               <br/>
-              <p>Item Level: ${Game.currentPickaxe.itemLevel}</p>
-              <p>Damage: ${beautify(Game.currentPickaxe.stats.damage)}</p>
+              <p>Item Level: ${Game.state.player.pickaxe.itemLevel}</p>
+              <p>Damage: ${beautify(Game.state.player.pickaxe.damage)}</p>
               `
-              if (Game.currentPickaxe.stats.hasPrefix == true) {
+              if (Game.state.player.pickaxe.hasPrefix == true) {
                 str += `
-                  <p>${Game.currentPickaxe.stats.stat}: ${Math.floor(Game.currentPickaxe.stats.statVal)}</p>
+                  <p>${Game.state.player.pickaxe.prefixStat}: ${Math.floor(Game.state.player.pickaxe.prefixStatVal)}</p>
                 `
               }
               str += `
@@ -496,8 +493,8 @@ Game.launch = () => {
           </div>
         </div>
         <div class="item-modal-bottom">
-          <button style='margin-right: 10px;' onclick=Game.modalButtonClick('equip')>Equip</button>
-          <button style='margin-left: 10px;' onclick=Game.modalButtonClick()>Discard</button>
+          <button style='margin-right: 10px;' onclick=Game.itemModalClick('equip')>Equip</button>
+          <button style='margin-left: 10px;' onclick=Game.itemModalClick()>Discard</button>
         </div>
       </div>
     `
@@ -506,12 +503,388 @@ Game.launch = () => {
     s('body').append(itemModal)
   }
 
-  Game.modalButtonClick = (str) => {
+  Game.itemModalClick = (str) => {
 
     if (str == 'equip') {
-      Game.currentPickaxe = Game.newItem
+      Game.state.player.pickaxe = Game.newItem
     }
     s('.item-modal-container').remove()
+  }
+
+  let buildInventory = () => {
+    let str = ''
+    str += `Ores: ${beautify(Game.state.ores.toFixed(1))}`
+    if (Game.state.oresPerSecond > 0) {
+      str += ` (${Game.state.oresPerSecond.toFixed(1)}/s)`
+    }
+    s('.ores').innerHTML = str
+    s('.level').innerHTML = `Level: ${Game.state.player.lvl} (${Game.state.player.currentXp}/${Game.state.player.xpNeeded})`
+  }
+
+  let buildTabs = () => {
+    let str = ''
+    for (i = 0; i < Game.state.tabs.length; i++) {
+      if (Game.state.tabs[i].locked == false) {
+        str += `
+          <div id='${Game.state.tabs[i].name}-tab' class='tab' onclick='Game.switchTab("${Game.state.tabs[i].name}")' style='display: flex; align-items: center; justify-content: center;'>
+            <p style='font-size: x-large'>${Game.state.tabs[i].name}</p>
+          </div>
+        `
+      }
+    }
+    s('.tabs').innerHTML = str
+  }
+
+  Game.switchTab = (selectedTab) => {
+    let tabs = document.querySelectorAll('.tab')
+    tabs.forEach((tab) => {
+      tab.classList.remove('selected')
+    })
+    s(`#${selectedTab}-tab`).classList.add('selected')
+    Game.selectedTab = selectedTab
+    buildTabContent()
+  }
+
+  let buildTabContent = () => {
+    let str = ''
+    if (Game.selectedTab == 'store') {
+      str += `
+        <div id='anchor-point' class="horizontal-separator" style='height: 8px'></div>
+        <div class="upgrades-container">
+        `
+        let hasContent = 0
+        for (i in Game.items) {
+          if (Game.items[i].type == 'upgrade') {
+            if (Game.items[i].hidden == 0) {
+              hasContent = 1
+              str += `
+                <div class="upgrade-item" onmouseover="Game.showTooltip('${i}')" onmouseout="Game.hideTooltip()" onclick='Game.items["${i}"].buy()'></div>
+              `
+            }
+          }
+        }
+        if (hasContent == 0) {
+          str += ' <h3>Upgrades</h3>'
+        }
+
+        str += `
+        </div>
+        <div class="horizontal-separator" style='height: 8px; margin-bottom: 20px;'></div>
+      `
+      for (let i in Game.items) {
+        let item = Game.items[i]
+        if (item.type == 'item') {
+          if (item.hidden == 0) {
+            str += `
+              <div class="button" onclick="Game.items['${item.functionName}'].buy()">
+                <div class="button-top">
+                  <div class="button-left">
+                    <img src="./assets/${item.pic}" style='filter: brightness(100%); image-rendering: pixelated'/>
+                  </div>
+                  <div class="button-middle">
+                    <h3 style='font-size: x-large'>${item.name}</h3>
+                    <p>cost: ${beautify(item.price.toFixed(0))} ores</p>
+                  </div>
+                  <div class="button-right">
+                    <p style='font-size: xx-large'>${item.owned}</p>
+                  </div>
+                </div>
+                <div class="button-bottom">
+                  <hr/>
+                  <p>${item.desc}</p>
+                  <hr />
+                  `
+                  if (item.owned > 0) {
+                    str += `
+                      <p>Each ${item.name} generates ${item.production} ores per second</p>
+                      <p> <span class='bold'>${item.owned}</span> ${item.name} generating <span class='bold'>${(item.production * item.owned).toFixed(1)}</span> ores per second</p>
+                    `
+                  }
+
+                  str += `
+                  <br/>
+                  <p style='font-style: italic; text-align: center'>“${item.fillerQuote}”</p>
+                </div>
+              </div>
+            `
+          }
+          if (item.hidden == 1) {
+            str += `
+              <div class="button" style='cursor: not-allowed; box-shadow: 0 4px black; filter: brightness(50%)'>
+                <div class="button-top">
+                  <div class="button-left">
+                    <img src="./assets/${item.pic}" style='filter: brightness(0%)'/>
+                  </div>
+                  <div class="button-middle">
+                    <h3 style='font-size: larger'>???</h3>
+                    <p>cost: ??? ores</p>
+                  </div>
+                  <div class="button-right">
+                  </div>
+                </div>
+              </div>
+              `
+          }
+        }
+      }
+      str += `
+          <div class="cancer">
+            <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+            <!-- ad -->
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-4584563958870163"
+                 data-ad-slot="6565116738"
+                 data-ad-format="auto"></ins>
+            <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+          </div>
+        `
+    }
+
+    if (Game.selectedTab == 'stats') {
+      str += `
+
+        <div class='stat-sheet'>
+
+          <div class="stat-sheet-right">
+            <div class="stats-container">
+              <div class="single-stat" style='font-size: x-large'>
+                <p class='stat-left'>Level: </p>
+                <p>${Game.state.player.lvl}</p>
+              </div>
+              <hr/>
+              <p style='text-align: center;'>Available SP: ${Game.state.player.availableSp}</p>
+              <br/>
+              <div class="single-stat">
+                <p class='stat-left'>Strength: </p>
+                <p>${Game.state.player.str}</p>
+                `
+
+                if (Game.state.player.availableSp > 0) {
+                  str += `<button class='level-up-btn' onclick='Game.addStat("str")'>+</button>`
+                }
+
+              str += `
+              <br/>
+              </div>
+              <div class="single-stat">
+                <p class='stat-left'>Luck: </p>
+                <p>${Game.state.player.luk}</p>
+
+                `
+                if (Game.state.player.availableSp > 0) {
+                  str += `<button class='level-up-btn' onclick='Game.addStat("luk")'>+</button>`
+                }
+
+                str += `
+
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <p>Ore Clicks: ${Game.state.stats.oreClicks}</p>
+        <p>Ore Crit Clicks: ${Game.state.stats.oreCritClicks} </p>
+        <p>Rocks Destroyed: ${Game.state.stats.rocksDestroyed}</p>
+        <p>Items Picked Up: ${Game.state.stats.itemsPickedUp}</p>
+
+        <button onclick=Game.save()>Save</button>
+        <button onclick=Game.wipe()>Wipe Save</button>
+      `
+    }
+    s('.tab-content').innerHTML = str
+  }
+
+  Game.showTooltip = (itemName) => {
+    let item = Game.items[itemName]
+    let tooltip = s('.tooltip')
+    let anchor = s('#main-separator').getBoundingClientRect()
+
+    tooltip.classList.add('tooltip-container')
+    tooltip.style.display = 'block'
+    tooltip.style.width = '300px'
+    tooltip.style.background = 'white'
+    tooltip.style.border = '1px solid black'
+    tooltip.style.position = 'absolute'
+    tooltip.style.left = anchor.left - 300 + 'px'
+    tooltip.style.top = s('#anchor-point').getBoundingClientRect().bottom + 'px'
+
+    tooltip.innerHTML = `
+      <div class="tooltip-top">
+        <p>pic</p>
+        <h3 style='flex-grow: 1'>${item.name}</h3>
+        <p>${beautify(item.price)} ores</p>
+      </div>
+      <hr />
+      <div class="tooltip-bottom">
+        <p>${item.desc}</p>
+      </div>
+    `
+  }
+
+  Game.hideTooltip = () => {
+    s('.tooltip').style.display = 'none'
+  }
+
+  Game.addStat = (stat) => {
+    if (Game.state.player.availableSp > 0) {
+      Game.state.player.availableSp--
+      if (stat == 'str') Game.state.player.str++
+      if (stat == 'luk') Game.state.player.luk++
+      buildTabContent()
+    }
+  }
+
+  let buyFunction = (item) => {
+    if (item.name == 'Magnifying Glass') {
+      oreClickArea()
+      item.hidden = 2
+      Game.items['CleanMagnifyingGlass'].hidden = 0
+    }
+    if (item.name == 'Old Man') {
+      if (item.owned == 1) {
+        Game.items['NearSightedGlasses'].hidden = 0
+        Game.items['RockFarmer'].hidden = 0
+        Game.items['RockMiner'].hidden = 1
+      }
+    }
+    if (item.name == 'Rock Farmer') {
+      if (item.owned == 1) {
+        Game.items['RockMiner'].hidden = 0
+        Game.items['RockCharmer'].hidden = 1
+      }
+    }
+    if (item.name == 'Rock Miner') {
+      if (item.owned == 1) {
+        Game.items['RockCharmer'].hidden = 0
+      }
+    }
+    if (item.name == 'Rock Charmer') {
+      if (item.owned == 1) {
+        //
+      }
+    }
+  }
+
+  let Item = function(obj, id) {
+    // this.id = id
+    this.name = obj.name
+    this.functionName = obj.name.replace(/ /g, '')
+    this.type = obj.type
+    this.pic = obj.pic
+    this.production = obj.production || 0
+    this.desc = obj.desc
+    this.fillerQuote = obj.fillerQuote
+    this.basePrice = obj.price
+    this.price = obj.price
+    this.hidden = obj.hidden
+    this.owned = obj.owned || 0
+
+    this.buy = () => {
+      if (Game.state.ores >= this.price) {
+        spend(this.price)
+        this.owned++
+        playSound('buysound')
+        this.price = this.basePrice * Math.pow(1.05, this.owned)
+        buyFunction(this)
+        buildInventory()
+        risingNumber(0, 'spendMoney')
+        generateStoreItems()
+        buildTabContent(Game.selectedTab)
+      }
+    }
+
+    Game.items[this.functionName] = this
+  }
+
+  Game.items = []
+  // ITEMS
+  Game.items['MagnifyingGlass'] = {
+    name: 'Magnifying Glass',
+    type: 'item',
+    pic: 'magnifying-glass.png',
+    desc: 'Allows you to spot weakpoints inside the rock',
+    fillerQuote: 'wip',
+    price: 5,
+    hidden: 0
+  }
+  Game.items['OldMan'] = {
+    name: 'Old Man',
+    type: 'item',
+    pic: 'oldman.png',
+    production: .2,
+    desc: 'wip',
+    fillerQuote: 'wip',
+    price: 10,
+    hidden: 0
+  }
+  Game.items['RockFarmer'] = {
+    name: 'Rock Farmer',
+    type: 'item',
+    pic: 'rock-farmer.png',
+    production: 1,
+    desc: 'wip',
+    fillerQuote: 'wip',
+    price: 80,
+    hidden: 1
+  }
+  Game.items['RockMiner'] = {
+    name: 'Rock Miner',
+    type: 'item',
+    pic: 'rock-miner.png',
+    production: 40,
+    desc: 'wip',
+    fillerQuote: 'wip',
+    price: 300,
+    hidden: 2
+  }
+  Game.items['RockCharmer'] = {
+    name: 'Rock Charmer',
+    type: 'item',
+    pic: 'wip.png',
+    production: 560,
+    desc: 'wip',
+    fillerQuote: 'wip',
+    price: 1250,
+    hidden: 2
+  }
+
+  // UPGRADES
+  Game.items['CleanMagnifyingGlass'] = {
+    name: 'Clean Magnifying Glass',
+    type: 'upgrade',
+    pic: 'wip.png',
+    desc: 'Increases critical hit multiplier to 10x',
+    fillerQuote: 'wip',
+    price: 100,
+    hidden: 1,
+  }
+  Game.items['PolishMagnifyingGlass'] = {
+    name: 'Polish Magnifying Glass',
+    type: 'upgrade',
+    pic: 'wip.png',
+    desc: 'Increases critical hit multiplier to 15x',
+    fillerQuote: 'wip',
+    price: 15000,
+    hidden: 1,
+  }
+  Game.items['NearSightedGlasses'] = {
+    name: 'Near Sighted Glasses',
+    type: 'upgrade',
+    pic: 'glasses.png',
+    desc: 'doubles the production of Old Men',
+    fillerQuote: 'wip',
+    price: 500,
+    hidden: 1,
+  }
+
+  let generateStoreItems = () => {
+    for (i in Game.items) {
+      new Item(Game.items[i])
+    }
   }
 
   let soundPlayed1 = false
@@ -519,78 +892,98 @@ Game.launch = () => {
   let soundPlayed3 = false
   let soundPlayed4 = false
   let soundPlayed5 = false
-  let currentHp = Game.oreHp
   let whichPic = Math.floor(Math.random() * 4) + 1
-  Game.updatePercentage = (amount) => {
-    if (currentHp > 0) {
-      if (currentHp - amount > 0) {
-        currentHp -= amount
-        s('.ore-hp').innerHTML = `${((currentHp/Game.oreHp)*100).toFixed(0)}%`
-      } else {
-        currentHp = 0
-        s('.ore-hp').innerHTML = `0%`
+  let updatePercentage = (amount) => {
+    if (Game.state.oreCurrentHp - amount > 0) {
+      Game.state.oreCurrentHp -= amount
+      s('.ore-hp').innerHTML = `${((Game.state.oreCurrentHp/Game.state.oreHp)*100).toFixed(0)}%`
+
+      if (Game.state.oreCurrentHp/Game.state.oreHp > .8 ) {
+        s('.ore').style.background = `url("./assets/ore${whichPic}-1.png")`
+        s('.ore').style.backgroundSize = 'cover'
+      }
+      if (Game.state.oreCurrentHp/Game.state.oreHp <= .8 && soundPlayed1 == false) {
+        s('.ore').style.background = `url("assets/ore${whichPic}-2.png")`
+        s('.ore').style.backgroundSize = 'cover'
+        playSound('explosion')
+        soundPlayed1 = true
+      }
+      if (Game.state.oreCurrentHp/Game.state.oreHp <= .6 && soundPlayed2 == false) {
+        s('.ore').style.background = `url("assets/ore${whichPic}-3.png")`
+        s('.ore').style.backgroundSize = 'cover'
+        playSound('explosion')
+        soundPlayed2 = true
+      }
+      if (Game.state.oreCurrentHp/Game.state.oreHp <= .4 && soundPlayed3 == false) {
+        s('.ore').style.background = `url("assets/ore${whichPic}-4.png")`
+        s('.ore').style.backgroundSize = 'cover'
+        playSound('explosion')
+        soundPlayed3 = true
+      }
+      if (Game.state.oreCurrentHp/Game.state.oreHp <= .2 && soundPlayed4 == false) {
+        s('.ore').style.background = `url("assets/ore${whichPic}-5.png")`
+        s('.ore').style.backgroundSize = 'cover'
+        playSound('explosion')
+        soundPlayed4 = true
       }
     } else {
-      Game.stats.rocksDestroyed++
-      Game.oreHp = Math.pow(Game.oreHp, 1.05)
-      currentHp = Game.oreHp
-      Game.dropItems()
-      s('.ore-hp').innerHTML = `${((currentHp/Game.oreHp)*100).toFixed(0)}%`
+      Game.state.stats.rocksDestroyed++
+      playSound('explosion2')
+      Game.state.oreHp = Math.pow(Game.state.oreHp, 1.03)
+      Game.state.oreCurrentHp = Game.state.oreHp
+      dropItem()
+      s('.ore-hp').innerHTML = '100%'
       soundPlayed1 = false
       soundPlayed2 = false
       soundPlayed3 = false
       soundPlayed4 = false
       soundPlayed5 = false
-
-      whichPic = Math.floor(Math.random() * 3) + 1
-    }
-
-    if (currentHp/Game.oreHp > 0.8) {
+      whichPic = Math.floor(Math.random() * 4) + 1
       s('.ore').style.background = `url("./assets/ore${whichPic}-1.png")`
       s('.ore').style.backgroundSize = 'cover'
     }
-    if (currentHp/Game.oreHp <= 0.8) {
-      s('.ore').style.background = `url("./assets/ore${whichPic}-2.png")`
-      s('.ore').style.backgroundSize = 'cover'
-      if (soundPlayed1 == false) {
-        Game.playSound('explosion')
-        soundPlayed1 = true
-      }
-    }
-    if (currentHp/Game.oreHp <= 0.6) {
-      s('.ore').style.background = `url("./assets/ore${whichPic}-3.png")`
-      s('.ore').style.backgroundSize = 'cover'
-      if (soundPlayed2 == false) {
-        Game.playSound('explosion')
-        soundPlayed2 = true
-      }
-    }
-    if (currentHp/Game.oreHp <= 0.4) {
-      s('.ore').style.background = `url("./assets/ore${whichPic}-4.png")`
-      s('.ore').style.backgroundSize = 'cover'
-      if (soundPlayed3 == false) {
-        Game.playSound('explosion')
-        soundPlayed3 = true
-      }
-    }
-    if (currentHp/Game.oreHp <= 0.2) {
-      s('.ore').style.background = `url("./assets/ore${whichPic}-5.png")`
-      s('.ore').style.backgroundSize = 'cover'
-      if (soundPlayed4 == false) {
-        Game.playSound('explosion')
-        soundPlayed4 = true
-      }
-    }
-    if (currentHp/Game.oreHp <= 0) {
-      s('.ore').style.background = 'url("./assets/nothing.png")'
-      if (soundPlayed5 == false) {
-        Game.playSound('explosion2')
-        soundPlayed5 = true
-      }
-    }
   }
 
-  Game.risingNumber = (amount, type) => {
+  let oreClickArea = () => {
+    let randomNumber = () => Math.floor(Math.random() * 80) + 1
+    let orePos = s('.ore').getBoundingClientRect()
+    let randomSign = Math.round(Math.random()) * 2 - 1
+    let centerX = (orePos.left + orePos.right) / 2
+    let centerY = (orePos.top + orePos.bottom) / 2
+    let randomX = centerX + (randomNumber() * randomSign)
+    let randomY = centerY + (randomNumber() * randomSign)
+
+    s('.ore-click-area').style.left = randomX + 'px'
+    s('.ore-click-area').style.top = randomY + 'px'
+    s('.ore-click-area').style.display = 'block'
+  }
+
+  let gainXp = () => {
+    if (Game.state.player.currentXp < Game.state.player.xpNeeded) {
+      Game.state.player.currentXp++
+    } else {
+      Game.state.player.currentXp = 0
+      Game.state.player.lvl++
+      Game.state.player.availableSp += 3
+      playSound('levelup')
+      Game.state.player.xpNeeded = Math.ceil(Math.pow(Game.state.player.xpNeeded, 1.05))
+      setTimeout(() => {
+        s('#stats-tab').style.boxShadow = 'none'
+      }, 1000)
+      s('#stats-tab').style.boxShadow = '0px 0px 50px yellow'
+      risingNumber(0, 'level')
+    }
+    if (Game.state.player.availableSp > 0) {
+      s('#stats-tab').innerHTML = 'stats [!]'
+      s('#stats-tab').style.fontSize = 'x-large'
+    } else {
+      s('#stats-tab').innerHTML = 'stats'
+      s('#stats-tab').style.fontSize = 'x-large'
+    }
+    buildInventory()
+  }
+
+  let risingNumber = (amount, type) => {
     let mouseX = event.clientX
     let randomNumber = Math.floor(Math.random() * 20) + 1
     let randomSign = Math.round(Math.random()) * 2 - 1
@@ -610,7 +1003,7 @@ Game.launch = () => {
     risingNumber.style.pointerEvents = 'none'
     risingNumber.style.color = 'white'
 
-    if (type == 'special') {
+    if (type == 'crit') {
       risingNumber.style.fontSize = 'xx-large'
     }
 
@@ -632,459 +1025,7 @@ Game.launch = () => {
     }, 2000)
   }
 
-  Game.oreClickArea = () => {
-    let randomNumber = () => Math.floor(Math.random() * 80) + 1
-    let orePos = s('.ore').getBoundingClientRect()
-    let randomSign = Math.round(Math.random()) * 2 - 1
-    let centerX = (orePos.left + orePos.right) / 2
-    let centerY = (orePos.top + orePos.bottom) / 2
-    let randomX = centerX + (randomNumber() * randomSign)
-    let randomY = centerY + (randomNumber() * randomSign)
-
-    s('.ore-click-area').style.left = randomX + 'px'
-    s('.ore-click-area').style.top = randomY + 'px'
-    s('.ore-click-area').style.display = 'block'
-  }
-
-  Game.buildTabs = () => {
-    let str = ''
-    for (i = 0; i < Game.tabs.length; i++) {
-      if (Game.tabs[i].locked == false) {
-        str += `
-          <div id='${Game.tabs[i].name}-tab' class='tab' onclick='Game.switchTab("${Game.tabs[i].name}")'  style='display: flex; align-items: center; justify-content: center;'>
-            <p style='font-size: x-large'>${Game.tabs[i].name}</p>
-          </div>
-        `
-      }
-    }
-    s('.tabs').innerHTML = str
-  }
-
-  Game.switchTab = (selectedTab) => {
-    let tabs = document.querySelectorAll('.tab')
-    tabs.forEach((tab) => {
-      tab.classList.remove('selected')
-    })
-    s(`#${selectedTab}-tab`).classList.add('selected')
-    Game.buildTabContent(selectedTab)
-    Game.selectedTab = selectedTab
-    // Game.playSound('changetabsound')
-  }
-
-  Game.buildTabContent = (tab) => {
-    let str = ''
-    if (tab == 'store') {
-      for (var i in Game.items) {
-        let item = Game.items[i]
-        if (item.tab == 'store') {
-          if (item.hidden == 0) {
-            str += `
-              <div class="button" onclick="Game.items.${item.functionName}.buy()" style='border-radius: 10px'>
-                <div class="button-top">
-                  <div class="button-left">
-                    <img src="./assets/${item.pic}" style='filter: brightness(100%); image-rendering: pixelated'/>
-                  </div>
-                  <div class="button-middle">
-                    <h3 style='font-size: larger'>${item.name}</h3>
-                    <p>cost: ${beautify(item.price.toFixed(0))} ores</p>
-                  </div>
-                  <div class="button-right">
-                    <p style='font-size: xx-large'>${item.owned}</p>
-                  </div>
-                </div>
-                <div class="button-bottom">
-                  <hr/>
-                  <p>${item.desc}</p>
-                  <hr />
-                  `
-                  if (item.owned > 0) {
-                    str += `
-                      <p> <span class='bold'>${item.owned}</span> ${item.name} generating <span class='bold'>${(item.production * item.owned).toFixed(1)}</span> ores per second</p>
-                    `
-                  }
-
-
-                  str += `
-                  <br/>
-                  <p style='font-style: italic; text-align: center'>“${item.fillerQuote}”</p>
-                </div>
-              </div>
-            `
-          }
-          if (item.hidden == 1) {
-            str += `
-              <div class="button" onclick="Game.items.${item.functionName}.buy()" style='border-radius: 10px; cursor: not-allowed; box-shadow: 0 4px black; filter: brightness(50%)'>
-                <div class="button-top">
-                  <div class="button-left">
-                    <img src="./assets/${item.pic}" style='filter: brightness(0%)'/>
-                  </div>
-                  <div class="button-middle">
-                    <h3 style='font-size: larger'>???</h3>
-                    <p>cost: ??? ores</p>
-                  </div>
-                  <div class="button-right">
-
-                  </div>
-                </div>
-              </div>
-              `
-          }
-        }
-      }
-    }
-
-    if (tab == 'upgrades') {
-      for (var i in Game.items) {
-        let item = Game.items[i]
-        if (item.tab == 'upgrades') {
-          if (item.hidden == 0) {
-            str += `
-              <div class="button" onclick="Game.items.${item.functionName}.buy()" style='border-radius: 10px'>
-                <div class="button-top">
-                  <div class="button-left">
-                    <img src="./assets/${item.pic}" style='filter: brightness(100%); image-rendering: pixelated'/>
-                  </div>
-                  <div class="button-middle">
-                    <h3 style='font-size: larger'>${item.name}</h3>
-                    <p>cost: ${beautify(item.price.toFixed(0))} ores</p>
-                  </div>
-                  <div class="button-right">
-                    <p style='font-size: xx-large'>${item.owned}</p>
-                  </div>
-                </div>
-
-                <div class="button-bottom">
-                  <hr/>
-                  <p>${item.desc}</p>
-                  <hr />
-                  <br/>
-                  <p style='font-style: italic; text-align: center'>“${item.fillerQuote}”</p>
-                </div>
-
-              </div>
-            `
-          }
-        }
-      }
-    }
-
-    if (tab == 'stats') {
-      str += `
-
-        <div class='stat-sheet'>
-
-          <div class="stat-sheet-right">
-            <div class="stats-container">
-              <div class="single-stat" style='font-size: x-large'>
-                <p class='stat-left'>Level: </p>
-                <p>${Game.level.currentLevel}</p>
-              </div>
-              <hr/>
-              <p style='text-align: center;'>Available SP: ${Game.level.availableSP}</p>
-              <br/>
-              <div class="single-stat">
-                <p class='stat-left'>Strength: </p>
-                <p>${Game.level.currentStrength}</p>
-                `
-
-                if (Game.level.availableSP > 0) {
-                  str += `<button class='level-up-btn' onclick='Game.addStat("str")'>+</button>`
-                }
-
-              str += `
-              <br/>
-              </div>
-              <div class="single-stat">
-                <p class='stat-left'>Luck: </p>
-                <p>${Game.level.currentLuck}</p>
-
-                `
-                if (Game.level.availableSP > 0) {
-                  str += `<button class='level-up-btn' onclick='Game.addStat("luk")'>+</button>`
-                }
-
-                str += `
-
-              </div>
-
-            </div>
-          </div>
-        </div>
-
-        <p>Ore Clicks: ${Game.stats.oreClicks}</p>
-        <p>Ore Crit Clicks: ${Game.stats.oreCritClick} </p>
-        <p>Rocks Destroyed: ${Game.stats.rocksDestroyed}</p>
-        <p>Items Picked Up: ${Game.stats.itemsPickedUp}</p>
-        <p>Time Played: ${formatTime()}</p>
-
-        <button onclick=Game.save()>Save</button>
-        <button onclick=Game.wipe()>Wipe Save</button>
-      `
-    }
-
-    s('.tab-content').innerHTML = str
-  }
-
-  Game.addStat = (stat) => {
-    if (Game.level.availableSP > 0) {
-      Game.level.availableSP--
-      if (stat == 'str') Game.level.currentStrength++
-      if (stat == 'luk') Game.level.currentLuck++
-      Game.buildTabContent(Game.selectedTab)
-    }
-  }
-
-  Game.buyFunctions = (item) => {
-    if (item.functionName == 'MagnifyingGlass') {
-      Game.oreClickArea()
-      Game.items.MagnifyingGlass.hidden = 3
-      if (Game.tabs[1].locked == true) { Game.tabs[1].locked = false; Game.buildTabs(); Game.switchTab(Game.selectedTab)}
-    }
-
-    if (item.functionName == 'OldMan') {
-      if (Game.tabs[1].locked == true) { Game.tabs[1].locked = false; Game.buildTabs(); Game.switchTab(Game.selectedTab)}
-      if (Game.items.RockFarmer.hidden == 1) {Game.items.RockFarmer.hidden = 0}
-      if (Game.items.RockMiner.hidden == 2) {Game.items.RockMiner.hidden = 1}
-    }
-
-    if (item.functionName == 'RockFarmer') {
-      if (Game.items.RockMiner.hidden == 1) {Game.items.RockMiner.hidden = 0}
-    }
-
-    if (item.functionName == 'CleanMagnifyingGlass') {
-      Game.items.CleanMagnifyingGlass.hidden = 1
-      Game.oreClickMultiplier = 10
-      Game.items.PolishMagnifyingGlass.hidden = 0
-    }
-
-    if (item.functionName == 'PolishMagnifyingGlass') {
-      Game.items.PolishMagnifyingGlass.hidden = 1
-      Game.oreClickMultiplier = 15
-      Game.items.RefineMagnifyingGlass.hidden = 0
-    }
-
-    if (item.functionName == 'RefineMagnifyingGlass') {
-      Game.items.RefineMagnifyingGlass.hidden = 1
-      Game.oreClickMultiplier = 20
-    }
-
-    if (item.functionName == 'NearSightedGlasses') {
-      Game.items.NearSightedGlasses.hidden = 1
-      Game.items.OldMan.perSecond *= 2
-    }
-  }
-
-  Game.items = []
-
-  Game.item = function(obj) {
-    this.name = obj.name
-    this.functionName = obj.name.replace(/ /g, '')
-    this.tab = obj.tab
-    this.pic = obj.pic
-    this.production = obj.production
-    this.desc = obj.desc
-    this.fillerQuote = obj.fillerQuote
-    this.basePrice = obj.price
-    this.price = obj.price
-    this.owned = 0
-    this.hidden = obj.hidden
-
-    this.buy = () => {
-      if (Game.ores >= this.price) {
-        Game.playSound('buysound')
-        Game.spend(this.price)
-        this.owned++
-        this.price = this.basePrice * Math.pow(1.15, this.owned)
-        Game.buyFunctions(this)
-        Game.rebuildInventory()
-        Game.risingNumber(0, 'spendMoney')
-        Game.buildTabContent(Game.selectedTab)
-      }
-    }
-
-    Game.items[this.functionName] = this
-  }
-
-  new Game.item({
-    name: 'Magnifying Glass',
-    tab: 'store',
-    pic: 'magnifying-glass.png',
-    production: 0,
-    desc: 'Allows you to spot weakpoints inside the rock',
-    fillerQuote: 'wip',
-    price: 5,
-    hidden: 0
-  })
-
-  new Game.item({
-    name: 'Old Man',
-    tab: 'store',
-    pic: 'oldman.png',
-    production: .2,
-    desc: 'He\'s just trying to feed his family',
-    fillerQuote: 'wip',
-    price: 10,
-    hidden: 0
-  })
-
-  new Game.item({
-    name: 'Rock Farmer',
-    tab: 'store',
-    pic: 'rock-farmer.png',
-    production: 1,
-    desc: 'A farmer that farms rocks... it\'s a dying business',
-    fillerQuote: 'wip',
-    price: 100,
-    hidden: 1,
-  })
-
-  new Game.item({
-    name: 'Rock Miner',
-    tab: 'store',
-    pic: 'rock-miner.png',
-    production: 5,
-    desc: 'This makes a lot more sense',
-    fillerQuote: 'wip',
-    price: 1500,
-    hidden: 2,
-  })
-
-  // // UPGRADES
-
-  new Game.item({
-    name: 'Clean Magnifying Glass',
-    tab: 'upgrades',
-    pic: 'wip.png',
-    production: 0,
-    desc: 'Increases critical hit multiplier to 10x',
-    fillerQuote: 'wip',
-    price: 100,
-    hidden: 0,
-  })
-
-  new Game.item({
-    name: 'Polish Magnifying Glass',
-    tab: 'upgrades',
-    pic: 'wip.png',
-    production: 0,
-    desc: 'Increases critical hit multiplier to 15x',
-    fillerQuote: 'wip',
-    price: 15000,
-    hidden: 1,
-  })
-
-  new Game.item({
-    name: 'Refine Magnifying Glass',
-    tab: 'upgrades',
-    pic: 'wip.png',
-    production: 0,
-    desc: 'Increases critical hit multiplier to 20x',
-    fillerQuote: 'wip',
-    price: 1000000,
-    hidden: 1,
-  })
-
-  new Game.item({
-    name: 'Near Sighted Glasses',
-    tab: 'upgrades',
-    pic: 'glasses.png',
-    production: 0,
-    desc: 'Doubles the production of Old Men',
-    fillerQuote: 'wip',
-    price: 500,
-    hidden: 0,
-  })
-
-  Game.gainXp = () => {
-    if (Game.level.currentXP < Game.level.XPNeeded) {
-      Game.level.currentXP++
-    } else {
-      Game.level.currentXP = 0
-      Game.level.currentLevel++
-      Game.level.availableSP += 3
-      Game.playSound('levelup')
-      Game.level.XPNeeded = Math.ceil(Math.pow(Game.level.XPNeeded, 1.15))
-      setTimeout(() => {
-        s('#stats-tab').style.boxShadow = 'none'
-      }, 1000)
-      s('#stats-tab').style.boxShadow = '0px 0px 50px yellow'
-      Game.risingNumber(0, 'level')
-    }
-    if (Game.level.availableSP > 0) {
-      s('#stats-tab').innerHTML = 'stats [!]'
-      s('#stats-tab').style.fontSize = 'x-large'
-    } else {
-      s('#stats-tab').innerHTML = 'stats'
-      s('#stats-tab').style.fontSize = 'x-large'
-    }
-  }
-
-  Game.achievements = []
-  Game.achievement = function(name, img, howToUnlock) {
-    this.name = name
-    this.img = img
-    this.howToUnlock = howToUnlock
-    this.won = 0
-    this.functionName = name.replace(/ /g, '')
-
-
-    Game.achievements[this.functionName] = this
-  }
-
-  Game.win = (achievement) => {
-    if (Game.achievements[achievement]) {
-      if (Game.achievements[achievement].won == 0) {
-        Game.achievements[achievement].won = 1
-        let div = document.createElement('div')
-        div.classList.add('achievement')
-        div.innerHTML = `
-          <img class='achievement-img' src="./assets/${Game.achievements[achievement].img}" alt="" />
-          <div class="achievement-right">
-            <h3>Achievement Unlocked</h3>
-            <h1>${Game.achievements[achievement].name}</h1>
-            <p>${Game.achievements[achievement].howToUnlock}</p>
-          </div>
-        `
-        s('body').append(div)
-
-        setTimeout(() => {
-          div.remove()
-        }, 2800)
-      }
-    }
-  }
-
-  new Game.achievement('Your First Ore', 'wip.png', 'Mine your first ore')
-  new Game.achievement('Bucket Full of Ore', 'wip', 'Mine a total of 500 ores')
-
-
-  new Game.achievement('Level 2', 'Reach lvl 2', 'wip')
-
-
-
-  Game.calculatePerClick = (type) => {
-    let amount = 0
-    let totalStr = Game.level.currentStrength
-
-    if (Game.currentPickaxe.stats.stat) {
-      if (Game.currentPickaxe.stats.stat == 'Strength') {
-        totalStr += Game.currentPickaxe.stats.statVal
-      }
-    }
-
-    amount += Game.currentPickaxe.stats.damage
-    amount += Game.currentPickaxe.stats.damage * totalStr * .1
-
-
-    if (type === 'special') {
-      amount *= Game.oreClickMultiplier
-    }
-    Game.earn(amount)
-    Game.risingNumber(amount, type)
-    Game.updatePercentage(amount)
-  }
-
-  Game.drawParticles = () => {
+  let drawRockParticles = () => {
     for (i = 0; i < 3; i++) {
       let div = document.createElement('div')
       div.classList.add('particle')
@@ -1128,64 +1069,56 @@ Game.launch = () => {
   }
 
   s('.ore').onclick = () => {
-    if (currentHp > 0) {
-      Game.calculatePerClick()
-      Game.gainXp()
-    }
-    Game.drawParticles()
-    Game.updatePercentage(0)
-    Game.stats.oreClicks++
-    Game.playSound('ore-hit')
-    if (Game.selectedTab === 'stats') {
-      Game.buildTabContent('stats')
-    }
-    if (Game.achievements['YourFirstOre'].won == 0) {Game.win('YourFirstOre')}
-  }
-  s('.ore-click-area').onclick = () => {
-    if (currentHp > 0) {
-      Game.calculatePerClick('special')
-      Game.oreClickArea()
-      Game.gainXp()
-    }
-    Game.drawParticles()
-    Game.updatePercentage(0)
-    Game.stats.oreClicks++
-    Game.stats.oreCritClick++
-    Game.playSound('ore-hit')
-    if (Game.selectedTab === 'stats') {
-      Game.buildTabContent('stats')
-    }
+    let amt = calculateOPC()
+    earn(amt)
+    gainXp()
+    risingNumber(amt)
+    playSound('ore-hit')
+    updatePercentage(amt)
+    buildInventory()
+    drawRockParticles()
   }
 
+  s('.ore-click-area').onclick = () => {
+    let amt = calculateOPC('crit')
+    earn(amt)
+    gainXp()
+    risingNumber(amt, 'crit')
+    playSound('ore-hit')
+    updatePercentage(amt)
+    buildInventory()
+    drawRockParticles()
+    oreClickArea()
+  }
+
+
+
+  // INIT SHIT
+  buildInventory()
+  generateStoreItems()
+  // Game.load()
+  buildTabs()
+  Game.switchTab('store')
   setInterval(() => {
-    Game.gainXp()
-    Game.stats.timePlayed += 1
+    gainXp()
+    Game.state.stats.timePlayed++
     if (Game.selectedTab == 'stats') {
-      Game.buildTabContent(Game.selectedTab)
+      buildTabContent()
     }
   }, 1000)
-
-  //Init Shit
-  // Game.load()
-  Game.buildTabs()
-  Game.switchTab('store')
-  Game.rebuildInventory()
-  Game.updatePercentage(0)
+  setInterval(() => {
+    Game.save()
+  }, 1000 * 30)
+  updatePercentage(0)
+  setInterval(() => {
+    earnOPS()
+  }, 1000 / 30)
   window.onresize = () => {
-    if (Game.items.MagnifyingGlass.owned == 1) {
-      Game.oreClickArea()
+    if (Game.items['MagnifyingGlass'].owned > 0) {
+      oreClickArea()
     }
   }
-  setInterval(() => {
-    let ops = 0
-    ops += Game.items.OldMan.owned * Game.items.OldMan.production
-    ops += Game.items.RockFarmer.owned * Game.items.RockFarmer.production
-    ops += Game.items.RockMiner.owned * Game.items.RockMiner.production
-    Game.earn(ops / 30)
-    Game.updatePercentage(ops / 30)
-    Game.oresPerSecond = ops
-  }, 1000 / 30)
-
+  if (Game.items['MagnifyingGlass'].owned > 0) oreClickArea()
 }
 
-window.onload = () => {Game.launch()}
+window.onload = () => Game.launch()
