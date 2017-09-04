@@ -139,7 +139,7 @@ Game.launch = () => {
     let ops = 0
 
     for (i in Game.items) {
-      if (Game.items[i].tab == 'store') {
+      if (Game.items[i].type == 'item') {
         ops += Game.items[i].production * Game.items[i].owned
       }
     }
@@ -576,7 +576,7 @@ Game.launch = () => {
         if (item.type == 'item') {
           if (item.hidden == 0) {
             str += `
-              <div class="button" onclick="Game.items['${item.functionName}'].buy()">
+              <div class="button" onclick="Game.items['${i}'].buy()" onmouseover="Game.showTooltip('${i}', this)" onmouseout="Game.hideTooltip()">
                 <div class="button-top">
                   <div class="button-left">
                     <img src="./assets/${item.pic}" style='filter: brightness(100%); image-rendering: pixelated'/>
@@ -588,22 +588,6 @@ Game.launch = () => {
                   <div class="button-right">
                     <p style='font-size: xx-large'>${item.owned}</p>
                   </div>
-                </div>
-                <div class="button-bottom">
-                  <hr/>
-                  <p>${item.desc}</p>
-                  <hr />
-                  `
-                  if (item.owned > 0) {
-                    str += `
-                      <p>Each ${item.name} generates ${item.production} ores per second</p>
-                      <p> <span class='bold'>${item.owned}</span> ${item.name} generating <span class='bold'>${(item.production * item.owned).toFixed(1)}</span> ores per second</p>
-                    `
-                  }
-
-                  str += `
-                  <br/>
-                  <p style='font-style: italic; text-align: center'>“${item.fillerQuote}”</p>
                 </div>
               </div>
             `
@@ -746,7 +730,7 @@ Game.launch = () => {
     s('.tab-content').innerHTML = str
   }
 
-  Game.showTooltip = (itemName) => {
+  Game.showTooltip = (itemName, anchorPoint, type) => {
     let item = Game.items[itemName]
     let tooltip = s('.tooltip')
     let anchor = s('#main-separator').getBoundingClientRect()
@@ -757,8 +741,14 @@ Game.launch = () => {
     tooltip.style.background = 'white'
     tooltip.style.border = '1px solid black'
     tooltip.style.position = 'absolute'
-    tooltip.style.left = anchor.left - 300 + 'px'
+    tooltip.style.left = anchor.left - tooltip.getBoundingClientRect().width + 'px'
+
     tooltip.style.top = s('#anchor-point').getBoundingClientRect().bottom + 'px'
+
+    if (anchorPoint) {
+      tooltip.style.top = anchorPoint.getBoundingClientRect().top + 'px'
+    }
+
 
     tooltip.innerHTML = `
       <div class="tooltip-top">
@@ -766,9 +756,24 @@ Game.launch = () => {
         <h3 style='flex-grow: 1'>${item.name}</h3>
         <p>${beautify(item.price)} ores</p>
       </div>
-      <hr />
       <div class="tooltip-bottom">
+        <hr />
         <p>${item.desc}</p>
+
+        `
+
+        if (item.type == 'item') {
+          if (item.owned > 0) {
+            tooltip.innerHTML += `
+              <hr />
+              <p>Each ${item.name} generates ${item.production} OpS</p>
+              <p><span class='bold'>${item.owned}</span> ${item.name} generating <span class='bold'>${(item.production * item.owned).toFixed(1)}</span> ores per second</p>
+            `
+          }
+        }
+
+        tooltip.innerHTML += `
+
       </div>
     `
   }
@@ -969,7 +974,7 @@ Game.launch = () => {
     desc: 'wip',
     fillerQuote: 'wip',
     price: 1320,
-    hidden: 2
+    hidden: 1
   }
   Game.items['RockCharmer'] = {
     name: 'Rock Charmer',
