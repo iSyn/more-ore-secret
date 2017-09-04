@@ -827,6 +827,7 @@ Game.launch = () => {
         this.price = this.basePrice * Math.pow(1.05, this.owned)
         buyFunction(this)
         buildInventory()
+        Game.hideTooltip()
         risingNumber(0, 'spendMoney')
         generateStoreItems()
         buildTabContent(Game.selectedTab)
