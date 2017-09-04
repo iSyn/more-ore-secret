@@ -554,11 +554,12 @@ Game.launch = () => {
         `
         let hasContent = 0
         for (i in Game.items) {
-          if (Game.items[i].type == 'upgrade') {
-            if (Game.items[i].hidden == 0) {
+          let item = Game.items[i]
+          if (item.type == 'upgrade') {
+            if (item.hidden == 0) {
               hasContent = 1
               str += `
-                <div class="upgrade-item" onmouseover="Game.showTooltip('${i}')" onmouseout="Game.hideTooltip()" onclick='Game.items["${i}"].buy()'></div>
+                <div class="upgrade-item" onmouseover="Game.showTooltip('${i}')" onmouseout="Game.hideTooltip()" onclick='Game.items["${i}"].buy()' style='background: url(./assets/${item.pic}); background-size: 100%; background-color: snow'></div>
               `
             }
           }
@@ -714,7 +715,7 @@ Game.launch = () => {
 
     tooltip.innerHTML = `
       <div class="tooltip-top">
-        <p>pic</p>
+        <img src="./assets/${item.pic}" height='40px' alt="" />
         <h3 style='flex-grow: 1'>${item.name}</h3>
         <p>${beautify(item.price)} ores</p>
       </div>
@@ -739,6 +740,7 @@ Game.launch = () => {
   }
 
   let buyFunction = (item) => {
+    // ITEMS
     if (item.name == 'Magnifying Glass') {
       oreClickArea()
       item.hidden = 2
@@ -753,19 +755,53 @@ Game.launch = () => {
     }
     if (item.name == 'Rock Farmer') {
       if (item.owned == 1) {
+        Game.items['StonePitchfork'].hidden = 0
         Game.items['RockMiner'].hidden = 0
         Game.items['RockCharmer'].hidden = 1
       }
     }
     if (item.name == 'Rock Miner') {
       if (item.owned == 1) {
+        Game.items['MinerLamp'].hidden = 0
         Game.items['RockCharmer'].hidden = 0
       }
     }
     if (item.name == 'Rock Charmer') {
       if (item.owned == 1) {
-        //
+        Game.items['BambooPanFlute'].hidden = 0
       }
+    }
+
+    // UPGRADES
+    if (item.name == 'Clean Magnifying Glass') {
+      item.hidden = 1
+      Game.state.oreClickMultiplier = 10
+      Game.items['PolishMagnifyingGlass'].hidden = 0
+    }
+    if (item.name == 'Polish Magnifying Glass') {
+      item.hidden = 1
+      Game.state.oreClickMultiplier = 15
+      Game.items['RefineMagnifyingGlass'].hidden = 0
+    }
+    if (item.name == 'Refine Magnifying Glass') {
+      item.hidden = 1
+      Game.state.oreClickMultiplier = 20
+    }
+    if (item.name == 'Near Sighted Glasses') {
+      item.hidden = 1
+      Game.items['OldMan'].production *= 2
+    }
+    if (item.name == 'Stone Pitchfork') {
+      item.hidden = 1
+      Game.items['RockFarmer'].production *= 2
+    }
+    if (item.name == 'Miner Lamp') {
+      item.hidden = 1
+      Game.items['RockMiner'].production *= 2
+    }
+    if (item.name == 'Bamboo Pan Flute') {
+      item.hidden = 1
+      Game.items['RockCharmer'].production *= 2
     }
   }
 
@@ -871,13 +907,49 @@ Game.launch = () => {
     price: 15000,
     hidden: 1,
   }
+  Game.items['RefineMagnifyingGlass'] = {
+    name: 'Refine Magnifying Glass',
+    type: 'upgrade',
+    pic: 'wip.png',
+    desc: 'Increases critical hit multiplier to 20x',
+    fillerQuote: 'wip',
+    price: 1000000,
+    hidden: 1,
+  }
   Game.items['NearSightedGlasses'] = {
     name: 'Near Sighted Glasses',
     type: 'upgrade',
     pic: 'glasses.png',
     desc: 'doubles the production of Old Men',
     fillerQuote: 'wip',
-    price: 500,
+    price: 200,
+    hidden: 1,
+  }
+  Game.items['StonePitchfork'] = {
+    name: 'Stone Pitchfork',
+    type: 'upgrade',
+    pic: 'wip.png',
+    desc: 'doubles the production of Rock Farmers',
+    fillerQuote: 'wip',
+    price: 840,
+    hidden: 1,
+  }
+  Game.items['MinerLamp'] = {
+    name: 'Miner Lamp',
+    type: 'upgrade',
+    pic: 'wip.png',
+    desc: 'doubles the production of Rock Miners',
+    fillerQuote: 'wip',
+    price: 2950,
+    hidden: 1,
+  }
+  Game.items['BambooPanFlute'] = {
+    name: 'Bamboo Pan Flute',
+    type: 'upgrade',
+    pic: 'wip.png',
+    desc: 'doubles the production of Rock Charmers',
+    fillerQuote: 'wip',
+    price: 13000,
     hidden: 1,
   }
 

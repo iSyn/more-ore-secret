@@ -614,6 +614,7 @@ footer {
   height: 50px;
   width: 50px;
   cursor: pointer;
+  /*image-rendering: pixelated;*/
 }
 
 .tooltip-container {
