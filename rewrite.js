@@ -626,6 +626,20 @@ Game.launch = () => {
               `
           }
         }
+        str += `
+          <div class="cancer">
+            <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+            <!-- ad -->
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-4584563958870163"
+                 data-ad-slot="6565116738"
+                 data-ad-format="auto"></ins>
+            <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+          </div>
+        `
       }
     }
 
@@ -1082,7 +1096,7 @@ Game.launch = () => {
   // INIT SHIT
   buildInventory()
   generateStoreItems()
-  Game.load()
+  // Game.load()
   buildTabs()
   Game.switchTab('store')
   setInterval(() => {
