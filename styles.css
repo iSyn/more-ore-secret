@@ -545,35 +545,19 @@ footer {
 
 .stat-sheet {
   width: 90%;
-  height: 150px;
+  /*height: 150px;*/
   border: 1px solid black;
   display: flex;
   flex-flow: row nowrap;
+  /*justify-content: center;*/
   background: snow;
   margin-bottom: 15px;
-}
-
-.stat-sheet-left, .stat-sheet-right {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.stat-sheet-img {
-  background: url('./assets/oldman.png');
-  height: 85%;
-  width: 85%;
-  border: 1px solid black;
-  background-repeat: no-repeat;
-  background-size: cover;
-  image-rendering: pixelated;
-  background-color: grey;
+  padding: 10px 10px;
 }
 
 .stats-container {
-  height: 85%;
-  width: 85%;
+  height: 100%;
+  width: 100%;
 }
 
 .single-stat {

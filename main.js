@@ -34,9 +34,10 @@ Game.launch = () => {
     player: {
       lvl: 1,
       str: 0,
+      dex: 0,
       luk: 0,
       int: 0,
-      dex: 0,
+      cha: 0,
       currentXp: 0,
       xpNeeded: 100,
       availableSp: 0,
@@ -53,9 +54,6 @@ Game.launch = () => {
       {
         name: 'store',
         locked: false
-      }, {
-        name: 'upgrades',
-        locked: true
       }, {
         name: 'stats',
         locked: false
@@ -141,7 +139,9 @@ Game.launch = () => {
     let ops = 0
 
     for (i in Game.items) {
-      ops += Game.items[i].production * Game.items[i].owned
+      if (Game.items[i].tab == 'store') {
+        ops += Game.items[i].production * Game.items[i].owned
+      }
     }
 
     Game.state.oresPerSecond = ops
@@ -192,7 +192,6 @@ Game.launch = () => {
     } else {
       if (Math.random() < .3) { // 30% chance
         let itemContainer = document.createElement('div')
-        console.log(itemContainer)
         itemContainer.classList.add('item-container')
         itemContainer.innerHTML = `
           <div class="item-pouch-glow"></div>
@@ -628,7 +627,109 @@ Game.launch = () => {
           }
         }
       }
+    }
+
+    if (Game.selectedTab == 'stats') {
       str += `
+
+        <div class='stat-sheet'>
+          <div class="stats-container">
+            <div class="single-stat" style='font-size: x-large'>
+              <p class='stat-left'>Level: </p>
+              <p>${Game.state.player.lvl}</p>
+            </div>
+            <hr/>
+            <p style='text-align: center;'>Available SP: ${Game.state.player.availableSp}</p>
+
+            <div class="single-stat">
+              <p class='stat-left'>Strength: </p>
+              <p>${Game.state.player.str}</p>
+              `
+
+              if (Game.state.player.availableSp > 0) {
+                str += `<button class='level-up-btn' onclick='Game.addStat("str")'>+</button>`
+              }
+
+            str += `
+            <br/>
+            </div>
+
+            <div class="single-stat">
+              <p class='stat-left'>Dexterity: </p>
+              <p>${Game.state.player.dex}</p>
+
+              `
+              if (Game.state.player.availableSp > 0) {
+                str += `<button class='level-up-btn' onclick='Game.addStat("dex")'>+</button>`
+              }
+
+              str += `
+
+            <br/>
+            </div>
+
+            <div class="single-stat">
+              <p class='stat-left'>Intelligence: </p>
+              <p>${Game.state.player.int}</p>
+
+              `
+              if (Game.state.player.availableSp > 0) {
+                str += `<button class='level-up-btn' onclick='Game.addStat("int")'>+</button>`
+              }
+
+              str += `
+
+            <br/>
+            </div>
+
+            <div class="single-stat">
+              <p class='stat-left'>Luck: </p>
+              <p>${Game.state.player.luk}</p>
+
+              `
+              if (Game.state.player.availableSp > 0) {
+                str += `<button class='level-up-btn' onclick='Game.addStat("luk")'>+</button>`
+              }
+
+              str += `
+
+            <br/>
+            </div>
+
+            <div class="single-stat">
+              <p class='stat-left'>Charisma: </p>
+              <p>${Game.state.player.cha}</p>
+
+              `
+              if (Game.state.player.availableSp > 0) {
+                str += `<button class='level-up-btn' onclick='Game.addStat("cha")'>+</button>`
+              }
+
+              str += `
+
+            <br/>
+            </div>
+
+          </div>
+        </div>
+
+        <div style='border: 1px solid black; width: 90%; display: flex; flex-flow: row nowrap; align-items: center; background-color: snow; padding: 10px;'>
+          <i class='fa fa-lock fa-2x'></i>
+          <p style='margin-left: 10px;'>Unlock Classes lv 5</p>
+        </div>
+
+        <br/>
+
+        <p>Ore Clicks: ${Game.state.stats.oreClicks}</p>
+        <p>Ore Crit Clicks: ${Game.state.stats.oreCritClicks} </p>
+        <p>Rocks Destroyed: ${Game.state.stats.rocksDestroyed}</p>
+        <p>Items Picked Up: ${Game.state.stats.itemsPickedUp}</p>
+
+        <button onclick=Game.save()>Save</button>
+        <button onclick=Game.wipe()>Wipe Save</button>
+      `
+    }
+    str += `
           <div class="cancer">
             <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
             <!-- ad -->
@@ -642,60 +743,6 @@ Game.launch = () => {
             </script>
           </div>
         `
-    }
-
-    if (Game.selectedTab == 'stats') {
-      str += `
-
-        <div class='stat-sheet'>
-
-          <div class="stat-sheet-right">
-            <div class="stats-container">
-              <div class="single-stat" style='font-size: x-large'>
-                <p class='stat-left'>Level: </p>
-                <p>${Game.state.player.lvl}</p>
-              </div>
-              <hr/>
-              <p style='text-align: center;'>Available SP: ${Game.state.player.availableSp}</p>
-              <br/>
-              <div class="single-stat">
-                <p class='stat-left'>Strength: </p>
-                <p>${Game.state.player.str}</p>
-                `
-
-                if (Game.state.player.availableSp > 0) {
-                  str += `<button class='level-up-btn' onclick='Game.addStat("str")'>+</button>`
-                }
-
-              str += `
-              <br/>
-              </div>
-              <div class="single-stat">
-                <p class='stat-left'>Luck: </p>
-                <p>${Game.state.player.luk}</p>
-
-                `
-                if (Game.state.player.availableSp > 0) {
-                  str += `<button class='level-up-btn' onclick='Game.addStat("luk")'>+</button>`
-                }
-
-                str += `
-
-              </div>
-
-            </div>
-          </div>
-        </div>
-
-        <p>Ore Clicks: ${Game.state.stats.oreClicks}</p>
-        <p>Ore Crit Clicks: ${Game.state.stats.oreCritClicks} </p>
-        <p>Rocks Destroyed: ${Game.state.stats.rocksDestroyed}</p>
-        <p>Items Picked Up: ${Game.state.stats.itemsPickedUp}</p>
-
-        <button onclick=Game.save()>Save</button>
-        <button onclick=Game.wipe()>Wipe Save</button>
-      `
-    }
     s('.tab-content').innerHTML = str
   }
 
@@ -735,7 +782,19 @@ Game.launch = () => {
       Game.state.player.availableSp--
       if (stat == 'str') Game.state.player.str++
       if (stat == 'luk') Game.state.player.luk++
+      if (stat == 'dex') Game.state.player.dex++
+      if (stat == 'int') Game.state.player.int++
+      if (stat == 'cha') Game.state.player.cha++
       buildTabContent()
+    }
+  }
+
+  let unlockUpgrades = (name) => {
+    let upgrade = Game.items[name]
+    if (upgrade.owned <= 0) {
+      if (upgrade.hidden != 0) {
+        upgrade.hidden = 0
+      }
     }
   }
 
@@ -748,27 +807,49 @@ Game.launch = () => {
     }
     if (item.name == 'Old Man') {
       if (item.owned == 1) {
-        Game.items['NearSightedGlasses'].hidden = 0
+        unlockUpgrades('NearSightedGlasses')
         Game.items['RockFarmer'].hidden = 0
         Game.items['RockMiner'].hidden = 1
+      }
+      if (item.owned == 10) {
+        unlockUpgrades('ExtraVirginPruneJuice')
+      }
+      if (item.owned == 50) {
+
       }
     }
     if (item.name == 'Rock Farmer') {
       if (item.owned == 1) {
-        Game.items['StonePitchfork'].hidden = 0
+        unlockUpgrades('StonePitchfork')
         Game.items['RockMiner'].hidden = 0
         Game.items['RockCharmer'].hidden = 1
       }
     }
     if (item.name == 'Rock Miner') {
       if (item.owned == 1) {
-        Game.items['MinerLamp'].hidden = 0
+        unlockUpgrades('MinerLamp')
         Game.items['RockCharmer'].hidden = 0
+        Game.items['RockScientist'].hidden = 1
       }
     }
     if (item.name == 'Rock Charmer') {
       if (item.owned == 1) {
-        Game.items['BambooPanFlute'].hidden = 0
+        unlockUpgrades('BambooPanFlute')
+        Game.items['RockScientist'].hidden = 0
+        Game.items['RockPortal'].hidden = 1
+      }
+    }
+
+    if (item.name == 'Rock Scientist') {
+      if (item.owned == 1) {
+        unlockUpgrades('100xMicroscope')
+        Game.items['RockPortal'].hidden = 0
+      }
+    }
+
+    if (item.name == 'Rock Portal') {
+      if (item.owned == 1) {
+        unlockUpgrades('TimeTravelJelly')
       }
     }
 
@@ -789,19 +870,31 @@ Game.launch = () => {
     }
     if (item.name == 'Near Sighted Glasses') {
       item.hidden = 1
-      Game.items['OldMan'].production *= 2
+      Game.items['OldMan'].production *= item.production
+    }
+    if (item.name == 'Extra Virgin Prune Juice') {
+      item.hidden = 1
+      Game.items['OldMan'].production *= item.production
     }
     if (item.name == 'Stone Pitchfork') {
       item.hidden = 1
-      Game.items['RockFarmer'].production *= 2
+      Game.items['RockFarmer'].production *= item.production
     }
     if (item.name == 'Miner Lamp') {
       item.hidden = 1
-      Game.items['RockMiner'].production *= 2
+      Game.items['RockMiner'].production *= item.production
     }
     if (item.name == 'Bamboo Pan Flute') {
       item.hidden = 1
-      Game.items['RockCharmer'].production *= 2
+      Game.items['RockCharmer'].production *= item.production
+    }
+    if (item.name == '100xMicroscope') {
+      item.hidden = 1
+      Game.items['RockScientist'].production *= item.production
+    }
+    if (item.name == 'TimeTravelJelly') {
+      item.hidden = 1
+      Game.items['RockPortal'].production *= item.production
     }
   }
 
@@ -865,31 +958,51 @@ Game.launch = () => {
     production: 1,
     desc: 'wip',
     fillerQuote: 'wip',
-    price: 80,
+    price: 110,
     hidden: 1
   }
   Game.items['RockMiner'] = {
     name: 'Rock Miner',
     type: 'item',
     pic: 'rock-miner.png',
-    production: 40,
+    production: 9,
     desc: 'wip',
     fillerQuote: 'wip',
-    price: 300,
+    price: 1320,
     hidden: 2
   }
   Game.items['RockCharmer'] = {
     name: 'Rock Charmer',
     type: 'item',
     pic: 'wip.png',
-    production: 560,
+    production: 50,
     desc: 'wip',
     fillerQuote: 'wip',
-    price: 1250,
+    price: 12500,
+    hidden: 2
+  }
+  Game.items['RockScientist'] = {
+    name: 'Rock Scientist',
+    type: 'item',
+    pic: 'wip.png',
+    production: 300,
+    desc: 'wip',
+    fillerQuote: 'wip',
+    price: 110000,
+    hidden: 2
+  }
+  Game.items['RockPortal'] = {
+    name: 'Rock Portal',
+    type: 'item',
+    pic: 'wip.png',
+    production: 2300,
+    desc: 'Open a rift in the space time continuum... for ores',
+    fillerQuote: 'wip',
+    price: 1800000,
     hidden: 2
   }
 
-  // UPGRADES
+  // ITEM UPGRADES
   Game.items['CleanMagnifyingGlass'] = {
     name: 'Clean Magnifying Glass',
     type: 'upgrade',
@@ -899,31 +1012,24 @@ Game.launch = () => {
     price: 100,
     hidden: 1,
   }
-  Game.items['PolishMagnifyingGlass'] = {
-    name: 'Polish Magnifying Glass',
-    type: 'upgrade',
-    pic: 'wip.png',
-    desc: 'Increases critical hit multiplier to 15x',
-    fillerQuote: 'wip',
-    price: 15000,
-    hidden: 1,
-  }
-  Game.items['RefineMagnifyingGlass'] = {
-    name: 'Refine Magnifying Glass',
-    type: 'upgrade',
-    pic: 'wip.png',
-    desc: 'Increases critical hit multiplier to 20x',
-    fillerQuote: 'wip',
-    price: 1000000,
-    hidden: 1,
-  }
   Game.items['NearSightedGlasses'] = {
     name: 'Near Sighted Glasses',
     type: 'upgrade',
     pic: 'glasses.png',
     desc: 'doubles the production of Old Men',
+    production: 2,
     fillerQuote: 'wip',
     price: 200,
+    hidden: 1,
+  }
+  Game.items['ExtraVirginPruneJuice'] = {
+    name: 'Extra Virgin Prune Juice',
+    type: 'upgrade',
+    pic: 'wip.png',
+    desc: 'triples the production of Old Men',
+    production: 3,
+    fillerQuote: 'wip',
+    price: 1200,
     hidden: 1,
   }
   Game.items['StonePitchfork'] = {
@@ -931,6 +1037,7 @@ Game.launch = () => {
     type: 'upgrade',
     pic: 'wip.png',
     desc: 'doubles the production of Rock Farmers',
+    production: 2,
     fillerQuote: 'wip',
     price: 840,
     hidden: 1,
@@ -940,6 +1047,7 @@ Game.launch = () => {
     type: 'upgrade',
     pic: 'wip.png',
     desc: 'doubles the production of Rock Miners',
+    production: 2,
     fillerQuote: 'wip',
     price: 2950,
     hidden: 1,
@@ -949,9 +1057,50 @@ Game.launch = () => {
     type: 'upgrade',
     pic: 'wip.png',
     desc: 'doubles the production of Rock Charmers',
+    production: 2,
     fillerQuote: 'wip',
     price: 13000,
     hidden: 1,
+  }
+  Game.items['100xMicroscope'] = {
+    name: '100x Microscope',
+    type: 'upgrade',
+    pic: 'wip.png',
+    desc: 'doubles the production of Rock Scientists',
+    production: 2,
+    fillerQuote: 'wip',
+    price: 1000000,
+    hidden: 1,
+  }
+  Game.items['TimeTravelJelly'] = {
+    name: 'Time Travel Jelly',
+    type: 'upgrade',
+    pic: 'wip.png',
+    desc: 'doubles the production of Rock Portal',
+    production: 2,
+    fillerQuote: 'wip',
+    price: 1000000,
+    hidden: 1,
+  }
+
+  // UPGRADES
+  Game.items['SpeechTherapy'] = {
+    name: 'Speech Therapy',
+    type: 'upgrade',
+    pic: 'wip.png',
+    desc: 'Increases OpS by 1%',
+    fillerQuote: 'wip',
+    price: 100,
+    hidden: 0,
+  }
+  Game.items['Steroids'] = {
+    name: 'Steroids',
+    type: 'upgrade',
+    pic: 'steroids.png',
+    desc: 'double your OpC',
+    fillerQuote: 'wip',
+    price: 100000,
+    hidden: 0,
   }
 
   let generateStoreItems = () => {
@@ -1057,11 +1206,15 @@ Game.launch = () => {
   }
 
   let risingNumber = (amount, type) => {
-    let mouseX = event.clientX
+    let mouseX = (s('.ore').getBoundingClientRect().left + s('.ore').getBoundingClientRect().right)/2
+    let mouseY = (s('.ore').getBoundingClientRect().top + s('.ore').getBoundingClientRect().bottom)/2
+    if (event) {
+      mouseX = event.clientX
+      mouseY = event.clientY
+    }
     let randomNumber = Math.floor(Math.random() * 20) + 1
     let randomSign = Math.round(Math.random()) * 2 - 1
     let randomMouseX = mouseX + (randomNumber * randomSign)
-    let mouseY = event.clientY - 20
 
     let risingNumber = document.createElement('div')
     risingNumber.classList.add('rising-number')
