@@ -754,7 +754,7 @@ Game.launch = () => {
       <div class="tooltip-top">
         <img src="./assets/${item.pic}" height='40px' alt="" />
         <h3 style='flex-grow: 1'>${item.name}</h3>
-        <p>${beautify(item.price)} ores</p>
+        <p>${beautify(item.price.toFixed(0))} ores</p>
       </div>
       <div class="tooltip-bottom">
         <hr />
@@ -805,16 +805,12 @@ Game.launch = () => {
 
   let buyFunction = (item) => {
     // ITEMS
-    if (item.name == 'Magnifying Glass') {
-      oreClickArea()
-      item.hidden = 2
-      Game.items['CleanMagnifyingGlass'].hidden = 0
-    }
     if (item.name == 'Old Man') {
       if (item.owned == 1) {
         unlockUpgrades('NearSightedGlasses')
         Game.items['RockFarmer'].hidden = 0
         Game.items['RockMiner'].hidden = 1
+        Game.items['RockCharmer'].hidden = 1
       }
       if (item.owned == 10) {
         unlockUpgrades('ExtraVirginPruneJuice')
@@ -828,6 +824,7 @@ Game.launch = () => {
         unlockUpgrades('StonePitchfork')
         Game.items['RockMiner'].hidden = 0
         Game.items['RockCharmer'].hidden = 1
+        Game.items['RockScientist'].hidden = 1
       }
     }
     if (item.name == 'Rock Miner') {
@@ -835,6 +832,7 @@ Game.launch = () => {
         unlockUpgrades('MinerLamp')
         Game.items['RockCharmer'].hidden = 0
         Game.items['RockScientist'].hidden = 1
+        Game.items['RockPortal'].hidden = 1
       }
     }
     if (item.name == 'Rock Charmer') {
@@ -858,20 +856,16 @@ Game.launch = () => {
       }
     }
 
-    // UPGRADES
+    // ITEM UPGRADES
+    if (item.name == 'Magnifying Glass') {
+      oreClickArea()
+      item.hidden = 2
+      Game.items['CleanMagnifyingGlass'].hidden = 0
+    }
     if (item.name == 'Clean Magnifying Glass') {
       item.hidden = 1
       Game.state.oreClickMultiplier = 10
       Game.items['PolishMagnifyingGlass'].hidden = 0
-    }
-    if (item.name == 'Polish Magnifying Glass') {
-      item.hidden = 1
-      Game.state.oreClickMultiplier = 15
-      Game.items['RefineMagnifyingGlass'].hidden = 0
-    }
-    if (item.name == 'Refine Magnifying Glass') {
-      item.hidden = 1
-      Game.state.oreClickMultiplier = 20
     }
     if (item.name == 'Near Sighted Glasses') {
       item.hidden = 1
@@ -893,13 +887,21 @@ Game.launch = () => {
       item.hidden = 1
       Game.items['RockCharmer'].production *= item.production
     }
-    if (item.name == '100xMicroscope') {
+    if (item.name == '100x Microscope') {
       item.hidden = 1
       Game.items['RockScientist'].production *= item.production
     }
-    if (item.name == 'TimeTravelJelly') {
+    if (item.name == 'Time Travel Jelly') {
       item.hidden = 1
       Game.items['RockPortal'].production *= item.production
+    }
+
+    // UPGRADES
+    if (item.name == 'Speech Therapy') {
+      item.hidden = 1
+    }
+    if (item.name == 'Steroids') {
+      item.hidden = 1
     }
   }
 
@@ -924,8 +926,10 @@ Game.launch = () => {
         playSound('buysound')
         this.price = this.basePrice * Math.pow(1.05, this.owned)
         buyFunction(this)
+        if (this.type == 'upgrade') {
+          Game.hideTooltip()
+        }
         buildInventory()
-        Game.hideTooltip()
         risingNumber(0, 'spendMoney')
         generateStoreItems()
         buildTabContent(Game.selectedTab)
@@ -937,15 +941,6 @@ Game.launch = () => {
 
   Game.items = []
   // ITEMS
-  Game.items['MagnifyingGlass'] = {
-    name: 'Magnifying Glass',
-    type: 'item',
-    pic: 'magnifying-glass.png',
-    desc: 'Allows you to spot weakpoints inside the rock',
-    fillerQuote: 'wip',
-    price: 5,
-    hidden: 0
-  }
   Game.items['OldMan'] = {
     name: 'Old Man',
     type: 'item',
@@ -1008,6 +1003,15 @@ Game.launch = () => {
   }
 
   // ITEM UPGRADES
+  Game.items['MagnifyingGlass'] = {
+    name: 'Magnifying Glass',
+    type: 'upgrade',
+    pic: 'magnifying-glass.png',
+    desc: 'Allows you to spot weakpoints inside the rock',
+    fillerQuote: 'wip',
+    price: 5,
+    hidden: 0
+  }
   Game.items['CleanMagnifyingGlass'] = {
     name: 'Clean Magnifying Glass',
     type: 'upgrade',
