@@ -45,7 +45,7 @@ Game.launch = () => {
         rarity: 'Common',
         itemLevel: 1,
         material: 'Wood',
-        damage: 1000
+        damage: 1
       },
       accesory: {}
     },
@@ -79,11 +79,20 @@ Game.launch = () => {
 
   Game.save = () => {
     localStorage.setItem('state', JSON.stringify(Game.state))
+    for (i in Game.items) {
+      localStorage.setItem(`item-${i}`, JSON.stringify(Game.items[i]))
+    }
   }
 
   Game.load = () => {
     if (localStorage.getItem('state') !== null) {
       Game.state = JSON.parse(localStorage.getItem('state'))
+
+      for (i in Game.items) {
+        Game.items[i] = JSON.parse(localStorage.getItem(`item-${i}`))
+      }
+
+      generateStoreItems()
     }
   }
 
@@ -102,6 +111,7 @@ Game.launch = () => {
   let earnOPS = () => {
     let ops = calculateOPS()
     earn(ops/30)
+    updatePercentage(ops/30)
   }
 
   let spend = (amt) => {
@@ -130,8 +140,8 @@ Game.launch = () => {
   let calculateOPS = () => {
     let ops = 0
 
-    for (i = 0; i < Game.state.items.length; i++) {
-      ops += Game.state.items[i].production * Game.state.items[i].owned
+    for (i in Game.items) {
+      ops += Game.items[i].production * Game.items[i].owned
     }
 
     Game.state.oresPerSecond = ops
@@ -538,12 +548,35 @@ Game.launch = () => {
   let buildTabContent = () => {
     let str = ''
     if (Game.selectedTab == 'store') {
-      for (let i in Game.state.items) {
-        let item = Game.state.items[i]
-        if (item.tab == 'store') {
+      str += `
+        <div id='anchor-point' class="horizontal-separator" style='height: 8px'></div>
+        <div class="upgrades-container">
+        `
+        let hasContent = 0
+        for (i in Game.items) {
+          if (Game.items[i].type == 'upgrade') {
+            if (Game.items[i].hidden == 0) {
+              hasContent = 1
+              str += `
+                <div class="upgrade-item" onmouseover="Game.showTooltip('${i}')" onmouseout="Game.hideTooltip()" onclick='Game.items["${i}"].buy()'></div>
+              `
+            }
+          }
+        }
+        if (hasContent == 0) {
+          str += ' <h3>Upgrades</h3>'
+        }
+
+        str += `
+        </div>
+        <div class="horizontal-separator" style='height: 8px; margin-bottom: 20px;'></div>
+      `
+      for (let i in Game.items) {
+        let item = Game.items[i]
+        if (item.type == 'item') {
           if (item.hidden == 0) {
             str += `
-              <div class="button" onclick="Game.state.items[${item.id}].buy()">
+              <div class="button" onclick="Game.items['${item.functionName}'].buy()">
                 <div class="button-top">
                   <div class="button-left">
                     <img src="./assets/${item.pic}" style='filter: brightness(100%); image-rendering: pixelated'/>
@@ -563,6 +596,7 @@ Game.launch = () => {
                   `
                   if (item.owned > 0) {
                     str += `
+                      <p>Each ${item.name} generates ${item.production} ores per second</p>
                       <p> <span class='bold'>${item.owned}</span> ${item.name} generating <span class='bold'>${(item.production * item.owned).toFixed(1)}</span> ores per second</p>
                     `
                   }
@@ -594,40 +628,7 @@ Game.launch = () => {
         }
       }
     }
-    if (Game.selectedTab == 'upgrades') {
-      for (let i in Game.state.items) {
-        let item = Game.state.items[i]
-        if (item.tab == 'upgrades') {
-          if (item.hidden == 0) {
-            str += `
-              <div class="button" onclick="Game.state.items[${item.id}].buy()">
-                <div class="button-top">
-                  <div class="button-left">
-                    <img src="./assets/${item.pic}" style='filter: brightness(100%); image-rendering: pixelated'/>
-                  </div>
-                  <div class="button-middle">
-                    <h3 style='font-size: larger'>${item.name}</h3>
-                    <p>cost: ${beautify(item.price.toFixed(0))} ores</p>
-                  </div>
-                  <div class="button-right">
-                    <p style='font-size: xx-large'>${item.owned}</p>
-                  </div>
-                </div>
 
-                <div class="button-bottom">
-                  <hr/>
-                  <p>${item.desc}</p>
-                  <hr />
-                  <br/>
-                  <p style='font-style: italic; text-align: center'>“${item.fillerQuote}”</p>
-                </div>
-
-              </div>
-            `
-          }
-        }
-      }
-    }
     if (Game.selectedTab == 'stats') {
       str += `
 
@@ -683,6 +684,37 @@ Game.launch = () => {
     s('.tab-content').innerHTML = str
   }
 
+  Game.showTooltip = (itemName) => {
+    let item = Game.items[itemName]
+    let tooltip = s('.tooltip')
+    let anchor = s('#main-separator').getBoundingClientRect()
+
+    tooltip.classList.add('tooltip-container')
+    tooltip.style.display = 'block'
+    tooltip.style.width = '300px'
+    tooltip.style.background = 'white'
+    tooltip.style.border = '1px solid black'
+    tooltip.style.position = 'absolute'
+    tooltip.style.left = anchor.left - 300 + 'px'
+    tooltip.style.top = s('#anchor-point').getBoundingClientRect().bottom + 'px'
+
+    tooltip.innerHTML = `
+      <div class="tooltip-top">
+        <p>pic</p>
+        <h3 style='flex-grow: 1'>${item.name}</h3>
+        <p>${beautify(item.price)} ores</p>
+      </div>
+      <hr />
+      <div class="tooltip-bottom">
+        <p>${item.desc}</p>
+      </div>
+    `
+  }
+
+  Game.hideTooltip = () => {
+    s('.tooltip').style.display = 'none'
+  }
+
   Game.addStat = (stat) => {
     if (Game.state.player.availableSp > 0) {
       Game.state.player.availableSp--
@@ -693,80 +725,41 @@ Game.launch = () => {
   }
 
   let buyFunction = (item) => {
-    if (item.functionName == 'MagnifyingGlass') {
+    if (item.name == 'Magnifying Glass') {
       oreClickArea()
       item.hidden = 2
-      if (Game.state.tabs[1].locked == true) {Game.state.tabs[1].locked = false; buildTabs(); Game.switchTab(Game.selectedTab)}
+      Game.items['CleanMagnifyingGlass'].hidden = 0
     }
-    if (item.functionName == 'OldMan') {
-      if (Game.state.tabs[1].locked == true) {Game.state.tabs[1].locked = false; buildTabs(); Game.switchTab(Game.selectedTab)}
+    if (item.name == 'Old Man') {
       if (item.owned == 1) {
-        Game.state.items[item.id + 1].hidden = 0
-        Game.state.items[item.id + 2].hidden = 1
+        Game.items['NearSightedGlasses'].hidden = 0
+        Game.items['RockFarmer'].hidden = 0
+        Game.items['RockMiner'].hidden = 1
       }
     }
-    if (item.functionName == 'RockFarmer') {
+    if (item.name == 'Rock Farmer') {
       if (item.owned == 1) {
-        Game.state.items[item.id + 1].hidden = 0
-        Game.state.items[item.id + 2].hidden = 1
+        Game.items['RockMiner'].hidden = 0
+        Game.items['RockCharmer'].hidden = 1
       }
     }
-    if (item.functionName == 'RockMiner') {
+    if (item.name == 'Rock Miner') {
       if (item.owned == 1) {
-        Game.state.items[item.id + 1].hidden = 0
-        Game.state.items[item.id + 2].hidden = 1
+        Game.items['RockCharmer'].hidden = 0
       }
     }
-    if (item.functionName == 'RockCharmer') {
+    if (item.name == 'Rock Charmer') {
       if (item.owned == 1) {
-        Game.state.items[item.id + 1].hidden = 0
-        Game.state.items[item.id + 2].hidden = 1
+        //
       }
-    }
-    if (item.functionName == 'RockHospital') {
-      if (item.owned == 1) {
-        Game.state.items[item.id + 1].hidden = 0
-        Game.state.items[item.id + 2].hidden = 1
-      }
-    }
-    if (item.functionName == 'RockFactory') {
-      if (item.owned == 1) {
-        Game.state.items[item.id + 1].hidden = 0
-      }
-    }
-    if (item.functionName == 'RockScienceLab') {
-      //
-    }
-    if (item.functionName == 'CleanMagnifyingGlass') {
-      Game.state.items[item.id + 1].hidden = 0
-      item.hidden = 1
-      Game.state.oreClickMultiplier = 10
-    }
-    if (item.functionName == 'PolishMagnifyingGlass') {
-      Game.state.items[item.id + 1].hidden = 0
-      item.hidden = 1
-      Game.state.oreClickMultiplier = 15
-    }
-    if (item.functionName == 'RefineMagnifyingGlass') {
-      item.hidden = 1
-      Game.state.oreClickMultiplier = 20
-    }
-    if (item.functionName == 'NearSightedGlasses') {
-      item.hidden = 1
-      Game.state.items[1].production *= 3
-      Game.state.items[item.id + 1].hidden = 0
-    }
-    if (item.functionName == 'NewPerscriptionLens') {
-      item.hidden = 1
-      Game.state.items[1].production *= 4
     }
   }
 
   let Item = function(obj, id) {
-    this.id = id
+    // this.id = id
     this.name = obj.name
     this.functionName = obj.name.replace(/ /g, '')
-    this.tab = obj.tab
+    this.type = obj.type
     this.pic = obj.pic
     this.production = obj.production || 0
     this.desc = obj.desc
@@ -781,7 +774,7 @@ Game.launch = () => {
         spend(this.price)
         this.owned++
         playSound('buysound')
-        this.price = this.basePrice * Math.pow(1.15, this.owned)
+        this.price = this.basePrice * Math.pow(1.05, this.owned)
         buyFunction(this)
         buildInventory()
         risingNumber(0, 'spendMoney')
@@ -790,128 +783,93 @@ Game.launch = () => {
       }
     }
 
-    Game.state.items[this.id] = this
+    Game.items[this.functionName] = this
   }
 
-  Game.state.items = [
-    // ITEMS
-    {
-      name: 'Magnifying Glass',
-      tab: 'store',
-      pic: 'magnifying-glass.png',
-      desc: 'Allows you to spot weakpoints inside the rock',
-      fillerQuote: 'wip',
-      price: 5,
-      hidden: 0,
-    }, {
-      name: 'Old Man',
-      tab: 'store',
-      pic: 'oldman.png',
-      production: .2,
-      desc: 'He\'s just trying to feed his family',
-      fillerQuote: 'wip',
-      price: 10,
-      hidden: 0,
-    }, {
-      name: 'Rock Farmer',
-      tab: 'store',
-      pic: 'rock-farmer.png',
-      production: 2,
-      desc: 'A farmer that farms rocks... it\'s a dying business',
-      fillerQuote: 'wip',
-      price: 100,
-      hidden: 1,
-    }, {
-      name: 'Rock Miner',
-      tab: 'store',
-      pic: 'rock-miner.png',
-      production: 10,
-      desc: 'This makes a lot more sense',
-      fillerQuote: 'wip',
-      price: 1500,
-      hidden: 2,
-    }, {
-      name: 'Rock Charmer',
-      tab: 'store',
-      pic: 'wip.png',
-      production: 60,
-      desc: 'Charming rocks straight out the ground',
-      fillerQuote: 'wip',
-      price: 13500,
-      hidden: 2
-    }, {
-      name: 'Rock Hospital',
-      tab: 'store',
-      pic: 'wip.png',
-      production: 260,
-      desc: 'Heals sick rocks back to healthy',
-      fillerQuote: 'wip',
-      price: 110000,
-      hidden: 2
-    }, {
-      name: 'Rock Factory',
-      tab: 'store',
-      pic: 'wip.png',
-      production: 1000,
-      desc: 'Churn out artificial ores',
-      fillerQuote: 'wip',
-      price: 1300000
-    }, {
-      name: 'Rock Science Lab',
-      tab: 'store',
-      pic: 'wip.png',
-      production: 6100,
-      desc: 'Science shit up',
-      fillerQuote: 'wip',
-      price: 7000000
-    },
-    //UPGRADES
-    {
-      name: 'Clean Magnifying Glass',
-      tab: 'upgrades',
-      pic: 'wip.png',
-      desc: 'Increases critical hit multiplier to 10x',
-      fillerQuote: 'wip',
-      price: 100,
-      hidden: 0,
-    }, {
-      name: 'Polish Magnifying Glass',
-      tab: 'upgrades',
-      pic: 'wip.png',
-      desc: 'Increases critical hit multiplier to 15x',
-      fillerQuote: 'wip',
-      price: 15000,
-      hidden: 1,
-    }, {
-      name: 'Refine Magnifying Glass',
-      tab: 'upgrades',
-      pic: 'wip.png',
-      desc: 'Increases critical hit multiplier to 20x',
-      fillerQuote: 'wip',
-      price: 1000000,
-      hidden: 1,
-    }, {
-      name: 'Near Sighted Glasses',
-      tab: 'upgrades',
-      pic: 'glasses.png',
-      desc: 'Triples the production of Old Men',
-      fillerQuote: 'wip',
-      price: 500,
-      hidden: 0,
-    }, {
-      name: 'New Perscription Lens',
-      tab: 'upgrades',
-      pic: 'wip.png',
-      desc: 'Quadruples the production of Old Men',
-      fillerQuote: 'wip',
-      price: 3000,
-      hidden: 1,
-    }
-  ]
+  Game.items = []
+  // ITEMS
+  Game.items['MagnifyingGlass'] = {
+    name: 'Magnifying Glass',
+    type: 'item',
+    pic: 'magnifying-glass.png',
+    desc: 'Allows you to spot weakpoints inside the rock',
+    fillerQuote: 'wip',
+    price: 5,
+    hidden: 0
+  }
+  Game.items['OldMan'] = {
+    name: 'Old Man',
+    type: 'item',
+    pic: 'oldman.png',
+    production: .2,
+    desc: 'wip',
+    fillerQuote: 'wip',
+    price: 10,
+    hidden: 0
+  }
+  Game.items['RockFarmer'] = {
+    name: 'Rock Farmer',
+    type: 'item',
+    pic: 'rock-farmer.png',
+    production: 1,
+    desc: 'wip',
+    fillerQuote: 'wip',
+    price: 80,
+    hidden: 1
+  }
+  Game.items['RockMiner'] = {
+    name: 'Rock Miner',
+    type: 'item',
+    pic: 'rock-miner.png',
+    production: 40,
+    desc: 'wip',
+    fillerQuote: 'wip',
+    price: 300,
+    hidden: 2
+  }
+  Game.items['RockCharmer'] = {
+    name: 'Rock Charmer',
+    type: 'item',
+    pic: 'wip.png',
+    production: 560,
+    desc: 'wip',
+    fillerQuote: 'wip',
+    price: 1250,
+    hidden: 2
+  }
+
+  // UPGRADES
+  Game.items['CleanMagnifyingGlass'] = {
+    name: 'Clean Magnifying Glass',
+    type: 'upgrade',
+    pic: 'wip.png',
+    desc: 'Increases critical hit multiplier to 10x',
+    fillerQuote: 'wip',
+    price: 100,
+    hidden: 1,
+  }
+  Game.items['PolishMagnifyingGlass'] = {
+    name: 'Polish Magnifying Glass',
+    type: 'upgrade',
+    pic: 'wip.png',
+    desc: 'Increases critical hit multiplier to 15x',
+    fillerQuote: 'wip',
+    price: 15000,
+    hidden: 1,
+  }
+  Game.items['NearSightedGlasses'] = {
+    name: 'Near Sighted Glasses',
+    type: 'upgrade',
+    pic: 'glasses.png',
+    desc: 'doubles the production of Old Men',
+    fillerQuote: 'wip',
+    price: 500,
+    hidden: 1,
+  }
 
   let generateStoreItems = () => {
-    for (i = 0; i < Game.state.items.length; i++) {
-      new Item(Game.state.items[i], i)
+    for (i in Game.items) {
+      new Item(Game.items[i])
     }
   }
 
@@ -957,7 +915,7 @@ Game.launch = () => {
     } else {
       Game.state.stats.rocksDestroyed++
       playSound('explosion2')
-      Game.state.oreHp = Math.pow(Game.state.oreHp, 1.15)
+      Game.state.oreHp = Math.pow(Game.state.oreHp, 1.03)
       Game.state.oreCurrentHp = Game.state.oreHp
       dropItem()
       s('.ore-hp').innerHTML = '100%'
@@ -1122,9 +1080,9 @@ Game.launch = () => {
 
 
   // INIT SHIT
-  Game.load()
   buildInventory()
   generateStoreItems()
+  Game.load()
   buildTabs()
   Game.switchTab('store')
   setInterval(() => {
@@ -1142,11 +1100,11 @@ Game.launch = () => {
     earnOPS()
   }, 1000 / 30)
   window.onresize = () => {
-    if (Game.state.items[0].owned > 0) {
+    if (Game.items['MagnifyingGlass'].owned > 0) {
       oreClickArea()
     }
   }
-  if (Game.state.items[0].owned > 0) oreClickArea()
+  if (Game.items['MagnifyingGlass'].owned > 0) oreClickArea()
 }
 
 window.onload = () => Game.launch()
