@@ -590,11 +590,27 @@ footer {
 .upgrades-container {
   display: flex;
   flex-flow: row wrap;
+  justify-content: flex-start;
+  width: 100%;
+}
+
+.upgrade-item-container {
+  background: url('./assets/upgrade-item-container.png');
+  height: 50px;
+  width: 50px;
+  background-size: 100% 100%;
+  /*margin: 1px;*/
+}
+
+.upgrade-item-container:hover {
+  box-shadow: 0 0 10px #fff inset;
+}
+
+.upgrade-item-container:hover .upgrade-item {
+  transform: translateY(-1px)
 }
 
 .upgrade-item {
-  border: 1px solid black;
-  margin: 1px;
   height: 50px;
   width: 50px;
   cursor: pointer;

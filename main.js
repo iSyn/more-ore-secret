@@ -558,13 +558,15 @@ Game.launch = () => {
             if (item.hidden == 0) {
               hasContent = 1
               str += `
-                <div class="upgrade-item" onmouseover="Game.showTooltip('${i}')" onmouseout="Game.hideTooltip()" onclick='Game.items["${i}"].buy()' style='background: url(./assets/${item.pic}); background-size: 100%; background-color: snow'></div>
+                <div class="upgrade-item-container" style='background-color: ${item.bgc}'>
+                  <div class="upgrade-item" onmouseover="Game.showTooltip('${i}')" onmouseout="Game.hideTooltip()" onclick='Game.items["${i}"].buy()' style='background: url(./assets/${item.pic}); background-size: 100%;'></div>
+                </div>
               `
             }
           }
         }
         if (hasContent == 0) {
-          str += ' <h3>Upgrades</h3>'
+          str += ' <h3 style="text-align: center; width: 100%; opacity: .5">no upgrades available</h3>'
         }
 
         str += `
@@ -911,6 +913,9 @@ Game.launch = () => {
     this.functionName = obj.name.replace(/ /g, '')
     this.type = obj.type
     this.pic = obj.pic
+    if (obj.bgc) {
+      this.bgc = obj.bgc
+    }
     this.production = obj.production || 0
     this.desc = obj.desc
     this.fillerQuote = obj.fillerQuote
@@ -941,6 +946,15 @@ Game.launch = () => {
 
   Game.items = []
   // ITEMS
+  Game.items['MagnifyingGlass'] = {
+    name: 'Magnifying Glass',
+    type: 'item',
+    pic: 'magnifying-glass.png',
+    desc: 'Allows you to spot weakpoints inside the rock',
+    fillerQuote: 'wip',
+    price: 5,
+    hidden: 0
+  }
   Game.items['OldMan'] = {
     name: 'Old Man',
     type: 'item',
@@ -1003,15 +1017,6 @@ Game.launch = () => {
   }
 
   // ITEM UPGRADES
-  Game.items['MagnifyingGlass'] = {
-    name: 'Magnifying Glass',
-    type: 'upgrade',
-    pic: 'magnifying-glass.png',
-    desc: 'Allows you to spot weakpoints inside the rock',
-    fillerQuote: 'wip',
-    price: 5,
-    hidden: 0
-  }
   Game.items['CleanMagnifyingGlass'] = {
     name: 'Clean Magnifying Glass',
     type: 'upgrade',
@@ -1025,6 +1030,7 @@ Game.launch = () => {
     name: 'Near Sighted Glasses',
     type: 'upgrade',
     pic: 'glasses.png',
+    bgc: '#313131',
     desc: 'doubles the production of Old Men',
     production: 2,
     fillerQuote: 'wip',
@@ -1100,12 +1106,23 @@ Game.launch = () => {
     desc: 'Increases OpS by 1%',
     fillerQuote: 'wip',
     price: 100,
+    hidden: 1,
+  }
+  Game.items['Painkillers'] = {
+    name: 'Painkillers',
+    type: 'upgrade',
+    pic: 'painkillers.png',
+    bgc: '#ed143d',
+    desc: 'double your OpC',
+    fillerQuote: 'wip',
+    price: 12000,
     hidden: 0,
   }
   Game.items['Steroids'] = {
     name: 'Steroids',
     type: 'upgrade',
     pic: 'steroids.png',
+    bgc: '#da9800',
     desc: 'double your OpC',
     fillerQuote: 'wip',
     price: 100000,
