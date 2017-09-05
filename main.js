@@ -808,20 +808,6 @@ Game.launch = () => {
 
   let buyFunction = (item) => {
     // ITEMS
-    if (item.name == 'Old Man') {
-      if (item.owned == 1) {
-        unlockUpgrades('NearSightedGlasses')
-        Game.items['RockFarmer'].hidden = 0
-        Game.items['RockMiner'].hidden = 1
-        Game.items['RockCharmer'].hidden = 1
-      }
-      if (item.owned == 10) {
-        unlockUpgrades('ExtraVirginPruneJuice')
-      }
-      if (item.owned == 50) {
-
-      }
-    }
     if (item.name == 'Rock Farmer') {
       if (item.owned == 1) {
         unlockUpgrades('StonePitchfork')
@@ -835,29 +821,49 @@ Game.launch = () => {
         unlockUpgrades('MinerLamp')
         Game.items['RockCharmer'].hidden = 0
         Game.items['RockScientist'].hidden = 1
-        Game.items['RockPortal'].hidden = 1
+        Game.items['RockPope'].hidden = 1
       }
     }
     if (item.name == 'Rock Charmer') {
       if (item.owned == 1) {
         unlockUpgrades('BambooPanFlute')
         Game.items['RockScientist'].hidden = 0
-        Game.items['RockPortal'].hidden = 1
+        Game.items['RockPope'].hidden = 1
+        Game.items['RockGiant'].hidden = 1
       }
     }
 
     if (item.name == 'Rock Scientist') {
       if (item.owned == 1) {
         unlockUpgrades('100xMicroscope')
-        Game.items['RockPortal'].hidden = 0
+        Game.items['RockPope'].hidden = 0
+        Game.items['RockGiant'].hidden = 1
+        Game.items['RockDragon'].hidden = 1
       }
     }
 
-    if (item.name == 'Rock Portal') {
+    if (item.name == 'Rock Pope') {
       if (item.owned == 1) {
-        unlockUpgrades('TimeTravelJelly')
+        //
+        Game.items['RockGiant'].hidden = 0
+        Game.items['RockDragon'].hidden = 1
       }
     }
+
+    if (item.name == 'Rock Giant') {
+      if (item.owned == 1) {
+        //
+        Game.items['RockDragon'].hidden = 0
+      }
+    }
+
+    if (item.name == 'Rock Dragon') {
+      if (item.owned == 1) {
+        //
+      }
+    }
+
+
 
     // ITEM UPGRADES
     if (item.name == 'Magnifying Glass') {
@@ -869,10 +875,6 @@ Game.launch = () => {
       item.hidden = 1
       Game.state.oreClickMultiplier = 10
       Game.items['PolishMagnifyingGlass'].hidden = 0
-    }
-    if (item.name == 'Near Sighted Glasses') {
-      item.hidden = 1
-      Game.items['OldMan'].production *= item.production
     }
     if (item.name == 'Extra Virgin Prune Juice') {
       item.hidden = 1
@@ -953,16 +955,6 @@ Game.launch = () => {
     price: 5,
     hidden: 0
   }
-  Game.items['OldMan'] = {
-    name: 'Old Man',
-    type: 'item',
-    pic: 'oldman.png',
-    production: .2,
-    desc: 'wip',
-    fillerQuote: 'wip',
-    price: 10,
-    hidden: 0
-  }
   Game.items['RockFarmer'] = {
     name: 'Rock Farmer',
     type: 'item',
@@ -971,7 +963,7 @@ Game.launch = () => {
     desc: 'wip',
     fillerQuote: 'wip',
     price: 110,
-    hidden: 1
+    hidden: 0
   }
   Game.items['RockMiner'] = {
     name: 'Rock Miner',
@@ -991,7 +983,7 @@ Game.launch = () => {
     desc: 'wip',
     fillerQuote: 'wip',
     price: 12500,
-    hidden: 2
+    hidden: 1
   }
   Game.items['RockScientist'] = {
     name: 'Rock Scientist',
@@ -1003,16 +995,37 @@ Game.launch = () => {
     price: 110000,
     hidden: 2
   }
-  Game.items['RockPortal'] = {
-    name: 'Rock Portal',
+  Game.items['RockPope'] = {
+    name: 'Rock Pope',
     type: 'item',
     pic: 'wip.png',
     production: 2300,
-    desc: 'Open a rift in the space time continuum... for ores',
+    desc: 'Pray to the rock gods',
     fillerQuote: 'wip',
     price: 1800000,
     hidden: 2
   }
+  Game.items['RockGiant'] = { //giant feet for pic
+    name: 'Rock Giant',
+    type: 'item',
+    pic: 'wip.png',
+    production: 30000,
+    desc: 'Open a rift in the space time continuum... for ores',
+    fillerQuote: 'wip',
+    price: 30000000,
+    hidden: 2
+  }
+  Game.items['RockDragon'] = {
+    name: 'Rock Dragon',
+    type: 'item',
+    pic: 'wip.png',
+    production: 550000,
+    desc: 'Open a rift in the space time continuum... for ores',
+    fillerQuote: 'wip',
+    price: 700000000,
+    hidden: 2
+  }
+
 
   // ITEM UPGRADES
   Game.items['CleanMagnifyingGlass'] = {
@@ -1084,16 +1097,7 @@ Game.launch = () => {
     price: 1000000,
     hidden: 1,
   }
-  Game.items['TimeTravelJelly'] = {
-    name: 'Time Travel Jelly',
-    type: 'upgrade',
-    pic: 'wip.png',
-    desc: 'doubles the production of Rock Portal',
-    production: 2,
-    fillerQuote: 'wip',
-    price: 1000000,
-    hidden: 1,
-  }
+
 
   // UPGRADES
   Game.items['SpeechTherapy'] = {
