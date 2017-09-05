@@ -442,9 +442,7 @@ footer {
 /* RIGHT SECTION */
 
 .right-section {
-  /*width: 27%;*/
-  width: 313px;
-  /*flex-grow: 1;*/
+  width: 300px;
   background: lightgrey;
   display: flex;
   flex-flow: column nowrap;
@@ -481,6 +479,7 @@ footer {
   padding-top: 20px;
   height: 90%;
   overflow-y: auto;
+  background: linear-gradient(lightgrey, #190800);
 }
 
 .tab-content {
@@ -497,28 +496,23 @@ footer {
 
 .button {
   font-family: 'Abel';
-  width: 95%;
-  margin-bottom: 10px;
-  border-radius: 5px;
-  border: 1px solid black;
-  border-collapse: collapse;
+  width: 290px;
+  height: 70px;
+  margin-bottom: 1px;
+  /*border-radius: 5px;*/
   cursor: pointer;
-  padding: 10px 20px 10px 10px;
+  padding: 5px 20px 5px 0px;
   display: flex;
   flex-flow: column nowrap;
   box-shadow: 0 4px #222;
   justify-content: center;
-  background: snow;
-}
-
-.button:hover .button-bottom {
-  display: block;
-
+  background: url('./assets/item-container.png');
+  background-color: snow;
+  box-shadow: 0 0 30px #222 inset;
 }
 
 .button:hover {
-  box-shadow: 0 4px 5px black;
-  border: 2px solid black;
+  box-shadow: 0 0 10px #fff inset;
 }
 
 .sprite {
@@ -601,6 +595,7 @@ footer {
   background-size: 100% 100%;
   box-shadow: 0 0 30px rgba(0,0,0,0.9) inset;
   /*margin: 1px;*/
+  image-rendering: pixelated;
 }
 
 .upgrade-item-container:hover {

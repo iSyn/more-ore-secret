@@ -558,7 +558,7 @@ Game.launch = () => {
             if (item.hidden == 0) {
               hasContent = 1
               str += `
-                <div class="upgrade-item-container" style='background-color: ${item.bgc}'>
+                <div class="upgrade-item-container" style='background-color: #b56535'>
                   <div class="upgrade-item" onmouseover="Game.showTooltip('${i}')" onmouseout="Game.hideTooltip()" onclick='Game.items["${i}"].buy()' style='background: url(./assets/${item.pic}); background-size: 100%;'></div>
                 </div>
               `
@@ -596,7 +596,7 @@ Game.launch = () => {
           }
           if (item.hidden == 1) {
             str += `
-              <div class="button" style='cursor: not-allowed; box-shadow: 0 4px black; filter: brightness(50%)'>
+              <div class="button" style='cursor: not-allowed; box-shadow: 0 4px black; opacity: .7; filter: brightness(60%)'>
                 <div class="button-top">
                   <div class="button-left">
                     <img src="./assets/${item.pic}" style='filter: brightness(0%)'/>
@@ -740,8 +740,9 @@ Game.launch = () => {
     tooltip.classList.add('tooltip-container')
     tooltip.style.display = 'block'
     tooltip.style.width = '300px'
-    tooltip.style.background = 'white'
-    tooltip.style.border = '1px solid black'
+    tooltip.style.background = '#222'
+    tooltip.style.border = '1px solid white'
+    tooltip.style.color = 'white'
     tooltip.style.position = 'absolute'
     tooltip.style.left = anchor.left - tooltip.getBoundingClientRect().width + 'px'
 
@@ -913,9 +914,6 @@ Game.launch = () => {
     this.functionName = obj.name.replace(/ /g, '')
     this.type = obj.type
     this.pic = obj.pic
-    if (obj.bgc) {
-      this.bgc = obj.bgc
-    }
     this.production = obj.production || 0
     this.desc = obj.desc
     this.fillerQuote = obj.fillerQuote
@@ -1020,7 +1018,7 @@ Game.launch = () => {
   Game.items['CleanMagnifyingGlass'] = {
     name: 'Clean Magnifying Glass',
     type: 'upgrade',
-    pic: 'wip.png',
+    pic: 'clean-magnifying-glass.png',
     desc: 'Increases critical hit multiplier to 10x',
     fillerQuote: 'wip',
     price: 100,
@@ -1030,7 +1028,6 @@ Game.launch = () => {
     name: 'Near Sighted Glasses',
     type: 'upgrade',
     pic: 'glasses.png',
-    bgc: '#313131',
     desc: 'doubles the production of Old Men',
     production: 2,
     fillerQuote: 'wip',
@@ -1112,7 +1109,6 @@ Game.launch = () => {
     name: 'Painkillers',
     type: 'upgrade',
     pic: 'painkillers.png',
-    bgc: '#ed143d',
     desc: 'double your OpC',
     fillerQuote: 'wip',
     price: 12000,
@@ -1122,7 +1118,6 @@ Game.launch = () => {
     name: 'Steroids',
     type: 'upgrade',
     pic: 'steroids.png',
-    bgc: '#da9800',
     desc: 'double your OpC',
     fillerQuote: 'wip',
     price: 100000,
