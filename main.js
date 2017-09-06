@@ -836,14 +836,7 @@ Game.launch = () => {
     let div = document.createElement('div')
     div.append(script)
     div.append(ins)
-    s('body').append(div)
-
-
-
-    // console.log('loadAd firing')
-    // let adContainer = s('#ads-im-sorry-please-dont-hate-me')
-    // let ad = s(".ads-im-sorry-please-dont-hate-me").innerHTML
-    // adContainer.innerHTML = ad
+    s('.tab-content').append(div)
   }
 
   let buyFunction = (item) => {
