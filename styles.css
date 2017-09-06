@@ -28,6 +28,10 @@ a:visited {
   flex-flow: row nowrap;
 }
 
+.ads-im-sorry-please-dont-hate-me {
+  display: none;
+}
+
 footer {
   height: 2vh;
   line-height: 2vh;
