@@ -823,10 +823,27 @@ Game.launch = () => {
   }
 
   let loadAd = () => {
-    console.log('loadAd firing')
-    let adContainer = s('#ads-im-sorry-please-dont-hate-me')
-    let ad = s(".ads-im-sorry-please-dont-hate-me").innerHTML
-    adContainer.innerHTML = ad
+
+    let script = document.createElement('script')
+    script.src = '//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js'
+    let ins = document.createElement('ins')
+    ins.classList.add('adsbygoogle')
+    ins.style.display = 'block'
+    ins.setAttribute('data-ad-client', 'ca-pub-4584563958870163')
+    ins.setAttribute('data-ad-slot', '6565116738')
+    ins.setAttribute('data-ad-format', 'auto')
+
+    let div = document.createElement('div')
+    div.append(script)
+    div.append(ins)
+    s('body').append(div)
+
+
+
+    // console.log('loadAd firing')
+    // let adContainer = s('#ads-im-sorry-please-dont-hate-me')
+    // let ad = s(".ads-im-sorry-please-dont-hate-me").innerHTML
+    // adContainer.innerHTML = ad
   }
 
   let buyFunction = (item) => {
