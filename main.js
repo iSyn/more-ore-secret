@@ -824,6 +824,8 @@ Game.launch = () => {
 
   let loadAd = () => {
 
+    console.log('WHY ISNT THIS WORKING')
+
     let script = document.createElement('script')
     script.src = '//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js'
     let ins = document.createElement('ins')
