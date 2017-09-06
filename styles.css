@@ -31,6 +31,14 @@ a:visited {
 .ads-im-sorry-please-dont-hate-me {
   display: none;
 }
+#ads-im-sorry-please-dont-hate-me {
+  min-width: 100px;
+  min-height: 100px;
+}
+ins {
+  min-width: 100px;
+  min-height: 100px;
+}
 
 footer {
   height: 2vh;
