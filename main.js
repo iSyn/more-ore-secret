@@ -836,6 +836,7 @@ Game.launch = () => {
     let div = document.createElement('div')
     div.append(script)
     div.append(ins)
+    console.log(div)
     s('.tab-content').append(div)
   }
 
