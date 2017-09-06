@@ -824,7 +824,7 @@ Game.launch = () => {
 
   let loadAd = () => {
 
-    console.log('WHY ISNT THIS WORKING')
+    console.log('... I HATE THIS')
 
     let script = document.createElement('script')
     script.src = '//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js'
@@ -835,10 +835,11 @@ Game.launch = () => {
     ins.setAttribute('data-ad-slot', '6565116738')
     ins.setAttribute('data-ad-format', 'auto')
 
-    let div = document.createElement('div')
+    let div = s('#ads-im-sorry-please-dont-hate-me')
     div.append(script)
     div.append(ins)
     console.log(div)
+
     s('.tab-content').append(div)
   }
 
@@ -1432,6 +1433,6 @@ Game.launch = () => {
 window.onload = () => {
   Game.launch();
 }
-document.addEventListener("DOMContentLoaded", function() {
-    (adsbygoogle = window.adsbygoogle || []).push({});
-});
+// document.addEventListener("DOMContentLoaded", function() {
+//     (adsbygoogle = window.adsbygoogle || []).push({});
+// });
