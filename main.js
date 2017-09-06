@@ -30,6 +30,8 @@ Game.launch = () => {
     oreHp: 50,
     oreCurrentHp: 50,
     oresPerSecond: 0,
+    opsMultiplier: 0,
+    opcMultiplier: 0,
     oreClickMultiplier: 5,
     player: {
       lvl: 1,
@@ -128,6 +130,8 @@ Game.launch = () => {
     opc += Game.state.player.pickaxe.damage
     opc += Game.state.player.pickaxe.damage * str * .1
 
+    opc += (opc * Game.state.opcMultiplier)
+
     if (type == 'crit') {
       opc *= Game.state.oreClickMultiplier
     }
@@ -144,6 +148,8 @@ Game.launch = () => {
       }
     }
 
+    ops += (ops * Game.state.opsMultiplier)
+
     Game.state.oresPerSecond = ops
     return ops
   }
@@ -156,8 +162,7 @@ Game.launch = () => {
     let amountOfRocksDestroyed = Game.state.stats.rocksDestroyed
     let iLvl = amountOfRocksDestroyed
 
-    if (Game.state.stats.rocksDestroyed == 1) {
-
+    if (Math.random() < .3 || amountOfRocksDestroyed <= 1) { // 30% chance
       let itemContainer = document.createElement('div')
       itemContainer.classList.add('item-container')
       itemContainer.innerHTML = `
@@ -187,42 +192,7 @@ Game.launch = () => {
           pickUpItem(iLvl)
         }, 800)
       })
-
       s('body').append(itemContainer)
-    } else {
-      if (Math.random() < .3) { // 30% chance
-        let itemContainer = document.createElement('div')
-        itemContainer.classList.add('item-container')
-        itemContainer.innerHTML = `
-          <div class="item-pouch-glow"></div>
-          <div class="item-pouch-glow2"></div>
-          <div class="item-pouch-glow3"></div>
-        `
-        let orePos = s('.ore').getBoundingClientRect()
-        itemContainer.style.position = 'absolute'
-        itemContainer.style.top = orePos.bottom + randomY + 'px'
-        itemContainer.style.left = (orePos.left + orePos.right)/2 + randomNumber + 'px'
-
-        let item = document.createElement('div')
-        item.classList.add('item-drop')
-        item.style.position = 'relative'
-
-        itemContainer.append(item)
-
-        item.addEventListener('click', () => {
-          s('.item-pouch-glow').style.display = 'none'
-          s('.item-pouch-glow2').style.display = 'none'
-          s('.item-pouch-glow3').style.display = 'none'
-          item.style.pointerEvents = 'none'
-          s('.item-drop').classList.add('item-pickup-animation')
-          setTimeout(() => {
-            itemContainer.remove()
-            pickUpItem(iLvl)
-          }, 800)
-          })
-
-          s('body').append(itemContainer)
-        }
     }
   }
 
@@ -628,12 +598,12 @@ Game.launch = () => {
             <p style='text-align: center;'>Available SP: ${Game.state.player.availableSp}</p>
 
             <div class="single-stat">
-              <p class='stat-left'>Strength: </p>
+              <p class='stat-left' onmouseover='Game.showTooltip("", null, "stat", "str")' onmouseout='Game.hideTooltip()'>Strength: </p>
               <p>${Game.state.player.str}</p>
               `
 
               if (Game.state.player.availableSp > 0) {
-                str += `<button class='level-up-btn' onclick='Game.addStat("str")'>+</button>`
+                str += `<button class='level-up-btn' onclick='Game.addStat("str")' onmouseover='Game.showTooltip("", null, "stat", "str")' onmouseout='Game.hideTooltip()'>+</button>`
               }
 
             str += `
@@ -641,12 +611,12 @@ Game.launch = () => {
             </div>
 
             <div class="single-stat">
-              <p class='stat-left'>Dexterity: </p>
+              <p class='stat-left' onmouseover='Game.showTooltip("", null, "stat", "dex")' onmouseout='Game.hideTooltip()'>Dexterity: </p>
               <p>${Game.state.player.dex}</p>
 
               `
               if (Game.state.player.availableSp > 0) {
-                str += `<button class='level-up-btn' onclick='Game.addStat("dex")'>+</button>`
+                str += `<button class='level-up-btn' onclick='Game.addStat("dex")' onmouseover='Game.showTooltip("", null, "stat", "dex")' onmouseout='Game.hideTooltip()'>+</button>`
               }
 
               str += `
@@ -655,12 +625,12 @@ Game.launch = () => {
             </div>
 
             <div class="single-stat">
-              <p class='stat-left'>Intelligence: </p>
+              <p class='stat-left' onmouseover='Game.showTooltip("", null, "stat", "int")' onmouseout='Game.hideTooltip()'>Intelligence: </p>
               <p>${Game.state.player.int}</p>
 
               `
               if (Game.state.player.availableSp > 0) {
-                str += `<button class='level-up-btn' onclick='Game.addStat("int")'>+</button>`
+                str += `<button class='level-up-btn' onclick='Game.addStat("int")' onmouseover='Game.showTooltip("", null, "stat", "int")' onmouseout='Game.hideTooltip()'>+</button>`
               }
 
               str += `
@@ -669,12 +639,12 @@ Game.launch = () => {
             </div>
 
             <div class="single-stat">
-              <p class='stat-left'>Luck: </p>
+              <p class='stat-left' onmouseover='Game.showTooltip("", null, "stat", "luk")' onmouseout='Game.hideTooltip()'>Luck: </p>
               <p>${Game.state.player.luk}</p>
 
               `
               if (Game.state.player.availableSp > 0) {
-                str += `<button class='level-up-btn' onclick='Game.addStat("luk")'>+</button>`
+                str += `<button class='level-up-btn' onclick='Game.addStat("luk")' onmouseover='Game.showTooltip("", null, "stat", "luk")' onmouseout='Game.hideTooltip()'>+</button>`
               }
 
               str += `
@@ -683,12 +653,12 @@ Game.launch = () => {
             </div>
 
             <div class="single-stat">
-              <p class='stat-left'>Charisma: </p>
+              <p class='stat-left' onmouseover='Game.showTooltip("", null, "stat", "cha")' onmouseout='Game.hideTooltip()'>Charisma: </p>
               <p>${Game.state.player.cha}</p>
 
               `
               if (Game.state.player.availableSp > 0) {
-                str += `<button class='level-up-btn' onclick='Game.addStat("cha")'>+</button>`
+                str += `<button class='level-up-btn' onclick='Game.addStat("cha")' onmouseover='Game.showTooltip("", null, "stat", "cha")' onmouseout='Game.hideTooltip()'>+</button>`
               }
 
               str += `
@@ -732,8 +702,11 @@ Game.launch = () => {
     s('.tab-content').innerHTML = str
   }
 
-  Game.showTooltip = (itemName, anchorPoint, type) => {
-    let item = Game.items[itemName]
+  Game.showTooltip = (itemName, anchorPoint, type, stat) => {
+    let item;
+    if (itemName) {
+      item = Game.items[itemName]
+    }
     let tooltip = s('.tooltip')
     let anchor = s('#main-separator').getBoundingClientRect()
 
@@ -746,14 +719,60 @@ Game.launch = () => {
     tooltip.style.position = 'absolute'
     tooltip.style.left = anchor.left - tooltip.getBoundingClientRect().width + 'px'
 
-    tooltip.style.top = s('#anchor-point').getBoundingClientRect().bottom + 'px'
+    if (document.querySelector('#anchor-point')) {
+      tooltip.style.top = s('#anchor-point').getBoundingClientRect().bottom + 'px'
+    } else {
+      tooltip.style.top = s('.stat-sheet').getBoundingClientRect().top + 'px'
+    }
 
     if (anchorPoint) {
       tooltip.style.top = anchorPoint.getBoundingClientRect().top + 'px'
     }
 
-
-    tooltip.innerHTML = `
+    if (type == 'stat') {
+      if (stat == 'str') {
+        tooltip.innerHTML = `
+          <h3>Strength</h3>
+          <hr/>
+          <p>Increases your OpC</p>
+        `
+      }
+      if (stat == 'dex') {
+        tooltip.innerHTML = `
+          <h3>Dexterity</h3>
+          <hr/>
+          <p>Increases your OpC</p>
+          <p>Chance for critical strikes</p>
+        `
+      }
+      if (stat == 'int') {
+        tooltip.innerHTML = `
+          <h3>Intelligence</h3>
+          <hr/>
+          <p>Increases item output</p>
+          <p>Chance for critical strikes</p>
+        `
+      }
+      if (stat == 'luk') {
+        tooltip.innerHTML = `
+          <h3>Luck</h3>
+          <hr/>
+          <p>Increases item rarity percentage</p>
+          <p>Increases item drop chance</p>
+        `
+      }
+      if (stat == 'cha') {
+        tooltip.innerHTML = `
+          <h3>Charisma</h3>
+          <hr/>
+          <p>Increases item output</p>
+          <p>Lowers shop prices</p>
+        `
+      }
+      tooltip.style.width = 'auto'
+      tooltip.style.left = anchor.left - tooltip.getBoundingClientRect().width + 'px'
+    } else {
+      tooltip.innerHTML = `
       <div class="tooltip-top">
         <img src="./assets/${item.pic}" height='40px' alt="" />
         <h3 style='flex-grow: 1'>${item.name}</h3>
@@ -779,6 +798,7 @@ Game.launch = () => {
 
       </div>
     `
+    }
   }
 
   Game.hideTooltip = () => {
@@ -802,12 +822,18 @@ Game.launch = () => {
     if (upgrade.owned <= 0) {
       if (upgrade.hidden != 0) {
         upgrade.hidden = 0
+        buildTabContent()
       }
     }
   }
 
   let buyFunction = (item) => {
     // ITEMS
+    if (item.name == 'Magnifying Glass') {
+      oreClickArea()
+      item.hidden = 2
+      Game.items['CleanMagnifyingGlass'].hidden = 0
+    }
     if (item.name == 'Rock Farmer') {
       if (item.owned == 1) {
         unlockUpgrades('StonePitchfork')
@@ -866,15 +892,9 @@ Game.launch = () => {
 
 
     // ITEM UPGRADES
-    if (item.name == 'Magnifying Glass') {
-      oreClickArea()
-      item.hidden = 2
-      Game.items['CleanMagnifyingGlass'].hidden = 0
-    }
     if (item.name == 'Clean Magnifying Glass') {
       item.hidden = 1
       Game.state.oreClickMultiplier = 10
-      Game.items['PolishMagnifyingGlass'].hidden = 0
     }
     if (item.name == 'Extra Virgin Prune Juice') {
       item.hidden = 1
@@ -902,8 +922,10 @@ Game.launch = () => {
     }
 
     // UPGRADES
-    if (item.name == 'Speech Therapy') {
+    if (item.name == 'Work Boots') {
       item.hidden = 1
+      Game.state.opsMultiplier += .1
+      Game.state.opcMultiplier += .1
     }
     if (item.name == 'Steroids') {
       item.hidden = 1
@@ -958,7 +980,7 @@ Game.launch = () => {
   Game.items['RockFarmer'] = {
     name: 'Rock Farmer',
     type: 'item',
-    pic: 'rock-farmer.png',
+    pic: 'farmer.png',
     production: 1,
     desc: 'wip',
     fillerQuote: 'wip',
@@ -1100,13 +1122,13 @@ Game.launch = () => {
 
 
   // UPGRADES
-  Game.items['SpeechTherapy'] = {
-    name: 'Speech Therapy',
+  Game.items['WorkBoots'] = {
+    name: 'Work Boots',
     type: 'upgrade',
     pic: 'wip.png',
-    desc: 'Increases OpS by 1%',
+    desc: 'Increase all ore production by 1%',
     fillerQuote: 'wip',
-    price: 100,
+    price: 500,
     hidden: 1,
   }
   Game.items['Painkillers'] = {
@@ -1116,7 +1138,7 @@ Game.launch = () => {
     desc: 'double your OpC',
     fillerQuote: 'wip',
     price: 12000,
-    hidden: 0,
+    hidden: 1,
   }
   Game.items['Steroids'] = {
     name: 'Steroids',
@@ -1124,8 +1146,8 @@ Game.launch = () => {
     pic: 'steroids.png',
     desc: 'double your OpC',
     fillerQuote: 'wip',
-    price: 100000,
-    hidden: 0,
+    price: 1000,
+    hidden: 1,
   }
 
   let generateStoreItems = () => {
@@ -1328,6 +1350,13 @@ Game.launch = () => {
     updatePercentage(amt)
     buildInventory()
     drawRockParticles()
+    Game.state.stats.oreClicks++
+    if (Game.state.stats.oreClicks >= 10) {
+      unlockUpgrades('WorkBoots')
+    }
+    if (document.querySelector('.click-me-container')) {
+      s('.click-me-container').remove()
+    }
   }
 
   s('.ore-click-area').onclick = () => {
@@ -1341,8 +1370,6 @@ Game.launch = () => {
     drawRockParticles()
     oreClickArea()
   }
-
-
 
   // INIT SHIT
   buildInventory()
@@ -1368,6 +1395,20 @@ Game.launch = () => {
     if (Game.items['MagnifyingGlass'].owned > 0) {
       oreClickArea()
     }
+  }
+  if (Game.state.stats.oreClicks == 0) {
+    let clickMeContainer = s('.click-me-container')
+    let orePos = s('.ore').getBoundingClientRect()
+    clickMeContainer.style.top = (orePos.top + orePos.bottom)/2 + 'px'
+    clickMeContainer.innerHTML = `
+      <div class="click-me-left">
+        <p style='text-align: center;'>Click me!</p>
+      </div>
+      <div class="click-me-right"></div>
+    `
+    console.log(clickMeContainer.getBoundingClientRect())
+    clickMeContainer.style.left = orePos.left - clickMeContainer.getBoundingClientRect().width + 'px'
+    s('body').append(clickMeContainer)
   }
   if (Game.items['MagnifyingGlass'].owned > 0) oreClickArea()
 }
