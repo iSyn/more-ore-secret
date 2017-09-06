@@ -943,8 +943,15 @@ Game.launch = () => {
       Game.state.opsMultiplier += .1
       Game.state.opcMultiplier += .1
     }
+    if (item.name == 'Painkillers') {
+      item.hidden = 1
+      Game.state.opcMultiplier += 2
+      Game.items['Steroids'].hidden = 0
+    }
     if (item.name == 'Steroids') {
       item.hidden = 1
+      Game.state.opcMultiplier += 2
+      Game.items['Steroids'].hidden = 0
     }
   }
 
@@ -1049,7 +1056,7 @@ Game.launch = () => {
     type: 'item',
     pic: 'wip.png',
     production: 30000,
-    desc: 'Open a rift in the space time continuum... for ores',
+    desc: 'wip',
     fillerQuote: 'wip',
     price: 30000000,
     hidden: 2
@@ -1059,7 +1066,7 @@ Game.launch = () => {
     type: 'item',
     pic: 'wip.png',
     production: 550000,
-    desc: 'Open a rift in the space time continuum... for ores',
+    desc: 'wip',
     fillerQuote: 'wip',
     price: 700000000,
     hidden: 2
@@ -1154,7 +1161,7 @@ Game.launch = () => {
     pic: 'painkillers.png',
     desc: 'double your OpC',
     fillerQuote: 'wip',
-    price: 12000,
+    price: 15000,
     hidden: 1,
   }
   Game.items['Steroids'] = {
@@ -1163,7 +1170,7 @@ Game.launch = () => {
     pic: 'steroids.png',
     desc: 'double your OpC',
     fillerQuote: 'wip',
-    price: 1000,
+    price: 1000000,
     hidden: 1,
   }
 
@@ -1368,8 +1375,11 @@ Game.launch = () => {
     buildInventory()
     drawRockParticles()
     Game.state.stats.oreClicks++
-    if (Game.state.stats.oreClicks >= 10) {
+    if (Game.state.stats.oreClicks >= 10 ) {
       unlockUpgrades('WorkBoots')
+    }
+    if (Game.state.stats.oreClicks >= 100) {
+      unlockUpgrades('Painkillers')
     }
     if (document.querySelector('.click-me-container')) {
       s('.click-me-container').remove()
@@ -1378,6 +1388,8 @@ Game.launch = () => {
 
   s('.ore-click-area').onclick = () => {
     let amt = calculateOPC('crit')
+    Game.state.stats.oreClicks++
+    Game.state.stats.oreCritClicks++
     earn(amt)
     gainXp()
     risingNumber(amt, 'crit')
