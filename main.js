@@ -818,11 +818,14 @@ Game.launch = () => {
   }
 
   let loadAd = () => {
-    let div = document.createElement('div')
-    div.id = 'ads-im-sorry-please-dont-hate-me'
-    s(".tab-content").append(div)
-    let ad = s(".ads-im-sorry-please-dont-hate-me").innerHTML
-    s("#ads-im-sorry-please-dont-hate-me").innerHTML = ad
+    setTimeout(() => {
+      let div = document.createElement('div')
+      div.id = 'ads-im-sorry-please-dont-hate-me'
+      s(".tab-content").append(div)
+      let ad = s(".ads-im-sorry-please-dont-hate-me").innerHTML
+      s("#ads-im-sorry-please-dont-hate-me").innerHTML = ad
+    }, 1000)
+
   }
 
   let buyFunction = (item) => {
