@@ -824,7 +824,7 @@ Game.launch = () => {
 
   let loadAd = () => {
 
-    console.log('asdfasdf')
+    console.log('update')
 
     let script = document.createElement('script')
     script.src = '//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js'
@@ -834,6 +834,7 @@ Game.launch = () => {
     ins.setAttribute('data-ad-client', 'ca-pub-4584563958870163')
     ins.setAttribute('data-ad-slot', '6565116738')
     ins.setAttribute('data-ad-format', 'auto')
+    (adsbygoogle = window.adsbygoogle || []).push({});
 
     let div = s('#ads-im-sorry-please-dont-hate-me')
     div.append(script)
