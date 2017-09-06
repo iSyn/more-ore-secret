@@ -836,16 +836,17 @@ Game.launch = () => {
     // ins.setAttribute('data-ad-format', 'auto');
     // (adsbygoogle = window.adsbygoogle || []).push({});
 
+    let div = s('#ads-im-sorry-please-dont-hate-me')
+    div.append(script)
+    div.append(ins)
+    console.log(div)
+
     if (s('ins').style.display == 'block') {
       console.log('load the fucking ad')
       ins.setAttribute('data-ad-format', 'auto');
       (adsbygoogle = window.adsbygoogle || []).push({});
     }
 
-    let div = s('#ads-im-sorry-please-dont-hate-me')
-    div.append(script)
-    div.append(ins)
-    console.log(div)
 
     s('.tab-content').append(div)
   }
