@@ -818,7 +818,7 @@ Game.launch = () => {
   }
 
   let loadAd = () => {
-    let ad = $(".ads-im-sorry-please-dont-hate-me").html();
+    let ad = s(".ads-im-sorry-please-dont-hate-me").html();
     s(".tab-content").append(ad);
   }
 
