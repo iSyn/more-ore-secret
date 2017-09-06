@@ -824,7 +824,7 @@ Game.launch = () => {
 
   let loadAd = () => {
 
-    console.log('update2')
+    console.log('update4')
 
     let script = document.createElement('script')
     script.src = '//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js'
@@ -833,8 +833,14 @@ Game.launch = () => {
     ins.style.display = 'block'
     ins.setAttribute('data-ad-client', 'ca-pub-4584563958870163')
     ins.setAttribute('data-ad-slot', '6565116738')
-    ins.setAttribute('data-ad-format', 'auto');
-    (adsbygoogle = window.adsbygoogle || []).push({});
+    // ins.setAttribute('data-ad-format', 'auto');
+    // (adsbygoogle = window.adsbygoogle || []).push({});
+
+    if (s('ins').style.display == 'block') {
+      console.log('load the fucking ad')
+      ins.setAttribute('data-ad-format', 'auto');
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    }
 
     let div = s('#ads-im-sorry-please-dont-hate-me')
     div.append(script)
