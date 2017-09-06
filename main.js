@@ -688,7 +688,11 @@ Game.launch = () => {
         <button onclick=Game.wipe()>Wipe Save</button>
       `
     }
+    str += `
+      <div id="ads-im-sorry-please-dont-hate-me"></div>
+    `
     s('.tab-content').innerHTML = str
+
     loadAd()
   }
 
@@ -818,11 +822,10 @@ Game.launch = () => {
   }
 
   let loadAd = () => {
-    let div = document.createElement('div')
-    div.id = 'ads-im-sorry-please-dont-hate-me'
-    s(".tab-content").append(div)
+    console.log('loadAd firing')
+    let adContainer = s('#ads-im-sorry-please-dont-hate-me')
     let ad = s(".ads-im-sorry-please-dont-hate-me").innerHTML
-    s("#ads-im-sorry-please-dont-hate-me").innerHTML = ad
+    adContainer.innerHTML = ad
   }
 
   let buyFunction = (item) => {
@@ -1410,10 +1413,11 @@ Game.launch = () => {
     s('body').append(clickMeContainer)
   }
   if (Game.items['MagnifyingGlass'].owned > 0) oreClickArea()
-  loadAd()
 }
 
 window.onload = () => {
   Game.launch();
-  (adsbygoogle = window.adsbygoogle || []).push({});
 }
+document.addEventListener("DOMContentLoaded", function() {
+    (adsbygoogle = window.adsbygoogle || []).push({});
+});
