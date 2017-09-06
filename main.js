@@ -824,7 +824,7 @@ Game.launch = () => {
 
   let loadAd = () => {
 
-    console.log('... I HATE THIS')
+    console.log('asdfasdf')
 
     let script = document.createElement('script')
     script.src = '//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js'
