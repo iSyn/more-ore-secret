@@ -818,14 +818,11 @@ Game.launch = () => {
   }
 
   let loadAd = () => {
-    setTimeout(() => {
-      let div = document.createElement('div')
-      div.id = 'ads-im-sorry-please-dont-hate-me'
-      s(".tab-content").append(div)
-      let ad = s(".ads-im-sorry-please-dont-hate-me").innerHTML
-      s("#ads-im-sorry-please-dont-hate-me").innerHTML = ad
-    }, 1000)
-
+    let div = document.createElement('div')
+    div.id = 'ads-im-sorry-please-dont-hate-me'
+    s(".tab-content").append(div)
+    let ad = s(".ads-im-sorry-please-dont-hate-me").innerHTML
+    s("#ads-im-sorry-please-dont-hate-me").innerHTML = ad
   }
 
   let buyFunction = (item) => {
@@ -1417,5 +1414,6 @@ Game.launch = () => {
 }
 
 window.onload = () => {
-  Game.launch()
+  Game.launch();
+  (adsbygoogle = window.adsbygoogle || []).push({});
 }
