@@ -48,7 +48,7 @@ Game.launch = () => {
         rarity: 'Common',
         itemLevel: 1,
         material: 'Wood',
-        damage: 1
+        damage: 99999
       },
       accesory: {}
     },
@@ -178,6 +178,7 @@ Game.launch = () => {
       let item = document.createElement('div')
       item.classList.add('item-drop')
       item.style.position = 'relative'
+      item.id = `item-${amountOfRocksDestroyed}`
 
       itemContainer.append(item)
 
@@ -192,6 +193,8 @@ Game.launch = () => {
           pickUpItem(iLvl)
         }, 800)
       })
+
+
       s('body').append(itemContainer)
     }
   }
@@ -990,7 +993,7 @@ Game.launch = () => {
   Game.items['RockMiner'] = {
     name: 'Rock Miner',
     type: 'item',
-    pic: 'rock-miner.png',
+    pic: 'wip.png',
     production: 9,
     desc: 'wip',
     fillerQuote: 'wip',
