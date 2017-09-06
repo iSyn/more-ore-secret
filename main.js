@@ -692,9 +692,9 @@ Game.launch = () => {
       <div id="ads-im-sorry-please-dont-hate-me"></div>
     `
     s('.tab-content').innerHTML = str
-    setTimeout(() => {
+    // setTimeout(() => {
       loadAd()
-    }, 3000)
+    // }, 3000)
   }
 
   Game.showTooltip = (itemName, anchorPoint, type, stat) => {
