@@ -818,8 +818,11 @@ Game.launch = () => {
   }
 
   let loadAd = () => {
-    let ad = s(".ads-im-sorry-please-dont-hate-me").html();
-    s(".tab-content").append(ad);
+    let div = document.createElement('div')
+    div.id = 'ads-im-sorry-please-dont-hate-me'
+    s(".tab-content").append(div)
+    let ad = s(".ads-im-sorry-please-dont-hate-me").innerHTML
+    s("#ads-im-sorry-please-dont-hate-me").innerHTML = ad
   }
 
   let buyFunction = (item) => {
@@ -1407,6 +1410,9 @@ Game.launch = () => {
     s('body').append(clickMeContainer)
   }
   if (Game.items['MagnifyingGlass'].owned > 0) oreClickArea()
+  loadAd()
 }
 
-window.onload = () => Game.launch()
+window.onload = () => {
+  Game.launch()
+}
