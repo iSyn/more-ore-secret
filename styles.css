@@ -523,14 +523,17 @@ footer {
   transform-origin: 10%;
 }
 
-.stats-container-content {
+.stats-container-content-wrapper {
   height: 0px;
-  overflow-y: auto;
-  overflow-x: none;
+  overflow: auto;
   transition: all 0.5s;
+}
+
+.stats-container-content {
+  height: auto;
   display: flex;
   flex-flow: column nowrap;
-  padding: 0 10px;
+  padding: 20px;
 }
 
 .single-stat {
