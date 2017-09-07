@@ -497,7 +497,6 @@ Game.launch = () => {
   let buildStore = () => {
     let str = ''
     str += `
-      <div id='anchor-point' class="horizontal-separator" style='height: 8px'></div>
       <div class="upgrades-container">
     `
     let hasContent = 0
