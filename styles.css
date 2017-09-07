@@ -490,12 +490,42 @@ footer {
   background-size: auto 100%;
 }
 
-.stats-button {
+.stats-container {
   position: absolute;
-  height: 50px;
-  width: 20px;
-  border: 1px solid black;
-  background: white;
+  display: flex;
+  flex-flow: column nowrap;
+  background: rgba(0, 0, 0, .5);
+  color: white;
+  width: 200px;
+  text-align: center;
+}
+
+.stats-container-header {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  border: 1px solid rgba(255,255,255,0.5);
+  background: black;
+  cursor: pointer;
+}
+
+.stats-container-header h4 {
+  flex-grow: 1;
+}
+
+.stats-container-header i {
+  transition: all 0.5s;
+  transform-origin: 10%;
+}
+
+.stats-container-content {
+  height: 0px;
+  overflow: hidden;
+  transition: all 0.5s;
+}
+
+.caret {
+  transition: all 0.3s;
 }
 
 /* RIGHT SECTION */
@@ -598,36 +628,6 @@ footer {
 
 .button-bottom {
   display: none;
-}
-
-.stat-sheet {
-  width: 90%;
-  /*height: 150px;*/
-  border: 1px solid black;
-  display: flex;
-  flex-flow: row nowrap;
-  /*justify-content: center;*/
-  background: snow;
-  margin-bottom: 15px;
-  padding: 10px 10px;
-}
-
-.stats-container {
-  height: 100%;
-  width: 100%;
-}
-
-.single-stat {
-  display: flex;
-  flex-flow: row nowrap;
-}
-
-.single-stat:first-child {
-  flex-grow: 1;
-}
-
-.stat-left {
-  flex-grow: 1;
 }
 
 .achievements-container {
