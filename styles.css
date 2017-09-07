@@ -32,6 +32,11 @@ a:visited {
   display: hidden;
 }
 
+#ads-im-sorry-please-dont-hate-me {
+  margin-top: 50px;
+  width: 100%;
+}
+
 footer {
   height: 2vh;
   line-height: 2vh;
