@@ -999,6 +999,8 @@ Game.launch = () => {
   }
 
 
+  console.log('new')
+
   Game.items = []
   // ITEMS
   Game.items['MagnifyingGlass'] = {

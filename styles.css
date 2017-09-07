@@ -534,6 +534,7 @@ footer {
   display: flex;
   flex-flow: column nowrap;
   padding: 10px 20px;
+  overflow: hidden;
 }
 
 .single-stat {
