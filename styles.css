@@ -377,8 +377,7 @@ footer {
   /*border: 1px solid white;*/
   color: white;
   padding: 10px;
-  animation: pulse 1s infinite;
-
+  animation: sideToSide .5s infinite ease-in-out;
 }
 
 .click-me-left {
@@ -393,6 +392,12 @@ footer {
   border-top: 6px solid transparent;
   border-bottom: 6px solid transparent;
   border-left: 6px solid #969188;
+}
+
+@keyframes sideToSide {
+  0% { transform: translateX(0px); }
+  50% { transform: translateX(5px); }
+  100% { transform: translateX(0px); }
 }
 
 @keyframes pulse {
@@ -497,7 +502,6 @@ footer {
   background: rgba(0, 0, 0, .5);
   color: white;
   width: 200px;
-  text-align: center;
 }
 
 .stats-container-header {
@@ -507,6 +511,7 @@ footer {
   border: 1px solid rgba(255,255,255,0.5);
   background: black;
   cursor: pointer;
+  text-align: center;
 }
 
 .stats-container-header h4 {
@@ -520,19 +525,33 @@ footer {
 
 .stats-container-content {
   height: 0px;
-  overflow: hidden;
+  overflow: scroll;
   transition: all 0.5s;
+  display: flex;
+  flex-flow: column nowrap;
+  padding: 0 10px;
+}
+
+.single-stat {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
 }
 
 .caret {
   transition: all 0.3s;
 }
 
+.stat-level-container {
+  display:  flex;
+  flex-flow: row nowrap;
+}
+
 /* RIGHT SECTION */
 
 .right-section {
   width: 300px;
-  background: lightgrey;
+  background: black;
   display: flex;
   flex-flow: column nowrap;
 }
@@ -541,6 +560,9 @@ footer {
   font-size: 50px;
   text-align: center;
   padding: 0 20px;
+  border-top-right-radius: 30px;
+  border-top-left-radius: 30px;
+  background-color: lightgrey;
 }
 
 .tabs {
@@ -601,7 +623,7 @@ footer {
   background: url('./assets/item-container2.png');
   background-color: snow;
   background-size: 100% 100%;
-  box-shadow: 0 0 10px #222 inset;
+  box-shadow: 0 0 20px #222 inset;
 }
 
 .button:hover {

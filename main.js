@@ -565,40 +565,126 @@ Game.launch = () => {
     s('.tab-content').innerHTML = str
   }
 
+  Game.statsVisable = false
+
   let buildStats = () => {
+    let str = ''
     let inventoryPos = s('.inventory-section')
     let leftSeparatorPos = s('#left-separator')
 
     let statsContainer = s('.stats-container')
     statsContainer.style.top = inventoryPos.getBoundingClientRect().bottom + 10 + 'px'
     statsContainer.style.left = leftSeparatorPos.getBoundingClientRect().right + 'px'
-    statsContainer.innerHTML = `
+
+    str += `
       <div class="stats-container-header" onclick='Game.toggleStats()'>
         <h4>stats</h4>
         <p class='caret' style='font-size: 8px; float: right; margin-right: 5px'>&#9660;</p>
       </div>
-      <div class="stats-container-content">
-        <p>test</p>
-        <p>test</p>
-        <p>test</p>
-        <p>test</p>
-        <p>test</p>
-        <p>test</p>
-        <p>test</p>
-        <p>test</p>
+
+      `
+
+      if (Game.statsVisable == true) {
+        str += `<div class="stats-container-content" style='height: 300px'>`
+      } else {
+        str += `<div class="stats-container-content">`
+      }
+
+      str += `
+
+        <div class="stat-level-container">
+          <h1 style='flex-grow: 1'>Level:</h1>
+          <h1 class='stat-player-lvl'>${Game.state.player.lvl}</h1>
+        </div>
+
+        <hr/>
+
+        <div class="single-stat">
+          <p style='flex-grow: 1'>Strength:</p>
+          <p class='stat-str'>${Game.state.player.str}</p>
+          `
+          if (Game.state.player.availableSp > 0) {
+            str += `<button>+</button>`
+          }
+
+          str += `
+        </div>
+
+        <div class="single-stat">
+          <p style='flex-grow: 1'>Dexterity:</p>
+          <p class='stat-dex'>${Game.state.player.dex}</p>
+          `
+          if (Game.state.player.availableSp > 0) {
+            str += `<button>+</button>`
+          }
+
+          str += `
+        </div>
+        <div class="single-stat">
+          <p style='flex-grow: 1'>Intelligence:</p>
+          <p class='stat-int'>${Game.state.player.int}</p>
+          `
+          if (Game.state.player.availableSp > 0) {
+            str += `<button>+</button>`
+          }
+
+          str += `
+        </div>
+        <div class="single-stat">
+          <p style='flex-grow: 1'>Luck:</p>
+          <p class='stat-luk'>${Game.state.player.luk}</p>
+          `
+          if (Game.state.player.availableSp > 0) {
+            str += `<button>+</button>`
+          }
+
+          str += `
+        </div>
+        <div class="single-stat">
+          <p style='flex-grow: 1'>Charisma:</p>
+          <p class='stat-cha'>${Game.state.player.cha}</p>
+          `
+          if (Game.state.player.availableSp > 0) {
+            str += `<button>+</button>`
+          }
+
+          str += `
+        </div>
+
+        <br/>
+
+        <p style='text-align: center; font-size: small'>Available SP: ${Game.state.player.availableSp}</p>
+
+        <hr/>
+        <br/>
+
+        <div style='width: 100%; border: 1px solid white; text-align: center; padding: 10px; cursor: pointer'> Unlock classes lv. 10 </div>
+
+        <br/>
+        <hr/>
       </div>
     `
+
+
+
+
+    statsContainer.innerHTML = str
   }
 
+  // let updateStats = () => {
+  //   let currentLvl = s('')
+  // }
+
   Game.toggleStats = () => {
-    console.log('firing')
     if (s('.stats-container-content').style.height == 0 || s('.stats-container-content').style.height == '0px') {
       s('.stats-container-content').style.height = '300px'
       s('.caret').style.transform = 'rotate(180deg)'
+      Game.statsVisable = true
 
     } else {
       s('.stats-container-content').style.height = 0
       s('.caret').style.transform = 'rotate(0deg)'
+      Game.statsVisable = false
     }
   }
 
@@ -1168,6 +1254,7 @@ Game.launch = () => {
       Game.state.player.currentXp = 0
       Game.state.player.lvl++
       Game.state.player.availableSp += 3
+      buildStats()
       playSound('levelup')
       Game.state.player.xpNeeded = Math.ceil(Math.pow(Game.state.player.xpNeeded, 1.05))
       risingNumber(0, 'level')
