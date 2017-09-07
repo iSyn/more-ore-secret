@@ -576,12 +576,21 @@ Game.launch = () => {
     statsContainer.style.top = inventoryPos.getBoundingClientRect().bottom + 10 + 'px'
     statsContainer.style.left = leftSeparatorPos.getBoundingClientRect().right + 'px'
 
-    str += `
-      <div class="stats-container-header" onclick='Game.toggleStats()'>
-        <h4>stats</h4>
-        <p class='caret' style='font-size: 8px; float: right; margin-right: 5px'>&#9660;</p>
-      </div>
-    `
+    if (Game.statsVisable == true) {
+      str += `
+        <div class="stats-container-header" onclick='Game.toggleStats()'>
+          <h4>stats</h4>
+          <p class='caret' style='font-size: 8px; float: right; margin-right: 5px; transform: rotate(180deg)'>&#9660;</p>
+        </div>
+      `
+    } else {
+      str += `
+        <div class="stats-container-header" onclick='Game.toggleStats()'>
+          <h4>stats</h4>
+          <p class='caret' style='font-size: 8px; float: right; margin-right: 5px';>&#9660;</p>
+        </div>
+      `
+    }
 
     if (Game.statsVisable == true) {
       str += '<div class="stats-container-content-wrapper" style="height: 400px;">'
@@ -681,13 +690,14 @@ Game.launch = () => {
 
   Game.toggleStats = () => {
     if (s('.stats-container-content-wrapper').style.height == 0 || s('.stats-container-content-wrapper').style.height == '0px') {
+      s('.stats-container-content-wrapper').style.height = '400px';
       s('.caret').style.transform = 'rotate(180deg)'
       Game.statsVisable = true
     } else {
+      s('.stats-container-content-wrapper').style.height = 0;
       s('.caret').style.transform = 'rotate(0deg)'
       Game.statsVisable = false
     }
-    buildStats()
   }
 
   Game.showTooltip = (itemName, anchorPoint, type, stat) => {

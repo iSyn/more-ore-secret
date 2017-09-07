@@ -533,7 +533,7 @@ footer {
   height: auto;
   display: flex;
   flex-flow: column nowrap;
-  padding: 20px;
+  padding: 10px 20px;
 }
 
 .single-stat {
@@ -547,7 +547,7 @@ footer {
 }
 
 .stat-level-container {
-  display:  flex;
+  display: flex;
   flex-flow: row nowrap;
 }
 
