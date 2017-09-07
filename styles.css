@@ -494,6 +494,12 @@ footer {
   flex-flow: column nowrap;
 }
 
+.right-section > h1 {
+  font-size: 50px;
+  text-align: center;
+  padding: 0 20px;
+}
+
 .tabs {
   display: flex;
   flex-flow: row nowrap;
@@ -508,9 +514,6 @@ footer {
   text-align: center;
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
-  /*border-bottom: 1px solid black;
-  border-right: 1px solid black;*/
-  border: 1px solid black;
   cursor: pointer;
   flex-grow: 1;
   background-color: darkgrey;
@@ -522,8 +525,7 @@ footer {
 }
 
 .tab-content-container {
-  padding-top: 20px;
-  height: 90%;
+  height: 100%;
   overflow-y: auto;
   background: linear-gradient(lightgrey, #190800);
 }
@@ -543,6 +545,7 @@ footer {
 .button {
   font-family: 'Abel';
   width: 100%;
+  min-width: 300px;
   height: 70px;
   margin-bottom: 1px;
   /*border-radius: 5px;*/
@@ -554,7 +557,7 @@ footer {
   justify-content: center;
   background: url('./assets/item-container2.png');
   background-color: snow;
-  background-size: 100% auto;
+  background-size: 100% 100%;
   box-shadow: 0 0 10px #222 inset;
 }
 

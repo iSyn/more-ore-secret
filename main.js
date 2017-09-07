@@ -56,10 +56,11 @@ Game.launch = () => {
       {
         name: 'store',
         locked: false
-      }, {
-        name: 'stats',
-        locked: false
-      }
+      },
+      // {
+      //   name: 'stats',
+      //   locked: false
+      // }
     ],
     stats: {
       totalOresMined: 0,
@@ -493,208 +494,77 @@ Game.launch = () => {
     s('.level').innerHTML = `Level: ${Game.state.player.lvl} (${Game.state.player.currentXp}/${Game.state.player.xpNeeded})`
   }
 
-  let buildTabs = () => {
+  let buildStore = () => {
     let str = ''
-    for (i = 0; i < Game.state.tabs.length; i++) {
-      if (Game.state.tabs[i].locked == false) {
-        str += `
-          <div id='${Game.state.tabs[i].name}-tab' class='tab' onclick='Game.switchTab("${Game.state.tabs[i].name}")' style='display: flex; align-items: center; justify-content: center;'>
-            <p style='font-size: x-large'>${Game.state.tabs[i].name}</p>
-          </div>
-        `
+    str += `
+      <div id='anchor-point' class="horizontal-separator" style='height: 8px'></div>
+      <div class="upgrades-container">
+    `
+    let hasContent = 0
+    for (i in Game.items) {
+      let item = Game.items[i]
+      if (item.type == 'upgrade') {
+        if (item.hidden == 0) {
+          hasContent = 1
+          str += `
+            <div class="upgrade-item-container" style='background-color: #b56535'>
+              <div class="upgrade-item" onmouseover="Game.showTooltip('${i}')" onmouseout="Game.hideTooltip()" onclick='Game.items["${i}"].buy()' style='background: url(./assets/${item.pic}); background-size: 100%;'></div>
+            </div>
+          `
+        }
       }
     }
-    s('.tabs').innerHTML = str
-  }
+    if (hasContent == 0) str += `<h3 style="text-align: center; width: 100%; opacity: .5">no upgrades available</h3>`
+    str += `</div><div class="horizontal-separator" style='height: 8px;'></div>`
 
-  Game.switchTab = (selectedTab) => {
-    let tabs = document.querySelectorAll('.tab')
-    tabs.forEach((tab) => {
-      tab.classList.remove('selected')
-    })
-    s(`#${selectedTab}-tab`).classList.add('selected')
-    Game.selectedTab = selectedTab
-    buildTabContent()
-  }
-
-  let buildTabContent = () => {
-    let str = ''
-    if (Game.selectedTab == 'store') {
-      str += `
-        <div id='anchor-point' class="horizontal-separator" style='height: 8px'></div>
-        <div class="upgrades-container">
-        `
-        let hasContent = 0
-        for (i in Game.items) {
-          let item = Game.items[i]
-          if (item.type == 'upgrade') {
-            if (item.hidden == 0) {
-              hasContent = 1
-              str += `
-                <div class="upgrade-item-container" style='background-color: #b56535'>
-                  <div class="upgrade-item" onmouseover="Game.showTooltip('${i}')" onmouseout="Game.hideTooltip()" onclick='Game.items["${i}"].buy()' style='background: url(./assets/${item.pic}); background-size: 100%;'></div>
+    for (i in Game.items) {
+      let item = Game.items[i]
+      if (item.type == 'item') {
+        if (item.hidden == 0) {
+          console.log('building', item)
+          str += `
+            <div class="button" onclick="Game.items['${i}'].buy()" onmouseover="Game.showTooltip('${i}', this)" onmouseout="Game.hideTooltip()">
+              <div class="button-top">
+                <div class="button-left">
+                  <img src="./assets/${item.pic}" style='filter: brightness(100%); image-rendering: pixelated'/>
                 </div>
-              `
-            }
-          }
-        }
-        if (hasContent == 0) {
-          str += ' <h3 style="text-align: center; width: 100%; opacity: .5">no upgrades available</h3>'
-        }
-
-        str += `
-        </div>
-        <div class="horizontal-separator" style='height: 8px; margin-bottom: 20px;'></div>
-      `
-      for (let i in Game.items) {
-        let item = Game.items[i]
-        if (item.type == 'item') {
-          if (item.hidden == 0) {
-            str += `
-              <div class="button" onclick="Game.items['${i}'].buy()" onmouseover="Game.showTooltip('${i}', this)" onmouseout="Game.hideTooltip()">
-                <div class="button-top">
-                  <div class="button-left">
-                    <img src="./assets/${item.pic}" style='filter: brightness(100%); image-rendering: pixelated'/>
-                  </div>
-                  <div class="button-middle">
-                    <h3 style='font-size: x-large'>${item.name}</h3>
-                    <p>cost: ${beautify(item.price.toFixed(0))} ores</p>
-                  </div>
-                  <div class="button-right">
-                    <p style='font-size: xx-large'>${item.owned}</p>
-                  </div>
+                <div class="button-middle">
+                  <h3 style='font-size: x-large'>${item.name}</h3>
+                  <p>cost: ${beautify(item.price.toFixed(0))} ores</p>
+                </div>
+                <div class="button-right">
+                  <p style='font-size: xx-large'>${item.owned}</p>
                 </div>
               </div>
-            `
-          }
-          if (item.hidden == 1) {
-            str += `
-              <div class="button" style='cursor: not-allowed; box-shadow: 0 4px black; opacity: .7; filter: brightness(60%)'>
-                <div class="button-top">
-                  <div class="button-left">
-                    <img src="./assets/${item.pic}" style='filter: brightness(0%)'/>
-                  </div>
-                  <div class="button-middle">
-                    <h3 style='font-size: larger'>???</h3>
-                    <p>cost: ??? ores</p>
-                  </div>
-                  <div class="button-right">
-                  </div>
+            </div>
+          `
+        }
+        if (item.hidden == 1) {
+          str += `
+            <div class="button" style='cursor: not-allowed; box-shadow: 0 4px black; opacity: .7; filter: brightness(60%)'>
+              <div class="button-top">
+                <div class="button-left">
+                  <img src="./assets/${item.pic}" style='filter: brightness(0%)'/>
+                </div>
+                <div class="button-middle">
+                  <h3 style='font-size: larger'>???</h3>
+                  <p>cost: ??? ores</p>
+                </div>
+                <div class="button-right">
                 </div>
               </div>
-              `
-          }
+            </div>
+          `
         }
       }
     }
 
-    if (Game.selectedTab == 'stats') {
-      str += `
-
-        <div class='stat-sheet'>
-          <div class="stats-container">
-            <div class="single-stat" style='font-size: x-large'>
-              <p class='stat-left'>Level: </p>
-              <p>${Game.state.player.lvl}</p>
-            </div>
-            <hr/>
-            <p style='text-align: center;'>Available SP: ${Game.state.player.availableSp}</p>
-
-            <div class="single-stat">
-              <p class='stat-left' onmouseover='Game.showTooltip("", null, "stat", "str")' onmouseout='Game.hideTooltip()'>Strength: </p>
-              <p>${Game.state.player.str}</p>
-              `
-
-              if (Game.state.player.availableSp > 0) {
-                str += `<button class='level-up-btn' onclick='Game.addStat("str")' onmouseover='Game.showTooltip("", null, "stat", "str")' onmouseout='Game.hideTooltip()'>+</button>`
-              }
-
-            str += `
-            <br/>
-            </div>
-
-            <div class="single-stat">
-              <p class='stat-left' onmouseover='Game.showTooltip("", null, "stat", "dex")' onmouseout='Game.hideTooltip()'>Dexterity: </p>
-              <p>${Game.state.player.dex}</p>
-
-              `
-              if (Game.state.player.availableSp > 0) {
-                str += `<button class='level-up-btn' onclick='Game.addStat("dex")' onmouseover='Game.showTooltip("", null, "stat", "dex")' onmouseout='Game.hideTooltip()'>+</button>`
-              }
-
-              str += `
-
-            <br/>
-            </div>
-
-            <div class="single-stat">
-              <p class='stat-left' onmouseover='Game.showTooltip("", null, "stat", "int")' onmouseout='Game.hideTooltip()'>Intelligence: </p>
-              <p>${Game.state.player.int}</p>
-
-              `
-              if (Game.state.player.availableSp > 0) {
-                str += `<button class='level-up-btn' onclick='Game.addStat("int")' onmouseover='Game.showTooltip("", null, "stat", "int")' onmouseout='Game.hideTooltip()'>+</button>`
-              }
-
-              str += `
-
-            <br/>
-            </div>
-
-            <div class="single-stat">
-              <p class='stat-left' onmouseover='Game.showTooltip("", null, "stat", "luk")' onmouseout='Game.hideTooltip()'>Luck: </p>
-              <p>${Game.state.player.luk}</p>
-
-              `
-              if (Game.state.player.availableSp > 0) {
-                str += `<button class='level-up-btn' onclick='Game.addStat("luk")' onmouseover='Game.showTooltip("", null, "stat", "luk")' onmouseout='Game.hideTooltip()'>+</button>`
-              }
-
-              str += `
-
-            <br/>
-            </div>
-
-            <div class="single-stat">
-              <p class='stat-left' onmouseover='Game.showTooltip("", null, "stat", "cha")' onmouseout='Game.hideTooltip()'>Charisma: </p>
-              <p>${Game.state.player.cha}</p>
-
-              `
-              if (Game.state.player.availableSp > 0) {
-                str += `<button class='level-up-btn' onclick='Game.addStat("cha")' onmouseover='Game.showTooltip("", null, "stat", "cha")' onmouseout='Game.hideTooltip()'>+</button>`
-              }
-
-              str += `
-
-            <br/>
-            </div>
-
-          </div>
-        </div>
-
-        <div style='border: 1px solid black; width: 90%; display: flex; flex-flow: row nowrap; align-items: center; background-color: snow; padding: 10px;'>
-          <i class='fa fa-lock fa-2x'></i>
-          <p style='margin-left: 10px;'>Unlock Classes lv 5</p>
-        </div>
-
-        <br/>
-
-        <p>Ore Clicks: ${Game.state.stats.oreClicks}</p>
-        <p>Ore Crit Clicks: ${Game.state.stats.oreCritClicks} </p>
-        <p>Rocks Destroyed: ${Game.state.stats.rocksDestroyed}</p>
-        <p>Items Picked Up: ${Game.state.stats.itemsPickedUp}</p>
-
-        <button onclick=Game.save()>Save</button>
-        <button onclick=Game.wipe()>Wipe Save</button>
-      `
-    }
     str += `
       <div id="ads-im-sorry-please-dont-hate-me"></div>
     `
+
     s('.tab-content').innerHTML = str
-    // setTimeout(() => {
-      loadAd()
-    // }, 3000)
+    loadAd()
   }
 
   Game.showTooltip = (itemName, anchorPoint, type, stat) => {
@@ -808,7 +678,7 @@ Game.launch = () => {
       if (stat == 'dex') Game.state.player.dex++
       if (stat == 'int') Game.state.player.int++
       if (stat == 'cha') Game.state.player.cha++
-      buildTabContent()
+      buildStore()
     }
   }
 
@@ -817,14 +687,12 @@ Game.launch = () => {
     if (upgrade.owned <= 0) {
       if (upgrade.hidden != 0) {
         upgrade.hidden = 0
-        buildTabContent()
+        buildStore()
       }
     }
   }
 
   let loadAd = () => {
-
-    console.log('update4')
 
     let script = document.createElement('script')
     script.src = '//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js'
@@ -839,10 +707,8 @@ Game.launch = () => {
     let div = s('#ads-im-sorry-please-dont-hate-me')
     div.append(script)
     div.append(ins)
-    console.log(div)
 
     if (s('ins').style.display == 'block') {
-      console.log('load the fucking ad')
       ins.setAttribute('data-ad-format', 'auto');
       (adsbygoogle = window.adsbygoogle || []).push({});
     }
@@ -990,7 +856,7 @@ Game.launch = () => {
         buildInventory()
         risingNumber(0, 'spendMoney')
         generateStoreItems()
-        buildTabContent(Game.selectedTab)
+        buildStore()
       }
     }
 
@@ -1079,7 +945,6 @@ Game.launch = () => {
     price: 700000000,
     hidden: 2
   }
-
 
   // ITEM UPGRADES
   Game.items['CleanMagnifyingGlass'] = {
@@ -1268,18 +1133,7 @@ Game.launch = () => {
       Game.state.player.availableSp += 3
       playSound('levelup')
       Game.state.player.xpNeeded = Math.ceil(Math.pow(Game.state.player.xpNeeded, 1.05))
-      setTimeout(() => {
-        s('#stats-tab').style.boxShadow = 'none'
-      }, 1000)
-      s('#stats-tab').style.boxShadow = '0px 0px 50px yellow'
       risingNumber(0, 'level')
-    }
-    if (Game.state.player.availableSp > 0) {
-      s('#stats-tab').innerHTML = 'stats [!]'
-      s('#stats-tab').style.fontSize = 'x-large'
-    } else {
-      s('#stats-tab').innerHTML = 'stats'
-      s('#stats-tab').style.fontSize = 'x-large'
     }
     buildInventory()
   }
@@ -1411,15 +1265,11 @@ Game.launch = () => {
   // INIT SHIT
   buildInventory()
   generateStoreItems()
+  buildStore()
   // Game.load()
-  buildTabs()
-  Game.switchTab('store')
   setInterval(() => {
     gainXp()
     Game.state.stats.timePlayed++
-    if (Game.selectedTab == 'stats') {
-      buildTabContent()
-    }
   }, 1000)
   setInterval(() => {
     Game.save()
@@ -1443,7 +1293,6 @@ Game.launch = () => {
       </div>
       <div class="click-me-right"></div>
     `
-    console.log(clickMeContainer.getBoundingClientRect())
     clickMeContainer.style.left = orePos.left - clickMeContainer.getBoundingClientRect().width + 'px'
     s('body').append(clickMeContainer)
   }
