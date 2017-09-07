@@ -525,7 +525,8 @@ footer {
 
 .stats-container-content {
   height: 0px;
-  overflow: scroll;
+  overflow-y: auto;
+  overflow-x: none;
   transition: all 0.5s;
   display: flex;
   flex-flow: column nowrap;
