@@ -490,6 +490,14 @@ footer {
   background-size: auto 100%;
 }
 
+.stats-button {
+  position: absolute;
+  height: 50px;
+  width: 20px;
+  border: 1px solid black;
+  background: white;
+}
+
 /* RIGHT SECTION */
 
 .right-section {

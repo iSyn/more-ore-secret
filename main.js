@@ -48,7 +48,7 @@ Game.launch = () => {
         rarity: 'Common',
         itemLevel: 1,
         material: 'Wood',
-        damage: 99999
+        damage: 1
       },
       accesory: {}
     },
@@ -567,6 +567,15 @@ Game.launch = () => {
     loadAd()
   }
 
+  let buildStats = () => {
+    let inventoryPos = s('.inventory-section')
+    let leftSeparatorPos = s('#left-separator')
+
+    let div = s('.stats-button')
+    div.style.top = inventoryPos.getBoundingClientRect().bottom + 10 + 'px'
+    div.style.left = leftSeparatorPos.getBoundingClientRect().right + 'px'
+  }
+
   Game.showTooltip = (itemName, anchorPoint, type, stat) => {
     let item;
     if (itemName) {
@@ -692,29 +701,31 @@ Game.launch = () => {
     }
   }
 
+  let adsLoaded = false
   let loadAd = () => {
 
-    let script = document.createElement('script')
-    script.src = '//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js'
-    let ins = document.createElement('ins')
-    ins.classList.add('adsbygoogle')
-    ins.style.display = 'block'
-    ins.setAttribute('data-ad-client', 'ca-pub-4584563958870163')
-    ins.setAttribute('data-ad-slot', '6565116738')
-    // ins.setAttribute('data-ad-format', 'auto');
-    // (adsbygoogle = window.adsbygoogle || []).push({});
+    if (adsLoaded = false) {
+      adsLoaded = true
+      let script = document.createElement('script')
+      script.src = '//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js'
+      let ins = document.createElement('ins')
+      ins.classList.add('adsbygoogle')
+      ins.style.display = 'block'
+      ins.setAttribute('data-ad-client', 'ca-pub-4584563958870163')
+      ins.setAttribute('data-ad-slot', '6565116738')
+      // ins.setAttribute('data-ad-format', 'auto');
+      // (adsbygoogle = window.adsbygoogle || []).push({});
 
-    let div = s('#ads-im-sorry-please-dont-hate-me')
-    div.append(script)
-    div.append(ins)
+      let div = s('#ads-im-sorry-please-dont-hate-me')
+      div.append(script)
+      div.append(ins)
 
-    if (s('ins').style.display == 'block') {
-      ins.setAttribute('data-ad-format', 'auto');
-      (adsbygoogle = window.adsbygoogle || []).push({});
-    }
-
-
+      if (s('ins').style.display == 'block') {
+        ins.setAttribute('data-ad-format', 'auto');
+        (adsbygoogle = window.adsbygoogle || []).push({});
+      }
     s('.tab-content').append(div)
+    }
   }
 
   let buyFunction = (item) => {
@@ -1264,6 +1275,7 @@ Game.launch = () => {
 
   // INIT SHIT
   buildInventory()
+  buildStats()
   generateStoreItems()
   buildStore()
   // Game.load()
