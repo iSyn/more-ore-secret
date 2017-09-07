@@ -563,7 +563,6 @@ Game.launch = () => {
     `
 
     s('.tab-content').innerHTML = str
-    loadAd()
   }
 
   let buildStats = () => {
@@ -1277,6 +1276,8 @@ Game.launch = () => {
   buildStats()
   generateStoreItems()
   buildStore()
+  loadAd()
+  console.log('new')
   // Game.load()
   setInterval(() => {
     gainXp()
