@@ -671,7 +671,10 @@ Game.launch = () => {
           <hr/>
           <br/>
 
-          <div style='width: 100%; border: 1px solid white; text-align: center; padding: 10px; cursor: pointer'> Unlock classes lv. 10 </div>
+          <div style='width: 100%; border: 1px solid white; cursor: pointer; display: flex; flex-flow: row-nowrap; align-items: center; justify-content: center;'>
+            <img src="./assets/lock.svg" alt="" height="30px" style='filter: invert(100%)'/>
+            <p style='flex-grow: 1'>Classes lv. 10</p>
+          </div>
 
           <br/>
           <hr/>
@@ -997,9 +1000,6 @@ Game.launch = () => {
 
     Game.items[this.functionName] = this
   }
-
-
-  console.log('new')
 
   Game.items = []
   // ITEMS

@@ -543,6 +543,15 @@ footer {
   align-items: center;
 }
 
+.single-stat button {
+  color: white;
+  border: 1px solid white;
+  background: transparent;
+  padding: 1px 2px;
+  margin-left: 5px;
+  border-radius: 2px;
+}
+
 .caret {
   transition: all 0.3s;
 }
