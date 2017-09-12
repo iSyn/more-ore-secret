@@ -293,6 +293,8 @@ footer {
   width: 90px;
   font-size: 20px;
   cursor: pointer;
+  background: transparent;
+  color: white;
 }
 
 .particle {
@@ -550,6 +552,10 @@ footer {
   padding: 1px 2px;
   margin-left: 5px;
   border-radius: 2px;
+}
+
+.single-stat button:hover {
+  box-shadow: 0 0 2px #fff inset;
 }
 
 .caret {
