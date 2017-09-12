@@ -863,7 +863,7 @@ Game.launch = () => {
         ins.setAttribute('data-ad-format', 'auto');
         (adsbygoogle = window.adsbygoogle || []).push({});
       }
-    s('.tab-content').append(div)
+    s('.tab-content-container').append(div)
     }
   }
 
@@ -1446,6 +1446,9 @@ Game.launch = () => {
     s('body').append(clickMeContainer)
   }
   if (Game.items['MagnifyingGlass'].owned > 0) oreClickArea()
+  setTimeout(() => {
+    loadAd()
+  }, 1000)
 }
 
 window.onload = () => {
