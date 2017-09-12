@@ -1399,7 +1399,7 @@ Game.launch = () => {
     earn(amt)
     gainXp()
     risingNumber(amt, 'crit')
-    playSound('ore-hit')
+    playSound('ore-crit-hit')
     updatePercentage(amt)
     buildInventory()
     drawRockParticles()
