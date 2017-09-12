@@ -854,8 +854,11 @@ Game.launch = () => {
       div.append(ins)
 
       if (s('ins').style.display == 'block') {
+        console.log('good')
         ins.setAttribute('data-ad-format', 'auto');
         (adsbygoogle = window.adsbygoogle || []).push({});
+      } else {
+        console.log('bleh')
       }
     s('.tab-content-container').append(div)
     }
