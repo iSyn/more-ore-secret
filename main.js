@@ -8,13 +8,22 @@ let beautify = (num) => {
     return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); //found on https://stackoverflow.com/questions/2901102/how-to-print-a-number-with-commas-as-thousands-separators-in-javascript
   } else {
     if (num >= 1000000 && num < 1000000000) {
-      return (num/1000000).toFixed(3) + 'M'
+      return (num/1000000).toFixed(3) + ' Million'
     }
     if (num >= 1000000000 && num < 1000000000000) {
-      return (num/1000000000).toFixed(3) + 'B'
+      return (num/1000000000).toFixed(3) + ' Billion'
     }
-    if (num >= 1000000000000) {
-      return (num/1000000000000).toFixed(3) + 'T'
+    if (num >= 1000000000000 && num < 1000000000000000) {
+      return (num/1000000000000).toFixed(3) + ' Trillion'
+    }
+    if (num >= 1000000000000000 && num < 1000000000000000000) {
+      return (num/1000000000000000).toFixed(3) + ' Quadrillion'
+    }
+    if (num >= 1000000000000000000 && num < 1000000000000000000000) {
+      return (num/1000000000000000000).toFixed(3) + ' Quintillion'
+    }
+    if (num >= 1000000000000000000000 && num < 1000000000000000000000000) {
+      return (num/1000000000000000000000).toFixed(3) + ' Sextillion'
     }
   }
 }
@@ -488,7 +497,7 @@ Game.launch = () => {
     let str = ''
     str += `Ores: ${beautify(Game.state.ores.toFixed(1))}`
     if (Game.state.oresPerSecond > 0) {
-      str += ` (${Game.state.oresPerSecond.toFixed(1)}/s)`
+      str += ` (${beautify(Game.state.oresPerSecond.toFixed(1))}/s)`
     }
     s('.ores').innerHTML = str
     s('.level').innerHTML = `Level: ${Game.state.player.lvl} (${Game.state.player.currentXp}/${Game.state.player.xpNeeded})`
@@ -792,8 +801,8 @@ Game.launch = () => {
           if (item.owned > 0) {
             tooltip.innerHTML += `
               <hr />
-              <p>Each ${item.name} generates ${item.production} OpS</p>
-              <p><span class='bold'>${item.owned}</span> ${item.name} generating <span class='bold'>${(item.production * item.owned).toFixed(1)}</span> ores per second</p>
+              <p>Each ${item.name} generates ${beautify(item.production)} OpS</p>
+              <p><span class='bold'>${item.owned}</span> ${item.name} generating <span class='bold'>${beautify((item.production * item.owned).toFixed(1))}</span> ores per second</p>
             `
           }
         }
@@ -864,6 +873,13 @@ Game.launch = () => {
       oreClickArea()
       item.hidden = 2
       unlockUpgrades('CleanMagnifyingGlass')
+    }
+    if (item.name == 'School') {
+      if (item.owned == 1) {
+        Game.items['Farm'].hidden = 0
+        Game.items['Quarry'].hidden = 1
+        Game.items['Church'].hidden = 1
+      }
     }
     if (item.name == 'Farm') {
       if (item.owned == 1) {
@@ -946,30 +962,6 @@ Game.launch = () => {
       item.hidden = 1
       Game.state.oreClickMultiplier = 10
     }
-    if (item.name == 'Extra Virgin Prune Juice') {
-      item.hidden = 1
-      Game.items['OldMan'].production *= item.production
-    }
-    if (item.name == 'Stone Pitchfork') {
-      item.hidden = 1
-      Game.items['RockFarmer'].production *= item.production
-    }
-    if (item.name == 'Miner Lamp') {
-      item.hidden = 1
-      Game.items['RockMiner'].production *= item.production
-    }
-    if (item.name == 'Bamboo Pan Flute') {
-      item.hidden = 1
-      Game.items['RockCharmer'].production *= item.production
-    }
-    if (item.name == '100x Microscope') {
-      item.hidden = 1
-      Game.items['RockScientist'].production *= item.production
-    }
-    if (item.name == 'Time Travel Jelly') {
-      item.hidden = 1
-      Game.items['RockPortal'].production *= item.production
-    }
 
     // UPGRADES
     if (item.name == 'Work Boots') {
@@ -985,7 +977,6 @@ Game.launch = () => {
     if (item.name == 'Steroids') {
       item.hidden = 1
       Game.state.opcMultiplier += 2
-      Game.items['Steroids'].hidden = 0
     }
   }
 
@@ -1031,7 +1022,17 @@ Game.launch = () => {
     pic: 'magnifying-glass.png',
     desc: 'Allows you to spot weakpoints inside the rock',
     fillerQuote: 'wip',
-    price: 5,
+    price: 1,
+    hidden: 0
+  }
+  Game.items['School'] = {
+    name: 'School',
+    type: 'item',
+    pic: 'wip.png',
+    production: .3,
+    desc: 'wip',
+    fillerQuote: 'wip',
+    price: 6,
     hidden: 0
   }
   Game.items['Farm'] = {
@@ -1041,117 +1042,117 @@ Game.launch = () => {
     production: 1,
     desc: 'wip',
     fillerQuote: 'wip',
-    price: 110,
-    hidden: 0
+    price: 75,
+    hidden: 1
   }
   Game.items['Quarry'] = {
     name: 'Quarry',
     type: 'item',
     pic: 'wip.png',
-    production: 1,
+    production: 21,
     desc: 'wip',
     fillerQuote: 'wip',
-    price: 110,
+    price: 1200,
     hidden: 1
   }
   Game.items['Church'] = {
     name: 'Church',
     type: 'item',
     pic: 'wip.png',
-    production: 1,
+    production: 300,
     desc: 'wip',
     fillerQuote: 'wip',
-    price: 110,
-    hidden: 1
+    price: 6660,
+    hidden: 2
   }
   Game.items['Factory'] = {
     name: 'Factory',
     type: 'item',
     pic: 'wip.png',
-    production: 1,
+    production: 5500,
     desc: 'wip',
     fillerQuote: 'wip',
-    price: 110,
+    price: 48000,
     hidden: 2
   }
   Game.items['Crypt'] = {
     name: 'Crypt',
     type: 'item',
     pic: 'wip.png',
-    production: 1,
+    production: 30000,
     desc: 'wip',
     fillerQuote: 'wip',
-    price: 110,
+    price: 290000,
     hidden: 2
   }
   Game.items['Hospital'] = {
     name: 'Hospital',
     type: 'item',
     pic: 'wip.png',
-    production: 1,
+    production: 220000,
     desc: 'wip',
     fillerQuote: 'wip',
-    price: 110,
+    price: 1000000,
     hidden: 2
   }
   Game.items['Citadel'] = {
     name: 'Citadel',
     type: 'item',
     pic: 'wip.png',
-    production: 1,
+    production: 1666666,
     desc: 'wip',
     fillerQuote: 'wip',
-    price: 110,
+    price: 66666666,
     hidden: 2
   }
   Game.items['XenoSpaceship'] = {
     name: 'Xeno Spaceship',
     type: 'item',
     pic: 'wip.png',
-    production: 1,
+    production: 45678910,
     desc: 'wip',
     fillerQuote: 'wip',
-    price: 110,
+    price: 758492047,
     hidden: 2
   }
   Game.items['SkyCastle'] = {
     name: 'Sky Castle',
     type: 'item',
     pic: 'wip.png',
-    production: 1,
+    production: 777777777,
     desc: 'wip',
     fillerQuote: 'wip',
-    price: 110,
+    price: 5500000000,
     hidden: 2
   }
   Game.items['EonPortal'] = {
     name: 'Eon Portal',
     type: 'item',
     pic: 'wip.png',
-    production: 1,
+    production: 8888800000,
     desc: 'wip',
     fillerQuote: 'wip',
-    price: 110,
+    price: 79430000000,
     hidden: 2
   }
   Game.items['SacredMines'] = {
     name: 'Sacred Mines',
     type: 'item',
     pic: 'wip.png',
-    production: 1,
+    production: 40501030500,
     desc: 'wip',
     fillerQuote: 'wip',
-    price: 110,
+    price: 300000000000,
     hidden: 2
   }
   Game.items['O.A.R.D.I.S.'] = {
     name: 'O.A.R.D.I.S.',
     type: 'item',
     pic: 'wip.png',
-    production: 1,
+    production: 110100110110,
     desc: 'wip',
     fillerQuote: 'wip',
-    price: 110,
+    price: 9999999999999,
     hidden: 2
   }
 
@@ -1450,6 +1451,4 @@ Game.launch = () => {
 window.onload = () => {
   Game.launch();
 }
-// document.addEventListener("DOMContentLoaded", function() {
-//     (adsbygoogle = window.adsbygoogle || []).push({});
-// });
+
