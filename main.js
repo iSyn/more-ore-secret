@@ -839,7 +839,7 @@ Game.launch = () => {
   let adsLoaded = false
   let loadAd = () => {
     console.log('loading/test')
-    if (adsLoaded = false) {
+    if (adsLoaded == false) {
       adsLoaded = true
       let script = document.createElement('script')
       script.src = '//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js'
