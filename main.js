@@ -840,7 +840,7 @@ Game.launch = () => {
   let loadAd = () => {
     if (adsLoaded == false) {
       adsLoaded = true
-      for (i = 0; i <= 3; i++) {
+      for (i = 0; i < 3; i++) {
         console.log(i)
         let script = document.createElement('script')
         script.src = '//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js'
@@ -855,7 +855,7 @@ Game.launch = () => {
         div.append(ins)
 
         if (s('ins').style.display == 'block') {
-          ins.setAttribute('data-ad-format', 'auto');
+          ins.setAttribute('data-ad-format', 'rectangle, horizontal');
           (adsbygoogle = window.adsbygoogle || []).push({});
         }
       s('.tab-content-container').append(div)
