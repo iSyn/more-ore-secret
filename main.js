@@ -566,12 +566,8 @@ Game.launch = () => {
         }
       }
     }
-
-    str += `
-      <div id="ads-im-sorry-please-dont-hate-me"></div>
-    `
-
     s('.tab-content').innerHTML = str
+    loadAd()
   }
 
   Game.statsVisable = false
@@ -842,7 +838,7 @@ Game.launch = () => {
 
   let adsLoaded = false
   let loadAd = () => {
-
+    console.log('loading/test')
     if (adsLoaded = false) {
       adsLoaded = true
       let script = document.createElement('script')
@@ -1444,10 +1440,10 @@ Game.launch = () => {
     s('body').append(clickMeContainer)
   }
   if (Game.items['MagnifyingGlass'].owned > 0) oreClickArea()
-  setTimeout(() => {
-    console.log('loading ads')
-    loadAd()
-  }, 1000)
+  // setTimeout(() => {
+  //   console.log('loading ads')
+  //   loadAd()
+  // }, 1000)
 }
 
 window.onload = () => {
