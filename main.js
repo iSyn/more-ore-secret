@@ -852,8 +852,6 @@ Game.launch = () => {
       ins.style.display = 'block'
       ins.setAttribute('data-ad-client', 'ca-pub-4584563958870163')
       ins.setAttribute('data-ad-slot', '6565116738')
-      // ins.setAttribute('data-ad-format', 'auto');
-      // (adsbygoogle = window.adsbygoogle || []).push({});
 
       let div = s('#ads-im-sorry-please-dont-hate-me')
       div.append(script)
@@ -1447,6 +1445,7 @@ Game.launch = () => {
   }
   if (Game.items['MagnifyingGlass'].owned > 0) oreClickArea()
   setTimeout(() => {
+    console.log('loading ads')
     loadAd()
   }, 1000)
 }
