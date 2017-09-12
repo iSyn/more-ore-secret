@@ -612,6 +612,7 @@ footer {
 .tab-content-container {
   height: 100%;
   overflow-y: auto;
+  overflow-x: hidden;
   background: linear-gradient(lightgrey, #190800);
 }
 

@@ -838,29 +838,28 @@ Game.launch = () => {
 
   let adsLoaded = false
   let loadAd = () => {
-    console.log('loading/test')
     if (adsLoaded == false) {
       adsLoaded = true
-      let script = document.createElement('script')
-      script.src = '//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js'
-      let ins = document.createElement('ins')
-      ins.classList.add('adsbygoogle')
-      ins.style.display = 'block'
-      ins.setAttribute('data-ad-client', 'ca-pub-4584563958870163')
-      ins.setAttribute('data-ad-slot', '6565116738')
+      for (i = 0; i <= 3; i++) {
+        console.log(i)
+        let script = document.createElement('script')
+        script.src = '//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js'
+        let ins = document.createElement('ins')
+        ins.classList.add('adsbygoogle')
+        ins.style.display = 'block'
+        ins.setAttribute('data-ad-client', 'ca-pub-4584563958870163')
+        ins.setAttribute('data-ad-slot', '6565116738')
 
-      let div = s('#ads-im-sorry-please-dont-hate-me')
-      div.append(script)
-      div.append(ins)
+        let div = s('#ads-im-sorry-please-dont-hate-me')
+        div.append(script)
+        div.append(ins)
 
-      if (s('ins').style.display == 'block') {
-        console.log('good')
-        ins.setAttribute('data-ad-format', 'auto');
-        (adsbygoogle = window.adsbygoogle || []).push({});
-      } else {
-        console.log('bleh')
+        if (s('ins').style.display == 'block') {
+          ins.setAttribute('data-ad-format', 'auto');
+          (adsbygoogle = window.adsbygoogle || []).push({});
+        }
+      s('.tab-content-container').append(div)
       }
-    s('.tab-content-container').append(div)
     }
   }
 
