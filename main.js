@@ -57,7 +57,7 @@ Game.launch = () => {
         rarity: 'Common',
         itemLevel: 1,
         material: 'Wood',
-        damage: 1
+        damage: 999
       },
       accesory: {}
     },
@@ -138,7 +138,8 @@ Game.launch = () => {
       }
     }
     opc += Game.state.player.pickaxe.damage
-    opc += Game.state.player.pickaxe.damage * str * .1
+    // opc += (Game.state.player.pickaxe.damage * str) * .1
+    opc += Math.pow(1.25, str)
 
     opc += (opc * Game.state.opcMultiplier)
 
@@ -756,7 +757,7 @@ Game.launch = () => {
         tooltip.innerHTML = `
           <h3>Dexterity</h3>
           <hr/>
-          <p>Increases your OpC</p>
+          <p>Increases your OpC slightly</p>
           <p>Chance for critical strikes</p>
         `
       }
@@ -764,7 +765,7 @@ Game.launch = () => {
         tooltip.innerHTML = `
           <h3>Intelligence</h3>
           <hr/>
-          <p>Increases item output</p>
+          <p>Increases item output slightly</p>
           <p>Chance for critical strikes</p>
         `
       }
@@ -843,7 +844,7 @@ Game.launch = () => {
     }
   }
 
-  let adsLoaded = true
+  let adsLoaded = false
   let loadAd = () => {
     if (adsLoaded == false) {
       adsLoaded = true
@@ -1277,9 +1278,13 @@ Game.launch = () => {
     s('.ore-click-area').style.display = 'block'
   }
 
-  let gainXp = () => {
+  let gainXp = (amt) => {
+    let amount = 1
+    if (amt) {
+      amount = 2
+    }
     if (Game.state.player.currentXp < Game.state.player.xpNeeded) {
-      Game.state.player.currentXp++
+      Game.state.player.currentXp += amount
     } else {
       Game.state.player.currentXp = 0
       Game.state.player.lvl++
@@ -1404,7 +1409,7 @@ Game.launch = () => {
     Game.state.stats.oreClicks++
     Game.state.stats.oreCritClicks++
     earn(amt)
-    gainXp()
+    gainXp(3)
     risingNumber(amt, 'crit')
     playSound('ore-crit-hit')
     updatePercentage(amt)
@@ -1419,6 +1424,7 @@ Game.launch = () => {
   generateStoreItems()
   buildStore()
   Game.load()
+  Game.buildStats()
   setInterval(() => {
     gainXp()
     Game.state.stats.timePlayed++
