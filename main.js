@@ -616,55 +616,55 @@ Game.launch = () => {
           <hr/>
 
           <div class="single-stat">
-            <p style='flex-grow: 1'>Strength:</p>
+            <p style='flex-grow: 1' onmouseover='Game.showTooltip(null, null, "stat", "str")' onmouseout='Game.hideTooltip()'>Strength:</p>
             <p class='stat-str'>${Game.state.player.str}</p>
             `
             if (Game.state.player.availableSp > 0) {
-              str += `<button onclick='Game.addStat("str")'>+</button>`
+              str += `<button onclick='Game.addStat("str")' onmouseover='Game.showTooltip(null, null, "stat", "str")' onmouseout='Game.hideTooltip()'>+</button>`
             }
 
             str += `
           </div>
 
           <div class="single-stat">
-            <p style='flex-grow: 1'>Dexterity:</p>
+            <p style='flex-grow: 1' onmouseover='Game.showTooltip(null, null, "stat", "dex")' onmouseout='Game.hideTooltip()'>Dexterity:</p>
             <p class='stat-dex'>${Game.state.player.dex}</p>
             `
             if (Game.state.player.availableSp > 0) {
-              str += `<button onclick='Game.addStat("dex")'>+</button>`
+              str += `<button onclick='Game.addStat("dex")' onmouseover='Game.showTooltip(null, null, "stat", "dex")' onmouseout='Game.hideTooltip()'>+</button>`
             }
 
             str += `
           </div>
 
           <div class="single-stat">
-            <p style='flex-grow: 1'>Intelligence:</p>
+            <p style='flex-grow: 1' onmouseover='Game.showTooltip(null, null, "stat", "int")' onmouseout='Game.hideTooltip()'>Intelligence:</p>
             <p class='stat-int'>${Game.state.player.int}</p>
             `
             if (Game.state.player.availableSp > 0) {
-              str += `<button onclick='Game.addStat("int")'>+</button>`
+              str += `<button onclick='Game.addStat("int")' onmouseover='Game.showTooltip(null, null, "stat", "int")' onmouseout='Game.hideTooltip()'>+</button>`
             }
 
             str += `
           </div>
 
           <div class="single-stat">
-            <p style='flex-grow: 1'>Luck:</p>
+            <p style='flex-grow: 1' onmouseover='Game.showTooltip(null, null, "stat", "luk")' onmouseout='Game.hideTooltip()'>Luck:</p>
             <p class='stat-luk'>${Game.state.player.luk}</p>
             `
             if (Game.state.player.availableSp > 0) {
-              str += `<button onclick='Game.addStat("luk")'>+</button>`
+              str += `<button onclick='Game.addStat("luk")' onmouseover='Game.showTooltip(null, null, "stat", "luk")' onmouseout='Game.hideTooltip()'>+</button>`
             }
 
             str += `
           </div>
 
           <div class="single-stat">
-            <p style='flex-grow: 1'>Charisma:</p>
+            <p style='flex-grow: 1' onmouseover='Game.showTooltip(null, null, "stat", "cha")' onmouseout='Game.hideTooltip()'>Charisma:</p>
             <p class='stat-cha'>${Game.state.player.cha}</p>
             `
             if (Game.state.player.availableSp > 0) {
-              str += `<button onclick='Game.addStat("cha")'>+</button>`
+              str += `<button onclick='Game.addStat("cha")' onmouseover='Game.showTooltip(null, null, "stat", "cha")' onmouseout='Game.hideTooltip()'>+</button>`
             }
 
             str += `
@@ -738,7 +738,13 @@ Game.launch = () => {
       tooltip.style.top = anchorPoint.getBoundingClientRect().top + 'px'
     }
 
+
     if (type == 'stat') {
+      anchor = s('.stats-container-content-wrapper').getBoundingClientRect()
+      tooltip.style.width = 'auto'
+      tooltip.style.left = anchor.right + 'px'
+      tooltip.style.top = event.clientY + 'px'
+
       if (stat == 'str') {
         tooltip.innerHTML = `
           <h3>Strength</h3>
@@ -778,8 +784,6 @@ Game.launch = () => {
           <p>Lowers shop prices</p>
         `
       }
-      tooltip.style.width = 'auto'
-      tooltip.style.left = anchor.left - tooltip.getBoundingClientRect().width + 'px'
     } else {
       tooltip.innerHTML = `
       <div class="tooltip-top">
@@ -823,6 +827,9 @@ Game.launch = () => {
       if (stat == 'int') Game.state.player.int++
       if (stat == 'cha') Game.state.player.cha++
       Game.buildStats()
+      if (Game.state.player.availableSp == 0) {
+        Game.hideTooltip()
+      }
     }
   }
 
