@@ -836,7 +836,7 @@ Game.launch = () => {
     }
   }
 
-  let adsLoaded = false
+  let adsLoaded = true
   let loadAd = () => {
     if (adsLoaded == false) {
       adsLoaded = true
@@ -1411,7 +1411,7 @@ Game.launch = () => {
   Game.buildStats()
   generateStoreItems()
   buildStore()
-  // Game.load()
+  Game.load()
   setInterval(() => {
     gainXp()
     Game.state.stats.timePlayed++
@@ -1442,10 +1442,6 @@ Game.launch = () => {
     s('body').append(clickMeContainer)
   }
   if (Game.items['MagnifyingGlass'].owned > 0) oreClickArea()
-  // setTimeout(() => {
-  //   console.log('loading ads')
-  //   loadAd()
-  // }, 1000)
 }
 
 window.onload = () => {
