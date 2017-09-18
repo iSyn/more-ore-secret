@@ -530,7 +530,6 @@ Game.launch = () => {
       let item = Game.items[i]
       if (item.type == 'item') {
         if (item.hidden == 0) {
-          console.log('building', item)
           str += `
             <div class="button" onclick="Game.items['${i}'].buy()" onmouseover="Game.showTooltip('${i}', this)" onmouseout="Game.hideTooltip()">
               <div class="button-top">
@@ -574,7 +573,6 @@ Game.launch = () => {
   Game.statsVisable = false
 
   Game.buildStats = () => {
-    console.log('?')
     let str = ''
     let inventoryPos = s('.inventory-section')
     let leftSeparatorPos = s('#left-separator')
@@ -849,7 +847,6 @@ Game.launch = () => {
     if (adsLoaded == false) {
       adsLoaded = true
       for (i = 0; i < 3; i++) {
-        console.log(i)
         let script = document.createElement('script')
         script.src = '//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js'
         let ins = document.createElement('ins')
@@ -993,7 +990,7 @@ Game.launch = () => {
     this.production = obj.production || 0
     this.desc = obj.desc
     this.fillerQuote = obj.fillerQuote
-    this.basePrice = obj.price
+    this.basePrice = obj.basePrice
     this.price = obj.price
     this.hidden = obj.hidden
     this.owned = obj.owned || 0
@@ -1003,7 +1000,7 @@ Game.launch = () => {
         spend(this.price)
         this.owned++
         playSound('buysound')
-        this.price = this.basePrice * Math.pow(1.05, this.owned)
+        this.price = this.basePrice * Math.pow(1.15, this.owned)
         buyFunction(this)
         if (this.type == 'upgrade') {
           Game.hideTooltip()
@@ -1027,6 +1024,7 @@ Game.launch = () => {
     desc: 'Allows you to spot weakpoints inside the rock',
     fillerQuote: 'wip',
     price: 1,
+    basePrice: 1,
     hidden: 0
   }
   Game.items['School'] = {
@@ -1037,6 +1035,7 @@ Game.launch = () => {
     desc: 'wip',
     fillerQuote: 'wip',
     price: 6,
+    basePrice: 6,
     hidden: 0
   }
   Game.items['Farm'] = {
@@ -1047,6 +1046,7 @@ Game.launch = () => {
     desc: 'wip',
     fillerQuote: 'wip',
     price: 75,
+    basePrice: 75,
     hidden: 1
   }
   Game.items['Quarry'] = {
@@ -1057,6 +1057,7 @@ Game.launch = () => {
     desc: 'wip',
     fillerQuote: 'wip',
     price: 1200,
+    basePrice: 1200,
     hidden: 1
   }
   Game.items['Church'] = {
@@ -1067,6 +1068,7 @@ Game.launch = () => {
     desc: 'wip',
     fillerQuote: 'wip',
     price: 6660,
+    basePrice: 6660,
     hidden: 2
   }
   Game.items['Factory'] = {
@@ -1077,6 +1079,7 @@ Game.launch = () => {
     desc: 'wip',
     fillerQuote: 'wip',
     price: 48000,
+    basePrice: 48000,
     hidden: 2
   }
   Game.items['Crypt'] = {
@@ -1087,6 +1090,7 @@ Game.launch = () => {
     desc: 'wip',
     fillerQuote: 'wip',
     price: 290000,
+    basePrice: 290000,
     hidden: 2
   }
   Game.items['Hospital'] = {
@@ -1097,6 +1101,7 @@ Game.launch = () => {
     desc: 'wip',
     fillerQuote: 'wip',
     price: 1000000,
+    basePrice: 1000000,
     hidden: 2
   }
   Game.items['Citadel'] = {
@@ -1107,6 +1112,7 @@ Game.launch = () => {
     desc: 'wip',
     fillerQuote: 'wip',
     price: 66666666,
+    basePrice: 66666666,
     hidden: 2
   }
   Game.items['XenoSpaceship'] = {
@@ -1117,6 +1123,7 @@ Game.launch = () => {
     desc: 'wip',
     fillerQuote: 'wip',
     price: 758492047,
+    basePrice: 758492047,
     hidden: 2
   }
   Game.items['SkyCastle'] = {
@@ -1127,6 +1134,7 @@ Game.launch = () => {
     desc: 'wip',
     fillerQuote: 'wip',
     price: 5500000000,
+    basePrice: 5500000000,
     hidden: 2
   }
   Game.items['EonPortal'] = {
@@ -1137,6 +1145,7 @@ Game.launch = () => {
     desc: 'wip',
     fillerQuote: 'wip',
     price: 79430000000,
+    basePrice: 79430000000,
     hidden: 2
   }
   Game.items['SacredMines'] = {
@@ -1147,6 +1156,7 @@ Game.launch = () => {
     desc: 'wip',
     fillerQuote: 'wip',
     price: 300000000000,
+    basePrice: 300000000000,
     hidden: 2
   }
   Game.items['O.A.R.D.I.S.'] = {
@@ -1157,6 +1167,7 @@ Game.launch = () => {
     desc: 'wip',
     fillerQuote: 'wip',
     price: 9999999999999,
+    basePrice: 9999999999999,
     hidden: 2
   }
 
