@@ -1260,7 +1260,7 @@ Game.launch = () => {
     } else {
       Game.state.stats.rocksDestroyed++
       playSound('explosion2')
-      Game.state.oreHp = Math.pow(Game.state.oreHp, 1.03)
+      Game.state.oreHp = Math.pow(Game.state.oreHp, 1.15)
       Game.state.oreCurrentHp = Game.state.oreHp
       dropItem()
       s('.ore-hp').innerHTML = '100%'
