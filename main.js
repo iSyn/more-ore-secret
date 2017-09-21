@@ -1258,6 +1258,10 @@ Game.launch = () => {
       playSound('levelup')
       Game.state.player.xpNeeded = Math.ceil(Math.pow(Game.state.player.xpNeeded, 1.05))
       risingNumber(0, 'level')
+      s('.stats-container').style.boxShadow = '0 0 10px yellow'
+      setTimeout(() => {
+        s('.stats-container').style.boxShadow = 'none'
+      }, 1000)
     }
     buildInventory()
   }

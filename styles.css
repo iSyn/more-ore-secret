@@ -353,7 +353,7 @@ footer {
   }
   100% {
     opacity: 0;
-    transform: translateY(-300px)
+    transform: translateY(-200px)
   }
 }
 
@@ -495,6 +495,7 @@ footer {
   flex-flow: row nowrap;
   align-items: center;
   border: 1px solid rgba(255,255,255,0.5);
+  border-left: none;
   background: black;
   cursor: pointer;
   text-align: center;
