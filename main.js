@@ -1214,7 +1214,7 @@ Game.launch = () => {
       if (Game.state.stats.rocksDestroyed == 5) winAchievement('Novice Miner')
       if (Game.state.stats.rocksDestroyed == 10) winAchievement('Intermediate Miner')
       playSound('explosion2')
-      Game.state.oreHp = Math.pow(Game.state.oreHp, 1.15)
+      Game.state.oreHp = Math.pow(Game.state.oreHp, 1.11)
       Game.state.oreCurrentHp = Game.state.oreHp
       dropItem()
       s('.ore-hp').innerHTML = '100%'
@@ -1419,8 +1419,8 @@ Game.launch = () => {
   buildInventory()
   Game.buildStats()
   generateStoreItems()
-  buildStore()
   Game.load()
+  buildStore()
   Game.buildStats()
   showChangelog()
   setInterval(() => {
