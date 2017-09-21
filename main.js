@@ -133,23 +133,23 @@ Game.launch = () => {
 
   let calculateOPC = (type) => {
     let opc = 0
-    let str = Game.state.player.str
     if (Game.state.player.pickaxe.prefixStat) {
       if (Game.state.player.pickaxe.prefixStat == 'Strength') {
-        str += Game.state.player.pickaxe.prefixStatVal
+        Game.state.player.str += Game.state.player.pickaxe.prefixStatVal
       }
     }
     opc += Game.state.player.pickaxe.damage
-    if (str > 0) {
-      opc += Math.pow(1.25, str)
+    if (Game.state.player.str > 0) {
+      opc += Math.pow(1.35, Game.state.player.str)
+    }
+    if (Game.state.player.dex > 0) {
+      opc += Math.pow(1.15, Game.state.player.dex)
     }
     opc += (opc * Game.state.opcMultiplier)
 
     if (type == 'crit') {
       opc *= Game.state.oreClickMultiplier
     }
-
-    console.log(opc)
 
     return opc
   }
@@ -1388,6 +1388,12 @@ Game.launch = () => {
 
   s('.ore').onclick = () => {
     let amt = calculateOPC()
+    let num = Math.random()
+    console.log(num, '<=', Game.state.player.dex * .1)
+    if (num <= Game.state.player.dex * .1) {
+      console.log('critical hit!')
+      amt = calculateOPC('crit')
+    }
     earn(amt)
     gainXp()
     risingNumber(amt)
