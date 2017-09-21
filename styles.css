@@ -3,7 +3,6 @@
   padding: 0;
   box-sizing: border-box;
   font-family: 'Abel';
-  user-drag: none;
   user-select: none;
   -moz-user-select: none;
   -webkit-user-drag: none;
@@ -336,26 +335,13 @@ footer {
   background-color: white;
   text-align: center;
   padding: 10px 20px;
-  animation: fadeOut 3s linear;
+  animation: fadeOut 2.5s linear;
+  animation-fill-mode: forwards;
   /*background: #91ffa6;*/
   pointer-events: none;
   color: black;
   display: flex;
-  flex-flow: row nowrap;
-}
-
-.achievement-img {
-  height: 90px;
-  width: 90px;
-  margin-right: 20px;
-}
-
-.achievement-right {
-  display: flex;
   flex-flow: column nowrap;
-  justify-content: center;
-  text-align: center;
-  flex-grow: 1;
 }
 
 @keyframes fadeOut {
@@ -413,8 +399,6 @@ footer {
     transform: scale(1);
   }
 }
-
-
 
 /* LEFT SECTION */
 
@@ -580,9 +564,11 @@ footer {
   font-size: 50px;
   text-align: center;
   padding: 0 20px;
-  border-top-right-radius: 30px;
-  border-top-left-radius: 30px;
-  background-color: lightgrey;
+  /*border-top-right-radius: 30px;*/
+  /*border-top-left-radius: 30px;*/
+  box-shadow: 0 0 40px #222 inset;
+  color: white;
+  background-color: #4e3013;
 }
 
 .tabs {
@@ -673,20 +659,6 @@ footer {
   display: none;
 }
 
-.achievements-container {
-  display: flex;
-  flex-flow: row wrap;
-}
-
-.achievement-box {
-  height: 50px;
-  width: 50px;
-  border: 1px solid black;
-  background: url('./assets/mystery.png');
-  background-size: contain;
-  margin: 5px;
-}
-
 .upgrades-container {
   display: flex;
   flex-flow: row wrap;
@@ -733,4 +705,50 @@ footer {
 
 hr {
   border-color: rgba(255, 255, 255, .1);
+}
+
+.changelog-wrapper {
+  position: fixed;
+  top: 0;
+  height: 100vh;
+  width: 100vw;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 99;
+}
+
+.changelog-container {
+  height: 500px;
+  width: 400px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(255, 255, 255, 0.9);
+  overflow-y: auto;
+  border: 2px solid black;
+  padding: 5px;
+}
+
+.changelog-container h1 {
+  text-align: center;
+  padding: 10px 0;
+}
+
+.changelog-container h3 {
+  font-size: x-large;
+}
+
+.changelog-container p {
+  font-size: large;
+}
+
+.changelog-footer {
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  bottom: 0px;
+}
+
+li {
+  list-style-type: circle;
 }
