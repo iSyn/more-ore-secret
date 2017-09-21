@@ -1091,9 +1091,9 @@ Game.launch = () => {
   Game.items = []
   /* ITEMS */
   Game.items['MagnifyingGlass'] = { name: 'Magnifying Glass', type: 'item', pic: 'magnifying-glass.png', desc: 'Allows you to spot weakpoints inside the rock', fillerQuote: 'wip', price: 1, basePrice: 1, hidden: 0}
-  Game.items['School'] = { name: 'School', type: 'item', pic: 'wip.png', production: .3, desc: 'wip', fillerQuote: 'wip', price: 6, basePrice: 6, hidden: 0}
+  Game.items['School'] = { name: 'School', type: 'item', pic: 'school.png', production: .3, desc: 'wip', fillerQuote: 'wip', price: 6, basePrice: 6, hidden: 0}
   Game.items['Farm'] = { name: 'Farm', type: 'item', pic: 'farmer.png', production: 1, desc: 'wip', fillerQuote: 'wip', price: 75, basePrice: 75, hidden: 1}
-  Game.items['Quarry'] = { name: 'Quarry', type: 'item', pic: 'wip.png', production: 21, desc: 'wip', fillerQuote: 'wip', price: 1200, basePrice: 1200, hidden: 1}
+  Game.items['Quarry'] = { name: 'Quarry', type: 'item', pic: 'quarry.png', production: 21, desc: 'wip', fillerQuote: 'wip', price: 1200, basePrice: 1200, hidden: 1}
   Game.items['Church'] = { name: 'Church', type: 'item', pic: 'wip.png', production: 300, desc: 'wip', fillerQuote: 'wip', price: 6660, basePrice: 6660, hidden: 2}
   Game.items['Factory'] = { name: 'Factory', type: 'item', pic: 'wip.png', production: 5500, desc: 'wip', fillerQuote: 'wip', price: 48000, basePrice: 48000, hidden: 2}
   Game.items['Crypt'] = { name: 'Crypt', type: 'item', pic: 'wip.png', production: 30000, desc: 'wip', fillerQuote: 'wip', price: 290000, basePrice: 290000, hidden: 2}
@@ -1109,7 +1109,7 @@ Game.launch = () => {
   /* ITEM UPGRADES */
   Game.items['CleanMagnifyingGlass'] = { name: 'Clean Magnifying Glass', type: 'upgrade', pic: 'clean-magnifying-glass.png', desc: 'Increases critical hit multiplier to 10x', fillerQuote: 'wip', price: 100, hidden: 1,}
   Game.items['PolishMagnifyingGlass'] = { name: 'Polish Magnifying Glass', type: 'upgrade', pic: 'wip.png', desc: 'Increases critical hit multiplier to 15x', fillerQuote: 'wip', price: 50000, hidden: 1,}
-  Game.items['CompositionNotebooks'] = { name: 'Composition Notebooks', type: 'upgrade', pic: 'wip.png', desc: 'Doubles the production of Schools', fillerQuote: 'wip', price: 80, hidden: 1}
+  Game.items['CompositionNotebooks'] = { name: 'Composition Notebooks', type: 'upgrade', pic: 'compositionnotebook.png', desc: 'Doubles the production of Schools', fillerQuote: 'wip', price: 80, hidden: 1}
   Game.items['ManureSpreader'] = { name: 'Manure Spreader', type: 'upgrade', pic: 'wip.png', desc: 'Doubles the production of Farms', fillerQuote: 'wip', price: 950, hidden: 1}
   Game.items['Headlights'] = { name: 'Headlights', type: 'upgrade', pic: 'wip.png', desc: 'Doubles the production of Quarrys', fillerQuote: 'wip', price: 19000, hidden: 1}
   Game.items['ScriptureReading'] = { name: 'Scripture Reading', type: 'upgrade', pic: 'wip.png', desc: 'Doubles the production of Churches', fillerQuote: 'wip', price: 300000, hidden: 1}
@@ -1125,7 +1125,7 @@ Game.launch = () => {
   Game.items['OARDISupgrade'] = { name: 'OARDISupgrade', type: 'upgrade', pic: 'wip.png', desc: 'Doubles the production of OARDIS ', fillerQuote: 'wip', price: 50000000000000, hidden: 1}
 
   // UPGRADES
-  Game.items['WorkBoots'] = {name: 'Work Boots', type: 'upgrade', pic: 'wip.png', desc: 'Increase all ore production by 1%', fillerQuote: 'wip', price: 500, hidden: 1,}
+  Game.items['WorkBoots'] = {name: 'Work Boots', type: 'upgrade', pic: 'workboots.png', desc: 'Increase all ore production by 1%', fillerQuote: 'wip', price: 500, hidden: 1,}
   Game.items['Painkillers'] = {name: 'Painkillers', type: 'upgrade', pic: 'painkillers.png', desc: 'double your OpC', fillerQuote: 'wip', price: 15000, hidden: 1,}
   Game.items['Steroids'] = {name: 'Steroids', type: 'upgrade', pic: 'steroids.png', desc: 'double your OpC', fillerQuote: 'wip', price: 1000000, hidden: 1,}
 
@@ -1369,6 +1369,7 @@ Game.launch = () => {
 
           <h3>v0.6.1</h3>
           <p>-Added upgrades for every single store item</p>
+          <p>-Added a bunch more sprites</p>
           <p>-Critical hits gives more XP</p>
           <p>-Mousing over stats displays information</p>
           <p>-Adjusted Strength values to prevent negative damage from happening</p>
