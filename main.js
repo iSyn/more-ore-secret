@@ -140,14 +140,16 @@ Game.launch = () => {
       }
     }
     opc += Game.state.player.pickaxe.damage
-    // opc += (Game.state.player.pickaxe.damage * str) * .1
-    opc += Math.pow(1.25, str)
-
+    if (str > 0) {
+      opc += Math.pow(1.25, str)
+    }
     opc += (opc * Game.state.opcMultiplier)
 
     if (type == 'crit') {
       opc *= Game.state.oreClickMultiplier
     }
+
+    console.log(opc)
 
     return opc
   }
