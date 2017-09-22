@@ -82,7 +82,6 @@ Game.launch = () => {
       timePlayed: 0
     },
     currentVersion: '0.6.2',
-    storedVersion: null
   }
 
   Game.wipe = () => {
@@ -1471,8 +1470,9 @@ Game.launch = () => {
   }
 
   let showChangelog = () => {
-    if (Game.state.currentVersion !== Game.state.storedVersion) {
-      console.log('New version')
+    let newestVersion == '0.6.2'
+
+    if (Game.state.currentVersion !== newestVersion) {
       Game.state.storedVersion = Game.state.currentVersion
       let div = document.createElement('div')
       div.classList.add('changelog-wrapper')
