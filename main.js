@@ -1394,8 +1394,9 @@ Game.launch = () => {
   s('.ore').onclick = () => {
     let amt = calculateOPC()
     let num = Math.random()
-    console.log(num, '<=', Game.state.player.dex * .1)
-    if (num <= Game.state.player.dex * .1) {
+    let dex = Game.state.player.dex * .01
+    console.log(num, '<=', dex, '/', dex+1)
+    if (num <= dex/(dex + 1)) {
       console.log('critical hit!')
       amt = calculateOPC('crit')
     }
