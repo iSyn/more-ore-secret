@@ -57,7 +57,7 @@ Game.launch = () => {
         rarity: 'Common',
         itemLevel: 1,
         material: 'Wood',
-        damage: 1,
+        damage: 1000,
       },
       accesory: {}
     },
@@ -133,15 +133,20 @@ Game.launch = () => {
 
   let calculateOPC = (type) => {
     let opc = 0
+    let pickaxeStr = 0
     if (Game.state.player.pickaxe.prefixStat) {
       if (Game.state.player.pickaxe.prefixStat == 'Strength') {
-        Game.state.player.str += Game.state.player.pickaxe.prefixStatVal
+        pickaxeStr = Game.state.player.pickaxe.prefixStatVal
       }
     }
+    let totalStr = Game.state.player.str + pickaxeStr
+
     opc += Game.state.player.pickaxe.damage
-    if (Game.state.player.str > 0) {
-      opc += Math.pow(1.35, Game.state.player.str)
+
+    if (totalStr > 0) {
+      opc += Math.pow(1.35, totalStr)
     }
+
     if (Game.state.player.dex > 0) {
       opc += Math.pow(1.15, Game.state.player.dex)
     }
