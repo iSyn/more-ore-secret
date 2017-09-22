@@ -49,6 +49,7 @@ Game.launch = () => {
       luk: 0,
       int: 0,
       cha: 0,
+      specialization: null,
       currentXp: 0,
       xpNeeded: 100,
       availableSp: 0,
@@ -80,7 +81,7 @@ Game.launch = () => {
       itemsPickedUp: 0,
       timePlayed: 0
     },
-    currentVersion: '0.6.1',
+    currentVersion: '0.6.2',
     storedVersion: null
   }
 
@@ -607,7 +608,7 @@ Game.launch = () => {
     }
 
     if (Game.statsVisable == true) {
-      str += '<div class="stats-container-content-wrapper" style="height: 400px;">'
+      str += '<div class="stats-container-content-wrapper" style="height: 300px;">'
     } else {
       str += '<div class="stats-container-content-wrapper">'
     }
@@ -625,7 +626,16 @@ Game.launch = () => {
 
           <div class="single-stat">
             <p style='flex-grow: 1' onmouseover='Game.showTooltip(null, null, "stat", "str")' onmouseout='Game.hideTooltip()'>Strength:</p>
-            <p class='stat-str'>${Game.state.player.str}</p>
+            <p class='stat-str'>${Game.state.player.str}`
+              if (Game.state.player.pickaxe.prefixStat) {
+                console.log('pickaxe has a prefix')
+                if (Game.state.player.pickaxe.prefixStat == 'Strength') {
+                  console.log('pcikaxe has str', Game.state.player.pickaxe.prefixStatVal)
+                  str += `(${Game.state.player.pickaxe.prefixStatVal})`
+                }
+              }
+
+            str += `</p>
             `
             if (Game.state.player.availableSp > 0) {
               str += `<button onclick='Game.addStat("str")' onmouseover='Game.showTooltip(null, null, "stat", "str")' onmouseout='Game.hideTooltip()'>+</button>`
@@ -683,20 +693,32 @@ Game.launch = () => {
           <p style='text-align: center; font-size: small'>Available SP: ${Game.state.player.availableSp}</p>
 
           <hr/>
-          <br/>
 
-          <div style='width: 100%; border: 1px solid white; cursor: pointer; display: flex; flex-flow: row-nowrap; align-items: center; justify-content: center;'>
-            <img src="./assets/lock.svg" alt="" height="30px" style='filter: invert(100%)'/>
-            <p style='flex-grow: 1'>Classes lv. 10</p>
-          </div>
+          `
+            if (Game.state.player.lvl < 5) {
+              str += `
+              </br>
+              <button class='specialization-btn' onmouseover='Game.showTooltip(null, null, "stat", "spec")' onmouseout='Game.hideTooltip()'>???</button>
+              </br>
+              `
+            }
+            if (Game.state.player.lvl >= 5 && Game.state.player.specialization == null) {
+              str += `
+              </br>
+              <button class='specialization-btn' onclick='Game.showSpecialization()'>Specialization</button>
+              </br>
+              `
+            }
+            if (Game.state.player.lvl >= 5 && Game.state.player.specialization != null) {
+              str += `
+               </br>
+              <button class='specialization-btn' onclick='Game.specializationSkills()'>${Game.state.player.specialization}</button>
+              `
+            }
 
-          <br/>
-          <hr/>
-          <p>Miscellaneous</p>
-          <p>Ore Clicks: ${Game.state.stats.oreClicks}</p>
-          <p>Ore Crit Clicks: ${Game.state.stats.oreCritClicks}</p>
-          <p>Rocks Destroyed: ${Game.state.stats.rocksDestroyed}</p>
-          <p>Items Picked Up: ${Game.state.stats.itemsPickedUp}</p>
+
+
+          str += `
         </div>
       </div>
     `
@@ -707,9 +729,86 @@ Game.launch = () => {
     statsContainer.innerHTML = str
   }
 
+  Game.showSpecialization = () => {
+    let div = document.createElement('div')
+    div.classList.add('specialization-wrapper')
+    div.innerHTML = `
+      <h1>Choose a Specialization</h1>
+      <div class="specialization-container">
+        <div class="specialization-miner specialization" onclick='Game.chooseSpecialization("Miner")'>
+          <div class="miner-txt specialization-txt">
+            <h3>Miner</h3>
+            <p>-text about how being a miner is great-</p>
+            <p>Skills for more OpC and extra bonuses in game</p>
+            <p>(For players that are more active in games)</p>
+          </div>
+        </div>
+        <div class="specialization-manager specialization" onclick='Game.chooseSpecialization("Manager")'>
+          <div class="manager-txt specialization-txt">
+            <h3>Manager</h3>
+            <p>-text about how being a manager is great-</p>
+            <p>Skills for more OpS and other benefits</p>
+            <p>(For players that are more idle in games)</p>
+          </div>
+        </div>
+      </div>
+    `
+
+    s('body').append(div)
+  }
+
+  Game.chooseSpecialization = (sel) => {
+
+    let div = document.createElement('div')
+    div.classList.add('specialization-confirmation-wrapper')
+    div.innerHTML = `
+      <div class="specialization-confirmation-container">
+        <h4>Specialization</h4>
+        <hr/>
+        <p>Are you sure you want to be a <strong>${sel}</strong></p>
+        <p>You can not change this until your next rebirth</p>
+        <hr style='margin-bottom: 5px;'/>
+        <button onclick='Game.specialization("${sel}")'>yes</button>
+        <button onclick='document.querySelector(".specialization-confirmation-wrapper").remove()'>no</button>
+      </div>
+    `
+
+    s('body').append(div)
+  }
+
+  Game.specialization = (sel) => {
+    Game.state.player.specialization = sel
+    Game.buildStats()
+    s('.specialization-wrapper').remove()
+    s('.specialization-confirmation-wrapper').remove()
+    Game.specializationSkills()
+  }
+
+  Game.specializationSkills = () => {
+    let specialization = Game.state.player.specialization
+    let div = document.createElement('div')
+    if (specialization == 'Miner') {
+      console.log('you are a miner')
+      div.innerHTML = `
+
+
+
+
+
+
+
+      `
+    }
+    if (specialization == 'Manager') {
+      console.log('you are a manager')
+    }
+
+    s('body').append(div)
+  }
+
   Game.toggleStats = () => {
     if (s('.stats-container-content-wrapper').style.height == 0 || s('.stats-container-content-wrapper').style.height == '0px') {
-      s('.stats-container-content-wrapper').style.height = '400px';
+      s('.stats-container-content-wrapper').style.height = '300px';
       s('.caret').style.transform = 'rotate(180deg)'
       Game.statsVisable = true
     } else {
@@ -796,6 +895,11 @@ Game.launch = () => {
           <hr/>
           <p>Increases item output</p>
           <p>Lowers shop prices</p>
+        `
+      }
+      if (stat == 'spec') {
+        tooltip.innerHTML = `
+          <p>Unlocked at Level 5</p>
         `
       }
     } else {
@@ -1376,9 +1480,17 @@ Game.launch = () => {
       div.innerHTML = `
         <div class="changelog-container">
           <h1>Changelog</h1>
+          <p style='text-align: center'>(Click anywhere to close)</p>
           <hr style='border-color: black; margin-bottom: 10px;'/>
 
-          <h3>v0.6.1</h3>
+          <h3>v0.6.2 (9/22/2017)</h3>
+          <p>-BIG UPDATE IN THE WORKS... classes dont do anything yet but they will soon...</p>
+          <p>-Added a couple more sprites</p>
+          <p>-Lots of bug fixes</p>
+
+          <br/>
+
+          <h3>v0.6.1 (9/19/2017)</h3>
           <p>-Added upgrades for every single store item</p>
           <p>-Added a bunch more sprites</p>
           <p>-Critical hits gives more XP</p>
@@ -1388,8 +1500,6 @@ Game.launch = () => {
           <p>-Implement achievements</p>
           <p>-Added 2 achievements</p>
           <p>-Implemented patch notes (this thing!)</p>
-
-          <h1 class='changelog-footer'>press anywhere to close</h1>
         </div>
 
       `
