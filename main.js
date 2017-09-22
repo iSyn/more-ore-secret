@@ -767,6 +767,12 @@ Game.launch = () => {
           <p>Increases your OpC slightly</p>
           <p>Chance for critical strikes</p>
         `
+        if (Game.state.player.dex > 0) {
+          tooltip.innerHTML += `
+            <hr/>
+            <p>Crit Chance: ${((Game.state.player.dex/(Game.state.player.dex + 1)) * 10).toFixed(0)}%</p>
+          `
+        }
       }
       if (stat == 'int') {
         tooltip.innerHTML = `
@@ -1395,7 +1401,6 @@ Game.launch = () => {
     let amt = calculateOPC()
     let num = Math.random()
     let dex = Game.state.player.dex * .01
-    console.log(num, '<=', dex, '/', dex+1)
     if (num <= dex/(dex + 1)) {
       console.log('critical hit!')
       amt = calculateOPC('crit')
