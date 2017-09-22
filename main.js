@@ -1473,7 +1473,7 @@ Game.launch = () => {
     let newestVersion == '0.6.2'
 
     if (Game.state.currentVersion !== newestVersion) {
-      Game.state.storedVersion = Game.state.currentVersion
+      Game.state.storedVersion = newestVersion
       let div = document.createElement('div')
       div.classList.add('changelog-wrapper')
       div.onclick = () => s('.changelog-wrapper').remove()
