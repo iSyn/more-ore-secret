@@ -1470,10 +1470,10 @@ Game.launch = () => {
   }
 
   let showChangelog = () => {
-    let newestVersion == '0.6.2'
+    let newestVersion = '0.6.2'
 
-    if (Game.state.currentVersion !== newestVersion) {
-      Game.state.storedVersion = newestVersion
+    if (Game.state.currentVersion != newestVersion) {
+      Game.state.currentVersion = newestVersion
       let div = document.createElement('div')
       div.classList.add('changelog-wrapper')
       div.onclick = () => s('.changelog-wrapper').remove()
