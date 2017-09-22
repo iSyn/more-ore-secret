@@ -1472,7 +1472,10 @@ Game.launch = () => {
   let showChangelog = () => {
     let newestVersion = '0.6.2'
 
+    console.log('newest version', newestVersion)
+    console.log('current version', Game.state.currentVersion)
     if (Game.state.currentVersion != newestVersion || Game.state.ores == 0) {
+      console.log('showing changelog')
       Game.state.currentVersion = newestVersion
       let div = document.createElement('div')
       div.classList.add('changelog-wrapper')
