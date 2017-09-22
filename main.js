@@ -1039,7 +1039,7 @@ Game.launch = () => {
       item.hidden = 1
       Game.items['Hospital'].production *= 2
     }
-    if (item.name == 'Council of Rocks') {
+    if (item.name == 'Council Of Rocks') {
       item.hidden = 1
       Game.items['Citadel'].production *= 2
     }
@@ -1128,7 +1128,7 @@ Game.launch = () => {
   Game.items['RubberConveryorBelts'] = { name: 'Rubber Converyor Belts', type: 'upgrade', pic: 'wip.png', desc: 'Doubles the production of Factories', fillerQuote: 'wip', price: 300000, hidden: 1}
   Game.items['MetalSarcophagus'] = { name: 'Metal Sarcophagus', type: 'upgrade', pic: 'wip.png', desc: 'Doubles the production of Crypt', fillerQuote: 'wip', price: 5200000, hidden: 1}
   Game.items['ImmunizationShots'] = { name: 'Immunization Shots', type: 'upgrade', pic: 'wip.png', desc: 'Doubles the production of Hospitals', fillerQuote: 'wip', price: 10000000, hidden: 1}
-  Game.items['CouncilOfRocks'] = { name: 'Council of Rocks', type: 'upgrade', pic: 'wip.png', desc: 'Doubles the production of Citadel', fillerQuote: 'wip', price: 400000000, hidden: 1}
+  Game.items['CouncilOfRocks'] = { name: 'Council Of Rocks', type: 'upgrade', pic: 'wip.png', desc: 'Doubles the production of Citadel', fillerQuote: 'wip', price: 400000000, hidden: 1}
   Game.items['JetFuel'] = { name: 'Jet Fuel', type: 'upgrade', pic: 'wip.png', desc: 'Doubles the production of Xeno Spaceships', fillerQuote: 'wip', price: 5500000000, hidden: 1}
   Game.items['GoldenEggs'] = { name: 'Golden Eggs', type: 'upgrade', pic: 'wip.png', desc: 'Doubles the production of Sky Castles', fillerQuote: 'wip', price: 95000000000, hidden: 1}
   Game.items['GreenGoop'] = { name: 'Green Goop', type: 'upgrade', pic: 'wip.png', desc: 'Doubles the production of Eon Portals', fillerQuote: 'wip', price: 150000000000, hidden: 1}
