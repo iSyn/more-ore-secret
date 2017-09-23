@@ -1488,6 +1488,7 @@ Game.launch = () => {
 
           <h3>v0.6.2 (9/22/2017)</h3>
           <p>-BIG UPDATE IN THE WORKS... classes dont do anything yet but they will soon...</p>
+          <a href='#' style='color: blue' onclick='Game.wipe()'>(your game might be broken if you have a previous save... sorry... CLICK TO WIPE SAVE)</a>
           <p>-Added a couple more sprites</p>
           <p>-Lots of bug fixes</p>
 
