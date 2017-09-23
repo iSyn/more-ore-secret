@@ -1213,7 +1213,7 @@ Game.launch = () => {
   Game.items['Crypt'] = { name: 'Crypt', type: 'item', pic: 'crypt.png', production: 30000, desc: 'wip', fillerQuote: 'wip', price: 290000, basePrice: 290000, hidden: 2}
   Game.items['Hospital'] = { name: 'Hospital', type: 'item', pic: 'hospital.png', production: 220000, desc: 'wip', fillerQuote: 'wip', price: 1000000, basePrice: 1000000, hidden: 2}
   // Game.items['Laboratory']
-  Game.items['Citadel'] = { name: 'Citadel', type: 'item', pic: 'wip.png', production: 1666666, desc: 'wip', fillerQuote: 'wip', price: 66666666, basePrice: 66666666, hidden: 2}
+  Game.items['Citadel'] = { name: 'Citadel', type: 'item', pic: 'citadel.png', production: 1666666, desc: 'wip', fillerQuote: 'wip', price: 66666666, basePrice: 66666666, hidden: 2}
   Game.items['XenoSpaceship'] = { name: 'Xeno Spaceship', type: 'item', pic: 'wip.png', production: 45678910, desc: 'wip', fillerQuote: 'wip', price: 758492047, basePrice: 758492047, hidden: 2}
   Game.items['SkyCastle'] = { name: 'Sky Castle', type: 'item', pic: 'wip.png', production: 777777777, desc: 'wip', fillerQuote: 'wip', price: 5500000000, basePrice: 5500000000, hidden: 2}
   Game.items['EonPortal'] = { name: 'Eon Portal', type: 'item', pic: 'wip.png', production: 8888800000, desc: 'wip', fillerQuote: 'wip', price: 79430000000, basePrice: 79430000000, hidden: 2}
@@ -1470,7 +1470,7 @@ Game.launch = () => {
   }
 
   let showChangelog = () => {
-    let newestVersion = '0.6.2'
+    let newestVersion = '0.6.3'
 
     console.log('newest version', newestVersion)
     console.log('current version', Game.state.currentVersion)
@@ -1486,8 +1486,11 @@ Game.launch = () => {
           <p style='text-align: center'>(Click anywhere to close)</p>
           <hr style='border-color: black; margin-bottom: 10px;'/>
 
-          <h3>v0.6.2 (9/22/2017)</h3>
+          <h3>v0.6.3 (9/23/2017) THE SPRITES UPDATE</h3>
           <a href='#' onclick='Game.wipe()' style='color: red; text-decoration: underline'>(old saves are now broken... sorry. Click here to wipe old saves or on the bottom of the page)</a>
+          <p>-Sprites for every single store item(My index finger is sore)</p>
+
+          <h3>v0.6.2 (9/22/2017)</h3>
           <p>-BIG UPDATE IN THE WORKS... classes dont do anything yet but they will soon...</p>
           <p>-Added a couple more sprites</p>
           <p>-Lots of bug fixes</p>
