@@ -1588,7 +1588,14 @@ Game.launch = () => {
     s('body').append(clickMeContainer)
   }
   if (Game.items['MagnifyingGlass'].owned > 0) oreClickArea()
+
+  if (window.navigator.platform != 'MacIntel') {
+    console.log('not Mac')
+    s('.right-section').style.width = '317px'
+  }
 }
+
+
 
 window.onload = () => {
   Game.launch();
