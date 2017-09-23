@@ -1206,7 +1206,7 @@ Game.launch = () => {
   /* ITEMS */
   Game.items['MagnifyingGlass'] = { name: 'Magnifying Glass', type: 'item', pic: 'magnifying-glass.png', desc: 'Allows you to spot weakpoints inside the rock', fillerQuote: 'wip', price: 1, basePrice: 1, hidden: 0}
   Game.items['School'] = { name: 'School', type: 'item', pic: 'school.png', production: .3, desc: 'wip', fillerQuote: 'wip', price: 6, basePrice: 6, hidden: 0}
-  Game.items['Farm'] = { name: 'Farm', type: 'item', pic: 'farmer.png', production: 1, desc: 'wip', fillerQuote: 'wip', price: 75, basePrice: 75, hidden: 1}
+  Game.items['Farm'] = { name: 'Farm', type: 'item', pic: 'farm.png', production: 1, desc: 'wip', fillerQuote: 'wip', price: 75, basePrice: 75, hidden: 1}
   Game.items['Quarry'] = { name: 'Quarry', type: 'item', pic: 'quarry.png', production: 21, desc: 'wip', fillerQuote: 'wip', price: 1200, basePrice: 1200, hidden: 1}
   Game.items['Church'] = { name: 'Church', type: 'item', pic: 'wip.png', production: 300, desc: 'wip', fillerQuote: 'wip', price: 6660, basePrice: 6660, hidden: 2}
   Game.items['Factory'] = { name: 'Factory', type: 'item', pic: 'wip.png', production: 5500, desc: 'wip', fillerQuote: 'wip', price: 48000, basePrice: 48000, hidden: 2}
