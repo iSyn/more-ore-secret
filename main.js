@@ -1208,10 +1208,10 @@ Game.launch = () => {
   Game.items['School'] = { name: 'School', type: 'item', pic: 'school.png', production: .3, desc: 'wip', fillerQuote: 'wip', price: 6, basePrice: 6, hidden: 0}
   Game.items['Farm'] = { name: 'Farm', type: 'item', pic: 'farm.png', production: 1, desc: 'wip', fillerQuote: 'wip', price: 75, basePrice: 75, hidden: 1}
   Game.items['Quarry'] = { name: 'Quarry', type: 'item', pic: 'quarry.png', production: 21, desc: 'wip', fillerQuote: 'wip', price: 1200, basePrice: 1200, hidden: 1}
-  Game.items['Church'] = { name: 'Church', type: 'item', pic: 'wip.png', production: 300, desc: 'wip', fillerQuote: 'wip', price: 6660, basePrice: 6660, hidden: 2}
-  Game.items['Factory'] = { name: 'Factory', type: 'item', pic: 'wip.png', production: 5500, desc: 'wip', fillerQuote: 'wip', price: 48000, basePrice: 48000, hidden: 2}
-  Game.items['Crypt'] = { name: 'Crypt', type: 'item', pic: 'wip.png', production: 30000, desc: 'wip', fillerQuote: 'wip', price: 290000, basePrice: 290000, hidden: 2}
-  Game.items['Hospital'] = { name: 'Hospital', type: 'item', pic: 'wip.png', production: 220000, desc: 'wip', fillerQuote: 'wip', price: 1000000, basePrice: 1000000, hidden: 2}
+  Game.items['Church'] = { name: 'Church', type: 'item', pic: 'church.png', production: 300, desc: 'wip', fillerQuote: 'wip', price: 6660, basePrice: 6660, hidden: 2}
+  Game.items['Factory'] = { name: 'Factory', type: 'item', pic: 'factory.png', production: 5500, desc: 'wip', fillerQuote: 'wip', price: 48000, basePrice: 48000, hidden: 2}
+  Game.items['Crypt'] = { name: 'Crypt', type: 'item', pic: 'crypt.png', production: 30000, desc: 'wip', fillerQuote: 'wip', price: 290000, basePrice: 290000, hidden: 2}
+  Game.items['Hospital'] = { name: 'Hospital', type: 'item', pic: 'hospital.png', production: 220000, desc: 'wip', fillerQuote: 'wip', price: 1000000, basePrice: 1000000, hidden: 2}
   // Game.items['Laboratory']
   Game.items['Citadel'] = { name: 'Citadel', type: 'item', pic: 'wip.png', production: 1666666, desc: 'wip', fillerQuote: 'wip', price: 66666666, basePrice: 66666666, hidden: 2}
   Game.items['XenoSpaceship'] = { name: 'Xeno Spaceship', type: 'item', pic: 'wip.png', production: 45678910, desc: 'wip', fillerQuote: 'wip', price: 758492047, basePrice: 758492047, hidden: 2}

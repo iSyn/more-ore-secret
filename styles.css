@@ -556,6 +556,7 @@ footer {
 
 .right-section {
   width: 300px;
+  min-width: 300px;
   background: black;
   display: flex;
   flex-flow: column nowrap;
