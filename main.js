@@ -981,6 +981,7 @@ Game.launch = () => {
         tooltip.innerHTML = `
           <h3>Intelligence</h3>
           <hr/>
+          <p>NOT YET IMPLEMENTED</p>
           <p>Increases item output slightly</p>
           <p>Chance for critical strikes</p>
         `
@@ -989,6 +990,7 @@ Game.launch = () => {
         tooltip.innerHTML = `
           <h3>Luck</h3>
           <hr/>
+          <p>NOT YET IMPLEMENTED</p>
           <p>Increases item rarity percentage</p>
           <p>Increases item drop chance</p>
         `
@@ -997,6 +999,7 @@ Game.launch = () => {
         tooltip.innerHTML = `
           <h3>Charisma</h3>
           <hr/>
+          <p>NOT YET IMPLEMENTED</p>
           <p>Increases item output</p>
           <p>Lowers shop prices</p>
         `
