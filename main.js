@@ -43,13 +43,14 @@ Game.launch = () => {
     opcMultiplier: 0,
     oreClickMultiplier: 5,
     player: {
-      lvl: 1,
+      lvl: 5,
       str: 0,
       dex: 0,
       luk: 0,
       int: 0,
       cha: 0,
       specialization: null,
+      specializationLv: 1,
       currentXp: 0,
       xpNeeded: 100,
       availableSp: 0,
@@ -786,15 +787,34 @@ Game.launch = () => {
   Game.specializationSkills = () => {
     let specialization = Game.state.player.specialization
     let div = document.createElement('div')
+    let str = ''
+    div.classList.add('specialization-skills-wrapper')
     if (specialization == 'Miner') {
       console.log('you are a miner')
-      div.innerHTML = `
+      str += `
 
+      <div class="specialization-skills-container">
+        <div class="specialization-skills-top">
+          <h1 style='flex-grow: 1; text-align: center;'>${specialization} &nbsp; Lv.${Game.state.player.specializationLv}</h1>
+          <p onclick='document.querySelector(".specialization-skills-wrapper").remove()'>X</p>
+        </div>
+        <hr/>
+        <div class="specialization-skills-bottom">
+          <div class="specialization-skills-bottom-left">
+      `
+      Game.skills.forEach((skill) => {
+        if (skill.specialization == 'Miner') {
+          str += `
+            <div class='specialization-skill' id='${skill.id}' onmouseover='Game.renderSkillText(${skill.id})' onmouseout='document.querySelector(".specialization-skills-bottom-right").innerHTML=""'></div>
+          `
+        }
+      })
 
-
-
-
-
+      str += `
+          </div>
+          <div class="specialization-skills-bottom-right"></div>
+        </div>
+      </div>
 
       `
     }
@@ -802,7 +822,40 @@ Game.launch = () => {
       console.log('you are a manager')
     }
 
+    div.innerHTML = str
     s('body').append(div)
+  }
+
+  Game.skills = [
+    {
+      name: 'Mining Proficiency',
+      specialization: 'Miner',
+      fillerTxt: 'After countless rocks destroyed, you learn to handle pickaxes better',
+      desc: 'Adds a permanent buff to your pickaxes',
+      id: 0,
+      lv: 0
+    },
+    {
+      name: 'Test skill',
+      specialization: 'Miner',
+      fillerTxt: 'filler text',
+      desc: 'test desc',
+      id: 1,
+      lv: 0
+    }
+  ]
+
+  Game.renderSkillText = (iD) => {
+    for (i = 0; i < Game.skills.length; i++) {
+      if (iD == Game.skills[i].id) {
+        s('.specialization-skills-bottom-right').innerHTML = `
+          <h2>${Game.skills[i].name} &nbsp; Lv. ${Game.skills[i].lv}</h2>
+          <hr/>
+          <p>${Game.skills[i].fillerTxt}</p>
+          <p>${Game.skills[i].desc}</p>
+        `
+      }
+    }
   }
 
   Game.toggleStats = () => {
