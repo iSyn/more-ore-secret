@@ -809,7 +809,7 @@ li {
   overflow-y: hidden;
 }
 
-.specialization-miner:hover .miner-txt {
+.specialization-prospector:hover .prospector-txt {
   display: block;
   animation: fadeUpIn 0.1s ease-in-out;
 }
@@ -907,6 +907,7 @@ li {
   display: flex;
   flex-flow: row nowrap;
   padding: 10px;
+  height: 100%;
 }
 
 .specialization-skills-bottom-left {
@@ -919,6 +920,8 @@ li {
 .specialization-skills-bottom-right {
   width: 50%;
   text-align: center;
+  border: 1px solid white;
+  padding: 10px;
 }
 
 .specialization-skill {
@@ -932,25 +935,3 @@ li {
 .specialization-skill:hover {
   box-shadow: 0 0 10px white inset;
 }
-
-.specialization-skills-xp-container {
-  position: relative;
-  border: 1px solid white;
-  height: 30px;
-  flex-grow: 1;
-}
-
-.specialization-skills-xp {
-  height: 100%;
-  background: grey;
-}
-
-.specialization-skills-area {
-  display: flex;
-  flex-flow: row nowrap;
-  align-items: center;
-  justify-content: center;
-}
-
-
-
