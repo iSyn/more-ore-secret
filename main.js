@@ -49,11 +49,14 @@ Game.launch = () => {
       luk: 0,
       int: 0,
       cha: 0,
-      specialization: null,
-      specializationLv: 1,
       currentXp: 0,
       xpNeeded: 100,
       availableSp: 0,
+      specialization: null,
+      specializationLv: 1,
+      specializationXp: 0,
+      specializationXpNeeded: 50,
+      specializationSp: 1,
       pickaxe: {
         name: 'Beginners Wood Pickaxe',
         rarity: 'Common',
@@ -782,9 +785,37 @@ Game.launch = () => {
     s('.specialization-wrapper').remove()
     s('.specialization-confirmation-wrapper').remove()
     Game.specializationSkills()
+    startSpecializationXP()
+  }
+
+  startSpecializationXP = () => {
+    setInterval(() => {
+      if (Game.state.player.specializationXp < Game.state.player.specializationXpNeeded) {
+        Game.state.player.specializationXp += 1/30
+      } else {
+        Game.state.player.specializationLv++
+        Game.state.player.specializationXp = 0
+        Game.state.player.specializationSp++
+        Game.state.player.specializationXpNeeded = Math.pow(Game.state.player.specializationXpNeeded, 1.15)
+        if (s('.specialization-skills-wrapper')) {
+          Game.specializationSkills()
+        }
+      }
+      renderSpecializationXp()
+    }, 1000 / 30)
+  }
+
+  renderSpecializationXp = () => {
+    if (s('.specialization-skills-wrapper')) {
+      let xp = Game.state.player.specializationXp
+      let max = Game.state.player.specializationXpNeeded
+      let percentage = (xp/max) * 100
+      s('.specialization-skills-xp').style.width = Math.floor(percentage) + '%'
+    }
   }
 
   Game.specializationSkills = () => {
+    if (s('.specialization-skills-wrapper')) s('.specialization-skills-wrapper').remove()
     let specialization = Game.state.player.specialization
     let div = document.createElement('div')
     let str = ''
@@ -795,18 +826,31 @@ Game.launch = () => {
 
       <div class="specialization-skills-container">
         <div class="specialization-skills-top">
-          <h1 style='flex-grow: 1; text-align: center;'>${specialization} &nbsp; Lv.${Game.state.player.specializationLv}</h1>
+          <h1 style='flex-grow: 1; text-align: center;'>${specialization}</h1>
           <p onclick='document.querySelector(".specialization-skills-wrapper").remove()'>X</p>
         </div>
-        <hr/>
+        <div class="specialization-skills-area">
+          <h3 style='margin-right: 10px;'>Miner Lv. ${Game.state.player.specializationLv}</h3>
+          <div class="specialization-skills-xp-container">
+            <div class="specialization-skills-xp"></div>
+          </div>
+        </div>
+        <p style='text-align: center;'>Specialization SP Available: ${Game.state.player.specializationSp}</p>
+        <br/>
         <div class="specialization-skills-bottom">
           <div class="specialization-skills-bottom-left">
       `
       Game.skills.forEach((skill) => {
         if (skill.specialization == 'Miner') {
-          str += `
-            <div class='specialization-skill' id='${skill.id}' onmouseover='Game.renderSkillText(${skill.id})' onmouseout='document.querySelector(".specialization-skills-bottom-right").innerHTML=""'></div>
-          `
+          if (skill.locked == 0) {
+            str += `
+              <div class='specialization-skill' id='${skill.id}' onmouseover='Game.renderSkillText(${skill.id})' onmouseout='document.querySelector(".specialization-skills-bottom-right").innerHTML=""'></div>
+            `
+          } else {
+            str += `
+              <div class='specialization-skill' id='${skill.id}' onmouseover='Game.renderSkillText("locked")' onmouseout='document.querySelector(".specialization-skills-bottom-right").innerHTML=""'></div>
+            `
+          }
         }
       })
 
@@ -824,6 +868,7 @@ Game.launch = () => {
 
     div.innerHTML = str
     s('body').append(div)
+    renderSpecializationXp()
   }
 
   Game.skills = [
@@ -833,7 +878,8 @@ Game.launch = () => {
       fillerTxt: 'After countless rocks destroyed, you learn to handle pickaxes better',
       desc: 'Adds a permanent buff to your pickaxes',
       id: 0,
-      lv: 0
+      lv: 0,
+      locked: 0
     },
     {
       name: 'Test skill',
@@ -841,7 +887,8 @@ Game.launch = () => {
       fillerTxt: 'filler text',
       desc: 'test desc',
       id: 1,
-      lv: 0
+      lv: 0,
+      locked: 1
     }
   ]
 
@@ -855,6 +902,11 @@ Game.launch = () => {
           <p>${Game.skills[i].desc}</p>
         `
       }
+    }
+    if (iD == 'locked') {
+      s('.specialization-skills-bottom-right').innerHTML = `
+          <h2>???</h2>
+        `
     }
   }
 
@@ -1522,13 +1574,10 @@ Game.launch = () => {
     }
   }
 
-  let showChangelog = () => {
-    let newestVersion = '0.6.3'
+  Game.showChangelog = (show) => {
+    let newestVersion = '0.6.4'
 
-    console.log('newest version', newestVersion)
-    console.log('current version', Game.state.currentVersion)
-    if (Game.state.currentVersion != newestVersion || Game.state.ores == 0) {
-      console.log('showing changelog')
+    if (Game.state.currentVersion != newestVersion || Game.state.ores == 0 || show == 1) {
       Game.state.currentVersion = newestVersion
       let div = document.createElement('div')
       div.classList.add('changelog-wrapper')
@@ -1539,9 +1588,16 @@ Game.launch = () => {
           <p style='text-align: center'>(Click anywhere to close)</p>
           <hr style='border-color: black; margin-bottom: 10px;'/>
 
-          <h3>v0.6.3 (9/23/2017) THE SPRITES UPDATE</h3>
+          <h3>v0.6.4 (9/24/2017)</h3>
           <a href='#' onclick='Game.wipe()' style='color: red; text-decoration: underline'>(old saves are now broken... sorry. Click here to wipe old saves or on the bottom of the page)</a>
+          <p>-Almost done implementing classes... well, a single class</p>
+
+          <br/>
+
+          <h3>v0.6.3 (9/23/2017) THE SPRITES UPDATE</h3>
           <p>-Sprites for every single store item(My index finger is sore)</p>
+
+          <br/>
 
           <h3>v0.6.2 (9/22/2017)</h3>
           <p>-BIG UPDATE IN THE WORKS... classes dont do anything yet but they will soon...</p>
@@ -1614,7 +1670,7 @@ Game.launch = () => {
   Game.load()
   buildStore()
   Game.buildStats()
-  showChangelog()
+  Game.showChangelog()
   setInterval(() => {
     gainXp()
     Game.state.stats.timePlayed++
@@ -1649,6 +1705,9 @@ Game.launch = () => {
   if (window.navigator.platform != 'MacIntel') {
     console.log('not Mac')
     s('.right-section').style.width = '317px'
+  }
+  if (Game.state.player.specialization != null) { // ON LOAD, IF PLAYER HAS A SPECIALIZATION, START XP GAIN
+    startSpecializationXP()
   }
 }
 
