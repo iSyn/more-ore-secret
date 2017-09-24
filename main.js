@@ -1211,7 +1211,7 @@ Game.launch = () => {
       item.hidden = 1
       Game.items['EonPortal'].production *= 2
     }
-    if (item.name == 'Scripture Reading') {
+    if (item.name == 'Unholy Mineshaft') {
       item.hidden = 1
       Game.items['SacredMines'].production *= 2
     }
