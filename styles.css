@@ -514,6 +514,8 @@ footer {
   height: 0px;
   overflow: auto;
   transition: all 0.5s;
+  border-right: 1px solid white;
+  border-bottom: 1px solid white;
 }
 
 .stats-container-content {
@@ -522,6 +524,7 @@ footer {
   flex-flow: column nowrap;
   padding: 10px 20px;
   overflow: hidden;
+
 }
 
 .single-stat {

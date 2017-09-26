@@ -43,7 +43,7 @@ Game.launch = () => {
     opcMultiplier: 0,
     oreClickMultiplier: 5,
     player: {
-      lvl: 1,
+      lvl: 5,
       str: 0,
       dex: 0,
       luk: 0,
@@ -602,7 +602,7 @@ Game.launch = () => {
     }
 
     if (Game.statsVisable == true) {
-      str += '<div class="stats-container-content-wrapper" style="height: 350px;;">'
+      str += '<div class="stats-container-content-wrapper" style="height: 370px;">'
     } else {
       str += '<div class="stats-container-content-wrapper">'
     }
@@ -706,8 +706,21 @@ Game.launch = () => {
             }
           } else { // IF THERE IS A SPECIALIZATION
             str += `
+              <h2 style='text-align: center; cursor: pointer; padding: 5px 0;' onclick='Game.specializationSkills()'>${Game.state.player.specialization} &nbsp; &rsaquo;</h2>
+              <hr/>
+              <div class="single-stat">
+                <p style='flex-grow: 1'>Level:</p>
+                <p>${Game.state.player.specializationLv}</p>
+              </div>
+              <div class="single-stat">
+                <p style='flex-grow: 1'>XP until next lv:</p>
+                <p>${Game.state.player.specializationXpNeeded}</p>
+              </div>
+              <div class="single-stat">
+                <p style='flex-grow: 1'>XP on refine:</p>
+                <p class='specialization-xp-stored'>${Game.state.player.specializationXpStored}</p>
+              </div>
               <br/>
-              <button class='specialization-btn' onclick='Game.specializationSkills()' style='margin-bottom: 20px;'>${Game.state.player.specialization}</button>
               <button class='specialization-btn' onclick='Game.confirmRefine()'>Refine</button>
             `
           }
@@ -770,11 +783,12 @@ Game.launch = () => {
   }
 
   Game.startSpecializationXp = () => {
-    console.log('runnin')
     if (Game.state.player.specialization != null) {
       setInterval(() => {
         Game.state.player.specializationXpStored++
-        console.log(Game.state.player.specializationXpStored)
+        if (Game.statsVisable) {
+          s('.specialization-xp-stored').innerHTML = Game.state.player.specializationXpStored
+        }
       }, 1000)
     }
   }
@@ -975,9 +989,10 @@ Game.launch = () => {
 
   Game.toggleStats = () => {
     if (s('.stats-container-content-wrapper').style.height == 0 || s('.stats-container-content-wrapper').style.height == '0px') {
-      s('.stats-container-content-wrapper').style.height = '350px';
+      s('.stats-container-content-wrapper').style.height = '370px';
       s('.caret').style.transform = 'rotate(180deg)'
       Game.statsVisable = true
+      s('.stats-container-content-wrapper').classList.add('stats-open')
     } else {
       s('.stats-container-content-wrapper').style.height = 0;
       s('.caret').style.transform = 'rotate(0deg)'
@@ -1715,8 +1730,8 @@ Game.launch = () => {
     drawRockParticles()
     Game.state.stats.oreClicks++
     if (Game.statsVisable) Game.buildStats()
-    if (Game.state.stats.oreClicks >= 5) unlockUpgrades('MagnifyingGlass')
-    if (Game.state.stats.oreClicks >= 10 ) unlockUpgrades('WorkBoots')
+    if (Game.state.stats.oreClicks >= 2) unlockUpgrades('MagnifyingGlass')
+    if (Game.state.stats.oreClicks >= 100) unlockUpgrades('WorkBoots')
     if (Game.state.stats.oreClicks >= 100) unlockUpgrades('Painkillers')
     if (document.querySelector('.click-me-container')) {
       s('.click-me-container').remove()
@@ -1735,6 +1750,10 @@ Game.launch = () => {
     buildInventory()
     drawRockParticles()
     oreClickArea()
+    if (Game.state.player.specialization == 'Prospector') {
+      Game.state.player.specializationXpStored += 5
+    }
+    if (Game.statsVisable) Game.buildStats()
   }
 
 
