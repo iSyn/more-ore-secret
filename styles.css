@@ -995,5 +995,21 @@ li {
   }
 }
 
+.specialization-skills-middle {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 5px;
+}
 
+.specialization-skills-xp-container {
+  flex-grow: 1;
+  height: 40px;
+  border: 1px solid white;
+}
 
+.specialization-skills-xp {
+  height: 100%;
+  background: white;
+}

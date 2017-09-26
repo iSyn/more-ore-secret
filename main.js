@@ -55,7 +55,8 @@ Game.launch = () => {
       specialization: null,
       specializationLv: 1,
       specializationXp: 0,
-      specializationXpNeeded: 50,
+      specializationXpNeeded: 1000,
+      specializationXpStored: 0,
       specializationSp: 1,
       pickaxe: {
         name: 'Beginners Wood Pickaxe',
@@ -706,7 +707,7 @@ Game.launch = () => {
           } else { // IF THERE IS A SPECIALIZATION
             str += `
               <br/>
-              <button class='specialization-btn' onclick='Game.specializationSkills()' style='margin-bottom: 10px;'>${Game.state.player.specialization}</button>
+              <button class='specialization-btn' onclick='Game.specializationSkills()' style='margin-bottom: 20px;'>${Game.state.player.specialization}</button>
               <button class='specialization-btn' onclick='Game.confirmRefine()'>Refine</button>
             `
           }
@@ -768,12 +769,23 @@ Game.launch = () => {
     s('body').append(div)
   }
 
+  Game.startSpecializationXp = () => {
+    console.log('runnin')
+    if (Game.state.player.specialization != null) {
+      setInterval(() => {
+        Game.state.player.specializationXpStored++
+        console.log(Game.state.player.specializationXpStored)
+      }, 1000)
+    }
+  }
+
   Game.specialization = (sel) => {
     Game.state.player.specialization = sel
     Game.buildStats()
     s('.specialization-wrapper').remove()
     s('.specialization-confirmation-wrapper').remove()
     Game.specializationSkills()
+    Game.startSpecializationXp()
   }
 
   Game.specializationSkills = () => {
@@ -789,6 +801,12 @@ Game.launch = () => {
         <div class="specialization-skills-top">
           <h1 style='flex-grow: 1; text-align: center;'>${specialization}</h1>
           <p onclick='document.querySelector(".specialization-skills-wrapper").remove()'>X</p>
+        </div>
+        <div class="specialization-skills-middle">
+          <h2 style='margin-right: 10px;'>Lv: ${Game.state.player.specializationLv}</h2>
+          <div class="specialization-skills-xp-container">
+            <div class="specialization-skills-xp"></div>
+          </div>
         </div>
         <p style='text-align: center;'>Specialization SP Available: ${Game.state.player.specializationSp}</p>
         <br/>
@@ -823,6 +841,16 @@ Game.launch = () => {
 
     div.innerHTML = str
     s('body').append(div)
+    calculateSpecializationXP()
+  }
+
+  calculateSpecializationXP = () => {
+    let currentXp = Game.state.player.specializationXp
+    let neededXp = Game.state.player.specializationXpNeeded
+    let percentage = (currentXp / neededXp) * 100
+    console.log(`${currentXp}/${neededXp}=${percentage}`)
+    console.log(percentage)
+    s('.specialization-skills-xp').style.width = percentage + '%'
   }
 
   Game.confirmRefine = () => {
@@ -832,7 +860,7 @@ Game.launch = () => {
       <div class="confirm-refine">
         <h3 style='text-align: center;'>Refine</h3>
         <hr/>
-        <p style='text-align: left; color: lightgreen;'>+ You will gain <strong>THIS MUCH</strong> specialization experience</p>
+        <p style='text-align: left; color: lightgreen;'>+ You will gain <strong>${Game.state.player.specializationXpStored}</strong> specialization xp</p>
         <p style='text-align: left; color: lightgreen;'>+ You will gain <strong>THIS MUCH</strong> refined ores</p>
         <p style='text-align: left; color: #c36d6d;'>- You will lose all current ores</p>
         <p style='text-align: left; color: #c36d6d;'>- You will lose all owned items and upgrades</p>
@@ -875,7 +903,7 @@ Game.launch = () => {
     Game.state.player.int = 0
     Game.state.player.cha = 0
     Game.state.player.currentXp = 0
-    Game.state.player.xpNeeded = 100
+    Game.state.player.xpNeeded = 50
     Game.state.player.availableSp = 0
     Game.state.player.pickaxe = {
       name: 'Beginners Wood Pickaxe',
@@ -884,6 +912,19 @@ Game.launch = () => {
       material: 'Wood',
       damage: 1,
     }
+
+    if (Game.state.player.specializationXpStored > 0) {
+      while (Game.state.player.specializationXp + Game.state.player.specializationXpStored > Game.state.player.specializationXpNeeded) {
+        Game.state.player.specializationXpStored -= Game.state.player.specializationXpNeeded
+        Game.state.player.specializationLv++
+        Game.state.player.specializationXp = 0
+        Game.state.player.specializationXpNeeded = Math.pow(Game.state.player.specializationXpNeeded, 1.15)
+      }
+      Game.state.player.specializationXp = Game.state.player.specializationXpStored
+      Game.state.player.specializationXpStored = 0
+    }
+
+
     Game.buildStats()
   }
 
@@ -1741,6 +1782,7 @@ Game.launch = () => {
     console.log('not Mac')
     s('.right-section').style.width = '317px'
   }
+  Game.startSpecializationXp()
 }
 
 
