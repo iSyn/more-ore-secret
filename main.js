@@ -44,7 +44,7 @@ Game.launch = () => {
     opcMultiplier: 0,
     oreClickMultiplier: 5,
     player: {
-      lvl: 5,
+      lvl: 1,
       str: 0,
       dex: 0,
       luk: 0,
@@ -141,6 +141,7 @@ Game.launch = () => {
     for (i in Game.items) {
       localStorage.setItem(`item-${i}`, JSON.stringify(Game.items[i]))
     }
+    localStorage.setItem('skills', JSON.stringify(Game.skills))
   }
 
   Game.load = () => {
@@ -150,6 +151,8 @@ Game.launch = () => {
       for (i in Game.items) {
         Game.items[i] = JSON.parse(localStorage.getItem(`item-${i}`))
       }
+
+      Game.skills = JSON.parse(localStorage.getItem('skills'))
 
       generateStoreItems()
     }
@@ -881,7 +884,7 @@ Game.launch = () => {
         if (skill.specialization == 'Prospector') {
           if (skill.locked == 0) {
             str += `
-              <div class='specialization-skill' id='${skill.id}' onclick='Game.levelUpSkill(${skill.name.replace(/ /g,'')})' onmouseover='Game.renderSkillText(${skill.id})' onmouseout='document.querySelector(".specialization-skills-bottom-right").innerHTML=""'></div>
+              <div class='specialization-skill' id='${skill.id}' onclick='Game.levelUpSkill("${skill.name}")' onmouseover='Game.renderSkillText(${skill.id})' onmouseout='document.querySelector(".specialization-skills-bottom-right").innerHTML=""'></div>
             `
           } else {
             str += `
@@ -912,8 +915,6 @@ Game.launch = () => {
     let currentXp = Game.state.player.specializationXp
     let neededXp = Game.state.player.specializationXpNeeded
     let percentage = (currentXp / neededXp) * 100
-    console.log(`${currentXp}/${neededXp}=${percentage}`)
-    console.log(percentage)
     s('.specialization-skills-xp').style.width = percentage + '%'
   }
 
@@ -981,6 +982,7 @@ Game.launch = () => {
       while (Game.state.player.specializationXp + Game.state.player.specializationXpStored > Game.state.player.specializationXpNeeded) {
         Game.state.player.specializationXpStored -= Game.state.player.specializationXpNeeded
         Game.state.player.specializationLv++
+        Game.state.player.specializationSp++
         Game.state.player.specializationXp = 0
         Game.state.player.specializationXpNeeded = Math.pow(Game.state.player.specializationXpNeeded, 1.15)
       }
@@ -995,13 +997,22 @@ Game.launch = () => {
 
 
   Game.levelUpSkill = (skillName) => {
-    if (Game.state.player.specializationSp > 0) {
-      //
+
+    if (Game.state.player.specializationSp > 0) { // IF THERE IS SP
+      for (i = 0; i < Game.skills.length; i++) { // LOOP THORUGH SKILLS TO FIND SELECTED SKILL
+        if (Game.skills[i].name == skillName) { // IF WE FOUND SKILL
+          Game.state.player.specializationSp-- // SUBTRACT SP
+          Game.skills[i].lv++
+        }
+      }
     }
+
+    Game.specializationSkills()
   }
 
   Game.skills = [
     {
+
       name: 'Pickaxe Proficiency',
       specialization: 'Prospector',
       fillerTxt: 'After countless rocks destroyed, you learn to handle pickaxes better',
