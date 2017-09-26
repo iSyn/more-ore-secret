@@ -879,27 +879,52 @@ Game.launch = () => {
         <br/>
         <div class="specialization-skills-bottom">
           <div class="specialization-skills-bottom-left">
+            <div class="skill-tier">
       `
       Game.skills.forEach((skill) => {
         if (skill.specialization == 'Prospector') {
-          if (skill.locked == 0) {
-            str += `
-              <div class='specialization-skill' id='${skill.id}' onclick='Game.levelUpSkill("${skill.name}")' onmouseover='Game.renderSkillText(${skill.id})' onmouseout='document.querySelector(".specialization-skills-bottom-right").innerHTML=""'></div>
-            `
-          } else {
-            str += `
-              <div class='specialization-skill' id='${skill.id}' onmouseover='Game.renderSkillText("locked")' onmouseout='document.querySelector(".specialization-skills-bottom-right").innerHTML=""'></div>
-            `
+          if (skill.tier == 1) {
+            if (skill.locked == 0) {
+              str += `
+                <div class='specialization-skill' id='${skill.id}' onclick='Game.levelUpSkill("${skill.name}")' onmouseover='Game.renderSkillText(${skill.id})' onmouseout='document.querySelector(".specialization-skills-bottom-right").innerHTML=""'></div>
+              `
+            } else {
+              str += `
+                <div class='specialization-skill' id='${skill.id}' onmouseover='Game.renderSkillText("locked")' onmouseout='document.querySelector(".specialization-skills-bottom-right").innerHTML=""'></div>
+              `
+            }
           }
         }
       })
 
-      str += `
-          </div>
-          <div class="specialization-skills-bottom-right"></div>
-        </div>
-      </div>
+      str += `</div>`
 
+      str += `<div class="skill-tier">`
+
+      Game.skills.forEach((skill) => {
+        if (skill.specialization == 'Prospector') {
+          if (skill.tier == 2) {
+            if (skill.locked == 0) {
+              str += `
+                <div class='specialization-skill' id='${skill.id}' onclick='Game.levelUpSkill("${skill.name}")' onmouseover='Game.renderSkillText(${skill.id})' onmouseout='document.querySelector(".specialization-skills-bottom-right").innerHTML=""'></div>
+              `
+            } else {
+              str += `
+                <div class='specialization-skill' id='${skill.id}' onmouseover='Game.renderSkillText("locked")' onmouseout='document.querySelector(".specialization-skills-bottom-right").innerHTML=""'></div>
+              `
+            }
+          }
+        }
+      })
+
+
+
+      str += `
+            </div>
+              </div>
+              <div class="specialization-skills-bottom-right"></div>
+            </div>
+          </div>
       `
     }
     if (specialization == 'Manager') {
@@ -1003,32 +1028,55 @@ Game.launch = () => {
         if (Game.skills[i].name == skillName) { // IF WE FOUND SKILL
           Game.state.player.specializationSp-- // SUBTRACT SP
           Game.skills[i].lv++
+          let nextTier = Game.skills[i].tier + 1
+          for (j = 0; j < Game.skills.length; j++) {
+            if (Game.skills[j].tier == nextTier) {
+              Game.skills[j].locked = 0
+            }
+          }
+
+          Game.specializationSkills()
+          Game.renderSkillText(Game.skills[i].id)
         }
       }
     }
 
-    Game.specializationSkills()
+
   }
 
   Game.skills = [
     {
 
       name: 'Pickaxe Proficiency',
+      type: 'passive',
       specialization: 'Prospector',
       fillerTxt: 'After countless rocks destroyed, you learn to handle pickaxes better',
       desc: 'Adds a permanent buff to your pickaxes',
       id: 0,
       lv: 0,
-      locked: 0
+      locked: 0,
+      tier: 1
     },
     {
-      name: 'Test skill',
+      name: 'Weight Lifting',
+      type: 'passive',
       specialization: 'Prospector',
-      fillerTxt: 'filler text',
-      desc: 'test desc',
+      fillerTxt: 'I lift things up and put them down',
+      desc: 'Passive STR bonus',
       id: 1,
       lv: 0,
-      locked: 1
+      locked: 1,
+      tier: 2
+    }, {
+      name: 'Conditioning',
+      type: 'passive',
+      specialization: 'Prospector',
+      fillerTxt: 'Crossfit is like totally awesome',
+      desc: 'Passive DEX bonus',
+      id: 2,
+      lv: 0,
+      locked: 1,
+      tier: 2
     }
   ]
 
@@ -1037,6 +1085,8 @@ Game.launch = () => {
       if (iD == Game.skills[i].id) {
         s('.specialization-skills-bottom-right').innerHTML = `
           <h2>${Game.skills[i].name} &nbsp; Lv. ${Game.skills[i].lv}</h2>
+          <hr/>
+          <p><i>${Game.skills[i].type}</i></p>
           <hr/>
           <p>${Game.skills[i].fillerTxt}</p>
           <p>${Game.skills[i].desc}</p>

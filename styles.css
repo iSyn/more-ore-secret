@@ -940,7 +940,7 @@ li {
   height: 64px;
   width: 64px;
   border: 1px solid white;
-  margin-bottom: 25px;
+  margin: 10px;
   cursor: pointer;
 }
 
@@ -1015,4 +1015,12 @@ li {
 .specialization-skills-xp {
   height: 100%;
   background: white;
+}
+
+.skill-tier {
+  width: 100%;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+
 }
