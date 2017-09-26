@@ -35,6 +35,7 @@ let Game = {}
 Game.launch = () => {
 
   Game.state = {
+    refinedOres: 0,
     ores: 0,
     oreHp: 50,
     oreCurrentHp: 50,
@@ -43,7 +44,7 @@ Game.launch = () => {
     opcMultiplier: 0,
     oreClickMultiplier: 5,
     player: {
-      lvl: 5,
+      lvl: 1,
       str: 0,
       dex: 0,
       luk: 0,
@@ -77,6 +78,57 @@ Game.launch = () => {
       timePlayed: 0
     },
     currentVersion: '0.6.2',
+  }
+
+  let generateStoreItems = () => {
+    for (i in Game.items) {
+      new Item(Game.items[i])
+    }
+  }
+
+  let resetItems = () => {
+    Game.items = []
+    /* ITEMS */
+    Game.items['School'] = { name: 'School', type: 'item', pic: 'school.png', production: .3, desc: 'Teach students about ores', fillerQuote: 'Jesus Christ Marie, they\'re minerals!', price: 6, basePrice: 6, hidden: 0}
+    Game.items['Farm'] = { name: 'Farm', type: 'item', pic: 'farm.png', production: 1, desc: 'Cultivate the lands for higher quality ores', fillerQuote: 'This totally makes sense.', price: 75, basePrice: 75, hidden: 1}
+    Game.items['Quarry'] = { name: 'Quarry', type: 'item', pic: 'quarry.png', production: 21, desc: 'Designated mining area', fillerQuote: 'mine mine mine', price: 1200, basePrice: 1200, hidden: 1}
+    Game.items['Church'] = { name: 'Church', type: 'item', pic: 'church.png', production: 300, desc: 'Praise to the Ore Gods', fillerQuote: 'In Ore name we pray, Amen.', price: 6660, basePrice: 6660, hidden: 2}
+    Game.items['Factory'] = { name: 'Factory', type: 'item', pic: 'factory.png', production: 5500, desc: 'Manufacture your ores', fillerQuote: 'wip', price: 48000, basePrice: 48000, hidden: 2}
+    Game.items['Crypt'] = { name: 'Crypt', type: 'item', pic: 'crypt.png', production: 30000, desc: 'Raise dead ores from the graves', fillerQuote: 'spooky ores', price: 290000, basePrice: 290000, hidden: 2}
+    Game.items['Hospital'] = { name: 'Hospital', type: 'item', pic: 'hospital.png', production: 220000, desc: 'wip', fillerQuote: 'wip', price: 1000000, basePrice: 1000000, hidden: 2}
+    // Game.items['Laboratory']
+    Game.items['Citadel'] = { name: 'Citadel', type: 'item', pic: 'citadel.png', production: 1666666, desc: 'wip', fillerQuote: 'wip', price: 66666666, basePrice: 66666666, hidden: 2}
+    Game.items['XenoSpaceship'] = { name: 'Xeno Spaceship', type: 'item', pic: 'wip.png', production: 45678910, desc: 'wip', fillerQuote: 'wip', price: 758492047, basePrice: 758492047, hidden: 2}
+    Game.items['SkyCastle'] = { name: 'Sky Castle', type: 'item', pic: 'wip.png', production: 777777777, desc: 'wip', fillerQuote: 'wip', price: 5500000000, basePrice: 5500000000, hidden: 2}
+    Game.items['EonPortal'] = { name: 'Eon Portal', type: 'item', pic: 'wip.png', production: 8888800000, desc: 'wip', fillerQuote: 'wip', price: 79430000000, basePrice: 79430000000, hidden: 2}
+    Game.items['SacredMines'] = { name: 'Sacred Mines', type: 'item', pic: 'wip.png', production: 40501030500, desc: 'wip', fillerQuote: 'wip', price: 300000000000, basePrice: 300000000000, hidden: 2}
+    Game.items['O.A.R.D.I.S.'] = { name: 'O.A.R.D.I.S.', type: 'item', pic: 'wip.png', production: 110100110110, desc: 'wip', fillerQuote: 'wip', price: 9999999999999, basePrice: 9999999999999, hidden: 2}
+
+    /* ITEM UPGRADES */
+    Game.items['MagnifyingGlass'] = { name: 'Magnifying Glass', type: 'upgrade', pic: 'magnifying-glass.png', desc: 'Allows you to spot weakpoints inside the rock', fillerQuote: 'These sure will help...', price: 1, basePrice: 1, hidden: 1}
+    Game.items['CleanMagnifyingGlass'] = { name: 'Clean Magnifying Glass', type: 'upgrade', pic: 'clean-magnifying-glass.png', desc: 'Increases critical hit multiplier to 10x', fillerQuote: 'wip', price: 100, hidden: 1,}
+    Game.items['PolishMagnifyingGlass'] = { name: 'Polish Magnifying Glass', type: 'upgrade', pic: 'wip.png', desc: 'Increases critical hit multiplier to 15x', fillerQuote: 'wip', price: 50000, hidden: 1,}
+    Game.items['CompositionNotebooks'] = { name: 'Composition Notebooks', type: 'upgrade', pic: 'compositionnotebook.png', desc: 'Doubles the production of Schools', fillerQuote: 'wip', price: 80, hidden: 1}
+    Game.items['ManureSpreader'] = { name: 'Manure Spreader', type: 'upgrade', pic: 'wip.png', desc: 'Doubles the production of Farms', fillerQuote: 'wip', price: 950, hidden: 1}
+    Game.items['Headlights'] = { name: 'Headlights', type: 'upgrade', pic: 'wip.png', desc: 'Doubles the production of Quarrys', fillerQuote: 'wip', price: 19000, hidden: 1}
+    Game.items['ScriptureReading'] = { name: 'Scripture Reading', type: 'upgrade', pic: 'wip.png', desc: 'Doubles the production of Churches', fillerQuote: 'wip', price: 300000, hidden: 1}
+    // Metal Detector
+    Game.items['RubberConveryorBelts'] = { name: 'Rubber Converyor Belts', type: 'upgrade', pic: 'wip.png', desc: 'Doubles the production of Factories', fillerQuote: 'wip', price: 300000, hidden: 1}
+    Game.items['MetalSarcophagus'] = { name: 'Metal Sarcophagus', type: 'upgrade', pic: 'wip.png', desc: 'Doubles the production of Crypt', fillerQuote: 'wip', price: 5200000, hidden: 1}
+    Game.items['ImmunizationShots'] = { name: 'Immunization Shots', type: 'upgrade', pic: 'wip.png', desc: 'Doubles the production of Hospitals', fillerQuote: 'wip', price: 10000000, hidden: 1}
+    Game.items['CouncilOfRocks'] = { name: 'Council Of Rocks', type: 'upgrade', pic: 'wip.png', desc: 'Doubles the production of Citadel', fillerQuote: 'wip', price: 400000000, hidden: 1}
+    Game.items['JetFuel'] = { name: 'Jet Fuel', type: 'upgrade', pic: 'wip.png', desc: 'Doubles the production of Xeno Spaceships', fillerQuote: 'wip', price: 5500000000, hidden: 1}
+    Game.items['GoldenEggs'] = { name: 'Golden Eggs', type: 'upgrade', pic: 'wip.png', desc: 'Doubles the production of Sky Castles', fillerQuote: 'wip', price: 95000000000, hidden: 1}
+    Game.items['GreenGoop'] = { name: 'Green Goop', type: 'upgrade', pic: 'wip.png', desc: 'Doubles the production of Eon Portals', fillerQuote: 'wip', price: 150000000000, hidden: 1}
+    Game.items['UnholyMineshaft'] = { name: 'Unholy Mineshaft', type: 'upgrade', pic: 'wip.png', desc: 'Doubles the production of Sacred Mines', fillerQuote: 'wip', price: 2200000000000, hidden: 1}
+    Game.items['OARDISupgrade'] = { name: 'OARDISupgrade', type: 'upgrade', pic: 'wip.png', desc: 'Doubles the production of OARDIS ', fillerQuote: 'wip', price: 50000000000000, hidden: 1}
+
+    // UPGRADES
+    Game.items['WorkBoots'] = {name: 'Work Boots', type: 'upgrade', pic: 'workboots.png', desc: 'Increase all ore production by 1%', fillerQuote: 'wip', price: 500, hidden: 1,}
+    Game.items['Painkillers'] = {name: 'Painkillers', type: 'upgrade', pic: 'painkillers.png', desc: 'double your OpC', fillerQuote: 'wip', price: 15000, hidden: 1,}
+    Game.items['Steroids'] = {name: 'Steroids', type: 'upgrade', pic: 'steroids.png', desc: 'double your OpC', fillerQuote: 'wip', price: 1000000, hidden: 1,}
+
+    generateStoreItems()
   }
 
   Game.wipe = () => {
@@ -714,7 +766,7 @@ Game.launch = () => {
               </div>
               <div class="single-stat">
                 <p style='flex-grow: 1'>XP until next lv:</p>
-                <p>${Game.state.player.specializationXpNeeded}</p>
+                <p>${Math.floor(Game.state.player.specializationXpNeeded - Game.state.player.specializationXp)}</p>
               </div>
               <div class="single-stat">
                 <p style='flex-grow: 1'>XP on refine:</p>
@@ -938,9 +990,11 @@ Game.launch = () => {
       Game.state.player.specializationXpStored = 0
     }
 
-
+    resetItems()
     Game.buildStats()
+    buildStore()
   }
+
 
   Game.levelUpSkill = (skillName) => {
     if (Game.state.player.specializationSp > 0) {
@@ -992,7 +1046,6 @@ Game.launch = () => {
       s('.stats-container-content-wrapper').style.height = '370px';
       s('.caret').style.transform = 'rotate(180deg)'
       Game.statsVisable = true
-      s('.stats-container-content-wrapper').classList.add('stats-open')
     } else {
       s('.stats-container-content-wrapper').style.height = 0;
       s('.caret').style.transform = 'rotate(0deg)'
@@ -1397,52 +1450,7 @@ Game.launch = () => {
     Game.items[this.functionName] = this
   }
 
-  Game.items = []
-  /* ITEMS */
-  Game.items['School'] = { name: 'School', type: 'item', pic: 'school.png', production: .3, desc: 'Teach students about ores', fillerQuote: 'Jesus Christ Marie, they\'re minerals!', price: 6, basePrice: 6, hidden: 0}
-  Game.items['Farm'] = { name: 'Farm', type: 'item', pic: 'farm.png', production: 1, desc: 'Cultivate the lands for higher quality ores', fillerQuote: 'This totally makes sense.', price: 75, basePrice: 75, hidden: 1}
-  Game.items['Quarry'] = { name: 'Quarry', type: 'item', pic: 'quarry.png', production: 21, desc: 'Designated mining area', fillerQuote: 'mine mine mine', price: 1200, basePrice: 1200, hidden: 1}
-  Game.items['Church'] = { name: 'Church', type: 'item', pic: 'church.png', production: 300, desc: 'Praise to the Ore Gods', fillerQuote: 'In Ore name we pray, Amen.', price: 6660, basePrice: 6660, hidden: 2}
-  Game.items['Factory'] = { name: 'Factory', type: 'item', pic: 'factory.png', production: 5500, desc: 'Manufacture your ores', fillerQuote: 'wip', price: 48000, basePrice: 48000, hidden: 2}
-  Game.items['Crypt'] = { name: 'Crypt', type: 'item', pic: 'crypt.png', production: 30000, desc: 'Raise dead ores from the graves', fillerQuote: 'spooky ores', price: 290000, basePrice: 290000, hidden: 2}
-  Game.items['Hospital'] = { name: 'Hospital', type: 'item', pic: 'hospital.png', production: 220000, desc: 'wip', fillerQuote: 'wip', price: 1000000, basePrice: 1000000, hidden: 2}
-  // Game.items['Laboratory']
-  Game.items['Citadel'] = { name: 'Citadel', type: 'item', pic: 'citadel.png', production: 1666666, desc: 'wip', fillerQuote: 'wip', price: 66666666, basePrice: 66666666, hidden: 2}
-  Game.items['XenoSpaceship'] = { name: 'Xeno Spaceship', type: 'item', pic: 'wip.png', production: 45678910, desc: 'wip', fillerQuote: 'wip', price: 758492047, basePrice: 758492047, hidden: 2}
-  Game.items['SkyCastle'] = { name: 'Sky Castle', type: 'item', pic: 'wip.png', production: 777777777, desc: 'wip', fillerQuote: 'wip', price: 5500000000, basePrice: 5500000000, hidden: 2}
-  Game.items['EonPortal'] = { name: 'Eon Portal', type: 'item', pic: 'wip.png', production: 8888800000, desc: 'wip', fillerQuote: 'wip', price: 79430000000, basePrice: 79430000000, hidden: 2}
-  Game.items['SacredMines'] = { name: 'Sacred Mines', type: 'item', pic: 'wip.png', production: 40501030500, desc: 'wip', fillerQuote: 'wip', price: 300000000000, basePrice: 300000000000, hidden: 2}
-  Game.items['O.A.R.D.I.S.'] = { name: 'O.A.R.D.I.S.', type: 'item', pic: 'wip.png', production: 110100110110, desc: 'wip', fillerQuote: 'wip', price: 9999999999999, basePrice: 9999999999999, hidden: 2}
-
-  /* ITEM UPGRADES */
-  Game.items['MagnifyingGlass'] = { name: 'Magnifying Glass', type: 'upgrade', pic: 'magnifying-glass.png', desc: 'Allows you to spot weakpoints inside the rock', fillerQuote: 'These sure will help...', price: 1, basePrice: 1, hidden: 1}
-  Game.items['CleanMagnifyingGlass'] = { name: 'Clean Magnifying Glass', type: 'upgrade', pic: 'clean-magnifying-glass.png', desc: 'Increases critical hit multiplier to 10x', fillerQuote: 'wip', price: 100, hidden: 1,}
-  Game.items['PolishMagnifyingGlass'] = { name: 'Polish Magnifying Glass', type: 'upgrade', pic: 'wip.png', desc: 'Increases critical hit multiplier to 15x', fillerQuote: 'wip', price: 50000, hidden: 1,}
-  Game.items['CompositionNotebooks'] = { name: 'Composition Notebooks', type: 'upgrade', pic: 'compositionnotebook.png', desc: 'Doubles the production of Schools', fillerQuote: 'wip', price: 80, hidden: 1}
-  Game.items['ManureSpreader'] = { name: 'Manure Spreader', type: 'upgrade', pic: 'wip.png', desc: 'Doubles the production of Farms', fillerQuote: 'wip', price: 950, hidden: 1}
-  Game.items['Headlights'] = { name: 'Headlights', type: 'upgrade', pic: 'wip.png', desc: 'Doubles the production of Quarrys', fillerQuote: 'wip', price: 19000, hidden: 1}
-  Game.items['ScriptureReading'] = { name: 'Scripture Reading', type: 'upgrade', pic: 'wip.png', desc: 'Doubles the production of Churches', fillerQuote: 'wip', price: 300000, hidden: 1}
-  // Metal Detector
-  Game.items['RubberConveryorBelts'] = { name: 'Rubber Converyor Belts', type: 'upgrade', pic: 'wip.png', desc: 'Doubles the production of Factories', fillerQuote: 'wip', price: 300000, hidden: 1}
-  Game.items['MetalSarcophagus'] = { name: 'Metal Sarcophagus', type: 'upgrade', pic: 'wip.png', desc: 'Doubles the production of Crypt', fillerQuote: 'wip', price: 5200000, hidden: 1}
-  Game.items['ImmunizationShots'] = { name: 'Immunization Shots', type: 'upgrade', pic: 'wip.png', desc: 'Doubles the production of Hospitals', fillerQuote: 'wip', price: 10000000, hidden: 1}
-  Game.items['CouncilOfRocks'] = { name: 'Council Of Rocks', type: 'upgrade', pic: 'wip.png', desc: 'Doubles the production of Citadel', fillerQuote: 'wip', price: 400000000, hidden: 1}
-  Game.items['JetFuel'] = { name: 'Jet Fuel', type: 'upgrade', pic: 'wip.png', desc: 'Doubles the production of Xeno Spaceships', fillerQuote: 'wip', price: 5500000000, hidden: 1}
-  Game.items['GoldenEggs'] = { name: 'Golden Eggs', type: 'upgrade', pic: 'wip.png', desc: 'Doubles the production of Sky Castles', fillerQuote: 'wip', price: 95000000000, hidden: 1}
-  Game.items['GreenGoop'] = { name: 'Green Goop', type: 'upgrade', pic: 'wip.png', desc: 'Doubles the production of Eon Portals', fillerQuote: 'wip', price: 150000000000, hidden: 1}
-  Game.items['UnholyMineshaft'] = { name: 'Unholy Mineshaft', type: 'upgrade', pic: 'wip.png', desc: 'Doubles the production of Sacred Mines', fillerQuote: 'wip', price: 2200000000000, hidden: 1}
-  Game.items['OARDISupgrade'] = { name: 'OARDISupgrade', type: 'upgrade', pic: 'wip.png', desc: 'Doubles the production of OARDIS ', fillerQuote: 'wip', price: 50000000000000, hidden: 1}
-
-  // UPGRADES
-  Game.items['WorkBoots'] = {name: 'Work Boots', type: 'upgrade', pic: 'workboots.png', desc: 'Increase all ore production by 1%', fillerQuote: 'wip', price: 500, hidden: 1,}
-  Game.items['Painkillers'] = {name: 'Painkillers', type: 'upgrade', pic: 'painkillers.png', desc: 'double your OpC', fillerQuote: 'wip', price: 15000, hidden: 1,}
-  Game.items['Steroids'] = {name: 'Steroids', type: 'upgrade', pic: 'steroids.png', desc: 'double your OpC', fillerQuote: 'wip', price: 1000000, hidden: 1,}
-
-  let generateStoreItems = () => {
-    for (i in Game.items) {
-      new Item(Game.items[i])
-    }
-  }
+  resetItems()
 
   Game.achievements = []
   let Achievement = function(name, desc) {
@@ -1459,7 +1467,6 @@ Game.launch = () => {
   new Achievement('Intermediate Miner', 'Break 10 rocks')
 
   let winAchievement = (functionName) => {
-    console.log('winning achievement', functionName)
     if (Game.achievements[functionName]) {
       if (Game.achievements[functionName].won == 0) {
         Game.achievements[functionName].won = 1
@@ -1718,7 +1725,6 @@ Game.launch = () => {
     let num = Math.random()
     let dex = Game.state.player.dex * .01
     if (num <= dex/(dex + 1)) {
-      console.log('critical hit!')
       amt = calculateOPC('crit')
     }
     earn(amt)
@@ -1798,7 +1804,6 @@ Game.launch = () => {
   if (Game.items['MagnifyingGlass'].owned > 0) oreClickArea()
 
   if (window.navigator.platform != 'MacIntel') {
-    console.log('not Mac')
     s('.right-section').style.width = '317px'
   }
   Game.startSpecializationXp()
