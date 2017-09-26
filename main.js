@@ -571,6 +571,14 @@ Game.launch = () => {
     }
     s('.tab-content').innerHTML = str
     loadAd()
+    if (s('#ads-im-sorry-please-dont-hate-me').is(':empty')) {
+      console.log('show text')
+      let str = `
+        <p style='text-align: center; background: transparent; color: white;'>Please consider whitelisting this page! <br/> I tried my best to make the ads non-intrusive! <br/> Thanks!</p>
+      `
+      s('#ads-im-sorry-please-dont-hate-me').innerHTML = str
+
+    }
   }
 
   Game.statsVisable = false
