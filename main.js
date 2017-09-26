@@ -1115,14 +1115,14 @@ Game.launch = () => {
       s('.tab-content-container').append(div)
       }
     }
-    if (s('.img_ad')) {
-      //do nothing
-    } else {
-        let str = `
-        <p style='text-align: center; background: transparent; color: white;'>Please consider whitelisting this page! <br/> I tried my best to make the ads non-intrusive! <br/> Thanks!</p>
-        `
-        s('#ads-im-sorry-please-dont-hate-me').innerHTML = str
-    }
+    // if (s('.img_ad')) {
+    //   //do nothing
+    // } else {
+    //     let str = `
+    //     <p style='text-align: center; background: transparent; color: white;'>Please consider whitelisting this page! <br/> I tried my best to make the ads non-intrusive! <br/> Thanks!</p>
+    //     `
+    //     s('#ads-im-sorry-please-dont-hate-me').innerHTML = str
+    // }
   }
 
   let buyFunction = (item) => {
