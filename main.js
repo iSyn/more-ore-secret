@@ -44,7 +44,7 @@ Game.launch = () => {
     opcMultiplier: 0,
     oreClickMultiplier: 5,
     player: {
-      lvl: 1,
+      lvl: 5,
       str: 0,
       dex: 0,
       luk: 0,
@@ -801,12 +801,10 @@ Game.launch = () => {
             <p>(For players that are more active in games)</p>
           </div>
         </div>
-        <div class="specialization-manager specialization" onclick='Game.chooseSpecialization("Manager")'>
+        <div class="specialization-manager specialization"'>
           <div class="manager-txt specialization-txt">
             <h3>Manager</h3>
-            <p>-text about how being a manager is great-</p>
-            <p>Skills for more OpS and other benefits</p>
-            <p>(For players that are more idle in games)</p>
+            <p>-NOT IMPLEMENTED YET-</p>
           </div>
         </div>
       </div>
