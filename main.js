@@ -44,7 +44,7 @@ Game.launch = () => {
     opcMultiplier: 0,
     oreClickMultiplier: 5,
     player: {
-      lvl: 1,
+      lvl: 5,
       str: 0,
       dex: 0,
       luk: 0,
@@ -56,7 +56,7 @@ Game.launch = () => {
       specialization: null,
       specializationLv: 1,
       specializationXp: 0,
-      specializationXpNeeded: 1000,
+      specializationXpNeeded: 500,
       specializationXpStored: 0,
       specializationSp: 1,
       pickaxe: {
@@ -78,6 +78,10 @@ Game.launch = () => {
       timePlayed: 0
     },
     currentVersion: '0.6.2',
+    settings: {
+      volume: .5
+
+    }
   }
 
   let generateStoreItems = () => {
@@ -160,7 +164,7 @@ Game.launch = () => {
 
   let playSound = (snd) => {
     let sfx = new Audio(`./assets/${snd}.wav`)
-    sfx.volume = 0.1
+    sfx.volume = Game.state.settings.volume
     sfx.play()
   }
 
@@ -917,14 +921,32 @@ Game.launch = () => {
         }
       })
 
+      str += `</div>`
 
+      str += `<div class="skill-tier">`
+
+      Game.skills.forEach((skill) => {
+        if (skill.specialization == 'Prospector') {
+          if (skill.tier == 3) {
+            if (skill.locked == 0) {
+              str += `
+                <div class='specialization-skill' id='${skill.id}' onclick='Game.levelUpSkill("${skill.name}")' onmouseover='Game.renderSkillText(${skill.id})' onmouseout='document.querySelector(".specialization-skills-bottom-right").innerHTML=""'></div>
+              `
+            } else {
+              str += `
+                <div class='specialization-skill' id='${skill.id}' onmouseover='Game.renderSkillText("locked")' onmouseout='document.querySelector(".specialization-skills-bottom-right").innerHTML=""'></div>
+              `
+            }
+          }
+        }
+      })
 
       str += `
-            </div>
               </div>
-              <div class="specialization-skills-bottom-right"></div>
+                </div>
+                <div class="specialization-skills-bottom-right"></div>
+              </div>
             </div>
-          </div>
       `
     }
     if (specialization == 'Manager') {
@@ -956,6 +978,7 @@ Game.launch = () => {
         <p style='text-align: left; color: #c36d6d;'>- You will lose all owned items and upgrades</p>
         <hr/>
         <p style='text-align: center;'>Are you sure you want to refine?</p>
+        <p style='text-align: center; font-size: smaller; margin-bottom: 5px'>-You can refine once every 3 hours-</p>
         <button onclick='Game.refine()'>yes</button>
         <button onclick='document.querySelector(".wrapper").remove()'>no</button>
       </div>
@@ -1055,7 +1078,9 @@ Game.launch = () => {
       id: 0,
       lv: 0,
       locked: 0,
-      tier: 1
+      tier: 1,
+      what: 'Pickaxe Damage',
+      whatAmount: 10
     },
     {
       name: 'Weight Lifting',
@@ -1066,7 +1091,9 @@ Game.launch = () => {
       id: 1,
       lv: 0,
       locked: 1,
-      tier: 2
+      tier: 2,
+      what: 'STR',
+      whatAmount: 5,
     }, {
       name: 'Conditioning',
       type: 'passive',
@@ -1076,7 +1103,21 @@ Game.launch = () => {
       id: 2,
       lv: 0,
       locked: 1,
-      tier: 2
+      tier: 2,
+      what: 'DEX',
+      whatAmount: 5
+    }, {
+      name: 'Juggernaut',
+      type: 'active',
+      specialization: 'Prospector',
+      fillerTxt: 'Fill with rage and smash some shit',
+      desc: 'Increase your damage by 50x for 5s',
+      id: 3,
+      lv: 0,
+      locked: 1,
+      tier: 3,
+      what: 'Damage',
+      whatAmount: 50
     }
   ]
 
@@ -1088,9 +1129,19 @@ Game.launch = () => {
           <hr/>
           <p><i>${Game.skills[i].type}</i></p>
           <hr/>
+          <br/>
           <p>${Game.skills[i].fillerTxt}</p>
+          <br/>
           <p>${Game.skills[i].desc}</p>
         `
+        if (Game.skills[i].lv > 0) {
+          s('.specialization-skills-bottom-right').innerHTML += `
+            <br/>
+            <hr/>
+            <p style='float: left;'>[Current Level] ${Game.skills[i].what} + ${Game.skills[i].whatAmount}%</p>
+            <p style='float: left;'>[Next Level] ${Game.skills[i].what} + ${Game.skills[i].whatAmount + 1}%</p>
+          `
+        }
       }
     }
     if (iD == 'locked') {
@@ -1821,6 +1872,80 @@ Game.launch = () => {
     if (Game.statsVisable) Game.buildStats()
   }
 
+  Game.showSettings = () => {
+    let div = document.createElement('div')
+    let str;
+    div.classList.add('wrapper')
+
+    str += `
+      <div class="setting-container">
+        <h3>settings</h3>
+        <i class='fa fa-times fa-1x' onclick='document.querySelector(".wrapper").remove()'></i>
+        <hr/>
+        <div class="single-setting">
+          <p style='padding-right: 10px;'>Volume: </p>
+          <input class='volume-slider' type="range" min=0 max=1 step=0.1 list='tickmarks' onchange='Game.state.settings.volume = document.querySelector(".volume-slider").value'/>
+          <datalist id="tickmarks">
+            <option value="0" label="0%">
+            <option value="0.1">
+            <option value="0.1">
+            <option value="0.2">
+            <option value="0.3">
+            <option value="0.4">
+            <option value="0.5" label="50%">
+            <option value="0.6">
+            <option value="0.7">
+            <option value="0.8">
+            <option value="0.9">
+            <option value='1.0' label="100%">
+          </datalist>
+        </div>
+
+        <hr/>
+      </div>
+
+    `
+    div.innerHTML = str
+
+    s('body').append(div)
+    s('.volume-slider').value = Game.state.settings.volume
+  }
+
+  Game.changeVolume = () => {
+    let volume = s('.volume-slider').value
+
+  }
+
+  Game.showAchievements = () => {
+    let div = document.createElement('div')
+    let str;
+    div.classList.add('wrapper')
+
+    str += `
+      <div class="achievements-container">
+        <h1>Statistics</h1>
+        <i class='fa fa-times fa-1x' onclick='document.querySelector(".wrapper").remove()'></i>
+        <hr/>
+        <p>Ores Mined: ${Game.state.stats.totalOresMined.toFixed(0)}</p>
+        <p>Ore Clicks: ${Game.state.stats.oreClicks}</p>
+        <p>Weak Spot hits: ${Game.state.stats.oreCritClicks}</p>
+        <p>Ores Spent: ${Game.state.stats.totalOresSpent.toFixed(0)}</p>
+        <p>Rocks Destroyed: ${Game.state.stats.rocksDestroyed}</p>
+        <p>Items Picked Up: ${Game.state.stats.itemsPickedUp}</p>
+        <p>Time Played: ${Game.state.stats.timePlayed} seconds</p>
+        <br/>
+        <h1>Achievements</h1>
+        <hr/>
+        <p>Achievements Won: -not implemented yet-</p>
+      </div>
+
+    `
+
+
+    div.innerHTML = str
+
+    s('body').append(div)
+  }
 
 
   // INIT SHIT
@@ -1843,6 +1968,7 @@ Game.launch = () => {
     earnOPS()
   }, 1000 / 30)
   window.onresize = () => {
+    drawSettingsBar()
     if (Game.items['MagnifyingGlass'].owned > 0) {
       oreClickArea()
     }
@@ -1866,7 +1992,29 @@ Game.launch = () => {
     s('.right-section').style.width = '317px'
   }
   Game.startSpecializationXp()
+
+  // Settings area thing
+  let drawSettingsBar = () => {
+    let div = s('.settings-container')
+
+    let anchorHorizontal = s('#horizontal-separator').getBoundingClientRect()
+    let anchorVertical = s('#main-separator').getBoundingClientRect()
+
+    div.style.position = 'absolute'
+    div.style.top = anchorHorizontal.top - div.getBoundingClientRect().height + 'px'
+    div.style.left = anchorVertical.left - div.getBoundingClientRect().width  + 'px'
+
+    s('body').append(div)
+  }
+
+  drawSettingsBar()
+
+
+
+
 }
+
+
 
 
 

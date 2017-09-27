@@ -1024,3 +1024,88 @@ li {
   justify-content: center;
 
 }
+
+.settings-container {
+  position: absolute;
+  top: 0;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-around;
+}
+
+.settings {
+  height: 40px;
+  width: 40px;
+  margin: 5px;
+  color: white;
+  opacity: .1;
+  text-align: center;
+}
+
+.settings:hover {
+  opacity: .5;
+  cursor: pointer;
+}
+
+.achievements-container {
+  background: rgba(0, 0, 0, 0.9);
+  border: 1px solid lightgrey;
+  color: white;
+  height: 90vh;
+  /*width: 50vw;*/
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 10px 20px;
+}
+
+.achievements-container i {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  opacity: .3;
+  cursor: pointer;
+}
+
+.achievements-container i {
+  opacity: 1;
+}
+
+.achievements-container h1 {
+  font-size: 4em;
+}
+
+.achievements-container p {
+  font-size: large;
+}
+
+.setting-container {
+  background: rgba(0, 0, 0, 0.9);
+  border: 1px solid lightgrey;
+  color: white;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 5px 10px;
+}
+
+.setting-container i {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  cursor: pointer;
+}
+
+.setting-container h3 {
+  text-align: center;
+}
+
+.single-setting {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: space-between;
+}
+

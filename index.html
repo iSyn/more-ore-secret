@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css?family=Asap+Condensed:400,700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Abel" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
     <meta name="description" content="More Ore - A clicker, incremental, and idle game with RPG elements">
     <meta name="keywords" content="game, clicker game, incremental game, idle game, more ore, isyn, incremental, idle, clicker, More Ore"/>
     <meta name="author" content="Syn Studios"/>
@@ -67,7 +68,11 @@
           <div class="ore-hp">100%</div>
           <div class="ore-click-area"></div>
         </div>
-        <div class="horizontal-separator"></div>
+        <div class="settings-container">
+          <i onclick='Game.showSettings()' class='fa fa-cog fa-2x settings'></i>
+          <i onclick='Game.showAchievements()' class='fa fa-bar-chart fa-2x settings'></i>
+        </div>
+        <div class="horizontal-separator" id='horizontal-separator'></div>
         <div class="bottom"></div>
       </div>
 
