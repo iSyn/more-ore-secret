@@ -1109,3 +1109,8 @@ li {
   justify-content: space-between;
 }
 
+#not-allowed {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+

@@ -28,6 +28,24 @@ let beautify = (num) => {
   }
 }
 
+let beautifyTime = (num) => {
+
+  let hours = Math.floor(num / 3600);
+  num %= 3600;
+  let minutes = Math.floor(num / 60);
+  if (minutes < 10) {
+    minutes = '0' + minutes
+  }
+  let seconds = num % 60;
+  if (seconds < 10) {
+    seconds = '0' + seconds
+  }
+
+  console.log(`${num} is ${hours}:${minutes}:${seconds}`)
+
+  return hours + ":" + minutes + ":" + seconds
+}
+
 // Game
 
 let Game = {}
@@ -80,8 +98,9 @@ Game.launch = () => {
     currentVersion: '0.6.2',
     settings: {
       volume: .5
-
-    }
+    },
+    canRefine: true,
+    refineTimer: 10800 // 3 hours in seconds
   }
 
   let generateStoreItems = () => {
@@ -764,6 +783,7 @@ Game.launch = () => {
               `
             }
           } else { // IF THERE IS A SPECIALIZATION
+            let timeLeft = beautifyTime(Game.state.refineTimer)
             str += `
               <h2 style='text-align: center; cursor: pointer; padding: 5px 0;' onclick='Game.specializationSkills()'>${Game.state.player.specialization} &nbsp; &rsaquo;</h2>
               <hr/>
@@ -779,9 +799,17 @@ Game.launch = () => {
                 <p style='flex-grow: 1'>XP on refine:</p>
                 <p class='specialization-xp-stored'>${Game.state.player.specializationXpStored}</p>
               </div>
-              <br/>
-              <button class='specialization-btn' onclick='Game.confirmRefine()'>Refine</button>
-            `
+              <br/>`
+
+              if (Game.state.canRefine == true) {
+                str += `
+                  <button class='specialization-btn' onclick='Game.confirmRefine()'>Refine</button>
+                `
+              } else {
+                str += `
+                  <button id='not-allowed' class='specialization-btn' onclick='Game.confirmRefine()'>Refine ${timeLeft}</button>
+                `
+              }
           }
           str += `
         </div>
@@ -966,39 +994,57 @@ Game.launch = () => {
   }
 
   Game.confirmRefine = () => {
-    let div = document.createElement('div')
-    div.classList.add('wrapper')
-    div.innerHTML = `
-      <div class="confirm-refine">
-        <h3 style='text-align: center;'>Refine</h3>
-        <hr/>
-        <p style='text-align: left; color: lightgreen;'>+ You will gain <strong>${Game.state.player.specializationXpStored}</strong> specialization xp</p>
-        <p style='text-align: left; color: lightgreen;'>+ You will gain <strong>THIS MUCH</strong> refined ores</p>
-        <p style='text-align: left; color: #c36d6d;'>- You will lose all current ores</p>
-        <p style='text-align: left; color: #c36d6d;'>- You will lose all owned items and upgrades</p>
-        <hr/>
-        <p style='text-align: center;'>Are you sure you want to refine?</p>
-        <p style='text-align: center; font-size: smaller; margin-bottom: 5px'>-You can refine once every 3 hours-</p>
-        <button onclick='Game.refine()'>yes</button>
-        <button onclick='document.querySelector(".wrapper").remove()'>no</button>
-      </div>
-    `
+    if (Game.state.canRefine == true) {
+      let div = document.createElement('div')
+      div.classList.add('wrapper')
+      div.innerHTML = `
+        <div class="confirm-refine">
+          <h3 style='text-align: center;'>Refine</h3>
+          <hr/>
+          <p style='text-align: left; color: lightgreen;'>+ You will gain <strong>${Game.state.player.specializationXpStored}</strong> specialization xp</p>
+          <p style='text-align: left; color: lightgreen;'>+ You will gain <strong>THIS MUCH</strong> refined ores</p>
+          <p style='text-align: left; color: #c36d6d;'>- You will lose all current ores</p>
+          <p style='text-align: left; color: #c36d6d;'>- You will lose all owned items and upgrades</p>
+          <hr/>
+          <p style='text-align: center;'>Are you sure you want to refine?</p>
+          <p style='text-align: center; font-size: smaller; margin-bottom: 5px'>-You can refine once every 3 hours-</p>
+          <button onclick='Game.refine()'>yes</button>
+          <button onclick='document.querySelector(".wrapper").remove()'>no</button>
+        </div>
+      `
 
-    s('body').append(div)
+      s('body').append(div)
+    }
   }
 
   Game.refine = () => {
-    let div = document.createElement('div')
-    div.classList.add('refine')
-    s('body').append(div)
+    if (Game.state.canRefine == true) {
+      Game.state.canRefine = false
+      refineCountdown()
+      let div = document.createElement('div')
+      div.classList.add('refine')
+      s('body').append(div)
 
-    setTimeout(() => {
-      softReset()
-      s('.wrapper').remove()
-    }, 1500)
-    setTimeout(() => {
-      s('.refine').remove()
-    }, 3000)
+      setTimeout(() => {
+        softReset()
+        s('.wrapper').remove()
+      }, 1500)
+      setTimeout(() => {
+        s('.refine').remove()
+      }, 3000)
+    }
+  }
+
+  refineCountdown = () => {
+    if (Game.state.refineTimer > 0) {
+      Game.state.refineTimer--
+      console.log(Game.state.refineTimer)
+    } else {
+      Game.state.canRefine == true
+      Game.state.refineTimer = 10800000
+      Game.buildStats()
+      console.log('you can refine')
+    }
   }
 
   softReset = () => {
@@ -1959,6 +2005,12 @@ Game.launch = () => {
   setInterval(() => {
     gainXp()
     Game.state.stats.timePlayed++
+    if (Game.state.canRefine == false) {
+      refineCountdown()
+    }
+    if (s('.stats-container-content-wrapper').clientHeight > 0) {
+      Game.buildStats()
+    }
   }, 1000)
   setInterval(() => {
     Game.save()
@@ -2008,8 +2060,6 @@ Game.launch = () => {
   }
 
   drawSettingsBar()
-
-
 
 
 }
