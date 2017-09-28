@@ -53,7 +53,7 @@ let Game = {}
 Game.launch = () => {
 
   Game.state = {
-    refinedOres: 10,
+    refinedOres: 0,
     ores: 0,
     oreHp: 50,
     oreCurrentHp: 50,
