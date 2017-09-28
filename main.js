@@ -225,12 +225,10 @@ Game.launch = () => {
     opc += Game.state.player.pickaxe.damage
 
     // ADD DAMAGE FROM PLAYER STRENGTH
-    opc += Math.pow(1.25, Game.state.player.str)
+    if (Game.state.player.str > 0 ) opc += Math.pow(1.25, Game.state.player.str)
 
     // ADD DAMAGE FROM PLAYER DEX
-    if (Game.state.player.dex > 0) {
-      opc += Math.pow(1.1, Game.state.player.dex)
-    }
+    if (Game.state.player.dex > 0) opc += Math.pow(1.1, Game.state.player.dex)
 
     // ADD OpC MULTIPLIERS
     opc += (opc * Game.state.opcMultiplier)
@@ -269,7 +267,12 @@ Game.launch = () => {
     let amountOfRocksDestroyed = Game.state.stats.rocksDestroyed
     let iLvl = amountOfRocksDestroyed
 
-    if (Math.random() < .3 || amountOfRocksDestroyed <= 1) { // 30% chance
+    let itemDropChance = .3 // 30%
+    if (Game.state.player.int > 0) {
+      itemDropChance += Game.state.player.int / (Game.state.player.int + 30)
+    }
+
+    if (Math.random() < itemDropChance || amountOfRocksDestroyed <= 1) { // 30% chance
       let itemContainer = document.createElement('div')
       itemContainer.classList.add('item-container')
       itemContainer.innerHTML = `
@@ -1866,7 +1869,6 @@ Game.launch = () => {
       if (Game.state.stats.currentCombo >= 100) winAchievement('Combo Master')
       if (Game.state.stats.currentCombo >= 666) winAchievement('Combo Devil')
       if (Game.state.stats.currentCombo >= 777) winAchievement('Combo God')
-
 
 
     } else { // IF REGULAR HIT
