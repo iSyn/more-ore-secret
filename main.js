@@ -53,7 +53,7 @@ let Game = {}
 Game.launch = () => {
 
   Game.state = {
-    refinedOres: 0,
+    refinedOres: 10,
     ores: 0,
     oreHp: 50,
     oreCurrentHp: 50,
@@ -96,6 +96,7 @@ Game.launch = () => {
       timePlayed: 0,
       highestCombo: 0,
       currentCombo: 0,
+      timesRefined: 0,
     },
     currentVersion: '0.6.2',
     settings: {
@@ -167,6 +168,8 @@ Game.launch = () => {
       localStorage.setItem(`item-${i}`, JSON.stringify(Game.items[i]))
     }
     localStorage.setItem('skills', JSON.stringify(Game.skills))
+    // let cookie = btoa(JSON.stringify(Game.state))
+    // console.log(cookie)
   }
 
   Game.load = () => {
@@ -579,13 +582,26 @@ Game.launch = () => {
   }
 
   let buildInventory = () => {
+
     let str = ''
     str += `Ores: ${beautify(Game.state.ores.toFixed(1))}`
     if (Game.state.oresPerSecond > 0) {
       str += ` (${beautify(Game.state.oresPerSecond.toFixed(1))}/s)`
     }
+    if (Game.state.stats.timesRefined > 0) {
+      str += `<br/> Refined Ores: ${Game.state.refinedOres}`
+    }
+
     s('.ores').innerHTML = str
-    s('.level').innerHTML = `Level: ${Game.state.player.lvl} (${Game.state.player.currentXp}/${Game.state.player.xpNeeded})`
+
+    let lvlStr = ''
+    lvlStr += `Level: ${Game.state.player.lvl} (${Game.state.player.currentXp}/${Game.state.player.xpNeeded})`
+    if (Game.state.player.specialization != null) {
+      lvlStr += `<br/> ${Game.state.player.specialization} Level: ${Game.state.player.specializationLv} (${Game.state.player.specializationXp.toFixed(0)}/${Game.state.player.specializationXpNeeded.toFixed(0)})`
+    }
+
+
+    s('.level').innerHTML = lvlStr
   }
 
   let buildStore = () => {
@@ -998,13 +1014,14 @@ Game.launch = () => {
   Game.confirmRefine = () => {
     if (Game.state.canRefine == true) {
       let div = document.createElement('div')
+      let amountOfRefinedOres = Math.floor(Math.cbrt(Game.state.ores / 10000000))
       div.classList.add('wrapper')
       div.innerHTML = `
         <div class="confirm-refine">
           <h3 style='text-align: center;'>Refine</h3>
           <hr/>
           <p style='text-align: left; color: lightgreen;'>+ You will gain <strong>${Game.state.player.specializationXpStored}</strong> specialization xp</p>
-          <p style='text-align: left; color: lightgreen;'>+ You will gain <strong>THIS MUCH</strong> refined ores</p>
+          <p style='text-align: left; color: lightgreen;'>+ You will gain <strong>${amountOfRefinedOres}</strong> refined ores</p>
           <p style='text-align: left; color: #c36d6d;'>- You will lose all current ores</p>
           <p style='text-align: left; color: #c36d6d;'>- You will lose all owned items and upgrades</p>
           <hr/>
@@ -1022,10 +1039,14 @@ Game.launch = () => {
   Game.refine = () => {
     if (Game.state.canRefine == true) {
       Game.state.canRefine = false
+      Game.state.stats.timesRefined++
       refineCountdown()
       let div = document.createElement('div')
       div.classList.add('refine')
       s('body').append(div)
+
+      let amountOfRefinedOres = Math.floor(Math.cbrt(Game.state.ores / 10000000))
+      Game.state.refinedOres += amountOfRefinedOres
 
       setTimeout(() => {
         softReset()
@@ -1740,6 +1761,16 @@ Game.launch = () => {
     buildInventory()
   }
 
+  //https://stackoverflow.com/questions/1484506/random-color-generator
+  let getRandomColor = () => {
+    let letters = '0123456789ABCDEF';
+    let color = '#';
+    for (i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+  }
+
   let risingNumber = (amount, type) => {
     let mouseX = (s('.ore').getBoundingClientRect().left + s('.ore').getBoundingClientRect().right)/2
     let mouseY = (s('.ore').getBoundingClientRect().top + s('.ore').getBoundingClientRect().bottom)/2
@@ -1780,8 +1811,8 @@ Game.launch = () => {
     }
 
     if (type == 'combo') {
-      risingNumber.style.fontSize = 'x-large'
-      risingNumber.style.color = 'red'
+      risingNumber.style.fontSize = 'xx-large'
+      risingNumber.style.color = getRandomColor()
       risingNumber.style.animationDuration = '3s'
       risingNumber.innerHTML = `${Game.state.stats.currentCombo} hit combo`
     }
@@ -2004,14 +2035,15 @@ Game.launch = () => {
         <h1>Statistics</h1>
         <i class='fa fa-times fa-1x' onclick='document.querySelector(".wrapper").remove()'></i>
         <hr/>
-        <p>Ores Mined: ${Game.state.stats.totalOresMined.toFixed(0)}</p>
-        <p>Ore Clicks: ${Game.state.stats.oreClicks}</p>
-        <p>Weak Spot hits: ${Game.state.stats.oreCritClicks}</p>
-        <p>Highest Weak Spot Combo: ${Game.state.stats.highestCombo}</p>
-        <p>Ores Spent: ${Game.state.stats.totalOresSpent.toFixed(0)}</p>
-        <p>Rocks Destroyed: ${Game.state.stats.rocksDestroyed}</p>
-        <p>Items Picked Up: ${Game.state.stats.itemsPickedUp}</p>
-        <p>Time Played: ${Game.state.stats.timePlayed} seconds</p>
+        <p><span style='opacity: .6'>Ores Mined:</span> <strong>${beautify(Game.state.stats.totalOresMined)}</strong></p>
+        <p><span style='opacity: .6'>Ore Clicks:</span> <strong>${Game.state.stats.oreClicks}</strong></p>
+        <p><span style='opacity: .6'>Weak Spot hits:</span> <strong>${Game.state.stats.oreCritClicks}</strong></p>
+        <p><span style='opacity: .6'>Highest Weak Spot Combo:</span> <strong>${Game.state.stats.highestCombo}</strong></p>
+        <p><span style='opacity: .6'>Ores Spent:</span> <strong>${beautify(Game.state.stats.totalOresSpent)}</strong></p>
+        <p><span style='opacity: .6'>Rocks Destroyed:</span> <strong>${Game.state.stats.rocksDestroyed}</strong></p>
+        <p><span style='opacity: .6'>Items Picked Up:</span> <strong>${Game.state.stats.itemsPickedUp}</strong></p>
+        <p><span style='opacity: .6'>Refine Amount:</span> <strong>${Game.state.stats.timesRefined}</strong></p>
+        <p><span style='opacity: .6'>Time Played:</span> <strong>${beautifyTime(Game.state.stats.timePlayed)}</strong></p>
         <br/>
         <h1>Achievements</h1>
         <hr/>
