@@ -62,7 +62,7 @@ Game.launch = () => {
     opcMultiplier: 0,
     oreClickMultiplier: 5,
     player: {
-      lvl: 5,
+      lvl: 1,
       str: 0,
       dex: 0,
       luk: 0,
@@ -93,7 +93,9 @@ Game.launch = () => {
       oreCritClicks: 0,
       rocksDestroyed: 0,
       itemsPickedUp: 0,
-      timePlayed: 0
+      timePlayed: 0,
+      highestCombo: 0,
+      currentCombo: 0,
     },
     currentVersion: '0.6.2',
     settings: {
@@ -1773,8 +1775,15 @@ Game.launch = () => {
 
     if (type == 'spendMoney') {
       risingNumber.style.fontSize = 'xx-large'
-      risingNumber.innerHTML = '-$'
       risingNumber.style.color = 'red'
+      risingNumber.innerHTML = '-$'
+    }
+
+    if (type == 'combo') {
+      risingNumber.style.fontSize = 'x-large'
+      risingNumber.style.color = 'red'
+      risingNumber.style.animationDuration = '3s'
+      risingNumber.innerHTML = `${Game.state.stats.currentCombo} hit combo`
     }
 
     s('.particles').append(risingNumber)
@@ -1782,6 +1791,21 @@ Game.launch = () => {
     setTimeout(() => {
       risingNumber.remove()
     }, 2000)
+  }
+
+  let getCombo = (type) => {
+    if (type == 'hit') { // IF WEAK SPOT HIT
+      Game.state.stats.currentCombo++
+      if (Game.state.stats.currentCombo % 5 == 0) {
+        risingNumber(0, 'combo')
+      }
+      if (Game.state.stats.currentCombo > Game.state.stats.highestCombo) {
+        Game.state.stats.highestCombo = Game.state.stats.currentCombo
+      }
+    } else { // IF REGULAR HIT
+      Game.state.stats.currentCombo = 0
+    }
+    console.log(Game.state.stats.highestCombo)
   }
 
   let drawRockParticles = () => {
@@ -1841,8 +1865,13 @@ Game.launch = () => {
           <p style='text-align: center'>(Click anywhere to close)</p>
           <hr style='border-color: black; margin-bottom: 10px;'/>
 
+          <h3>v0.6.5 (9/27/2017)</h3>
+          <p>NOTE: GAME DOES NOT SAVE (I took it out because its extremely buggy as on now and breaks the game if i put out a new update)</p>
+          <p>Prospector class is halfway done...</p>
+
+          <br/>
+
           <h3>v0.6.4 (9/24/2017)</h3>
-          <a href='#' onclick='Game.wipe()' style='color: red; text-decoration: underline'>(old saves are now broken... sorry. Click here to wipe old saves or on the bottom of the page)</a>
           <p>-Almost done implementing classes... well, a single class</p>
 
           <br/>
@@ -1883,6 +1912,7 @@ Game.launch = () => {
     if (num <= dex/(dex + 1)) {
       amt = calculateOPC('crit')
     }
+    Game.state.currentCombo = 0
     earn(amt)
     gainXp()
     risingNumber(amt)
@@ -1898,6 +1928,7 @@ Game.launch = () => {
     if (document.querySelector('.click-me-container')) {
       s('.click-me-container').remove()
     }
+    getCombo()
   }
 
   s('.ore-click-area').onclick = () => {
@@ -1916,6 +1947,7 @@ Game.launch = () => {
       Game.state.player.specializationXpStored += 5
     }
     if (Game.statsVisable) Game.buildStats()
+    getCombo('hit')
   }
 
   Game.showSettings = () => {
@@ -1975,6 +2007,7 @@ Game.launch = () => {
         <p>Ores Mined: ${Game.state.stats.totalOresMined.toFixed(0)}</p>
         <p>Ore Clicks: ${Game.state.stats.oreClicks}</p>
         <p>Weak Spot hits: ${Game.state.stats.oreCritClicks}</p>
+        <p>Highest Weak Spot Combo: ${Game.state.stats.highestCombo}</p>
         <p>Ores Spent: ${Game.state.stats.totalOresSpent.toFixed(0)}</p>
         <p>Rocks Destroyed: ${Game.state.stats.rocksDestroyed}</p>
         <p>Items Picked Up: ${Game.state.stats.itemsPickedUp}</p>
@@ -1998,7 +2031,7 @@ Game.launch = () => {
   buildInventory()
   Game.buildStats()
   generateStoreItems()
-  Game.load()
+  // Game.load()
   buildStore()
   Game.buildStats()
   Game.showChangelog()
@@ -2060,6 +2093,22 @@ Game.launch = () => {
   }
 
   drawSettingsBar()
+
+  //https://stackoverflow.com/questions/3369593/how-to-detect-escape-key-press-with-javascript-or-jquery
+  document.onkeydown = function(evt) {
+    evt = evt || window.event;
+    var isEscape = false;
+    if ("key" in evt) {
+        isEscape = (evt.key == "Escape" || evt.key == "Esc");
+    } else {
+        isEscape = (evt.keyCode == 27);
+    }
+    if (isEscape) {
+      if (s('.wrapper')) {
+        s('.wrapper').remove()
+      }
+    }
+};
 
 
 }
