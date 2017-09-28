@@ -41,8 +41,6 @@ let beautifyTime = (num) => {
     seconds = '0' + seconds
   }
 
-  console.log(`${num} is ${hours}:${minutes}:${seconds}`)
-
   return hours + ":" + minutes + ":" + seconds
 }
 
@@ -60,7 +58,8 @@ Game.launch = () => {
     oresPerSecond: 0,
     opsMultiplier: 0,
     opcMultiplier: 0,
-    oreClickMultiplier: 5,
+    critHitMultiplier: 2,
+    weakHitMultiplier: 5,
     player: {
       lvl: 1,
       str: 0,
@@ -90,7 +89,9 @@ Game.launch = () => {
       totalOresMined: 0,
       totalOresSpent: 0,
       oreClicks: 0,
-      oreCritClicks: 0,
+      critHits: 0,
+      weakSpotHits: 0,
+      megaHits: 0,
       rocksDestroyed: 0,
       itemsPickedUp: 0,
       timePlayed: 0,
@@ -169,7 +170,6 @@ Game.launch = () => {
     }
     localStorage.setItem('skills', JSON.stringify(Game.skills))
     // let cookie = btoa(JSON.stringify(Game.state))
-    console.log(cookie)
   }
 
   Game.load = () => {
@@ -230,8 +230,12 @@ Game.launch = () => {
     }
     opc += (opc * Game.state.opcMultiplier)
 
-    if (type == 'crit') {
-      opc *= Game.state.oreClickMultiplier
+    if (type == 'weak-hit') {
+      opc *= Game.state.weakHitMultiplier
+    }
+
+    if (type == 'crit-hit') {
+      opc *= Game.state.critHitMultiplier
     }
 
     return opc
@@ -718,9 +722,7 @@ Game.launch = () => {
             <p style='flex-grow: 1' onmouseover='Game.showTooltip(null, null, "stat", "str")' onmouseout='Game.hideTooltip()'>Strength:</p>
             <p class='stat-str'>${Game.state.player.str}`
               if (Game.state.player.pickaxe.prefixStat) {
-                console.log('pickaxe has a prefix')
                 if (Game.state.player.pickaxe.prefixStat == 'Strength') {
-                  console.log('pcikaxe has str', Game.state.player.pickaxe.prefixStatVal)
                   str += `(${Game.state.player.pickaxe.prefixStatVal})`
                 }
               }
@@ -1061,12 +1063,10 @@ Game.launch = () => {
   refineCountdown = () => {
     if (Game.state.refineTimer > 0) {
       Game.state.refineTimer--
-      console.log(Game.state.refineTimer)
     } else {
       Game.state.canRefine == true
       Game.state.refineTimer = 10800000
       Game.buildStats()
-      console.log('you can refine')
     }
   }
 
@@ -1077,7 +1077,7 @@ Game.launch = () => {
     Game.state.oresPerSecond = 0
     Game.state.opsMultiplier = 0
     Game.state.opcMultiplier = 0
-    Game.state.oreClickMultiplier = 5
+    Game.state.weakHitMultiplier = 5
     Game.state.player.lvl = 1
     Game.state.player.str = 0
     Game.state.player.dex = 0
@@ -1283,7 +1283,7 @@ Game.launch = () => {
         if (Game.state.player.dex > 0) {
           tooltip.innerHTML += `
             <hr/>
-            <p>Crit Chance: ${((Game.state.player.dex/(Game.state.player.dex + 1)) * 10).toFixed(0)}%</p>
+            <p>Crit Chance: ${Math.floor((Math.pow((Game.state.player.dex/(Game.state.player.dex+5)), 2)) * 100) / 2}%
           `
         }
       }
@@ -1519,11 +1519,11 @@ Game.launch = () => {
     if (item.name == 'Clean Magnifying Glass') {
       item.hidden = 1
       Game.items['PolishMagnifyingGlass'].hidden = 0
-      Game.state.oreClickMultiplier = 10
+      Game.state.weakHitMultiplier = 10
     }
     if (item.name == 'Polish Magnifying Glass') {
       item.hidden = 1
-      Game.state.oreClickMultiplier = 15
+      Game.state.weakHitMultiplier = 15
     }
 
     // UPGRADES
@@ -1795,12 +1795,16 @@ Game.launch = () => {
     risingNumber.style.pointerEvents = 'none'
     risingNumber.style.color = 'white'
 
-    if (type == 'crit') {
-      risingNumber.style.fontSize = 'xx-large'
+    if (type == 'weak-hit') {
+      risingNumber.style.fontSize = '30px'
+    }
+
+    if (type == 'crit-hit') {
+      risingNumber.style.fontSize = '25px'
     }
 
     if (type == 'level') {
-      risingNumber.style.fontSize = 'xx-large'
+      risingNumber.style.fontSize = 'x-large'
       risingNumber.innerHTML = 'LEVEL UP'
     }
 
@@ -1816,6 +1820,14 @@ Game.launch = () => {
       risingNumber.style.animationDuration = '3s'
       risingNumber.innerHTML = `${Game.state.stats.currentCombo} hit combo`
     }
+
+    if (type == 'mega-crit') {
+      risingNumber.style.fontSize = '60px'
+      risingNumber.style.color = 'lightcyan'
+      risingNumber.style.animationDuration = '3.5s'
+
+    }
+
 
     s('.particles').append(risingNumber)
 
@@ -1836,7 +1848,6 @@ Game.launch = () => {
     } else { // IF REGULAR HIT
       Game.state.stats.currentCombo = 0
     }
-    console.log(Game.state.stats.highestCombo)
   }
 
   let drawRockParticles = () => {
@@ -1936,17 +1947,27 @@ Game.launch = () => {
     }
   }
 
+
   s('.ore').onclick = () => {
     let amt = calculateOPC()
     let num = Math.random()
-    let dex = Game.state.player.dex * .01
-    if (num <= dex/(dex + 1)) {
-      amt = calculateOPC('crit')
+    let dex = Game.state.player.dex
+
+    if (dex > 0) {
+      let critChance = Math.floor((Math.pow((dex/(dex+5)), 2)) * 100) / 2
+      if (critChance > Math.random() * 100) {
+        amt += calculateOPC('crit-hit')
+        risingNumber(amt, 'crit-hit')
+      } else {
+        risingNumber(amt)
+      }
+    } else {
+      risingNumber(amt)
     }
+
     Game.state.currentCombo = 0
     earn(amt)
     gainXp()
-    risingNumber(amt)
     playSound('ore-hit')
     updatePercentage(amt)
     buildInventory()
@@ -1963,12 +1984,27 @@ Game.launch = () => {
   }
 
   s('.ore-click-area').onclick = () => {
-    let amt = calculateOPC('crit')
+    let amt = calculateOPC('weak-hit')
+    let dex = Game.state.player.dex
     Game.state.stats.oreClicks++
-    Game.state.stats.oreCritClicks++
+    Game.state.stats.weakSpotHits++
+
+    if (dex > 0) {
+      let critChance = Math.floor((Math.pow((dex/(dex+5)), 2)) * 100) / 2
+      if (critChance > Math.random() * 100) {
+        amt += calculateOPC('weak-hit')
+        risingNumber(amt, 'mega-crit')
+        Game.state.stats.megaCrit++
+      } else {
+        risingNumber(amt, 'weak-hit')
+      }
+    } else {
+      risingNumber(amt, 'weak-hit')
+    }
+
+
     earn(amt)
     gainXp(3)
-    risingNumber(amt, 'crit')
     playSound('ore-crit-hit')
     updatePercentage(amt)
     buildInventory()
@@ -2035,9 +2071,11 @@ Game.launch = () => {
         <h1>Statistics</h1>
         <i class='fa fa-times fa-1x' onclick='document.querySelector(".wrapper").remove()'></i>
         <hr/>
-        <p><span style='opacity: .6'>Ores Mined:</span> <strong>${beautify(Game.state.stats.totalOresMined)}</strong></p>
+        <p><span style='opacity: .6'>Ores Mined:</span> <strong>${beautify(Game.state.stats.totalOresMined.toFixed(1))}</strong></p>
         <p><span style='opacity: .6'>Ore Clicks:</span> <strong>${Game.state.stats.oreClicks}</strong></p>
-        <p><span style='opacity: .6'>Weak Spot hits:</span> <strong>${Game.state.stats.oreCritClicks}</strong></p>
+        <p><span style='opacity: .6'>Weak Spot Hits:</span> <strong>${Game.state.stats.weakSpotHits}</strong></p>
+        <p><span style='opacity: .6'>Crit Hits:</span> <strong>${Game.state.stats.critHits}</strong></p>
+        <p><span style='opacity: .6'>Mega Hits: (Crit & Weak Spot Hit):</span> <strong>${Game.state.stats.megaHits}</strong></p>
         <p><span style='opacity: .6'>Highest Weak Spot Combo:</span> <strong>${Game.state.stats.highestCombo}</strong></p>
         <p><span style='opacity: .6'>Ores Spent:</span> <strong>${beautify(Game.state.stats.totalOresSpent)}</strong></p>
         <p><span style='opacity: .6'>Rocks Destroyed:</span> <strong>${Game.state.stats.rocksDestroyed}</strong></p>
