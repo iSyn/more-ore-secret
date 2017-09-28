@@ -169,7 +169,7 @@ Game.launch = () => {
     }
     localStorage.setItem('skills', JSON.stringify(Game.skills))
     // let cookie = btoa(JSON.stringify(Game.state))
-    // console.log(cookie)
+    console.log(cookie)
   }
 
   Game.load = () => {
