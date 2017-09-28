@@ -112,7 +112,7 @@ footer {
   height: 60px;
   width: 60px;
   position: absolute;
-  background: url('./assets/item-pouch-glow.png');
+  background: url('./assets/item-glow-3.png');
   background-size: cover;
   animation: clockwiseSpin 6s infinite linear;
 }
@@ -123,6 +123,10 @@ footer {
 
 .item-pouch-glow2 {
   animation: counterClockwiseSpin 7s infinite linear;
+}
+
+.item-pouch-glow3 {
+  animation-duration: 10s;
 }
 
 

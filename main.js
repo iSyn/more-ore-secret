@@ -169,7 +169,8 @@ Game.launch = () => {
       localStorage.setItem(`item-${i}`, JSON.stringify(Game.items[i]))
     }
     localStorage.setItem('skills', JSON.stringify(Game.skills))
-    // let cookie = btoa(JSON.stringify(Game.state))
+    let cookie = btoa(JSON.stringify(Game.state))
+
   }
 
   Game.load = () => {
@@ -211,23 +212,27 @@ Game.launch = () => {
 
   let calculateOPC = (type) => {
     let opc = 0
-    let pickaxeStr = 0
+
+    // IF PICKAXE HAS STRENGTH
     if (Game.state.player.pickaxe.prefixStat) {
       if (Game.state.player.pickaxe.prefixStat == 'Strength') {
-        pickaxeStr = Game.state.player.pickaxe.prefixStatVal
+        // pickaxeStr = Game.state.player.pickaxe.prefixStatVal
+        opc += Math.pow(1.2, Game.state.player.pickaxe.prefixStatVal)
       }
     }
-    let totalStr = Game.state.player.str + pickaxeStr
 
+    // ADD DAMAGE FROM PICKAXE
     opc += Game.state.player.pickaxe.damage
 
-    if (totalStr > 0) {
-      opc += Math.pow(1.35, totalStr)
+    // ADD DAMAGE FROM PLAYER STRENGTH
+    opc += Math.pow(1.25, Game.state.player.str)
+
+    // ADD DAMAGE FROM PLAYER DEX
+    if (Game.state.player.dex > 0) {
+      opc += Math.pow(1.1, Game.state.player.dex)
     }
 
-    if (Game.state.player.dex > 0) {
-      opc += Math.pow(1.15, Game.state.player.dex)
-    }
+    // ADD OpC MULTIPLIERS
     opc += (opc * Game.state.opcMultiplier)
 
     if (type == 'weak-hit') {
@@ -1292,8 +1297,8 @@ Game.launch = () => {
           <h3>Intelligence</h3>
           <hr/>
           <p>NOT YET IMPLEMENTED</p>
-          <p>Increases item output slightly</p>
-          <p>Chance for critical strikes</p>
+          <p>Increases item drop chance</p>
+          <p>Lowers shop prices slightly</p>
         `
       }
       if (stat == 'luk') {
@@ -1303,6 +1308,7 @@ Game.launch = () => {
           <p>NOT YET IMPLEMENTED</p>
           <p>Increases item rarity percentage</p>
           <p>Increases item drop chance</p>
+          <p>Chance for critical strikes</p>
         `
       }
       if (stat == 'cha') {
@@ -1638,28 +1644,37 @@ Game.launch = () => {
     this.desc = desc
     this.won = 0
 
-    Game.achievements[this.name] = this
+    Game.achievements.push(this)
   }
 
   new Achievement('Newbie Miner', 'Break your first rock')
   new Achievement('Novice Miner', 'Break 5 rocks')
   new Achievement('Intermediate Miner', 'Break 10 rocks')
 
-  let winAchievement = (functionName) => {
-    if (Game.achievements[functionName]) {
-      if (Game.achievements[functionName].won == 0) {
-        Game.achievements[functionName].won = 1
-        let div = document.createElement('div')
-        div.classList.add('achievement')
-        div.innerHTML = `
-          <h3>Achievement Unlocked</h3>
-          <h1>${Game.achievements[functionName].name}</h1>
-          <p>${Game.achievements[functionName].desc}</p>
-        `
-        s('body').append(div)
-        setTimeout(() => {
-          div.remove()
-        }, 2500)
+  new Achievement('Steady Miner', 'Reach 10 hit combo')
+  new Achievement('Dilligent Watcher', 'Reach 25 hit combo')
+  new Achievement('Combo Master', 'Reach 100 hit combo')
+  new Achievement('Combo Devil', 'Reach 666 hit combo')
+  new Achievement('Combo God', 'Reach 777 hit combo')
+
+
+  let winAchievement = (achievementName) => {
+    for (i = 0; i < Game.achievements.length; i++) {
+      if (achievementName == Game.achievements[i].name) {
+        if (Game.achievements[i].won == 0) {
+          Game.achievements[i].won = 1
+          let div = document.createElement('div')
+          div.classList.add('achievement')
+          div.innerHTML = `
+            <h3>Achievement Unlocked</h3>
+            <h1>${Game.achievements[i].name}</h1>
+            <p>${Game.achievements[i].desc}</p>
+          `
+          s('body').append(div)
+          setTimeout(() => {
+            div.remove()
+          }, 2500)
+        }
       }
     }
   }
@@ -1825,7 +1840,6 @@ Game.launch = () => {
       risingNumber.style.fontSize = '60px'
       risingNumber.style.color = 'lightcyan'
       risingNumber.style.animationDuration = '3.5s'
-
     }
 
 
@@ -1845,6 +1859,16 @@ Game.launch = () => {
       if (Game.state.stats.currentCombo > Game.state.stats.highestCombo) {
         Game.state.stats.highestCombo = Game.state.stats.currentCombo
       }
+
+      // UNLOCK ACHIEVEMENTS REGARDING COMBOS
+      if (Game.state.stats.currentCombo >= 10) winAchievement('Steady Miner')
+      if (Game.state.stats.currentCombo >= 25) winAchievement('Dilligent Watcher')
+      if (Game.state.stats.currentCombo >= 100) winAchievement('Combo Master')
+      if (Game.state.stats.currentCombo >= 666) winAchievement('Combo Devil')
+      if (Game.state.stats.currentCombo >= 777) winAchievement('Combo God')
+
+
+
     } else { // IF REGULAR HIT
       Game.state.stats.currentCombo = 0
     }
@@ -1947,11 +1971,19 @@ Game.launch = () => {
     }
   }
 
+  let checkCrit = () => {
+    let dex = Game.state.player.dex
+    let luk = Game.state.player.luk
+    let critChance = Math.floor((Math.pow((dex/(dex+5)), 2)) * 100) / 2
+    critChance += luk * .10
+    console.log(critChance)
+  }
 
   s('.ore').onclick = () => {
     let amt = calculateOPC()
     let num = Math.random()
     let dex = Game.state.player.dex
+    checkCrit()
 
     if (dex > 0) {
       let critChance = Math.floor((Math.pow((dex/(dex+5)), 2)) * 100) / 2
@@ -2064,7 +2096,17 @@ Game.launch = () => {
   Game.showAchievements = () => {
     let div = document.createElement('div')
     let str;
+    let achievementsWon = 0
+    let achievementsMissing = 0
     div.classList.add('wrapper')
+
+    for (i = 0; i < Game.achievements.length; i++) {
+      if (Game.achievements[i].won == 1) {
+        achievementsWon++
+      } else {
+        achievementsMissing++
+      }
+    }
 
     str += `
       <div class="achievements-container">
@@ -2085,7 +2127,8 @@ Game.launch = () => {
         <br/>
         <h1>Achievements</h1>
         <hr/>
-        <p>Achievements Won: -not implemented yet-</p>
+        <p>Achievements Won: ${achievementsWon}</p>
+        <p>Achievements Missing: ${achievementsMissing}</p>
       </div>
 
     `
