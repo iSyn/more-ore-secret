@@ -61,7 +61,7 @@ Game.launch = () => {
     critHitMultiplier: 2,
     weakHitMultiplier: 5,
     player: {
-      lvl: 1,
+      lvl: 5,
       str: 0,
       dex: 0,
       luk: 0,
@@ -223,6 +223,9 @@ Game.launch = () => {
 
     // ADD DAMAGE FROM PICKAXE
     opc += Game.state.player.pickaxe.damage
+    if (Game.skills[0].lv > 0) { // IF PLAYER HAS PICKAXE PROFICIENCY SKILL LVLED
+      opc += Game.state.player.pickaxe.damage * (Game.skills[0].current * .01)
+    }
 
     // ADD DAMAGE FROM PLAYER STRENGTH
     if (Game.state.player.str > 0 ) opc += Math.pow(1.25, Game.state.player.str)
@@ -250,6 +253,8 @@ Game.launch = () => {
     for (i in Game.items) {
       if (Game.items[i].type == 'item') {
         ops += Game.items[i].production * Game.items[i].owned
+        ops += (Game.items[i].production * Game.items[i].owned) * (Game.state.player.int * .01)
+        ops += (Game.items[i].production * Game.items[i].owned) * (Game.staet.player.cha * .05)
       }
     }
 
@@ -270,6 +275,9 @@ Game.launch = () => {
     let itemDropChance = .3 // 30%
     if (Game.state.player.int > 0) {
       itemDropChance += Game.state.player.int / (Game.state.player.int + 30)
+    }
+    if (Game.state.player.luk > 0) {
+      itemDropChance += Game.state.player.int / (Game.state.player.int + 20)
     }
 
     if (Math.random() < itemDropChance || amountOfRocksDestroyed <= 1) { // 30% chance
@@ -946,7 +954,7 @@ Game.launch = () => {
           if (skill.tier == 1) {
             if (skill.locked == 0) {
               str += `
-                <div class='specialization-skill' id='${skill.id}' onclick='Game.levelUpSkill("${skill.name}")' onmouseover='Game.renderSkillText(${skill.id})' onmouseout='document.querySelector(".specialization-skills-bottom-right").innerHTML=""'></div>
+                <div class='specialization-skill' id='${skill.id}' style='background: url("./assets/${skill.img}.png")' onclick='Game.levelUpSkill("${skill.name}")' onmouseover='Game.renderSkillText(${skill.id})' onmouseout='document.querySelector(".specialization-skills-bottom-right").innerHTML=""'></div>
               `
             } else {
               str += `
@@ -1120,7 +1128,6 @@ Game.launch = () => {
     buildStore()
   }
 
-
   Game.levelUpSkill = (skillName) => {
 
     if (Game.state.player.specializationSp > 0) { // IF THERE IS SP
@@ -1128,6 +1135,9 @@ Game.launch = () => {
         if (Game.skills[i].name == skillName) { // IF WE FOUND SKILL
           Game.state.player.specializationSp-- // SUBTRACT SP
           Game.skills[i].lv++
+          if (Game.skills[i].lv > 1) {
+            Game.skills[i].current += Game.skills[i].next
+          }
           let nextTier = Game.skills[i].tier + 1
           for (j = 0; j < Game.skills.length; j++) {
             if (Game.skills[j].tier == nextTier) {
@@ -1140,8 +1150,6 @@ Game.launch = () => {
         }
       }
     }
-
-
   }
 
   Game.skills = [
@@ -1149,6 +1157,7 @@ Game.launch = () => {
 
       name: 'Pickaxe Proficiency',
       type: 'passive',
+      img: 'pickaxe-skill',
       specialization: 'Prospector',
       fillerTxt: 'After countless rocks destroyed, you learn to handle pickaxes better',
       desc: 'Adds a permanent buff to your pickaxes',
@@ -1157,7 +1166,8 @@ Game.launch = () => {
       locked: 0,
       tier: 1,
       what: 'Pickaxe Damage',
-      whatAmount: 10
+      current: 50,
+      next: 10
     },
     {
       name: 'Weight Lifting',
@@ -1170,7 +1180,8 @@ Game.launch = () => {
       locked: 1,
       tier: 2,
       what: 'STR',
-      whatAmount: 5,
+      current: 5,
+      next: 1
     }, {
       name: 'Conditioning',
       type: 'passive',
@@ -1182,7 +1193,8 @@ Game.launch = () => {
       locked: 1,
       tier: 2,
       what: 'DEX',
-      whatAmount: 5
+      current: 5,
+      next: 1
     }, {
       name: 'Juggernaut',
       type: 'active',
@@ -1194,7 +1206,8 @@ Game.launch = () => {
       locked: 1,
       tier: 3,
       what: 'Damage',
-      whatAmount: 50
+      current: 50,
+      next: 1
     }
   ]
 
@@ -1215,8 +1228,8 @@ Game.launch = () => {
           s('.specialization-skills-bottom-right').innerHTML += `
             <br/>
             <hr/>
-            <p style='float: left;'>[Current Level] ${Game.skills[i].what} + ${Game.skills[i].whatAmount}%</p>
-            <p style='float: left;'>[Next Level] ${Game.skills[i].what} + ${Game.skills[i].whatAmount + 1}%</p>
+            <p style='float: left;'>[Current Level] ${Game.skills[i].what} + ${Game.skills[i].current}%</p>
+            <p style='float: left;'>[Next Level] ${Game.skills[i].what} + ${Game.skills[i].current + Game.skills[i].next}%</p>
           `
         }
       }
@@ -1279,6 +1292,7 @@ Game.launch = () => {
           <h3>Strength</h3>
           <hr/>
           <p>Increases your OpC</p>
+          <p>Increases your critical damage multiplier</p>
         `
       }
       if (stat == 'dex') {
@@ -1286,12 +1300,12 @@ Game.launch = () => {
           <h3>Dexterity</h3>
           <hr/>
           <p>Increases your OpC slightly</p>
-          <p>Chance for critical strikes</p>
+          <p>Increases your critical strike chance slightly</p>
         `
         if (Game.state.player.dex > 0) {
           tooltip.innerHTML += `
             <hr/>
-            <p>Crit Chance: ${Math.floor((Math.pow((Game.state.player.dex/(Game.state.player.dex+5)), 2)) * 100) / 2}%
+            <p>Crit Chance: ${Math.floor((Math.pow((Game.state.player.dex/(Game.state.player.dex+10)), 2)) * 100) / 2}%
           `
         }
       }
@@ -1299,8 +1313,8 @@ Game.launch = () => {
         tooltip.innerHTML = `
           <h3>Intelligence</h3>
           <hr/>
-          <p>NOT YET IMPLEMENTED</p>
           <p>Increases item drop chance</p>
+          <p>Increases store item output slightly</p>
           <p>Lowers shop prices slightly</p>
         `
       }
@@ -1308,7 +1322,6 @@ Game.launch = () => {
         tooltip.innerHTML = `
           <h3>Luck</h3>
           <hr/>
-          <p>NOT YET IMPLEMENTED</p>
           <p>Increases item rarity percentage</p>
           <p>Increases item drop chance</p>
           <p>Chance for critical strikes</p>
@@ -1318,7 +1331,6 @@ Game.launch = () => {
         tooltip.innerHTML = `
           <h3>Charisma</h3>
           <hr/>
-          <p>NOT YET IMPLEMENTED</p>
           <p>Increases item output</p>
           <p>Lowers shop prices</p>
         `
@@ -1623,7 +1635,14 @@ Game.launch = () => {
         spend(this.price)
         this.owned++
         playSound('buysound')
-        this.price = this.basePrice * Math.pow(1.15, this.owned)
+        this.price = (this.basePrice * Math.pow(1.15, this.owned))
+        if (Game.state.player.int > 0) {
+          this.price -= (this.basePrice * Math.pow(1.15, this.owned)) * (Game.state.player.int * .01)
+        }
+        if (Game.state.player.cha > 0) {
+          this.price -= (this.basePrice * Math.pow(1.15, this.owned)) * (Game.state.player.cha * .05)
+        }
+
         buyFunction(this)
         if (this.type == 'upgrade') {
           Game.hideTooltip()
