@@ -292,6 +292,7 @@ Game.launch = () => {
     let amountOfRocksDestroyed = Game.state.stats.rocksDestroyed
     let iLvl = amountOfRocksDestroyed
 
+    // CALCULATES DROP CHANCE
     let itemDropChance = .3 // 30%
     if (Game.state.player.int > 0) {
       itemDropChance += Game.state.player.int / (Game.state.player.int + 30)
@@ -300,19 +301,25 @@ Game.launch = () => {
       itemDropChance += Game.state.player.int / (Game.state.player.int + 20)
     }
 
-    if (Math.random() < itemDropChance || amountOfRocksDestroyed <= 1) { // 30% chance
+    // IF ITEM DROPS CREATE A CONTAINER
+    if (Math.random() < itemDropChance || amountOfRocksDestroyed <= 1) {
       let itemContainer = document.createElement('div')
       itemContainer.classList.add('item-container')
+      itemContainer.id = `item-${amountOfRocksDestroyed}`
       itemContainer.innerHTML = `
         <div class="item-pouch-glow"></div>
         <div class="item-pouch-glow2"></div>
         <div class="item-pouch-glow3"></div>
       `
+
+
+      // POSITION ITEM CONTAINER NEAR ORE
       let orePos = s('.ore').getBoundingClientRect()
       itemContainer.style.position = 'absolute'
       itemContainer.style.top = orePos.bottom + randomY + 'px'
       itemContainer.style.left = (orePos.left + orePos.right)/2 + randomNumber + 'px'
 
+      // MAKE ITEM
       let item = document.createElement('div')
       item.classList.add('item-drop')
       item.style.position = 'relative'
@@ -320,20 +327,21 @@ Game.launch = () => {
 
       itemContainer.append(item)
 
+      s('body').append(itemContainer)
+
+
       item.addEventListener('click', () => {
-        s('.item-pouch-glow').style.display = 'none'
-        s('.item-pouch-glow2').style.display = 'none'
-        s('.item-pouch-glow3').style.display = 'none'
+        let id = item.id
         item.style.pointerEvents = 'none'
-        s('.item-drop').classList.add('item-pickup-animation')
+        s(`#${id}`).classList.add('item-pickup-animation')
         setTimeout(() => {
-          itemContainer.remove()
+          let items = document.querySelectorAll(`#${id}`)
+          items.forEach((item) => {
+            item.remove()
+          })
           pickUpItem(iLvl)
         }, 800)
       })
-
-
-      s('body').append(itemContainer)
     }
   }
 
