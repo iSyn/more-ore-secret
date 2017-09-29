@@ -256,6 +256,7 @@ Game.launch = () => {
       opc += ops
     }
 
+
     if (type == 'weak-hit') {
       opc *= Game.state.weakHitMultiplier
     }
@@ -263,6 +264,10 @@ Game.launch = () => {
     if (type == 'crit-hit') {
       opc *= Game.state.critHitMultiplier
     }
+
+    if (opc >= 1000000) winAchievement('Still A Baby')
+    if (opc >= 1000000000) winAchievement('Getting There')
+    if (opc >= 1000000000000) winAchievement('Big Boy')
 
     return opc
   }
@@ -281,6 +286,11 @@ Game.launch = () => {
     ops += (ops * Game.state.opsMultiplier)
 
     Game.state.oresPerSecond = ops
+
+    if (ops >= 401000) winAchievement('401K')
+    if (ops >= 5000000) winAchievement('Retirement Plan')
+    if (ops >= 5000000000) winAchievement('Hedge Fund')
+
     return ops
   }
 
@@ -1700,15 +1710,27 @@ Game.launch = () => {
     Game.achievements.push(this)
   }
 
+  // AMOUNT OF ROCKS DESTROYED ACHIEVEMENTS
   new Achievement('Newbie Miner', 'Break your first rock')
   new Achievement('Novice Miner', 'Break 5 rocks')
   new Achievement('Intermediate Miner', 'Break 10 rocks')
 
+  // COMBO ACHIEVEMENTS
   new Achievement('Steady Miner', 'Reach 10 hit combo')
   new Achievement('Dilligent Watcher', 'Reach 25 hit combo')
   new Achievement('Combo Master', 'Reach 100 hit combo')
   new Achievement('Combo Devil', 'Reach 666 hit combo')
   new Achievement('Combo God', 'Reach 777 hit combo')
+
+  // OPC ACHIEVEMENTS
+  new Achievement('Still A Baby', 'Deal more than 1,000,000 in one hit')
+  new Achievement('Getting There', 'Deal more than 1,000,000,000 in one hit')
+  new Achievement('Big Boy', 'Deal more than 1,000,000,000,000 in one hit')
+
+  // OPS ACHIEVEMENTS
+  new Achievement('401K', 'Reach 401,000 OpS')
+  new Achievement('Retirement Plan', 'Reach 5,000,000 OpS')
+  new Achievement('Hedge Fund', 'Reach 5,000,000,000 OpS')
 
 
   let winAchievement = (achievementName) => {
