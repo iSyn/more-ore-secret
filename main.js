@@ -213,6 +213,7 @@ Game.launch = () => {
   let calculateOPC = (type) => {
     let opc = 0
 
+
     // IF PICKAXE HAS STRENGTH
     if (Game.state.player.pickaxe.prefixStat) {
       if (Game.state.player.pickaxe.prefixStat == 'Strength') {
@@ -228,10 +229,21 @@ Game.launch = () => {
     }
 
     // ADD DAMAGE FROM PLAYER STRENGTH
-    if (Game.state.player.str > 0 ) opc += Math.pow(1.25, Game.state.player.str)
+    let playerStr = Game.state.player.str
+    if (Game.skills[1].lv > 0) { // WEIGHT LIFTING SKILL
+      playerStr += playerStr * (Game.skills[1].current * .01)
+    }
+
+    if (playerStr > 0) opc += Math.pow(1.25, playerStr)
+
 
     // ADD DAMAGE FROM PLAYER DEX
-    if (Game.state.player.dex > 0) opc += Math.pow(1.1, Game.state.player.dex)
+    let playerDex = Game.state.player.dex
+    if (Game.skills[2].lv > 0) { // CROSSFIT SKILL
+      playerDex += playerDex * (Game.skills[1].current * .01)
+    }
+
+    if (playerDex > 0) opc += Math.pow(1.1, playerDex)
 
     // ADD OpC MULTIPLIERS
     opc += (opc * Game.state.opcMultiplier)
@@ -254,7 +266,7 @@ Game.launch = () => {
       if (Game.items[i].type == 'item') {
         ops += Game.items[i].production * Game.items[i].owned
         ops += (Game.items[i].production * Game.items[i].owned) * (Game.state.player.int * .01)
-        ops += (Game.items[i].production * Game.items[i].owned) * (Game.staet.player.cha * .05)
+        ops += (Game.items[i].production * Game.items[i].owned) * (Game.state.player.cha * .05)
       }
     }
 
@@ -1180,8 +1192,8 @@ Game.launch = () => {
       locked: 1,
       tier: 2,
       what: 'STR',
-      current: 5,
-      next: 1
+      current: 20,
+      next: 15
     }, {
       name: 'Conditioning',
       type: 'passive',
@@ -1193,13 +1205,13 @@ Game.launch = () => {
       locked: 1,
       tier: 2,
       what: 'DEX',
-      current: 5,
-      next: 1
+      current: 20,
+      next: 15
     }, {
-      name: 'Juggernaut',
+      name: 'Roid Rage',
       type: 'active',
       specialization: 'Prospector',
-      fillerTxt: 'Fill with rage and smash some shit',
+      fillerTxt: 'All you see is red... and rocks',
       desc: 'Increase your damage by 50x for 5s',
       id: 3,
       lv: 0,
@@ -1997,7 +2009,6 @@ Game.launch = () => {
     let luk = Game.state.player.luk
     let critChance = Math.floor((Math.pow((dex/(dex+5)), 2)) * 100) / 2
     critChance += luk * .10
-    console.log(critChance)
   }
 
   s('.ore').onclick = () => {
@@ -2148,8 +2159,8 @@ Game.launch = () => {
         <br/>
         <h1>Achievements</h1>
         <hr/>
-        <p>Achievements Won: ${achievementsWon}</p>
-        <p>Achievements Missing: ${achievementsMissing}</p>
+         <p><span style='opacity: .6'>Achievements Won:</span> <strong>${achievementsWon}</strong></p>
+         <p><span style='opacity: .6'>Achievements Missing:</span> <strong>${achievementsMissing}</strong></p>
       </div>
 
     `
@@ -2244,6 +2255,9 @@ Game.launch = () => {
     }
 };
 
+  if (window.navigator.vendor != 'Google Inc.') {
+    alert('Game works best on Google Chrome. Sorry if things dont work, they will be fixed on final version')
+  }
 
 }
 
