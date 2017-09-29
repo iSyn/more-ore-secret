@@ -151,9 +151,10 @@ Game.launch = () => {
     Game.items['OARDISupgrade'] = { name: 'OARDISupgrade', type: 'upgrade', pic: 'wip.png', desc: 'Doubles the production of OARDIS ', fillerQuote: 'wip', price: 50000000000000, hidden: 1}
 
     // UPGRADES
-    Game.items['WorkBoots'] = {name: 'Work Boots', type: 'upgrade', pic: 'workboots.png', desc: 'Increase all ore production by 1%', fillerQuote: 'wip', price: 500, hidden: 1,}
-    Game.items['Painkillers'] = {name: 'Painkillers', type: 'upgrade', pic: 'painkillers.png', desc: 'double your OpC', fillerQuote: 'wip', price: 15000, hidden: 1,}
-    Game.items['Steroids'] = {name: 'Steroids', type: 'upgrade', pic: 'steroids.png', desc: 'double your OpC', fillerQuote: 'wip', price: 1000000, hidden: 1,}
+    Game.items['WorkBoots'] = {name: 'Work Boots', type: 'upgrade', pic: 'workboots.png', desc: 'Increase all ore production by 1%', fillerQuote: 'wip', price: 500, hidden: 1}
+    Game.items['Painkillers'] = {name: 'Painkillers', type: 'upgrade', pic: 'painkillers.png', desc: 'double your OpC', fillerQuote: 'wip', price: 15000, hidden: 1}
+    Game.items['Steroids'] = {name: 'Steroids', type: 'upgrade', pic: 'steroids.png', desc: 'double your OpC', fillerQuote: 'wip', price: 1000000, hidden: 1}
+    Game.items['Flashlight'] = {name: 'Flashlight', type: 'upgrade', pic: 'wip.png', desc: 'Gain 10% of your OpS as OpC', fillerQuote: 'wip', price: 50000, hidden: 1}
 
     generateStoreItems()
   }
@@ -197,6 +198,8 @@ Game.launch = () => {
     Game.state.ores += amt
     Game.state.stats.totalOresMined += amt
     buildInventory()
+
+    if (Game.state.ores >= 10000) unlockUpgrades('Flashlight')
   }
 
   let earnOPS = () => {
@@ -247,6 +250,11 @@ Game.launch = () => {
 
     // ADD OpC MULTIPLIERS
     opc += (opc * Game.state.opcMultiplier)
+
+    if (Game.items['Flashlight'].owned > 0) {
+      let ops = calculateOPS() * .01
+      opc += ops
+    }
 
     if (type == 'weak-hit') {
       opc *= Game.state.weakHitMultiplier
@@ -1178,8 +1186,8 @@ Game.launch = () => {
       locked: 0,
       tier: 1,
       what: 'Pickaxe Damage',
-      current: 50,
-      next: 10
+      current: 100,
+      next: 20
     },
     {
       name: 'Weight Lifting',
@@ -1626,6 +1634,9 @@ Game.launch = () => {
       item.hidden = 1
       Game.items['O.A.R.D.I.S.'].production *= 2
     }
+    if (item.name == 'Flashlight') {
+      item.hidden = 1
+    }
   }
 
   let Item = function(obj, id) {
@@ -1754,6 +1765,7 @@ Game.launch = () => {
       }
     } else {
       Game.state.stats.rocksDestroyed++
+      gainXp(10)
       if (Game.state.stats.rocksDestroyed == 1) winAchievement('Newbie Miner')
       if (Game.state.stats.rocksDestroyed == 5) winAchievement('Novice Miner')
       if (Game.state.stats.rocksDestroyed == 10) winAchievement('Intermediate Miner')
@@ -1788,14 +1800,16 @@ Game.launch = () => {
   }
 
   let gainXp = (amt) => {
+
     let amount = 1
     if (amt) {
-      amount = 2
+      amount = amt
     }
-    if (Game.state.player.currentXp < Game.state.player.xpNeeded) {
+
+    if (Game.state.player.currentXp + amount < Game.state.player.xpNeeded) {
       Game.state.player.currentXp += amount
     } else {
-      Game.state.player.currentXp = 0
+      Game.state.player.currentXp = (Game.state.player.currentXp + amount) - Game.state.player.xpNeeded
       Game.state.player.lvl++
       Game.state.player.availableSp += 3
       Game.buildStats()
