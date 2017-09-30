@@ -1127,7 +1127,7 @@ li {
   border-right: none;
   position: absolute;
   display: none;
-  background-color: #513317;
+  background-color: #a1a1a1;
   flex-flow: column nowrap;
 }
 
@@ -1143,6 +1143,11 @@ li {
   display: flex;
   flex-flow: column nowrap;
   align-items: center;
+}
+
+.active-skills-area-container p {
+  background-color: #513317;
+  width: 100%;
 }
 
 .active-skill {

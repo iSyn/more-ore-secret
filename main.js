@@ -999,6 +999,31 @@ Game.launch = () => {
            str += `<div class="specialization-skill" style='background-image: url("./assets/${skill.img}.png")' onclick='Game.levelUpSkill("${i}")' onmouseover='Game.renderSkillText("${i}")' onmouseout='document.querySelector(".specialization-skills-bottom-right").innerHTML = "" '></div>`
         }
       }
+      str += `</div> <div class="skill-tier tier-2">`
+
+      for (i in Game.skills) {
+        let skill = Game.skills[i]
+        if (skill.tier == 2) {
+          if (skill.locked == 0) {
+            str += `<div class="specialization-skill" style='background-image: url("./assets/${skill.img}.png")' onclick='Game.levelUpSkill("${i}")' onmouseover='Game.renderSkillText("${i}")' onmouseout='document.querySelector(".specialization-skills-bottom-right").innerHTML = "" '></div>`
+          } else {
+            str += `<div class="specialization-skill" style='background-image: url("./assets/mystery.png")' onclick='Game.levelUpSkill("${i}")' onmouseover='Game.renderSkillText("${i}")' onmouseout='document.querySelector(".specialization-skills-bottom-right").innerHTML = "" '></div>`
+          }
+        }
+      }
+
+      str += `</div> <div class="skill-tier tier-3">`
+
+      for (i in Game.skills) {
+        let skill = Game.skills[i]
+        if (skill.tier == 3) {
+          if (skill.locked == 0) {
+            str += `<div class="specialization-skill" style='background-image: url("./assets/${skill.img}.png")' onclick='Game.levelUpSkill("${i}")' onmouseover='Game.renderSkillText("${i}")' onmouseout='document.querySelector(".specialization-skills-bottom-right").innerHTML = "" '></div>`
+          } else {
+            str += `<div class="specialization-skill" style='background-image: url("./assets/mystery.png")' onclick='Game.levelUpSkill("${i}")' onmouseover='Game.renderSkillText("${i}")' onmouseout='document.querySelector(".specialization-skills-bottom-right").innerHTML = "" '></div>`
+          }
+        }
+      }
 
       str += `
               </div>
@@ -1170,22 +1195,9 @@ Game.launch = () => {
     what: 'Damage',
     current: 50,
     next: 1,
-    cooldown: '60 minutes', //1000 * 60 * 5,
-    inUse: false
-  }
-  Game.skills['PickaxeProficiency'] = {
-    name: 'Pickaxe Proficiency',
-    type: 'passive',
-    img: 'pickaxe-skill',
-    fillerTxt: 'After countless rocks destroyed, you learn to handle pickaxes better',
-    desc: 'Adds a permanent buff to your pickaxes',
-    id: 0,
-    lv: 0,
-    locked: 0,
-    tier: 2,
-    what: 'Pickaxe Damage',
-    current: 100,
-    next: 20
+    cooldown: 60,
+    inUse: false,
+    currentCooldown: 0
   }
   Game.skills['WeightLifting'] = {
     name: 'Weight Lifting',
@@ -1216,6 +1228,20 @@ Game.launch = () => {
     what: 'DEX',
     current: 20,
     next: 15
+  }
+  Game.skills['PickaxeProficiency'] = {
+    name: 'Pickaxe Proficiency',
+    type: 'passive',
+    img: 'pickaxe-skill',
+    fillerTxt: 'After countless rocks destroyed, you learn to handle pickaxes better',
+    desc: 'Adds a permanent buff to your pickaxes',
+    id: 0,
+    lv: 0,
+    locked: 1,
+    tier: 3,
+    what: 'Pickaxe Damage',
+    current: 100,
+    next: 20
   }
 
   Game.renderSkillText = (skillName) => {
@@ -1268,7 +1294,11 @@ Game.launch = () => {
       if (Game.skills[i].type == 'active') { // IF ITS AN ACTIVE SKILL
         if (Game.skills[i].locked == 0) { // IF ITS NOT LOCKED
           if (Game.skills[i].lv > 0) { // IF THERES POINTS IN IT
-            str += `<div class='active-skill' style='background-image: url("./assets/${Game.skills[i].img}.png")' onclick='Game.useSkill("${i}")' onmouseover='Game.showTooltip("${i}", null, "skill", null)' onmouseout='Game.hideTooltip()' ></div>`
+            if (Game.skills[i].currentCooldown <= 0) {
+              str += `<div class='active-skill' style='background-image: url("./assets/${Game.skills[i].img}.png"); cursor: pointer' onclick='Game.useSkill("${i}")' onmouseover='Game.showTooltip("${i}", null, "skill", null)' onmouseout='Game.hideTooltip()' ></div>`
+            } else {
+              str += `<div class='active-skill' style='background-image: url("./assets/${Game.skills[i].img}.png"); cursor: not-allowed' onmouseover='Game.showTooltip("${i}", null, "skill", null)' onmouseout='Game.hideTooltip()' ></div>`
+            }
           }
         }
       }
@@ -1280,11 +1310,13 @@ Game.launch = () => {
     Game.hideTooltip()
     let skill = Game.skills[skillName]
     if (skill.name == 'Roid Rage') {
-      if (skill.inUse == false) {
+      if (skill.inUse == false && skill.currentCooldown <= 0) {
         skill.inUse = true
+        skill.currentCooldown = skill.cooldown * 60
+        calculateSkillCooldown()
         setTimeout(() => {
           skill.inUse = false
-        }, 5000)
+        }, 10000)
 
         let div = document.createElement('div')
         div.style.width = '100vw'
@@ -1302,6 +1334,13 @@ Game.launch = () => {
           div.remove()
         }, 1000 * 10)
       }
+    }
+    drawActiveSkills()
+  }
+
+  let calculateSkillCooldown = () => {
+    if (Game.skills['RoidRage'].currentCooldown > 0) {
+      Game.skills['RoidRage'].currentCooldown--
     }
   }
 
@@ -1417,8 +1456,13 @@ Game.launch = () => {
         <h3>${skill.name}</h3>
         <hr/>
         <p>${skill.desc}</p>
-        <p>Cooldown: ${skill.cooldown}</p>
+        <p>Cooldown: ${skill.cooldown} minutes</p>
+        <hr/>
       `
+      if (skill.currentCooldown > 0) {
+        tooltip.innerHTML += `<p>Use Again In: ${beautifyTime(skill.currentCooldown)}</p>`
+      }
+
     } else {
       tooltip.innerHTML = `
       <div class="tooltip-top">
@@ -2318,6 +2362,7 @@ Game.launch = () => {
     if (s('.stats-container-content-wrapper').clientHeight > 0) {
       Game.buildStats()
     }
+    calculateSkillCooldown()
   }, 1000)
   setInterval(() => {
     Game.save()
