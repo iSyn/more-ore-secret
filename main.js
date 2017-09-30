@@ -61,7 +61,7 @@ Game.launch = () => {
     critHitMultiplier: 2,
     weakHitMultiplier: 5,
     player: {
-      lvl: 1,
+      lvl: 5,
       str: 0,
       dex: 0,
       luk: 0,
@@ -1053,7 +1053,6 @@ Game.launch = () => {
     if (Game.state.canRefine == true) {
       Game.state.canRefine = false
       Game.state.stats.timesRefined++
-      if (Game.state.stats.timesRefined > 0) winAchievement('Blacksmiths Apprentice')
       refineCountdown()
       let div = document.createElement('div')
       div.classList.add('refine')
@@ -1068,6 +1067,7 @@ Game.launch = () => {
       }, 1500)
       setTimeout(() => {
         s('.refine').remove()
+        if (Game.state.stats.timesRefined > 0) winAchievement('Blacksmiths Apprentice')
       }, 3000)
     }
   }
@@ -2352,6 +2352,15 @@ Game.launch = () => {
     if (isEscape) {
       if (s('.wrapper')) {
         s('.wrapper').remove()
+      }
+      if (s('.specialization-wrapper')) {
+        s('.specialization-wrapper').remove()
+      }
+      if (s('.specialization-skills-wrapper')) {
+        s('.specialization-skills-wrapper').remove()
+      }
+      if (s('.specialization-confirmation-wrapper')) {
+        s('.specialization-confirmation-wrapper').remove()
       }
     }
 };
