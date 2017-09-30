@@ -81,7 +81,7 @@ Game.launch = () => {
         rarity: 'Common',
         itemLevel: 1,
         material: 'Wood',
-        damage: 1,
+        damage: 10,
       },
       accesory: {}
     },

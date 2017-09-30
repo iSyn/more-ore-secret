@@ -25,6 +25,7 @@ a:visited {
 
   display: flex;
   flex-flow: row nowrap;
+  overflow: none;
 }
 
 .ads-im-sorry-please-dont-hate-me {
