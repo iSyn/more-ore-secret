@@ -101,7 +101,9 @@ Game.launch = () => {
     },
     currentVersion: '0.6.2',
     settings: {
-      volume: .5
+      volume: .5,
+      rockParticles: true,
+      risingNumbers: true
     },
     canRefine: true,
     refineTimer: 10800 // 3 hours in seconds
@@ -1096,6 +1098,7 @@ Game.launch = () => {
     if (Game.state.canRefine == true) {
       Game.state.canRefine = false
       Game.state.stats.timesRefined++
+      if (Game.state.stats.timesRefined > 0) winAchievement('Blacksmiths Apprentice')
       refineCountdown()
       let div = document.createElement('div')
       div.classList.add('refine')
@@ -1732,6 +1735,9 @@ Game.launch = () => {
   new Achievement('Retirement Plan', 'Reach 5,000,000 OpS')
   new Achievement('Hedge Fund', 'Reach 5,000,000,000 OpS')
 
+  // REFINE ACHIEVEMENTS
+  new Achievement('Blacksmiths Apprentice', 'Refine for your first time')
+
 
   let winAchievement = (achievementName) => {
     for (i = 0; i < Game.achievements.length; i++) {
@@ -1865,67 +1871,69 @@ Game.launch = () => {
   }
 
   let risingNumber = (amount, type) => {
-    let mouseX = (s('.ore').getBoundingClientRect().left + s('.ore').getBoundingClientRect().right)/2
-    let mouseY = (s('.ore').getBoundingClientRect().top + s('.ore').getBoundingClientRect().bottom)/2
-    if (event) {
-      mouseX = event.clientX
-      mouseY = event.clientY
+    if (Game.state.settings.risingNumbers == true) {
+      let mouseX = (s('.ore').getBoundingClientRect().left + s('.ore').getBoundingClientRect().right)/2
+      let mouseY = (s('.ore').getBoundingClientRect().top + s('.ore').getBoundingClientRect().bottom)/2
+      if (event) {
+        mouseX = event.clientX
+        mouseY = event.clientY
+      }
+      let randomNumber = Math.floor(Math.random() * 20) + 1
+      let randomSign = Math.round(Math.random()) * 2 - 1
+      let randomMouseX = mouseX + (randomNumber * randomSign)
+
+      let risingNumber = document.createElement('div')
+      risingNumber.classList.add('rising-number')
+      risingNumber.innerHTML = `+${beautify(amount.toFixed(1))}`
+      risingNumber.style.left = randomMouseX + 'px'
+      risingNumber.style.top = mouseY + 'px'
+
+      risingNumber.style.position = 'absolute'
+      risingNumber.style.fontSize = '15px'
+      risingNumber.style.animation = 'risingNumber 2s ease-out'
+      risingNumber.style.animationFillMode = 'forwards'
+      risingNumber.style.pointerEvents = 'none'
+      risingNumber.style.color = 'white'
+
+      if (type == 'weak-hit') {
+        risingNumber.style.fontSize = '30px'
+      }
+
+      if (type == 'crit-hit') {
+        risingNumber.style.fontSize = '25px'
+      }
+
+      if (type == 'level') {
+        risingNumber.style.fontSize = 'x-large'
+        risingNumber.innerHTML = 'LEVEL UP'
+      }
+
+      if (type == 'spendMoney') {
+        risingNumber.style.fontSize = 'xx-large'
+        risingNumber.style.color = 'red'
+        risingNumber.innerHTML = '-$'
+      }
+
+      if (type == 'combo') {
+        risingNumber.style.fontSize = 'xx-large'
+        risingNumber.style.color = getRandomColor()
+        risingNumber.style.animationDuration = '3s'
+        risingNumber.innerHTML = `${Game.state.stats.currentCombo} hit combo`
+      }
+
+      if (type == 'mega-crit') {
+        risingNumber.style.fontSize = '60px'
+        risingNumber.style.color = 'lightcyan'
+        risingNumber.style.animationDuration = '3.5s'
+      }
+
+
+      s('.particles').append(risingNumber)
+
+      setTimeout(() => {
+        risingNumber.remove()
+      }, 2000)
     }
-    let randomNumber = Math.floor(Math.random() * 20) + 1
-    let randomSign = Math.round(Math.random()) * 2 - 1
-    let randomMouseX = mouseX + (randomNumber * randomSign)
-
-    let risingNumber = document.createElement('div')
-    risingNumber.classList.add('rising-number')
-    risingNumber.innerHTML = `+${beautify(amount.toFixed(1))}`
-    risingNumber.style.left = randomMouseX + 'px'
-    risingNumber.style.top = mouseY + 'px'
-
-    risingNumber.style.position = 'absolute'
-    risingNumber.style.fontSize = '15px'
-    risingNumber.style.animation = 'risingNumber 2s ease-out'
-    risingNumber.style.animationFillMode = 'forwards'
-    risingNumber.style.pointerEvents = 'none'
-    risingNumber.style.color = 'white'
-
-    if (type == 'weak-hit') {
-      risingNumber.style.fontSize = '30px'
-    }
-
-    if (type == 'crit-hit') {
-      risingNumber.style.fontSize = '25px'
-    }
-
-    if (type == 'level') {
-      risingNumber.style.fontSize = 'x-large'
-      risingNumber.innerHTML = 'LEVEL UP'
-    }
-
-    if (type == 'spendMoney') {
-      risingNumber.style.fontSize = 'xx-large'
-      risingNumber.style.color = 'red'
-      risingNumber.innerHTML = '-$'
-    }
-
-    if (type == 'combo') {
-      risingNumber.style.fontSize = 'xx-large'
-      risingNumber.style.color = getRandomColor()
-      risingNumber.style.animationDuration = '3s'
-      risingNumber.innerHTML = `${Game.state.stats.currentCombo} hit combo`
-    }
-
-    if (type == 'mega-crit') {
-      risingNumber.style.fontSize = '60px'
-      risingNumber.style.color = 'lightcyan'
-      risingNumber.style.animationDuration = '3.5s'
-    }
-
-
-    s('.particles').append(risingNumber)
-
-    setTimeout(() => {
-      risingNumber.remove()
-    }, 2000)
   }
 
   let getCombo = (type) => {
@@ -1952,45 +1960,47 @@ Game.launch = () => {
   }
 
   let drawRockParticles = () => {
-    for (i = 0; i < 3; i++) {
-      let div = document.createElement('div')
-      div.classList.add('particle')
-      div.style.background = 'lightgrey'
-      let x = event.clientX
-      let y = event.clientY
-      div.style.left = x + 'px'
-      div.style.top = y + 'px'
+    if (Game.state.settings.rockParticles == true) {
+      for (i = 0; i < 3; i++) {
+        let div = document.createElement('div')
+        div.classList.add('particle')
+        div.style.background = 'lightgrey'
+        let x = event.clientX
+        let y = event.clientY
+        div.style.left = x + 'px'
+        div.style.top = y + 'px'
 
-      let particleY = y
-      let particleX = x
+        let particleY = y
+        let particleX = x
 
-      let randomNumber = Math.random()
-      let randomSign = Math.round(Math.random()) * 2 - 1
+        let randomNumber = Math.random()
+        let randomSign = Math.round(Math.random()) * 2 - 1
 
-      let particleUp = setInterval(() => {
-        particleX += randomNumber * randomSign
-        particleY -= 1
-        div.style.top = particleY + 'px'
-        div.style.left = particleX + 'px'
-      }, 10)
-
-      setTimeout(() => {
-        clearInterval(particleUp)
-
-        let particleDown = setInterval(() => {
-          particleX += randomNumber * randomSign / 2
-          particleY += 1.5
+        let particleUp = setInterval(() => {
+          particleX += randomNumber * randomSign
+          particleY -= 1
           div.style.top = particleY + 'px'
           div.style.left = particleX + 'px'
         }, 10)
 
         setTimeout(() => {
-          clearInterval(particleDown)
-          div.remove()
-        }, 1000)
-      }, 100)
+          clearInterval(particleUp)
 
-      s('body').append(div)
+          let particleDown = setInterval(() => {
+            particleX += randomNumber * randomSign / 2
+            particleY += 1.5
+            div.style.top = particleY + 'px'
+            div.style.left = particleX + 'px'
+          }, 10)
+
+          setTimeout(() => {
+            clearInterval(particleDown)
+            div.remove()
+          }, 1000)
+        }, 100)
+
+        s('body').append(div)
+      }
     }
   }
 
@@ -2153,6 +2163,20 @@ Game.launch = () => {
             <option value='1.0' label="100%">
           </datalist>
         </div>
+        <div class="single-setting">
+          <p style='padding-right: 20px;'>Enable Rock Particles:</p>
+          <input type="radio" name='rockParticles' id='rockParticlesOn' value='true' onchange='Game.state.settings.rockParticles = true'/>
+            <label for="rockParticlesOn" style='margin-right: 10px'>On</label>
+          <input type="radio" name='rockParticles' id='rockParticlesOff' value='false' onchange='Game.state.settings.rockParticles = false' />
+            <label for="rockParticlesOff">Off</label>
+        </div>
+        <div class="single-setting">
+          <p style='padding-right: 20px;'>Enable Rising Numbers:</p>
+          <input type="radio" name='risingNumbers' id='risingNumbersOn' value='true' onchange='Game.state.settings.risingNumbers = true'/>
+            <label for="risingNumbersOn" style='margin-right: 10px'>On</label>
+          <input type="radio" name='risingNumbers' id='risingNumbersOff' value='false' onchange='Game.state.settings.risingNumbers = false' />
+            <label for="risingNumbersOff">Off</label>
+        </div>
 
         <hr/>
       </div>
@@ -2162,10 +2186,10 @@ Game.launch = () => {
 
     s('body').append(div)
     s('.volume-slider').value = Game.state.settings.volume
-  }
 
-  Game.changeVolume = () => {
-    let volume = s('.volume-slider').value
+    Game.state.settings.rockParticles == true ? s('#rockParticlesOn').checked = true : s('#rockParticlesOff').checked = true
+    Game.state.settings.risingNumbers == true ? s('#risingNumbersOn').checked = true : s('#risingNumbersOff').checked = true
+
 
   }
 
