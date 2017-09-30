@@ -956,6 +956,7 @@ Game.launch = () => {
 
   Game.specialization = (sel) => {
     Game.state.player.specialization = sel
+    drawSkillsContainer()
     Game.buildStats()
     s('.specialization-wrapper').remove()
     s('.specialization-confirmation-wrapper').remove()
@@ -1014,7 +1015,7 @@ Game.launch = () => {
           if (skill.tier == 2) {
             if (skill.locked == 0) {
               str += `
-                <div class='specialization-skill' id='${skill.id}' onclick='Game.levelUpSkill("${skill.name}")' onmouseover='Game.renderSkillText(${skill.id})' onmouseout='document.querySelector(".specialization-skills-bottom-right").innerHTML=""'></div>
+                <div class='specialization-skill' id='${skill.id}' style='background: url("./assets/${skill.img}.png")' onclick='Game.levelUpSkill("${skill.name}")' onmouseover='Game.renderSkillText(${skill.id})' onmouseout='document.querySelector(".specialization-skills-bottom-right").innerHTML=""'></div>
               `
             } else {
               str += `
@@ -1034,7 +1035,7 @@ Game.launch = () => {
           if (skill.tier == 3) {
             if (skill.locked == 0) {
               str += `
-                <div class='specialization-skill' id='${skill.id}' onclick='Game.levelUpSkill("${skill.name}")' onmouseover='Game.renderSkillText(${skill.id})' onmouseout='document.querySelector(".specialization-skills-bottom-right").innerHTML=""'></div>
+                <div class='specialization-skill' id='${skill.id}' style='background: url("./assets/${skill.img}.png")' onclick='Game.levelUpSkill("${skill.name}")' onmouseover='Game.renderSkillText(${skill.id})' onmouseout='document.querySelector(".specialization-skills-bottom-right").innerHTML=""'></div>
               `
             } else {
               str += `
@@ -1213,6 +1214,7 @@ Game.launch = () => {
     {
       name: 'Weight Lifting',
       type: 'passive',
+      img: 'weight-lifting-skill',
       specialization: 'Prospector',
       fillerTxt: 'I lift things up and put them down',
       desc: 'Passive STR bonus',
@@ -1226,6 +1228,7 @@ Game.launch = () => {
     }, {
       name: 'Conditioning',
       type: 'passive',
+      img: 'conditioning-skill',
       specialization: 'Prospector',
       fillerTxt: 'Crossfit is like totally awesome',
       desc: 'Passive DEX bonus',
@@ -1282,6 +1285,21 @@ Game.launch = () => {
     }
   }
 
+  let drawSkillsContainer = () => {
+    if (Game.state.player.specialization != null) {
+      let div = s('.active-skills-container')
+      let anchorTop = s('.inventory-section').getBoundingClientRect()
+      let anchorRight = s('#main-separator').getBoundingClientRect()
+
+      s('body').append(div)
+
+      div.style.display = 'flex'
+      div.style.top = anchorTop.bottom + 'px'
+      div.style.marginTop = '10px'
+      div.style.left = anchorRight.left - div.getBoundingClientRect().width + 'px'
+    }
+  }
+
   Game.toggleStats = () => {
     if (s('.stats-container-content-wrapper').style.height == 0 || s('.stats-container-content-wrapper').style.height == '0px') {
       s('.stats-container-content-wrapper').style.height = '370px';
@@ -1310,6 +1328,7 @@ Game.launch = () => {
     tooltip.style.color = 'white'
     tooltip.style.position = 'absolute'
     tooltip.style.left = anchor.left - tooltip.getBoundingClientRect().width + 'px'
+    tooltip.style.zIndex = '9999'
 
     if (document.querySelector('#anchor-point')) {
       tooltip.style.top = s('#anchor-point').getBoundingClientRect().bottom + 'px'
@@ -2245,6 +2264,7 @@ Game.launch = () => {
   Game.buildStats()
   generateStoreItems()
   // Game.load()
+  drawSkillsContainer()
   buildStore()
   Game.buildStats()
   Game.showChangelog()
@@ -2270,6 +2290,7 @@ Game.launch = () => {
     if (Game.items['MagnifyingGlass'].owned > 0) {
       oreClickArea()
     }
+    drawSkillsContainer()
   }
   if (Game.state.stats.oreClicks == 0) {
     let clickMeContainer = s('.click-me-container')

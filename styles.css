@@ -1118,3 +1118,23 @@ li {
   opacity: 0.6;
 }
 
+.active-skills-container {
+  height: 300px;
+  width: 70px;
+  border-right: none;
+  position: absolute;
+  display: none;
+  background-color: #513317;
+  flex-flow: column nowrap;
+}
+
+.active-skills-content {
+  height: 100%;
+  display: flex;
+  flex-flow: row nowrap;
+}
+
+.active-skills-area {
+  flex-grow: 1;
+}
+
