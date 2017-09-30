@@ -332,32 +332,31 @@ footer {
 
 .achievement {
   position: absolute;
-  bottom: 10px;
-  left: 10px;
-  border: 3px solid black;
+  bottom: 0px;
+  left: 0px;
+  border: 3px solid white;
   z-index: 9999;
-  background-color: white;
+  background-color: #222;
   text-align: center;
-  padding: 10px 20px;
-  animation: fadeOut 2.5s linear;
+  padding: 10px 30px;
+  animation: achievement 2s ease-in-out;
   animation-fill-mode: forwards;
-  /*background: #91ffa6;*/
   pointer-events: none;
-  color: black;
+  color: white;
   display: flex;
   flex-flow: column nowrap;
+  box-shadow: 0 0 10px yellow;
 }
 
-@keyframes fadeOut {
-  0%{
-    transform: translateY(0);
+@keyframes achievement {
+  0% {
+    bottom: -300px;
   }
-  50% {
-    opacity: 1;
+  20%, 80% {
+    bottom: 0px;
   }
   100% {
-    opacity: 0;
-    transform: translateY(-200px)
+    bottom: -300px;
   }
 }
 

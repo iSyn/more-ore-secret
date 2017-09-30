@@ -1784,15 +1784,24 @@ Game.launch = () => {
           Game.achievements[i].won = 1
           let div = document.createElement('div')
           div.classList.add('achievement')
+
           div.innerHTML = `
             <h3>Achievement Unlocked</h3>
             <h1>${Game.achievements[i].name}</h1>
             <p>${Game.achievements[i].desc}</p>
           `
           s('body').append(div)
+
+          // let divWidth = div.getBoundingClientRect().width
+          // let windowWidth = window.innerWidth
+
+          // div.style.left = ((windowWidth/2) - (divWidth/2)) + 'px'
+
+
+
           setTimeout(() => {
             div.remove()
-          }, 2500)
+          }, 2000)
         }
       }
     }
