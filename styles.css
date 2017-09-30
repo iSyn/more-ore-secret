@@ -947,6 +947,7 @@ li {
   border: 1px solid white;
   margin: 10px;
   cursor: pointer;
+  background-color: white;
 }
 
 .specialization-skill:hover {
@@ -1121,7 +1122,7 @@ li {
 
 .active-skills-container {
   height: 300px;
-  width: 70px;
+  width: 80px;
   border-right: none;
   position: absolute;
   display: none;
@@ -1144,11 +1145,11 @@ li {
 }
 
 .active-skill {
-  height: 50px;
-  width: 50px;
+  height: 64px;
+  width: 64px;
   border: 1px solid white;
   margin: 10px 0;
-  background: black;
+  background: white;
   cursor: pointer;
 }
 

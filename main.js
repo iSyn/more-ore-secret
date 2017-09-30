@@ -996,7 +996,7 @@ Game.launch = () => {
       for (i in Game.skills) {
         let skill = Game.skills[i]
         if (skill.tier == 1) {
-           str += `<div class="specialization-skill" onclick='Game.levelUpSkill("${i}")' onmouseover='Game.renderSkillText("${i}")' onmouseout='document.querySelector(".specialization-skills-bottom-right").innerHTML = "" '></div>`
+           str += `<div class="specialization-skill" style='background-image: url("./assets/${skill.img}.png")' onclick='Game.levelUpSkill("${i}")' onmouseover='Game.renderSkillText("${i}")' onmouseout='document.querySelector(".specialization-skills-bottom-right").innerHTML = "" '></div>`
         }
       }
 
@@ -1153,7 +1153,7 @@ Game.launch = () => {
   Game.skills['RoidRage'] = {
     name: 'Roid Rage',
     type: 'active',
-    img: 'wip',
+    img: 'roidrage-skill',
     specialization: 'Prospector',
     fillerTxt: 'All you see is red... and rocks',
     desc: 'Increases your OpC by 50x for 10s',
@@ -1261,7 +1261,7 @@ Game.launch = () => {
       if (Game.skills[i].type == 'active') { // IF ITS AN ACTIVE SKILL
         if (Game.skills[i].locked == 0) { // IF ITS NOT LOCKED
           if (Game.skills[i].lv > 0) { // IF THERES POINTS IN IT
-            str += `<div class='active-skill' onclick='Game.useSkill("${i}")' onmouseover='Game.showTooltip("${i}", null, "skill", null)' onmouseout='Game.hideTooltip()' ></div>`
+            str += `<div class='active-skill' style='background-image: url("./assets/${Game.skills[i].img}.png")' onclick='Game.useSkill("${i}")' onmouseover='Game.showTooltip("${i}", null, "skill", null)' onmouseout='Game.hideTooltip()' ></div>`
           }
         }
       }
