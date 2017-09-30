@@ -81,7 +81,7 @@ Game.launch = () => {
         rarity: 'Common',
         itemLevel: 1,
         material: 'Wood',
-        damage: 10,
+        damage: 1,
       },
       accesory: {}
     },
@@ -2236,8 +2236,6 @@ Game.launch = () => {
 
     Game.state.settings.rockParticles == true ? s('#rockParticlesOn').checked = true : s('#rockParticlesOff').checked = true
     Game.state.settings.risingNumbers == true ? s('#risingNumbersOn').checked = true : s('#risingNumbersOff').checked = true
-
-
   }
 
   Game.showAchievements = () => {
