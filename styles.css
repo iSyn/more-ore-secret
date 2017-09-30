@@ -947,7 +947,7 @@ li {
   border: 1px solid white;
   margin: 10px;
   cursor: pointer;
-  background-color: white;
+  background-color: black;
 }
 
 .specialization-skill:hover {
@@ -1064,6 +1064,7 @@ li {
   left: 50%;
   transform: translate(-50%, -50%);
   padding: 10px 20px;
+  overflow: auto;
 }
 
 .achievements-container i {
@@ -1145,11 +1146,16 @@ li {
 }
 
 .active-skill {
-  height: 64px;
-  width: 64px;
+  height: 50px;
+  width: 50px;
   border: 1px solid white;
   margin: 10px 0;
-  background: white;
+  background: black;
   cursor: pointer;
+  background-size: 100% 100%;
+}
+
+.active-skill:hover {
+  box-shadow: 0 0 10px white inset;
 }
 

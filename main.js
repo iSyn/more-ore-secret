@@ -61,7 +61,7 @@ Game.launch = () => {
     critHitMultiplier: 2,
     weakHitMultiplier: 5,
     player: {
-      lvl: 5,
+      lvl: 1,
       str: 0,
       dex: 0,
       luk: 0,
@@ -1058,7 +1058,14 @@ Game.launch = () => {
       div.classList.add('refine')
       s('body').append(div)
 
-      let amountOfRefinedOres = Math.floor(Math.cbrt(Game.state.ores / 10000000))
+      // let amountOfRefinedOres = Math.floor(Math.cbrt(Game.state.ores / 10000000))
+      let amountOfRefinedOres = 0
+      if (Game.state.ores >= 1000000) amountOfRefinedOres++
+      if (Game.state.ores >= 1000000000) amountOfRefinedOres += 2
+      if (Game.state.ores >= 1000000000000) amountOfRefinedOres += 5
+      if (Game.state.ores >= 1000000000000000) amountOfRefinedOres += 10
+      if (Game.state.ores >= 1000000000000000000) amountOfRefinedOres += 10
+
       Game.state.refinedOres += amountOfRefinedOres
 
       setTimeout(() => {
@@ -2258,9 +2265,24 @@ Game.launch = () => {
         <br/>
         <h1>Achievements</h1>
         <hr/>
-         <p><span style='opacity: .6'>Achievements Won:</span> <strong>${achievementsWon}</strong></p>
-         <p><span style='opacity: .6'>Achievements Missing:</span> <strong>${achievementsMissing}</strong></p>
-      </div>
+        <h2><span style='opacity: .6'>Achievements Won:</span> ${achievementsWon}</h2>
+        `
+        for (i = 0; i < Game.achievements.length; i++) {
+          if (Game.achievements[i].won == 1) {
+            str += `<p><span style='opacity: .6'>${Game.achievements[i].name}</span> - <strong>${Game.achievements[i].desc}</strong></p>`
+          }
+        }
+
+        str += `<br/> <p><span style='opacity: .6'>Achievements Missing:</span> <strong>${achievementsMissing}</strong></p>`
+
+        // for (j = 0; j < Game.achievements.length; j++) {
+        //   if (Game.achievements[j].won == 0) {
+        //     str += `<p><span style='opacity: .6'>${Game.achievements[j].name}</span> - <strong>???</strong></p>`
+        //   }
+        // }
+
+        str += `
+    </div>
 
     `
 
