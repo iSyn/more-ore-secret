@@ -704,6 +704,7 @@ footer {
   display: flex;
   flex-flow: column nowrap;
   padding: 10px;
+  z-index: 1;
 }
 
 .tooltip-top {
@@ -1134,7 +1135,20 @@ li {
   flex-flow: row nowrap;
 }
 
-.active-skills-area {
+.active-skills-area-container {
   flex-grow: 1;
+  color: white;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+}
+
+.active-skill {
+  height: 50px;
+  width: 50px;
+  border: 1px solid white;
+  margin: 10px 0;
+  background: black;
+  cursor: pointer;
 }
 

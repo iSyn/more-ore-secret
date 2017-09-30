@@ -61,7 +61,7 @@ Game.launch = () => {
     critHitMultiplier: 2,
     weakHitMultiplier: 5,
     player: {
-      lvl: 1,
+      lvl: 5,
       str: 0,
       dex: 0,
       luk: 0,
@@ -218,7 +218,6 @@ Game.launch = () => {
   let calculateOPC = (type) => {
     let opc = 0
 
-
     // IF PICKAXE HAS STRENGTH
     if (Game.state.player.pickaxe.prefixStat) {
       if (Game.state.player.pickaxe.prefixStat == 'Strength') {
@@ -229,14 +228,14 @@ Game.launch = () => {
 
     // ADD DAMAGE FROM PICKAXE
     opc += Game.state.player.pickaxe.damage
-    if (Game.skills[0].lv > 0) { // IF PLAYER HAS PICKAXE PROFICIENCY SKILL LVLED
-      opc += Game.state.player.pickaxe.damage * (Game.skills[0].current * .01)
+    if (Game.skills['PickaxeProficiency'].lv > 0) { // IF PLAYER HAS PICKAXE PROFICIENCY SKILL LVLED
+      opc += Game.state.player.pickaxe.damage * (Game.skills['PickaxeProficiency'].current * .01)
     }
 
     // ADD DAMAGE FROM PLAYER STRENGTH
     let playerStr = Game.state.player.str
-    if (Game.skills[1].lv > 0) { // WEIGHT LIFTING SKILL
-      playerStr += playerStr * (Game.skills[1].current * .01)
+    if (Game.skills['WeightLifting'].lv > 0) { // WEIGHT LIFTING SKILL
+      playerStr += playerStr * (Game.skills['WeightLifting'].current * .01)
     }
 
     if (playerStr > 0) opc += Math.pow(1.25, playerStr)
@@ -244,8 +243,8 @@ Game.launch = () => {
 
     // ADD DAMAGE FROM PLAYER DEX
     let playerDex = Game.state.player.dex
-    if (Game.skills[2].lv > 0) { // CROSSFIT SKILL
-      playerDex += playerDex * (Game.skills[1].current * .01)
+    if (Game.skills['Conditioning'].lv > 0) { // Conditioning SKILL
+      playerDex += playerDex * (Game.skills['Conditioning'].current * .01)
     }
 
     if (playerDex > 0) opc += Math.pow(1.1, playerDex)
@@ -265,6 +264,10 @@ Game.launch = () => {
 
     if (type == 'crit-hit') {
       opc *= Game.state.critHitMultiplier
+    }
+
+    if (Game.skills['RoidRage'].inUse == true) {
+      opc *= 50
     }
 
     if (opc >= 1000000) winAchievement('Still A Baby')
@@ -988,63 +991,14 @@ Game.launch = () => {
         <br/>
         <div class="specialization-skills-bottom">
           <div class="specialization-skills-bottom-left">
-            <div class="skill-tier">
+            <div class="skill-tier tier-1">
       `
-      Game.skills.forEach((skill) => {
-        if (skill.specialization == 'Prospector') {
-          if (skill.tier == 1) {
-            if (skill.locked == 0) {
-              str += `
-                <div class='specialization-skill' id='${skill.id}' style='background: url("./assets/${skill.img}.png")' onclick='Game.levelUpSkill("${skill.name}")' onmouseover='Game.renderSkillText(${skill.id})' onmouseout='document.querySelector(".specialization-skills-bottom-right").innerHTML=""'></div>
-              `
-            } else {
-              str += `
-                <div class='specialization-skill' id='${skill.id}' onmouseover='Game.renderSkillText("locked")' onmouseout='document.querySelector(".specialization-skills-bottom-right").innerHTML=""'></div>
-              `
-            }
-          }
+      for (i in Game.skills) {
+        let skill = Game.skills[i]
+        if (skill.tier == 1) {
+           str += `<div class="specialization-skill" onclick='Game.levelUpSkill("${i}")' onmouseover='Game.renderSkillText("${i}")' onmouseout='document.querySelector(".specialization-skills-bottom-right").innerHTML = "" '></div>`
         }
-      })
-
-      str += `</div>`
-
-      str += `<div class="skill-tier">`
-
-      Game.skills.forEach((skill) => {
-        if (skill.specialization == 'Prospector') {
-          if (skill.tier == 2) {
-            if (skill.locked == 0) {
-              str += `
-                <div class='specialization-skill' id='${skill.id}' style='background: url("./assets/${skill.img}.png")' onclick='Game.levelUpSkill("${skill.name}")' onmouseover='Game.renderSkillText(${skill.id})' onmouseout='document.querySelector(".specialization-skills-bottom-right").innerHTML=""'></div>
-              `
-            } else {
-              str += `
-                <div class='specialization-skill' id='${skill.id}' onmouseover='Game.renderSkillText("locked")' onmouseout='document.querySelector(".specialization-skills-bottom-right").innerHTML=""'></div>
-              `
-            }
-          }
-        }
-      })
-
-      str += `</div>`
-
-      str += `<div class="skill-tier">`
-
-      Game.skills.forEach((skill) => {
-        if (skill.specialization == 'Prospector') {
-          if (skill.tier == 3) {
-            if (skill.locked == 0) {
-              str += `
-                <div class='specialization-skill' id='${skill.id}' style='background: url("./assets/${skill.img}.png")' onclick='Game.levelUpSkill("${skill.name}")' onmouseover='Game.renderSkillText(${skill.id})' onmouseout='document.querySelector(".specialization-skills-bottom-right").innerHTML=""'></div>
-              `
-            } else {
-              str += `
-                <div class='specialization-skill' id='${skill.id}' onmouseover='Game.renderSkillText("locked")' onmouseout='document.querySelector(".specialization-skills-bottom-right").innerHTML=""'></div>
-              `
-            }
-          }
-        }
-      })
+      }
 
       str += `
               </div>
@@ -1171,114 +1125,113 @@ Game.launch = () => {
   }
 
   Game.levelUpSkill = (skillName) => {
+    let skill = Game.skills[skillName]
 
-    if (Game.state.player.specializationSp > 0) { // IF THERE IS SP
-      for (i = 0; i < Game.skills.length; i++) { // LOOP THORUGH SKILLS TO FIND SELECTED SKILL
-        if (Game.skills[i].name == skillName) { // IF WE FOUND SKILL
-          Game.state.player.specializationSp-- // SUBTRACT SP
-          Game.skills[i].lv++
-          if (Game.skills[i].lv > 1) {
-            Game.skills[i].current += Game.skills[i].next
-          }
-          let nextTier = Game.skills[i].tier + 1
-          for (j = 0; j < Game.skills.length; j++) {
-            if (Game.skills[j].tier == nextTier) {
-              Game.skills[j].locked = 0
-            }
-          }
-
-          Game.specializationSkills()
-          Game.renderSkillText(Game.skills[i].id)
+    if (Game.state.player.specializationSp > 0) { // IF WE HAVE SP
+      if (skill) { // IF SKILL EXISTS
+        Game.state.player.specializationSp --
+        skill.lv++
+        if (skill.lv > 1) {
+          skill.current += skill.next
         }
+        // UNlOCK NEXT TIER
+        let nextTier = skill.tier + 1
+        for (i in Game.skills) {
+          if (Game.skills[i].tier == nextTier) {
+            Game.skills[i].locked = 0
+          }
+        }
+        Game.specializationSkills()
+        Game.renderSkillText(skillName)
+        drawSkillsContainer()
       }
     }
   }
 
-  Game.skills = [
-    {
+  Game.skills = []
 
-      name: 'Pickaxe Proficiency',
-      type: 'passive',
-      img: 'pickaxe-skill',
-      specialization: 'Prospector',
-      fillerTxt: 'After countless rocks destroyed, you learn to handle pickaxes better',
-      desc: 'Adds a permanent buff to your pickaxes',
-      id: 0,
-      lv: 0,
-      locked: 0,
-      tier: 1,
-      what: 'Pickaxe Damage',
-      current: 100,
-      next: 20
-    },
-    {
-      name: 'Weight Lifting',
-      type: 'passive',
-      img: 'weight-lifting-skill',
-      specialization: 'Prospector',
-      fillerTxt: 'I lift things up and put them down',
-      desc: 'Passive STR bonus',
-      id: 1,
-      lv: 0,
-      locked: 1,
-      tier: 2,
-      what: 'STR',
-      current: 20,
-      next: 15
-    }, {
-      name: 'Conditioning',
-      type: 'passive',
-      img: 'conditioning-skill',
-      specialization: 'Prospector',
-      fillerTxt: 'Crossfit is like totally awesome',
-      desc: 'Passive DEX bonus',
-      id: 2,
-      lv: 0,
-      locked: 1,
-      tier: 2,
-      what: 'DEX',
-      current: 20,
-      next: 15
-    }, {
-      name: 'Roid Rage',
-      type: 'active',
-      specialization: 'Prospector',
-      fillerTxt: 'All you see is red... and rocks',
-      desc: 'Increase your damage by 50x for 5s',
-      id: 3,
-      lv: 0,
-      locked: 1,
-      tier: 3,
-      what: 'Damage',
-      current: 50,
-      next: 1
-    }
-  ]
+  Game.skills['RoidRage'] = {
+    name: 'Roid Rage',
+    type: 'active',
+    img: 'wip',
+    specialization: 'Prospector',
+    fillerTxt: 'All you see is red... and rocks',
+    desc: 'Increases your OpC by 50x for 10s',
+    lv: 0,
+    locked: 0,
+    tier: 1,
+    what: 'Damage',
+    current: 50,
+    next: 1,
+    cooldown: '60 minutes', //1000 * 60 * 5,
+    inUse: false
+  }
+  Game.skills['PickaxeProficiency'] = {
+    name: 'Pickaxe Proficiency',
+    type: 'passive',
+    img: 'pickaxe-skill',
+    fillerTxt: 'After countless rocks destroyed, you learn to handle pickaxes better',
+    desc: 'Adds a permanent buff to your pickaxes',
+    id: 0,
+    lv: 0,
+    locked: 0,
+    tier: 2,
+    what: 'Pickaxe Damage',
+    current: 100,
+    next: 20
+  }
+  Game.skills['WeightLifting'] = {
+    name: 'Weight Lifting',
+    type: 'passive',
+    img: 'weight-lifting-skill',
+    specialization: 'Prospector',
+    fillerTxt: 'I lift things up and put them down',
+    desc: 'Passive STR bonus',
+    id: 1,
+    lv: 0,
+    locked: 1,
+    tier: 2,
+    what: 'STR',
+    current: 20,
+    next: 15
+  }
+  Game.skills['Conditioning'] = {
+    name: 'Conditioning',
+    type: 'passive',
+    img: 'conditioning-skill',
+    specialization: 'Prospector',
+    fillerTxt: 'Crossfit is like totally awesome',
+    desc: 'Passive DEX bonus',
+    id: 2,
+    lv: 0,
+    locked: 1,
+    tier: 2,
+    what: 'DEX',
+    current: 20,
+    next: 15
+  }
 
-  Game.renderSkillText = (iD) => {
-    for (i = 0; i < Game.skills.length; i++) {
-      if (iD == Game.skills[i].id) {
-        s('.specialization-skills-bottom-right').innerHTML = `
-          <h2>${Game.skills[i].name} &nbsp; Lv. ${Game.skills[i].lv}</h2>
-          <hr/>
-          <p><i>${Game.skills[i].type}</i></p>
-          <hr/>
-          <br/>
-          <p>${Game.skills[i].fillerTxt}</p>
-          <br/>
-          <p>${Game.skills[i].desc}</p>
-        `
-        if (Game.skills[i].lv > 0) {
-          s('.specialization-skills-bottom-right').innerHTML += `
-            <br/>
-            <hr/>
-            <p style='float: left;'>[Current Level] ${Game.skills[i].what} + ${Game.skills[i].current}%</p>
-            <p style='float: left;'>[Next Level] ${Game.skills[i].what} + ${Game.skills[i].current + Game.skills[i].next}%</p>
-          `
-        }
-      }
+  Game.renderSkillText = (skillName) => {
+    let skill = Game.skills[`${skillName}`]
+    s('.specialization-skills-bottom-right').innerHTML = `
+      <h2>${skill.name} &nbsp; Lv. ${skill.lv}</h2>
+      <hr/>
+      <p><i>${skill.type}</i></p>
+      <hr/>
+      <br/>
+      <p>${skill.fillerTxt}</p>
+      <br/>
+      <p>${skill.desc}</p>
+    `
+    if (skill.lv > 0) {
+      s('.specialization-skills-bottom-right').innerHTML += `
+        <br/>
+        <hr/>
+        <p style='float: left;'>[Current Level] ${skill.what} + ${skill.current}%</p>
+        <p style='float: left;'>[Next Level] ${skill.what} + ${skill.current + skill.next}%</p>
+      `
     }
-    if (iD == 'locked') {
+    if (skill.locked == 1) {
       s('.specialization-skills-bottom-right').innerHTML = `
           <h2>???</h2>
         `
@@ -1297,6 +1250,51 @@ Game.launch = () => {
       div.style.top = anchorTop.bottom + 'px'
       div.style.marginTop = '10px'
       div.style.left = anchorRight.left - div.getBoundingClientRect().width + 'px'
+
+      drawActiveSkills()
+    }
+  }
+
+  let drawActiveSkills = () => {
+    let str = ''
+    for (i in Game.skills) {
+      if (Game.skills[i].type == 'active') { // IF ITS AN ACTIVE SKILL
+        if (Game.skills[i].locked == 0) { // IF ITS NOT LOCKED
+          if (Game.skills[i].lv > 0) { // IF THERES POINTS IN IT
+            str += `<div class='active-skill' onclick='Game.useSkill("${i}")' onmouseover='Game.showTooltip("${i}", null, "skill", null)' onmouseout='Game.hideTooltip()' ></div>`
+          }
+        }
+      }
+    }
+    s('.active-skills-area').innerHTML = str
+  }
+
+  Game.useSkill = (skillName) => {
+    Game.hideTooltip()
+    let skill = Game.skills[skillName]
+    if (skill.name == 'Roid Rage') {
+      if (skill.inUse == false) {
+        skill.inUse = true
+        setTimeout(() => {
+          skill.inUse = false
+        }, 5000)
+
+        let div = document.createElement('div')
+        div.style.width = '100vw'
+        div.style.height = '100vh'
+        div.style.position = 'absolute'
+        div.style.top = '0px'
+        div.style.background = 'darkred'
+        div.style.opacity = '0.2'
+        div.style.zindex = '99999'
+        div.style.pointerEvents = 'none'
+
+        s('body').append(div)
+
+        setTimeout(() => {
+          div.remove()
+        }, 1000 * 10)
+      }
     }
   }
 
@@ -1400,6 +1398,20 @@ Game.launch = () => {
           <p>Unlocked at Level 5</p>
         `
       }
+    } else if (type == 'skill') {
+      let skill = Game.skills[itemName]
+      let anchorRight = s('#skill-separator').getBoundingClientRect()
+      let mouseY = event.clientY
+
+      tooltip.style.left = anchorRight.left - tooltip.getBoundingClientRect().width + 'px'
+      tooltip.style.top = mouseY + 'px'
+
+      tooltip.innerHTML = `
+        <h3>${skill.name}</h3>
+        <hr/>
+        <p>${skill.desc}</p>
+        <p>Cooldown: ${skill.cooldown}</p>
+      `
     } else {
       tooltip.innerHTML = `
       <div class="tooltip-top">
