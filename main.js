@@ -2385,12 +2385,10 @@ Game.launch = () => {
   ]
 
   showTextScroller = (text) => {
-    console.log('showTextScroller firing')
 
     let scrollTime = 20 // 20seconds
 
     if (Game.state.settings.scrollingText == true) {
-      console.log('enabled')
       s('.text-scroller').innerHTML = ''
 
       if (text) {
@@ -2402,21 +2400,19 @@ Game.launch = () => {
         s('.text-scroller').style.transition = `transform 15s linear`;
         s('.text-scroller').style.transform = `translateX(-${parentWidth + s('.text-scroller').clientWidth}px)`
       } else {
-        if (Math.random() >= .5) {
-          let random = Math.floor(Math.random() * textScroller.length)
+        let random = Math.floor(Math.random() * textScroller.length)
 
-          s('.text-scroller').innerHTML = textScroller[random]
-          s('.text-scroller').style.right = -s('.text-scroller').clientWidth + 'px'
+        s('.text-scroller').innerHTML = textScroller[random]
+        s('.text-scroller').style.right = -s('.text-scroller').clientWidth + 'px'
 
-          let parentWidth = s('.text-scroller').parentElement.clientWidth
+        let parentWidth = s('.text-scroller').parentElement.clientWidth
 
-          s('.text-scroller').style.transition = `transform ${scrollTime}s linear`;
-          s('.text-scroller').style.transform = `translateX(-${parentWidth + s('.text-scroller').clientWidth}px)`
-        }
+        s('.text-scroller').style.transition = `transform ${scrollTime}s linear`;
+        s('.text-scroller').style.transform = `translateX(-${parentWidth + s('.text-scroller').clientWidth}px)`
       }
       setTimeout(() => {
         showTextScroller()
-      }, scrollTime * 1000)
+      }, scrollTime * 3 * 1000)
     }
 
 

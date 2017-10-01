@@ -599,6 +599,7 @@ body {
   background-color: #4e3013;
   font-family: 'Germania One';
   letter-spacing: 4px;
+  text-shadow: 0 0 4px black;
 }
 
 .tabs {
@@ -683,8 +684,17 @@ body {
 }
 
 .button-middle h3 {
+  /*font-family: 'Francois One';*/
   font-family: 'Germania One';
   letter-spacing: 1px;
+  color: white;
+  text-shadow: 0 0 1px black;
+}
+
+.button-right p {
+  font-family: 'Germania One';
+  color: white;
+  text-shadow: 0 0 3px black;
 }
 
 .button-bottom {
