@@ -49,6 +49,10 @@ footer {
   text-align: center;
 }
 
+body {
+  overflow: none;
+}
+
 .vertical-separator {
   height: 100%;
   width: 30px !important;
@@ -427,6 +431,7 @@ footer {
   height: 10%;
   color: white;
   font-size: x-large;
+  background-color: #201b17;
 }
 
 .ore-container {
