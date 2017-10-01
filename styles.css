@@ -51,7 +51,7 @@ footer {
 
 .vertical-separator {
   height: 100%;
-  /*width: 20px;*/
+  width: 30px !important;
   width: 15px;
   background: url('./assets/verticalseparator.png');
   background-size: 100% auto;
@@ -410,6 +410,7 @@ footer {
   /*width: 70%;*/
   flex-grow: 1;
   background: url('./assets/main-bg.png');
+  /*background: url('./assets/test.png');*/
   background-size: auto 80%;
   image-rendering: pixelated;
   display: flex;
@@ -434,7 +435,6 @@ footer {
   flex-flow: column nowrap;
   justify-content: center;
   align-items: center;
-  box-shadow: 0 0 200px #222 inset;
 }
 
 .ore {

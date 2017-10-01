@@ -61,7 +61,7 @@ Game.launch = () => {
     critHitMultiplier: 2,
     weakHitMultiplier: 5,
     player: {
-      lvl: 1,
+      lvl: 5,
       str: 0,
       dex: 0,
       luk: 0,
@@ -81,7 +81,7 @@ Game.launch = () => {
         rarity: 'Common',
         itemLevel: 1,
         material: 'Wood',
-        damage: 1,
+        damage: 10,
       },
       accesory: {}
     },
@@ -267,7 +267,7 @@ Game.launch = () => {
     }
 
     if (Game.skills['RoidRage'].inUse == true) {
-      opc *= 50
+      opc *= Game.skills['RoidRage'].current
     }
 
     if (opc >= 1000000) winAchievement('Still A Baby')
@@ -596,7 +596,7 @@ Game.launch = () => {
               `
               if (Game.newItem.hasPrefix == true) {
                 str += `
-                  <p>${Game.newItem.prefixStat}: ${Math.floor(Game.newItem.prefixStatVal)}</p>
+                  <p>${Game.newItem.prefixStat}: ${Game.newItem.prefixStatVal}</p>
                 `
               }
               str += `
@@ -1161,21 +1161,23 @@ Game.launch = () => {
 
     if (Game.state.player.specializationSp > 0) { // IF WE HAVE SP
       if (skill) { // IF SKILL EXISTS
-        Game.state.player.specializationSp --
-        skill.lv++
-        if (skill.lv > 1) {
-          skill.current += skill.next
-        }
-        // UNlOCK NEXT TIER
-        let nextTier = skill.tier + 1
-        for (i in Game.skills) {
-          if (Game.skills[i].tier == nextTier) {
-            Game.skills[i].locked = 0
+        if (skill.locked == 0) {
+          Game.state.player.specializationSp --
+          skill.lv++
+          if (skill.lv > 1) {
+            skill.current += skill.next
           }
+          // UNlOCK NEXT TIER
+          let nextTier = skill.tier + 1
+          for (i in Game.skills) {
+            if (Game.skills[i].tier == nextTier) {
+              Game.skills[i].locked = 0
+            }
+          }
+          Game.specializationSkills()
+          Game.renderSkillText(skillName)
+          drawSkillsContainer()
         }
-        Game.specializationSkills()
-        Game.renderSkillText(skillName)
-        drawSkillsContainer()
       }
     }
   }
@@ -1192,9 +1194,9 @@ Game.launch = () => {
     lv: 0,
     locked: 0,
     tier: 1,
-    what: 'Damage',
+    what: 'OpC',
     current: 50,
-    next: 1,
+    next: 10,
     cooldown: 60,
     inUse: false,
     currentCooldown: 0
@@ -1211,8 +1213,8 @@ Game.launch = () => {
     locked: 1,
     tier: 2,
     what: 'STR',
-    current: 20,
-    next: 15
+    current: 5,
+    next: 5
   }
   Game.skills['Conditioning'] = {
     name: 'Conditioning',
@@ -1226,8 +1228,8 @@ Game.launch = () => {
     locked: 1,
     tier: 2,
     what: 'DEX',
-    current: 20,
-    next: 15
+    current: 5,
+    next: 5
   }
   Game.skills['PickaxeProficiency'] = {
     name: 'Pickaxe Proficiency',
@@ -1241,7 +1243,7 @@ Game.launch = () => {
     tier: 3,
     what: 'Pickaxe Damage',
     current: 100,
-    next: 20
+    next: 100
   }
 
   Game.renderSkillText = (skillName) => {
@@ -1260,8 +1262,8 @@ Game.launch = () => {
       s('.specialization-skills-bottom-right').innerHTML += `
         <br/>
         <hr/>
-        <p style='float: left;'>[Current Level] ${skill.what} + ${skill.current}%</p>
-        <p style='float: left;'>[Next Level] ${skill.what} + ${skill.current + skill.next}%</p>
+        <p style='float: left;'>[Current Level] ${skill.what} + ${skill.current}</p>
+        <p style='float: left;'>[Next Level] ${skill.what} + ${skill.current + skill.next}</p>
       `
     }
     if (skill.locked == 1) {
