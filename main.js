@@ -2385,10 +2385,12 @@ Game.launch = () => {
   ]
 
   showTextScroller = (text) => {
+    console.log('showTextScroller firing')
 
     let scrollTime = 20 // 20seconds
 
     if (Game.state.settings.scrollingText == true) {
+      console.log('enabled')
       s('.text-scroller').innerHTML = ''
 
       if (text) {
@@ -2416,6 +2418,9 @@ Game.launch = () => {
         showTextScroller()
       }, scrollTime * 1000)
     }
+
+
+
   }
 
   showTextScroller()
