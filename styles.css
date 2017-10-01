@@ -56,13 +56,13 @@ body {
 .vertical-separator {
   height: 100%;
   width: 30px !important;
-  width: 15px;
+  image-rendering: pixelated;
   background: url('./assets/verticalseparator.png');
   background-size: 100% auto;
 }
 
 .horizontal-separator {
-  height: 20px;
+  height: 8px;
   width: 100%;
   background: url('./assets/horizontalseparator.png');
   background-size: auto 100%;
@@ -86,6 +86,20 @@ body {
     opacity: 0;
     transform: translateY(-200px);
   }
+}
+
+.text-scroller-container {
+  background: rgba(0,0,0,0.6);
+  width: 100%;
+  height: 30px;
+  color: white;
+  line-height: 30px;
+  overflow: hidden;
+  position: relative;
+}
+
+.text-scroller {
+  position: relative;
 }
 
 .item-container {
@@ -485,7 +499,7 @@ body {
 }
 
 .bottom {
-  height: 20%;
+  height: 18%;
   background: url('./assets/mineshaft.png');
   background-size: auto 100%;
 }
@@ -583,6 +597,7 @@ body {
   box-shadow: 0 0 40px #222 inset;
   color: white;
   background-color: #4e3013;
+  font-family: 'Germania One';
 }
 
 .tabs {
@@ -629,20 +644,16 @@ body {
 }
 
 .button {
-  font-family: 'Abel';
   width: 100%;
-  /*min-width: 300px;*/
   height: 70px;
   margin-bottom: 1px;
-  /*border-radius: 5px;*/
   cursor: pointer;
   padding: 5px 20px 5px 0px;
   display: flex;
   flex-flow: column nowrap;
   box-shadow: 0 4px #222;
   justify-content: center;
-  background: url('./assets/item-container2.png');
-  background-color: snow;
+  background: url('./assets/item-container.png');
   background-size: 100% 100%;
   box-shadow: 0 0 20px #222 inset;
 }
@@ -667,6 +678,10 @@ body {
   flex-flow: column nowrap;
   justify-content: center;
   flex-grow: 1;
+}
+
+.button-middle h3 {
+  font-family: 'Germania One';
 }
 
 .button-bottom {

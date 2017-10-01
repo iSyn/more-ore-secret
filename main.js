@@ -103,7 +103,8 @@ Game.launch = () => {
     settings: {
       volume: .5,
       rockParticles: true,
-      risingNumbers: true
+      risingNumbers: true,
+      scrollingText: true
     },
     canRefine: true,
     refineTimer: 10800 // 3 hours in seconds
@@ -122,12 +123,12 @@ Game.launch = () => {
     Game.items['Farm'] = { name: 'Farm', type: 'item', pic: 'farm.png', production: 1, desc: 'Cultivate the lands for higher quality ores', fillerQuote: 'This totally makes sense.', price: 75, basePrice: 75, hidden: 1}
     Game.items['Quarry'] = { name: 'Quarry', type: 'item', pic: 'quarry.png', production: 21, desc: 'Designated mining area', fillerQuote: 'mine mine mine', price: 1200, basePrice: 1200, hidden: 1}
     Game.items['Church'] = { name: 'Church', type: 'item', pic: 'church.png', production: 300, desc: 'Praise to the Ore Gods', fillerQuote: 'In Ore name we pray, Amen.', price: 6660, basePrice: 6660, hidden: 2}
-    Game.items['Factory'] = { name: 'Factory', type: 'item', pic: 'factory.png', production: 5500, desc: 'Manufacture your ores', fillerQuote: 'wip', price: 48000, basePrice: 48000, hidden: 2}
+    Game.items['Factory'] = { name: 'Factory', type: 'item', pic: 'factory.png', production: 5500, desc: 'Manufacture your ores', fillerQuote: 'Assembly line this sh&* up!', price: 48000, basePrice: 48000, hidden: 2}
     Game.items['Crypt'] = { name: 'Crypt', type: 'item', pic: 'crypt.png', production: 30000, desc: 'Raise dead ores from the graves', fillerQuote: 'spooky ores', price: 290000, basePrice: 290000, hidden: 2}
-    Game.items['Hospital'] = { name: 'Hospital', type: 'item', pic: 'hospital.png', production: 220000, desc: 'wip', fillerQuote: 'wip', price: 1000000, basePrice: 1000000, hidden: 2}
+    Game.items['Hospital'] = { name: 'Hospital', type: 'item', pic: 'hospital.png', production: 220000, desc: 'Heal your damaged ores', fillerQuote: 'An apple a day keeps the ore cancer away', price: 1000000, basePrice: 1000000, hidden: 2}
     // Game.items['Laboratory']
     Game.items['Citadel'] = { name: 'Citadel', type: 'item', pic: 'citadel.png', production: 1666666, desc: 'wip', fillerQuote: 'wip', price: 66666666, basePrice: 66666666, hidden: 2}
-    Game.items['XenoSpaceship'] = { name: 'Xeno Spaceship', type: 'item', pic: 'wip.png', production: 45678910, desc: 'wip', fillerQuote: 'wip', price: 758492047, basePrice: 758492047, hidden: 2}
+    Game.items['XenoSpaceship'] = { name: 'Xeno Spaceship', type: 'item', pic: 'xeno-spaceship.png', production: 45678910, desc: 'wip', fillerQuote: 'wip', price: 758492047, basePrice: 758492047, hidden: 2}
     Game.items['SkyCastle'] = { name: 'Sky Castle', type: 'item', pic: 'wip.png', production: 777777777, desc: 'wip', fillerQuote: 'wip', price: 5500000000, basePrice: 5500000000, hidden: 2}
     Game.items['EonPortal'] = { name: 'Eon Portal', type: 'item', pic: 'wip.png', production: 8888800000, desc: 'wip', fillerQuote: 'wip', price: 79430000000, basePrice: 79430000000, hidden: 2}
     Game.items['SacredMines'] = { name: 'Sacred Mines', type: 'item', pic: 'wip.png', production: 40501030500, desc: 'wip', fillerQuote: 'wip', price: 300000000000, basePrice: 300000000000, hidden: 2}
@@ -1034,7 +1035,7 @@ Game.launch = () => {
       `
     }
     if (specialization == 'Manager') {
-      console.log('you are a manager')
+      //
     }
 
     div.innerHTML = str
@@ -1437,7 +1438,7 @@ Game.launch = () => {
         tooltip.innerHTML = `
           <h3>Charisma</h3>
           <hr/>
-          <p>Increases item output</p>
+          <p>Increases item output slightly</p>
           <p>Lowers shop prices</p>
         `
       }
@@ -1803,11 +1804,13 @@ Game.launch = () => {
   new Achievement('Intermediate Miner', 'Break 10 rocks')
 
   // COMBO ACHIEVEMENTS
-  new Achievement('Steady Miner', 'Reach 10 hit combo')
-  new Achievement('Dilligent Watcher', 'Reach 25 hit combo')
+  new Achievement('Combro', 'Reach 5 hit combo')
+  new Achievement('Comboing', 'Reach 25 hit combo')
   new Achievement('Combo Master', 'Reach 100 hit combo')
   new Achievement('Combo Devil', 'Reach 666 hit combo')
   new Achievement('Combo God', 'Reach 777 hit combo')
+  new Achievement('Combo Saiyan', 'Reach 1000 hit combo')
+  new Achievement('Combo Saitama', 'Reach 11111 hit combo')
 
   // OPC ACHIEVEMENTS
   new Achievement('Still A Baby', 'Deal more than 1,000,000 in one hit')
@@ -2040,11 +2043,13 @@ Game.launch = () => {
       }
 
       // UNLOCK ACHIEVEMENTS REGARDING COMBOS
-      if (Game.state.stats.currentCombo >= 10) winAchievement('Steady Miner')
-      if (Game.state.stats.currentCombo >= 25) winAchievement('Dilligent Watcher')
+      if (Game.state.stats.currentCombo >= 5) winAchievement('Combro')
+      if (Game.state.stats.currentCombo >= 25) winAchievement('Comboing')
       if (Game.state.stats.currentCombo >= 100) winAchievement('Combo Master')
       if (Game.state.stats.currentCombo >= 666) winAchievement('Combo Devil')
       if (Game.state.stats.currentCombo >= 777) winAchievement('Combo God')
+      if (Game.state.stats.currentCombo >= 1000) winAchievement('Combo Saiyan')
+      if (Game.state.stats.currentCombo >= 11111) winAchievement('Combo Saitama')
 
 
     } else { // IF REGULAR HIT
@@ -2238,6 +2243,7 @@ Game.launch = () => {
         <h3>settings</h3>
         <i class='fa fa-times fa-1x' onclick='document.querySelector(".wrapper").remove()'></i>
         <hr/>
+        <p>Sound</p>
         <div class="single-setting">
           <p style='padding-right: 10px;'>Volume: </p>
           <input class='volume-slider' type="range" min=0 max=1 step=0.1 list='tickmarks' onchange='Game.state.settings.volume = document.querySelector(".volume-slider").value'/>
@@ -2256,6 +2262,9 @@ Game.launch = () => {
             <option value='1.0' label="100%">
           </datalist>
         </div>
+        <hr/>
+        <br/>
+        <p>Video</p>
         <div class="single-setting">
           <p style='padding-right: 20px;'>Enable Rock Particles:</p>
           <input type="radio" name='rockParticles' id='rockParticlesOn' value='true' onchange='Game.state.settings.rockParticles = true'/>
@@ -2270,7 +2279,16 @@ Game.launch = () => {
           <input type="radio" name='risingNumbers' id='risingNumbersOff' value='false' onchange='Game.state.settings.risingNumbers = false' />
             <label for="risingNumbersOff">Off</label>
         </div>
-
+        <hr/>
+        <br/>
+        <p>Miscellaneous</p>
+        <div class="single-setting">
+          <p style='padding-right: 20px;'>Enable Scrolling Text:</p>
+          <input type="radio" name='scrollingText' id='scrollingTextOn' value='true' onchange='Game.state.settings.scrollingText = true'/>
+            <label for="scrollingTextOn" style='margin-right: 10px'>On</label>
+          <input type="radio" name='scrollingText' id='scrollingTextOff' value='false' onchange='Game.state.settings.scrollingText = false' />
+            <label for="scrollingTextOff">Off</label>
+        </div>
         <hr/>
       </div>
 
@@ -2282,6 +2300,7 @@ Game.launch = () => {
 
     Game.state.settings.rockParticles == true ? s('#rockParticlesOn').checked = true : s('#rockParticlesOff').checked = true
     Game.state.settings.risingNumbers == true ? s('#risingNumbersOn').checked = true : s('#risingNumbersOff').checked = true
+    Game.state.settings.scrollingText == true ? s('#scrollingTextOn').checked = true : s('#scrollingTextOff').checked = true
   }
 
   Game.showAchievements = () => {
@@ -2344,6 +2363,51 @@ Game.launch = () => {
 
     s('body').append(div)
   }
+
+  textScroller = [
+    'What is a rocks favorite fruit? ... Pom-a-granite',
+    'Did you see that cleavage? Now that\'s some gneiss schist.',
+    'All rock and no clay makes you a dull boy (or girl)',
+    'Don\'t take life for granite',
+    'What happens when you throw a blue rock in the red sea? ... It gets wet',
+    '[Breaking News] Rocks are breaking!',
+  ]
+
+  showTextScroller = (text) => {
+
+    let scrollTime = 20 // 20seconds
+
+    if (Game.state.settings.scrollingText == true) {
+      s('.text-scroller').innerHTML = ''
+
+      if (text) {
+        s('.text-scroller').innerHTML = text
+        s('.text-scroller').style.right = -s('.text-scroller').clientWidth + 'px'
+
+        let parentWidth = s('.text-scroller').parentElement.clientWidth
+
+        s('.text-scroller').style.transition = `transform 15s linear`;
+        s('.text-scroller').style.transform = `translateX(-${parentWidth + s('.text-scroller').clientWidth}px)`
+      } else {
+        if (Math.random() >= .5) {
+          let random = Math.floor(Math.random() * textScroller.length)
+
+          s('.text-scroller').innerHTML = textScroller[random]
+          s('.text-scroller').style.right = -s('.text-scroller').clientWidth + 'px'
+
+          let parentWidth = s('.text-scroller').parentElement.clientWidth
+
+          s('.text-scroller').style.transition = `transform ${scrollTime}s linear`;
+          s('.text-scroller').style.transform = `translateX(-${parentWidth + s('.text-scroller').clientWidth}px)`
+        }
+      }
+      setTimeout(() => {
+        showTextScroller()
+      }, scrollTime * 1000)
+    }
+  }
+
+  showTextScroller()
 
 
   // INIT SHIT
