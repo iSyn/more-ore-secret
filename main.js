@@ -99,7 +99,7 @@ Game.launch = () => {
       currentCombo: 0,
       timesRefined: 0,
     },
-    currentVersion: '0.6.2',
+    currentVersion: '0.6.7',
     settings: {
       volume: .5,
       rockParticles: true,
@@ -2116,10 +2116,21 @@ Game.launch = () => {
           <p style='text-align: center'>(Click anywhere to close)</p>
           <hr style='border-color: black; margin-bottom: 10px;'/>
 
-          <h3>v0.6.5 (9/27/2017)</h3>
-          <p>NOTE: GAME DOES NOT SAVE (I took it out because its extremely buggy as on now and breaks the game if i put out a new update)</p>
-          <p>Prospector class is halfway done...</p>
+          <h3>v0.6.7 (10/1/2017)</h3>
+          <p>-Prospector class is 3/4 done...</p>
+          <p>-Changed up background image</p>
+          <p>-Changed store fonts</p>
+          <p>-Added a couple more upgrades</p>
+          <p>-Added some more sprites</p>
+          <p>-Added more achievements</p>
+          <p>-Added a text scrolling thingy doodad</p>
+          <p>-Fixed bug where other items disappear on click</p>
+          <p>-Fixed countless more bugs</p>
+          <br/>
 
+
+          <h3>v0.6.5 (9/27/2017)</h3>
+          <p>Prospector class is halfway done...</p>
           <br/>
 
           <h3>v0.6.4 (9/24/2017)</h3>
