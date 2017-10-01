@@ -61,7 +61,7 @@ Game.launch = () => {
     critHitMultiplier: 2,
     weakHitMultiplier: 5,
     player: {
-      lvl: 5,
+      lvl: 1,
       str: 0,
       dex: 0,
       luk: 0,
@@ -81,7 +81,7 @@ Game.launch = () => {
         rarity: 'Common',
         itemLevel: 1,
         material: 'Wood',
-        damage: 10,
+        damage: 1,
       },
       accesory: {}
     },
