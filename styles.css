@@ -55,7 +55,7 @@ body {
 
 .vertical-separator {
   height: 100%;
-  width: 30px !important;
+  width: 30px;
   image-rendering: pixelated;
   background: url('./assets/verticalseparator.png');
   background-size: 100% auto;
@@ -358,7 +358,7 @@ body {
   background-color: #222;
   text-align: center;
   padding: 10px 30px;
-  animation: achievement 2s ease-in-out;
+  animation: achievement 3s ease-in-out;
   animation-fill-mode: forwards;
   pointer-events: none;
   color: white;
@@ -673,6 +673,10 @@ body {
   display: flex;
   flex-flow: row nowrap;
   align-items: center;
+}
+
+.button-left {
+  padding-left: 5px;
 }
 
 .button-middle {
