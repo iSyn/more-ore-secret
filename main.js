@@ -43,7 +43,6 @@ let beautifyTime = (num) => {
 
   return hours + ":" + minutes + ":" + seconds
 }
-
 // Game
 
 let Game = {}
