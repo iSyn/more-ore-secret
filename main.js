@@ -61,7 +61,7 @@ Game.launch = () => {
     critHitMultiplier: 2,
     weakHitMultiplier: 5,
     player: {
-      lvl: 1,
+      lvl: 5,
       str: 0,
       dex: 0,
       luk: 0,
@@ -1330,11 +1330,13 @@ Game.launch = () => {
         div.style.opacity = '0.2'
         div.style.zindex = '99999'
         div.style.pointerEvents = 'none'
+        s('body').classList.add('roid-rage')
 
         s('body').append(div)
 
         setTimeout(() => {
           div.remove()
+          s('body').classList.remove('roid-rage')
         }, 1000 * 10)
       }
     }
@@ -2416,9 +2418,6 @@ Game.launch = () => {
         showTextScroller()
       }, scrollTime * 1000)
     }
-
-
-
   }
 
   showTextScroller()
