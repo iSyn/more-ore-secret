@@ -139,9 +139,9 @@ Game.launch = () => {
     Game.items['CleanMagnifyingGlass'] = { name: 'Clean Magnifying Glass', type: 'upgrade', pic: 'clean-magnifying-glass.png', desc: 'Increases critical hit multiplier to 10x', fillerQuote: 'wip', price: 100, hidden: 1,}
     Game.items['PolishMagnifyingGlass'] = { name: 'Polish Magnifying Glass', type: 'upgrade', pic: 'wip.png', desc: 'Increases critical hit multiplier to 15x', fillerQuote: 'wip', price: 50000, hidden: 1,}
     Game.items['CompositionNotebooks'] = { name: 'Composition Notebooks', type: 'upgrade', pic: 'compositionnotebook.png', desc: 'Doubles the production of Schools', fillerQuote: 'wip', price: 80, hidden: 1}
-    Game.items['ManureSpreader'] = { name: 'Manure Spreader', type: 'upgrade', pic: 'wip.png', desc: 'Doubles the production of Farms', fillerQuote: 'wip', price: 950, hidden: 1}
-    Game.items['Headlights'] = { name: 'Headlights', type: 'upgrade', pic: 'wip.png', desc: 'Doubles the production of Quarrys', fillerQuote: 'wip', price: 19000, hidden: 1}
-    Game.items['ScriptureReading'] = { name: 'Scripture Reading', type: 'upgrade', pic: 'wip.png', desc: 'Doubles the production of Churches', fillerQuote: 'wip', price: 300000, hidden: 1}
+    Game.items['ManureSpreader'] = { name: 'Manure Spreader', type: 'upgrade', pic: 'manure-spreader.png', desc: 'Doubles the production of Farms', fillerQuote: 'wip', price: 950, hidden: 1}
+    Game.items['Headlights'] = { name: 'Headlights', type: 'upgrade', pic: 'headlights.png', desc: 'Doubles the production of Quarrys', fillerQuote: 'wip', price: 19000, hidden: 1}
+    Game.items['ScriptureReading'] = { name: 'Scripture Reading', type: 'upgrade', pic: 'scripture-reading.png', desc: 'Doubles the production of Churches', fillerQuote: 'wip', price: 300000, hidden: 1}
     // Metal Detector
     Game.items['RubberConveryorBelts'] = { name: 'Rubber Converyor Belts', type: 'upgrade', pic: 'wip.png', desc: 'Doubles the production of Factories', fillerQuote: 'wip', price: 300000, hidden: 1}
     Game.items['MetalSarcophagus'] = { name: 'Metal Sarcophagus', type: 'upgrade', pic: 'wip.png', desc: 'Doubles the production of Crypt', fillerQuote: 'wip', price: 5200000, hidden: 1}

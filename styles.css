@@ -50,7 +50,7 @@ footer {
 }
 
 body {
-  overflow: none;
+  overflow: hidden;
 }
 
 .vertical-separator {
@@ -693,6 +693,12 @@ body {
   letter-spacing: 1px;
   color: white;
   text-shadow: 0 0 1px black;
+}
+
+.button-middle p {
+  font-family: 'Germania One';
+  color: #2b2b2b;
+  letter-spacing: .5px;
 }
 
 .button-right p {
