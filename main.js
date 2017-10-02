@@ -61,7 +61,7 @@ Game.launch = () => {
     critHitMultiplier: 2,
     weakHitMultiplier: 5,
     player: {
-      lvl: 1,
+      lvl: 5,
       str: 0,
       dex: 0,
       luk: 0,
@@ -73,8 +73,8 @@ Game.launch = () => {
       specialization: null,
       specializationLv: 1,
       specializationXp: 0,
-      specializationXpNeeded: 500,
-      specializationXpStored: 0,
+      specializationXpNeeded: 300,
+      specializationXpStored: 1000000,
       specializationSp: 1,
       pickaxe: {
         name: 'Beginners Wood Pickaxe',
@@ -229,9 +229,6 @@ Game.launch = () => {
 
     // ADD DAMAGE FROM PICKAXE
     opc += Game.state.player.pickaxe.damage
-    if (Game.skills['PickaxeProficiency'].lv > 0) { // IF PLAYER HAS PICKAXE PROFICIENCY SKILL LVLED
-      opc += Game.state.player.pickaxe.damage * (Game.skills['PickaxeProficiency'].current * .01)
-    }
 
     // ADD DAMAGE FROM PLAYER STRENGTH
     let playerStr = Game.state.player.str
@@ -1185,20 +1182,20 @@ Game.launch = () => {
 
   Game.skills = []
 
-  Game.skills['RoidRage'] = {
-    name: 'Roid Rage',
+  Game.skills['HeavySmash'] = {
+    name: 'Heavy Smash',
     type: 'active',
-    img: 'roidrage-skill',
+    img: 'wip',
     specialization: 'Prospector',
-    fillerTxt: 'All you see is red... and rocks',
-    desc: 'Increases your OpC by 50x for 10s',
+    fillerTxt: 'Unleash your inner strength and deal a powerful strike',
+    desc: 'Deal a single 100x OpC hit',
     lv: 0,
     locked: 0,
     tier: 1,
     what: 'OpC',
-    current: 50,
+    current: 100,
     next: 10,
-    cooldown: 60,
+    cooldown: 3,
     inUse: false,
     currentCooldown: 0
   }
@@ -1232,19 +1229,22 @@ Game.launch = () => {
     current: 5,
     next: 5
   }
-  Game.skills['PickaxeProficiency'] = {
-    name: 'Pickaxe Proficiency',
-    type: 'passive',
-    img: 'pickaxe-skill',
-    fillerTxt: 'After countless rocks destroyed, you learn to handle pickaxes better',
-    desc: 'Adds a permanent buff to your pickaxes',
-    id: 0,
+  Game.skills['RoidRage'] = {
+    name: 'Roid Rage',
+    type: 'active',
+    img: 'roidrage-skill',
+    specialization: 'Prospector',
+    fillerTxt: 'All you see is red... and rocks',
+    desc: 'Increases your OpC by 50x for 10s',
     lv: 0,
     locked: 1,
     tier: 3,
-    what: 'Pickaxe Damage',
-    current: 100,
-    next: 100
+    what: 'OpC',
+    current: 50,
+    next: 10,
+    cooldown: 60,
+    inUse: false,
+    currentCooldown: 0
   }
 
   Game.renderSkillText = (skillName) => {
@@ -1340,6 +1340,41 @@ Game.launch = () => {
         }, 1000 * 10)
       }
     }
+    if (skill.name == 'Heavy Smash') {
+      if (skill.currentCooldown <= 0) {
+        playSound('heavy-smash')
+        let orePos = s('.ore').getBoundingClientRect()
+        skill.currentCooldown = skill.cooldown * 60
+        calculateSkillCooldown()
+
+        let div = document.createElement('div')
+        div.classList.add('heavy-smash-wrapper')
+        div.innerHTML = `
+          <div class="heavy-smash"></div>
+        `
+
+        s('body').append(div)
+
+        s('.heavy-smash').style.left = (orePos.left + orePos.right) / 2 + 'px'
+        s('.heavy-smash').style.top = ((orePos.top + orePos.bottom) / 2) - ((s('.heavy-smash').getBoundingClientRect().top + s('.heavy-smash').getBoundingClientRect().bottom) / 2) + 'px'
+
+        s('body').classList.add('roid-rage')
+
+        // DO DAMAGE
+        let amount = calculateOPC() * 100
+        earn(amount)
+        updatePercentage(amount)
+        risingNumber(amount, 'heavy-smash')
+
+        if (Game.skills['RoidRage'].inUse == true) winAchievement('Roided Smash')
+
+        setTimeout(() => {
+          s('body').classList.remove('roid-rage')
+          div.remove()
+        }, 500)
+
+      }
+    }
     drawActiveSkills()
   }
 
@@ -1347,6 +1382,10 @@ Game.launch = () => {
     if (Game.skills['RoidRage'].currentCooldown > 0) {
       Game.skills['RoidRage'].currentCooldown--
     }
+    if (Game.skills['HeavySmash'].currentCooldown > 0) {
+      Game.skills['HeavySmash'].currentCooldown--
+    }
+    drawActiveSkills()
   }
 
   Game.toggleStats = () => {
@@ -1461,11 +1500,9 @@ Game.launch = () => {
         <h3>${skill.name}</h3>
         <hr/>
         <p>${skill.desc}</p>
-        <p>Cooldown: ${skill.cooldown} minutes</p>
-        <hr/>
       `
       if (skill.currentCooldown > 0) {
-        tooltip.innerHTML += `<p>Use Again In: ${beautifyTime(skill.currentCooldown)}</p>`
+        tooltip.innerHTML += `<hr/><p>Cooldown: ${beautifyTime(skill.currentCooldown)}</p>`
       }
 
     } else {
@@ -1827,6 +1864,9 @@ Game.launch = () => {
   // REFINE ACHIEVEMENTS
   new Achievement('Blacksmiths Apprentice', 'Refine for your first time')
 
+  // OTHER ACHIEVEMENTS
+  new Achievement('Roided Smash', 'Use the skill Heavy Smash along while Roid Rage is active')
+
 
   let winAchievement = (achievementName) => {
     for (i = 0; i < Game.achievements.length; i++) {
@@ -2023,6 +2063,14 @@ Game.launch = () => {
         risingNumber.style.fontSize = '60px'
         risingNumber.style.color = 'lightcyan'
         risingNumber.style.animationDuration = '3.5s'
+      }
+
+      if (type == 'heavy-smash') {
+        risingNumber.style.left = (s('.ore').getBoundingClientRect().left + s('.ore').getBoundingClientRect().right)/2 + 'px'
+        risingNumber.style.right = (s('.ore').getBoundingClientRect().top + s('.ore').getBoundingClientRect().bottom)/2 + 'px'
+        risingNumber.style.animationDuration = '3s'
+        risingNumber.style.fontSize = '50px'
+        risingNumber.style.color = 'crimson'
       }
 
 
@@ -2360,11 +2408,11 @@ Game.launch = () => {
 
         str += `<br/> <p><span style='opacity: .6'>Achievements Missing:</span> <strong>${achievementsMissing}</strong></p>`
 
-        // for (j = 0; j < Game.achievements.length; j++) {
-        //   if (Game.achievements[j].won == 0) {
-        //     str += `<p><span style='opacity: .6'>${Game.achievements[j].name}</span> - <strong>???</strong></p>`
-        //   }
-        // }
+        for (j = 0; j < Game.achievements.length; j++) {
+          if (Game.achievements[j].won == 0) {
+            str += `<p><span style='opacity: .6'>${Game.achievements[j].name}</span> - <strong>???</strong></p>`
+          }
+        }
 
         str += `
     </div>
@@ -2386,7 +2434,6 @@ Game.launch = () => {
   ]
 
   showTextScroller = (text) => {
-    console.log('showTextScroller firing')
 
     let scrollTime = 20 // 20seconds
 
