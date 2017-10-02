@@ -73,7 +73,7 @@ Game.launch = () => {
       specializationLv: 1,
       specializationXp: 0,
       specializationXpNeeded: 300,
-      specializationXpStored: 1000000,
+      specializationXpStored: 0,
       specializationSp: 1,
       pickaxe: {
         name: 'Beginners Wood Pickaxe',
