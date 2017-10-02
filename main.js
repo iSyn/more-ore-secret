@@ -61,7 +61,7 @@ Game.launch = () => {
     critHitMultiplier: 2,
     weakHitMultiplier: 5,
     player: {
-      lvl: 5,
+      lvl: 1,
       str: 0,
       dex: 0,
       luk: 0,
@@ -1185,7 +1185,7 @@ Game.launch = () => {
   Game.skills['HeavySmash'] = {
     name: 'Heavy Smash',
     type: 'active',
-    img: 'wip',
+    img: 'heavy-smash-skill',
     specialization: 'Prospector',
     fillerTxt: 'Unleash your inner strength and deal a powerful strike',
     desc: 'Deal a single 100x OpC hit',
@@ -1941,7 +1941,7 @@ Game.launch = () => {
       Game.state.stats.rocksDestroyed++
       gainXp(10)
       if (Game.state.stats.rocksDestroyed == 1) { winAchievement('Newbie Miner'); textScroller.push('[Breaking News] Rocks are breaking!',) }
-      if (Game.state.stats.rocksDestroyed == 5) winAchievement('Novice Miner'); textScroller.push('[Breaking News] The cries of baby rocks can be heard from miles away as their parents get obliterated by this new miner')
+      if (Game.state.stats.rocksDestroyed == 5) { winAchievement('Novice Miner'); textScroller.push('[Breaking News] The cries of baby rocks can be heard from miles away as their parents get obliterated by this new miner','What happens in Ore Town stays in Ore Town') }
       if (Game.state.stats.rocksDestroyed == 10) winAchievement('Intermediate Miner')
       playSound('explosion2')
       Game.state.oreHp = Math.pow(Game.state.oreHp, 1.11)
