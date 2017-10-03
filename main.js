@@ -60,7 +60,7 @@ Game.launch = () => {
     critHitMultiplier: 2,
     weakHitMultiplier: 5,
     player: {
-      lvl: 5,
+      lvl: 1,
       str: 0,
       dex: 0,
       luk: 0,
@@ -74,7 +74,7 @@ Game.launch = () => {
       specializationXp: 0,
       specializationXpNeeded: 300,
       specializationXpStored: 0,
-      specializationSp: 10,
+      specializationSp: 0,
       pickaxe: {
         name: 'Beginners Wood Pickaxe',
         rarity: 'Common',
