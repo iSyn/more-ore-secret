@@ -60,7 +60,7 @@ Game.launch = () => {
     critHitMultiplier: 2,
     weakHitMultiplier: 5,
     player: {
-      lvl: 1,
+      lvl: 5,
       str: 0,
       dex: 0,
       luk: 0,
@@ -74,7 +74,7 @@ Game.launch = () => {
       specializationXp: 0,
       specializationXpNeeded: 300,
       specializationXpStored: 0,
-      specializationSp: 1,
+      specializationSp: 10,
       pickaxe: {
         name: 'Beginners Wood Pickaxe',
         rarity: 'Common',
@@ -139,8 +139,8 @@ Game.launch = () => {
     Game.items['PolishMagnifyingGlass'] = { name: 'Polish Magnifying Glass', type: 'upgrade', pic: 'wip.png', desc: 'Increases critical hit multiplier to 15x', fillerQuote: 'wip', price: 50000, hidden: 1,}
     Game.items['CompositionNotebooks'] = { name: 'Composition Notebooks', type: 'upgrade', pic: 'compositionnotebook.png', desc: 'Doubles the production of Schools', fillerQuote: 'wip', price: 80, hidden: 1}
     Game.items['ManureSpreader'] = { name: 'Manure Spreader', type: 'upgrade', pic: 'manure-spreader.png', desc: 'Doubles the production of Farms', fillerQuote: 'wip', price: 950, hidden: 1}
-    Game.items['Headlights'] = { name: 'Headlights', type: 'upgrade', pic: 'headlights.png', desc: 'Doubles the production of Quarrys', fillerQuote: 'wip', price: 19000, hidden: 1}
-    Game.items['ScriptureReading'] = { name: 'Scripture Reading', type: 'upgrade', pic: 'scripture-reading.png', desc: 'Doubles the production of Churches', fillerQuote: 'wip', price: 300000, hidden: 1}
+    Game.items['Headlights'] = { name: 'Headlights', type: 'upgrade', pic: 'headlights.png', desc: 'Doubles the production of Quarrys', fillerQuote: 'wip', price: 1900, hidden: 1}
+    Game.items['ScriptureReading'] = { name: 'Scripture Reading', type: 'upgrade', pic: 'scripture-reading.png', desc: 'Doubles the production of Churches', fillerQuote: 'wip', price: 60000, hidden: 1}
     // Metal Detector
     Game.items['RubberConveryorBelts'] = { name: 'Rubber Converyor Belts', type: 'upgrade', pic: 'wip.png', desc: 'Doubles the production of Factories', fillerQuote: 'wip', price: 300000, hidden: 1}
     Game.items['MetalSarcophagus'] = { name: 'Metal Sarcophagus', type: 'upgrade', pic: 'wip.png', desc: 'Doubles the production of Crypt', fillerQuote: 'wip', price: 5200000, hidden: 1}
@@ -232,7 +232,7 @@ Game.launch = () => {
     // ADD DAMAGE FROM PLAYER STRENGTH
     let playerStr = Game.state.player.str
     if (Game.skills['WeightLifting'].lv > 0) { // WEIGHT LIFTING SKILL
-      playerStr += playerStr * (Game.skills['WeightLifting'].current * .01)
+      playerStr += Game.skills['WeightLifting'].current
     }
 
     if (playerStr > 0) opc += Math.pow(1.25, playerStr)
@@ -241,7 +241,7 @@ Game.launch = () => {
     // ADD DAMAGE FROM PLAYER DEX
     let playerDex = Game.state.player.dex
     if (Game.skills['Conditioning'].lv > 0) { // Conditioning SKILL
-      playerDex += playerDex * (Game.skills['Conditioning'].current * .01)
+      playerDex += Game.skills['Conditioning'].current
     }
 
     if (playerDex > 0) opc += Math.pow(1.1, playerDex)
@@ -988,42 +988,28 @@ Game.launch = () => {
         <br/>
         <div class="specialization-skills-bottom">
           <div class="specialization-skills-bottom-left">
-            <div class="skill-tier tier-1">
+
       `
-      for (i in Game.skills) {
-        let skill = Game.skills[i]
-        if (skill.tier == 1) {
-           str += `<div class="specialization-skill" style='background-image: url("./assets/${skill.img}.png")' onclick='Game.levelUpSkill("${i}")' onmouseover='Game.renderSkillText("${i}")' onmouseout='document.querySelector(".specialization-skills-bottom-right").innerHTML = "" '></div>`
-        }
-      }
-      str += `</div> <div class="skill-tier tier-2">`
 
-      for (i in Game.skills) {
-        let skill = Game.skills[i]
-        if (skill.tier == 2) {
-          if (skill.locked == 0) {
-            str += `<div class="specialization-skill" style='background-image: url("./assets/${skill.img}.png")' onclick='Game.levelUpSkill("${i}")' onmouseover='Game.renderSkillText("${i}")' onmouseout='document.querySelector(".specialization-skills-bottom-right").innerHTML = "" '></div>`
-          } else {
-            str += `<div class="specialization-skill" style='background-image: url("./assets/mystery.png")' onclick='Game.levelUpSkill("${i}")' onmouseover='Game.renderSkillText("${i}")' onmouseout='document.querySelector(".specialization-skills-bottom-right").innerHTML = "" '></div>`
+      for (i = 1; i <= 5; i++) {
+        str += '<div class="skill-tier">'
+
+          for (j in Game.skills) {
+            let skill = Game.skills[j]
+            if (skill.tier == i) {
+              if (skill.locked == 0) {
+                str += `<div class="specialization-skill" style='background-image: url("./assets/${skill.img}.png")' onclick='Game.levelUpSkill("${j}")' onmouseover='Game.renderSkillText("${j}")' onmouseout='document.querySelector(".specialization-skills-bottom-right").innerHTML = "" '></div>`
+              } else {
+                str += `<div class="specialization-skill" style='background-image: url("./assets/mystery.png")' onclick='Game.levelUpSkill("${j}")' onmouseover='Game.renderSkillText("${j}")' onmouseout='document.querySelector(".specialization-skills-bottom-right").innerHTML = "" '></div>`
+              }
+            }
           }
-        }
-      }
 
-      str += `</div> <div class="skill-tier tier-3">`
 
-      for (i in Game.skills) {
-        let skill = Game.skills[i]
-        if (skill.tier == 3) {
-          if (skill.locked == 0) {
-            str += `<div class="specialization-skill" style='background-image: url("./assets/${skill.img}.png")' onclick='Game.levelUpSkill("${i}")' onmouseover='Game.renderSkillText("${i}")' onmouseout='document.querySelector(".specialization-skills-bottom-right").innerHTML = "" '></div>`
-          } else {
-            str += `<div class="specialization-skill" style='background-image: url("./assets/mystery.png")' onclick='Game.levelUpSkill("${i}")' onmouseover='Game.renderSkillText("${i}")' onmouseout='document.querySelector(".specialization-skills-bottom-right").innerHTML = "" '></div>`
-          }
-        }
+        str += '</div>'
       }
 
       str += `
-              </div>
                 </div>
                 <div class="specialization-skills-bottom-right"></div>
               </div>
@@ -1184,7 +1170,7 @@ Game.launch = () => {
   Game.skills['HeavySmash'] = {
     name: 'Heavy Smash',
     type: 'active',
-    img: 'heavy-smash-skill',
+    img: 'heavy-smash',
     specialization: 'Prospector',
     fillerTxt: 'Unleash your inner strength and deal a powerful strike',
     desc: 'Deal a single 100x OpC hit',
@@ -1231,7 +1217,7 @@ Game.launch = () => {
   Game.skills['RoidRage'] = {
     name: 'Roid Rage',
     type: 'active',
-    img: 'roidrage-skill',
+    img: 'roid-rage',
     specialization: 'Prospector',
     fillerTxt: 'All you see is red... and rocks',
     desc: 'Increases your OpC by 50x for 10s',
@@ -1245,6 +1231,53 @@ Game.launch = () => {
     inUse: false,
     currentCooldown: 0
   }
+  Game.skills['MasterofMany'] = {
+    name: 'Master of Many',
+    type: 'passive',
+    img: 'master-of-many-skill',
+    specialization: 'Prospector',
+    fillerTxt: 'Master of many... or master or none',
+    desc: 'Gain a portion of your OpS as OpC',
+    lv: 0,
+    locked: 1,
+    tier: 4,
+    what: 'OpS',
+    current: 30,
+    next: 10,
+  }
+  Game.skills['DoubleStrike'] = {
+    name: 'Double Strike',
+    type: 'passive',
+    img: 'double-strike',
+    specialization: 'Prospector',
+    fillerTxt: 'Dual wielding pickaxes...',
+    desc: 'Gain an extra hit every couple of hits',
+    lv: 0,
+    locked: 1,
+    tier: 4,
+    what: 'Extra hit in',
+    current: 10,
+    next: -1,
+  }
+  Game.skills['AutoStriker5000'] = {
+    name: 'Auto-Miner 5000',
+    type: 'active',
+    img: 'auto-miner-5000',
+    specialization: 'Prospector',
+    fillerTxt: 'The best Auto-Miner money can buy',
+    desc: 'This machine hits 10x each second for 15 seconds',
+    lv: 0,
+    locked: 1,
+    tier: 5,
+    what: 'OpC',
+    current: 50,
+    next: 10,
+    cooldown: 180,
+    inUse: false,
+    currentCooldown: 0
+  }
+
+  //autominer
 
   Game.renderSkillText = (skillName) => {
     let skill = Game.skills[`${skillName}`]
@@ -1842,7 +1875,8 @@ Game.launch = () => {
   new Achievement('Intermediate Miner', 'Break 10 rocks')
 
   // COMBO ACHIEVEMENTS
-  new Achievement('Combro', 'Reach 5 hit combo')
+  new Achievement('Combaby', 'Reach 5 hit combo')
+  new Achievement('Combro', 'Reach 15 hit combo')
   new Achievement('Comboing', 'Reach 25 hit combo')
   new Achievement('Combo Master', 'Reach 100 hit combo')
   new Achievement('Combo Devil', 'Reach 666 hit combo')
@@ -2092,7 +2126,8 @@ Game.launch = () => {
       }
 
       // UNLOCK ACHIEVEMENTS REGARDING COMBOS
-      if (Game.state.stats.currentCombo >= 5) winAchievement('Combro')
+      if (Game.state.stats.currentCombo >= 5) winAchievement('Combaby')
+      if (Game.state.stats.currentCombo >= 15) winAchievement('Combro')
       if (Game.state.stats.currentCombo >= 25) winAchievement('Comboing')
       if (Game.state.stats.currentCombo >= 100) winAchievement('Combo Master')
       if (Game.state.stats.currentCombo >= 666) winAchievement('Combo Devil')
