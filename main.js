@@ -758,7 +758,7 @@ Game.launch = () => {
     }
 
     if (Game.statsVisable == true) {
-      str += '<div class="stats-container-content-wrapper" style="height: 370px;">'
+      str += '<div class="stats-container-content-wrapper" style="height: 450px;">'
     } else {
       str += '<div class="stats-container-content-wrapper">'
     }
@@ -1452,7 +1452,7 @@ Game.launch = () => {
 
   Game.toggleStats = () => {
     if (s('.stats-container-content-wrapper').style.height == 0 || s('.stats-container-content-wrapper').style.height == '0px') {
-      s('.stats-container-content-wrapper').style.height = '370px';
+      s('.stats-container-content-wrapper').style.height = '450px';
       s('.caret').style.transform = 'rotate(180deg)'
       Game.statsVisable = true
     } else {
