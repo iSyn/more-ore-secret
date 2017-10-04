@@ -1180,14 +1180,14 @@ Game.launch = () => {
     img: 'heavy-smash',
     specialization: 'Prospector',
     fillerTxt: 'Unleash your inner strength and deal a powerful strike',
-    desc: 'Deal a single 100x OpC hit',
+    desc: 'Deal a crazy strong hit',
     lv: 0,
     locked: 0,
     tier: 1,
     what: 'OpC',
-    current: 100,
-    next: 10,
-    cooldown: 0,
+    current: 0,
+    next: 0,
+    cooldown: 60,
     inUse: false,
     currentCooldown: 0
   }
@@ -1234,7 +1234,7 @@ Game.launch = () => {
     what: 'OpC',
     current: 50,
     next: 10,
-    cooldown: 60,
+    cooldown: 180,
     inUse: false,
     currentCooldown: 0
   }
@@ -1279,7 +1279,7 @@ Game.launch = () => {
     what: 'OpC',
     current: 50,
     next: 10,
-    cooldown: 180,
+    cooldown: 240,
     inUse: false,
     currentCooldown: 0
   }
@@ -1374,7 +1374,7 @@ Game.launch = () => {
         s('body').classList.add('roid-rage')
 
         // DO DAMAGE
-        let amount = calculateOPC() * 100
+        let amount = Game.state.oreHp/2.9
         earn(amount)
         updatePercentage(amount)
         risingNumber(amount, 'heavy-smash')
