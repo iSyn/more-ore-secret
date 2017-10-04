@@ -983,7 +983,7 @@ Game.launch = () => {
       <div class="specialization-skills-container">
         <div class="specialization-skills-top">
           <h1 style='flex-grow: 1; text-align: center;'>${specialization}</h1>
-          <p onclick='document.querySelector(".specialization-skills-wrapper").remove()'>X</p>
+          <p onclick='document.querySelector(".wrapper").remove()'>X</p>
         </div>
         <div class="specialization-skills-middle">
           <h2 style='margin-right: 10px;'>Lv: ${Game.state.player.specializationLv}</h2>
