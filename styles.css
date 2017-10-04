@@ -939,7 +939,7 @@ li {
   top: 0;
   height: 100vh;
   width: 100vw;
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(0, 0, 0, 0.7);
   z-index: 199;
 }
 
@@ -1268,7 +1268,7 @@ li {
 
 @keyframes refined-store-btn {
   0% {opacity: .6;}
-  50% {opacity: .9;}
+  50% {opacity: 1;}
   100% {opacity: .6;}
 }
 

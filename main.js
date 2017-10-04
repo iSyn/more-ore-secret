@@ -972,11 +972,11 @@ Game.launch = () => {
   }
 
   Game.specializationSkills = () => {
-    if (s('.specialization-skills-wrapper')) s('.specialization-skills-wrapper').remove()
+    if (s('.wrapper')) s('.wrapper').remove()
     let specialization = Game.state.player.specialization
     let div = document.createElement('div')
     let str = ''
-    div.classList.add('specialization-skills-wrapper')
+    div.classList.add('wrapper')
     if (specialization == 'Prospector') {
       str += `
 
@@ -1572,13 +1572,15 @@ Game.launch = () => {
       tooltip.style.width = 'auto'
       tooltip.style.left = anchor.right + 'px'
       tooltip.style.top = event.clientY + 'px'
+      tooltip.style.minWidth = '150px'
       if (stat == 'pickaxe') {
         tooltip.innerHTML = `
-          <h3>${Game.state.player.pickaxe.name}</h3>
+          <p style='text-align: center; font-size: small;'><i>Currently Equipped</i></p>
+          <hr/>
+          <h3 class='${Game.state.player.pickaxe.rarity}' style='text-align: center'>${Game.state.player.pickaxe.name}</h3>
           <hr/>
           <p style='text-align: center'><i>${Game.state.player.pickaxe.rarity}</i></p>
           <hr/>
-          <p>Item Level: ${Game.state.player.pickaxe.itemLevel}</p>
           <p>Damage: ${Game.state.player.pickaxe.damage}</p>
         `
         if (Game.state.player.pickaxe.prefixStat) {
