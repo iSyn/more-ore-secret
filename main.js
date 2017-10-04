@@ -60,7 +60,7 @@ Game.launch = () => {
     critHitMultiplier: 2,
     weakHitMultiplier: 5,
     player: {
-      lvl: 1,
+      lvl: 10,
       str: 0,
       dex: 0,
       luk: 0,
@@ -74,7 +74,7 @@ Game.launch = () => {
       specializationXp: 0,
       specializationXpNeeded: 300,
       specializationXpStored: 0,
-      specializationSp: 0,
+      specializationSp: 10,
       pickaxe: {
         name: 'Beginners Wood Pickaxe',
         rarity: 'Common',
@@ -683,7 +683,7 @@ Game.launch = () => {
         }
       }
     }
-    if (hasContent == 0) str += `<h3 style="text-align: center; width: 100%; opacity: .5">no upgrades available</h3>`
+    if (hasContent == 0) str += `<h3 style="text-align: center; width: 100%; opacity: .5; height: 50px; line-height: 50px;">no upgrades available</h3>`
     str += `</div><div class="horizontal-separator" style='height: 8px;'></div>`
 
     for (i in Game.items) {
@@ -1342,10 +1342,12 @@ Game.launch = () => {
   }
 
   Game.useSkill = (skillName) => {
+    console.log('using', skillName)
     Game.hideTooltip()
     let skill = Game.skills[skillName]
     if (skill.name == 'Roid Rage') {
       if (skill.inUse == false && skill.currentCooldown <= 0) {
+        winAchievement('RAOOARARRWR')
         skill.inUse = true
         skill.currentCooldown = skill.cooldown * 60
         calculateSkillCooldown()
@@ -1374,6 +1376,7 @@ Game.launch = () => {
     }
     if (skill.name == 'Heavy Smash') {
       if (skill.currentCooldown <= 0) {
+        winAchievement('Hulk Smash')
         playSound('heavy-smash')
         let orePos = s('.ore').getBoundingClientRect()
         skill.currentCooldown = skill.cooldown * 60
@@ -1407,15 +1410,35 @@ Game.launch = () => {
 
       }
     }
+    if (skill.name == 'Auto-Miner 5000') {
+      if (skill.currentCooldown <= 0) {
+        winAchievement('Beep Boop')
+        skill.currentCooldown = skill.cooldown * 60
+        calculateSkillCooldown()
+        let autoMiner = setInterval(() => {
+          console.log('running')
+          let amount = calculateOPC()
+          earn(amount)
+          playSound('ore-hit')
+          updatePercentage(amount)
+          risingNumber(amount, 'auto-miner')
+        }, 1000 / 15)
+
+        setTimeout(() => {
+          clearInterval(autoMiner)
+        }, 1000 * 15)
+      }
+    }
     drawActiveSkills()
   }
 
   let calculateSkillCooldown = () => {
-    if (Game.skills['RoidRage'].currentCooldown > 0) {
-      Game.skills['RoidRage'].currentCooldown--
-    }
-    if (Game.skills['HeavySmash'].currentCooldown > 0) {
-      Game.skills['HeavySmash'].currentCooldown--
+    for (i in Game.skills) {
+      if (Game.skills[i].type == 'active') {
+        if (Game.skills[i].currentCooldown > 0) {
+          Game.skills[i].currentCooldown--
+        }
+      }
     }
     drawActiveSkills()
   }
@@ -1897,7 +1920,10 @@ Game.launch = () => {
   // REFINE ACHIEVEMENTS
   new Achievement('Blacksmiths Apprentice', 'Refine for your first time')
 
-  // OTHER ACHIEVEMENTS
+  // SKILL ACHIEVEMENTS
+  new Achievement('Hulk Smash', 'Use the skill Heavy Smash for the first time')
+  new Achievement('RAOOARARRWR', 'Use the skill Roid Rage for the first time')
+  new Achievement('Beep Boop', 'Use the skill Auto-Miner 5000 for the first time')
   new Achievement('Roided Smash', 'Use the skill Heavy Smash along while Roid Rage is active')
 
 
@@ -2100,10 +2126,15 @@ Game.launch = () => {
 
       if (type == 'heavy-smash') {
         risingNumber.style.left = (s('.ore').getBoundingClientRect().left + s('.ore').getBoundingClientRect().right)/2 + 'px'
-        risingNumber.style.right = (s('.ore').getBoundingClientRect().top + s('.ore').getBoundingClientRect().bottom)/2 + 'px'
+        risingNumber.style.top = (s('.ore').getBoundingClientRect().top + s('.ore').getBoundingClientRect().bottom)/2 + 'px'
         risingNumber.style.animationDuration = '3s'
         risingNumber.style.fontSize = '50px'
         risingNumber.style.color = 'crimson'
+      }
+
+      if (type == 'auto-miner') {
+        risingNumber.style.left = (s('.ore').getBoundingClientRect().left + s('.ore').getBoundingClientRect().right)/2 + (randomNumber * randomSign) + 'px'
+        risingNumber.style.top = (s('.ore').getBoundingClientRect().top + s('.ore').getBoundingClientRect().bottom)/2 + 'px'
       }
 
 

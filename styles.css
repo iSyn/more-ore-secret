@@ -860,6 +860,18 @@ li {
   overflow-y: hidden;
 }
 
+.specialization-prospector {
+  background: url('./assets/prospector.png');
+  background-size: 100% 100%;
+  image-rendering: pixelated;
+}
+
+.specialization-manager {
+  background: url('./assets/manager.png');
+  background-size: 100% 100%;
+  image-rendering: pixelated;
+}
+
 .specialization-prospector:hover .prospector-txt {
   display: block;
   animation: fadeUpIn 0.1s ease-in-out;
@@ -1165,7 +1177,7 @@ li {
 }
 
 .active-skills-container {
-  height: 240px;
+  height: 250px;
   width: 80px;
   border-right: none;
   position: absolute;
