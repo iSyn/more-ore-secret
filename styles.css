@@ -535,7 +535,7 @@ body {
 
 .stats-container-content-wrapper {
   height: 0px;
-  overflow: auto;
+  overflow: hidden;
   transition: all 0.5s;
   border-right: 1px solid rgba(255,255,255,0.5);;
   border-bottom: 1px solid rgba(255,255,255,0.5);;
@@ -844,7 +844,7 @@ li {
 
 .specialization-txt {
   display: none;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.5);
   height: 100%;
 }
 
@@ -1083,7 +1083,7 @@ li {
   display: flex;
   flex-flow: row nowrap;
   justify-content: center;
-
+  position: relative;
 }
 
 .settings-container {

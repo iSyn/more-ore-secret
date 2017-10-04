@@ -999,7 +999,7 @@ Game.launch = () => {
       `
 
       for (i = 1; i <= 5; i++) {
-        str += '<div class="skill-tier">'
+        str += `<div class="skill-tier">`
 
           for (j in Game.skills) {
             let skill = Game.skills[j]
