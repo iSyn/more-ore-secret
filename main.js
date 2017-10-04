@@ -60,7 +60,7 @@ Game.launch = () => {
     critHitMultiplier: 2,
     weakHitMultiplier: 5,
     player: {
-      lvl: 5,
+      lvl: 1,
       str: 0,
       dex: 0,
       luk: 0,
@@ -2181,6 +2181,12 @@ Game.launch = () => {
         risingNumber.style.top = (s('.ore').getBoundingClientRect().top + s('.ore').getBoundingClientRect().bottom)/2 + 'px'
       }
 
+      if (type == 'buildings') {
+        risingNumber.style.left = (s('.ore').getBoundingClientRect().left + s('.ore').getBoundingClientRect().right)/2 + (randomNumber * randomSign) + 'px'
+        risingNumber.style.top = (s('.ore').getBoundingClientRect().top + s('.ore').getBoundingClientRect().bottom)/2 + 'px'
+        risingNumber.style.opacity = '.3 !important'
+      }
+
 
       s('.particles').append(risingNumber)
 
@@ -2619,6 +2625,9 @@ Game.launch = () => {
       Game.buildStats()
     }
     calculateSkillCooldown()
+    if (Game.state.oresPerSecond > 0) {
+      risingNumber(calculateOPS(), 'buildings')
+    }
   }, 1000)
   setInterval(() => {
     Game.save()
