@@ -1254,10 +1254,23 @@ li {
 .heavy-smash {
   position: absolute;
   height: 60vh;
-  width: 15px;
+  width: 5px;
   border-radius: 50%;
   background-color: white;
-  transform: rotate(15deg);
+  /*transform: rotate(15deg);*/
+  animation-name: heavy-smash;
+  animation-duration: .1s;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
+@keyframes heavy-smash {
+  0% {
+    transform: translateY(-200px) translateX(100px) rotate(30deg);
+  }
+  100% {
+    transform: translateY(0px) translateX(-50px) rotate(30deg);
+  }
 }
 
 .refined-store-btn {

@@ -60,7 +60,7 @@ Game.launch = () => {
     critHitMultiplier: 2,
     weakHitMultiplier: 5,
     player: {
-      lvl: 1,
+      lvl: 5,
       str: 0,
       dex: 0,
       luk: 0,
@@ -1187,7 +1187,7 @@ Game.launch = () => {
     what: 'OpC',
     current: 100,
     next: 10,
-    cooldown: 3,
+    cooldown: 0,
     inUse: false,
     currentCooldown: 0
   }
@@ -1352,6 +1352,42 @@ Game.launch = () => {
     console.log('using', skillName)
     Game.hideTooltip()
     let skill = Game.skills[skillName]
+    if (skill.name == 'Heavy Smash') {
+      if (skill.currentCooldown <= 0) {
+        winAchievement('Hulk Smash')
+        playSound('heavy-smash')
+        let orePos = s('.ore').getBoundingClientRect()
+        skill.currentCooldown = skill.cooldown * 60
+        calculateSkillCooldown()
+
+        let div = document.createElement('div')
+        div.classList.add('heavy-smash-wrapper')
+        div.innerHTML = ` <div class="heavy-smash"></div>`
+
+        s('body').append(div)
+
+        div.classList.add('heavy-smash-anim')
+
+        s('.heavy-smash').style.left = (orePos.left + orePos.right) / 2 + 'px'
+        s('.heavy-smash').style.top = ((orePos.top + orePos.bottom) / 2) - ((s('.heavy-smash').getBoundingClientRect().top + s('.heavy-smash').getBoundingClientRect().bottom) / 2) + 'px'
+
+        s('body').classList.add('roid-rage')
+
+        // DO DAMAGE
+        let amount = calculateOPC() * 100
+        earn(amount)
+        updatePercentage(amount)
+        risingNumber(amount, 'heavy-smash')
+
+        if (Game.skills['RoidRage'].inUse == true) winAchievement('Roided Smash')
+
+        setTimeout(() => {
+          s('body').classList.remove('roid-rage')
+          div.remove()
+        }, 500)
+
+      }
+    }
     if (skill.name == 'Roid Rage') {
       if (skill.inUse == false && skill.currentCooldown <= 0) {
         winAchievement('RAOOARARRWR')
@@ -1379,42 +1415,6 @@ Game.launch = () => {
           div.remove()
           s('body').classList.remove('roid-rage')
         }, 1000 * 10)
-      }
-    }
-    if (skill.name == 'Heavy Smash') {
-      if (skill.currentCooldown <= 0) {
-        winAchievement('Hulk Smash')
-        playSound('heavy-smash')
-        let orePos = s('.ore').getBoundingClientRect()
-        skill.currentCooldown = skill.cooldown * 60
-        calculateSkillCooldown()
-
-        let div = document.createElement('div')
-        div.classList.add('heavy-smash-wrapper')
-        div.innerHTML = `
-          <div class="heavy-smash"></div>
-        `
-
-        s('body').append(div)
-
-        s('.heavy-smash').style.left = (orePos.left + orePos.right) / 2 + 'px'
-        s('.heavy-smash').style.top = ((orePos.top + orePos.bottom) / 2) - ((s('.heavy-smash').getBoundingClientRect().top + s('.heavy-smash').getBoundingClientRect().bottom) / 2) + 'px'
-
-        s('body').classList.add('roid-rage')
-
-        // DO DAMAGE
-        let amount = calculateOPC() * 100
-        earn(amount)
-        updatePercentage(amount)
-        risingNumber(amount, 'heavy-smash')
-
-        if (Game.skills['RoidRage'].inUse == true) winAchievement('Roided Smash')
-
-        setTimeout(() => {
-          s('body').classList.remove('roid-rage')
-          div.remove()
-        }, 500)
-
       }
     }
     if (skill.name == 'Auto-Miner 5000') {
