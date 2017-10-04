@@ -82,7 +82,7 @@ Game.launch = () => {
         material: 'Wood',
         damage: 1,
       },
-      accesory: {}
+      accessory: {}
     },
     stats: {
       totalOresMined: 0,
@@ -774,6 +774,13 @@ Game.launch = () => {
 
           <hr/>
 
+          <div class="stats-container-current-equipment">
+            <div onmouseover='Game.showTooltip(null, null, "equipment", "pickaxe")' onmouseout='Game.hideTooltip()' class="stats-container-current-pickaxe stats-container-equipment"></div>
+            <div onmouseover='Game.showTooltip(null, null, "equipment", "accessory")' onmouseout='Game.hideTooltip()' class="stats-container-current-accessory stats-container-equipment"></div>
+          </div>
+
+          <hr/>
+
           <div class="single-stat">
             <p style='flex-grow: 1' onmouseover='Game.showTooltip(null, null, "stat", "str")' onmouseout='Game.hideTooltip()'>Strength:</p>
             <p class='stat-str'>${Game.state.player.str}`
@@ -1105,15 +1112,15 @@ Game.launch = () => {
     Game.state.opsMultiplier = 0
     Game.state.opcMultiplier = 0
     Game.state.weakHitMultiplier = 5
-    Game.state.player.lvl = 1
-    Game.state.player.str = 0
-    Game.state.player.dex = 0
-    Game.state.player.luk = 0
-    Game.state.player.int = 0
-    Game.state.player.cha = 0
-    Game.state.player.currentXp = 0
-    Game.state.player.xpNeeded = 50
-    Game.state.player.availableSp = 0
+    // Game.state.player.lvl = 1
+    // Game.state.player.str = 0
+    // Game.state.player.dex = 0
+    // Game.state.player.luk = 0
+    // Game.state.player.int = 0
+    // Game.state.player.cha = 0
+    // Game.state.player.currentXp = 0
+    // Game.state.player.xpNeeded = 50
+    // Game.state.player.availableSp = 0
     Game.state.player.pickaxe = {
       name: 'Beginners Wood Pickaxe',
       rarity: 'Common',
@@ -1559,6 +1566,41 @@ Game.launch = () => {
       if (skill.currentCooldown > 0) {
         tooltip.innerHTML += `<hr/><p>Cooldown: ${beautifyTime(skill.currentCooldown)}</p>`
       }
+
+    } else if (type == 'equipment'){
+      anchor = s('.stats-container-content-wrapper').getBoundingClientRect()
+      tooltip.style.width = 'auto'
+      tooltip.style.left = anchor.right + 'px'
+      tooltip.style.top = event.clientY + 'px'
+      if (stat == 'pickaxe') {
+        tooltip.innerHTML = `
+          <h3>${Game.state.player.pickaxe.name}</h3>
+          <hr/>
+          <p style='text-align: center'><i>${Game.state.player.pickaxe.rarity}</i></p>
+          <hr/>
+          <p>Item Level: ${Game.state.player.pickaxe.itemLevel}</p>
+          <p>Damage: ${Game.state.player.pickaxe.damage}</p>
+        `
+        if (Game.state.player.pickaxe.prefixStat) {
+          tooltip.innerHTML += `
+            <p>${Game.state.player.pickaxe.prefixStat}: ${Game.state.player.pickaxe.prefixStatVal}</p>
+          `
+        }
+      } else if (stat == 'accessory'){
+        tooltip.innerHTML = `
+            <p>You don't have an accessory</p>
+        `
+      }
+
+      // pickaxe: {
+      //   name: 'Beginners Wood Pickaxe',
+      //   rarity: 'Common',
+      //   itemLevel: 1,
+      //   material: 'Wood',
+      //   damage: 1,
+      // },
+
+
 
     } else {
       tooltip.innerHTML = `
@@ -2486,6 +2528,27 @@ Game.launch = () => {
 
 
     div.innerHTML = str
+
+    s('body').append(div)
+  }
+
+  Game.showRefinedStore = () => {
+    let div = document.createElement('div')
+    div.classList.add('wrapper')
+
+    div.innerHTML = `
+        <div class="refined-store-container">
+          <div class="refined-store-header">
+            <h1 style='text-align: center; flex-grow: 1'>Refined Store</h1>
+            <h1 style='margin-right: 15px;'><i class='fa fa-diamond fa-1x' style='color: #00c0ff;'></i> ${Game.state.refinedOres}</h1>
+            <p onclick='document.querySelector(".wrapper").remove()'>X</p>
+          </div>
+          <hr/>
+          <p>NOTHING YET STAY TUNED</p>
+
+
+        </div>
+    `
 
     s('body').append(div)
   }
