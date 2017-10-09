@@ -50,7 +50,7 @@ let Game = {}
 Game.launch = () => {
 
   Game.state = {
-    refinedOres: 0,
+    gems: 0,
     ores: 0,
     oreHp: 50,
     oreCurrentHp: 50,
@@ -644,7 +644,7 @@ Game.launch = () => {
       str += ` (${beautify(Game.state.oresPerSecond.toFixed(1))}/s)`
     }
     if (Game.state.stats.timesRefined > 0) {
-      str += `<br/> Refined Ores: ${Game.state.refinedOres}`
+      str += `<br/> Gems: ${Game.state.gems}`
     }
 
     s('.ores').innerHTML = str
@@ -1037,14 +1037,14 @@ Game.launch = () => {
   Game.confirmRefine = () => {
     if (Game.state.canRefine == true) {
       let div = document.createElement('div')
-      let amountOfRefinedOres = Math.floor(Math.cbrt(Game.state.ores / 10000000))
+      let amountOfGems = Math.floor(Math.cbrt(Game.state.ores / 10000000))
       div.classList.add('wrapper')
       div.innerHTML = `
         <div class="confirm-refine">
           <h3 style='text-align: center;'>Refine</h3>
           <hr/>
           <p style='text-align: left; color: lightgreen;'>+ You will gain <strong>${Game.state.player.specializationXpStored}</strong> specialization xp</p>
-          <p style='text-align: left; color: lightgreen;'>+ You will gain <strong>${amountOfRefinedOres}</strong> refined ores</p>
+          <p style='text-align: left; color: lightgreen;'>+ You will gain <strong>${amountOfGems}</strong> gems</p>
           <p style='text-align: left; color: #c36d6d;'>- You will lose all current ores</p>
           <p style='text-align: left; color: #c36d6d;'>- You will lose all owned items and upgrades</p>
           <hr/>
@@ -1069,14 +1069,14 @@ Game.launch = () => {
       s('body').append(div)
 
       // let amountOfRefinedOres = Math.floor(Math.cbrt(Game.state.ores / 10000000))
-      let amountOfRefinedOres = 0
-      if (Game.state.ores >= 1000000) amountOfRefinedOres++
-      if (Game.state.ores >= 1000000000) amountOfRefinedOres += 2
-      if (Game.state.ores >= 1000000000000) amountOfRefinedOres += 5
-      if (Game.state.ores >= 1000000000000000) amountOfRefinedOres += 10
-      if (Game.state.ores >= 1000000000000000000) amountOfRefinedOres += 10
+      let amountOfGems = 0
+      if (Game.state.ores >= 1000000) amountOfGems++
+      if (Game.state.ores >= 1000000000) amountOfGems += 2
+      if (Game.state.ores >= 1000000000000) amountOfGems += 5
+      if (Game.state.ores >= 1000000000000000) amountOfGems += 10
+      if (Game.state.ores >= 1000000000000000000) amountOfGems += 10
 
-      Game.state.refinedOres += amountOfRefinedOres
+      Game.state.gems += amountOfGems
 
       setTimeout(() => {
         softReset()
@@ -2531,11 +2531,11 @@ Game.launch = () => {
     {
       name: 'Tome of Higher Learning',
       // desc: 'Doubles xp gain per click',
-      rarity: 'Unique-Legendary'
+      rarity: 'Mythic'
     }, {
       name: 'Earrings of Alacrity',
       // desc: 'Double cast skills',
-      rarity: 'Unique-Legendary'
+      rarity: 'Mythic'
     }
   ]
   Game.generateRefinedStoreItems = () => {
@@ -2605,6 +2605,7 @@ Game.launch = () => {
     }
   }
 
+  Game.selectedRefineTab = 'trinkets'
   Game.showRefinedStore = () => {
     let div = document.createElement('div')
     div.classList.add('wrapper')
@@ -2614,31 +2615,57 @@ Game.launch = () => {
 
     str += `
         <div class="refined-store-container">
-          <div class="refined-store-header">
-            <h1 style='text-align: center; flex-grow: 1'>Refined Store</h1>
-            <h1 style='position: absolute; right: 10px;'><i class='fa fa-diamond fa-1x' style='color: #00c0ff;'></i> ${Game.state.refinedOres}</h1>
-            <p onclick='document.querySelector(".wrapper").remove()'>X</p>
+          <div class="refined-store-top">
+            <p onclick='document.querySelector(".wrapper").remove()' style='position: absolute; right: 5px; top: 1px; cursor: pointer'>x</p>
+            <h1 style='flex-grow: 1; text-align: center;'>Refined Store</h1>
+            <h3 style='padding-right: 20px;'><i style='color:#00c0ff' class='fa fa-diamond fa-1x'></i> ${Game.state.gems}</h3>
           </div>
-          <div class="refined-store-items-container">
-          `
-
-          for(i=0; i<Game.state.currentRefinedStoreItems.length; i++) {
-            str += `
-              <div class="refined-store-item ${Game.state.currentRefinedStoreItems[i].rarity}" onmouseout='Game.renderRefinedItemText()' onmouseover='Game.renderRefinedItemText(${JSON.stringify(Game.state.currentRefinedStoreItems[i])})'>
-                <p style='color: white; text-align: center'>${Game.state.currentRefinedStoreItems[i].name}</p>
-                <button class='refined-store-purchase-btn'>Purchase</button>
-              </div>
-            `
-          }
-
-          str += `
+          <hr/>
+          <div class="refined-store-middle">
+            <p onclick='Game.changeRefineTab("trinkets")' id='trinkets-tab' class='refine-tab selected'>Trinkets</p>
+            <p onclick='Game.changeRefineTab("potions")' id='potions-tab' class='refine-tab' >Potions</p>
+            <p onclick='Game.changeRefineTab("gems")' id='gems-tab' class='refine-tab' >Gems</p>
           </div>
-          <div class="refined-item-desc-txt"></div>
+          <hr/>
+          <div class="refined-store-bottom"></div>
+          <div class="refined-store-refresh-btn"></div>
         </div>
     `
 
     div.innerHTML = str
     s('body').append(div)
+    Game.changeRefineTab('trinkets')
+  }
+
+  Game.changeRefineTab = (selectedTab) => {
+    let tabs = document.querySelectorAll('.refine-tab')
+    tabs.forEach((tab) => tab.classList.remove('selected'))
+
+    s(`#${selectedTab}-tab`).classList.add('selected')
+
+    let str = ''
+    if (selectedTab == 'trinkets') {
+      s('.refined-store-refresh-btn').innerHTML = '<button onclick="Game.refreshItems()">REFRESH</button>'
+      for (i=0; i<Game.state.currentRefinedStoreItems.length; i++) {
+        str += `
+            <div class="refined-store-item ${Game.state.currentRefinedStoreItems[i].rarity}">
+              <h3>${Game.state.currentRefinedStoreItems[i].name}</h3>
+            </div>
+        `
+      }
+    } else {
+      s('.refined-store-refresh-btn').innerHTML = ''
+      str = ''
+    }
+
+    s('.refined-store-bottom').innerHTML = str
+
+  }
+
+  Game.refreshItems = () => {
+    s('.wrapper').remove()
+    Game.generateRefinedStoreItems()
+    Game.showRefinedStore()
   }
 
   textScroller = [

@@ -670,8 +670,7 @@ body {
 }
 
 .selected {
-  background-color: lightgrey;
-  border-bottom: none;
+  text-decoration: underline;
 }
 
 .tab-content-container {
@@ -1348,26 +1347,39 @@ li {
   transform: translate(-50%, -50%);
   color: white;
   padding: 10px;
+  display: flex;
+  flex-flow: column nowrap;
 }
 
-.refined-store-header {
+.refined-store-top {
   display: flex;
   flex-flow: row nowrap;
   align-items: center;
-  justify-content: center;
-  padding: 40px 0;
+  font-size: xx-large;
 }
 
-.refined-store-header p {
-  position: absolute;
-  top: 5px;
-  right: 5px;
-  opacity: .7;
+.refined-store-middle {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: space-around;
+  font-size: x-large;
+  padding: 10px 0;
+}
+
+.refined-store-middle p {
   cursor: pointer;
 }
 
-.refined-store-header p:hover {
-  opacity: 1;
+.refined-store-middle p:hover {
+  text-decoration: underline;
+}
+
+.refined-store-bottom {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-evenly;
+  margin-top: 30px;
 }
 
 .stats-container-current-equipment {
@@ -1384,51 +1396,39 @@ li {
   border: 1px solid white;
 }
 
-.refined-store-items-container {
-  display: flex;
-  flex-flow: row nowrap;
-  justify-content: space-evenly;
-}
-
 .refined-store-item {
   position: relative;
-  height: 200px;
-  width: 200px;
+  height: 400px;
+  width: 270px;
   border: 1px solid white;
 }
 
-.refined-store-purchase-btn {
-  position: absolute;
-  display: none;
-  width: 90%;
-  left: 50%;
-  transform: translateX(-50%);
-  bottom: 10px;
-  font-size: 20px;
-  color: white;
-  background: transparent;
-  cursor: pointer;
-  /*border: 1px solid white;*/
-}
-
-.refined-store-item:hover .refined-store-purchase-btn {
-  display: block;
-}
-
-.Unique-Legendary {
-  box-shadow: 0 0 10px 1px orange;
-  animation: boxshadow 2s linear infinite;
-}
-
-@keyframes boxshadow {
-  0% { box-shadow: 0 0 10px 1px orange }
-  50% { box-shadow: 0 0 20px 3px yellow }
-  100% { box-shadow: 0 0 10px 1px orange;}
-}
-
-.refined-item-desc-txt {
-  margin-top: 25px;
+.refined-store-refresh-btn {
+  margin-top: 30px;
   text-align: center;
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.refined-store-refresh-btn button {
+  text-align: center;
+  width: 80%;
+  background: transparent;
+  color: white;
+  font-size: x-large;
+  padding: 30px;
+}
+
+.Mythic {
+  animation: mythic-item-shadow 2s linear infinite;
+}
+
+@keyframes mythic-item-shadow {
+  0% {box-shadow: 0 0 10px 1px orange;}
+  50% {box-shadow: 0 0 30px 4px purple;}
+  100% {box-shadow: 0 0 10px 1px orange;}
 }
 
 
