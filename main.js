@@ -106,7 +106,8 @@ Game.launch = () => {
       scrollingText: true
     },
     canRefine: true,
-    refineTimer: 10800 // 3 hours in seconds
+    refineTimer: 10800, // 3 hours in seconds
+    fps: 30
   }
 
   let generateStoreItems = () => {
@@ -202,12 +203,6 @@ Game.launch = () => {
     buildInventory()
 
     if (Game.state.ores >= 10000) unlockUpgrades('Flashlight')
-  }
-
-  let earnOPS = () => {
-    let ops = calculateOPS()
-    earn(ops/30)
-    updatePercentage(ops/30)
   }
 
   let spend = (amt) => {
@@ -1180,14 +1175,14 @@ Game.launch = () => {
     img: 'heavy-smash',
     specialization: 'Prospector',
     fillerTxt: 'Unleash your inner strength and deal a powerful strike',
-    desc: 'Deal a crazy strong hit',
+    desc: `Instantly deal a large amount of damage`,
     lv: 0,
     locked: 0,
     tier: 1,
     what: 'OpC',
     current: 0,
     next: 0,
-    cooldown: 60,
+    cooldown: 10,
     inUse: false,
     currentCooldown: 0
   }
@@ -1374,7 +1369,7 @@ Game.launch = () => {
         s('body').classList.add('roid-rage')
 
         // DO DAMAGE
-        let amount = Game.state.oreHp/2.9
+        let amount = Math.ceil(Game.state.oreHp/2.9)
         earn(amount)
         updatePercentage(amount)
         risingNumber(amount, 'heavy-smash')
@@ -1590,20 +1585,9 @@ Game.launch = () => {
         }
       } else if (stat == 'accessory'){
         tooltip.innerHTML = `
-            <p>You don't have an accessory</p>
+            <p>You don't have a trinket</p>
         `
       }
-
-      // pickaxe: {
-      //   name: 'Beginners Wood Pickaxe',
-      //   rarity: 'Common',
-      //   itemLevel: 1,
-      //   material: 'Wood',
-      //   damage: 1,
-      // },
-
-
-
     } else {
       tooltip.innerHTML = `
       <div class="tooltip-top">
@@ -2008,33 +1992,35 @@ Game.launch = () => {
   let soundPlayed5 = false
   let whichPic = Math.floor(Math.random() * 4) + 1
   let updatePercentage = (amount) => {
+    let oreHpPercentage = (Game.state.oreCurrentHp/Game.state.oreHp) * 100
     if (Game.state.oreCurrentHp - amount > 0) {
       Game.state.oreCurrentHp -= amount
-      s('.ore-hp').innerHTML = `${((Game.state.oreCurrentHp/Game.state.oreHp)*100).toFixed(0)}%`
 
-      if (Game.state.oreCurrentHp/Game.state.oreHp > .8 ) {
+      s('.ore-hp').innerHTML = `${oreHpPercentage.toFixed(0)}%`
+
+      if (oreHpPercentage > 80 ) {
         s('.ore').style.background = `url("./assets/ore${whichPic}-1.png")`
         s('.ore').style.backgroundSize = 'cover'
       }
-      if (Game.state.oreCurrentHp/Game.state.oreHp <= .8 && soundPlayed1 == false) {
+      if (oreHpPercentage <= 80 && soundPlayed1 == false) {
         s('.ore').style.background = `url("assets/ore${whichPic}-2.png")`
         s('.ore').style.backgroundSize = 'cover'
         playSound('explosion')
         soundPlayed1 = true
       }
-      if (Game.state.oreCurrentHp/Game.state.oreHp <= .6 && soundPlayed2 == false) {
+      if (oreHpPercentage <= 60 && soundPlayed2 == false) {
         s('.ore').style.background = `url("assets/ore${whichPic}-3.png")`
         s('.ore').style.backgroundSize = 'cover'
         playSound('explosion')
         soundPlayed2 = true
       }
-      if (Game.state.oreCurrentHp/Game.state.oreHp <= .4 && soundPlayed3 == false) {
+      if (oreHpPercentage <= 40 && soundPlayed3 == false) {
         s('.ore').style.background = `url("assets/ore${whichPic}-4.png")`
         s('.ore').style.backgroundSize = 'cover'
         playSound('explosion')
         soundPlayed3 = true
       }
-      if (Game.state.oreCurrentHp/Game.state.oreHp <= .2 && soundPlayed4 == false) {
+      if (oreHpPercentage <= 20 && soundPlayed4 == false) {
         s('.ore').style.background = `url("assets/ore${whichPic}-5.png")`
         s('.ore').style.backgroundSize = 'cover'
         playSound('explosion')
@@ -2047,7 +2033,7 @@ Game.launch = () => {
       if (Game.state.stats.rocksDestroyed == 5) { winAchievement('Novice Miner'); textScroller.push('[Breaking News] The cries of baby rocks can be heard from miles away as their parents get obliterated by this new miner','What happens in Ore Town stays in Ore Town') }
       if (Game.state.stats.rocksDestroyed == 10) winAchievement('Intermediate Miner')
       playSound('explosion2')
-      Game.state.oreHp = Math.pow(Game.state.oreHp, 1.11)
+      Game.state.oreHp = Math.pow(Game.state.oreHp, 1.09)
       Game.state.oreCurrentHp = Game.state.oreHp
       dropItem()
       s('.ore-hp').innerHTML = '100%'
@@ -2541,24 +2527,117 @@ Game.launch = () => {
     s('body').append(div)
   }
 
+  Game.uniqueTrinkets = [
+    {
+      name: 'Tome of Higher Learning',
+      // desc: 'Doubles xp gain per click',
+      rarity: 'Unique-Legendary'
+    }, {
+      name: 'Earrings of Alacrity',
+      // desc: 'Double cast skills',
+      rarity: 'Unique-Legendary'
+    }
+  ]
+  Game.generateRefinedStoreItems = () => {
+    Game.state.currentRefinedStoreItems = []
+    // % of unique trinket
+    let uniqueChance = .1
+    let prefixChance = .3
+    let cost = 1
+
+    // GENERATE 4 ITEMS
+    for (i=0; i<4; i++) {
+      if (Math.random() <= uniqueChance) {
+        let randomUnique = Game.uniqueTrinkets[Math.floor(Math.random() * Game.uniqueTrinkets.length)]
+        Game.state.currentRefinedStoreItems.push(randomUnique)
+      } else {
+        //SELECT TYPE
+        let types = ['Helmet', 'Hat', 'Cap', 'Headgear','Earrings', 'Earpiece', 'Bracelet', 'Necklace', 'Brooch', 'Pendant', 'Ring', 'Tome', 'Book', 'Chestplate', 'Chestarmor']
+        let selectedType = types[Math.floor(Math.random() * types.length)]
+
+        //SELECT MATERIAL
+        let selectedMaterial = ''
+        let materials = ['Wood', 'Stone', 'Iron', 'Steel', 'Diamond']
+        let materialNum = Math.random()
+        if (materialNum >= 0) { selectedMaterial = materials[0] }
+        if (materialNum >= .4) { selectedMaterial = materials[1] }
+        if (materialNum >= .7) { selectedMaterial = materials[2] }
+        if (materialNum >= .9) { selectedMaterial = materials[3] }
+        if (materialNum >= .95) { selectedMaterial = materials[4] }
+
+        // SELECT RARITY
+        let selectedRarity = ''
+        let rarity = ['Common', 'Uncommon', 'Unique', 'Rare', 'Legendary']
+        let rarityNum = Math.random()
+        if (rarityNum >= 0) { selectedRarity = rarity[0] }
+        if (rarityNum >= .6) { selectedRarity = rarity[1] }
+        if (rarityNum >= .8) { selectedRarity = rarity[2] }
+        if (rarityNum >= .9) { selectedRarity = rarity[3] }
+        if (rarityNum >= .95) { selectedRarity = rarity[4] }
+
+        // SELECT PREFIX
+        let selectedPrefix = ''
+        let prefixes = ['of Strength', 'of Dexterity', 'of Intelligence', 'of Luck', 'of Charisma']
+        if (Math.random() <= prefixChance) selectedPrefix = prefixes[Math.floor(Math.random() * prefixes.length)]
+
+        let trinket = {
+          name: `${selectedMaterial} ${selectedType} ${selectedPrefix}`,
+          rarity: selectedRarity,
+        }
+
+        Game.state.currentRefinedStoreItems.push(trinket)
+      }
+    }
+    console.log(Game.state.currentRefinedStoreItems)
+  }
+
+  Game.generateRefinedStoreItems()
+
+  Game.renderRefinedItemText = (item) => {
+    if (item) {
+      s('.refined-item-desc-txt').innerHTML = `
+        <h1>${item.name}</h1>
+        <h3><i>${item.rarity}</i></h3>
+        <p>TEXT ABOUT ITEM</p>
+      `
+    } else {
+      s('.refined-item-desc-txt').innerHTML = ''
+    }
+  }
+
   Game.showRefinedStore = () => {
     let div = document.createElement('div')
     div.classList.add('wrapper')
+    let str = ''
 
-    div.innerHTML = `
+    let items = Game.state.currentRefinedStoreItems
+
+    str += `
         <div class="refined-store-container">
           <div class="refined-store-header">
             <h1 style='text-align: center; flex-grow: 1'>Refined Store</h1>
-            <h1 style='margin-right: 15px;'><i class='fa fa-diamond fa-1x' style='color: #00c0ff;'></i> ${Game.state.refinedOres}</h1>
+            <h1 style='position: absolute; right: 10px;'><i class='fa fa-diamond fa-1x' style='color: #00c0ff;'></i> ${Game.state.refinedOres}</h1>
             <p onclick='document.querySelector(".wrapper").remove()'>X</p>
           </div>
-          <hr/>
-          <p>NOTHING YET STAY TUNED</p>
+          <div class="refined-store-items-container">
+          `
 
+          for(i=0; i<Game.state.currentRefinedStoreItems.length; i++) {
+            str += `
+              <div class="refined-store-item ${Game.state.currentRefinedStoreItems[i].rarity}" onmouseout='Game.renderRefinedItemText()' onmouseover='Game.renderRefinedItemText(${JSON.stringify(Game.state.currentRefinedStoreItems[i])})'>
+                <p style='color: white; text-align: center'>${Game.state.currentRefinedStoreItems[i].name}</p>
+                <button class='refined-store-purchase-btn'>Purchase</button>
+              </div>
+            `
+          }
 
+          str += `
+          </div>
+          <div class="refined-item-desc-txt"></div>
         </div>
     `
 
+    div.innerHTML = str
     s('body').append(div)
   }
 
@@ -2606,6 +2685,22 @@ Game.launch = () => {
 
   showTextScroller()
 
+  Game.logic = () => {
+    //GAIN PASSIVE ORES
+    let ops = calculateOPS()
+    let opsFPS = ops/Game.state.fps
+    earn(opsFPS)
+    updatePercentage(opsFPS)
+  }
+
+  Game.mainLoop = () => {
+    Game.logic()
+    setTimeout(Game.mainLoop, 1000/Game.state.fps);
+  }
+
+
+  Game.mainLoop()
+
 
   // INIT SHIT
   buildInventory()
@@ -2634,9 +2729,6 @@ Game.launch = () => {
     Game.save()
   }, 1000 * 30)
   updatePercentage(0)
-  setInterval(() => {
-    earnOPS()
-  }, 1000 / 30)
   window.onresize = () => {
     drawSettingsBar()
     if (Game.items['MagnifyingGlass'].owned > 0) {

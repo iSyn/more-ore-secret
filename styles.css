@@ -68,6 +68,10 @@ body {
   background-size: auto 100%;
 }
 
+.rising-number {
+  z-index: 3;
+}
+
 @keyframes risingNumber {
   0% {
     transform: translateY(0);
@@ -522,6 +526,30 @@ body {
   height: 18%;
   background: url('./assets/mineshaft.png');
   background-size: auto 100%;
+}
+
+.bottom-overlay {
+  display: none;
+  background-color: rgba(255, 255, 255, 0.1);
+  height: 100%;
+  width: 100%;
+  cursor: pointer;
+  position: relative;
+}
+
+.bottom-overlay-txt {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  padding: 10px 15px;
+  border: 2px solid white;
+  font-size: xx-large;
+}
+
+.bottom:hover .bottom-overlay {
+  display: block;
 }
 
 .stats-container {
@@ -1327,7 +1355,7 @@ li {
   flex-flow: row nowrap;
   align-items: center;
   justify-content: center;
-  padding: 10px 0;
+  padding: 40px 0;
 }
 
 .refined-store-header p {
@@ -1355,3 +1383,52 @@ li {
   width: 40px;
   border: 1px solid white;
 }
+
+.refined-store-items-container {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-evenly;
+}
+
+.refined-store-item {
+  position: relative;
+  height: 200px;
+  width: 200px;
+  border: 1px solid white;
+}
+
+.refined-store-purchase-btn {
+  position: absolute;
+  display: none;
+  width: 90%;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 10px;
+  font-size: 20px;
+  color: white;
+  background: transparent;
+  cursor: pointer;
+  /*border: 1px solid white;*/
+}
+
+.refined-store-item:hover .refined-store-purchase-btn {
+  display: block;
+}
+
+.Unique-Legendary {
+  box-shadow: 0 0 10px 1px orange;
+  animation: boxshadow 2s linear infinite;
+}
+
+@keyframes boxshadow {
+  0% { box-shadow: 0 0 10px 1px orange }
+  50% { box-shadow: 0 0 20px 3px yellow }
+  100% { box-shadow: 0 0 10px 1px orange;}
+}
+
+.refined-item-desc-txt {
+  margin-top: 25px;
+  text-align: center;
+}
+
+
