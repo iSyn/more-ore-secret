@@ -530,7 +530,7 @@ body {
 
 .bottom-overlay {
   display: none;
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(255, 255, 255, 0.02);
   height: 100%;
   width: 100%;
   cursor: pointer;
@@ -1401,6 +1401,26 @@ li {
   height: 400px;
   width: 270px;
   border: 1px solid white;
+  display: flex;
+  flex-flow: column nowrap;
+  cursor: pointer;
+  transition: transform .1s;
+  background: black;
+}
+
+.refined-store-item:hover {
+  transform: scale(1.05);
+}
+
+.refined-store-item-top {
+  height: 50%;
+  width: 100%;
+  background-image: url('./assets/wip.png');
+  background-size: 100% 100%;
+}
+
+.refined-store-item-bottom p h2{
+  padding: 0 10px;
 }
 
 .refined-store-refresh-btn {
@@ -1419,10 +1439,16 @@ li {
   color: white;
   font-size: x-large;
   padding: 30px;
+  cursor: pointer;
 }
 
-.Mythic {
+.Mythic{
   animation: mythic-item-shadow 2s linear infinite;
+}
+
+.Mythic h2 {
+  font-size: xx-large;
+  color: yellow;
 }
 
 @keyframes mythic-item-shadow {
@@ -1431,4 +1457,83 @@ li {
   100% {box-shadow: 0 0 10px 1px orange;}
 }
 
+.confirm-buy-refined-item {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  border: 1px solid white;
+  color: white;
+  text-align: center;
+  background-color: black;
+  padding: 10px;
+}
 
+.confirm-buy-refined-item button {
+  background: transparent;
+  color: white;
+  padding: 2px;
+}
+
+.fa-diamond {
+  color: #00c0ff;
+}
+
+.quests-container {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  height: 80vh;
+  width: 40vw;
+  min-height: 700px;
+  min-width: 500px;
+  background: black;
+  border: 1px solid white;
+  color: white;
+  text-align: center;
+}
+
+.active-quest-container p {
+  opacity: .7;
+  padding: 10px;
+}
+
+.available-quests-container {
+  display: flex;
+  flex-flow: column nowrap;
+  /*justify-content: center;*/
+  align-items: center;
+  height: 70%;
+  overflow: auto;
+}
+
+.available-quest {
+  width: 90%;
+  height: 150px;
+  min-height: 100px;
+  border: 1px solid white;
+  margin-bottom: 10px;
+  display: flex;
+  flex-flow: row nowrap;
+  padding: 10px;
+}
+
+.available-quest-left{
+  display: flex;
+  align-items: center;
+  font-size: x-large;
+  flex-grow: 1;
+}
+
+.available-quest-right {
+  display: flex;
+  align-items: center;
+}
+
+
+.available-quest:hover {
+  box-shadow: 0 0 10px 2px white inset;
+  cursor: pointer;
+}
+
+.

@@ -2530,80 +2530,122 @@ Game.launch = () => {
   Game.uniqueTrinkets = [
     {
       name: 'Tome of Higher Learning',
-      // desc: 'Doubles xp gain per click',
-      rarity: 'Mythic'
+      desc: 'Doubles xp gain per click',
+      rarity: 'Mythic',
+      img: 'wip.png',
+      price: 15,
+      owned: 0
+    },{
+      name: 'Discount Card',
+      desc: 'All store items are 10% cheaper',
+      rarity: 'Mythic',
+      img: 'wip.png',
+      price: 15,
+      owned: 0
     }, {
       name: 'Earrings of Alacrity',
-      // desc: 'Double cast skills',
-      rarity: 'Mythic'
+      desc: 'Double cast skills',
+      rarity: 'Mythic',
+      img: 'wip.png',
+      price: 10,
+      owned: 0
+    }, {
+      name: 'Golden Apple',
+      desc: 'Permanantly increases School production by 5x',
+      // rarity: 'Mythic',
+      img: 'wip.png',
+      price: 1,
+      owned: 0
+    }, {
+      name: 'Diamond Tow Truck',
+      desc: 'Permanantly increases Farm production by 5x',
+      // rarity: 'Mythic',
+      img: 'wip.png',
+      price: 1,
+      owned: 0
+    }, {
+      name: 'Quarry name-in-progress',
+      desc: 'Permanantly increases Quarry production by 5x',
+      img: 'wip.png',
+      price: 2,
+      owned: 0
+    }, {
+      name: 'Church name-in-progress',
+      desc: 'Permanantly increases Church production by 5x',
+      img: 'wip.png',
+      price: 2,
+      owned: 0
+    }, {
+      name: 'Factory name-in-progress',
+      desc: 'Permanantly increases Factory production by 5x',
+      img: 'wip.png',
+      price: 3,
+      owned: 0
+    }, {
+      name: 'Crypt name-in-progress',
+      desc: 'Permanantly increases Crypt production by 5x',
+      img: 'wip.png',
+      price: 3,
+      owned: 0
+    }, {
+      name: 'Hospital name-in-progress',
+      desc: 'Permanantly increases Hospital production by 5x',
+      img: 'wip.png',
+      price: 4,
+      owned: 0
+    }, {
+      name: 'Xeno Spaceship name-in-progress',
+      desc: 'Permanantly increases Xeno Spaceship production by 5x',
+      img: 'wip.png',
+      price: 4,
+      owned: 0
+    }, {
+      name: 'Sky Castle name-in-progress',
+      desc: 'Permanantly increases Sky Castle production by 5x',
+      img: 'wip.png',
+      price: 5,
+      owned: 0
+    }, {
+      name: 'Eon Portal name-in-progress',
+      desc: 'Permanantly increases Eon Portal production by 5x',
+      img: 'wip.png',
+      price: 5,
+      owned: 0
+    }, {
+      name: 'Sacred Mines name-in-progress',
+      desc: 'Permanantly increases Sacred Mines production by 5x',
+      img: 'wip.png',
+      price: 6,
+      owned: 0
+    }, {
+      name: 'O.A.R.D.I.S name-in-progress',
+      desc: 'Permanantly increases O.A.R.D.I.S production by 5x',
+      img: 'wip.png',
+      price: 7,
+      owned: 0
     }
   ]
+
   Game.generateRefinedStoreItems = () => {
     Game.state.currentRefinedStoreItems = []
     // % of unique trinket
     let uniqueChance = .1
-    let prefixChance = .3
+    let suffixChance = .3
+    let prefixChance = .5
     let cost = 1
+    let amountOfStats = 1
+    let iLvl = Math.floor(Math.random() * Game.state.stats.timesRefined) + 1
+    let multi = 0
+    let unique = true
 
     // GENERATE 4 ITEMS
-    for (i=0; i<4; i++) {
-      if (Math.random() <= uniqueChance) {
-        let randomUnique = Game.uniqueTrinkets[Math.floor(Math.random() * Game.uniqueTrinkets.length)]
-        Game.state.currentRefinedStoreItems.push(randomUnique)
-      } else {
-        //SELECT TYPE
-        let types = ['Helmet', 'Hat', 'Cap', 'Headgear','Earrings', 'Earpiece', 'Bracelet', 'Necklace', 'Brooch', 'Pendant', 'Ring', 'Tome', 'Book', 'Chestplate', 'Chestarmor']
-        let selectedType = types[Math.floor(Math.random() * types.length)]
-
-        //SELECT MATERIAL
-        let selectedMaterial = ''
-        let materials = ['Wood', 'Stone', 'Iron', 'Steel', 'Diamond']
-        let materialNum = Math.random()
-        if (materialNum >= 0) { selectedMaterial = materials[0] }
-        if (materialNum >= .4) { selectedMaterial = materials[1] }
-        if (materialNum >= .7) { selectedMaterial = materials[2] }
-        if (materialNum >= .9) { selectedMaterial = materials[3] }
-        if (materialNum >= .95) { selectedMaterial = materials[4] }
-
-        // SELECT RARITY
-        let selectedRarity = ''
-        let rarity = ['Common', 'Uncommon', 'Unique', 'Rare', 'Legendary']
-        let rarityNum = Math.random()
-        if (rarityNum >= 0) { selectedRarity = rarity[0] }
-        if (rarityNum >= .6) { selectedRarity = rarity[1] }
-        if (rarityNum >= .8) { selectedRarity = rarity[2] }
-        if (rarityNum >= .9) { selectedRarity = rarity[3] }
-        if (rarityNum >= .95) { selectedRarity = rarity[4] }
-
-        // SELECT PREFIX
-        let selectedPrefix = ''
-        let prefixes = ['of Strength', 'of Dexterity', 'of Intelligence', 'of Luck', 'of Charisma']
-        if (Math.random() <= prefixChance) selectedPrefix = prefixes[Math.floor(Math.random() * prefixes.length)]
-
-        let trinket = {
-          name: `${selectedMaterial} ${selectedType} ${selectedPrefix}`,
-          rarity: selectedRarity,
-        }
-
-        Game.state.currentRefinedStoreItems.push(trinket)
-      }
+    while (Game.state.currentRefinedStoreItems.length < 4) {
+      let randomUnique = Game.uniqueTrinkets[Math.floor(Math.random() * Game.uniqueTrinkets.length)]
+      Game.state.currentRefinedStoreItems.push(randomUnique)
     }
-    console.log(Game.state.currentRefinedStoreItems)
   }
 
   Game.generateRefinedStoreItems()
-
-  Game.renderRefinedItemText = (item) => {
-    if (item) {
-      s('.refined-item-desc-txt').innerHTML = `
-        <h1>${item.name}</h1>
-        <h3><i>${item.rarity}</i></h3>
-        <p>TEXT ABOUT ITEM</p>
-      `
-    } else {
-      s('.refined-item-desc-txt').innerHTML = ''
-    }
-  }
 
   Game.selectedRefineTab = 'trinkets'
   Game.showRefinedStore = () => {
@@ -2645,11 +2687,19 @@ Game.launch = () => {
 
     let str = ''
     if (selectedTab == 'trinkets') {
-      s('.refined-store-refresh-btn').innerHTML = '<button onclick="Game.refreshItems()">REFRESH</button>'
+      s('.refined-store-refresh-btn').innerHTML = '<button onclick="Game.refreshItems()">REFRESH <i class="fa fa-diamond fa-1x"></i> 1</button>'
       for (i=0; i<Game.state.currentRefinedStoreItems.length; i++) {
+        let item = Game.state.currentRefinedStoreItems[i]
         str += `
-            <div class="refined-store-item ${Game.state.currentRefinedStoreItems[i].rarity}">
-              <h3>${Game.state.currentRefinedStoreItems[i].name}</h3>
+            <div class="refined-store-item ${item.rarity}" onclick='Game.confirmBuyRefinedItem("${item.name}")'>
+              <div class="refined-store-item-top"></div>
+              <div class="refined-store-item-bottom" style='text-align: center'>
+                <h2>${item.name}</h2>
+                <hr/>
+                <p style='color: white'>${item.desc}</p>
+                <hr/>
+                <p style='color: white; margin-top: 20px;'>Cost: <i class='fa fa-diamond fa-1x' style="color:#00c0ff"></i> ${item.price}</p>
+              </div>
             </div>
         `
       }
@@ -2659,13 +2709,58 @@ Game.launch = () => {
     }
 
     s('.refined-store-bottom').innerHTML = str
+  }
+
+  Game.confirmBuyRefinedItem = (itemName) => {
+    let selectedItem = ''
+    for (i=0; i<Game.uniqueTrinkets.length; i++) {
+      if (Game.uniqueTrinkets[i].name == itemName) {
+        selectedItem = Game.uniqueTrinkets[i]
+      }
+    }
+
+    if (selectedItem) {
+      let div = document.createElement('div')
+      div.classList.add('wrapper')
+
+      div.innerHTML = `
+        <div class="confirm-buy-refined-item">
+          <h3>Confirm</h3>
+          <hr/>
+          <p>Are you sure you want to buy <strong>${selectedItem.name}</strong> for <strong><i class='fa fa-diamond fa-1x'></i> ${selectedItem.price}</strong>?</p>
+          <hr/>
+          <button onclick='Game.buyRefinedItem("${selectedItem.name}")'>Yes</button>
+          <button onclick='let wrappers = document.querySelectorAll(".wrapper"); wrappers[1].remove()'>No</button>
+        </div>
+      `
+
+      s('body').append(div)
+    }
+  }
+
+  Game.buyRefinedItem = (itemName) => {
+    let selectedItem = ''
+    for (i=0; i<Game.uniqueTrinkets.length; i++) {
+      if (Game.uniqueTrinkets[i].name == itemName) {
+        selectedItem = Game.uniqueTrinkets[i]
+      }
+    }
+
+    if (selectedItem) {
+      if (Game.state.gems >= selectedItem.price) {
+        Game.state.gems -= selectedItem.price
+      }
+    }
 
   }
 
   Game.refreshItems = () => {
-    s('.wrapper').remove()
-    Game.generateRefinedStoreItems()
-    Game.showRefinedStore()
+    if (Game.state.gems >= 1) {
+      Game.state.gems -= 1
+      s('.wrapper').remove()
+      Game.generateRefinedStoreItems()
+      Game.showRefinedStore()
+    }
   }
 
   textScroller = [
@@ -2725,9 +2820,51 @@ Game.launch = () => {
     setTimeout(Game.mainLoop, 1000/Game.state.fps);
   }
 
+  Game.showQuests = () => {
+    if (Game.state.player.lvl >= 10) {
+      let div = document.createElement('div')
+      div.classList.add('wrapper')
+
+      let str = `
+        <div class="quests-container">
+          <h1 style='font-size: 3rem; padding: 10px 0;'>Quests</h1>
+          <p onclick='document.querySelector(".wrapper").remove()' style='position: absolute; top: 5px; right: 5px; cursor: pointer'>X</p>
+          <hr/>
+          <div class="active-quest-container">
+            <p>No active quests :(</p>
+          </div>
+          <hr/>
+          <div class="available-quests-container">
+            <div class="available-quest">
+              <div class="available-quest-left">
+                <p>Abandoned Mineshaft</p>
+              </div>
+              <div class="available-quest-right">
+                <p>Go</p>
+              </div>
+            </div>
+            <div class="available-quest"></div>
+          </div>
+        </div>
+      `
+
+      div.innerHTML = str
+      s('body').append(div)
+    }
+  }
+
+  s('.bottom').addEventListener('mouseover', () => {
+    if (Game.state.player.lvl < 10) {
+      s('.bottom-overlay-txt').innerHTML = `<i class='fa fa-lock fa-1x' style='margin-right: 10px'></i>Quests Unlocked at Lv. 10`
+    } else {
+      s('.bottom-overlay-txt').style.display = 'none'
+    }
+  })
+
+  s('.bottom').addEventListener('click', Game.showQuests)
+
 
   Game.mainLoop()
-
 
   // INIT SHIT
   buildInventory()
@@ -2810,7 +2947,8 @@ Game.launch = () => {
     }
     if (isEscape) {
       if (s('.wrapper')) {
-        s('.wrapper').remove()
+        let wrappers = document.querySelectorAll('.wrapper')
+        wrappers.forEach((wrapper) => wrapper.remove())
       }
       if (s('.specialization-wrapper')) {
         s('.specialization-wrapper').remove()
