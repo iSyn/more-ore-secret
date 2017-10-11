@@ -735,7 +735,6 @@ body {
 }
 
 .button-middle h3 {
-  /*font-family: 'Francois One';*/
   font-family: 'Germania One';
   letter-spacing: 1px;
   color: white;
@@ -1493,6 +1492,15 @@ li {
   text-align: center;
 }
 
+.quests-container h1 {
+  font-family: 'Germania One';
+  letter-spacing: 4px;
+}
+
+.active-quest-container {
+  margin: 30px 0;
+}
+
 .active-quest-container p {
   opacity: .7;
   padding: 10px;
@@ -1512,28 +1520,83 @@ li {
   height: 150px;
   min-height: 100px;
   border: 1px solid white;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
   display: flex;
-  flex-flow: row nowrap;
+  flex-flow: column nowrap;
   padding: 10px;
+  justify-content: center;
+  align-items: center;
 }
 
-.available-quest-left{
-  display: flex;
-  align-items: center;
+.available-quest p {
   font-size: x-large;
-  flex-grow: 1;
 }
 
-.available-quest-right {
-  display: flex;
-  align-items: center;
-}
-
-
-.available-quest:hover {
+.available-quest.unlocked:hover {
   box-shadow: 0 0 10px 2px white inset;
   cursor: pointer;
 }
 
-.
+.available-quest.unlocked:hover .quest-est-time {
+  display: block;
+  visibility: visible;
+}
+
+.quest-est-time {
+  /*display: none;*/
+  visibility: hidden;
+}
+
+.quest-information {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: black;
+  border: 1px solid white;
+  height: 600px;
+  width: 800px;
+  color: white;
+  text-align: center;
+  padding: 5px;
+  display: flex;
+  flex-flow: column nowrap;
+}
+
+.quest-img {
+  height: 55%;
+  image-rendering: pixelated;
+}
+
+.quest-information-bottom {
+  display: flex;
+  flex-flow: row nowrap;
+  flex-grow: 1;
+  align-items: center;
+}
+
+.quest-information-bottom-right button {
+  width: 90%;
+  background: black;
+  border: 1px solid white;
+  color: white;
+  font-size: xx-large;
+  cursor: pointer;
+  padding: 15px 0;
+  transition: transform .1s;
+  -webkit-font-smoothing: antialiased;
+
+}
+
+.fa-long-arrow-right {
+  transition: transform .1s;
+}
+
+.quest-information-bottom-right button:hover {
+  transform: scale(1.04);
+}
+
+.quest-information-bottom-right button:hover .fa-long-arrow-right {
+  animation: sideToSide .5s infinite;
+}
+
