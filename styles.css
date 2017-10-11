@@ -1592,10 +1592,6 @@ li {
   transition: transform .1s;
 }
 
-.quest-information-bottom-right button:hover {
-  transform: scale(1.04);
-}
-
 .quest-information-bottom-right button:hover .fa-long-arrow-right {
   animation: sideToSide .5s infinite;
 }

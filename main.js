@@ -174,7 +174,6 @@ Game.launch = () => {
     }
     localStorage.setItem('skills', JSON.stringify(Game.skills))
     let cookie = btoa(JSON.stringify(Game.state))
-
   }
 
   Game.load = () => {
@@ -262,9 +261,9 @@ Game.launch = () => {
       opc *= Game.skills['RoidRage'].current
     }
 
-    if (opc >= 1000000) winAchievement('Still A Baby')
-    if (opc >= 1000000000) winAchievement('Getting There')
-    if (opc >= 1000000000000) winAchievement('Big Boy')
+    if (opc >= 1000000) Game.winAchievement('Still A Baby')
+    if (opc >= 1000000000) Game.winAchievement('Getting There')
+    if (opc >= 1000000000000) Game.winAchievement('Big Boy')
 
     return opc
   }
@@ -284,9 +283,9 @@ Game.launch = () => {
 
     Game.state.oresPerSecond = ops
 
-    if (ops >= 401000) winAchievement('401K')
-    if (ops >= 5000000) winAchievement('Retirement Plan')
-    if (ops >= 5000000000) winAchievement('Hedge Fund')
+    if (ops >= 401000) Game.winAchievement('401K')
+    if (ops >= 5000000) Game.winAchievement('Retirement Plan')
+    if (ops >= 5000000000) Game.winAchievement('Hedge Fund')
 
     return ops
   }
@@ -1084,7 +1083,7 @@ Game.launch = () => {
       }, 1500)
       setTimeout(() => {
         s('.refine').remove()
-        if (Game.state.stats.timesRefined > 0) winAchievement('Blacksmiths Apprentice')
+        if (Game.state.stats.timesRefined > 0) Game.winAchievement('Blacksmiths Apprentice')
       }, 3000)
     }
   }
@@ -1349,7 +1348,7 @@ Game.launch = () => {
     let skill = Game.skills[skillName]
     if (skill.name == 'Heavy Smash') {
       if (skill.currentCooldown <= 0) {
-        winAchievement('Hulk Smash')
+        Game.winAchievement('Hulk Smash')
         playSound('heavy-smash')
         let orePos = s('.ore').getBoundingClientRect()
         skill.currentCooldown = skill.cooldown * 60
@@ -1374,7 +1373,7 @@ Game.launch = () => {
         updatePercentage(amount)
         risingNumber(amount, 'heavy-smash')
 
-        if (Game.skills['RoidRage'].inUse == true) winAchievement('Roided Smash')
+        if (Game.skills['RoidRage'].inUse == true) Game.winAchievement('Roided Smash')
 
         setTimeout(() => {
           s('body').classList.remove('roid-rage')
@@ -1385,7 +1384,7 @@ Game.launch = () => {
     }
     if (skill.name == 'Roid Rage') {
       if (skill.inUse == false && skill.currentCooldown <= 0) {
-        winAchievement('RAOOARARRWR')
+        Game.winAchievement('RAOOARARRWR')
         skill.inUse = true
         skill.currentCooldown = skill.cooldown * 60
         calculateSkillCooldown()
@@ -1414,7 +1413,7 @@ Game.launch = () => {
     }
     if (skill.name == 'Auto-Miner 5000') {
       if (skill.currentCooldown <= 0) {
-        winAchievement('Beep Boop')
+        Game.winAchievement('Beep Boop')
         skill.currentCooldown = skill.cooldown * 60
         calculateSkillCooldown()
         let autoMiner = setInterval(() => {
@@ -1910,81 +1909,6 @@ Game.launch = () => {
 
   resetItems()
 
-  Game.achievements = []
-  let Achievement = function(name, desc) {
-    this.name = name
-    // this.functionName = name.replace(/ /g, '')
-    this.desc = desc
-    this.won = 0
-
-    Game.achievements.push(this)
-  }
-
-  // AMOUNT OF ROCKS DESTROYED ACHIEVEMENTS
-  new Achievement('Newbie Miner', 'Break your first rock')
-  new Achievement('Novice Miner', 'Break 5 rocks')
-  new Achievement('Intermediate Miner', 'Break 10 rocks')
-
-  // COMBO ACHIEVEMENTS
-  new Achievement('Combaby', 'Reach 5 hit combo')
-  new Achievement('Combro', 'Reach 15 hit combo')
-  new Achievement('Comboing', 'Reach 25 hit combo')
-  new Achievement('Combo Master', 'Reach 100 hit combo')
-  new Achievement('Combo Devil', 'Reach 666 hit combo')
-  new Achievement('Combo God', 'Reach 777 hit combo')
-  new Achievement('Combo Saiyan', 'Reach 1000 hit combo')
-  new Achievement('Combo Saitama', 'Reach 11111 hit combo')
-
-  // OPC ACHIEVEMENTS
-  new Achievement('Still A Baby', 'Deal more than 1,000,000 in one hit')
-  new Achievement('Getting There', 'Deal more than 1,000,000,000 in one hit')
-  new Achievement('Big Boy', 'Deal more than 1,000,000,000,000 in one hit')
-
-  // OPS ACHIEVEMENTS
-  new Achievement('401K', 'Reach 401,000 OpS')
-  new Achievement('Retirement Plan', 'Reach 5,000,000 OpS')
-  new Achievement('Hedge Fund', 'Reach 5,000,000,000 OpS')
-
-  // REFINE ACHIEVEMENTS
-  new Achievement('Blacksmiths Apprentice', 'Refine for your first time')
-
-  // SKILL ACHIEVEMENTS
-  new Achievement('Hulk Smash', 'Use the skill Heavy Smash for the first time')
-  new Achievement('RAOOARARRWR', 'Use the skill Roid Rage for the first time')
-  new Achievement('Beep Boop', 'Use the skill Auto-Miner 5000 for the first time')
-  new Achievement('Roided Smash', 'Use the skill Heavy Smash along while Roid Rage is active')
-
-
-  let winAchievement = (achievementName) => {
-    for (i = 0; i < Game.achievements.length; i++) {
-      if (achievementName == Game.achievements[i].name) {
-        if (Game.achievements[i].won == 0) {
-          Game.achievements[i].won = 1
-          let div = document.createElement('div')
-          div.classList.add('achievement')
-
-          div.innerHTML = `
-            <h3>Achievement Unlocked</h3>
-            <h1>${Game.achievements[i].name}</h1>
-            <p>${Game.achievements[i].desc}</p>
-          `
-          s('body').append(div)
-
-          // let divWidth = div.getBoundingClientRect().width
-          // let windowWidth = window.innerWidth
-
-          // div.style.left = ((windowWidth/2) - (divWidth/2)) + 'px'
-
-
-
-          setTimeout(() => {
-            div.remove()
-          }, 3000)
-        }
-      }
-    }
-  }
-
   let soundPlayed1 = false
   let soundPlayed2 = false
   let soundPlayed3 = false
@@ -2029,9 +1953,9 @@ Game.launch = () => {
     } else {
       Game.state.stats.rocksDestroyed++
       gainXp(10)
-      if (Game.state.stats.rocksDestroyed == 1) { winAchievement('Newbie Miner'); textScroller.push('[Breaking News] Rocks are breaking!',) }
-      if (Game.state.stats.rocksDestroyed == 5) { winAchievement('Novice Miner'); textScroller.push('[Breaking News] The cries of baby rocks can be heard from miles away as their parents get obliterated by this new miner','What happens in Ore Town stays in Ore Town') }
-      if (Game.state.stats.rocksDestroyed == 10) winAchievement('Intermediate Miner')
+      if (Game.state.stats.rocksDestroyed == 1) { Game.winAchievement('Newbie Miner'); textScroller.push('[Breaking News] Rocks are breaking!',) }
+      if (Game.state.stats.rocksDestroyed == 5) { Game.winAchievement('Novice Miner'); textScroller.push('[Breaking News] The cries of baby rocks can be heard from miles away as their parents get obliterated by this new miner','What happens in Ore Town stays in Ore Town') }
+      if (Game.state.stats.rocksDestroyed == 10) Game.winAchievement('Intermediate Miner')
       playSound('explosion2')
       Game.state.oreHp = Math.pow(Game.state.oreHp, 1.09)
       Game.state.oreCurrentHp = Game.state.oreHp
@@ -2194,14 +2118,14 @@ Game.launch = () => {
       }
 
       // UNLOCK ACHIEVEMENTS REGARDING COMBOS
-      if (Game.state.stats.currentCombo >= 5) winAchievement('Combaby')
-      if (Game.state.stats.currentCombo >= 15) winAchievement('Combro')
-      if (Game.state.stats.currentCombo >= 25) winAchievement('Comboing')
-      if (Game.state.stats.currentCombo >= 100) winAchievement('Combo Master')
-      if (Game.state.stats.currentCombo >= 666) winAchievement('Combo Devil')
-      if (Game.state.stats.currentCombo >= 777) winAchievement('Combo God')
-      if (Game.state.stats.currentCombo >= 1000) winAchievement('Combo Saiyan')
-      if (Game.state.stats.currentCombo >= 11111) winAchievement('Combo Saitama')
+      if (Game.state.stats.currentCombo >= 5) Game.winAchievement('Combaby')
+      if (Game.state.stats.currentCombo >= 15) Game.winAchievement('Combro')
+      if (Game.state.stats.currentCombo >= 25) Game.winAchievement('Comboing')
+      if (Game.state.stats.currentCombo >= 100) Game.winAchievement('Combo Master')
+      if (Game.state.stats.currentCombo >= 666) Game.winAchievement('Combo Devil')
+      if (Game.state.stats.currentCombo >= 777) Game.winAchievement('Combo God')
+      if (Game.state.stats.currentCombo >= 1000) Game.winAchievement('Combo Saiyan')
+      if (Game.state.stats.currentCombo >= 11111) Game.winAchievement('Combo Saitama')
 
 
     } else { // IF REGULAR HIT
