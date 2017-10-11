@@ -2779,7 +2779,7 @@ Game.launch = () => {
       let str = `
         <div class="quests-container">
           <h1 style='font-size: 3rem; padding: 10px 0;'>Quests</h1>
-          <p onclick='document.querySelector(".wrapper").remove()' style='position: absolute; top: 5px; right: 5px; cursor: pointer'>X</p>
+          <p onclick='Game.closeCurrentWindow()' style='position: absolute; top: 5px; right: 5px; cursor: pointer'>X</p>
           <div class="active-quest-container">
             <hr/>
             <p>No active quests :(</p>
@@ -2832,7 +2832,7 @@ Game.launch = () => {
     div.innerHTML = `
       <div class="quest-information">
         <h1 style='padding:10px 0'>${selectedQuest.name}</h1>
-        <p style='position: absolute; top: 5px; right: 5px; cursor: pointer'>X</p>
+        <p onclick='Game.closeCurrentWindow()' style='position: absolute; top: 5px; right: 5px; cursor: pointer'>X</p>
         <hr/>
         <img src="./assets/${selectedQuest.img}" class="quest-img"'>
         <hr/>
@@ -2876,6 +2876,23 @@ Game.launch = () => {
     Game.state.player.pickaxe.damage += 999999
     Game.state.gems += 999
   })
+
+  Game.closeCurrentWindow = () => {
+    if (s('.wrapper')) {
+      let wrappers = document.querySelectorAll('.wrapper')
+      let newest = wrappers.length -1
+
+      if (wrappers.length > 1) {
+        wrappers[newest].remove()
+      } else {
+        wrappers.forEach((wrapper) => wrapper.remove())
+      }
+    }
+
+    if (s('.specialization-wrapper')) s('.specialization-wrapper').remove()
+    if (s('.specialization-skills-wrapper')) s('.specialization-skills-wrapper').remove()
+    if (s('.specialization-confirmation-wrapper')) s('.specialization-confirmation-wrapper').remove()
+  }
 
   // INIT SHIT
   buildInventory()
@@ -2957,23 +2974,7 @@ Game.launch = () => {
         isEscape = (evt.keyCode == 27);
     }
     if (isEscape) {
-      if (s('.wrapper')) {
-        let wrappers = document.querySelectorAll('.wrapper')
-        if (wrappers.length > 1) {
-          wrappers[1].remove()
-        } else {
-          wrappers.forEach((wrapper) => wrapper.remove())
-        }
-      }
-      if (s('.specialization-wrapper')) {
-        s('.specialization-wrapper').remove()
-      }
-      if (s('.specialization-skills-wrapper')) {
-        s('.specialization-skills-wrapper').remove()
-      }
-      if (s('.specialization-confirmation-wrapper')) {
-        s('.specialization-confirmation-wrapper').remove()
-      }
+      Game.closeCurrentWindow()
     }
 };
 
