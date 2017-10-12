@@ -2179,7 +2179,7 @@ Game.launch = () => {
   }
 
   Game.showChangelog = (show) => {
-    let newestVersion = '0.6.4'
+    let newestVersion = '0.6.7'
 
     if (Game.state.currentVersion != newestVersion || Game.state.ores == 0 || show == 1) {
       Game.state.currentVersion = newestVersion
@@ -2191,6 +2191,12 @@ Game.launch = () => {
           <h1>Changelog</h1>
           <p style='text-align: center'>(Click anywhere to close)</p>
           <hr style='border-color: black; margin-bottom: 10px;'/>
+
+          <h3>v0.6.7 (10/12/2017)</h3>
+          <p>Working on Gems store</p>
+          <p>Working on Quests</p>
+          <p>Countless bug fixes</p>
+          <br/>
 
           <h3>v0.6.7 (10/1/2017)</h3>
           <p>-Prospector class is 3/4 done...</p>
