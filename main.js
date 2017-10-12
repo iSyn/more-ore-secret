@@ -2192,10 +2192,10 @@ Game.launch = () => {
           <p style='text-align: center'>(Click anywhere to close)</p>
           <hr style='border-color: black; margin-bottom: 10px;'/>
 
-          <h3>v0.6.7 (10/12/2017)</h3>
-          <p>Working on Gems store</p>
-          <p>Working on Quests</p>
-          <p>Countless bug fixes</p>
+          <h3>v0.6.8 (10/12/2017)</h3>
+          <p>-Working on Gems store</p>
+          <p>-Working on Quests</p>
+          <p>-Countless bug fixes</p>
           <br/>
 
           <h3>v0.6.7 (10/1/2017)</h3>
