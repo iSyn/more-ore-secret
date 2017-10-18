@@ -505,7 +505,7 @@ body {
   color: white;
 }
 
-.ore-click-area {
+.ore-weak-spot {
   display: none;
   position: absolute;
   top: 0px;
@@ -518,7 +518,7 @@ body {
   cursor: pointer;
 }
 
-.ore-click-area:hover {
+.ore-weak-spot:hover {
   box-shadow: 0 0 5px white inset;
 }
 

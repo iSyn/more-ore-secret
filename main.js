@@ -1957,7 +1957,7 @@ Game.launch = () => {
       if (Game.state.stats.rocksDestroyed == 5) { Game.winAchievement('Novice Miner'); textScroller.push('[Breaking News] The cries of baby rocks can be heard from miles away as their parents get obliterated by this new miner','What happens in Ore Town stays in Ore Town') }
       if (Game.state.stats.rocksDestroyed == 10) Game.winAchievement('Intermediate Miner')
       playSound('explosion2')
-      Game.state.oreHp = Math.pow(Game.state.oreHp, 1.09)
+      Game.state.oreHp = Math.pow(Game.state.oreHp, 1.1)
       Game.state.oreCurrentHp = Game.state.oreHp
       dropItem()
       s('.ore-hp').innerHTML = '100%'
@@ -1981,9 +1981,9 @@ Game.launch = () => {
     let randomX = centerX + (randomNumber() * randomSign)
     let randomY = centerY + (randomNumber() * randomSign)
 
-    s('.ore-click-area').style.left = randomX + 'px'
-    s('.ore-click-area').style.top = randomY + 'px'
-    s('.ore-click-area').style.display = 'block'
+    s('.ore-weak-spot').style.left = randomX + 'px'
+    s('.ore-weak-spot').style.top = randomY + 'px'
+    s('.ore-weak-spot').style.display = 'block'
   }
 
   let gainXp = (amt) => {
@@ -2063,6 +2063,13 @@ Game.launch = () => {
         risingNumber.style.fontSize = 'xx-large'
         risingNumber.style.color = 'red'
         risingNumber.innerHTML = '-$'
+      }
+
+      if (type == 'spendGems') {
+        risingNumber.style.fontSize = 'xx-large'
+        risingNumber.style.color = 'red'
+        risingNumber.style.zIndex = 9999999
+        risingNumber.innerHTML = '-<i style="color: red" class="fa fa-diamond fa-1x"></i>'
       }
 
       if (type == 'combo') {
@@ -2179,7 +2186,7 @@ Game.launch = () => {
   }
 
   Game.showChangelog = (show) => {
-    let newestVersion = '0.6.7'
+    let newestVersion = '0.6.8.1'
 
     if (Game.state.currentVersion != newestVersion || Game.state.ores == 0 || show == 1) {
       Game.state.currentVersion = newestVersion
@@ -2191,6 +2198,10 @@ Game.launch = () => {
           <h1>Changelog</h1>
           <p style='text-align: center'>(Click anywhere to close)</p>
           <hr style='border-color: black; margin-bottom: 10px;'/>
+
+          <h3>v0.6.8.1 (10/13/2017)</h3>
+          <p>-Trinket store is now working... most of em</p>
+          <br/>
 
           <h3>v0.6.8 (10/12/2017)</h3>
           <p>-Working on Gems store</p>
@@ -2292,7 +2303,7 @@ Game.launch = () => {
     getCombo()
   }
 
-  s('.ore-click-area').onclick = () => {
+  s('.ore-weak-spot').onclick = () => {
     let amt = calculateOPC('weak-hit')
     let dex = Game.state.player.dex
     Game.state.stats.oreClicks++
@@ -2484,6 +2495,11 @@ Game.launch = () => {
       desc: 'Permanantly increases School production by 5x',
       // rarity: 'Mythic',
       img: 'wip.png',
+      type: {
+        type: 'Building Multiplier',
+        building: 'School',
+        amount: 5
+      },
       price: 1,
       owned: 0
     }, {
@@ -2491,66 +2507,121 @@ Game.launch = () => {
       desc: 'Permanantly increases Farm production by 5x',
       // rarity: 'Mythic',
       img: 'wip.png',
+      type: {
+        type: 'Building Multiplier',
+        building: 'Farm',
+        amount: 5
+      },
       price: 1,
       owned: 0
     }, {
       name: 'Quarry name-in-progress',
       desc: 'Permanantly increases Quarry production by 5x',
       img: 'wip.png',
+      type: {
+        type: 'Building Multiplier',
+        building: 'Quarry',
+        amount: 5
+      },
       price: 2,
       owned: 0
     }, {
       name: 'Church name-in-progress',
       desc: 'Permanantly increases Church production by 5x',
       img: 'wip.png',
+      type: {
+        type: 'Building Multiplier',
+        building: 'Church',
+        amount: 5
+      },
       price: 2,
       owned: 0
     }, {
       name: 'Factory name-in-progress',
       desc: 'Permanantly increases Factory production by 5x',
       img: 'wip.png',
+      type: {
+        type: 'Building Multiplier',
+        building: 'Factory',
+        amount: 5
+      },
       price: 3,
       owned: 0
     }, {
       name: 'Crypt name-in-progress',
       desc: 'Permanantly increases Crypt production by 5x',
       img: 'wip.png',
+      type: {
+        type: 'Building Multiplier',
+        building: 'Crypt',
+        amount: 5
+      },
       price: 3,
       owned: 0
     }, {
       name: 'Hospital name-in-progress',
       desc: 'Permanantly increases Hospital production by 5x',
       img: 'wip.png',
+      type: {
+        type: 'Building Multiplier',
+        building: 'Hospital',
+        amount: 5
+      },
       price: 4,
       owned: 0
     }, {
       name: 'Xeno Spaceship name-in-progress',
       desc: 'Permanantly increases Xeno Spaceship production by 5x',
       img: 'wip.png',
+      type: {
+        type: 'Building Multiplier',
+        building: 'XenoSpaceship',
+        amount: 5
+      },
       price: 4,
       owned: 0
     }, {
       name: 'Sky Castle name-in-progress',
       desc: 'Permanantly increases Sky Castle production by 5x',
       img: 'wip.png',
+      type: {
+        type: 'Building Multiplier',
+        building: 'SkyCastle',
+        amount: 5
+      },
       price: 5,
       owned: 0
     }, {
       name: 'Eon Portal name-in-progress',
       desc: 'Permanantly increases Eon Portal production by 5x',
       img: 'wip.png',
+      type: {
+        type: 'Building Multiplier',
+        building: 'EonPortal',
+        amount: 5
+      },
       price: 5,
       owned: 0
     }, {
       name: 'Sacred Mines name-in-progress',
       desc: 'Permanantly increases Sacred Mines production by 5x',
       img: 'wip.png',
+      type: {
+        type: 'Building Multiplier',
+        building: 'SacredMines',
+        amount: 5
+      },
       price: 6,
       owned: 0
     }, {
-      name: 'O.A.R.D.I.S name-in-progress',
+      name: 'O.A.R.D.I.S. name-in-progress',
       desc: 'Permanantly increases O.A.R.D.I.S production by 5x',
       img: 'wip.png',
+      type: {
+        type: 'Building Multiplier',
+        building: 'O.A.R.D.I.S.',
+        amount: 5
+      },
       price: 7,
       owned: 0
     }
@@ -2676,12 +2747,36 @@ Game.launch = () => {
       }
     }
 
-    if (selectedItem) {
-      if (Game.state.gems >= selectedItem.price) {
+    if (selectedItem) { // IF THERE IS A SELECTED ITEM
+      if (Game.state.gems >= selectedItem.price) { // IF YOU HAVE ENOUGH MONEY
         Game.state.gems -= selectedItem.price
+        risingNumber(0, 'spendGems')
+        Game.closeCurrentWindow()
+        if (selectedItem.type) {
+          if (selectedItem.type.type == 'Building Multiplier') {
+            Game.items[selectedItem.type.building].production *= selectedItem.type.amount
+          }
+        }
+        if (selectedItem.name == 'Tome of Higher Learning') {
+          //
+        }
+        if (selectedItem.name == 'Discount Card') {
+          for (i in Game.items) {
+            if (Game.items[i].type == 'item') {
+              Game.items[i].price -= Game.items[i].price * .1
+              buildStore()
+            }
+          }
+        }
+        if (selectedItem.name == 'Earrings of Alacrity') {
+          //
+        }
       }
-    }
 
+
+
+
+    }
   }
 
   Game.refreshItems = () => {
@@ -2864,7 +2959,7 @@ Game.launch = () => {
 
   s('.bottom').addEventListener('mouseover', () => {
     if (Game.state.player.lvl < 10) {
-      s('.bottom-overlay-txt').innerHTML = `<i class='fa fa-lock fa-1x' style='margin-right: 10px'></i>Quests Unlocked at Lv. 10`
+      s('.bottom-overlay-txt').innerHTML = `<i class='fa fa-lock fa-1x' style='margin-right: 10px'></i>Unlocked after First Refine`
     } else {
       s('.bottom-overlay-txt').style.display = 'none'
     }
