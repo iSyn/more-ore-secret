@@ -544,7 +544,7 @@ body {
   transform: translate(-50%, -50%);
   color: white;
   padding: 10px 15px;
-  border: 2px solid white;
+  /*border: 2px solid white;*/
   font-size: xx-large;
 }
 

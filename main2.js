@@ -361,7 +361,7 @@ Game.launch = () => {
         hasContent = 1
         str += `
           <div class="upgrade-item-container" style='background-color: #b56535'>
-            <div class="upgrade-item" onclick='Game.upgrades[${i}].buy()' style='background: url(./assets/${item.pic}); background-size: 100%;'></div>
+            <div class="upgrade-item" onclick='Game.upgrades[${i}].buy()' onmouseover="Game.showTooltip({name: '${item.name}', type: '${item.type}s'})" onmouseout="Game.hideTooltip()" style='background: url(./assets/${item.pic}); background-size: 100%;'></div>
           </div>
         `
       }
@@ -705,6 +705,8 @@ Game.launch = () => {
 
     if (anchorPoint) {
       tooltip.style.top = anchorPoint.getBoundingClientRect().top + 'px'
+    } else {
+      tooltip.style.top = event.clientY + 'px'
     }
 
 
