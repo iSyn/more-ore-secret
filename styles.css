@@ -403,24 +403,24 @@ body {
   }
 }
 
-.click-me-container {
+.tutorial-container {
   display: flex;
   flex-flow: row nowrap;
   align-items: center;
-  position: absolute;
-  /*border: 1px solid white;*/
   color: white;
+  position: absolute;
   padding: 10px;
-  animation: sideToSide .5s infinite ease-in-out;
+  animation: sideToSide .8s infinite ease-in-out;
 }
 
-.click-me-left {
+.tutorial-text {
   padding: 15px;
   background-color: black;
   box-shadow: 0 0px 5px white inset;
+  text-align: center;
 }
 
-.click-me-right {
+.tutorial-arrow {
   height: 0;
   width: 0;
   border-top: 6px solid transparent;
