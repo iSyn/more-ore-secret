@@ -150,45 +150,38 @@ Game.launch = () => {
     localStorage.setItem('upgrades', JSON.stringify(Game.upgrades))
     localStorage.setItem('prospectorSkills', JSON.stringify(Game.prospectorSkills))
     localStorage.setItem('managerSkills', JSON.stringify(Game.managerSkills))
+    localStorage.setItem('achievements', JSON.stringify(Game.achievements))
   }
 
   Game.load = () => {
 
     if (localStorage.getItem('state') !== null) {
-
+      console.log('SAVE FILE FOUND')
+      // LOAD IN STATE
+      console.log('LOADING STATE')
       Game.state = JSON.parse(localStorage.getItem('state'))
 
+      // LOAD BUILDINGS AND UPGRADES
+      console.log('LOADING BUILDINGS AND UPGRADES')
       let items = []
+      JSON.parse(localStorage.getItem('buildings')).forEach((building) => {items.push(building)})
+      JSON.parse(localStorage.getItem('upgrades')).forEach((upgrade) => {items.push(upgrade)})
+      items.forEach((item) => {new Item(item)})
 
-      // LOADING BUILDINGS
-      JSON.parse(localStorage.getItem('buildings')).forEach((building) => {
-        items.push(building)
-      })
-
-      // LOADING UPGRADES
-      JSON.parse(localStorage.getItem('upgrades')).forEach((upgrade) => {
-        items.push(upgrade)
-      })
-
-      items.forEach((item) => {
-        new Item(item)
-      })
-
+      // LOAD SKILLS
+      console.log('LOADING SKILLS')
       let skills = []
+      JSON.parse(localStorage.getItem('prospectorSkills')).forEach((skill) => {skills.push(skill)})
+      JSON.parse(localStorage.getItem('managerSkills')).forEach((skill) => {skills.push(skill)})
+      skills.forEach((skill) => {new Skill(skill)})
 
-      // LOADING PROSPECTOR SKILLS
-      JSON.parse(localStorage.getItem('prospectorSkills')).forEach((skill) => {
-        skills.push(skill)
-      })
+      // LOAD ACHIEVEMENTS
+      console.log('LOADING ACHIEVEMENTS')
+      let achievements = []
+      JSON.parse(localStorage.getItem('achievements')).forEach((achievement) => {achievements.push(achievement)})
+      achievements.forEach((achievement) => {new Achievement(achievement)})
 
-      // LOADING MANAGER SKILLS
-      JSON.parse(localStorage.getItem('managerSkills')).forEach((skill) => {
-        skills.push(skill)
-      })
-
-      skills.forEach((skill) => {
-        new Skill(skill)
-      })
+      console.log('LOADING SAVE COMPLETE')
 
     } else {
       console.log('NO SAVE FILE. LOADING BASE ITEMS', items)
@@ -196,13 +189,18 @@ Game.launch = () => {
       items.forEach((item) => {
         new Item(item)
       })
-    }
 
-    // BUILD ALL SKILLS
-    skills.forEach((skill) => {
-      console.log('loading skill...')
-      new Skill(skill)
-    })
+       // BUILD ALL SKILLS
+      skills.forEach((skill) => {
+        new Skill(skill)
+      })
+
+      // BUILD ACHIEVEMENTS
+      achievements.forEach((achievement) => {
+        new Achievement(achievement)
+      })
+
+    }
 
     // PREREQUISITES
     Game.updatePercentage(0)
@@ -213,6 +211,7 @@ Game.launch = () => {
     Game.recalculateOpC = 1
     Game.recalculateOpS = 1
     Game.repositionSettingsContainer = 1
+    if (Game.state.player.specialization) Game.redrawSkillsContainer = 1
   }
 
   Game.wipe = () => {
@@ -345,6 +344,11 @@ Game.launch = () => {
 
     Game.state.oresPerClick = opc
     Game.recalculateOpC = 0
+
+    // OPC ACHIEVEMENTS
+    if (Game.state.oresPerClick >= 1000000) Game.winAchievement('Still a Baby')
+    if (Game.state.oresPerClick >= 1000000000) Game.winAchievement('Getting There')
+    if (Game.state.oresPerClick >= 1000000000000) Game.winAchievement('Big Boy')
   }
 
   Game.calculateOpS = () => {
@@ -358,6 +362,11 @@ Game.launch = () => {
 
     Game.state.oresPerSecond = ops
     Game.recalculateOpS = 0
+
+    // OPS ACHIEVEMENTS
+    if (Game.state.oresPerSecond >= 401000) Game.winAchievement('401k')
+    if (Game.state.oresPerSecond >= 5000000) Game.winAchievement('Retirement Plan')
+    if (Game.state.oresPerSecond >= 1000000000) Game.winAchievement('Hedge Fund')
   }
 
   Game.getCombo = (type) => {
@@ -371,14 +380,15 @@ Game.launch = () => {
       }
 
       // UNLOCK ACHIEVEMENTS REGARDING COMBOS
-      // if (Game.state.stats.currentCombo >= 5) Game.winAchievement('Combaby')
-      // if (Game.state.stats.currentCombo >= 15) Game.winAchievement('Combro')
-      // if (Game.state.stats.currentCombo >= 25) Game.winAchievement('Comboing')
-      // if (Game.state.stats.currentCombo >= 100) Game.winAchievement('Combo Master')
-      // if (Game.state.stats.currentCombo >= 666) Game.winAchievement('Combo Devil')
-      // if (Game.state.stats.currentCombo >= 777) Game.winAchievement('Combo God')
-      // if (Game.state.stats.currentCombo >= 1000) Game.winAchievement('Combo Saiyan')
-      // if (Game.state.stats.currentCombo >= 11111) Game.winAchievement('Combo Saitama')
+      if (Game.state.stats.currentCombo == 5) Game.winAchievement('Combo Pleb')
+      if (Game.state.stats.currentCombo == 15) Game.winAchievement('Combo Squire')
+      if (Game.state.stats.currentCombo == 40) Game.winAchievement('Combo Knight')
+      if (Game.state.stats.currentCombo == 100) Game.winAchievement('Combo King')
+      if (Game.state.stats.currentCombo == 300) Game.winAchievement('Combo Master')
+      if (Game.state.stats.currentCombo == 666) Game.winAchievement('Combo Devil')
+      if (Game.state.stats.currentCombo == 777) Game.winAchievement('Combo God')
+      if (Game.state.stats.currentCombo == 1000) Game.winAchievement('Combo Saiyan')
+      if (Game.state.stats.currentCombo == 10000) Game.winAchievement('Combo Saitama')
 
 
     } else { // IF REGULAR HIT
@@ -1444,6 +1454,12 @@ Game.launch = () => {
       Game.playSound('explosion2')
       Game.state.oreHp = Math.pow(Game.state.oreHp, 1.09)
       Game.state.oreCurrentHp = Game.state.oreHp
+
+      if (Game.state.stats.rocksDestroyed == 1) Game.winAchievement('Newbie Miner')
+      if (Game.state.stats.rocksDestroyed == 10) Game.winAchievement('Novice Miner')
+      if (Game.state.stats.rocksDestroyed == 25) Game.winAchievement('Intermediate Miner')
+      if (Game.state.stats.rocksDestroyed == 50) Game.winAchievement('Advanced Miner')
+
       soundPlayed1 = false
       soundPlayed2 = false
       soundPlayed3 = false
@@ -1765,6 +1781,7 @@ Game.launch = () => {
     }
 
     Game.hideTooltip()
+
     // if (skill.name == 'Heavy Smash') {
     //   if (skill.currentCooldown <= 0) {
     //     Game.winAchievement('Hulk Smash')
@@ -2498,6 +2515,88 @@ Game.launch = () => {
     if (s('.specialization-confirmation-wrapper')) s('.specialization-confirmation-wrapper').remove()
   }
 
+  Game.achievements = []
+  let Achievement = function(obj) {
+    this.name = obj.name
+    this.desc = obj.desc
+    this.won = obj.won || 0
+    if (obj.reward) this.reward = obj.reward
+
+    Game.achievements.push(this)
+  }
+
+  let achievements = [
+    // MINING RELATED ACHIEVEMENTS
+    {name: 'Newbie Miner', desc: 'Break your first rock'},
+    {name: 'Novice Miner', desc: 'Break 10 rocks'},
+    {name: 'Intermediate Miner', desc: 'Break 25 rocks'},
+    {name: 'Advanced Miner', desc: 'Break 50 rocks'},
+
+    // COMBO RELATED ACHIEVEMENTS
+    {name: 'Combo Pleb', desc: 'Reach 5 hit combo'},
+    {name: 'Combo Squire', desc: 'Reach 15 hit combo'},
+    {name: 'Combo Knight', desc: 'Reach 40 hit combo'},
+    {name: 'Combo King', desc: 'Reach 100 hit combo'},
+    {name: 'Combo Master', desc: 'Reach 300 hit combo'},
+    {name: 'Combo Devil', desc: 'Reach 666 hit combo'},
+    {name: 'Combo God', desc: 'Reach 777 hit combo'},
+    {name: 'Combo Saiyan', desc: 'Reach 1000 hit combo'},
+    {name: 'Combo Saitama', desc: 'Reach 10000 hit combo'},
+
+    // OPC ACHIEVEMENTS
+    {name: 'Still a Baby', desc: 'Deal more than 1,000,000 in one hit'},
+    {name: 'Getting There', desc: 'Deal more than 1,000,000,000 in one hit'},
+    {name: 'Big Boy', desc: 'Deal more than 1,000,000,000,000 in one hit'},
+
+    // OPS ACHIEVEMENTS
+    {name: '401k', desc: 'Earn 401,000 ores per second'},
+    {name: 'Retirement Plan', desc: 'Earn 5,000,000 OpS'},
+    {name: 'Hedge Fund', desc: 'Earn 1,000,000,000 OpS'},
+
+    // REFINE ACHIEVEMENTS
+    {name: 'Blacksmiths Apprentice', desc: 'Refine for your first time'},
+
+    // SKILL ACHIEVEMENTS
+    {name: 'Hulk Smash', desc: 'Use the skill Heavy Smash for the first time'},
+    {name: 'Roided Out', desc: 'Use the skill Roid Rage for the first time'},
+    {name: 'Beep Boop', desc: 'Use the skill Auto-Miner 5000 for the first time'},
+    {name: 'Roided Smash', desc: 'Use the skill Heavy Smash while Roid Rage is active'}
+  ]
+
+  Game.winAchievement = (achievementName) => {
+    let selectedAchievement;
+    for (i in Game.achievements) {
+      if (Game.achievements[i].name == achievementName) {
+        selectedAchievement = Game.achievements[i]
+        break
+      }
+    }
+
+    if (selectedAchievement.won == 0) {
+      selectedAchievement.won = 1
+      let div = document.createElement('div')
+      div.classList.add('achievement')
+
+      let str = `
+        <h3>Achievement Unlocked</h3>
+        <h1>${selectedAchievement.name}</h1>
+        <p>${selectedAchievement.desc}</p>
+      `
+      if (selectedAchievement.reward) {
+        str += `
+          <p>reward: bleh</p>
+        `
+      }
+
+      div.innerHTML = str
+      s('body').append(div)
+
+      setTimeout(() => {
+        div.remove()
+      }, 3000)
+    }
+  }
+
   Game.logic = () => {
     // HANDLE ORES N SHIT
     if (Game.recalculateOpC) Game.calculateOpC()
@@ -2659,6 +2758,12 @@ Game.launch = () => {
       s('.bottom-overlay-txt').style.display = 'none'
     }
   })
+  s('#main-separator').onclick = () => {
+    Game.state.ores += 99999999
+    Game.gainXp(999)
+    Game.state.player.gems += 999
+    Game.state.player.specializationSp += 999
+  }
 
   window.onresize = () => {
     Game.repositionSettingsContainer = 1
