@@ -130,6 +130,7 @@ Game.launch = () => {
     },
     prefs: {
       volume: 0.5,
+      bgm: 1,
       rockParticles: true,
       risingNumbers: true,
       scrollingText: true,
@@ -137,10 +138,6 @@ Game.launch = () => {
       fps: 30,
       canRefined: true,
       refineTimer: 10800, // 3 hours in seconds
-      //
-      tutOne: 0,
-      tutTwo: 0,
-      tutThree: 0
     }
   }
 
@@ -199,7 +196,6 @@ Game.launch = () => {
       achievements.forEach((achievement) => {
         new Achievement(achievement)
       })
-
     }
 
     // PREREQUISITES
@@ -212,6 +208,8 @@ Game.launch = () => {
     Game.recalculateOpS = 1
     Game.repositionSettingsContainer = 1
     if (Game.state.player.specialization) Game.redrawSkillsContainer = 1
+    if (Game.state.stats.oreClicks == 0) Game.tutorialOne()
+    Game.playBgm()
   }
 
   Game.wipe = () => {
@@ -223,6 +221,19 @@ Game.launch = () => {
     let sfx = new Audio(`./assets/${snd}.wav`)
     sfx.volume = Game.state.prefs.volume
     sfx.play()
+  }
+
+  Game.playBgm = (volume) => {
+    let selected = Math.floor(Math.random() * 4) + 1
+    let bgm = new Audio(`./assets/bgm${selected}.mp3`)
+
+    if (volume) {
+      //IDK HOW TO MUTE SHIT DONT WORK I TRIED EVERYTHING
+    } else {
+      bgm.volume = .1
+      bgm.play()
+      bgm.onended = () => Game.playBgm()
+    }
   }
 
   Game.earn = (amount) => {
@@ -237,8 +248,6 @@ Game.launch = () => {
   }
 
   Game.tutorialOne = () => {
-    Game.state.prefs.tutOne = 1
-
     let div = document.createElement('div')
 
     div.classList.add('tutorial-container')
@@ -256,52 +265,19 @@ Game.launch = () => {
     div.style.top = (anchor.top + anchor.bottom)/2 + 'px'
     div.style.left = anchor.left - div.getBoundingClientRect().width + 'px'
 
-    s('.ore').addEventListener('click', () => div.remove())
+    setTimeout(() => div.remove(), 2000)
+    setTimeout(() => {if (Game.state.stats.buildingsOwned == 0) Game.tutorialTwo()}, 5000)
   }
 
   Game.tutorialTwo = () => {
-    Game.state.prefs.tutTwo = 1
-
-    let div = document.createElement('div')
-
-    div.classList.add('tutorial-container')
-    div.innerHTML = `
-      <div class="tutorial-text">
-        <p>Buy the <strong style='text-decoration: underline'>Magnifying Glass</strong></p>
-        <p>This allows for weak spot hits!</p>
-      </div>
-      <div class="tutorial-arrow"></div>
-    `
-
-    let anchorTop = s('.upgrades-container').getBoundingClientRect()
-    let anchorLeft = s('#main-separator').getBoundingClientRect()
-
-    s('body').append(div)
-
-    div.style.top = anchorTop.top - div.getBoundingClientRect().height / 4 + "px"
-    div.style.left = anchorLeft.left - div.getBoundingClientRect().width + 'px'
-
-    setTimeout(() => {
-      s('.upgrade-item').addEventListener('click', () => {
-        div.remove()
-        setTimeout(() => {
-          if (Game.state.stats.buildingsOwned == 0) Game.tutorialThree()
-        }, 3000)
-
-      })
-    }, 100)
-  }
-
-  Game.tutorialThree = () => {
-    Game.state.prefs.tutThree = 1
-
     let div = document.createElement('div')
 
     div.classList.add('tutorial-container')
     div.innerHTML = `
       <div class="tutorial-text">
         <p>Don't forget to purchase buildings</p>
-        <p>to increase your Ores Per Second! (OpS)</p>
+        <p>to increase your Ores Per Second(OpS)</p>
+        <hr/>
         <p style='font-size: x-small'>(im looking at you Dylan)</p>
       </div>
       <div class="tutorial-arrow"></div>
@@ -957,7 +933,7 @@ Game.launch = () => {
         hasContent = 1
         str += `
           <div class="upgrade-item-container" style='background-color: #b56535'>
-            <div class="upgrade-item" onclick='Game.upgrades[${i}].buy(); Game.hideTooltip()' onmouseover="Game.showTooltip({name: '${item.name}', type: '${item.type}s'})" onmouseout="Game.hideTooltip()" style='background: url(./assets/${item.pic}); background-size: 100%;'></div>
+            <div class="upgrade-item" id="${item.name.replace(/\s/g , "-")}" onclick='Game.upgrades[${i}].buy(); Game.hideTooltip()' onmouseover="Game.showTooltip({name: '${item.name}', type: '${item.type}s'})" onmouseout="Game.hideTooltip()" style='background: url(./assets/${item.pic}); background-size: 100%;'></div>
           </div>
         `
       }
@@ -2026,7 +2002,7 @@ Game.launch = () => {
         <hr />
         <p>${item.desc}</p>
         `
-        if (item.type == 'item') {
+        if (item.type == 'building') {
           if (item.owned > 0) {
             tooltip.innerHTML += `
               <hr />
@@ -2063,7 +2039,7 @@ Game.launch = () => {
         <hr/>
         <p>Sound</p>
         <div class="single-setting">
-          <p style='padding-right: 10px;'>Volume: </p>
+          <p style='padding-right: 10px;'>SFX Volume: </p>
           <input class='volume-slider' type="range" min=0 max=1 step=0.1 list='tickmarks' onchange='Game.state.prefs.volume = document.querySelector(".volume-slider").value'/>
           <datalist id="tickmarks">
             <option value="0" label="0%">
@@ -2079,6 +2055,13 @@ Game.launch = () => {
             <option value="0.9">
             <option value='1.0' label="100%">
           </datalist>
+        </div>
+        <div class="single-setting">
+          <p style='padding-right: 20px;'>Background Music: </p>
+          <input type="radio" name='bgm' id='bgmOn' value='true' onchange='Game.state.prefs.bgm = 1; Game.playBgm()'/>
+            <label for="bgmOn" style='margin-right: 10px'>On</label>
+          <input type="radio" name='bgm' id='bgmOff' value='false' onchange='Game.state.prefs.bgm = 0; Game.playBgm("muted")'/>
+            <label for="bgmOff" style='margin-right: 10px'>Off</label>
         </div>
         <hr/>
         <br/>
@@ -2116,6 +2099,7 @@ Game.launch = () => {
     s('body').append(div)
     s('.volume-slider').value = Game.state.prefs.volume
 
+    Game.state.prefs.bgm == true ? s('#bgmOn').checked = true : s('#bgmOff').checked = true
     Game.state.prefs.rockParticles == true ? s('#rockParticlesOn').checked = true : s('#rockParticlesOff').checked = true
     Game.state.prefs.risingNumbers == true ? s('#risingNumbersOn').checked = true : s('#risingNumbersOff').checked = true
     Game.state.prefs.scrollingText == true ? s('#scrollingTextOn').checked = true : s('#scrollingTextOff').checked = true
@@ -2618,12 +2602,6 @@ Game.launch = () => {
     if (Game.state.stats.oreClicks >= 5 && Game.upgrades[0].owned == 0) Game.unlockUpgrade('Magnifying Glass')
     if (Game.state.stats.weakSpotHits >= 5 && Game.upgrades[1].owned == 0) Game.unlockUpgrade('Clean Magnifying Glass')
     if (Game.state.stats.weakSpotHits >= 20 && Game.upgrades[1].owned == 1 && Game.upgrades[2].owned == 0) Game.unlockUpgrade('Polish Magnifying Glass')
-
-    // TUTORIAL SHIT
-    if (Game.state.stats.oreClicks == 0 && Game.state.prefs.tutOne == 0) Game.tutorialOne()
-    if (Game.state.stats.oreClicks == 5 && Game.state.prefs.tutTwo == 0) Game.tutorialTwo()
-
-
 
     setTimeout(Game.logic, 1000/Game.state.prefs.fps)
   }
