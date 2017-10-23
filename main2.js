@@ -196,6 +196,9 @@ Game.launch = () => {
       achievements.forEach((achievement) => {
         new Achievement(achievement)
       })
+
+      Game.tutorialOne()
+      Game.tutOneActive = true
     }
 
     // PREREQUISITES
@@ -208,8 +211,7 @@ Game.launch = () => {
     Game.recalculateOpS = 1
     Game.repositionSettingsContainer = 1
     if (Game.state.player.specialization) Game.redrawSkillsContainer = 1
-    if (Game.state.stats.oreClicks == 0) Game.tutorialOne()
-    Game.playBgm()
+    // Game.playBgm()
   }
 
   Game.wipe = () => {
@@ -230,7 +232,7 @@ Game.launch = () => {
     if (volume) {
       //IDK HOW TO MUTE SHIT DONT WORK I TRIED EVERYTHING
     } else {
-      bgm.volume = .1
+      bgm.volume = .08
       bgm.play()
       bgm.onended = () => Game.playBgm()
     }
@@ -265,8 +267,14 @@ Game.launch = () => {
     div.style.top = (anchor.top + anchor.bottom)/2 + 'px'
     div.style.left = anchor.left - div.getBoundingClientRect().width + 'px'
 
-    setTimeout(() => div.remove(), 2000)
-    setTimeout(() => {if (Game.state.stats.buildingsOwned == 0) Game.tutorialTwo()}, 5000)
+    s('.ore').addEventListener("click", () => {
+      div.remove()
+      setTimeout(() => {
+        if (Game.state.stats.buildingsOwned == 0) {
+          Game.tutorialTwo()
+        }
+      }, 2000)
+    }, {once : true});
   }
 
   Game.tutorialTwo = () => {
@@ -2057,10 +2065,10 @@ Game.launch = () => {
           </datalist>
         </div>
         <div class="single-setting">
-          <p style='padding-right: 20px;'>Background Music: </p>
-          <input type="radio" name='bgm' id='bgmOn' value='true' onchange='Game.state.prefs.bgm = 1; Game.playBgm()'/>
+          <p style='padding-right: 20px;'>BGM (NOT WORKING SRY): </p>
+          <input type="radio" name='bgm' id='bgmOn' value='true' onchange='Game.state.prefs.bgm = 1'/>
             <label for="bgmOn" style='margin-right: 10px'>On</label>
-          <input type="radio" name='bgm' id='bgmOff' value='false' onchange='Game.state.prefs.bgm = 0; Game.playBgm("muted")'/>
+          <input type="radio" name='bgm' id='bgmOff' value='false' onchange='Game.state.prefs.bgm = 0'/>
             <label for="bgmOff" style='margin-right: 10px'>Off</label>
         </div>
         <hr/>
@@ -2602,6 +2610,8 @@ Game.launch = () => {
     if (Game.state.stats.oreClicks >= 5 && Game.upgrades[0].owned == 0) Game.unlockUpgrade('Magnifying Glass')
     if (Game.state.stats.weakSpotHits >= 5 && Game.upgrades[1].owned == 0) Game.unlockUpgrade('Clean Magnifying Glass')
     if (Game.state.stats.weakSpotHits >= 20 && Game.upgrades[1].owned == 1 && Game.upgrades[2].owned == 0) Game.unlockUpgrade('Polish Magnifying Glass')
+
+    // TUTORIAL SHIT
 
     setTimeout(Game.logic, 1000/Game.state.prefs.fps)
   }
