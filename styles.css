@@ -1596,3 +1596,25 @@ li {
   animation: sideToSide .5s infinite;
 }
 
+.offline-gain-popup-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  background-color: black;
+  border: 1px solid white;
+  padding: 8px;
+}
+
+.offline-gain-popup-container button {
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: transparent;
+  border: 1px solid white;
+  color: white;
+  padding: 3px 6px;
+  cursor: pointer;
+  margin-top: 8px;
+}

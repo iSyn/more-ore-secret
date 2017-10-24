@@ -126,7 +126,7 @@ Game.launch = () => {
       highestCombo: 0,
       currentCombo: 0,
       timesRefined: 0,
-      buildingsOwned: 0
+      buildingsOwned: 0,
     },
     prefs: {
       volume: 0.5,
@@ -136,12 +136,14 @@ Game.launch = () => {
       scrollingText: true,
       currentVersion: '0.6.7',
       fps: 30,
-      canRefined: true,
+      canRefine: true,
       refineTimer: 10800, // 3 hours in seconds
-    }
+    },
+    lastLogin: null
   }
 
   Game.save = () => {
+    Game.state.lastLogin = new Date().getTime()
     localStorage.setItem('state', JSON.stringify(Game.state))
     localStorage.setItem('buildings', JSON.stringify(Game.buildings))
     localStorage.setItem('upgrades', JSON.stringify(Game.upgrades))
@@ -177,6 +179,9 @@ Game.launch = () => {
       let achievements = []
       JSON.parse(localStorage.getItem('achievements')).forEach((achievement) => {achievements.push(achievement)})
       achievements.forEach((achievement) => {new Achievement(achievement)})
+
+      // GAIN AWAY INCOME
+      if (Game.state.oresPerSecond > 0 && Game.state.lastLogin) Game.earnOfflineGain()
 
       console.log('LOADING SAVE COMPLETE')
 
@@ -235,6 +240,30 @@ Game.launch = () => {
       bgm.volume = .08
       bgm.play()
       bgm.onended = () => Game.playBgm()
+    }
+  }
+
+  Game.earnOfflineGain = () => {
+    let past = Game.state.lastLogin
+    let current = new Date().getTime()
+    let amountOfTimePassed = (current - past) / 1000 // GETS THE DIFFERENCE IN SECONDS
+
+    let currentOpS = Game.state.oresPerSecond
+    let amountToGain = amountOfTimePassed * currentOpS
+
+    if (amountToGain >= 1) {
+      let div = document.createElement('div')
+      div.classList.add('wrapper')
+      div.innerHTML = `
+        <div class="offline-gain-popup-container">
+          <h2 style='font-family: "Germania One"; text-align: center; letter-spacing: 1px;'>Welcome Back!</h2>
+          <hr />
+          <p>While you were away, you earned ${amountToGain.toFixed(0)} ores!</p>
+          <button onclick='Game.earn(${amountToGain}); document.querySelector(".wrapper").remove()'>Ok</button>
+        </div>
+      `
+
+      s('body').append(div)
     }
   }
 
@@ -993,7 +1022,7 @@ Game.launch = () => {
 
   Game.buildInventory = () => {
     let str = ''
-    str += `Ores: ${beautify(Game.state.ores.toFixed(1))}`
+    str += `Ores: ${beautify(Game.state.ores.toFixed(0))}`
     if (Game.state.oresPerSecond > 0) {
       str += ` (${beautify(Game.state.oresPerSecond.toFixed(1))}/s)`
     }
@@ -1147,7 +1176,7 @@ Game.launch = () => {
               `
             }
           } else { // IF THERE IS A SPECIALIZATION
-            let timeLeft = beautifyTime(Game.state.refineTimer)
+            let timeLeft = beautifyTime(Game.state.prefs.refineTimer)
             str += `
               <h2 style='text-align: center; cursor: pointer; padding: 5px 0;' onclick='Game.specializationSkills()'>${Game.state.player.specialization} &nbsp; &rsaquo;</h2>
               <hr/>
@@ -1165,7 +1194,7 @@ Game.launch = () => {
               </div>
               <br/>`
 
-              if (Game.state.canRefine == true) {
+              if (Game.state.prefs.canRefine == true) {
                 str += `
                   <button class='specialization-btn' onclick='Game.confirmRefine()'>Refine</button>
                 `
@@ -1199,6 +1228,7 @@ Game.launch = () => {
         Game.hideTooltip()
       }
     }
+    Game.recalculateOpC = 1
   }
 
   Game.statsVisable = false
@@ -1272,14 +1302,11 @@ Game.launch = () => {
       Game.oreWeakSpot()
     }
     if (item.name == 'School') {
-      if (item.owned == 1) {
-        Game.unlockUpgrade('Composition Notebooks')
-      }
+      if (item.owned == 1) {Game.unlockUpgrade('Composition Notebooks'); Game.textScroller.push('First day of class has started')}
+      if (item.owned == 20) {Game.textScroller.push('[Breaking News] The school district superintendent has announced new ore related classes to take')}
     }
     if (item.name == 'Farm') {
-      if (item.owned == 1) {
-        Game.unlockUpgrade('Manure Spreader')
-      }
+      if (item.owned == 1) {Game.unlockUpgrade('Manure Spreader'); Game.textScroller.push('[Breaking News] Farmers have no started farming for ores. How is this possible? More at 7pm')}
     }
     if (item.name == 'Quarry') {
       if (item.owned == 1) {
@@ -1439,9 +1466,9 @@ Game.launch = () => {
       Game.state.oreHp = Math.pow(Game.state.oreHp, 1.09)
       Game.state.oreCurrentHp = Game.state.oreHp
 
-      if (Game.state.stats.rocksDestroyed == 1) Game.winAchievement('Newbie Miner')
-      if (Game.state.stats.rocksDestroyed == 10) Game.winAchievement('Novice Miner')
-      if (Game.state.stats.rocksDestroyed == 25) Game.winAchievement('Intermediate Miner')
+      if (Game.state.stats.rocksDestroyed == 1) {Game.winAchievement('Newbie Miner'); Game.textScroller.push('[Breaking News] Rocks are breaking!')}
+      if (Game.state.stats.rocksDestroyed == 10) {Game.winAchievement('Novice Miner'); Game.textScroller.push('What happens in Ore Town stays in Ore Town')}
+      if (Game.state.stats.rocksDestroyed == 25) {Game.winAchievement('Intermediate Miner'); Game.textScroller.push('[Breaking News] The cries of baby rocks can be heard from miles away as their parents get obliterated by this new miner')}
       if (Game.state.stats.rocksDestroyed == 50) Game.winAchievement('Advanced Miner')
 
       soundPlayed1 = false
@@ -2692,7 +2719,7 @@ Game.launch = () => {
     {name: 'Flashlight', type: 'upgrade', pic: 'wip.png', desc: 'Gain 10% of your OpS as OpC', fillerQuote: 'wip', price: 50000, hidden: 1},
   ]
 
-  textScroller = [
+  Game.textScroller = [
     'What is a rocks favorite fruit? ... Pom-a-granite',
     'Did you see that cleavage? Now that\'s some gneiss schist.',
     'All rock and no clay makes you a dull boy (or girl)',
@@ -2716,9 +2743,9 @@ Game.launch = () => {
         s('.text-scroller').style.transition = `transform 15s linear`;
         s('.text-scroller').style.transform = `translateX(-${parentWidth + s('.text-scroller').clientWidth}px)`
       } else {
-        let random = Math.floor(Math.random() * textScroller.length)
+        let random = Math.floor(Math.random() * Game.textScroller.length)
 
-        s('.text-scroller').innerHTML = textScroller[random]
+        s('.text-scroller').innerHTML = Game.textScroller[random]
         s('.text-scroller').style.right = -s('.text-scroller').clientWidth + 'px'
 
         let parentWidth = s('.text-scroller').parentElement.clientWidth
@@ -2760,8 +2787,9 @@ Game.launch = () => {
     Game.redrawSkillsContainer = 1
   }
 
-
 }
+
+
 
 window.onload = () => {
   Game.launch()
