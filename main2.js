@@ -1076,14 +1076,18 @@ Game.launch = () => {
       s('.tab-content-container').append(div)
       }
     }
-    // if (s('.img_ad')) {
-    //   //do nothing
-    // } else {
-    //     let str = `
-    //     <p style='text-align: center; background: transparent; color: white;'>Please consider whitelisting this page! <br/> I tried my best to make the ads non-intrusive! <br/> Thanks!</p>
-    //     `
-    //     s('#ads-im-sorry-please-dont-hate-me').innerHTML = str
-    // }
+
+    if (s('#ads-im-sorry-please-dont-hate-me').innerHTML.length < 1000) {
+      let str = `
+        <p style='text-align: center; background: transparent; color: white; padding-bottom: 20px;'>
+        Please consider disabling adblock! <br/>
+        I am just a broke college student. <br/>
+        The cents generated from this game will be for food :)<br/>
+        Thanks!
+        </p>
+      `
+      s('#ads-im-sorry-please-dont-hate-me').innerHTML = str
+    }
   }
 
   Game.buildInventory = () => {
