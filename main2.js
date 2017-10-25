@@ -482,6 +482,9 @@ Game.launch = () => {
     // ADD OPC MULTIPLIER
     opc += (opc * Game.state.opcMulti)
 
+    // ADD GENERATION BONUS
+    opc += (opc * (Game.state.player.generation * .01))
+
     Game.state.oresPerClick = opc
     Game.recalculateOpC = 0
 
@@ -499,6 +502,9 @@ Game.launch = () => {
         ops += Game.buildings[i].production * Game.buildings[i].owned
       }
     }
+
+    // GENERATION BONUS
+    ops += (ops * (Game.state.player.generation * .01))
 
     Game.state.oresPerSecond = ops
     Game.recalculateOpS = 0
@@ -1897,8 +1903,8 @@ Game.launch = () => {
       tooltip.innerHTML = `
         <h3>You are currently on Generation ${Game.state.player.generation}</h3>
         <hr/>
-        <p>+${Game.state.player.generation * .1} OpC multiplier</p>
-        <p>+${Game.state.player.generation * .1} OpS multiplier</p>
+        <p>+${Game.state.player.generation * .01} OpC multiplier</p>
+        <p>+${Game.state.player.generation * .01} OpS multiplier</p>
         <hr/>
         <p>Your generation goes up by 1 every time you refine</p>
       `
@@ -2893,7 +2899,7 @@ Game.launch = () => {
   s('.ore').onclick = () => Game.handleClick()
   s('.ore-weak-spot').onclick = () => {Game.handleClick('weak-spot'); Game.oreWeakSpot()}
   s('.bottom').addEventListener('mouseover', () => {
-    s('.bottom-overlay-txt').innerHTML = `<i class='fa fa-lock fa-1x' style='margin-right: 10px'></i>QUESTS UNLOCKED ON 3RD GENERATION`
+    s('.bottom-overlay-txt').innerHTML = `<i class='fa fa-lock fa-1x' style='margin-right: 10px'></i>QUESTS UNLOCKED ON 2ND GENERATION`
   })
   s('#main-separator').onclick = () => {
     Game.state.ores += 99999999
@@ -2919,7 +2925,6 @@ Game.launch = () => {
     Game.earnOfflineGain()
     Game.blurred = false;
   }
-
 }
 
 
