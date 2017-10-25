@@ -1982,8 +1982,20 @@ Game.launch = () => {
       tooltip.style.top = event.clientY + 'px'
     }
 
-
-    if (type == 'stat') {
+    if (type == 'generation') {
+      tooltip.style.width = 'auto'
+      tooltip.style.left = event.clientX - tooltip.getBoundingClientRect().width/2 + 'px'
+      tooltip.style.top = event.clientY + 20 + 'px'
+      tooltip.style.minWidth = '150px'
+      tooltip.innerHTML = `
+        <h3>You are currently on Generation ${Game.state.player.generation}</h3>
+        <hr/>
+        <p>+0 OpC multiplier</p>
+        <p>+0 OpS multiplier</p>
+        <hr/>
+        <p>Your generation goes up by 1 every time you refine</p>
+      `
+    } else if (type == 'stat') {
       anchor = s('.stats-container-content-wrapper').getBoundingClientRect()
       tooltip.style.width = 'auto'
       tooltip.style.left = anchor.right + 'px'
@@ -2092,20 +2104,7 @@ Game.launch = () => {
             <p>You don't have a trinket</p>
         `
       }
-    } else if (type = 'generation') {
-      tooltip.style.width = 'auto'
-      tooltip.style.left = event.clientX - tooltip.getBoundingClientRect().width/2 + 'px'
-      tooltip.style.top = event.clientY + 20 + 'px'
-      tooltip.style.minWidth = '150px'
-      tooltip.innerHTML = `
-        <h3>You are currently on Generation ${Game.state.player.generation}</h3>
-        <hr/>
-        <p>+0 OpC multiplier</p>
-        <p>+0 OpS multiplier</p>
-        <hr/>
-        <p>Your generation goes up by 1 every time you refine</p>
-      `
-    }else {
+    } else {
       tooltip.innerHTML = `
       <div class="tooltip-top">
         <img src="./assets/${item.pic}" height='40px' alt="" />
