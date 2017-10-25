@@ -45,6 +45,27 @@ let beautifyTime = (num) => {
   return hours + ":" + minutes + ":" + seconds
 }
 
+//https://stackoverflow.com/questions/19700283/how-to-convert-time-milliseconds-to-hours-min-sec-format-in-javascript
+let beautifyMs = (ms) => {
+  var seconds = (ms / 1000).toFixed(1);
+
+  var minutes = (ms / (1000 * 60)).toFixed(1);
+
+  var hours = (ms / (1000 * 60 * 60)).toFixed(1);
+
+  var days = (ms / (1000 * 60 * 60 * 24)).toFixed(1);
+
+  if (seconds < 60) {
+      return seconds + " seconds";
+  } else if (minutes < 60) {
+      return minutes + " minutes";
+  } else if (hours < 24) {
+      return hours + " hours";
+  } else {
+      return days + " days"
+  }
+}
+
 //https://stackoverflow.com/questions/3369593/how-to-detect-escape-key-press-with-javascript-or-jquery
 document.onkeydown = function(evt) {
   evt = evt || window.event;
@@ -214,6 +235,7 @@ Game.launch = () => {
     Game.rebuildInventory = 1
     Game.recalculateOpC = 1
     Game.recalculateOpS = 1
+    Game.redrawTorches = 1
     Game.repositionSettingsContainer = 1
     if (Game.state.player.specialization) Game.redrawSkillsContainer = 1
     // Game.playBgm()
@@ -225,9 +247,11 @@ Game.launch = () => {
   }
 
   Game.playSound = (snd) => {
-    let sfx = new Audio(`./assets/${snd}.wav`)
-    sfx.volume = Game.state.prefs.volume
-    sfx.play()
+    if (window.onfocus) {
+      let sfx = new Audio(`./assets/${snd}.wav`)
+      sfx.volume = Game.state.prefs.volume
+      sfx.play()
+    }
   }
 
   Game.playBgm = (volume) => {
@@ -247,23 +271,25 @@ Game.launch = () => {
     let past = Game.state.lastLogin
     let current = new Date().getTime()
     let amountOfTimePassed = (current - past) / 1000 // GETS THE DIFFERENCE IN SECONDS
-
     let currentOpS = Game.state.oresPerSecond
-    let amountToGain = amountOfTimePassed * currentOpS
+    let amountToGain = (amountOfTimePassed * currentOpS)
+    if (amountToGain >= 1 && amountOfTimePassed >= 5) {
+      if (!s('.offline-gain-popup-container')) {
+        let div = document.createElement('div')
+        div.classList.add('wrapper')
+        div.innerHTML = `
+          <div class="offline-gain-popup-container">
+            <h2 style='font-family: "Germania One"; letter-spacing: 1px;'>Welcome Back!</h2>
+            <hr />
+            <p>You were gone for ${beautifyMs(amountOfTimePassed * 1000)}</p>
+            <p>You earned ${amountToGain.toFixed(0)} ores!</p>
+            <hr />
+            <button onclick='Game.earn(${amountToGain}); document.querySelector(".wrapper").remove(); Game.save();'>Ok</button>
+          </div>
+        `
 
-    if (amountToGain >= 1) {
-      let div = document.createElement('div')
-      div.classList.add('wrapper')
-      div.innerHTML = `
-        <div class="offline-gain-popup-container">
-          <h2 style='font-family: "Germania One"; text-align: center; letter-spacing: 1px;'>Welcome Back!</h2>
-          <hr />
-          <p>While you were away, you earned ${amountToGain.toFixed(0)} ores!</p>
-          <button onclick='Game.earn(${amountToGain}); document.querySelector(".wrapper").remove()'>Ok</button>
-        </div>
-      `
-
-      s('body').append(div)
+        s('body').append(div)
+      }
     }
   }
 
@@ -956,6 +982,24 @@ Game.launch = () => {
         s('body').append(div)
       }
     }
+  }
+
+  Game.drawTorches = () => {
+
+    console.log('drawing torches')
+
+    let torch1 = s('.torch1')
+    let torch2 = s('.torch2')
+
+    let torch1Anchor = s('#left-separator').getBoundingClientRect()
+    torch1.style.left = torch1Anchor.right + 'px'
+    torch1.style.top = '15%'
+
+    let torch2Anchor = s('#main-separator').getBoundingClientRect()
+    torch2.style.left = torch2Anchor.left - torch2.getBoundingClientRect().width + 'px'
+    torch2.style.top = '15%'
+
+    Game.redrawTorches = 0
   }
 
   Game.buildStore = () => {
@@ -2201,6 +2245,105 @@ Game.launch = () => {
     s('body').append(div)
   }
 
+  Game.confirmRefine = () => {
+    if (Game.state.prefs.canRefine == true) {
+      let div = document.createElement('div')
+      let amountOfGems = Math.floor(Math.cbrt(Game.state.ores / 10000000))
+      div.classList.add('wrapper')
+      div.innerHTML = `
+        <div class="confirm-refine">
+          <h3 style='text-align: center;'>Refine</h3>
+          <hr/>
+          <p style='text-align: left; color: lightgreen;'>+ You will gain <strong>${Game.state.player.specializationXpStored}</strong> specialization xp</p>
+          <p style='text-align: left; color: lightgreen;'>+ You will gain <strong>${amountOfGems}</strong> gems</p>
+          <p style='text-align: left; color: #c36d6d;'>- You will lose all current ores</p>
+          <p style='text-align: left; color: #c36d6d;'>- You will lose all owned items and upgrades</p>
+          <hr/>
+          <p style='text-align: center;'>Are you sure you want to refine?</p>
+          <p style='text-align: center; font-size: smaller; margin-bottom: 5px'>-You can refine once every 3 hours-</p>
+          <button onclick='Game.refine()'>yes</button>
+          <button onclick='document.querySelector(".wrapper").remove()'>no</button>
+        </div>
+      `
+
+      s('body').append(div)
+    }
+  }
+
+  Game.refine = () => {
+    if (Game.state.prefs.canRefine == true) {
+      Game.state.prefs.canRefine = false
+      Game.state.stats.timesRefined++
+      Game.refineCountdown()
+      let div = document.createElement('div')
+      div.classList.add('refine')
+      s('body').append(div)
+
+      // let amountOfRefinedOres = Math.floor(Math.cbrt(Game.state.ores / 10000000))
+      let amountOfGems = 0
+      if (Game.state.ores >= 1000000) amountOfGems++
+      if (Game.state.ores >= 1000000000) amountOfGems += 2
+      if (Game.state.ores >= 1000000000000) amountOfGems += 5
+      if (Game.state.ores >= 1000000000000000) amountOfGems += 10
+      if (Game.state.ores >= 1000000000000000000) amountOfGems += 10
+
+      Game.state.gems += amountOfGems
+
+      setTimeout(() => {
+        Game.softReset()
+        s('.wrapper').remove()
+      }, 1500)
+      setTimeout(() => {
+        s('.refine').remove()
+        if (Game.state.stats.timesRefined > 0) Game.winAchievement('Blacksmiths Apprentice')
+      }, 3000)
+    }
+  }
+
+  Game.refineCountdown = () => {
+    if (Game.state.refineTimer > 0) {
+      Game.state.refineTimer--
+    } else {
+      Game.state.canRefine == true
+      Game.state.refineTimer = 10800000
+      Game.buildStats()
+    }
+  }
+
+  Game.softReset = () => {
+    Game.state.ores = 0
+    Game.state.oreHp = 50
+    Game.state.oreCurrentHp = 50
+    Game.state.oresPerSecond = 0
+    Game.state.opsMultiplier = 0
+    Game.state.opcMultiplier = 0
+    Game.state.weakHitMultiplier = 5
+    Game.state.player.pickaxe = {
+      name: 'Beginners Wood Pickaxe',
+      rarity: 'Common',
+      iLv: 1,
+      material: 'Wood',
+      damage: 1,
+    }
+
+    if (Game.state.player.specializationXpStored > 0) {
+      while (Game.state.player.specializationXp + Game.state.player.specializationXpStored > Game.state.player.specializationXpNeeded) {
+        Game.state.player.specializationXpStored -= Game.state.player.specializationXpNeeded
+        Game.state.player.specializationLv++
+        Game.state.player.specializationSp++
+        Game.state.player.specializationXp = 0
+        Game.state.player.specializationXpNeeded = Math.pow(Game.state.player.specializationXpNeeded, 1.15)
+      }
+      Game.state.player.specializationXp = Game.state.player.specializationXpStored
+      Game.state.player.specializationXpStored = 0
+    }
+
+    Game.rebuildStore = 1
+    Game.rebuildStats = 1
+
+    Game.resetItems()
+  }
+
   Game.uniqueTrinkets = [
     {
       name: 'Tome of Higher Learning',
@@ -2617,28 +2760,31 @@ Game.launch = () => {
   }
 
   Game.logic = () => {
-    // HANDLE ORES N SHIT
-    if (Game.recalculateOpC) Game.calculateOpC()
-    if (Game.recalculateOpS) Game.calculateOpS()
-    let ops = Game.state.oresPerSecond/Game.state.prefs.fps
-    Game.earn(ops)
 
-    // BUILD STORE & INVENTORY
-    if (Game.rebuildStore) Game.buildStore()
-    if (Game.rebuildInventory) Game.buildInventory()
+    if (window.focus) {
+      // HANDLE ORES N SHIT
+      if (Game.recalculateOpC) Game.calculateOpC()
+      if (Game.recalculateOpS) Game.calculateOpS()
+      let ops = Game.state.oresPerSecond/Game.state.prefs.fps
+      Game.earn(ops)
 
-    // REPOSITION SHIT
-    if (Game.repositionSettingsContainer) Game.positionSettingsContainer()
-    if (Game.repositionOreWeakSpot) Game.oreWeakSpot()
-    if (Game.rebuildStats) Game.buildStats()
-    if (Game.redrawSkillsContainer) Game.drawSkillsContainer()
+      // BUILD STORE & INVENTORY
+      if (Game.rebuildStore) Game.buildStore()
+      if (Game.rebuildInventory) Game.buildInventory()
 
-    // UNLOCK SHIT
-    if (Game.state.stats.oreClicks >= 5 && Game.upgrades[0].owned == 0) Game.unlockUpgrade('Magnifying Glass')
-    if (Game.state.stats.weakSpotHits >= 5 && Game.upgrades[1].owned == 0) Game.unlockUpgrade('Clean Magnifying Glass')
-    if (Game.state.stats.weakSpotHits >= 20 && Game.upgrades[1].owned == 1 && Game.upgrades[2].owned == 0) Game.unlockUpgrade('Polish Magnifying Glass')
+      // REPOSITION SHIT
+      if (Game.repositionSettingsContainer) Game.positionSettingsContainer()
+      if (Game.repositionOreWeakSpot) Game.oreWeakSpot()
+      if (Game.rebuildStats) Game.buildStats()
+      if (Game.redrawSkillsContainer) Game.drawSkillsContainer()
+      if (Game.redrawTorches) Game.drawTorches()
 
-    // TUTORIAL SHIT
+      // UNLOCK SHIT
+      if (Game.state.stats.oreClicks >= 5 && Game.upgrades[0].owned == 0) Game.unlockUpgrade('Magnifying Glass')
+      if (Game.state.stats.weakSpotHits >= 5 && Game.upgrades[1].owned == 0) Game.unlockUpgrade('Clean Magnifying Glass')
+      if (Game.state.stats.weakSpotHits >= 20 && Game.upgrades[1].owned == 1 && Game.upgrades[2].owned == 0) Game.unlockUpgrade('Polish Magnifying Glass')
+
+    }
 
     setTimeout(Game.logic, 1000/Game.state.prefs.fps)
   }
@@ -2719,6 +2865,15 @@ Game.launch = () => {
     {name: 'Flashlight', type: 'upgrade', pic: 'wip.png', desc: 'Gain 10% of your OpS as OpC', fillerQuote: 'wip', price: 50000, hidden: 1},
   ]
 
+  Game.resetItems = () => {
+    console.log('resetItems', items)
+    Game.buildings = []
+    Game.upgrades = []
+    items.forEach((item) => {
+      new Item(item)
+    })
+  }
+
   Game.textScroller = [
     'What is a rocks favorite fruit? ... Pom-a-granite',
     'Did you see that cleavage? Now that\'s some gneiss schist.',
@@ -2782,9 +2937,18 @@ Game.launch = () => {
 
   window.onresize = () => {
     Game.repositionSettingsContainer = 1
-    Game.repositionOreWeakSpot = 1
+    if (Game.upgrades[0].owned > 0)Game.repositionOreWeakSpot = 1
     Game.rebuildStats = 1
     Game.redrawSkillsContainer = 1
+    Game.redrawTorches = 1
+  }
+
+  window.onblur = () => {
+    Game.state.lastLogin = new Date().getTime()
+  }
+
+  window.onfocus = () => {
+    Game.earnOfflineGain()
   }
 
 }

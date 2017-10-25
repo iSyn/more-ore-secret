@@ -21,12 +21,17 @@ a:visited {
 .game {
   height: 98vh;
   width: 100vw;
-  background: grey;
-
   display: flex;
   flex-flow: row nowrap;
   overflow: none;
+  background: linear-gradient(270deg, #60695d, #62705d);
+  background-size: 400% 400%;
+
+  -webkit-animation: backgroundGradient 30s ease infinite;
+  -moz-animation: backgroundGradient 30s ease infinite;
+  animation: backgroundGradient 30s ease infinite;
 }
+
 
 .ads-im-sorry-please-dont-hate-me {
   display: hidden;
@@ -451,12 +456,30 @@ body {
 .left-section {
   /*width: 70%;*/
   flex-grow: 1;
-  background: url('./assets/main-bg.png');
-  /*background: url('./assets/test.png');*/
+  background-image: url('./assets/main-bg.png');
+  /*background-color: #60695d;*/
   background-size: auto 80%;
   image-rendering: pixelated;
   display: flex;
   flex-flow: column nowrap;
+}
+
+
+
+@-webkit-keyframes backgroundGradient {
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}
+@-moz-keyframes backgroundGradient {
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}
+@keyframes backgroundGradient {
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
 }
 
 .inventory-section {
@@ -1604,17 +1627,28 @@ li {
   color: white;
   background-color: black;
   border: 1px solid white;
-  padding: 8px;
+  padding: 8px 16px;
+  text-align: center;
+  box-shadow: 0 0 6px #ffe500;
 }
 
 .offline-gain-popup-container button {
-  position: relative;
-  left: 50%;
-  transform: translateX(-50%);
   background-color: transparent;
   border: 1px solid white;
   color: white;
   padding: 3px 6px;
   cursor: pointer;
-  margin-top: 8px;
+}
+
+.torch {
+  position: absolute;
+  height: 128px;
+  width: 128px;
+  background: url('./assets/torch.gif');
+  background-size: 100% 100%;
+  image-rendering: pixelated;
+}
+
+.torch1 {
+  transform: scaleX(-1);
 }
