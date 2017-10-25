@@ -1279,7 +1279,7 @@ Game.launch = () => {
       if (item.owned == 20) {Game.textScroller.push('[Breaking News] The school district superintendent has announced new ore related classes to take')}
     }
     if (item.name == 'Farm') {
-      if (item.owned == 1) {Game.unlockUpgrade('Manure Spreader'); Game.textScroller.push('[Breaking News] Farmers have no started farming for ores. How is this possible? More at 7pm')}
+      if (item.owned == 1) {Game.unlockUpgrade('Manure Spreader'); Game.textScroller.push('[Breaking News] Farmers have now started farming for ores. How is this possible? More at 7pm')}
     }
     if (item.name == 'Quarry') {
       if (item.owned == 1) {
