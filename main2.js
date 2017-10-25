@@ -111,7 +111,7 @@ Game.launch = () => {
     critHitMulti: 2,
     weakHitMulti: 5,
     player: {
-      generation: 1,
+      generation: 0,
       pickaxe: {
         name: 'Beginners Wood Pickaxe',
         rarity: 'Common',
@@ -323,11 +323,9 @@ Game.launch = () => {
   }
 
   Game.playSound = (snd) => {
-    if (window.onfocus) {
-      let sfx = new Audio(`./assets/${snd}.wav`)
-      sfx.volume = Game.state.prefs.volume
-      sfx.play()
-    }
+    let sfx = new Audio(`./assets/${snd}.wav`)
+    sfx.volume = Game.state.prefs.volume
+    sfx.play()
   }
 
   Game.playBgm = () => {
@@ -1899,8 +1897,8 @@ Game.launch = () => {
       tooltip.innerHTML = `
         <h3>You are currently on Generation ${Game.state.player.generation}</h3>
         <hr/>
-        <p>+0 OpC multiplier</p>
-        <p>+0 OpS multiplier</p>
+        <p>+${Game.state.player.generation * .1} OpC multiplier</p>
+        <p>+${Game.state.player.generation * .1} OpS multiplier</p>
         <hr/>
         <p>Your generation goes up by 1 every time you refine</p>
       `
@@ -2042,6 +2040,8 @@ Game.launch = () => {
       </div>
     `
     }
+    tooltip.style.animation = 'tooltip .3s'
+
   }
 
   Game.hideTooltip = () => {
@@ -2197,10 +2197,11 @@ Game.launch = () => {
     let div = document.createElement('div')
     let amountOfGems = Math.floor(Math.cbrt(Game.state.ores / 10000000))
     div.classList.add('wrapper')
+    div.id = 'confirm-refine'
     let str = `
       <div class="confirm-refine">
         <h2 style='text-align: center; font-family: "Germania One"; letter-spacing: 1px'>Refine</h2>
-        <i class='fa fa-times fa-1x' onclick='document.querySelector(".wrapper").remove()'></i>
+        <i class='fa fa-times fa-1x' onclick='document.querySelector("#confirm-refine").remove()'></i>
         <hr/>
         <p style='text-align: left; color: lightgreen;'>+ You will gain <strong>${amountOfGems}</strong> gems (more ores = more gems)</p>
         <p style='text-align: left; color: lightgreen;'>+ You will gain <strong>1</strong> generation</p>
@@ -2211,14 +2212,15 @@ Game.launch = () => {
         <p style='text-align: center;'>Are you sure you want to refine?</p>
         <p style='text-align: center; font-size: larger; margin-bottom: 5px; color: #ff2f2f;'>-You can refine once every hour-</p>
         `
-        if (difference) {
+
+        if (timeRemaining > 0 ) {
           str += `
             <p>TIME REMAINING UNTIL NEXT REFINE: ${beautifyMs(timeRemaining)}</p>
           `
         } else {
           str += `
             <button onclick='Game.refine(${amountOfGems})'>yes</button>
-            <button onclick='document.querySelector(".wrapper").remove()'>no</button>
+            <button onclick='document.querySelector("#confirm-refine").remove()'>no</button>
           `
         }
 
@@ -2721,7 +2723,9 @@ Game.launch = () => {
 
   Game.logic = () => {
 
-    if (window.focus) {
+    console.log(Game.blurred)
+
+    if (!Game.blurred) {
       // HANDLE ORES N SHIT
       if (Game.recalculateOpC) Game.calculateOpC()
       if (Game.recalculateOpS) Game.calculateOpS()
@@ -2751,7 +2755,7 @@ Game.launch = () => {
   }
 
   setInterval(() => {
-    if (window.onfocus) {
+    if (!Game.blurred) {
       if (Game.state.oresPerSecond) Game.risingNumber(Game.state.oresPerSecond, 'buildings')
     }
   }, 1000)
@@ -2889,7 +2893,7 @@ Game.launch = () => {
   s('.ore').onclick = () => Game.handleClick()
   s('.ore-weak-spot').onclick = () => {Game.handleClick('weak-spot'); Game.oreWeakSpot()}
   s('.bottom').addEventListener('mouseover', () => {
-    s('.bottom-overlay-txt').innerHTML = `<i class='fa fa-lock fa-1x' style='margin-right: 10px'></i>QUESTS UNLOCKED AFTER 3RD REFINE`
+    s('.bottom-overlay-txt').innerHTML = `<i class='fa fa-lock fa-1x' style='margin-right: 10px'></i>QUESTS UNLOCKED ON 3RD GENERATION`
   })
   s('#main-separator').onclick = () => {
     Game.state.ores += 99999999
@@ -2908,10 +2912,12 @@ Game.launch = () => {
 
   window.onblur = () => {
     Game.state.lastLogin = new Date().getTime()
+    Game.blurred = true;
   }
 
   window.onfocus = () => {
     Game.earnOfflineGain()
+    Game.blurred = false;
   }
 
 }
