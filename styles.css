@@ -1652,3 +1652,54 @@ li {
 .torch1 {
   transform: scaleX(-1);
 }
+
+.notify {
+  position: absolute;
+  color: white;
+  padding: 10px 30px;
+  border: 1px solid white;
+  background-color: black;
+  bottom: 0;
+  right: 0;
+  animation: notify 3s linear;
+  animation-fill-mode: forwards;
+}
+
+@keyframes notify {
+
+  0% {
+    bottom: -300px;
+  }
+  20%, 80% {
+    bottom: 0px;
+  }
+  100% {
+    bottom: -300px;
+  }
+}
+
+.loading {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  z-index: 999999999;
+  background-color: white;
+  opacity: 1;
+  transition: opacity 1.5s;
+  pointer-events: none;
+}
+
+.loading p {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 10rem;
+}
+
+.finished {
+  opacity: 0;
+
+}

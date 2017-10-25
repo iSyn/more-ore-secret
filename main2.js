@@ -111,21 +111,7 @@ Game.launch = () => {
     critHitMulti: 2,
     weakHitMulti: 5,
     player: {
-      lv: 1,
-      str: 0,
-      dex: 0,
-      int: 0,
-      luk: 0,
-      cha: 0,
-      currentXp: 0,
-      xpNeeded: 100,
-      availableSp: 0,
-      specialization: null,
-      specializationLv: 1,
-      specializationXp: 0,
-      specializationXpStored: 0,
-      specializationXpNeeded: 300,
-      specializationSp: 1,
+      generation: 1,
       pickaxe: {
         name: 'Beginners Wood Pickaxe',
         rarity: 'Common',
@@ -171,6 +157,7 @@ Game.launch = () => {
     localStorage.setItem('prospectorSkills', JSON.stringify(Game.prospectorSkills))
     localStorage.setItem('managerSkills', JSON.stringify(Game.managerSkills))
     localStorage.setItem('achievements', JSON.stringify(Game.achievements))
+    Game.notify()
   }
 
   Game.load = () => {
@@ -239,6 +226,10 @@ Game.launch = () => {
     Game.repositionSettingsContainer = 1
     if (Game.state.player.specialization) Game.redrawSkillsContainer = 1
     // Game.playBgm()
+    s('.loading').classList.add('finished')
+    setTimeout(() => {
+      s('.loading').remove()
+    }, 1500)
   }
 
   Game.wipe = () => {
@@ -267,6 +258,10 @@ Game.launch = () => {
     }
   }
 
+  Game.toggleBgm = () => {
+    //
+  }
+
   Game.earnOfflineGain = () => {
     let past = Game.state.lastLogin
     let current = new Date().getTime()
@@ -282,15 +277,31 @@ Game.launch = () => {
             <h2 style='font-family: "Germania One"; letter-spacing: 1px;'>Welcome Back!</h2>
             <hr />
             <p>You were gone for ${beautifyMs(amountOfTimePassed * 1000)}</p>
-            <p>You earned ${amountToGain.toFixed(0)} ores!</p>
+            <p>You earned ${beautify(Math.round(amountToGain))} ores!</p>
             <hr />
-            <button onclick='Game.earn(${amountToGain}); document.querySelector(".wrapper").remove(); Game.save();'>Ok</button>
+            <button onclick='Game.earn(${amountToGain}); Game.risingNumber(${amountToGain},"passive"); document.querySelector(".wrapper").remove(); Game.save();'>Ok</button>
           </div>
         `
 
         s('body').append(div)
       }
     }
+  }
+
+  Game.notify = () => {
+    let div = document.createElement('div')
+
+    div.classList.add('notify')
+
+    div.innerHTML = `
+      <p>Game Saved</p>
+    `
+
+    s('body').append(div)
+
+    setTimeout(() => {
+      div.remove()
+    }, 3000)
   }
 
   Game.earn = (amount) => {
@@ -368,15 +379,15 @@ Game.launch = () => {
       }
     }
 
-    // ADD DAMAGE FROM PLAYER STRENGTH
-    let playerStr = Game.state.player.str
+    // // ADD DAMAGE FROM PLAYER STRENGTH
+    // let playerStr = Game.state.player.str
 
-    if (playerStr > 0) opc += Math.pow(1.25, playerStr)
+    // if (playerStr > 0) opc += Math.pow(1.25, playerStr)
 
-    // ADD DAMAGE FROM PLAYER DEX
-    let playerDex = Game.state.player.dex
+    // // ADD DAMAGE FROM PLAYER DEX
+    // let playerDex = Game.state.player.dex
 
-    if (playerDex > 0) opc += Math.pow(1.1, playerDex)
+    // if (playerDex > 0) opc += Math.pow(1.1, playerDex)
 
     // ADD OPC MULTIPLIER
     opc += (opc * Game.state.opcMulti)
@@ -444,13 +455,13 @@ Game.launch = () => {
         Game.playSound('ore-crit-hit')
         Game.risingNumber(amount, 'weak-hit')
         Game.state.stats.weakSpotHits++
-        Game.gainXp(3)
+        // Game.gainXp(3)
       }
     } else {
       Game.getCombo()
       Game.playSound('ore-hit')
       Game.risingNumber(amount)
-      Game.gainXp()
+      // Game.gainXp()
     }
 
     Game.earn(amount)
@@ -459,31 +470,31 @@ Game.launch = () => {
     Game.state.stats.totalOresMined += amount
   }
 
-  Game.gainXp = (amt) => {
+  // Game.gainXp = (amt) => {
 
-    let amount = 1
-    if (amt) {
-      amount = amt
-    }
+  //   let amount = 1
+  //   if (amt) {
+  //     amount = amt
+  //   }
 
-    if (Game.state.player.currentXp + amount < Game.state.player.xpNeeded) {
-      Game.state.player.currentXp += amount
-    } else {
-      Game.state.player.currentXp = (Game.state.player.currentXp + amount) - Game.state.player.xpNeeded
-      Game.state.player.lv++
-      Game.state.player.availableSp += 3
-      Game.rebuildStats = 1
-      Game.playSound('levelup')
-      Game.state.player.xpNeeded = Math.ceil(Math.pow(Game.state.player.xpNeeded, 1.05))
-      Game.risingNumber(0, 'level')
-      s('.stats-container').style.boxShadow = '0 0 10px yellow'
-      setTimeout(() => {
-        s('.stats-container').style.boxShadow = 'none'
-      }, 1000)
-    }
+  //   if (Game.state.player.currentXp + amount < Game.state.player.xpNeeded) {
+  //     Game.state.player.currentXp += amount
+  //   } else {
+  //     Game.state.player.currentXp = (Game.state.player.currentXp + amount) - Game.state.player.xpNeeded
+  //     Game.state.player.lv++
+  //     Game.state.player.availableSp += 3
+  //     Game.rebuildStats = 1
+  //     Game.playSound('levelup')
+  //     Game.state.player.xpNeeded = Math.ceil(Math.pow(Game.state.player.xpNeeded, 1.05))
+  //     Game.risingNumber(0, 'level')
+  //     s('.stats-container').style.boxShadow = '0 0 10px yellow'
+  //     setTimeout(() => {
+  //       s('.stats-container').style.boxShadow = 'none'
+  //     }, 1000)
+  //   }
 
-    Game.rebuildInventory = 1
-  }
+  //   Game.rebuildInventory = 1
+  // }
 
   Game.oreWeakSpot = () => {
     let randomNumber = () => Math.floor(Math.random() * 80) + 1
@@ -930,6 +941,11 @@ Game.launch = () => {
         risingNumber.style.opacity = '.4'
       }
 
+      if (type == 'passive') {
+        risingNumber.innerHTML = `+${beautify(amount.toFixed(1))}`
+        risingNumber.style.fontSize = '35px'
+      }
+
 
       s('.particles').append(risingNumber)
 
@@ -994,10 +1010,12 @@ Game.launch = () => {
     let torch1Anchor = s('#left-separator').getBoundingClientRect()
     torch1.style.left = torch1Anchor.right + 'px'
     torch1.style.top = '15%'
+    // torch1.style.top = s('.text-scroller-container').getBoundingClientRect().top + 'px'
 
     let torch2Anchor = s('#main-separator').getBoundingClientRect()
     torch2.style.left = torch2Anchor.left - torch2.getBoundingClientRect().width + 'px'
     torch2.style.top = '15%'
+    // torch2.style.top = s('.text-scroller-container').getBoundingClientRect().top + 'px'
 
     Game.redrawTorches = 0
   }
@@ -1076,188 +1094,192 @@ Game.launch = () => {
 
     s('.ores').innerHTML = str
 
-    let lvlStr = ''
-    lvlStr += `Level: ${Game.state.player.lv} (${Game.state.player.currentXp}/${Game.state.player.xpNeeded})`
-    if (Game.state.player.specialization != null) {
-      lvlStr += `<br/> ${Game.state.player.specialization} Level: ${Game.state.player.specializationLv} (${Game.state.player.specializationXp.toFixed(0)}/${Game.state.player.specializationXpNeeded.toFixed(0)})`
-    }
+    // let lvlStr = ''
+    // lvlStr += `Level: ${Game.state.player.lv} (${Game.state.player.currentXp}/${Game.state.player.xpNeeded})`
+    // if (Game.state.player.specialization != null) {
+    //   lvlStr += `<br/> ${Game.state.player.specialization} Level: ${Game.state.player.specializationLv} (${Game.state.player.specializationXp.toFixed(0)}/${Game.state.player.specializationXpNeeded.toFixed(0)})`
+    // }
+
+    s('.generation').innerHTML = `Generation: ${Game.state.player.generation}`
+    s('.generation').onmouseover = () => Game.showTooltip(null, null, 'generation', null)
+    s('.generation').onmouseout = () => Game.hideTooltip()
 
     Game.rebuildInventory = 0
-    s('.level').innerHTML = lvlStr
+    // s('.level').innerHTML = lvlStr
   }
 
-  Game.buildStats = () => {
-    let str = ''
-    let inventoryPos = s('.inventory-section')
-    let leftSeparatorPos = s('#left-separator')
+  // Game.buildStats = () => {
+  //   let str = ''
+  //   let inventoryPos = s('.inventory-section')
+  //   let leftSeparatorPos = s('#left-separator')
 
-    let statsContainer = s('.stats-container')
-    statsContainer.style.top = inventoryPos.getBoundingClientRect().bottom + 10 + 'px'
-    statsContainer.style.left = leftSeparatorPos.getBoundingClientRect().right + 'px'
+  //   let statsContainer = s('.stats-container')
+  //   statsContainer.style.top = inventoryPos.getBoundingClientRect().bottom + 10 + 'px'
+  //   statsContainer.style.left = leftSeparatorPos.getBoundingClientRect().right + 'px'
 
-    if (Game.statsVisable == true) {
-      str += `
-        <div class="stats-container-header" onclick='Game.toggleStats();'>
-          <h4>stats</h4>
-          <p class='caret' style='font-size: 8px; float: right; margin-right: 5px; transform: rotate(180deg)'>&#9660;</p>
-        </div>
-      `
-    } else {
-      str += `
-        <div class="stats-container-header" onclick='Game.toggleStats()'>
-          <h4>stats</h4>
-          <p class='caret' style='font-size: 8px; float: right; margin-right: 5px';>&#9660;</p>
-        </div>
-      `
-    }
+  //   if (Game.statsVisable == true) {
+  //     str += `
+  //       <div class="stats-container-header" onclick='Game.toggleStats();'>
+  //         <h4>stats</h4>
+  //         <p class='caret' style='font-size: 8px; float: right; margin-right: 5px; transform: rotate(180deg)'>&#9660;</p>
+  //       </div>
+  //     `
+  //   } else {
+  //     str += `
+  //       <div class="stats-container-header" onclick='Game.toggleStats()'>
+  //         <h4>stats</h4>
+  //         <p class='caret' style='font-size: 8px; float: right; margin-right: 5px';>&#9660;</p>
+  //       </div>
+  //     `
+  //   }
 
-    if (Game.statsVisable == true) {
-      str += '<div class="stats-container-content-wrapper" style="height: 450px;">'
-    } else {
-      str += '<div class="stats-container-content-wrapper">'
-    }
+  //   if (Game.statsVisable == true) {
+  //     str += '<div class="stats-container-content-wrapper" style="height: 450px;">'
+  //   } else {
+  //     str += '<div class="stats-container-content-wrapper">'
+  //   }
 
-      str += `
+  //     str += `
 
-        <div class="stats-container-content">
+  //       <div class="stats-container-content">
 
-          <div class="stat-level-container">
-            <h1 style='flex-grow: 1'>Level:</h1>
-            <h1 class='stat-player-lvl'>${Game.state.player.lv}</h1>
-          </div>
+  //         <div class="stat-level-container">
+  //           <h1 style='flex-grow: 1'>Level:</h1>
+  //           <h1 class='stat-player-lvl'>${Game.state.player.lv}</h1>
+  //         </div>
 
-          <hr/>
+  //         <hr/>
 
-          <div class="stats-container-current-equipment">
-            <div onmouseover='Game.showTooltip(null, null, "equipment", "pickaxe")' onmouseout='Game.hideTooltip()' class="stats-container-current-pickaxe stats-container-equipment"></div>
-            <div onmouseover='Game.showTooltip(null, null, "equipment", "accessory")' onmouseout='Game.hideTooltip()' class="stats-container-current-accessory stats-container-equipment"></div>
-          </div>
+  //         <div class="stats-container-current-equipment">
+  //           <div onmouseover='Game.showTooltip(null, null, "equipment", "pickaxe")' onmouseout='Game.hideTooltip()' class="stats-container-current-pickaxe stats-container-equipment"></div>
+  //           <div onmouseover='Game.showTooltip(null, null, "equipment", "accessory")' onmouseout='Game.hideTooltip()' class="stats-container-current-accessory stats-container-equipment"></div>
+  //         </div>
 
-          <hr/>
+  //         <hr/>
 
-          <div class="single-stat">
-            <p style='flex-grow: 1' onmouseover='Game.showTooltip(null, null, "stat", "str")' onmouseout='Game.hideTooltip()'>Strength:</p>
-            <p class='stat-str'>${Game.state.player.str}`
-              if (Game.state.player.pickaxe.prefixStat) {
-                if (Game.state.player.pickaxe.prefixStat == 'Strength') {
-                  str += `(${Game.state.player.pickaxe.prefixStatVal})`
-                }
-              }
+  //         <div class="single-stat">
+  //           <p style='flex-grow: 1' onmouseover='Game.showTooltip(null, null, "stat", "str")' onmouseout='Game.hideTooltip()'>Strength:</p>
+  //           <p class='stat-str'>${Game.state.player.str}`
+  //             if (Game.state.player.pickaxe.prefixStat) {
+  //               if (Game.state.player.pickaxe.prefixStat == 'Strength') {
+  //                 str += `(${Game.state.player.pickaxe.prefixStatVal})`
+  //               }
+  //             }
 
-            str += `</p>
-            `
-            if (Game.state.player.availableSp > 0) {
-              str += `<button onclick='Game.addStat("str")' onmouseover='Game.showTooltip(null, null, "stat", "str")' onmouseout='Game.hideTooltip()'>+</button>`
-            }
+  //           str += `</p>
+  //           `
+  //           if (Game.state.player.availableSp > 0) {
+  //             str += `<button onclick='Game.addStat("str")' onmouseover='Game.showTooltip(null, null, "stat", "str")' onmouseout='Game.hideTooltip()'>+</button>`
+  //           }
 
-            str += `
-          </div>
+  //           str += `
+  //         </div>
 
-          <div class="single-stat">
-            <p style='flex-grow: 1' onmouseover='Game.showTooltip(null, null, "stat", "dex")' onmouseout='Game.hideTooltip()'>Dexterity:</p>
-            <p class='stat-dex'>${Game.state.player.dex}</p>
-            `
-            if (Game.state.player.availableSp > 0) {
-              str += `<button onclick='Game.addStat("dex")' onmouseover='Game.showTooltip(null, null, "stat", "dex")' onmouseout='Game.hideTooltip()'>+</button>`
-            }
+  //         <div class="single-stat">
+  //           <p style='flex-grow: 1' onmouseover='Game.showTooltip(null, null, "stat", "dex")' onmouseout='Game.hideTooltip()'>Dexterity:</p>
+  //           <p class='stat-dex'>${Game.state.player.dex}</p>
+  //           `
+  //           if (Game.state.player.availableSp > 0) {
+  //             str += `<button onclick='Game.addStat("dex")' onmouseover='Game.showTooltip(null, null, "stat", "dex")' onmouseout='Game.hideTooltip()'>+</button>`
+  //           }
 
-            str += `
-          </div>
+  //           str += `
+  //         </div>
 
-          <div class="single-stat">
-            <p style='flex-grow: 1' onmouseover='Game.showTooltip(null, null, "stat", "int")' onmouseout='Game.hideTooltip()'>Intelligence:</p>
-            <p class='stat-int'>${Game.state.player.int}</p>
-            `
-            if (Game.state.player.availableSp > 0) {
-              str += `<button onclick='Game.addStat("int")' onmouseover='Game.showTooltip(null, null, "stat", "int")' onmouseout='Game.hideTooltip()'>+</button>`
-            }
+  //         <div class="single-stat">
+  //           <p style='flex-grow: 1' onmouseover='Game.showTooltip(null, null, "stat", "int")' onmouseout='Game.hideTooltip()'>Intelligence:</p>
+  //           <p class='stat-int'>${Game.state.player.int}</p>
+  //           `
+  //           if (Game.state.player.availableSp > 0) {
+  //             str += `<button onclick='Game.addStat("int")' onmouseover='Game.showTooltip(null, null, "stat", "int")' onmouseout='Game.hideTooltip()'>+</button>`
+  //           }
 
-            str += `
-          </div>
+  //           str += `
+  //         </div>
 
-          <div class="single-stat">
-            <p style='flex-grow: 1' onmouseover='Game.showTooltip(null, null, "stat", "luk")' onmouseout='Game.hideTooltip()'>Luck:</p>
-            <p class='stat-luk'>${Game.state.player.luk}</p>
-            `
-            if (Game.state.player.availableSp > 0) {
-              str += `<button onclick='Game.addStat("luk")' onmouseover='Game.showTooltip(null, null, "stat", "luk")' onmouseout='Game.hideTooltip()'>+</button>`
-            }
+  //         <div class="single-stat">
+  //           <p style='flex-grow: 1' onmouseover='Game.showTooltip(null, null, "stat", "luk")' onmouseout='Game.hideTooltip()'>Luck:</p>
+  //           <p class='stat-luk'>${Game.state.player.luk}</p>
+  //           `
+  //           if (Game.state.player.availableSp > 0) {
+  //             str += `<button onclick='Game.addStat("luk")' onmouseover='Game.showTooltip(null, null, "stat", "luk")' onmouseout='Game.hideTooltip()'>+</button>`
+  //           }
 
-            str += `
-          </div>
+  //           str += `
+  //         </div>
 
-          <div class="single-stat">
-            <p style='flex-grow: 1' onmouseover='Game.showTooltip(null, null, "stat", "cha")' onmouseout='Game.hideTooltip()'>Charisma:</p>
-            <p class='stat-cha'>${Game.state.player.cha}</p>
-            `
-            if (Game.state.player.availableSp > 0) {
-              str += `<button onclick='Game.addStat("cha")' onmouseover='Game.showTooltip(null, null, "stat", "cha")' onmouseout='Game.hideTooltip()'>+</button>`
-            }
+  //         <div class="single-stat">
+  //           <p style='flex-grow: 1' onmouseover='Game.showTooltip(null, null, "stat", "cha")' onmouseout='Game.hideTooltip()'>Charisma:</p>
+  //           <p class='stat-cha'>${Game.state.player.cha}</p>
+  //           `
+  //           if (Game.state.player.availableSp > 0) {
+  //             str += `<button onclick='Game.addStat("cha")' onmouseover='Game.showTooltip(null, null, "stat", "cha")' onmouseout='Game.hideTooltip()'>+</button>`
+  //           }
 
-            str += `
-          </div>
+  //           str += `
+  //         </div>
 
-          <br/>
+  //         <br/>
 
-          <p style='text-align: center; font-size: small'>Available SP: ${Game.state.player.availableSp}</p>
+  //         <p style='text-align: center; font-size: small'>Available SP: ${Game.state.player.availableSp}</p>
 
-          <hr/>
+  //         <hr/>
 
-          `
+  //         `
 
-          if (Game.state.player.specialization == null) { // IF THERE IS NO SPECIALIZATION
-            if (Game.state.player.lv < 5) { // IF LESS THAN LV 5
-              str += `
-                <br/>
-                <button class='specialization-btn' onmouseover='Game.showTooltip(null, null, "stat", "spec")' onmouseout='Game.hideTooltip()'>???</button>
-                <br/>
-              `
-            } else {
-              str += `
-                <br/>
-                <button class='specialization-btn' onclick='Game.showSpecialization()'>Specialization</button>
-                <br/>
-              `
-            }
-          } else { // IF THERE IS A SPECIALIZATION
-            let timeLeft = beautifyTime(Game.state.prefs.refineTimer)
-            str += `
-              <h2 style='text-align: center; cursor: pointer; padding: 5px 0;' onclick='Game.specializationSkills()'>${Game.state.player.specialization} &nbsp; &rsaquo;</h2>
-              <hr/>
-              <div class="single-stat">
-                <p style='flex-grow: 1'>Level:</p>
-                <p>${Game.state.player.specializationLv}</p>
-              </div>
-              <div class="single-stat">
-                <p style='flex-grow: 1'>XP until next lv:</p>
-                <p>${Math.floor(Game.state.player.specializationXpNeeded - Game.state.player.specializationXp)}</p>
-              </div>
-              <div class="single-stat">
-                <p style='flex-grow: 1'>XP on refine:</p>
-                <p class='specialization-xp-stored'>${Game.state.player.specializationXpStored}</p>
-              </div>
-              <br/>`
+  //         if (Game.state.player.specialization == null) { // IF THERE IS NO SPECIALIZATION
+  //           if (Game.state.player.lv < 5) { // IF LESS THAN LV 5
+  //             str += `
+  //               <br/>
+  //               <button class='specialization-btn' onmouseover='Game.showTooltip(null, null, "stat", "spec")' onmouseout='Game.hideTooltip()'>???</button>
+  //               <br/>
+  //             `
+  //           } else {
+  //             str += `
+  //               <br/>
+  //               <button class='specialization-btn' onclick='Game.showSpecialization()'>Specialization</button>
+  //               <br/>
+  //             `
+  //           }
+  //         } else { // IF THERE IS A SPECIALIZATION
+  //           let timeLeft = beautifyTime(Game.state.prefs.refineTimer)
+  //           str += `
+  //             <h2 style='text-align: center; cursor: pointer; padding: 5px 0;' onclick='Game.specializationSkills()'>${Game.state.player.specialization} &nbsp; &rsaquo;</h2>
+  //             <hr/>
+  //             <div class="single-stat">
+  //               <p style='flex-grow: 1'>Level:</p>
+  //               <p>${Game.state.player.specializationLv}</p>
+  //             </div>
+  //             <div class="single-stat">
+  //               <p style='flex-grow: 1'>XP until next lv:</p>
+  //               <p>${Math.floor(Game.state.player.specializationXpNeeded - Game.state.player.specializationXp)}</p>
+  //             </div>
+  //             <div class="single-stat">
+  //               <p style='flex-grow: 1'>XP on refine:</p>
+  //               <p class='specialization-xp-stored'>${Game.state.player.specializationXpStored}</p>
+  //             </div>
+  //             <br/>`
 
-              if (Game.state.prefs.canRefine == true) {
-                str += `
-                  <button class='specialization-btn' onclick='Game.confirmRefine()'>Refine</button>
-                `
-              } else {
-                str += `
-                  <button id='not-allowed' class='specialization-btn' onclick='Game.confirmRefine()'>Refine ${timeLeft}</button>
-                `
-              }
-          }
-          str += `
-        </div>
-      </div>
-    `
+  //             if (Game.state.prefs.canRefine == true) {
+  //               str += `
+  //                 <button class='specialization-btn' onclick='Game.confirmRefine()'>Refine</button>
+  //               `
+  //             } else {
+  //               str += `
+  //                 <button id='not-allowed' class='specialization-btn' onclick='Game.confirmRefine()'>Refine ${timeLeft}</button>
+  //               `
+  //             }
+  //         }
+  //         str += `
+  //       </div>
+  //     </div>
+  //   `
 
 
 
-    Game.rebuildStats = 0
-    statsContainer.innerHTML = str
-  }
+  //   Game.rebuildStats = 0
+  //   statsContainer.innerHTML = str
+  // }
 
   Game.addStat = (stat) => {
     if (Game.state.player.availableSp > 0) {
@@ -1505,7 +1527,7 @@ Game.launch = () => {
     } else {
       Game.state.stats.rocksDestroyed++
       Game.dropItem()
-      Game.gainXp(10)
+      // Game.gainXp(10)
       Game.playSound('explosion2')
       Game.state.oreHp = Math.pow(Game.state.oreHp, 1.09)
       Game.state.oreCurrentHp = Game.state.oreHp
@@ -2070,7 +2092,20 @@ Game.launch = () => {
             <p>You don't have a trinket</p>
         `
       }
-    } else {
+    } else if (type = 'generation') {
+      tooltip.style.width = 'auto'
+      tooltip.style.left = event.clientX - tooltip.getBoundingClientRect().width/2 + 'px'
+      tooltip.style.top = event.clientY + 20 + 'px'
+      tooltip.style.minWidth = '150px'
+      tooltip.innerHTML = `
+        <h3>You are currently on Generation ${Game.state.player.generation}</h3>
+        <hr/>
+        <p>+0 OpC multiplier</p>
+        <p>+0 OpS multiplier</p>
+        <hr/>
+        <p>Your generation goes up by 1 every time you refine</p>
+      `
+    }else {
       tooltip.innerHTML = `
       <div class="tooltip-top">
         <img src="./assets/${item.pic}" height='40px' alt="" />
@@ -2137,9 +2172,9 @@ Game.launch = () => {
         </div>
         <div class="single-setting">
           <p style='padding-right: 20px;'>BGM (NOT WORKING SRY): </p>
-          <input type="radio" name='bgm' id='bgmOn' value='true' onchange='Game.state.prefs.bgm = 1'/>
+          <input type="radio" name='bgm' id='bgmOn' value='true' onchange='Game.state.prefs.bgm = 1; Game.toggleBgm();'/>
             <label for="bgmOn" style='margin-right: 10px'>On</label>
-          <input type="radio" name='bgm' id='bgmOff' value='false' onchange='Game.state.prefs.bgm = 0'/>
+          <input type="radio" name='bgm' id='bgmOff' value='false' onchange='Game.state.prefs.bgm = 0; Game.toggleBgm();'/>
             <label for="bgmOff" style='margin-right: 10px'>Off</label>
         </div>
         <hr/>
@@ -2775,7 +2810,7 @@ Game.launch = () => {
       // REPOSITION SHIT
       if (Game.repositionSettingsContainer) Game.positionSettingsContainer()
       if (Game.repositionOreWeakSpot) Game.oreWeakSpot()
-      if (Game.rebuildStats) Game.buildStats()
+      // if (Game.rebuildStats) Game.buildStats()
       if (Game.redrawSkillsContainer) Game.drawSkillsContainer()
       if (Game.redrawTorches) Game.drawTorches()
 
@@ -2789,7 +2824,13 @@ Game.launch = () => {
     setTimeout(Game.logic, 1000/Game.state.prefs.fps)
   }
 
-  setInterval(() => {if (Game.state.oresPerSecond) Game.risingNumber(Game.state.oresPerSecond, 'buildings')}, 1000)
+  setInterval(() => {
+    if (window.onfocus) {
+      if (Game.state.oresPerSecond) Game.risingNumber(Game.state.oresPerSecond, 'buildings')
+    }
+  }, 1000)
+
+  setInterval(() => {Game.save()}, 1000 * 60) // save every minute
 
   Game.buildings = []
   Game.upgrades = []
@@ -2922,15 +2963,11 @@ Game.launch = () => {
   s('.ore').onclick = () => Game.handleClick()
   s('.ore-weak-spot').onclick = () => {Game.handleClick('weak-spot'); Game.oreWeakSpot()}
   s('.bottom').addEventListener('mouseover', () => {
-    if (Game.state.player.lv < 10) {
-      s('.bottom-overlay-txt').innerHTML = `<i class='fa fa-lock fa-1x' style='margin-right: 10px'></i>QUESTS NOT YET IMPLEMENTED`
-    } else {
-      s('.bottom-overlay-txt').style.display = 'none'
-    }
+    s('.bottom-overlay-txt').innerHTML = `<i class='fa fa-lock fa-1x' style='margin-right: 10px'></i>QUESTS NOT YET IMPLEMENTED`
   })
   s('#main-separator').onclick = () => {
     Game.state.ores += 99999999
-    Game.gainXp(999)
+    // Game.gainXp(999)
     Game.state.player.gems += 999
     Game.state.player.specializationSp += 999
   }
