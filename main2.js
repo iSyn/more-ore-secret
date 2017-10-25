@@ -1052,7 +1052,7 @@ Game.launch = () => {
     s('.tab-content').innerHTML = str
   }
 
-  let Game.adsLoaded = false
+  Game.adsLoaded = false
   Game.loadAd = () => {
     if (Game.adsLoaded == false) {
       Game.adsLoaded = true
