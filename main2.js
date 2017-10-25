@@ -148,6 +148,90 @@ Game.launch = () => {
     lastRefine: null
   }
 
+  Game.showChangelog = (show) => {
+    let newestVersion = '0.6.8.1'
+
+    if (Game.state.currentVersion != newestVersion || Game.state.ores == 0 || show == 1) {
+      Game.state.currentVersion = newestVersion
+      let div = document.createElement('div')
+      div.classList.add('wrapper')
+      div.onclick = () => s('.wrapper').remove()
+      div.innerHTML = `
+        <div class="changelog-container">
+          <h1>Changelog</h1>
+          <p style='text-align: center'>(Click anywhere to close)</p>
+          <hr style='border-color: black; margin-bottom: 10px;'/>
+
+          <h3>v0.8 (10/25/2017)</h3>
+          <p>-Offline progression</p>
+          <p>-Autosave and autoload</p>
+          <p>-Added couple of new sprites</p>
+          <p>-Working refine mechanic with timer</p>
+
+          <p>-Took out leveling for generations</p>
+          <br/>
+
+          <h3>v0.6.8.1 (10/13/2017)</h3>
+          <p>-Trinket store is now working... most of em</p>
+          <br/>
+
+          <h3>v0.6.8 (10/12/2017)</h3>
+          <p>-Working on Gems store</p>
+          <p>-Working on Quests</p>
+          <p>-Countless bug fixes</p>
+          <br/>
+
+          <h3>v0.6.7 (10/1/2017)</h3>
+          <p>-Prospector class is 3/4 done...</p>
+          <p>-Changed up background image</p>
+          <p>-Changed store fonts</p>
+          <p>-Added a couple more upgrades</p>
+          <p>-Added some more sprites</p>
+          <p>-Added more achievements</p>
+          <p>-Added a text scrolling thingy doodad</p>
+          <p>-Fixed bug where other items disappear on click</p>
+          <p>-Fixed countless more bugs</p>
+          <br/>
+
+
+          <h3>v0.6.5 (9/27/2017)</h3>
+          <p>Prospector class is halfway done...</p>
+          <br/>
+
+          <h3>v0.6.4 (9/24/2017)</h3>
+          <p>-Almost done implementing classes... well, a single class</p>
+
+          <br/>
+
+          <h3>v0.6.3 (9/23/2017) THE SPRITES UPDATE</h3>
+          <p>-Sprites for every single store item(My index finger is sore)</p>
+
+          <br/>
+
+          <h3>v0.6.2 (9/22/2017)</h3>
+          <p>-BIG UPDATE IN THE WORKS... classes dont do anything yet but they will soon...</p>
+          <p>-Added a couple more sprites</p>
+          <p>-Lots of bug fixes</p>
+
+          <br/>
+
+          <h3>v0.6.1 (9/19/2017)</h3>
+          <p>-Added upgrades for every single store item</p>
+          <p>-Added a bunch more sprites</p>
+          <p>-Critical hits gives more XP</p>
+          <p>-Mousing over stats displays information</p>
+          <p>-Adjusted Strength values to prevent negative damage from happening</p>
+          <p>-Adjusted ore health</p>
+          <p>-Implement achievements</p>
+          <p>-Added 2 achievements</p>
+          <p>-Implemented patch notes (this thing!)</p>
+        </div>
+
+      `
+      s('body').append(div)
+    }
+  }
+
   Game.save = () => {
     Game.state.lastLogin = new Date().getTime()
     localStorage.setItem('state', JSON.stringify(Game.state))
@@ -215,6 +299,7 @@ Game.launch = () => {
 
     // PREREQUISITES
     Game.updatePercentage(0)
+    Game.playBgm()
     Game.showTextScroller()
     Game.rebuildStats = 1
     Game.rebuildStore = 1
@@ -245,21 +330,22 @@ Game.launch = () => {
     }
   }
 
-  Game.playBgm = (volume) => {
+  Game.playBgm = () => {
     let selected = Math.floor(Math.random() * 4) + 1
-    let bgm = new Audio(`./assets/bgm${selected}.mp3`)
-
-    if (volume) {
-      //IDK HOW TO MUTE SHIT DONT WORK I TRIED EVERYTHING
-    } else {
-      bgm.volume = .08
-      bgm.play()
-      bgm.onended = () => Game.playBgm()
-    }
+    let bgm = s('#bgm')
+    bgm.src = `./assets/bgm${selected}.mp3`
+    bgm.volume = 0.1
+    bgm.play()
+    bgm.onended = () => Game.playBgm()
   }
 
-  Game.toggleBgm = () => {
-    //
+  Game.toggleBgm = (type) => {
+    let audio = s('audio')
+    if (type == 'on') {
+      audio.play()
+    } else {
+      audio.pause()
+    }
   }
 
   Game.earnOfflineGain = () => {
@@ -364,7 +450,13 @@ Game.launch = () => {
     div.style.top = (anchor.top + anchor.bottom) / 5 + 'px'
     div.style.left = anchor.left  - div.getBoundingClientRect().width + 'px'
 
-    setTimeout(() => div.remove(), 5000)
+    let check = setInterval(() => {
+      console.log('check firing')
+      if (Game.state.stats.buildingsOwned > 0) {
+        div.remove()
+        clearInterval(check)
+      }
+    }, 500)
   }
 
   Game.calculateOpC = (type) => {
@@ -1987,10 +2079,10 @@ Game.launch = () => {
           </datalist>
         </div>
         <div class="single-setting">
-          <p style='padding-right: 20px;'>BGM (NOT WORKING SRY): </p>
-          <input type="radio" name='bgm' id='bgmOn' value='true' onchange='Game.state.prefs.bgm = 1; Game.toggleBgm();'/>
+          <p style='padding-right: 20px;'>BGM: </p>
+          <input type="radio" name='bgm' id='bgmOn' value='true' onchange='Game.state.prefs.bgm = 1; Game.toggleBgm("on");'/>
             <label for="bgmOn" style='margin-right: 10px'>On</label>
-          <input type="radio" name='bgm' id='bgmOff' value='false' onchange='Game.state.prefs.bgm = 0; Game.toggleBgm();'/>
+          <input type="radio" name='bgm' id='bgmOff' value='false' onchange='Game.state.prefs.bgm = 0; Game.toggleBgm("off");'/>
             <label for="bgmOff" style='margin-right: 10px'>Off</label>
         </div>
         <hr/>
@@ -2110,7 +2202,7 @@ Game.launch = () => {
         <h2 style='text-align: center; font-family: "Germania One"; letter-spacing: 1px'>Refine</h2>
         <i class='fa fa-times fa-1x' onclick='document.querySelector(".wrapper").remove()'></i>
         <hr/>
-        <p style='text-align: left; color: lightgreen;'>+ You will gain <strong>${amountOfGems}</strong> gems</p>
+        <p style='text-align: left; color: lightgreen;'>+ You will gain <strong>${amountOfGems}</strong> gems (more ores = more gems)</p>
         <p style='text-align: left; color: lightgreen;'>+ You will gain <strong>1</strong> generation</p>
         <p style='text-align: left; color: #c36d6d;'>- You will lose all current ores</p>
         <p style='text-align: left; color: #c36d6d;'>- You will lose all owned buildings and upgrades</p>
