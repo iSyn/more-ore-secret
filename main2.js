@@ -1048,7 +1048,42 @@ Game.launch = () => {
       }
     }
     Game.rebuildStore = 0
+    Game.loadAd()
     s('.tab-content').innerHTML = str
+  }
+
+  let Game.adsLoaded = false
+  Game.loadAd = () => {
+    if (Game.adsLoaded == false) {
+      Game.adsLoaded = true
+      for (i = 0; i < 3; i++) {
+        let script = document.createElement('script')
+        script.src = '//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js'
+        let ins = document.createElement('ins')
+        ins.classList.add('adsbygoogle')
+        ins.style.display = 'block'
+        ins.setAttribute('data-ad-client', 'ca-pub-4584563958870163')
+        ins.setAttribute('data-ad-slot', '6565116738')
+
+        let div = s('#ads-im-sorry-please-dont-hate-me')
+        div.append(script)
+        div.append(ins)
+
+        if (s('ins').style.display == 'block') {
+          ins.setAttribute('data-ad-format', 'rectangle, horizontal');
+          (adsbygoogle = window.adsbygoogle || []).push({});
+        }
+      s('.tab-content-container').append(div)
+      }
+    }
+    // if (s('.img_ad')) {
+    //   //do nothing
+    // } else {
+    //     let str = `
+    //     <p style='text-align: center; background: transparent; color: white;'>Please consider whitelisting this page! <br/> I tried my best to make the ads non-intrusive! <br/> Thanks!</p>
+    //     `
+    //     s('#ads-im-sorry-please-dont-hate-me').innerHTML = str
+    // }
   }
 
   Game.buildInventory = () => {
@@ -2069,6 +2104,7 @@ Game.launch = () => {
     let str = `
       <div class="confirm-refine">
         <h2 style='text-align: center; font-family: "Germania One"; letter-spacing: 1px'>Refine</h2>
+        <i class='fa fa-times fa-1x' onclick='document.querySelector(".wrapper").remove()'></i>
         <hr/>
         <p style='text-align: left; color: lightgreen;'>+ You will gain <strong>${amountOfGems}</strong> gems</p>
         <p style='text-align: left; color: lightgreen;'>+ You will gain <strong>1</strong> generation</p>
@@ -2077,7 +2113,7 @@ Game.launch = () => {
         <p style='text-align: left; color: #c36d6d;'>- You will lose your current pickaxe</p>
         <hr/>
         <p style='text-align: center;'>Are you sure you want to refine?</p>
-        <p style='text-align: center; font-size: smaller; margin-bottom: 5px; color: #ff2f2f;'>-You can refine once every hour-</p>
+        <p style='text-align: center; font-size: larger; margin-bottom: 5px; color: #ff2f2f;'>-You can refine once every hour-</p>
         `
         if (difference) {
           str += `
@@ -2363,7 +2399,7 @@ Game.launch = () => {
     str += `
         <div class="refined-store-container">
           <div class="refined-store-top">
-            <p onclick='document.querySelector(".wrapper").remove()' style='position: absolute; right: 5px; top: 1px; cursor: pointer'>x</p>
+            <i class='fa fa-times fa-1x' onclick='document.querySelector(".wrapper").remove()'></i>
             <h1 style='flex-grow: 1; text-align: center;'>Refined Store</h1>
             <h3 style='padding-right: 20px;'><i style='color:#00c0ff' class='fa fa-diamond fa-1x'></i> ${Game.state.gems}</h3>
           </div>

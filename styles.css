@@ -1198,7 +1198,7 @@ li {
   overflow: auto;
 }
 
-.achievements-container i {
+.fa-times {
   position: absolute;
   right: 5px;
   top: 5px;
@@ -1206,7 +1206,7 @@ li {
   cursor: pointer;
 }
 
-.achievements-container i {
+.fa-times:hover {
   opacity: 1;
 }
 
