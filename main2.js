@@ -616,8 +616,7 @@ Game.launch = () => {
 
     // UNLOCK SHIT
     if (Game.state.stats.oreClicks >= 5 ) Game.unlockUpgrade('Magnifying Glass')
-    if (Game.state.stats.oreClicks >= 100) Game.unlockUpgrade('WorkBoots')
-    if (Game.state.stats.oreClicks >= 100) Game.unlockUpgrade('Painkillers')
+    if (Game.state.stats.oreClicks >= 100) {Game.unlockUpgrade('Work Boots'); Game.unlockUpgrade('Painkillers')}
     if (Game.state.stats.weakSpotHits >= 5) Game.unlockUpgrade('Clean Magnifying Glass')
     if (Game.state.stats.weakSpotHits >= 20) Game.unlockUpgrade('Polish Magnifying Glass')
 
