@@ -1219,7 +1219,7 @@ Game.launch = () => {
 
               if (Game.state.player.pickaxe.stats) {
                 if (Game.state.player.pickaxe.stats.length > 0) {
-                  Game.newItem.stats.forEach((stat) => {
+                  Game.state.player.pickaxe.stats.forEach((stat) => {
                     str += `<p>${stat.name}: ${stat.val}</p>`
                   })
                 }
