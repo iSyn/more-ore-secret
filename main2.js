@@ -392,6 +392,8 @@ Game.launch = () => {
     Game.state.ores += amount
     Game.updatePercentage(amount)
     Game.rebuildInventory = 1
+
+    if (Game.state.ores >= 10000) Game.unlockUpgrade('Flashlight')
   }
 
   Game.spend = (amount) => {
@@ -564,6 +566,16 @@ Game.launch = () => {
     Game.drawRockParticles()
     Game.state.stats.oreClicks++
     Game.state.stats.totalOresMined += amount
+
+    // CHECK CLICK RELATED ACHIEVEMENTS
+
+    // UNLOCK SHIT
+    if (Game.state.stats.oreClicks >= 5 ) Game.unlockUpgrade('Magnifying Glass')
+    if (Game.state.stats.oreClicks >= 100) Game.unlockUpgrade('WorkBoots')
+    if (Game.state.stats.oreClicks >= 100) Game.unlockUpgrade('Painkillers')
+    if (Game.state.stats.weakSpotHits >= 5) Game.unlockUpgrade('Clean Magnifying Glass')
+    if (Game.state.stats.weakSpotHits >= 20) Game.unlockUpgrade('Polish Magnifying Glass')
+
   }
 
   Game.oreWeakSpot = () => {
@@ -642,23 +654,250 @@ Game.launch = () => {
     }
   }
 
-  Game.generateRandomItem = (iLvl) => {
+  // Game.generateRandomItem = (iLvl) => {
 
-    let rarity = [
+  //   let rarity = [
+  //     {
+  //       name: 'Common',
+  //       maxStat: 0,
+  //       mult: 1
+  //     }, {
+  //       name: 'Uncommon',
+  //       maxStat: 1,
+  //       mult: 1.5
+  //     }, {
+  //       name: 'Unique',
+  //       maxStat: 2,
+  //       mult: 2
+  //     }, {
+  //       name: 'Rare',
+  //       maxStat: 3,
+  //       mult: 3
+  //     }, {
+  //       name: 'Legendary',
+  //       maxStat: 4,
+  //       mult: 5
+  //     }
+  //   ]
+  //   let prefixes = [
+  //     {
+  //       name: 'Lucky',
+  //       stat: 'Luck',
+  //       mult: 1
+  //     }, {
+  //       name: 'Unlucky',
+  //       stat: 'Luck',
+  //       mult: -1
+  //     }, {
+  //       name: 'Fortuitous',
+  //       stat: 'Luck',
+  //       mult: 2
+  //     }, {
+  //       name: 'Poor',
+  //       stat: 'Luck',
+  //       mult: -1
+  //     }, {
+  //       name: 'Strong',
+  //       stat: 'Strength',
+  //       mult: 1
+  //     }, {
+  //       name: 'Weak',
+  //       stat: 'Strength',
+  //       mult: -1
+  //     }, {
+  //       name: 'Big',
+  //       stat: 'Strength',
+  //       mult: 1
+  //     }, {
+  //       name: 'Small',
+  //       stat: 'Strength',
+  //       mult: -1
+  //     }, {
+  //       name: 'Baby',
+  //       stat: 'Strength',
+  //       mult: -2
+  //     }, {
+  //       name: 'Gigantic',
+  //       stat: 'Strength',
+  //       mult: 2
+  //     },   {
+  //       name: 'Durable',
+  //       stat: 'Strength',
+  //       mult: 1
+  //     }, {
+  //       name: 'Frail',
+  //       stat: 'Strength',
+  //       mult: -1.5
+  //     }, {
+  //       name: 'Hard',
+  //       stat: 'Strength',
+  //       mult: 1
+  //     }, {
+  //       name: 'Weak',
+  //       stat: 'Strength',
+  //       mult: -1
+  //     }, {
+  //       name: 'Broken',
+  //       stat: 'Strength',
+  //       mult: -2
+  //     }, {
+  //       name: 'Shoddy',
+  //       stat: 'Strength',
+  //       mult: -1
+  //     }
+  //   ]
+  //   let materials = [
+  //     {
+  //       name: 'Wood',
+  //       mult: .5
+  //     }, {
+  //       name: 'Stone',
+  //       mult: 1.5
+  //     }, {
+  //       name: 'Iron',
+  //       mult: 3
+  //     }, {
+  //       name: 'Steel',
+  //       mult: 5
+  //     }, {
+  //       name: 'Diamond',
+  //       mult: 10
+  //     }
+  //   ]
+  //   let suffixes = [
+  //     {
+  //       name: 'of the Giant',
+  //       stat: 'strength',
+  //       mult: 10
+  //     }, {
+  //       name: 'of the Leprechaun',
+  //       stat: 'luck',
+  //       mult: 10
+  //     }
+  //   ]
+  //   let stats = [
+  //     {name: 'Strength', val: null},
+  //     {name: 'Dexterity', val: null},
+  //     {name: 'Intelligence', val: null},
+  //     {name: 'Luck', val: null},
+  //     {name: 'Charisma', val: null}
+  //   ]
+
+  //   let range = Math.ceil((Math.random() * iLvl/2) + iLvl/2) // Picks a random whole number from 1 to iLvl
+
+  //   let chooseRarity = () => {
+  //     let selectedRarity
+  //     let randomNum = Math.random()
+  //     if (randomNum >= 0) {
+  //       selectedRarity = rarity[0]
+  //     }
+  //     if (randomNum >= .5) {
+  //       selectedRarity = rarity[1]
+  //     }
+  //     if (randomNum >= .7) {
+  //       selectedRarity = rarity[2]
+  //     }
+  //     if (randomNum >= .9) {
+  //       selectedRarity = rarity[3]
+  //     }
+  //     if (randomNum >= .95) {
+  //       selectedRarity = rarity[4]
+  //     }
+  //     return selectedRarity
+  //   }
+  //   let chooseMaterial = () => {
+  //     let selectedMaterial
+  //     let randomNum = Math.random()
+  //     if (randomNum >= 0) {
+  //       selectedMaterial = materials[0]
+  //     }
+  //     if (randomNum >= .4) {
+  //       selectedMaterial = materials[1]
+  //     }
+  //     if (randomNum >= .7) {
+  //       selectedMaterial = materials[2]
+  //     }
+  //     if (randomNum >= .9) {
+  //       selectedMaterial = materials[3]
+  //     }
+  //     if (randomNum >= .95) {
+  //       selectedMaterial = materials[4]
+  //     }
+  //     return selectedMaterial
+  //   }
+
+  //   let selectedRarity = chooseRarity()
+  //   let selectedMaterial = chooseMaterial()
+  //   let totalMult = selectedRarity.mult + selectedMaterial.mult
+  //   let itemName
+  //   let prefixName
+  //   let prefixVal
+  //   let prefixStat
+  //   let suffixName
+
+  //   if (selectedRarity.name == 'Legendary' || selectedRarity.name == 'Rare') {
+  //     let selectedSuffix = suffixes[Math.floor(Math.random() * suffixes.length)]
+  //     totalMult += selectedSuffix.mult
+  //     suffixName = selectedSuffix.name
+  //   }
+  //   if (Math.random() >= .6) { // 40% chance for a prefix
+  //     let selectedPrefix = prefixes[Math.floor(Math.random() * prefixes.length)]
+  //     prefixVal = (range + totalMult) * selectedPrefix.mult
+  //     prefixStat = selectedPrefix.stat
+  //     prefixName = selectedPrefix.name
+  //   }
+  //   if (prefixName) {
+  //     itemName = `${prefixName} ${selectedMaterial.name} Pickaxe`
+  //   } else {
+  //     itemName = `${selectedMaterial.name} Pickaxe`
+  //   }
+  //   if (suffixName) {
+  //     itemName += ` ${suffixName}`
+  //   }
+
+  //   let calculateDmg = iLvl * totalMult
+
+  //   let newItem = {
+  //     name: itemName,
+  //     rarity: selectedRarity.name,
+  //     material: selectedMaterial.name,
+  //     iLv: iLvl,
+  //     damage: calculateDmg,
+  //   }
+
+  //   if (prefixName) {
+  //     newItem['hasPrefix'] = true
+  //     newItem['prefixStat'] = prefixStat
+  //     newItem['prefixStatVal'] = prefixVal
+  //   }
+
+  //   return newItem
+  // }
+
+  Game.generateRandomItem2 = (iLv) => {
+
+    let rarity, material, prefix, suffix, totalMult, selectedStats, name
+
+    let rarities = [
       {
         name: 'Common',
+        maxStat: 0,
         mult: 1
       }, {
         name: 'Uncommon',
+        maxStat: 1,
         mult: 1.5
       }, {
         name: 'Unique',
+        maxStat: 2,
         mult: 2
       }, {
         name: 'Rare',
+        maxStat: 3,
         mult: 3
       }, {
         name: 'Legendary',
+        maxStat: 4,
         mult: 5
       }
     ]
@@ -750,34 +989,39 @@ Game.launch = () => {
     let suffixes = [
       {
         name: 'of the Giant',
-        stat: 'strength',
+        stat: 'Strength',
         mult: 10
       }, {
         name: 'of the Leprechaun',
-        stat: 'luck',
+        stat: 'Luck',
         mult: 10
       }
     ]
-
-    let range = Math.ceil((Math.random() * iLvl/2) + iLvl/2) // Picks a random whole number from 1 to iLvl
+    let stats = [
+      {name: 'Strength', val: null},
+      {name: 'Dexterity', val: null},
+      {name: 'Intelligence', val: null},
+      {name: 'Luck', val: null},
+      {name: 'Charisma', val: null}
+    ]
 
     let chooseRarity = () => {
       let selectedRarity
       let randomNum = Math.random()
       if (randomNum >= 0) {
-        selectedRarity = rarity[0]
+        selectedRarity = rarities[0]
       }
       if (randomNum >= .5) {
-        selectedRarity = rarity[1]
+        selectedRarity = rarities[1]
       }
       if (randomNum >= .7) {
-        selectedRarity = rarity[2]
+        selectedRarity = rarities[2]
       }
       if (randomNum >= .9) {
-        selectedRarity = rarity[3]
+        selectedRarity = rarities[3]
       }
       if (randomNum >= .95) {
-        selectedRarity = rarity[4]
+        selectedRarity = rarities[4]
       }
       return selectedRarity
     }
@@ -801,50 +1045,78 @@ Game.launch = () => {
       }
       return selectedMaterial
     }
+    let choosePrefix = () => prefixes[Math.floor(Math.random() * prefixes.length)]
+    let chooseSuffix = () => suffixes[Math.floor(Math.random() * suffixes.length)]
 
-    let selectedRarity = chooseRarity()
-    let selectedMaterial = chooseMaterial()
-    let totalMult = selectedRarity.mult + selectedMaterial.mult
-    let itemName
-    let prefixName
-    let prefixVal
-    let prefixStat
-    let suffixName
+    rarity = chooseRarity()
+    material = chooseMaterial()
+    if (Math.random() >= .6 && rarity.name != 'Common') prefix = choosePrefix()
+    if (rarity.name == 'Rare' || rarity.name == 'Legendary') suffix = chooseSuffix()
 
-    if (selectedRarity.name == 'Legendary' || selectedRarity.name == 'Rare') {
-      let selectedSuffix = suffixes[Math.floor(Math.random() * suffixes.length)]
-      totalMult += selectedSuffix.mult
-      suffixName = selectedSuffix.name
+    // CALCULATE MULT
+    totalMult = 0
+    totalMult += rarity.mult
+    totalMult += material.mult
+    if (prefix) totalMult += prefix.mult
+    if (suffix) totalMult += suffix.mult
+    totalMult *= (iLv * .5)
+
+    // DETERMINE STATS
+    selectedStats = []
+    let absolutePrefix = 0
+    let absoluteSuffix = 0
+
+    for (i=0; i<rarity.maxStat; i++) {
+      console.log('AMOUNT OF STATS:', rarity.maxStat)
+      if (prefix && absolutePrefix == 0) {
+        absolutePrefix = 1
+        for (j=0; j<stats.length; j++) {
+          if (prefix.stat == stats[j].name) {
+            selectedStats.push(stats[j])
+          }
+        }
+      } else if (suffix && absoluteSuffix == 0) {
+        absoluteSuffix = 1
+        for (j=0; j<stats.length; j++) {
+          if (suffix.stat == stats[j].name) {
+            selectedStats.push(stats[j])
+          }
+        }
+      } else {
+        selectedStats.push(stats[Math.floor(Math.random() * stats.length)])
+      }
     }
-    if (Math.random() >= .6) { // 40% chance for a prefix
-      let selectedPrefix = prefixes[Math.floor(Math.random() * prefixes.length)]
-      prefixVal = (range + totalMult) * selectedPrefix.mult
-      prefixStat = selectedPrefix.stat
-      prefixName = selectedPrefix.name
+
+    // DETERMINE STAT VALUES
+    for (i in selectedStats) {
+      selectedStats[i].val = Math.floor(Math.random() * (totalMult - (totalMult / 2) + 1) + (totalMult / 2))
     }
-    if (prefixName) {
-      itemName = `${prefixName} ${selectedMaterial.name} Pickaxe`
+
+    // DAMAGE
+    let calculateDmg = iLv * totalMult
+
+    // BUILD IT OUT
+    if (suffix) {
+      if (prefix) {
+        name = `${prefix.name} ${material.name} pickaxe ${suffix.name}`
+      } else {
+        name = `${material.name} pickaxe ${suffix.name}`
+      }
     } else {
-      itemName = `${selectedMaterial.name} Pickaxe`
+      if (prefix) {
+        name = `${prefix.name} ${material.name} pickaxe`
+      } else {
+        name = `${material.name} pickaxe`
+      }
     }
-    if (suffixName) {
-      itemName += ` ${suffixName}`
-    }
-
-    let calculateDmg = iLvl * totalMult
 
     let newItem = {
-      name: itemName,
-      rarity: selectedRarity.name,
-      material: selectedMaterial.name,
-      iLv: iLvl,
+      name: name,
+      rarity: rarity.name,
+      material: material.name,
+      stats: selectedStats,
+      iLv: iLv,
       damage: calculateDmg,
-    }
-
-    if (prefixName) {
-      newItem['hasPrefix'] = true
-      newItem['prefixStat'] = prefixStat
-      newItem['prefixStatVal'] = prefixVal
     }
 
     return newItem
@@ -852,7 +1124,7 @@ Game.launch = () => {
 
   Game.pickUpItem = (iLvl) => {
     Game.state.stats.itemsPickedUp++
-    Game.newItem = Game.generateRandomItem(iLvl)
+    Game.newItem = Game.generateRandomItem2(iLvl)
     let itemModal = document.createElement('div')
     itemModal.classList.add('item-modal-container')
 
@@ -876,11 +1148,13 @@ Game.launch = () => {
               <p>Item Level: ${Game.newItem.iLv}</p>
               <p>Damage: ${beautify(Game.newItem.damage)}</p>
               `
-              if (Game.newItem.hasPrefix == true) {
-                str += `
-                  <p>${Game.newItem.prefixStat}: ${Game.newItem.prefixStatVal}</p>
-                `
+
+              if (Game.newItem.stats.length > 0) {
+                Game.newItem.stats.forEach((stat) => {
+                  str += `<p>${stat.name}: ${stat.val}</p>`
+                })
               }
+
               str += `
             </div>
           </div>
@@ -898,11 +1172,15 @@ Game.launch = () => {
               <p>Item Level: ${Game.state.player.pickaxe.iLv}</p>
               <p>Damage: ${beautify(Game.state.player.pickaxe.damage)}</p>
               `
-              if (Game.state.player.pickaxe.hasPrefix == true) {
-                str += `
-                  <p>${Game.state.player.pickaxe.prefixStat}: ${Math.floor(Game.state.player.pickaxe.prefixStatVal)}</p>
-                `
+
+              if (Game.state.player.pickaxe.stats) {
+                if (Game.state.player.pickaxe.stats.length > 0) {
+                  Game.newItem.stats.forEach((stat) => {
+                    str += `<p>${stat.name}: ${stat.val}</p>`
+                  })
+                }
               }
+
               str += `
             </div>
           </div>
@@ -1091,13 +1369,18 @@ Game.launch = () => {
       <div class="upgrades-container">
     `
     let hasContent = 0
-    for (i in Game.upgrades) {
-      let item = Game.upgrades[i]
+
+    Game.sortedUpgrades = Game.upgrades.sort((a, b) => {
+      return a.price - b.price;
+    });
+
+    for (i in Game.sortedUpgrades) {
+      let item = Game.sortedUpgrades[i]
       if (item.hidden == 0) {
         hasContent = 1
         str += `
           <div class="upgrade-item-container" style='background-color: #b56535'>
-            <div class="upgrade-item" id="${item.name.replace(/\s/g , "-")}" onclick='Game.upgrades[${i}].buy(); Game.hideTooltip();' onmouseover="Game.showTooltip({name: '${item.name}', type: '${item.type}s'}); Game.playSound('itemhover')" onmouseout="Game.hideTooltip()" style='background: url(./assets/${item.pic}); background-size: 100%;'></div>
+            <div class="upgrade-item" id="${item.name.replace(/\s/g , "-")}" onclick='Game.sortedUpgrades[${i}].buy(); Game.hideTooltip();' onmouseover="Game.showTooltip({name: '${item.name}', type: '${item.type}s'}); Game.playSound('itemhover')" onmouseout="Game.hideTooltip()" style='background: url(./assets/${item.pic}); background-size: 100%;'></div>
           </div>
         `
       }
@@ -1330,7 +1613,7 @@ Game.launch = () => {
         Game.unlockUpgrade('Green Goop')
       }
     }
-    if (item.name == 'Sacred Mines') {
+    if (item.name == 'Sacred Mine') {
       if (item.owned == 1) {
         Game.unlockUpgrade('Unholy Mineshaft')
       }
@@ -2047,7 +2330,6 @@ Game.launch = () => {
     `
     }
     tooltip.style.animation = 'tooltip .3s'
-
   }
 
   Game.hideTooltip = () => {
@@ -2243,7 +2525,6 @@ Game.launch = () => {
     Game.playSound('smithsfx')
     Game.state.prefs.canRefine = false
     Game.state.stats.timesRefined++
-    Game.refineCountdown()
     let div = document.createElement('div')
     div.classList.add('refine')
     s('body').append(div)
@@ -2268,15 +2549,6 @@ Game.launch = () => {
       s('.refine').remove()
       if (Game.state.stats.timesRefined > 0) Game.winAchievement('Blacksmiths Apprentice')
     }, 3000)
-  }
-
-  Game.refineCountdown = () => {
-    if (Game.state.refineTimer > 0) {
-      Game.state.refineTimer--
-    } else {
-      Game.state.canRefine == true
-      Game.state.refineTimer = 10800000
-    }
   }
 
   Game.softReset = () => {
@@ -2308,6 +2580,8 @@ Game.launch = () => {
     }
 
     Game.rebuildStore = 1
+    Game.recalculateOpC = 1
+    Game.recalculateOpS = 1
 
     Game.resetItems()
   }
@@ -2729,8 +3003,6 @@ Game.launch = () => {
 
   Game.logic = () => {
 
-    console.log(Game.blurred)
-
     if (!Game.blurred) {
       // HANDLE ORES N SHIT
       if (Game.recalculateOpC) Game.calculateOpC()
@@ -2749,12 +3021,6 @@ Game.launch = () => {
       // if (Game.rebuildStats) Game.buildStats()
       if (Game.redrawSkillsContainer) Game.drawSkillsContainer()
       if (Game.redrawTorches) Game.drawTorches()
-
-      // UNLOCK SHIT
-      if (Game.state.stats.oreClicks >= 5 && Game.upgrades[0].owned == 0) Game.unlockUpgrade('Magnifying Glass')
-      if (Game.state.stats.weakSpotHits >= 5 && Game.upgrades[1].owned == 0) Game.unlockUpgrade('Clean Magnifying Glass')
-      if (Game.state.stats.weakSpotHits >= 20 && Game.upgrades[1].owned == 1 && Game.upgrades[2].owned == 0) Game.unlockUpgrade('Polish Magnifying Glass')
-
     }
 
     setTimeout(Game.logic, 1000/Game.state.prefs.fps)
@@ -2815,10 +3081,10 @@ Game.launch = () => {
     {name: 'Hospital', namePlural: 'Hospitals', type: 'building', pic: 'hospital.png', production: 220000, desc: 'Heal your damaged ores', fillerQuote: 'An apple a day keeps the ore cancer away', basePrice: 1000000, hidden: 2},
     {name: 'Citadel', namePlural: 'Citadels', type: 'building', pic: 'citadel.png', production: 1666666, desc: 'wip', fillerQuote: 'wip', basePrice: 66666666, hidden: 2},
     {name: 'Xeno Spaceship', namePlural: 'Xeno Spaceships', type: 'building', pic: 'xeno-spaceship.png', production: 45678910, desc: 'wip', fillerQuote: 'wip', basePrice: 758492047, hidden: 2},
-    {name: 'Sky Castle', namePlural: 'Sky Castles', type: 'building', pic: 'wip.png', production: 777777777, desc: 'wip', fillerQuote: 'wip', basePrice: 5500000000, hidden: 2},
-    {name: 'Eon Portal', namePlural: 'Eon Portal', type: 'building', pic: 'wip.png', production: 8888800000, desc: 'wip', fillerQuote: 'wip', basePrice: 79430000000, hidden: 2},
-    {name: 'Sacred Mine', namePlural: 'Sacred Mines', type: 'building', pic: 'wip.png', production: 40501030500, desc: 'wip', fillerQuote: 'wip', basePrice: 300000000000, hidden: 2},
-    {name: 'O.A.R.D.I.S.', namePlural: 'O.A.R.D.I.S.s', type: 'building', pic: 'wip.png', production: 110100110110, desc: 'wip', fillerQuote: 'wip', basePrice: 9999999999999, hidden: 2},
+    {name: 'Sky Castle', namePlural: 'Sky Castles', type: 'building', pic: 'skycastle.png', production: 777777777, desc: 'wip', fillerQuote: 'wip', basePrice: 5500000000, hidden: 2},
+    {name: 'Eon Portal', namePlural: 'Eon Portal', type: 'building', pic: 'eonportal.png', production: 8888800000, desc: 'wip', fillerQuote: 'wip', basePrice: 79430000000, hidden: 2},
+    {name: 'Sacred Mine', namePlural: 'Sacred Mines', type: 'building', pic: 'sacredmines.png', production: 40501030500, desc: 'wip', fillerQuote: 'wip', basePrice: 300000000000, hidden: 2},
+    {name: 'O.A.R.D.I.S.', namePlural: 'O.A.R.D.I.S.s', type: 'building', pic: 'oardis.png', production: 110100110110, desc: 'wip', fillerQuote: 'wip', basePrice: 9999999999999, hidden: 2},
     //UPGRADES
     {name: 'Magnifying Glass', type: 'upgrade', pic: 'magnifying-glass.png', desc: 'Allows you to spot weakpoints inside the rock', fillerQuote: 'These sure will help...', price: 5, hidden: 1},
     {name: 'Clean Magnifying Glass', type: 'upgrade', pic: 'clean-magnifying-glass.png', desc: 'Increases critical hit multiplier to 10x', fillerQuote: 'wip', price: 100, hidden: 1},
@@ -2827,19 +3093,19 @@ Game.launch = () => {
     {name: 'Manure Spreader', type: 'upgrade', pic: 'manure-spreader.png', desc: 'Doubles the production of Farms', fillerQuote: 'wip', price: 950, hidden: 1},
     {name: 'Headlights', type: 'upgrade', pic: 'headlights.png', desc: 'Doubles the production of Quarrys', fillerQuote: 'wip', price: 1900, hidden: 1},
     {name: 'Scripture Reading', type: 'upgrade', pic: 'scripture-reading.png', desc: 'Doubles the production of Churches', fillerQuote: 'wip', price: 60000, hidden: 1},
-    {name: 'Rubber Converyor Belts', type: 'upgrade', pic: 'wip.png', desc: 'Doubles the production of Factories', fillerQuote: 'wip', price: 300000, hidden: 1},
-    {name: 'Metal Sarcophagus', type: 'upgrade', pic: 'wip.png', desc: 'Doubles the production of Crypt', fillerQuote: 'wip', price: 5200000, hidden: 1},
-    {name: 'Immunization Shots', type: 'upgrade', pic: 'wip.png', desc: 'Doubles the production of Hospitals', fillerQuote: 'wip', price: 10000000, hidden: 1},
-    {name: 'Council of Rocks', type: 'upgrade', pic: 'wip.png', desc: 'Doubles the production of Citadel', fillerQuote: 'wip', price: 400000000, hidden: 1},
-    {name: 'Jet Fuel', type: 'upgrade', pic: 'wip.png', desc: 'Doubles the production of Xeno Spaceships', fillerQuote: 'wip', price: 5500000000, hidden: 1},
-    {name: 'Golden Eggs', type: 'upgrade', pic: 'wip.png', desc: 'Doubles the production of Sky Castles', fillerQuote: 'wip', price: 95000000000, hidden: 1},
-    {name: 'Green Goop', type: 'upgrade', pic: 'wip.png', desc: 'Doubles the production of Eon Portals', fillerQuote: 'wip', price: 150000000000, hidden: 1},
-    {name: 'Unholy Mineshaft', type: 'upgrade', pic: 'wip.png', desc: 'Doubles the production of Sacred Mines', fillerQuote: 'wip', price: 2200000000000, hidden: 1},
+    {name: 'Rubber Converyor Belts', type: 'upgrade', pic: 'rubber-conveyor-belt.png', desc: 'Doubles the production of Factories', fillerQuote: 'wip', price: 300000, hidden: 1},
+    {name: 'Metal Sarcophagus', type: 'upgrade', pic: 'metal-sarcophagus.png', desc: 'Doubles the production of Crypt', fillerQuote: 'wip', price: 5200000, hidden: 1},
+    {name: 'Immunization Shots', type: 'upgrade', pic: 'immunization-shot.png', desc: 'Doubles the production of Hospitals', fillerQuote: 'wip', price: 10000000, hidden: 1},
+    {name: 'Council of Rocks', type: 'upgrade', pic: 'council-of-rocks.png', desc: 'Doubles the production of Citadel', fillerQuote: 'wip', price: 400000000, hidden: 1},
+    {name: 'Jet Fuel', type: 'upgrade', pic: 'jet-fuel.png', desc: 'Doubles the production of Xeno Spaceships', fillerQuote: 'wip', price: 5500000000, hidden: 1},
+    {name: 'Golden Eggs', type: 'upgrade', pic: 'golden-egg.png', desc: 'Doubles the production of Sky Castles', fillerQuote: 'wip', price: 95000000000, hidden: 1},
+    {name: 'Green Goop', type: 'upgrade', pic: 'green-goop.png', desc: 'Doubles the production of Eon Portals', fillerQuote: 'wip', price: 150000000000, hidden: 1},
+    {name: 'Unholy Mineshaft', type: 'upgrade', pic: 'unholy-mineshaft.png', desc: 'Doubles the production of Sacred Mines', fillerQuote: 'wip', price: 2200000000000, hidden: 1},
     {name: 'OARDISupgrade', type: 'upgrade', pic: 'wip.png', desc: 'Doubles the production of OARDIS ', fillerQuote: 'wip', price: 50000000000000, hidden: 1},
     {name: 'Work Boots', type: 'upgrade', pic: 'workboots.png', desc: 'Increase all ore production by 1%', fillerQuote: 'wip', price: 500, hidden: 1},
     {name: 'Painkillers', type: 'upgrade', pic: 'painkillers.png', desc: 'double your OpC', fillerQuote: 'wip', price: 15000, hidden: 1},
     {name: 'Steroids', type: 'upgrade', pic: 'steroids.png', desc: 'double your OpC', fillerQuote: 'wip', price: 1000000, hidden: 1},
-    {name: 'Flashlight', type: 'upgrade', pic: 'wip.png', desc: 'Gain 10% of your OpS as OpC', fillerQuote: 'wip', price: 50000, hidden: 1},
+    {name: 'Flashlight', type: 'upgrade', pic: 'flashlight.png', desc: 'Gain 10% of your OpS as OpC', fillerQuote: 'wip', price: 50000, hidden: 1},
   ]
 
   Game.resetItems = () => {
@@ -2902,7 +3168,7 @@ Game.launch = () => {
     s('.bottom-overlay-txt').innerHTML = `<i class='fa fa-lock fa-1x' style='margin-right: 10px'></i>QUESTS UNLOCKED ON 2ND GENERATION`
   })
   s('#main-separator').onclick = () => {
-    Game.state.ores += 99999999
+    Game.state.ores += 99999999999999999999999999999999
     // Game.gainXp(999)
     Game.state.player.gems += 999
     Game.state.player.specializationSp += 999
