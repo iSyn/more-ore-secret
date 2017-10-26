@@ -5,26 +5,66 @@ let s = ((el) => {return document.querySelector(el)})
 
 let beautify = (num) => {
 
+  let amounts = [
+    [
+      'Million',
+      'Billion',
+      'Trillion',
+      'Quadrillion',
+      'Quintillion',
+      'Sextillion',
+      'Alotillion',
+      'Waytoomanyillion',
+      'Fuckloadillion',
+      'Fucktonillion'
+    ],
+    [
+      'M',
+      'B',
+      'T',
+      'Qa',
+      'Qi',
+      'Se',
+      'Al',
+      'Wa',
+      'Fl',
+      'Fu'
+    ]
+
+  ]
+
   if (num < 1000000) {
     return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); //found on https://stackoverflow.com/questions/2901102/how-to-print-a-number-with-commas-as-thousands-separators-in-javascript
   } else {
-    if (num >= 1000000 && num < 1000000000) {
-      return (num/1000000).toFixed(3) + ' Million'
+    if (num >= 1000000000000000000000000000000000) {
+      return (num/1000000000000000000000000000000000).toFixed(0) + ' F*cktonillion'
     }
-    if (num >= 1000000000 && num < 1000000000000) {
-      return (num/1000000000).toFixed(3) + ' Billion'
+    if (num >= 1000000000000000000000000000000) {
+      return (num/1000000000000000000000000000000).toFixed(1) + ' F*ckloadillion'
     }
-    if (num >= 1000000000000 && num < 1000000000000000) {
-      return (num/1000000000000).toFixed(3) + ' Trillion'
+    if (num >= 1000000000000000000000000000) {
+      return (num/1000000000000000000000000000).toFixed(1) + ' Waytoomanyillion'
     }
-    if (num >= 1000000000000000 && num < 1000000000000000000) {
-      return (num/1000000000000000).toFixed(3) + ' Quadrillion'
+    if (num >= 1000000000000000000000000) {
+      return (num/1000000000000000000000000).toFixed(1) + ' Alotillion'
     }
-    if (num >= 1000000000000000000 && num < 1000000000000000000000) {
-      return (num/1000000000000000000).toFixed(3) + ' Quintillion'
+    if (num >= 1000000000000000000000) {
+      return (num/1000000000000000000000).toFixed(1) + ' Sextillion'
     }
-    if (num >= 1000000000000000000000 && num < 1000000000000000000000000) {
-      return (num/1000000000000000000000).toFixed(3) + ' Sextillion'
+    if (num >= 1000000000000000000) {
+      return (num/1000000000000000000).toFixed(1) + ' Quintillion'
+    }
+    if (num >= 1000000000000000) {
+      return (num/1000000000000000).toFixed(1) + ' Quadrillion'
+    }
+    if (num >= 1000000000000) {
+      return (num/1000000000000).toFixed(1) + ' Trillion'
+    }
+    if (num >= 1000000000) {
+      return (num/1000000000).toFixed(1) + ' Billion'
+    }
+    if (num >= 1000000) {
+      return (num/1000000).toFixed(1) + ' Million'
     }
   }
 }
@@ -137,7 +177,7 @@ Game.launch = () => {
     },
     prefs: {
       volume: 0.5,
-      bgm: 1,
+      bgm: 0,
       rockParticles: true,
       risingNumbers: true,
       scrollingText: true,
@@ -162,10 +202,11 @@ Game.launch = () => {
           <p style='text-align: center'>(Click anywhere to close)</p>
           <hr style='border-color: black; margin-bottom: 10px;'/>
 
-          <h3>v0.8 (10/25/2017)</h3>
+          <h3>v0.7 (10/25/2017)</h3>
           <p>-Offline progression</p>
           <p>-Autosave and autoload</p>
-          <p>-Added couple of new sprites</p>
+          <p>-Upgrades are now sorted by price</p>
+          <p>-Added a bunch of new sprites. All buildings and current upgrades have a sprite</p>
           <p>-Working refine mechanic with timer</p>
 
           <p>-Took out leveling for generations</p>
@@ -299,7 +340,7 @@ Game.launch = () => {
 
     // PREREQUISITES
     Game.updatePercentage(0)
-    Game.playBgm()
+    // Game.playBgm()
     Game.showTextScroller()
     Game.rebuildStats = 1
     Game.rebuildStore = 1
@@ -332,14 +373,18 @@ Game.launch = () => {
     let selected = Math.floor(Math.random() * 4) + 1
     let bgm = s('#bgm')
     bgm.src = `./assets/bgm${selected}.mp3`
-    bgm.volume = 0.1
     bgm.play()
     bgm.onended = () => Game.playBgm()
   }
 
-  Game.toggleBgm = (type) => {
+  Game.toggleBgm = () => {
+    let selected = Math.floor(Math.random() * 4) + 1
     let audio = s('audio')
-    if (type == 'on') {
+    audio.src = `./assets/bgm${selected}.mp3`
+    audio.onended = () => Game.toggleBgm('on')
+    audio.volume = 0.1
+    bgm.onended = () => Game.playBgm()
+    if (Game.state.prefs.bgmd) {
       audio.play()
     } else {
       audio.pause()
@@ -1425,6 +1470,23 @@ Game.launch = () => {
           </div>
         `
       }
+      if (item.hidden == 3) {
+        str += `
+          <div class="button" style='cursor: not-allowed; box-shadow: 0 4px black; opacity: .7; filter: brightness(60%)'>
+            <div class="button-top">
+              <div class="button-left">
+                <img src="./assets/${item.pic}" style='filter: brightness(0%)'/>
+              </div>
+              <div class="button-middle">
+                <h3 style='font-size: larger'>???</h3>
+                <p>cost: ${beautify(item.price)} ores</p>
+              </div>
+              <div class="button-right">
+              </div>
+            </div>
+          </div>
+        `
+      }
     }
     Game.rebuildStore = 0
     Game.loadAd()
@@ -1540,7 +1602,7 @@ Game.launch = () => {
       for (i=0; i<Game.buildings.length; i++) {
         if (Game.buildings[i].name == item.name) {
           if (Game.buildings[i+1]) {
-            if (Game.buildings[i+1].hidden == 1) {
+            if (Game.buildings[i+1].hidden == 1 || Game.buildings[i+1].hidden == 3) {
               Game.buildings[i+1].hidden = 0
             }
           }
@@ -2368,9 +2430,9 @@ Game.launch = () => {
         </div>
         <div class="single-setting">
           <p style='padding-right: 20px;'>BGM: </p>
-          <input type="radio" name='bgm' id='bgmOn' value='true' onchange='Game.state.prefs.bgm = 1; Game.toggleBgm("on");'/>
+          <input type="radio" name='bgm' id='bgmOn' value='true' onchange='Game.state.prefs.bgm = 1; Game.toggleBgm();'/>
             <label for="bgmOn" style='margin-right: 10px'>On</label>
-          <input type="radio" name='bgm' id='bgmOff' value='false' onchange='Game.state.prefs.bgm = 0; Game.toggleBgm("off");'/>
+          <input type="radio" name='bgm' id='bgmOff' value='false' onchange='Game.state.prefs.bgm = 0; Game.toggleBgm();'/>
             <label for="bgmOff" style='margin-right: 10px'>Off</label>
         </div>
         <hr/>
@@ -2778,7 +2840,7 @@ Game.launch = () => {
         <div class="refined-store-container">
           <div class="refined-store-top">
             <i class='fa fa-times fa-1x' onclick='document.querySelector(".wrapper").remove()'></i>
-            <h1 style='flex-grow: 1; text-align: center;'>Refined Store</h1>
+            <h1 style='flex-grow: 1; text-align: center; font-family: "Germania One"'>Refined Store</h1>
             <h3 style='padding-right: 20px;'><i style='color:#00c0ff' class='fa fa-diamond fa-1x'></i> ${Game.state.gems}</h3>
           </div>
           <hr/>
@@ -3084,8 +3146,10 @@ Game.launch = () => {
     {name: 'Sky Castle', namePlural: 'Sky Castles', type: 'building', pic: 'skycastle.png', production: 777777777, desc: 'wip', fillerQuote: 'wip', basePrice: 5500000000, hidden: 2},
     {name: 'Eon Portal', namePlural: 'Eon Portal', type: 'building', pic: 'eonportal.png', production: 8888800000, desc: 'wip', fillerQuote: 'wip', basePrice: 79430000000, hidden: 2},
     {name: 'Sacred Mine', namePlural: 'Sacred Mines', type: 'building', pic: 'sacredmines.png', production: 40501030500, desc: 'wip', fillerQuote: 'wip', basePrice: 300000000000, hidden: 2},
-    {name: 'O.A.R.D.I.S.', namePlural: 'O.A.R.D.I.S.s', type: 'building', pic: 'oardis.png', production: 110100110110, desc: 'wip', fillerQuote: 'wip', basePrice: 9999999999999, hidden: 2},
+    {name: 'O.A.R.D.I.S.', namePlural: 'O.A.R.D.I.S.s', type: 'building', pic: 'oardis.png', production: 110100110110, desc: 'wip', fillerQuote: 'wip', basePrice: 6000000000000, hidden: 2},
+    {name: 'Final Destination', namePlural: 'Final Destination', type: 'building', pic: 'final-destination.png', production: 999999999999999999, desc: 'The final destination', fillerQuote: 'You Win', basePrice: 999999999999999999999999999999999, hidden: 3},
     //UPGRADES
+    //BUILDING UPGRADES
     {name: 'Magnifying Glass', type: 'upgrade', pic: 'magnifying-glass.png', desc: 'Allows you to spot weakpoints inside the rock', fillerQuote: 'These sure will help...', price: 5, hidden: 1},
     {name: 'Clean Magnifying Glass', type: 'upgrade', pic: 'clean-magnifying-glass.png', desc: 'Increases critical hit multiplier to 10x', fillerQuote: 'wip', price: 100, hidden: 1},
     {name: 'Polish Magnifying Glass', type: 'upgrade', pic: 'wip.png', desc: 'Increases critical hit multiplier to 15x', fillerQuote: 'wip', price: 50000, hidden: 1},
@@ -3102,9 +3166,10 @@ Game.launch = () => {
     {name: 'Green Goop', type: 'upgrade', pic: 'green-goop.png', desc: 'Doubles the production of Eon Portals', fillerQuote: 'wip', price: 150000000000, hidden: 1},
     {name: 'Unholy Mineshaft', type: 'upgrade', pic: 'unholy-mineshaft.png', desc: 'Doubles the production of Sacred Mines', fillerQuote: 'wip', price: 2200000000000, hidden: 1},
     {name: 'OARDISupgrade', type: 'upgrade', pic: 'wip.png', desc: 'Doubles the production of OARDIS ', fillerQuote: 'wip', price: 50000000000000, hidden: 1},
+    //OTHER UPGRADES
     {name: 'Work Boots', type: 'upgrade', pic: 'workboots.png', desc: 'Increase all ore production by 1%', fillerQuote: 'wip', price: 500, hidden: 1},
-    {name: 'Painkillers', type: 'upgrade', pic: 'painkillers.png', desc: 'double your OpC', fillerQuote: 'wip', price: 15000, hidden: 1},
-    {name: 'Steroids', type: 'upgrade', pic: 'steroids.png', desc: 'double your OpC', fillerQuote: 'wip', price: 1000000, hidden: 1},
+    {name: 'Painkillers', type: 'upgrade', pic: 'painkillers.png', desc: 'Double your OpC', fillerQuote: 'wip', price: 15000, hidden: 1},
+    {name: 'Steroids', type: 'upgrade', pic: 'steroids.png', desc: 'Double your OpC', fillerQuote: 'wip', price: 1000000, hidden: 1},
     {name: 'Flashlight', type: 'upgrade', pic: 'flashlight.png', desc: 'Gain 10% of your OpS as OpC', fillerQuote: 'wip', price: 50000, hidden: 1},
   ]
 
