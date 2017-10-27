@@ -360,6 +360,7 @@ Game.launch = () => {
 
   Game.wipe = () => {
     localStorage.clear()
+    Game.save()
     location.reload()
   }
 
