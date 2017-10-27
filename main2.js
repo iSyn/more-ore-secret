@@ -1521,8 +1521,9 @@ Game.launch = () => {
       let str = `
         <p style='text-align: center; background: transparent; color: white; padding-bottom: 20px;'>
         Please consider disabling adblock! <br/>
-        I am just a broke college student. <br/>
-        The cents generated from this game will be for food :)<br/>
+        I am just a broke college student and the cents generated from this game will be for food. <br/>
+        Or consider donating a lil somethin somethin <a href="https://www.patreon.com/user?u=8032477">PATREON LINK</a> <br/>
+        Your name will be placed in a special thanks section of the game! <br/>
         Thanks!
         </p>
       `
