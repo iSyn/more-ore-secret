@@ -3233,12 +3233,12 @@ Game.launch = () => {
   s('.bottom').addEventListener('mouseover', () => {
     s('.bottom-overlay-txt').innerHTML = `<i class='fa fa-lock fa-1x' style='margin-right: 10px'></i>QUESTS UNLOCKED ON 2ND GENERATION`
   })
-  s('#main-separator').onclick = () => {
-    Game.state.ores += 99999999999999999999999999999999
-    // Game.gainXp(999)
-    Game.state.player.gems += 999
-    Game.state.player.specializationSp += 999
-  }
+  // s('#main-separator').onclick = () => {
+  //   Game.state.ores += 99999999999999999999999999999999
+  //   // Game.gainXp(999)
+  //   Game.state.player.gems += 999
+  //   Game.state.player.specializationSp += 999
+  // }
 
   window.onresize = () => {
     Game.repositionSettingsContainer = 1
