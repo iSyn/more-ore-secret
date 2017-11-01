@@ -163,6 +163,8 @@ Game.launch = () => {
     stats: {
       totalOresMined: 0,
       totalOresSpent: 0,
+      currentOresEarned: 0,
+      currentOresMined: 0,
       oreClicks: 0,
       critHits: 0,
       weakSpotHits: 0,
@@ -349,6 +351,7 @@ Game.launch = () => {
     Game.recalculateOpS = 1
     Game.rebuildRefineBtn = 1
     Game.redrawTorches = 1
+    Game.redrawSkillsContainer = 1
     Game.repositionSettingsContainer = 1
     if (Game.state.player.specialization) Game.redrawSkillsContainer = 1
     // Game.playBgm()
@@ -437,8 +440,18 @@ Game.launch = () => {
     Game.state.ores += amount
     Game.updatePercentage(amount)
     Game.rebuildInventory = 1
+    Game.state.stats.currentOresEarned += amount
+    Game.state.stats.totalOresEarned += amount
 
-    if (Game.state.ores >= 10000) Game.unlockUpgrade('Flashlight')
+    if (Game.state.stats.currentOresEarned >= 200) {Game.unlockUpgrade('Work Boots'); Game.unlockUpgrade('Painkillers')}
+    if (Game.state.stats.currentOresEarned >= 600) {Game.unlockUpgrade('Shiny Watch'); Game.unlockUpgrade('Steroids')}
+    if (Game.state.stats.currentOresEarned >= 1000) Game.unlockUpgrade('Flashlight')
+    if (Game.state.stats.currentOresEarned >= 25000) Game.unlockUpgrade('Clipboard')
+
+    if (Game.state.stats.currentOresEarned >= 1000000 && Game.state.stats.timesRefined == 0 && Game.showTutorialRefine == 0) {
+      Game.buildRefineBtn()
+      Game.tutorialRefine()
+    }
   }
 
   Game.spend = (amount) => {
@@ -496,12 +509,33 @@ Game.launch = () => {
     div.style.left = anchor.left  - div.getBoundingClientRect().width + 'px'
 
     let check = setInterval(() => {
-      console.log('check firing')
       if (Game.state.stats.buildingsOwned > 0) {
         div.remove()
         clearInterval(check)
       }
     }, 500)
+  }
+
+  Game.showTutorialRefine = 0
+  Game.tutorialRefine = () => {
+    console.log('tutorialRefine running')
+    Game.showTutorialRefine = 1
+    let div = document.createElement('div')
+
+    div.classList.add('tutorial-container')
+    div.innerHTML = `
+      <div class="tutorial-arrow-left"></div>
+      <div class="tutorial-text">
+        <p>You can now refine!</p>
+      </div>
+    `
+
+    let anchor = s('.refine-btn').getBoundingClientRect()
+
+    s('body').append(div)
+
+    div.style.top = anchor.top + 'px'
+    div.style.left = anchor.right + 'px'
   }
 
   Game.calculateOpC = (type) => {
@@ -516,15 +550,11 @@ Game.launch = () => {
       }
     }
 
-    // // ADD DAMAGE FROM PLAYER STRENGTH
-    // let playerStr = Game.state.player.str
+    let flashlight = Game.select(Game.upgrades, 'Flashlight')
+    if (flashlight.owned > 0) opc += (Game.state.oresPerSecond * .01)
+    let clipboard = Game.select(Game.upgrades, 'Clipboard')
+    if (clipboard.owned > 0) opc += (Game.state.oresPerSecond * .02)
 
-    // if (playerStr > 0) opc += Math.pow(1.25, playerStr)
-
-    // // ADD DAMAGE FROM PLAYER DEX
-    // let playerDex = Game.state.player.dex
-
-    // if (playerDex > 0) opc += Math.pow(1.1, playerDex)
 
     // ADD OPC MULTIPLIER
     opc += (opc * Game.state.opcMulti)
@@ -552,6 +582,9 @@ Game.launch = () => {
 
     // GENERATION BONUS
     ops += (ops * (Game.state.player.generation * .01))
+
+    // OPS MULTI
+    ops += (ops * Game.state.opsMulti)
 
     Game.state.oresPerSecond = ops
     Game.recalculateOpS = 0
@@ -610,16 +643,15 @@ Game.launch = () => {
     Game.earn(amount)
     Game.drawRockParticles()
     Game.state.stats.oreClicks++
+    Game.state.stats.currentOresMined += amount
     Game.state.stats.totalOresMined += amount
 
     // CHECK CLICK RELATED ACHIEVEMENTS
 
     // UNLOCK SHIT
-    if (Game.state.stats.oreClicks >= 5 ) Game.unlockUpgrade('Magnifying Glass')
-    if (Game.state.stats.oreClicks >= 100) {Game.unlockUpgrade('Work Boots'); Game.unlockUpgrade('Painkillers')}
+
     if (Game.state.stats.weakSpotHits >= 5) Game.unlockUpgrade('Clean Magnifying Glass')
     if (Game.state.stats.weakSpotHits >= 20) Game.unlockUpgrade('Polish Magnifying Glass')
-
   }
 
   Game.oreWeakSpot = () => {
@@ -697,226 +729,6 @@ Game.launch = () => {
       })
     }
   }
-
-  // Game.generateRandomItem = (iLvl) => {
-
-  //   let rarity = [
-  //     {
-  //       name: 'Common',
-  //       maxStat: 0,
-  //       mult: 1
-  //     }, {
-  //       name: 'Uncommon',
-  //       maxStat: 1,
-  //       mult: 1.5
-  //     }, {
-  //       name: 'Unique',
-  //       maxStat: 2,
-  //       mult: 2
-  //     }, {
-  //       name: 'Rare',
-  //       maxStat: 3,
-  //       mult: 3
-  //     }, {
-  //       name: 'Legendary',
-  //       maxStat: 4,
-  //       mult: 5
-  //     }
-  //   ]
-  //   let prefixes = [
-  //     {
-  //       name: 'Lucky',
-  //       stat: 'Luck',
-  //       mult: 1
-  //     }, {
-  //       name: 'Unlucky',
-  //       stat: 'Luck',
-  //       mult: -1
-  //     }, {
-  //       name: 'Fortuitous',
-  //       stat: 'Luck',
-  //       mult: 2
-  //     }, {
-  //       name: 'Poor',
-  //       stat: 'Luck',
-  //       mult: -1
-  //     }, {
-  //       name: 'Strong',
-  //       stat: 'Strength',
-  //       mult: 1
-  //     }, {
-  //       name: 'Weak',
-  //       stat: 'Strength',
-  //       mult: -1
-  //     }, {
-  //       name: 'Big',
-  //       stat: 'Strength',
-  //       mult: 1
-  //     }, {
-  //       name: 'Small',
-  //       stat: 'Strength',
-  //       mult: -1
-  //     }, {
-  //       name: 'Baby',
-  //       stat: 'Strength',
-  //       mult: -2
-  //     }, {
-  //       name: 'Gigantic',
-  //       stat: 'Strength',
-  //       mult: 2
-  //     },   {
-  //       name: 'Durable',
-  //       stat: 'Strength',
-  //       mult: 1
-  //     }, {
-  //       name: 'Frail',
-  //       stat: 'Strength',
-  //       mult: -1.5
-  //     }, {
-  //       name: 'Hard',
-  //       stat: 'Strength',
-  //       mult: 1
-  //     }, {
-  //       name: 'Weak',
-  //       stat: 'Strength',
-  //       mult: -1
-  //     }, {
-  //       name: 'Broken',
-  //       stat: 'Strength',
-  //       mult: -2
-  //     }, {
-  //       name: 'Shoddy',
-  //       stat: 'Strength',
-  //       mult: -1
-  //     }
-  //   ]
-  //   let materials = [
-  //     {
-  //       name: 'Wood',
-  //       mult: .5
-  //     }, {
-  //       name: 'Stone',
-  //       mult: 1.5
-  //     }, {
-  //       name: 'Iron',
-  //       mult: 3
-  //     }, {
-  //       name: 'Steel',
-  //       mult: 5
-  //     }, {
-  //       name: 'Diamond',
-  //       mult: 10
-  //     }
-  //   ]
-  //   let suffixes = [
-  //     {
-  //       name: 'of the Giant',
-  //       stat: 'strength',
-  //       mult: 10
-  //     }, {
-  //       name: 'of the Leprechaun',
-  //       stat: 'luck',
-  //       mult: 10
-  //     }
-  //   ]
-  //   let stats = [
-  //     {name: 'Strength', val: null},
-  //     {name: 'Dexterity', val: null},
-  //     {name: 'Intelligence', val: null},
-  //     {name: 'Luck', val: null},
-  //     {name: 'Charisma', val: null}
-  //   ]
-
-  //   let range = Math.ceil((Math.random() * iLvl/2) + iLvl/2) // Picks a random whole number from 1 to iLvl
-
-  //   let chooseRarity = () => {
-  //     let selectedRarity
-  //     let randomNum = Math.random()
-  //     if (randomNum >= 0) {
-  //       selectedRarity = rarity[0]
-  //     }
-  //     if (randomNum >= .5) {
-  //       selectedRarity = rarity[1]
-  //     }
-  //     if (randomNum >= .7) {
-  //       selectedRarity = rarity[2]
-  //     }
-  //     if (randomNum >= .9) {
-  //       selectedRarity = rarity[3]
-  //     }
-  //     if (randomNum >= .95) {
-  //       selectedRarity = rarity[4]
-  //     }
-  //     return selectedRarity
-  //   }
-  //   let chooseMaterial = () => {
-  //     let selectedMaterial
-  //     let randomNum = Math.random()
-  //     if (randomNum >= 0) {
-  //       selectedMaterial = materials[0]
-  //     }
-  //     if (randomNum >= .4) {
-  //       selectedMaterial = materials[1]
-  //     }
-  //     if (randomNum >= .7) {
-  //       selectedMaterial = materials[2]
-  //     }
-  //     if (randomNum >= .9) {
-  //       selectedMaterial = materials[3]
-  //     }
-  //     if (randomNum >= .95) {
-  //       selectedMaterial = materials[4]
-  //     }
-  //     return selectedMaterial
-  //   }
-
-  //   let selectedRarity = chooseRarity()
-  //   let selectedMaterial = chooseMaterial()
-  //   let totalMult = selectedRarity.mult + selectedMaterial.mult
-  //   let itemName
-  //   let prefixName
-  //   let prefixVal
-  //   let prefixStat
-  //   let suffixName
-
-  //   if (selectedRarity.name == 'Legendary' || selectedRarity.name == 'Rare') {
-  //     let selectedSuffix = suffixes[Math.floor(Math.random() * suffixes.length)]
-  //     totalMult += selectedSuffix.mult
-  //     suffixName = selectedSuffix.name
-  //   }
-  //   if (Math.random() >= .6) { // 40% chance for a prefix
-  //     let selectedPrefix = prefixes[Math.floor(Math.random() * prefixes.length)]
-  //     prefixVal = (range + totalMult) * selectedPrefix.mult
-  //     prefixStat = selectedPrefix.stat
-  //     prefixName = selectedPrefix.name
-  //   }
-  //   if (prefixName) {
-  //     itemName = `${prefixName} ${selectedMaterial.name} Pickaxe`
-  //   } else {
-  //     itemName = `${selectedMaterial.name} Pickaxe`
-  //   }
-  //   if (suffixName) {
-  //     itemName += ` ${suffixName}`
-  //   }
-
-  //   let calculateDmg = iLvl * totalMult
-
-  //   let newItem = {
-  //     name: itemName,
-  //     rarity: selectedRarity.name,
-  //     material: selectedMaterial.name,
-  //     iLv: iLvl,
-  //     damage: calculateDmg,
-  //   }
-
-  //   if (prefixName) {
-  //     newItem['hasPrefix'] = true
-  //     newItem['prefixStat'] = prefixStat
-  //     newItem['prefixStatVal'] = prefixVal
-  //   }
-
-  //   return newItem
-  // }
 
   Game.generateRandomItem2 = (iLv) => {
 
@@ -1564,6 +1376,12 @@ Game.launch = () => {
     div.style.left = anchor.right + 'px'
     div.style.top = '50%'
 
+    if (Game.state.stats.timesRefined > 0 || Game.state.ores >= 1000000) {
+      div.style.display = 'block'
+    } else {
+      div.style.display = 'none'
+    }
+
     Game.rebuildRefineBtn = 0
   }
 
@@ -1688,17 +1506,21 @@ Game.launch = () => {
     if (item.name == 'Polish Magnifying Glass') {
       Game.state.weakHitMultiplier = 15
     }
-
-    // UPGRADES
     if (item.name == 'Work Boots') {
-      Game.state.opsMulti += .1
-      Game.state.opcMulti += .1
+      Game.state.opsMulti += .01
+      Game.state.opcMulti += .01
+    }
+    if (item.name == 'Shiny Watch') {
+      Game.state.opsMulti += .02
+      Game.state.opcMulti += .02
     }
     if (item.name == 'Painkillers') {
       Game.state.opcMultiplier += 2
-      Game.unlockUpgrade('Steroids')
     }
     if (item.name == 'Steroids') {
+      Game.state.opcMultiplier += 2
+    }
+    if (item.name == 'Whetstone') {
       Game.state.opcMultiplier += 2
     }
     if (item.name == 'Composition Notebooks') {
@@ -1740,6 +1562,9 @@ Game.launch = () => {
     if (item.name == 'OARDISupgrade') {
       Game.buildings[12].production *= 2
     }
+
+    Game.recalculateOpC = 1
+    Game.recalculateOpS = 1
   }
 
   soundPlayed1 = false
@@ -1806,52 +1631,46 @@ Game.launch = () => {
     s('.ore-hp').innerHTML = `${oreHpPercentage.toFixed(0)}%`
   }
 
-  Game.prospectorSkills = []
-  Game.managerSkills = []
+  Game.skills = []
   let Skill = function(skill) {
     this.name = skill.name
-    this.type = skill.type
     this.img = skill.img
-    this.specialization = skill.specialization
     this.fillerTxt = skill.fillerTxt
     this.desc = skill.desc
-    this.lv = skill.lv || 0
     this.locked = skill.locked
-    this.tier = skill.tier
+    this.generationLv = skill.generationLv
     if (this.type == 'active') this.cooldown = skill.cooldown
 
     this.currentCooldown = skill.currentCooldown || 0
 
-    this.specialization == 'Prospector' ? Game.prospectorSkills.push(this) : Game.managerSkills.push(this)
+    Game.skills.push(this)
   }
 
   let skills = [
     {
       name: 'Heavy Smash',
-      type: 'active',
       img: 'heavy-smash',
-      specialization: 'Prospector',
       fillerTxt: 'Unleash your inner strength and deal a powerful smash',
       desc: 'Instantly deal a large amount of damage',
-      tier: 1,
       cooldown: 10, // minutes
-      locked: 0
+      locked: 1,
+      generationLv: 1
     }, {
-      name: 'Weightlifting',
-      type: 'passive',
-      img: 'weight-lifting-skill',
-      specialization: 'Prospector',
-      fillerTxt: 'I lift things up and put them down',
-      desc: 'Passive STR bonus',
-      tier: 2
+      name: 'Roid Rage',
+      img: 'roid-rage',
+      fillerTxt: 'IM MADD',
+      desc: 'Increase you OpC by 10x for 10 seconds',
+      cooldown: 30,
+      locked: 1,
+      generationLv: 2
     }, {
-      name: 'Conditioning',
-      type: 'passive',
-      img: 'conditioning-skill',
-      specialization: 'Prospector',
-      fillerTxt: 'Crossfit is like totally awesome',
-      desc: 'Passive DEX bonus',
-      tier: 2
+      name: 'Auto Miner',
+      img: 'wip',
+      fillerTxt: 'R0B07M1N3R',
+      desc: 'this machine hits 10x each second for 15 seconds',
+      cooldown: 60,
+      locked: 1,
+      generationLv: 5
     }
   ]
 
@@ -1990,45 +1809,29 @@ Game.launch = () => {
   }
 
   Game.drawSkillsContainer = () => {
-    if (Game.state.player.specialization != null) {
-      let div = s('.active-skills-container')
-      let anchorTop = s('.inventory-section').getBoundingClientRect()
-      let anchorRight = s('#main-separator').getBoundingClientRect()
+    let div = s('.active-skills-container')
+    let anchorTop = s('.inventory-section').getBoundingClientRect()
+    let anchorRight = s('#main-separator').getBoundingClientRect()
 
-      s('body').append(div)
+    s('body').append(div)
 
-      div.style.display = 'flex'
-      div.style.top = anchorTop.bottom + 'px'
-      div.style.marginTop = '10px'
-      div.style.left = anchorRight.left - div.getBoundingClientRect().width + 'px'
+    div.style.display = 'flex'
+    div.style.top = anchorTop.bottom + 20 + 'px'
+    div.style.marginTop = '10px'
+    div.style.left = anchorRight.left - div.getBoundingClientRect().width + 'px'
 
-      Game.redrawSkillsContainer = 0
-      Game.drawActiveSkills()
-    }
+    Game.redrawSkillsContainer = 0
+    Game.drawActiveSkills()
   }
 
   Game.drawActiveSkills = () => {
     let str = ''
 
-    let skills;
-
-    if (Game.state.player.specialization == 'Prospector') {
-      skills = Game.prospectorSkills
-    } else {
-      skills = Game.managerSkills
-    }
-
-    for (i in skills) {
-      if (skills[i].type == 'active') { // IF ITS AN ACTIVE SKILL
-        if (skills[i].locked == 0) { // IF ITS NOT LOCKED
-          if (skills[i].lv > 0) { // IF THERES POINTS IN IT
-            if (skills[i].currentCooldown <= 0) {
-              str += `<div class='active-skill' style='background-image: url("./assets/${skills[i].img}.png"); cursor: pointer' onclick='Game.useSkill(${i})' onmouseover='Game.showTooltip(${i}, null, "skill", null)' onmouseout='Game.hideTooltip()' ></div>`
-            } else {
-              str += `<div class='active-skill' style='background-image: url("./assets/${skills[i].img}.png"); cursor: not-allowed' onmouseover='Game.showTooltip(${i}, null, "skill", null)' onmouseout='Game.hideTooltip()' ></div>`
-            }
-          }
-        }
+    for (i in Game.skills) {
+      if (skills[i].generationLv <= Game.state.player.generation) { // IF ITS NOT LOCKED
+        str += `<div class='active-skill' style='background-image: url("./assets/${skills[i].img}.png"); cursor: pointer' onmouseover='Game.showTooltip(${i}, null, "skill", null)' onclick='Game.useSkill(${i})' onmouseout='Game.hideTooltip()' ></div>`
+      } else {
+        str += `<div class='active-skill' style='background-image: url("./assets/${skills[i].img}.png"); cursor: not-allowed; filter: brightness(0)' onmouseover='Game.showTooltip(${i}, null, "skill", null)' onmouseout='Game.hideTooltip()' ></div>`
       }
     }
     s('.active-skills-area').innerHTML = str
@@ -2105,52 +1908,43 @@ Game.launch = () => {
 
   Game.useSkill = (id) => {
 
-    let skill;
-
-    if (Game.state.player.specialization == 'Prospector') {
-      skill = Game.prospectorSkills[id]
-    } else {
-      skill = Game.managerSkills[id]
-    }
+    let skill = Game.skills[id]
 
     Game.hideTooltip()
 
-    // if (skill.name == 'Heavy Smash') {
-    //   if (skill.currentCooldown <= 0) {
-    //     Game.winAchievement('Hulk Smash')
-    //     playSound('heavy-smash')
-    //     let orePos = s('.ore').getBoundingClientRect()
-    //     skill.currentCooldown = skill.cooldown * 60
-    //     calculateSkillCooldown()
+    if (skill.name == 'Heavy Smash') {
+      Game.winAchievement('Hulk Smash')
+      Game.playSound('heavy-smash')
+      let orePos = s('.ore').getBoundingClientRect()
+      skill.currentCooldown = skill.cooldown * 60
 
-    //     let div = document.createElement('div')
-    //     div.classList.add('heavy-smash-wrapper')
-    //     div.innerHTML = ` <div class="heavy-smash"></div>`
+      let div = document.createElement('div')
+      div.classList.add('heavy-smash-wrapper')
+      div.innerHTML = ` <div class="heavy-smash"></div>`
 
-    //     s('body').append(div)
+      s('body').append(div)
 
-    //     div.classList.add('heavy-smash-anim')
+      div.classList.add('heavy-smash-anim')
 
-    //     s('.heavy-smash').style.left = (orePos.left + orePos.right) / 2 + 'px'
-    //     s('.heavy-smash').style.top = ((orePos.top + orePos.bottom) / 2) - ((s('.heavy-smash').getBoundingClientRect().top + s('.heavy-smash').getBoundingClientRect().bottom) / 2) + 'px'
+      s('.heavy-smash').style.left = (orePos.left + orePos.right) / 2 + 'px'
+      s('.heavy-smash').style.top = ((orePos.top + orePos.bottom) / 2) - ((s('.heavy-smash').getBoundingClientRect().top + s('.heavy-smash').getBoundingClientRect().bottom) / 2) + 'px'
 
-    //     s('body').classList.add('roid-rage')
+      s('body').classList.add('roid-rage')
 
-    //     // DO DAMAGE
-    //     let amount = Math.ceil(Game.state.oreHp/2.9)
-    //     earn(amount)
-    //     updatePercentage(amount)
-    //     risingNumber(amount, 'heavy-smash')
+      // DO DAMAGE
+      let amount = Math.ceil(Game.state.oreHp/2.9)
+      Game.earn(amount)
+      Game.updatePercentage(amount)
+      Game.risingNumber(amount, 'heavy-smash')
 
-    //     if (Game.skills['RoidRage'].inUse == true) Game.winAchievement('Roided Smash')
+      // if (Game.skills['RoidRage'].inUse == true) Game.winAchievement('Roided Smash')
 
-    //     setTimeout(() => {
-    //       s('body').classList.remove('roid-rage')
-    //       div.remove()
-    //     }, 500)
+      setTimeout(() => {
+        s('body').classList.remove('roid-rage')
+        div.remove()
+      }, 500)
 
-    //   }
-    // }
+    }
     // if (skill.name == 'Roid Rage') {
     //   if (skill.inUse == false && skill.currentCooldown <= 0) {
     //     Game.winAchievement('RAOOARARRWR')
@@ -2313,28 +2107,26 @@ Game.launch = () => {
         `
       }
     } else if (type == 'skill') {
-      let skill;
-
-      if (Game.state.player.specialization == 'Prospector') {
-        skill = Game.prospectorSkills[itemInfo]
-      } else {
-        skill = Game.managerSkills[itemInfo]
-      }
-
+      let skill = Game.skills[itemInfo]
+      console.log(skill)
       let anchorRight = s('#skill-separator').getBoundingClientRect()
       let mouseY = event.clientY
 
       tooltip.style.left = anchorRight.left - tooltip.getBoundingClientRect().width + 'px'
       tooltip.style.top = mouseY + 'px'
 
-      tooltip.innerHTML = `
-        <h3>${skill.name}</h3>
-        <hr/>
-        <p>${skill.desc}</p>
-      `
-      if (skill.currentCooldown > 0) {
-        tooltip.innerHTML += `<hr/><p>Cooldown: ${beautifyTime(skill.currentCooldown)}</p>`
+      if (skill.generationLv != Game.state.player.generation) {
+        tooltip.innerHTML = `
+          <p>Unlocked at Generation ${skill.generationLv}</p>
+        `
+      } else {
+        tooltip.innerHTML = `
+          <h3>${skill.name}</h3>
+          <hr/>
+          <p>${skill.desc}</p>
+        `
       }
+
 
     } else if (type == 'equipment'){
       anchor = s('.stats-container-content-wrapper').getBoundingClientRect()
@@ -2497,13 +2289,14 @@ Game.launch = () => {
         <h1>Statistics</h1>
         <i class='fa fa-times fa-1x' onclick='document.querySelector(".wrapper").remove()'></i>
         <hr/>
-        <p><span style='opacity: .6'>Ores Mined:</span> <strong>${beautify(Game.state.stats.totalOresMined.toFixed(1))}</strong></p>
+        <p><span style='opacity: .6'>Ores Earned:</span> <strong>${beautify(Math.round(Game.state.stats.currentOresEarned))}</strong></p>
+        <p><span style='opacity: .6'>Ores Mined (By Clicks):</span> <strong>${beautify(Math.round(Game.state.stats.currentOresMined))}</strong></p>
         <p><span style='opacity: .6'>Ore Clicks:</span> <strong>${Game.state.stats.oreClicks}</strong></p>
         <p><span style='opacity: .6'>Weak Spot Hits:</span> <strong>${Game.state.stats.weakSpotHits}</strong></p>
         <p><span style='opacity: .6'>Crit Hits:</span> <strong>${Game.state.stats.critHits}</strong></p>
         <p><span style='opacity: .6'>Mega Hits: (Crit & Weak Spot Hit):</span> <strong>${Game.state.stats.megaHits}</strong></p>
         <p><span style='opacity: .6'>Highest Weak Spot Combo:</span> <strong>${Game.state.stats.highestCombo}</strong></p>
-        <p><span style='opacity: .6'>Ores Spent:</span> <strong>${beautify(Game.state.stats.totalOresSpent)}</strong></p>
+        <p><span style='opacity: .6'>Ores Spent:</span> <strong>${beautify(Math.round(Game.state.stats.totalOresSpent))}</strong></p>
         <p><span style='opacity: .6'>Rocks Destroyed:</span> <strong>${Game.state.stats.rocksDestroyed}</strong></p>
         <p><span style='opacity: .6'>Items Picked Up:</span> <strong>${Game.state.stats.itemsPickedUp}</strong></p>
         <p><span style='opacity: .6'>Refine Amount:</span> <strong>${Game.state.stats.timesRefined}</strong></p>
@@ -2539,13 +2332,25 @@ Game.launch = () => {
   }
 
   Game.confirmRefine = () => {
+
+    if (s('.tutorial-container')) {
+      s('.tutorial-container').remove()
+    }
+
     let difference, timeRemaining;
     if (Game.state.lastRefine) {
       difference = (new Date().getTime() - Game.state.lastRefine)
       timeRemaining = (1000 * 60 * 60) - difference
     }
     let div = document.createElement('div')
-    let amountOfGems = Math.floor(Math.cbrt(Game.state.ores / 10000000))
+
+    let amountOfGems = 0
+    if (Game.state.ores >= 1000000) amountOfGems += 1
+    if (Game.state.ores >= 1000000000) amountOfGems += 1
+    if (Game.state.ores >= 1000000000000) amountOfGems += 1
+    if (Game.state.ores >= 1000000000000000) amountOfGems += 1
+    if (Game.state.ores >= 1000000000000000000) amountOfGems += 1
+
     div.classList.add('wrapper')
     div.id = 'confirm-refine'
     let str = `
@@ -2587,17 +2392,11 @@ Game.launch = () => {
     Game.playSound('smithsfx')
     Game.state.prefs.canRefine = false
     Game.state.stats.timesRefined++
+    Game.state.stats.currentOresEarned = 0
+    Game.state.stats.currentOresMined = 0
     let div = document.createElement('div')
     div.classList.add('refine')
     s('body').append(div)
-
-    // let amountOfRefinedOres = Math.floor(Math.cbrt(Game.state.ores / 10000000))
-    // let amountOfGems = 0
-    // if (Game.state.ores >= 1000000) amountOfGems++
-    // if (Game.state.ores >= 1000000000) amountOfGems += 2
-    // if (Game.state.ores >= 1000000000000) amountOfGems += 5
-    // if (Game.state.ores >= 1000000000000000) amountOfGems += 10
-    // if (Game.state.ores >= 1000000000000000000) amountOfGems += 10
 
     Game.state.gems += amount
 
@@ -2605,6 +2404,7 @@ Game.launch = () => {
       Game.softReset()
       Game.state.player.generation++
       Game.rebuildInventory = 1
+      Game.redrawSkillsContainer = 1
       s('.wrapper').remove()
     }, 1500)
     setTimeout(() => {
@@ -3063,6 +2863,13 @@ Game.launch = () => {
     }
   }
 
+  Game.select = (arr, what) => {
+    for (i in arr) {
+      if (arr[i].name == what)
+        return arr[i]
+    }
+  }
+
   Game.logic = () => {
 
     if (!Game.blurred) {
@@ -3168,9 +2975,14 @@ Game.launch = () => {
     {name: 'OARDISupgrade', type: 'upgrade', pic: 'wip.png', desc: 'Doubles the production of OARDIS ', fillerQuote: 'wip', price: 50000000000000, hidden: 1},
     //OTHER UPGRADES
     {name: 'Work Boots', type: 'upgrade', pic: 'workboots.png', desc: 'Increase all ore production by 1%', fillerQuote: 'wip', price: 500, hidden: 1},
+    {name: 'Shiny Watch', type: 'upgrade', pic: 'wip.png', desc: 'Increase all ore production by 2%', fillerQuote: 'wip', price: 7000, hidden: 1},
+
     {name: 'Painkillers', type: 'upgrade', pic: 'painkillers.png', desc: 'Double your OpC', fillerQuote: 'wip', price: 15000, hidden: 1},
+    {name: 'Whetstone', type: 'upgrade', pic: 'wip.png', desc: 'Double your OpC', fillerQuote: 'wip', price:  400000, hidden: 1}, //
     {name: 'Steroids', type: 'upgrade', pic: 'steroids.png', desc: 'Double your OpC', fillerQuote: 'wip', price: 1000000, hidden: 1},
-    {name: 'Flashlight', type: 'upgrade', pic: 'flashlight.png', desc: 'Gain 10% of your OpS as OpC', fillerQuote: 'wip', price: 50000, hidden: 1},
+
+    {name: 'Flashlight', type: 'upgrade', pic: 'flashlight.png', desc: 'Gain 1% of your OpS as OpC', fillerQuote: 'wip', price: 50000, hidden: 1}, //
+    {name: 'Clipboard', type: 'upgrade', pic: 'wip.png', desc: 'Gain 2% of your OpS as OpC', fillerQuote: 'wip', price: 200000, hidden: 1}, //
   ]
 
   Game.resetItems = () => {
@@ -3232,12 +3044,13 @@ Game.launch = () => {
   s('.bottom').addEventListener('mouseover', () => {
     s('.bottom-overlay-txt').innerHTML = `<i class='fa fa-lock fa-1x' style='margin-right: 10px'></i>QUESTS UNLOCKED ON 2ND GENERATION`
   })
-  // s('#main-separator').onclick = () => {
-  //   Game.state.ores += 99999999999999999999999999999999
-  //   // Game.gainXp(999)
-  //   Game.state.player.gems += 999
-  //   Game.state.player.specializationSp += 999
-  // }
+
+  s('#main-separator').onclick = () => {
+    Game.earn(999999999999999)
+    // Game.gainXp(999)
+    Game.state.player.gems += 999
+    Game.state.player.specializationSp += 999
+  }
 
   window.onresize = () => {
     Game.repositionSettingsContainer = 1
@@ -3245,6 +3058,7 @@ Game.launch = () => {
     Game.rebuildStats = 1
     Game.redrawSkillsContainer = 1
     Game.redrawTorches = 1
+    Game.rebuildRefineBtn = 1
   }
 
   window.onblur = () => {
