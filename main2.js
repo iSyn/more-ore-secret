@@ -280,8 +280,7 @@ Game.launch = () => {
     localStorage.setItem('state', JSON.stringify(Game.state))
     localStorage.setItem('buildings', JSON.stringify(Game.buildings))
     localStorage.setItem('upgrades', JSON.stringify(Game.upgrades))
-    localStorage.setItem('prospectorSkills', JSON.stringify(Game.prospectorSkills))
-    localStorage.setItem('managerSkills', JSON.stringify(Game.managerSkills))
+    localStorage.setItem('skills', JSON.stringify(Game.skills))
     localStorage.setItem('achievements', JSON.stringify(Game.achievements))
     Game.notify('Game Saved')
   }
@@ -304,8 +303,7 @@ Game.launch = () => {
       // LOAD SKILLS
       console.log('LOADING SKILLS')
       let skills = []
-      JSON.parse(localStorage.getItem('prospectorSkills')).forEach((skill) => {skills.push(skill)})
-      JSON.parse(localStorage.getItem('managerSkills')).forEach((skill) => {skills.push(skill)})
+      JSON.parse(localStorage.getItem('skills')).forEach((skill) => {skills.push(skill)})
       skills.forEach((skill) => {new Skill(skill)})
 
       // LOAD ACHIEVEMENTS
@@ -560,7 +558,7 @@ Game.launch = () => {
     opc += (opc * Game.state.opcMulti)
 
     // ADD GENERATION BONUS
-    opc += (opc * (Game.state.player.generation * .01))
+    opc += (opc * (Game.state.player.generation * .1))
 
     Game.state.oresPerClick = opc
     Game.recalculateOpC = 0
@@ -581,9 +579,9 @@ Game.launch = () => {
     }
 
     // GENERATION BONUS
-    ops += (ops * (Game.state.player.generation * .01))
+    ops += (ops * (Game.state.player.generation * .1))
 
-    // OPS MULTI
+    // OPS MULTIeeeeeeeeeeeeeeee
     ops += (ops * Game.state.opsMulti)
 
     Game.state.oresPerSecond = ops
@@ -1639,9 +1637,9 @@ Game.launch = () => {
     this.desc = skill.desc
     this.locked = skill.locked
     this.generationLv = skill.generationLv
-    if (this.type == 'active') this.cooldown = skill.cooldown
+    this.cooldown = skill.cooldown
 
-    this.currentCooldown = skill.currentCooldown || 0
+    this.cooldownTimer = skill.cooldownTimer || null
 
     Game.skills.push(this)
   }
@@ -1837,112 +1835,51 @@ Game.launch = () => {
     s('.active-skills-area').innerHTML = str
   }
 
-  Game.renderSkillText = (id) => {
-    let skill;
-
-    if (Game.state.player.specialization == 'Prospector') {
-      skill = Game.prospectorSkills[id]
-    } else {
-      skill = Game.managerSkills[id]
-    }
-
-
-
-    s('.specialization-skills-bottom-right').innerHTML = `
-      <h2>${skill.name} &nbsp; Lv. ${skill.lv}</h2>
-      <hr/>
-      <p><i>${skill.type}</i></p>
-      <hr/>
-      <br/>
-      <p>${skill.fillerTxt}</p>
-      <br/>
-      <p>${skill.desc}</p>
-    `
-    if (skill.lv > 0) {
-      s('.specialization-skills-bottom-right').innerHTML += `
-        <br/>
-        <hr/>
-        <p style='float: left;'>[Current Level] ${skill.what} + ${skill.current}</p>
-        <p style='float: left;'>[Next Level] ${skill.what} + ${skill.current + skill.next}</p>
-      `
-    }
-    if (skill.locked == 1) {
-      s('.specialization-skills-bottom-right').innerHTML = `
-          <h2>???</h2>
-        `
-    }
-  }
-
-  Game.levelUpSkill = (id) => {
-
-    let skill;
-
-    if (Game.state.player.specialization == 'Prospector') {
-      skill = Game.prospectorSkills[id]
-    } else {
-      skill = Game.managerSkills[id]
-    }
-
-    if (Game.state.player.specializationSp > 0) { // IF WE HAVE SP
-      if (skill) { // IF SKILL EXISTS
-        if (skill.locked == 0) {
-          Game.state.player.specializationSp --
-          skill.lv++
-          if (skill.lv > 1) {
-            skill.current += skill.next
-          }
-          // UNlOCK NEXT TIER
-          let nextTier = skill.tier + 1
-          for (i in Game.skills) {
-            if (Game.skills[i].tier == nextTier) {
-              Game.skills[i].locked = 0
-            }
-          }
-          Game.specializationSkills()
-          Game.renderSkillText(id)
-          Game.drawSkillsContainer()
-        }
-      }
-    }
-  }
-
   Game.useSkill = (id) => {
 
     let skill = Game.skills[id]
+    let now = new Date().getTime()
 
     Game.hideTooltip()
 
     if (skill.name == 'Heavy Smash') {
-      Game.winAchievement('Hulk Smash')
-      Game.playSound('heavy-smash')
-      let orePos = s('.ore').getBoundingClientRect()
-      skill.currentCooldown = skill.cooldown * 60
+      if (!skill.cooldownTimer || now > skill.cooldownTimer) {
+        Game.winAchievement('Hulk Smash')
+        Game.playSound('heavy-smash')
 
-      let div = document.createElement('div')
-      div.classList.add('heavy-smash-wrapper')
-      div.innerHTML = ` <div class="heavy-smash"></div>`
+        skill.cooldownTimer = (skill.cooldown * 60 * 1000) + new Date().getTime()
 
-      s('body').append(div)
+        let orePos = s('.ore').getBoundingClientRect()
 
-      div.classList.add('heavy-smash-anim')
 
-      s('.heavy-smash').style.left = (orePos.left + orePos.right) / 2 + 'px'
-      s('.heavy-smash').style.top = ((orePos.top + orePos.bottom) / 2) - ((s('.heavy-smash').getBoundingClientRect().top + s('.heavy-smash').getBoundingClientRect().bottom) / 2) + 'px'
+        let div = document.createElement('div')
+        div.classList.add('heavy-smash-wrapper')
+        div.innerHTML = ` <div class="heavy-smash"></div>`
 
-      s('body').classList.add('roid-rage')
+        s('body').append(div)
 
-      // DO DAMAGE
-      let amount = Math.ceil(Game.state.oreHp/2.9)
-      Game.earn(amount)
-      Game.updatePercentage(amount)
-      Game.risingNumber(amount, 'heavy-smash')
+        div.classList.add('heavy-smash-anim')
 
-      // if (Game.skills['RoidRage'].inUse == true) Game.winAchievement('Roided Smash')
+        s('.heavy-smash').style.left = (orePos.left + orePos.right) / 2 + 'px'
+        s('.heavy-smash').style.top = ((orePos.top + orePos.bottom) / 2) - ((s('.heavy-smash').getBoundingClientRect().top + s('.heavy-smash').getBoundingClientRect().bottom) / 2) + 'px'
 
-      setTimeout(() => {
-        s('body').classList.remove('roid-rage')
-        div.remove()
-      }, 500)
+        s('body').classList.add('roid-rage')
+
+        // DO DAMAGE
+        let amount = Math.ceil(Game.state.oreHp/2.9)
+        Game.earn(amount)
+        Game.updatePercentage(amount)
+        Game.risingNumber(amount, 'heavy-smash')
+
+        // if (Game.skills['RoidRage'].inUse == true) Game.winAchievement('Roided Smash')
+
+        setTimeout(() => {
+          s('body').classList.remove('roid-rage')
+          div.remove()
+        }, 500)
+      } else {
+        console.log('on cooldown')
+      }
 
     }
     // if (skill.name == 'Roid Rage') {
@@ -2042,8 +1979,8 @@ Game.launch = () => {
       tooltip.innerHTML = `
         <h3>You are currently on Generation ${Game.state.player.generation}</h3>
         <hr/>
-        <p>+${Game.state.player.generation * .01} OpC multiplier</p>
-        <p>+${Game.state.player.generation * .01} OpS multiplier</p>
+        <p>+${Game.state.player.generation * .1} OpC multiplier</p>
+        <p>+${Game.state.player.generation * .1} OpS multiplier</p>
         <hr/>
         <p>Your generation goes up by 1 every time you refine</p>
       `
@@ -2107,27 +2044,29 @@ Game.launch = () => {
         `
       }
     } else if (type == 'skill') {
+      let now = new Date().getTime()
       let skill = Game.skills[itemInfo]
-      console.log(skill)
+      let timeRemaining = (skill.cooldownTimer - now)
       let anchorRight = s('#skill-separator').getBoundingClientRect()
       let mouseY = event.clientY
 
       tooltip.style.left = anchorRight.left - tooltip.getBoundingClientRect().width + 'px'
       tooltip.style.top = mouseY + 'px'
 
-      if (skill.generationLv != Game.state.player.generation) {
+      if (Game.state.player.generation <= skill.generationLv) {
         tooltip.innerHTML = `
           <p>Unlocked at Generation ${skill.generationLv}</p>
         `
       } else {
-        tooltip.innerHTML = `
+        let str = `
           <h3>${skill.name}</h3>
           <hr/>
           <p>${skill.desc}</p>
         `
+        if (timeRemaining > 0) str += `<p>Cooldown: ${beautifyMs(timeRemaining)}</p>`
+        console.log(timeRemaining)
+        tooltip.innerHTML = str
       }
-
-
     } else if (type == 'equipment'){
       anchor = s('.stats-container-content-wrapper').getBoundingClientRect()
       tooltip.style.width = 'auto'
@@ -3000,6 +2939,7 @@ Game.launch = () => {
     'All rock and no clay makes you a dull boy (or girl)',
     'Don\'t take life for granite',
     'What happens when you throw a blue rock in the red sea? ... It gets wet',
+    "I'd do more work, but I'll mine my own business - /u/Maxposure",
   ]
 
   Game.showTextScroller = (text) => {
@@ -3042,8 +2982,13 @@ Game.launch = () => {
   s('.ore').onclick = () => Game.handleClick()
   s('.ore-weak-spot').onclick = () => {Game.handleClick('weak-spot'); Game.oreWeakSpot()}
   s('.bottom').addEventListener('mouseover', () => {
-    s('.bottom-overlay-txt').innerHTML = `<i class='fa fa-lock fa-1x' style='margin-right: 10px'></i>QUESTS UNLOCKED ON 2ND GENERATION`
+    if (Game.state.player.generation == 0) {
+      s('.bottom-overlay-txt').innerHTML = `<i class='fa fa-lock fa-1x' style='margin-right: 10px'></i>QUESTS UNLOCKED ON FIRST GENERATION`
+    } else {
+      s('.bottom-overlay-txt').innerHTML = ''
+    }
   })
+  s('.bottom').addEventListener('click', () => Game.showQuests())
 
   s('#main-separator').onclick = () => {
     Game.earn(999999999999999)
