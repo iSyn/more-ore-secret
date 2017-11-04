@@ -441,9 +441,22 @@ Game.launch = () => {
     Game.state.stats.currentOresEarned += amount
     Game.state.stats.totalOresEarned += amount
 
-    if (Game.state.stats.currentOresEarned >= 200) {Game.unlockUpgrade('Work Boots'); Game.unlockUpgrade('Painkillers')}
-    if (Game.state.stats.currentOresEarned >= 600) {Game.unlockUpgrade('Shiny Watch'); Game.unlockUpgrade('Steroids')}
+    // UNLOCKS
+    if (Game.state.stats.currentOresEarned >= 200) {
+      Game.unlockUpgrade('Work Boots')
+      Game.unlockUpgrade('Painkillers')
+      if (Game.buildings[0].owned > 0) Game.unlockUpgrade('No. 2 Pencil')
+    }
+    if (Game.state.stats.currentOresEarned >= 600) {
+      Game.unlockUpgrade('Shiny Watch')
+      Game.unlockUpgrade('Whetstone')
+      if (Game.buildings[0].owned > 0) Game.unlockUpgrade('No. 2 Pencil')
+    }
     if (Game.state.stats.currentOresEarned >= 1000) Game.unlockUpgrade('Flashlight')
+    if (Game.state.stats.currentOresEarned >= 8000) {
+      if (Game.buildings[0].owned > 0) Game.unlockUpgrade('3 Ring Binder')
+      Game.unlockUpgrade('Steroids')
+    }
     if (Game.state.stats.currentOresEarned >= 25000) Game.unlockUpgrade('Clipboard')
 
     if (Game.state.stats.currentOresEarned >= 1000000 && Game.state.stats.timesRefined == 0 && Game.showTutorialRefine == 0) {
@@ -1513,13 +1526,13 @@ Game.launch = () => {
       Game.state.opcMulti += .02
     }
     if (item.name == 'Painkillers') {
-      Game.state.opcMultiplier += 2
+      Game.state.opcMulti += 2
     }
     if (item.name == 'Steroids') {
-      Game.state.opcMultiplier += 2
+      Game.state.opcMulti += 2
     }
     if (item.name == 'Whetstone') {
-      Game.state.opcMultiplier += 2
+      Game.state.opcMulti += 2
     }
     if (item.name == 'Composition Notebooks') {
       Game.buildings[0].production *= 2
@@ -2053,7 +2066,7 @@ Game.launch = () => {
       tooltip.style.left = anchorRight.left - tooltip.getBoundingClientRect().width + 'px'
       tooltip.style.top = mouseY + 'px'
 
-      if (Game.state.player.generation <= skill.generationLv) {
+      if (Game.state.player.generation < skill.generationLv) {
         tooltip.innerHTML = `
           <p>Unlocked at Generation ${skill.generationLv}</p>
         `
@@ -2358,7 +2371,7 @@ Game.launch = () => {
     Game.state.oreCurrentHp = 50
     Game.state.oresPerSecond = 0
     Game.state.opsMultiplier = 0
-    Game.state.opcMultiplier = 0
+    Game.state.opcMulti = 0
     Game.state.weakHitMultiplier = 5
     Game.state.player.pickaxe = {
       name: 'Beginners Wood Pickaxe',
@@ -2899,29 +2912,51 @@ Game.launch = () => {
     {name: 'Magnifying Glass', type: 'upgrade', pic: 'magnifying-glass.png', desc: 'Allows you to spot weakpoints inside the rock', fillerQuote: 'These sure will help...', price: 5, hidden: 1},
     {name: 'Clean Magnifying Glass', type: 'upgrade', pic: 'clean-magnifying-glass.png', desc: 'Increases critical hit multiplier to 10x', fillerQuote: 'wip', price: 100, hidden: 1},
     {name: 'Polish Magnifying Glass', type: 'upgrade', pic: 'wip.png', desc: 'Increases critical hit multiplier to 15x', fillerQuote: 'wip', price: 50000, hidden: 1},
+
     {name: 'Composition Notebooks', type: 'upgrade', pic: 'compositionnotebook.png', desc: 'Doubles the production of Schools', fillerQuote: 'wip', price: 80, hidden: 1},
+    {name: 'No. 2 Pencil', type: 'upgrade', pic: 'no2pencil.png', desc: 'Doubles the production of Schools', fillerQuote: 'wip', price: 1000, hidden: 1},
+    {name: '3 Ring Binder', type: 'upgrade', pic: '3ringbinder.png', desc: 'Doubles the production of Schools', fillerQuote: 'wip', price: 12000, hidden: 1},
+    // schoolbag
+    // looseleaf
+
     {name: 'Manure Spreader', type: 'upgrade', pic: 'manure-spreader.png', desc: 'Doubles the production of Farms', fillerQuote: 'wip', price: 950, hidden: 1},
+    // pitchfork
+    // Farmers truck
+    // shears
+    // hoe / hatchet
+
     {name: 'Headlights', type: 'upgrade', pic: 'headlights.png', desc: 'Doubles the production of Quarrys', fillerQuote: 'wip', price: 1900, hidden: 1},
+
     {name: 'Scripture Reading', type: 'upgrade', pic: 'scripture-reading.png', desc: 'Doubles the production of Churches', fillerQuote: 'wip', price: 60000, hidden: 1},
+
     {name: 'Rubber Converyor Belts', type: 'upgrade', pic: 'rubber-conveyor-belt.png', desc: 'Doubles the production of Factories', fillerQuote: 'wip', price: 300000, hidden: 1},
+
     {name: 'Metal Sarcophagus', type: 'upgrade', pic: 'metal-sarcophagus.png', desc: 'Doubles the production of Crypt', fillerQuote: 'wip', price: 5200000, hidden: 1},
+
     {name: 'Immunization Shots', type: 'upgrade', pic: 'immunization-shot.png', desc: 'Doubles the production of Hospitals', fillerQuote: 'wip', price: 10000000, hidden: 1},
+
     {name: 'Council of Rocks', type: 'upgrade', pic: 'council-of-rocks.png', desc: 'Doubles the production of Citadel', fillerQuote: 'wip', price: 400000000, hidden: 1},
+
     {name: 'Jet Fuel', type: 'upgrade', pic: 'jet-fuel.png', desc: 'Doubles the production of Xeno Spaceships', fillerQuote: 'wip', price: 5500000000, hidden: 1},
+
     {name: 'Golden Eggs', type: 'upgrade', pic: 'golden-egg.png', desc: 'Doubles the production of Sky Castles', fillerQuote: 'wip', price: 95000000000, hidden: 1},
+
     {name: 'Green Goop', type: 'upgrade', pic: 'green-goop.png', desc: 'Doubles the production of Eon Portals', fillerQuote: 'wip', price: 150000000000, hidden: 1},
+
     {name: 'Unholy Mineshaft', type: 'upgrade', pic: 'unholy-mineshaft.png', desc: 'Doubles the production of Sacred Mines', fillerQuote: 'wip', price: 2200000000000, hidden: 1},
+
     {name: 'OARDISupgrade', type: 'upgrade', pic: 'wip.png', desc: 'Doubles the production of OARDIS ', fillerQuote: 'wip', price: 50000000000000, hidden: 1},
+
     //OTHER UPGRADES
     {name: 'Work Boots', type: 'upgrade', pic: 'workboots.png', desc: 'Increase all ore production by 1%', fillerQuote: 'wip', price: 500, hidden: 1},
-    {name: 'Shiny Watch', type: 'upgrade', pic: 'wip.png', desc: 'Increase all ore production by 2%', fillerQuote: 'wip', price: 7000, hidden: 1},
+    {name: 'Shiny Watch', type: 'upgrade', pic: 'shinywatch.png', desc: 'Increase all ore production by 2%', fillerQuote: 'wip', price: 7000, hidden: 1},
 
     {name: 'Painkillers', type: 'upgrade', pic: 'painkillers.png', desc: 'Double your OpC', fillerQuote: 'wip', price: 15000, hidden: 1},
-    {name: 'Whetstone', type: 'upgrade', pic: 'wip.png', desc: 'Double your OpC', fillerQuote: 'wip', price:  400000, hidden: 1}, //
+    {name: 'Whetstone', type: 'upgrade', pic: 'whetstone.png', desc: 'Double your OpC', fillerQuote: 'wip', price:  400000, hidden: 1}, //
     {name: 'Steroids', type: 'upgrade', pic: 'steroids.png', desc: 'Double your OpC', fillerQuote: 'wip', price: 1000000, hidden: 1},
 
     {name: 'Flashlight', type: 'upgrade', pic: 'flashlight.png', desc: 'Gain 1% of your OpS as OpC', fillerQuote: 'wip', price: 50000, hidden: 1}, //
-    {name: 'Clipboard', type: 'upgrade', pic: 'wip.png', desc: 'Gain 2% of your OpS as OpC', fillerQuote: 'wip', price: 200000, hidden: 1}, //
+    {name: 'Clipboard', type: 'upgrade', pic: 'clipboard.png', desc: 'Gain 2% of your OpS as OpC', fillerQuote: 'wip', price: 200000, hidden: 1}, //
   ]
 
   Game.resetItems = () => {
