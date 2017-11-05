@@ -1738,3 +1738,14 @@ li {
   padding: 5px 5px 5px 15px;
   color: orange;
 }
+
+.skill-tree-container {
+  position: absolute;
+  top: 0;
+  height: 100vh;
+  width: 100vw;
+  background-color: black;
+  color: white;
+  padding: 5px;
+  text-align: center;
+}
