@@ -349,9 +349,8 @@ Game.launch = () => {
     Game.recalculateOpS = 1
     Game.rebuildRefineBtn = 1
     Game.redrawTorches = 1
-    Game.redrawSkillsContainer = 1
+    // Game.redrawSkillsContainer = 1
     Game.repositionSettingsContainer = 1
-    if (Game.state.player.specialization) Game.redrawSkillsContainer = 1
     s('.loading').classList.add('finished')
     setTimeout(() => {
       s('.loading').remove()
@@ -1579,31 +1578,52 @@ Game.launch = () => {
 
   let skills = [
     {
-      name: 'Heavy Smash',
-      img: 'heavy-smash',
-      fillerTxt: 'Unleash your inner strength and deal a powerful smash',
-      desc: 'Instantly deal a large amount of damage',
-      cooldown: 10, // minutes
-      locked: 1,
-      generationLv: 1
-    }, {
-      name: 'Roid Rage',
-      img: 'roid-rage',
-      fillerTxt: 'IM MADD',
-      desc: 'Increase you OpC by 10x for 10 seconds',
-      cooldown: 30,
-      locked: 1,
-      generationLv: 2
-    }, {
-      name: 'Auto Miner',
+      name: 'Pickaxe Proficiency',
+      type: 'passive',
+      tier: 1,
+      img: 'pickaxe-proficiency',
+      desc: 'Permanantly increase your OpC by 30%',
+      fillerTxt: 'wip',
+      locked: 0
+    },
+    {
+      name: 'Management Training',
+      type: 'passive',
+      tier: 1,
       img: 'wip',
-      fillerTxt: 'R0B07M1N3R',
-      desc: 'this machine hits 10x each second for 15 seconds',
-      cooldown: 60,
-      locked: 1,
-      generationLv: 5
-    }
+      desc: 'Permanantly increase your OpS by 10%',
+      fillerTxt: 'wip',
+      locked: 0
+    },
   ]
+
+  // let skills = [
+  //   {
+  //     name: 'Heavy Smash',
+  //     img: 'heavy-smash',
+  //     fillerTxt: 'Unleash your inner strength and deal a powerful smash',
+  //     desc: 'Instantly deal a large amount of damage',
+  //     cooldown: 10, // minutes
+  //     locked: 1,
+  //     generationLv: 1
+  //   }, {
+  //     name: 'Roid Rage',
+  //     img: 'roid-rage',
+  //     fillerTxt: 'IM MADD',
+  //     desc: 'Increase you OpC by 10x for 10 seconds',
+  //     cooldown: 30,
+  //     locked: 1,
+  //     generationLv: 2
+  //   }, {
+  //     name: 'Auto Miner',
+  //     img: 'wip',
+  //     fillerTxt: 'R0B07M1N3R',
+  //     desc: 'this machine hits 10x each second for 15 seconds',
+  //     cooldown: 60,
+  //     locked: 1,
+  //     generationLv: 5
+  //   }
+  // ]
 
   Game.showSpecialization = () => {
     let div = document.createElement('div')
@@ -1751,7 +1771,7 @@ Game.launch = () => {
     div.style.marginTop = '10px'
     div.style.left = anchorRight.left - div.getBoundingClientRect().width + 'px'
 
-    Game.redrawSkillsContainer = 0
+    // Game.redrawSkillsContainer = 0
     Game.drawActiveSkills()
   }
 
@@ -2282,7 +2302,7 @@ Game.launch = () => {
       Game.softReset()
       Game.state.player.generation++
       Game.rebuildInventory = 1
-      Game.redrawSkillsContainer = 1
+      // Game.redrawSkillsContainer = 1
       s('.wrapper').remove()
     }, 1500)
     setTimeout(() => {Game.showSkillTree()}, 2000)
@@ -2303,8 +2323,10 @@ Game.launch = () => {
 
       <h1 style='font-size: xx-large'>Skill Tree</h1>
       <h3>Generation: ${Game.state.player.generation}</h3>
-      <div class="skill-tree"></div>
+      <button onclick='document.querySelector(".skill-tree-container").remove()'>Go back</button>
+      <div class="skill-tree">
 
+      </div>
 
 
     `
@@ -2793,6 +2815,122 @@ Game.launch = () => {
     if (s('.specialization-confirmation-wrapper')) s('.specialization-confirmation-wrapper').remove()
   }
 
+  Game.quests = []
+
+  let Quest = function(obj) {
+    this.name = obj.name
+    this.functionName = obj.name.replace(/ /g,'')
+    this.timesCompleted = 0
+    this.desc = obj.desc
+    this.locked = obj.locked
+    this.img = obj.img
+    this.completionTime = obj.completionTime
+    this.completionTimeTxt = obj.completionTimeTxt
+
+    Game.quests.push(this)
+  }
+
+  new Quest({
+    name: 'Abandoned Mineshaft',
+    locked: 0,
+    desc: 'Traverse into an abandoned mineshaft for hopes of greater rewards',
+    img: 'wip.png',
+    completionTime: 30,
+    completionTimeTxt: '30 minutes'
+  })
+  new Quest({name: 'Darkest Dungeon', locked: 1, desc: 'wip.png', img: 'wip.png'})
+  new Quest({name: 'Test name', locked: 2, desc: 'wip.png', img: 'wip.png'})
+  new Quest({name: 'Test name 2', locked: 2, desc: 'wip.png', img: 'wip.png'})
+  new Quest({name: 'Test name 3', locked: 2, desc: 'wip.png', img: 'wip.png'})
+
+
+
+
+  Game.showQuests = () => {
+    if (Game.state.player.generation >= 1) {
+      let div = document.createElement('div')
+      div.classList.add('wrapper')
+
+      let str = `
+        <div class="quests-container">
+          <h1 style='font-size: 3rem; padding: 10px 0;'>Quests</h1>
+          <p onclick='Game.closeCurrentWindow()' style='position: absolute; top: 5px; right: 5px; cursor: pointer'>X</p>
+          <div class="active-quest-container">
+            <hr/>
+            <p>No active quests :(</p>
+            <hr/>
+          </div>
+          <div class="available-quests-container">
+          `
+            for (i=0; i<Game.quests.length; i++) {
+              if (Game.quests[i].locked == 0) {
+                str += `
+                  <div class="available-quest unlocked" onclick="Game.showQuestInformation('${Game.quests[i].functionName}')">
+                    <p>${Game.quests[i].name}</p>
+                    <p class='quest-est-time' style='font-size: small'>completetion time: ${Game.quests[i].completionTimeTxt}</p>
+                  </div>
+                `
+              } else if (Game.quests[i].locked == 1) {
+                str += `
+                  <div style='opacity: .7' class="available-quest">
+                    <p>???</p>
+                  </div>
+                `
+              } else {
+                str += `
+                  <div style='opacity: .2' class="available-quest hidden-quest">
+                    <p>???</p>
+                  </div>
+                `
+              }
+            }
+          `
+          </div>
+        </div>
+      `
+
+      div.innerHTML = str
+      s('body').append(div)
+    }
+  }
+
+  Game.showQuestInformation = (questName) => {
+    let selectedQuest = {}
+    for (i=0; i<Game.quests.length; i++) {
+      if (Game.quests[i].functionName == questName) {
+        selectedQuest = Game.quests[i]
+      }
+    }
+
+    let div = document.createElement('div')
+    div.classList.add('wrapper')
+    div.innerHTML = `
+      <div class="quest-information">
+        <h1 style='padding:10px 0'>${selectedQuest.name}</h1>
+        <p onclick='Game.closeCurrentWindow()' style='position: absolute; top: 5px; right: 5px; cursor: pointer'>X</p>
+        <hr/>
+        <img src="./assets/${selectedQuest.img}" class="quest-img"'>
+        <hr/>
+        <p>${selectedQuest.desc} <br/> Completion Time: ${selectedQuest.completionTimeTxt}</p>
+        <hr/>
+        <div class="quest-information-bottom">
+          <div style='width: 40%' class="quest-information-bottom-left">
+            <p>TIMES COMPLETED: 0</p>
+            <p>QUEST REWARDS</p>
+            <p>5 completions - ???</p>
+            <p>10 completions - ???</p>
+            <p>20 completions - ???</p>
+          </div>
+          <div style='width: 60%' class="quest-information-bottom-right">
+            <button>Adventure <i class='fa fa-long-arrow-right fa-1x'></i></button>
+          </div>
+        </div>
+      </div>
+    `
+
+    s('body').append(div)
+  }
+
   Game.achievements = []
 
   Game.winAchievement = (achievementName) => {
@@ -2855,7 +2993,7 @@ Game.launch = () => {
         if (Game.repositionSettingsContainer) Game.positionSettingsContainer()
         if (Game.repositionOreWeakSpot) Game.oreWeakSpot()
         // if (Game.rebuildStats) Game.buildStats()
-        if (Game.redrawSkillsContainer) Game.drawSkillsContainer()
+        // if (Game.redrawSkillsContainer) Game.drawSkillsContainer()
         if (Game.redrawTorches) Game.drawTorches()
       }
     }
@@ -2951,7 +3089,7 @@ Game.launch = () => {
     Game.repositionSettingsContainer = 1
     if (Game.upgrades[0].owned > 0)Game.repositionOreWeakSpot = 1
     Game.rebuildStats = 1
-    Game.redrawSkillsContainer = 1
+    // Game.redrawSkillsContainer = 1
     Game.redrawTorches = 1
     Game.rebuildRefineBtn = 1
   }

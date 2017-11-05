@@ -1749,3 +1749,21 @@ li {
   padding: 5px;
   text-align: center;
 }
+
+.skill-tree-container button {
+  background-color: transparent;
+  color: white;
+  padding: 5px;
+  border: 1px solid white;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.particles-js-canvas-el {
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+}
