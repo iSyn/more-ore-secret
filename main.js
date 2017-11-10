@@ -18,19 +18,6 @@ let beautify = (num) => {
       'Fuckloadillion',
       'Fucktonillion'
     ],
-    [
-      'M',
-      'B',
-      'T',
-      'Qa',
-      'Qi',
-      'Se',
-      'Al',
-      'Wa',
-      'Fl',
-      'Fu'
-    ]
-
   ]
 
   if (num < 1000000) {
@@ -657,9 +644,9 @@ Game.launch = () => {
     // CHECK CLICK RELATED ACHIEVEMENTS
 
     // UNLOCK SHIT
-
-    if (Game.state.stats.weakSpotHits >= 5) Game.unlockUpgrade('Clean Magnifying Glass')
-    if (Game.state.stats.weakSpotHits >= 20) Game.unlockUpgrade('Polish Magnifying Glass')
+    if (Game.state.stats.oreClicks == 3) Game.unlockUpgrade('Magnifying Glass')
+    if (Game.state.stats.weakSpotHits == 5) Game.unlockUpgrade('Clean Magnifying Glass')
+    if (Game.state.stats.weakSpotHits == 20) Game.unlockUpgrade('Polish Magnifying Glass')
   }
 
   Game.oreWeakSpot = () => {
@@ -1341,10 +1328,7 @@ Game.launch = () => {
       let str = `
         <p style='text-align: center; background: transparent; color: white; padding-bottom: 20px;'>
         Please consider disabling adblock! <br/>
-        I am just a broke college student and the cents generated from this game will be for food. <br/>
-        Or consider donating a lil somethin somethin <a href="https://www.patreon.com/user?u=8032477">PATREON LINK</a> <br/>
-        Your name will be placed in a special thanks section of the game! <br/>
-        Thanks!
+        I am just a broke college student and the cents generated from this game will be for food.
         </p>
       `
       s('#ads-im-sorry-please-dont-hate-me').innerHTML = str
