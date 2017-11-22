@@ -35,9 +35,9 @@ let Item = function(item) {
 
 let items = [
 
-  /*
+  /* ----------------------------------------------------------------------------------------
       BUILDINGS
-  */
+  ---------------------------------------------------------------------------------------- */
 
   {
     name: 'School', namePlural: 'Schools', type: 'building', pic: 'school.png', production: .3, desc: 'Teach students about the wonders of ores', fillerQuote: 'Jesus Christ Marie, they\'re minerals!', basePrice: 6, hidden: 0,
@@ -108,7 +108,7 @@ let items = [
         {name: 'Floppy Squiggle Tubes', amountNeeded: 10},
         {name: 'Clicky Squish Buttons', amountNeeded: 20},
         {name: 'Metallic Magnetic Panels', amountNeeded: 50},
-        {name: 'Hydropnic Screws', amountNeeded: 100},
+        {name: 'Hydroponic Screws', amountNeeded: 100},
       ]
     }
   },
@@ -116,7 +116,11 @@ let items = [
     name: 'Crypt', namePlural: 'Crypts', type: 'building', pic: 'crypt.png', production: 30000, desc: 'Raise dead ores from the graves', fillerQuote: 'spooky ores', basePrice: 290000, hidden: 2,
     buyFunctions: {
       unlockUpgrades: [
-        {name: 'Metal Sarcophagus', amountNeeded: 1}
+        {name: 'Metal Sarcophagus', amountNeeded: 1},
+        {name: 'Scarecrow', amountNeeded: 10},
+        {name: 'Polished Shovel', amountNeeded: 20},
+        {name: 'Fresh Bandages', amountNeeded: 50},
+        {name: 'Oil Lanterns', amountNeeded: 100},
       ]
     }
   },
@@ -124,7 +128,11 @@ let items = [
     name: 'Hospital', namePlural: 'Hospitals', type: 'building', pic: 'hospital.png', production: 220000, desc: 'Heal your damaged ores', fillerQuote: 'An apple a day keeps the ore cancer away', basePrice: 1000000, hidden: 2,
     buyFunctions: {
       unlockUpgrades: [
-        {name: 'Immunization Shot', amountNeeded: 1}
+        {name: 'Immunization Shot', amountNeeded: 1},
+        {name: 'Blood Test', amountNeeded: 10},
+        {name: 'Blood Transfusion', amountNeeded: 20},
+        {name: 'CAT Scan', amountNeeded: 50},
+        {name: 'Enhancement Surgery', amountNeeded: 100},
       ]
     }
   },
@@ -181,16 +189,16 @@ let items = [
   },
 
 
-  /*
+   /* ----------------------------------------------------------------------------------------
       UPGRADES
-  */
+  ---------------------------------------------------------------------------------------- */
+
 
 
   {name: 'Magnifying Glass', type: 'upgrade', pic: 'magnifying-glass.png', desc: 'Allows you to spot weakpoints inside the rock', fillerQuote: 'These sure will help...', price: 5, hidden: 1},
   {name: 'Clean Magnifying Glass', type: 'upgrade', pic: 'clean-magnifying-glass.png', desc: 'Increases weak hit multiplier by 5x', fillerQuote: 'wip', price: 100, hidden: 1},
   {name: 'Polish Magnifying Glass', type: 'upgrade', pic: 'wip.png', desc: 'Increases weak hit multiplier by 5x', fillerQuote: 'wip', price: 50000, hidden: 1},
 
-        //BUILDING UPGRADES
 
   // School
   {
@@ -310,7 +318,7 @@ let items = [
   {
     name: '7th Day', type: 'upgrade', pic: 'wip.png', desc: 'Triples the production of Churches', fillerQuote: 'wip', price: 62000000, hidden: 1,
     buyFunctions: {
-      increaseProduction: {building: 'Church', multi: 2}
+      increaseProduction: {building: 'Church', multi: 3}
     }
   },
   {
@@ -359,6 +367,30 @@ let items = [
       increaseProduction: {building: 'Crypt', multi: 2}
     }
   },
+  {
+    name: 'Scarecrow', type: 'upgrade', pic: 'wip.png', desc: 'Triples the production of factories', fillerQuote: 'Scare the ghosties away', price: 72000000, hidden: 1,
+    buyFunction: {
+      increaseProduction: {building: 'Crypt', multi: 3}
+    }
+  },
+  {
+    name: 'Polished Shovel', type: 'upgrade', pic: 'wip.png', desc: 'Doubles the production of factories', fillerQuote: 'wip', price: 150000000, hidden: 1,
+    buyFunction: {
+      increaseProduction: {building: 'Crypt', multi: 2}
+    }
+  },
+  {
+    name: 'Fresh Bandages', type: 'upgrade', pic: 'wip.png', desc: 'Triples the production of factories', fillerQuote: 'wip', price: 2500000000, hidden: 1,
+    buyFunction: {
+      increaseProduction: {building: 'Crypt', multi: 3}
+    }
+  },
+  {
+    name: 'Oil Lanterns', type: 'upgrade', pic: 'wip.png', desc: 'Quintuples the production of factories', fillerQuote: 'Sets the mood', price: 50000000000, hidden: 1,
+    buyFunction: {
+      increaseProduction: {building: 'Crypt', multi: 5}
+    }
+  },
 
   // Hospital
   {
@@ -367,6 +399,31 @@ let items = [
       increaseProduction: {building: 'Hospital', multi: 2}
     }
   },
+  {
+    name: 'Blood Test', type: 'upgrade', pic: 'wip.png', desc: 'Triples the production of Hospitals', fillerQuote: 'wip', price: 300000000, hidden: 1,
+    buyFunctions: {
+      increaseProduction: {building: 'Hospital', multi: 3}
+    }
+  },
+  {
+    name: 'Blood Transfusion', type: 'upgrade', pic: 'wip.png', desc: 'Doubles the production of Hospitals', fillerQuote: 'wip', price: 2900000000, hidden: 1,
+    buyFunctions: {
+      increaseProduction: {building: 'Hospital', multi: 2}
+    }
+  },
+  {
+    name: 'CAT Scan', type: 'upgrade', pic: 'wip.png', desc: 'Triples the production of Hospitals', fillerQuote: 'wip', price: 82000000000, hidden: 1,
+    buyFunctions: {
+      increaseProduction: {building: 'Hospital', multi: 3}
+    }
+  },
+  {
+    name: 'Enhancement Surgery', type: 'upgrade', pic: 'wip.png', desc: 'Quintuples the production of Hospitals', fillerQuote: 'wip', price: 900000000000, hidden: 1,
+    buyFunctions: {
+      increaseProduction: {building: 'Hospital', multi: 5}
+    }
+  },
+
 
   // Citadel
   {
@@ -375,6 +432,7 @@ let items = [
       increaseProduction: {building: 'Citadel', multi: 2}
     }
   },
+
 
   // Xeno Spaceship
   {

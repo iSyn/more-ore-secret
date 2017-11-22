@@ -111,7 +111,7 @@ document.onkeydown = function(evt) {
 let getRandomColor = () => {
   let letters = '0123456789ABCDEF';
   let color = '#';
-  for (i = 0; i < 6; i++) {
+  for (let i = 0; i < 6; i++) {
     color += letters[Math.floor(Math.random() * 16)];
   }
   return color;
@@ -569,7 +569,7 @@ Game.launch = () => {
   Game.calculateOpS = () => {
     let ops = 0
 
-    for (i in Game.buildings) {
+    for (let i in Game.buildings) {
       if (Game.buildings[i].owned > 0) {
         ops += Game.buildings[i].production * Game.buildings[i].owned
       }
@@ -917,7 +917,7 @@ Game.launch = () => {
     let absolutePrefix = 0
     let absoluteSuffix = 0
 
-    for (i=0; i<rarity.maxStat; i++) {
+    for (let i=0; i<rarity.maxStat; i++) {
       console.log('AMOUNT OF STATS:', rarity.maxStat)
       if (prefix && absolutePrefix == 0) {
         absolutePrefix = 1
@@ -939,7 +939,7 @@ Game.launch = () => {
     }
 
     // DETERMINE STAT VALUES
-    for (i in selectedStats) {
+    for (let i in selectedStats) {
       selectedStats[i].val = Math.floor(Math.random() * (totalMult - (totalMult / 2) + 1) + (totalMult / 2))
     }
 
@@ -1156,7 +1156,7 @@ Game.launch = () => {
 
   Game.drawRockParticles = () => {
     if (Game.state.prefs.rockParticles == true) {
-      for (i = 0; i < 3; i++) {
+      for (let i = 0; i < 3; i++) {
         let div = document.createElement('div')
         div.classList.add('particle')
         div.style.background = 'lightgrey'
@@ -1225,7 +1225,7 @@ Game.launch = () => {
       return a.price - b.price;
     });
 
-    for (i in Game.sortedUpgrades) {
+    for (let i in Game.sortedUpgrades) {
       let item = Game.sortedUpgrades[i]
       if (item.hidden == 0) {
         hasContent = 1
@@ -1239,7 +1239,7 @@ Game.launch = () => {
     if (hasContent == 0) str += `<h3 style="text-align: center; width: 100%; opacity: .5; height: 50px; line-height: 50px;">no upgrades available</h3>`
     str += `</div><div class="horizontal-separator" style='height: 8px;'></div>`
 
-    for (i in Game.buildings) {
+    for (let i in Game.buildings) {
       let item = Game.buildings[i]
       if (item.hidden == 0) {
         str += `
@@ -1303,7 +1303,7 @@ Game.launch = () => {
   Game.loadAd = () => {
     if (Game.adsLoaded == false) {
       Game.adsLoaded = true
-      for (i = 0; i < 3; i++) {
+      for (let i = 0; i < 3; i++) {
         let script = document.createElement('script')
         script.src = '//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js'
         let ins = document.createElement('ins')
@@ -1393,7 +1393,7 @@ Game.launch = () => {
 
   Game.unlockUpgrade = (upgradeName) => {
     let upgrade = ''
-    for (i in Game.upgrades) {
+    for (let i in Game.upgrades) {
       if (upgradeName == Game.upgrades[i].name)
         upgrade = Game.upgrades[i]
     }
@@ -1409,7 +1409,7 @@ Game.launch = () => {
   Game.buyFunction = (item) => {
     // UNLOCK NEXT BUILDING IF THERE IS ONE
     if (item.type == 'building') {
-      for (i=0; i<Game.buildings.length; i++) {
+      for (let i=0; i<Game.buildings.length; i++) {
         if (Game.buildings[i].name == item.name) {
           if (Game.buildings[i+1]) {
             if (Game.buildings[i+1].hidden == 1 || Game.buildings[i+1].hidden == 3) {
@@ -1432,14 +1432,14 @@ Game.launch = () => {
 
     if (item.buyFunctions) {
       if (item.buyFunctions.unlockUpgrades) {
-        for (i in item.buyFunctions.unlockUpgrades) {
+        for (let i in item.buyFunctions.unlockUpgrades) {
           if (item.owned == item.buyFunctions.unlockUpgrades[i].amountNeeded) {
             Game.unlockUpgrade(item.buyFunctions.unlockUpgrades[i].name)
           }
         }
       }
       if (item.buyFunctions.addTextScroller) {
-        for (i in item.buyFunctions.addTextScroller) {
+        for (let i in item.buyFunctions.addTextScroller) {
           if (item.owned == item.buyFunctions.addTextScroller[i].amountNeeded) {
             Game.textScroller.push(item.buyFunctions.addTextScroller[i].text)
           }
@@ -1449,13 +1449,13 @@ Game.launch = () => {
         Game.select(Game.buildings, item.buyFunctions.increaseProduction.building).production *= item.buyFunctions.increaseProduction.multi
       }
       if (item.buyFunctions.multipliers) {
-        for (i in item.buyFunctions.multipliers) {
+        for (let i in item.buyFunctions.multipliers) {
           if (item.buyFunctions.multipliers[i].type == 'ops') Game.state.opsMulti += item.buyFunctions.multipliers[i].amount
           if (item.buyFunctions.multipliers[i].type == 'opc') Game.state.opcMulti += item.buyFunctions.multipliers[i].amount
         }
       }
       if (item.buyFunctions.achievements) {
-        for (i in item.buyFunctions.achievements) {
+        for (let i in item.buyFunctions.achievements) {
           if (item.owned == item.buyFunctions.achievements[i].amountNeeded) {
             Game.winAchievement(item.buyFunctions.achievements[i].name)
           }
@@ -1581,168 +1581,6 @@ Game.launch = () => {
     },
   ]
 
-  // let skills = [
-  //   {
-  //     name: 'Heavy Smash',
-  //     img: 'heavy-smash',
-  //     fillerTxt: 'Unleash your inner strength and deal a powerful smash',
-  //     desc: 'Instantly deal a large amount of damage',
-  //     cooldown: 10, // minutes
-  //     locked: 1,
-  //     generationLv: 1
-  //   }, {
-  //     name: 'Roid Rage',
-  //     img: 'roid-rage',
-  //     fillerTxt: 'IM MADD',
-  //     desc: 'Increase you OpC by 10x for 10 seconds',
-  //     cooldown: 30,
-  //     locked: 1,
-  //     generationLv: 2
-  //   }, {
-  //     name: 'Auto Miner',
-  //     img: 'wip',
-  //     fillerTxt: 'R0B07M1N3R',
-  //     desc: 'this machine hits 10x each second for 15 seconds',
-  //     cooldown: 60,
-  //     locked: 1,
-  //     generationLv: 5
-  //   }
-  // ]
-
-  Game.showSpecialization = () => {
-    let div = document.createElement('div')
-    div.classList.add('specialization-wrapper')
-    div.innerHTML = `
-      <h1>Choose a Specialization</h1>
-      <div class="specialization-container">
-        <div class="specialization-prospector specialization" onclick='Game.chooseSpecialization("Prospector")'>
-          <div class="prospector-txt specialization-txt">
-            <h3>Prospector</h3>
-            <p>-text about how being a prospector is great-</p>
-            <p>Skills for more OpC and extra bonuses in game</p>
-            <p>(For players that are more active in games)</p>
-          </div>
-        </div>
-        <div class="specialization-manager specialization"'>
-          <div class="manager-txt specialization-txt">
-            <h3>Manager</h3>
-            <p>-NOT IMPLEMENTED YET-</p>
-          </div>
-        </div>
-      </div>
-    `
-
-    s('body').append(div)
-  }
-
-  Game.chooseSpecialization = (sel) => {
-
-    let div = document.createElement('div')
-    div.classList.add('specialization-confirmation-wrapper')
-    div.innerHTML = `
-      <div class="specialization-confirmation-container">
-        <h4>Specialization</h4>
-        <hr/>
-        <p>Are you sure you want to be a <strong>${sel}</strong></p>
-        <p>You can not change this unless you do a hard reset...</p>
-        <hr style='margin-bottom: 5px;'/>
-        <button onclick='Game.specialization("${sel}")'>yes</button>
-        <button onclick='document.querySelector(".specialization-confirmation-wrapper").remove()'>no</button>
-      </div>
-    `
-
-    s('body').append(div)
-  }
-
-  Game.startSpecializationXp = () => {
-    if (Game.state.player.specialization != null) {
-      setInterval(() => {
-        Game.state.player.specializationXpStored++
-        if (Game.statsVisable) {
-          s('.specialization-xp-stored').innerHTML = Game.state.player.specializationXpStored
-        }
-      }, 1000)
-    }
-  }
-
-  Game.specialization = (sel) => {
-    Game.state.player.specialization = sel
-    Game.drawSkillsContainer()
-    Game.buildStats()
-    s('.specialization-wrapper').remove()
-    s('.specialization-confirmation-wrapper').remove()
-    Game.specializationSkills()
-    Game.startSpecializationXp()
-  }
-
-  Game.specializationSkills = () => {
-    if (s('.wrapper')) s('.wrapper').remove()
-    let specialization = Game.state.player.specialization
-    let div = document.createElement('div')
-    let str = ''
-    div.classList.add('wrapper')
-    if (specialization == 'Prospector') {
-      str += `
-
-      <div class="specialization-skills-container">
-        <div class="specialization-skills-top">
-          <h1 style='flex-grow: 1; text-align: center;'>${specialization}</h1>
-          <p onclick='document.querySelector(".wrapper").remove()'>X</p>
-        </div>
-        <div class="specialization-skills-middle">
-          <h2 style='margin-right: 10px;'>Lv: ${Game.state.player.specializationLv}</h2>
-          <div class="specialization-skills-xp-container">
-            <div class="specialization-skills-xp"></div>
-          </div>
-        </div>
-        <p style='text-align: center;'>Specialization SP Available: ${Game.state.player.specializationSp}</p>
-        <br/>
-        <div class="specialization-skills-bottom">
-          <div class="specialization-skills-bottom-left">
-
-      `
-
-      for (i = 1; i <= 5; i++) {
-        str += `<div class="skill-tier">`
-
-          for (j in Game.prospectorSkills) {
-            let skill = Game.prospectorSkills[j]
-            if (skill.tier == i) {
-              if (skill.locked == 0) {
-                str += `<div class="specialization-skill" style='background-image: url("./assets/${skill.img}.png")' onclick='Game.levelUpSkill("${j}")' onmouseover='Game.renderSkillText("${j}")' onmouseout='document.querySelector(".specialization-skills-bottom-right").innerHTML = "" '></div>`
-              } else {
-                str += `<div class="specialization-skill" style='background-image: url("./assets/mystery.png")' onclick='Game.levelUpSkill("${j}")' onmouseover='Game.renderSkillText("${j}")' onmouseout='document.querySelector(".specialization-skills-bottom-right").innerHTML = "" '></div>`
-              }
-            }
-          }
-
-
-        str += '</div>'
-      }
-
-      str += `
-                </div>
-                <div class="specialization-skills-bottom-right"></div>
-              </div>
-            </div>
-      `
-    }
-    if (specialization == 'Manager') {
-      //
-    }
-
-    div.innerHTML = str
-    s('body').append(div)
-    Game.calculateSpecializationXP()
-  }
-
-  Game.calculateSpecializationXP = () => {
-    let currentXp = Game.state.player.specializationXp
-    let neededXp = Game.state.player.specializationXpNeeded
-    let percentage = (currentXp / neededXp) * 100
-    s('.specialization-skills-xp').style.width = percentage + '%'
-  }
-
   Game.drawSkillsContainer = () => {
     let div = s('.active-skills-container')
     let anchorTop = s('.inventory-section').getBoundingClientRect()
@@ -1762,7 +1600,7 @@ Game.launch = () => {
   Game.drawActiveSkills = () => {
     let str = ''
 
-    for (i in Game.skills) {
+    for (let i in Game.skills) {
       if (skills[i].generationLv <= Game.state.player.generation) { // IF ITS NOT LOCKED
         str += `<div class='active-skill' style='background-image: url("./assets/${skills[i].img}.png"); cursor: pointer' onmouseover='Game.showTooltip(${i}, null, "skill", null)' onclick='Game.useSkill(${i})' onmouseout='Game.hideTooltip()' ></div>`
       } else {
@@ -1876,7 +1714,7 @@ Game.launch = () => {
 
     // IF ITEM, GRAB SELECTED ITEM
     if (itemInfo) {
-      for (i in Game[`${itemInfo.type}`]) {
+      for (let i in Game[`${itemInfo.type}`]) {
         if (itemInfo.name == Game[`${itemInfo.type}`][i].name) item = Game[`${itemInfo.type}`][i]
       }
     }
@@ -2158,7 +1996,7 @@ Game.launch = () => {
     let achievementsMissing = 0
     div.classList.add('wrapper')
 
-    for (i = 0; i < Game.achievements.length; i++) {
+    for (let i = 0; i < Game.achievements.length; i++) {
       if (Game.achievements[i].won == 1) {
         achievementsWon++
       } else {
@@ -2188,7 +2026,7 @@ Game.launch = () => {
         <hr/>
         <h2><span style='opacity: .6'>Achievements Won:</span> ${achievementsWon}</h2>
         `
-        for (i = 0; i < Game.achievements.length; i++) {
+        for (let i = 0; i < Game.achievements.length; i++) {
           if (Game.achievements[i].won == 1) {
             str += `<p><span style='opacity: .6'>${Game.achievements[i].name}</span> - <strong>${Game.achievements[i].desc}</strong></p>`
           }
@@ -2687,7 +2525,7 @@ Game.launch = () => {
     let str = ''
     if (selectedTab == 'trinkets') {
       s('.refined-store-refresh-btn').innerHTML = '<button onclick="Game.refreshItems()">REFRESH <i class="fa fa-diamond fa-1x"></i> 1</button>'
-      for (i=0; i<Game.state.currentRefinedStoreItems.length; i++) {
+      for (let i=0; i<Game.state.currentRefinedStoreItems.length; i++) {
         let item = Game.state.currentRefinedStoreItems[i]
         str += `
             <div class="refined-store-item ${item.rarity}" onclick='Game.confirmBuyRefinedItem("${item.name}")'>
@@ -2712,7 +2550,7 @@ Game.launch = () => {
 
   Game.confirmBuyRefinedItem = (itemName) => {
     let selectedItem = ''
-    for (i=0; i<Game.uniqueTrinkets.length; i++) {
+    for (let i=0; i<Game.uniqueTrinkets.length; i++) {
       if (Game.uniqueTrinkets[i].name == itemName) {
         selectedItem = Game.uniqueTrinkets[i]
       }
@@ -2739,7 +2577,7 @@ Game.launch = () => {
 
   Game.buyRefinedItem = (itemName) => {
     let selectedItem = ''
-    for (i=0; i<Game.uniqueTrinkets.length; i++) {
+    for (let i=0; i<Game.uniqueTrinkets.length; i++) {
       if (Game.uniqueTrinkets[i].name == itemName) {
         selectedItem = Game.uniqueTrinkets[i]
       }
@@ -2759,7 +2597,7 @@ Game.launch = () => {
           //
         }
         if (selectedItem.name == 'Discount Card') {
-          for (i in Game.items) {
+          for (let i in Game.items) {
             if (Game.items[i].type == 'item') {
               Game.items[i].price -= Game.items[i].price * .1
               buildStore()
@@ -2827,9 +2665,6 @@ Game.launch = () => {
   new Quest({name: 'Test name 2', locked: 2, desc: 'wip.png', img: 'wip.png'})
   new Quest({name: 'Test name 3', locked: 2, desc: 'wip.png', img: 'wip.png'})
 
-
-
-
   Game.showQuests = () => {
     if (Game.state.player.generation >= 1) {
       let div = document.createElement('div')
@@ -2846,7 +2681,7 @@ Game.launch = () => {
           </div>
           <div class="available-quests-container">
           `
-            for (i=0; i<Game.quests.length; i++) {
+            for (let i=0; i<Game.quests.length; i++) {
               if (Game.quests[i].locked == 0) {
                 str += `
                   <div class="available-quest unlocked" onclick="Game.showQuestInformation('${Game.quests[i].functionName}')">
@@ -2880,7 +2715,7 @@ Game.launch = () => {
 
   Game.showQuestInformation = (questName) => {
     let selectedQuest = {}
-    for (i=0; i<Game.quests.length; i++) {
+    for (let i=0; i<Game.quests.length; i++) {
       if (Game.quests[i].functionName == questName) {
         selectedQuest = Game.quests[i]
       }
@@ -2919,7 +2754,7 @@ Game.launch = () => {
 
   Game.winAchievement = (achievementName) => {
     let selectedAchievement;
-    for (i in Game.achievements) {
+    for (let i in Game.achievements) {
       if (Game.achievements[i].name == achievementName) {
         selectedAchievement = Game.achievements[i]
         break
@@ -2952,7 +2787,7 @@ Game.launch = () => {
   }
 
   Game.select = (arr, what) => {
-    for (i in arr) {
+    for (let i in arr) {
       if (arr[i].name == what)
         return arr[i]
     }
@@ -3061,13 +2896,6 @@ Game.launch = () => {
     }
   })
   s('.bottom').addEventListener('click', () => Game.showQuests())
-
-  s('#main-separator').onclick = () => {
-    Game.earn(999999999999999)
-    // Game.gainXp(999)
-    Game.state.player.gems += 999
-    Game.state.player.specializationSp += 999
-  }
 
   window.onresize = () => {
     Game.repositionSettingsContainer = 1
