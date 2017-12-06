@@ -152,7 +152,7 @@ Game.launch = () => {
       totalOresSpent: 0,
       currentOresEarned: 0,
       currentOresMined: 0,
-      oreClicks: 0,
+      currentOreClicks: 0,
       critHits: 0,
       weakSpotHits: 0,
       megaHits: 0,
@@ -650,31 +650,37 @@ Game.launch = () => {
 
     Game.earn(amount)
     Game.drawRockParticles()
-    Game.state.stats.oreClicks++
+    Game.state.stats.currentOreClicks++
     Game.state.stats.currentOresMined += amount
     Game.state.stats.totalOresMined += amount
 
     // CHECK CLICK RELATED ACHIEVEMENTS
 
     // UNLOCK SHIT
-    if (Game.state.stats.oreClicks == 3) Game.unlockUpgrade('Magnifying Glass')
+    if (Game.state.stats.currentOreClicks == 3) Game.unlockUpgrade('Magnifying Glass')
     if (Game.state.stats.weakSpotHits == 5) Game.unlockUpgrade('Clean Magnifying Glass')
     if (Game.state.stats.weakSpotHits == 20) Game.unlockUpgrade('Polish Magnifying Glass')
   }
 
   Game.oreWeakSpot = () => {
-    let randomNumber = () => Math.floor(Math.random() * 80) + 1
-    let orePos = s('.ore').getBoundingClientRect()
-    let randomSign = Math.round(Math.random()) * 2 - 1
-    let centerX = (orePos.left + orePos.right) / 2
-    let centerY = (orePos.top + orePos.bottom) / 2
-    let randomX = centerX + (randomNumber() * randomSign)
-    let randomY = centerY + (randomNumber() * randomSign)
+    let magnifyingGlass = Game.select(Game.upgrades, 'Magnifying Glass')
+    if (magnifyingGlass.owned) {
+      let randomNumber = () => Math.floor(Math.random() * 80) + 1
+      let orePos = s('.ore').getBoundingClientRect()
+      let randomSign = Math.round(Math.random()) * 2 - 1
+      let centerX = (orePos.left + orePos.right) / 2
+      let centerY = (orePos.top + orePos.bottom) / 2
+      let randomX = centerX + (randomNumber() * randomSign)
+      let randomY = centerY + (randomNumber() * randomSign)
 
-    s('.ore-weak-spot').style.left = randomX + 'px'
-    s('.ore-weak-spot').style.top = randomY + 'px'
-    s('.ore-weak-spot').style.display = 'block'
-    Game.repositionOreWeakSpot = 0
+      s('.ore-weak-spot').style.left = randomX + 'px'
+      s('.ore-weak-spot').style.top = randomY + 'px'
+      s('.ore-weak-spot').style.display = 'block'
+      Game.repositionOreWeakSpot = 0
+    } else {
+      s('.ore-weak-spot').style.display = 'none'
+      Game.repositionOreWeakSpot = 0
+    }
   }
 
   Game.dropItem = () => {
@@ -2024,7 +2030,7 @@ Game.launch = () => {
         <hr/>
         <p><span style='opacity: .6'>Ores Earned:</span> <strong>${beautify(Math.round(Game.state.stats.currentOresEarned))}</strong></p>
         <p><span style='opacity: .6'>Ores Mined (By Clicks):</span> <strong>${beautify(Math.round(Game.state.stats.currentOresMined))}</strong></p>
-        <p><span style='opacity: .6'>Ore Clicks:</span> <strong>${Game.state.stats.oreClicks}</strong></p>
+        <p><span style='opacity: .6'>Ore Clicks:</span> <strong>${Game.state.stats.currentOreClicks}</strong></p>
         <p><span style='opacity: .6'>Weak Spot Hits:</span> <strong>${Game.state.stats.weakSpotHits}</strong></p>
         <p><span style='opacity: .6'>Crit Hits:</span> <strong>${Game.state.stats.critHits}</strong></p>
         <p><span style='opacity: .6'>Mega Hits: (Crit & Weak Spot Hit):</span> <strong>${Game.state.stats.megaHits}</strong></p>
@@ -2145,6 +2151,8 @@ Game.launch = () => {
       s('.refine').remove()
       if (Game.state.stats.timesRefined > 0) Game.winAchievement('Blacksmiths Apprentice')
     }, 3000)
+
+    s('.ore-weak-spot').style.display = 'none'
   }
 
   Game.showSkillTree = () => {
@@ -2297,6 +2305,8 @@ Game.launch = () => {
       material: 'Wood',
       damage: 1,
     }
+
+    Game.state.stats.currentOreClicks = 0
 
     if (Game.state.player.specializationXpStored > 0) {
       while (Game.state.player.specializationXp + Game.state.player.specializationXpStored > Game.state.player.specializationXpNeeded) {
@@ -2912,7 +2922,7 @@ Game.launch = () => {
 
   window.onresize = () => {
     Game.repositionSettingsContainer = 1
-    if (Game.upgrades[0].owned > 0)Game.repositionOreWeakSpot = 1
+    if (Game.upgrades[0].owned) Game.repositionOreWeakSpot = 1
     Game.rebuildStats = 1
     // Game.redrawSkillsContainer = 1
     Game.redrawTorches = 1
@@ -2928,6 +2938,12 @@ Game.launch = () => {
     Game.earnOfflineGain()
     Game.blurred = false;
   }
+
+
+  s('#main-separator').onclick = () => {
+    Game.state.ores += 9999999999
+  }
+
 }
 
 
