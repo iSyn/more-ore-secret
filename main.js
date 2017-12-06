@@ -137,6 +137,10 @@ Game.launch = () => {
     opcMulti: 0,
     critHitMulti: 2,
     weakHitMulti: 5,
+    canRefine: null,
+    lastLogin: null,
+    lastRefine: null,
+
     player: {
       generation: 0,
       pickaxe: {
@@ -147,6 +151,7 @@ Game.launch = () => {
         damage: 1
       }
     },
+
     stats: {
       totalOresMined: 0,
       totalOresSpent: 0,
@@ -154,7 +159,7 @@ Game.launch = () => {
       currentOresMined: 0,
       currentOreClicks: 0,
       critHits: 0,
-      weakSpotHits: 0,
+      currentWeakSpotHits: 0,
       megaHits: 0,
       rocksDestroyed: 0,
       itemsPickedUp: 0,
@@ -164,17 +169,73 @@ Game.launch = () => {
       timesRefined: 0,
       buildingsOwned: 0,
     },
+
     prefs: {
       volume: 0.5,
       bgm: 0,
       rockParticles: true,
       risingNumbers: true,
       scrollingText: true,
-      currentVersion: '0.6.7',
       fps: 30,
-    },
-    lastLogin: null,
-    lastRefine: null
+    }
+  }
+
+  Game.positionAllElements = () => {
+    // POSITION TORCHES
+    let torch1 = s('.torch1')
+    let torch2 = s('.torch2')
+
+    let torch1Anchor = s('#left-separator').getBoundingClientRect()
+    torch1.style.left = torch1Anchor.right + 'px'
+    torch1.style.top = '15%'
+
+    let torch2Anchor = s('#main-separator').getBoundingClientRect()
+    torch2.style.left = torch2Anchor.left - torch2.getBoundingClientRect().width + 'px'
+    torch2.style.top = '15%'
+
+    // POSITION SETTINGS CONTAINER
+    let settingsContainer = s('.settings-container')
+
+    let anchorHorizontal = s('#horizontal-separator').getBoundingClientRect()
+    let anchorVertical = s('#main-separator').getBoundingClientRect()
+
+    settingsContainer.style.position = 'absolute'
+    settingsContainer.style.top = anchorHorizontal.top - settingsContainer.getBoundingClientRect().height + 'px'
+    settingsContainer.style.left = anchorVertical.left - settingsContainer.getBoundingClientRect().width  + 'px'
+
+    // POSITION REFINE BUTTON
+    if (Game.state.canRefine == true || Game.state.stats.timesRefined > 0) {
+      let refineBtn = s('.refine-btn')
+      let anchorVertical = s('#left-separator').getBoundingClientRect()
+      let anchorHorizontal = s('#horizontal-separator').getBoundingClientRect()
+
+      refineBtn.style.display = 'block'
+
+      refineBtn.style.top = anchorHorizontal.top - refineBtn.getBoundingClientRect().height - 15 + 'px'
+      refineBtn.style.left = anchorVertical.right + 5 + 'px'
+    } else {
+      s('.refine-btn').style.display = 'none'
+    }
+
+    // POSITION ORE WEAK SPOT
+    let magnifyingGlass = Game.select(Game.upgrades, 'Magnifying Glass')
+    if (magnifyingGlass.owned) {
+      let randomNumber = () => Math.floor(Math.random() * 80) + 1
+      let orePos = s('.ore').getBoundingClientRect()
+      let randomSign = Math.round(Math.random()) * 2 - 1
+      let centerX = (orePos.left + orePos.right) / 2
+      let centerY = (orePos.top + orePos.bottom) / 2
+      let randomX = centerX + (randomNumber() * randomSign)
+      let randomY = centerY + (randomNumber() * randomSign)
+
+      s('.ore-weak-spot').style.left = randomX + 'px'
+      s('.ore-weak-spot').style.top = randomY + 'px'
+      s('.ore-weak-spot').style.display = 'block'
+    } else {
+      s('.ore-weak-spot').style.display = 'none'
+    }
+
+    Game.repositionAllElements = 0
   }
 
   Game.showChangelog = (show) => {
@@ -184,7 +245,7 @@ Game.launch = () => {
       Game.state.currentVersion = newestVersion
       let div = document.createElement('div')
       div.classList.add('wrapper')
-      div.onclick = () => s('.wrapper').remove()
+      div.onclick = () => Game.removeEl(s('.wrapper'))
       div.innerHTML = `
         <div class="changelog-container">
           <h1>Changelog</h1>
@@ -262,6 +323,43 @@ Game.launch = () => {
     }
   }
 
+  Game.export = () => {
+    alert('SAVE FILE COPIED')
+    let save = btoa(JSON.stringify(Game.state))
+    let textarea = document.createElement('textarea')
+
+    textarea.style.opacity = '0'
+
+    s('body').append(textarea)
+
+    textarea.value = save
+
+    textarea.select()
+
+    try {
+      document.execCommand('copy')
+    } catch (err) {
+      console.log('unable to copy')
+    }
+
+    if (s('textarea')) {
+      console.log('removing textarea')
+      Game.removeEl(s('textarea'))
+    }
+  }
+
+  Game.import = () => {
+    let save = prompt('Enter save code')
+
+    if (save.length > 2000) {
+      console.log(save.length)
+      let newState = JSON.parse(atob(save))
+      Game.state = newState
+      Game.save()
+      location.reload()
+    }
+  }
+
   Game.save = () => {
     Game.state.lastLogin = new Date().getTime()
     localStorage.setItem('state', JSON.stringify(Game.state))
@@ -273,11 +371,6 @@ Game.launch = () => {
   }
 
   Game.load = () => {
-
-    // console.log(window.location)
-    // if (window.location.hostname != 'synclairwang.com') {
-    //   window.location.replace('http://synclairwang.com/more-ore')
-    // }
 
     if (localStorage.getItem('state') !== null) {
       console.log('SAVE FILE FOUND')
@@ -342,18 +435,15 @@ Game.launch = () => {
     Game.updatePercentage(0)
     // Game.playBgm()
     Game.showTextScroller()
+    Game.repositionAllElements = 1
     Game.rebuildStats = 1
     Game.rebuildStore = 1
     Game.rebuildInventory = 1
     Game.recalculateOpC = 1
     Game.recalculateOpS = 1
-    Game.rebuildRefineBtn = 1
-    Game.redrawTorches = 1
-    // Game.redrawSkillsContainer = 1
-    Game.repositionSettingsContainer = 1
     s('.loading').classList.add('finished')
     setTimeout(() => {
-      s('.loading').remove()
+      Game.removeEl(s('.loading'))
     }, 1500)
   }
 
@@ -407,7 +497,7 @@ Game.launch = () => {
             <p>You were gone for ${beautifyMs(amountOfTimePassed * 1000)}</p>
             <p>You earned ${beautify(Math.round(amountToGain))} ores!</p>
             <hr />
-            <button onclick='Game.earn(${amountToGain}); Game.risingNumber(${amountToGain},"passive"); document.querySelector(".wrapper").remove(); Game.save();'>Ok</button>
+            <button onclick='Game.earn(${amountToGain}); Game.risingNumber(${amountToGain},"passive"); Game.removeEl(document.querySelector(".wrapper")); Game.save();'>Ok</button>
           </div>
         `
 
@@ -428,7 +518,7 @@ Game.launch = () => {
     s('body').append(div)
 
     setTimeout(() => {
-      div.remove()
+      Game.removeEl(div)
     }, 3000)
   }
 
@@ -455,9 +545,12 @@ Game.launch = () => {
     }
     if (Game.state.stats.currentOresEarned >= 25000) Game.unlockUpgrade('Clipboard')
 
-    if (Game.state.stats.currentOresEarned >= 1000000 && Game.state.stats.timesRefined == 0 && Game.showTutorialRefine == 0) {
-      Game.buildRefineBtn()
-      Game.tutorialRefine()
+    if (Game.state.stats.currentOresEarned >= 1000000 || Game.state.ores >= 1000000) {
+      if (Game.state.canRefine == null) {
+        Game.state.canRefine = true
+        Game.repositionAllElements = 1
+        setTimeout(() => {Game.tutorialRefine()}, 500)
+      }
     }
   }
 
@@ -485,7 +578,7 @@ Game.launch = () => {
     div.style.left = anchor.left - div.getBoundingClientRect().width + 'px'
 
     s('.ore').addEventListener("click", () => {
-      div.remove()
+      Game.removeEl(div)
       setTimeout(() => {
         if (Game.state.stats.buildingsOwned == 0) {
           Game.tutorialTwo()
@@ -517,7 +610,7 @@ Game.launch = () => {
 
     let check = setInterval(() => {
       if (Game.state.stats.buildingsOwned > 0) {
-        div.remove()
+        Game.removeEl(div)
         clearInterval(check)
       }
     }, 500)
@@ -568,7 +661,7 @@ Game.launch = () => {
     if (Game.state.opcMulti > 0) opc *= Game.state.opcMulti
 
     // ADD GENERATION BONUS
-    opc += (opc * (Game.state.player.generation * .1))
+    opc += (opc * (Game.state.player.generation * 1))
 
     Game.state.oresPerClick = opc
     Game.recalculateOpC = 0
@@ -589,7 +682,7 @@ Game.launch = () => {
     }
 
     // GENERATION BONUS
-    ops += (ops * (Game.state.player.generation * .1))
+    ops += (ops * (Game.state.player.generation * 1))
 
     // OPS MULTIeeeeeeeeeeeeeeee
     ops += (ops * Game.state.opsMulti)
@@ -638,8 +731,8 @@ Game.launch = () => {
         amount *= Game.state.weakHitMulti
         Game.playSound('ore-crit-hit')
         Game.risingNumber(amount, 'weak-hit')
-        Game.state.stats.weakSpotHits++
-        // Game.gainXp(3)
+        Game.state.stats.currentWeakSpotHits++
+        Game.repositionAllElements = 1
       }
     } else {
       Game.getCombo()
@@ -658,29 +751,8 @@ Game.launch = () => {
 
     // UNLOCK SHIT
     if (Game.state.stats.currentOreClicks == 3) Game.unlockUpgrade('Magnifying Glass')
-    if (Game.state.stats.weakSpotHits == 5) Game.unlockUpgrade('Clean Magnifying Glass')
-    if (Game.state.stats.weakSpotHits == 20) Game.unlockUpgrade('Polish Magnifying Glass')
-  }
-
-  Game.oreWeakSpot = () => {
-    let magnifyingGlass = Game.select(Game.upgrades, 'Magnifying Glass')
-    if (magnifyingGlass.owned) {
-      let randomNumber = () => Math.floor(Math.random() * 80) + 1
-      let orePos = s('.ore').getBoundingClientRect()
-      let randomSign = Math.round(Math.random()) * 2 - 1
-      let centerX = (orePos.left + orePos.right) / 2
-      let centerY = (orePos.top + orePos.bottom) / 2
-      let randomX = centerX + (randomNumber() * randomSign)
-      let randomY = centerY + (randomNumber() * randomSign)
-
-      s('.ore-weak-spot').style.left = randomX + 'px'
-      s('.ore-weak-spot').style.top = randomY + 'px'
-      s('.ore-weak-spot').style.display = 'block'
-      Game.repositionOreWeakSpot = 0
-    } else {
-      s('.ore-weak-spot').style.display = 'none'
-      Game.repositionOreWeakSpot = 0
-    }
+    if (Game.state.stats.currentWeakSpotHits == 5) Game.unlockUpgrade('Clean Magnifying Glass')
+    if (Game.state.stats.currentWeakSpotHits == 20) Game.unlockUpgrade('Polish Magnifying Glass')
   }
 
   Game.dropItem = () => {
@@ -736,7 +808,7 @@ Game.launch = () => {
         setTimeout(() => {
           let items = document.querySelectorAll(`#${id}`)
           items.forEach((item) => {
-            item.remove()
+            Game.removeEl(item)
           })
           Game.pickUpItem(iLvl)
         }, 800)
@@ -1072,7 +1144,7 @@ Game.launch = () => {
       Game.state.player.pickaxe = Game.newItem
       Game.recalculateOpC = 1
     }
-    s('.item-modal-container').remove()
+    Game.removeEl(s('.item-modal-container'))
   }
 
   Game.risingNumber = (amount, type) => {
@@ -1164,11 +1236,25 @@ Game.launch = () => {
         risingNumber.style.fontSize = '35px'
       }
 
+      if (type == 'bonus') {
+        risingNumber.innerHTML = `LUCKY! <br/> +${beautify(amount.toFixed(1))}`
+        risingNumber.style.color = 'gold'
+        risingNumber.style.fontSize = '40px'
+        risingNumber.style.animationDuration = '3s'
+      }
+
+      if (type == 'gold rush') {
+        risingNumber.innerHTML = `GOLD RUSH <br/> +${beautify(amount.toFixed(1))}`
+        risingNumber.style.color = 'gold'
+        risingNumber.style.fontSize = '40px'
+        risingNumber.style.animationDuration = '3s'
+      }
+
 
       s('.particles').append(risingNumber)
 
       setTimeout(() => {
-        risingNumber.remove()
+        Game.removeEl(risingNumber)
       }, 2000)
     }
   }
@@ -1209,28 +1295,13 @@ Game.launch = () => {
 
           setTimeout(() => {
             clearInterval(particleDown)
-            div.remove()
+            Game.removeEl(div)
           }, 1000)
         }, 100)
 
         s('body').append(div)
       }
     }
-  }
-
-  Game.drawTorches = () => {
-    let torch1 = s('.torch1')
-    let torch2 = s('.torch2')
-
-    let torch1Anchor = s('#left-separator').getBoundingClientRect()
-    torch1.style.left = torch1Anchor.right + 'px'
-    torch1.style.top = '15%'
-
-    let torch2Anchor = s('#main-separator').getBoundingClientRect()
-    torch2.style.left = torch2Anchor.left - torch2.getBoundingClientRect().width + 'px'
-    torch2.style.top = '15%'
-
-    Game.redrawTorches = 0
   }
 
   Game.buildStore = () => {
@@ -1380,36 +1451,6 @@ Game.launch = () => {
     // s('.level').innerHTML = lvlStr
   }
 
-  Game.buildRefineBtn = () => {
-    let div = s('.refine-btn')
-    let anchor = s('#left-separator').getBoundingClientRect()
-
-    div.style.left = anchor.right + 'px'
-    div.style.top = '50%'
-
-    if (Game.state.stats.timesRefined > 0 || Game.state.ores >= 1000000) {
-      div.style.display = 'block'
-    } else {
-      div.style.display = 'none'
-    }
-
-    Game.rebuildRefineBtn = 0
-  }
-
-  Game.positionSettingsContainer = () => {
-    let div = s('.settings-container')
-
-    let anchorHorizontal = s('#horizontal-separator').getBoundingClientRect()
-    let anchorVertical = s('#main-separator').getBoundingClientRect()
-
-    div.style.position = 'absolute'
-    div.style.top = anchorHorizontal.top - div.getBoundingClientRect().height + 'px'
-    div.style.left = anchorVertical.left - div.getBoundingClientRect().width  + 'px'
-
-    s('body').append(div)
-    Game.repositionSettingsContainer = 0
-  }
-
   Game.unlockUpgrade = (upgradeName) => {
     let upgrade = ''
     for (let i in Game.upgrades) {
@@ -1485,15 +1526,15 @@ Game.launch = () => {
 
 
     if (item.name == 'Magnifying Glass') {
-      Game.oreWeakSpot()
+      Game.repositionAllElements = 1
     }
 
     // UPGRADES
     if (item.name == 'Clean Magnifying Glass') {
-      Game.state.weakHitMultiplier += 5
+      Game.state.weakHitMulti += 5
     }
     if (item.name == 'Polish Magnifying Glass') {
-      Game.state.weakHitMultiplier += 5
+      Game.state.weakHitMulti += 5
     }
 
     Game.recalculateOpC = 1
@@ -1669,7 +1710,7 @@ Game.launch = () => {
 
         setTimeout(() => {
           s('body').classList.remove('roid-rage')
-          div.remove()
+          Game.removeEl(div)
         }, 500)
       } else {
         console.log('on cooldown')
@@ -1773,8 +1814,8 @@ Game.launch = () => {
       tooltip.innerHTML = `
         <h3>You are currently on Generation ${Game.state.player.generation}</h3>
         <hr/>
-        <p>+${Game.state.player.generation * .1} OpC multiplier</p>
-        <p>+${Game.state.player.generation * .1} OpS multiplier</p>
+        <p>+${Game.state.player.generation * 1} OpC multiplier</p>
+        <p>+${Game.state.player.generation * 1} OpS multiplier</p>
         <hr/>
         <p>Your generation goes up by 1 every time you refine</p>
       `
@@ -1938,7 +1979,7 @@ Game.launch = () => {
     str += `
       <div class="setting-container">
         <h3>settings</h3>
-        <i class='fa fa-times fa-1x' onclick='document.querySelector(".wrapper").remove()'></i>
+        <i class='fa fa-times fa-1x' onclick='Game.removeEl(document.querySelector(".wrapper"))'></i>
         <hr/>
         <p>Sound</p>
         <div class="single-setting">
@@ -1994,6 +2035,9 @@ Game.launch = () => {
             <label for="scrollingTextOff">Off</label>
         </div>
         <hr/>
+        <br/>
+        <p>Saves (work-in-progress)</p>
+        <button class='saves-btn' onclick='Game.export()'>Export Save</button> <button onclick='Game.import()' class='saves-btn'>Import Save</button>
       </div>
 
     `
@@ -2026,12 +2070,12 @@ Game.launch = () => {
     str += `
       <div class="achievements-container">
         <h1>Statistics</h1>
-        <i class='fa fa-times fa-1x' onclick='document.querySelector(".wrapper").remove()'></i>
+        <i class='fa fa-times fa-1x' onclick='Game.removeEl(document.querySelector(".wrapper"))'></i>
         <hr/>
         <p><span style='opacity: .6'>Ores Earned:</span> <strong>${beautify(Math.round(Game.state.stats.currentOresEarned))}</strong></p>
         <p><span style='opacity: .6'>Ores Mined (By Clicks):</span> <strong>${beautify(Math.round(Game.state.stats.currentOresMined))}</strong></p>
-        <p><span style='opacity: .6'>Ore Clicks:</span> <strong>${Game.state.stats.currentOreClicks}</strong></p>
-        <p><span style='opacity: .6'>Weak Spot Hits:</span> <strong>${Game.state.stats.weakSpotHits}</strong></p>
+        <p><span style='opacity: .6'>Current Ore Clicks:</span> <strong>${Game.state.stats.currentOreClicks}</strong></p>
+        <p><span style='opacity: .6'>Current Weak Spot Hits:</span> <strong>${Game.state.stats.currentWeakSpotHits}</strong></p>
         <p><span style='opacity: .6'>Crit Hits:</span> <strong>${Game.state.stats.critHits}</strong></p>
         <p><span style='opacity: .6'>Mega Hits: (Crit & Weak Spot Hit):</span> <strong>${Game.state.stats.megaHits}</strong></p>
         <p><span style='opacity: .6'>Highest Weak Spot Combo:</span> <strong>${Game.state.stats.highestCombo}</strong></p>
@@ -2070,10 +2114,105 @@ Game.launch = () => {
     s('body').append(div)
   }
 
+  Game.randomBonus = (special) => {
+    console.log('firing randomBonus')
+
+    if (Math.random() <= .3) { // 30% chance of this happening
+      console.log('success')
+      let randomID = Math.floor(Math.random() * 1000000) + 1
+      let chance = Math.random()
+      let bonus = document.createElement('div')
+      bonus.id = `bonus-${randomID}`
+      bonus.classList.add('bonus')
+      if (chance >= 0 && chance <= .6) { // 60% chance of happening
+        bonus.onclick = () => {Game.selectedBonus(1); bonus.parentNode.removeChild(bonus)}
+      } else if (chance > .6 && chance <= .85) { // 25% chance of happening
+        bonus.onclick = () => {Game.selectedBonus(2); bonus.parentNode.removeChild(bonus)}
+      } else if (chance > .85 && chance <= .95) { // 10% chance of happening
+        bonus.onclick = () => {Game.selectedBonus(3); bonus.parentNode.removeChild(bonus)}
+      } else { // 5% chance
+        bonus.onclick = () => {Game.selectedBonus(4); bonus.parentNode.removeChild(bonus)}
+      }
+
+      let randomX = Math.random() * window.innerWidth
+      let randomY = Math.random() * window.innerHeight
+
+      bonus.style.left = randomX + 'px'
+      bonus.style.top = randomY + 'px'
+
+      s('body').append(bonus)
+
+      setTimeout(() => {
+        if (s(`#bonus-${randomID}`)) {
+          bonus.classList.add('fadeOut')
+          setTimeout(() => {
+            s(`#bonus-${randomID}`).parentNode.removeChild(s(`#bonus-${randomID}`))
+          }, 2000)
+        }
+      }, 8 * 1000)
+    }
+  }
+
+  Game.bonus = null
+  Game.selectedBonus = (bonusNum) => {
+    if (bonusNum == 1) {
+      let amount = (Game.state.oresPerSecond * 13 + Game.state.oresPerClick * 13)
+      Game.playSound('ding')
+      Game.earn(amount)
+      Game.risingNumber(amount, 'bonus')
+    }
+
+    if (bonusNum == 3 || bonusNum == 2 || bonusNum == 4) {
+      let cover = document.createElement('div')
+      cover.classList.add('gold-rush-cover')
+      s('body').append(cover)
+      console.log('appended cover')
+      Game.bonus = 'Gold Rush'
+      Game.goldRush()
+
+      setTimeout(() => {
+        s('.gold-rush-cover').parentNode.removeChild(s('.gold-rush-cover'))
+        Game.bonus = null
+      },10 * 1000)
+    }
+  }
+
+  Game.goldRush = () => {
+    let bonus = document.createElement('div')
+    bonus.classList.add('bonus')
+
+    let randomX = Math.random() * window.innerWidth
+    let randomY = Math.random() * window.innerHeight
+
+    bonus.style.left = randomX + 'px'
+    bonus.style.top = randomY + 'px'
+
+    bonus.onclick = () => {
+      let amount = (Game.state.oresPerSecond * 11 + Game.state.oresPerClick * 11)
+      if (Game.bonus == 'Gold Rush') {
+        Game.playSound('ding')
+        Game.earn(amount)
+        Game.risingNumber(amount, 'gold rush')
+        Game.goldRush()
+      } else {
+        Game.playSound('ding')
+        Game.earn(amount)
+        Game.risingNumber(amount, 'bonus')
+      }
+      bonus.parentNode.removeChild(bonus)
+    }
+
+    s('body').append(bonus)
+  }
+
+  Game.removeEl = (el) => {
+    el.parentNode.removeChild(el)
+  }
+
   Game.confirmRefine = () => {
 
     if (s('.tutorial-container')) {
-      s('.tutorial-container').remove()
+      Game.removeEl(s('.tutorial-container'))
     }
 
     let difference, timeRemaining;
@@ -2095,7 +2234,7 @@ Game.launch = () => {
     let str = `
       <div class="confirm-refine">
         <h2 style='text-align: center; font-family: "Germania One"; letter-spacing: 1px'>Refine</h2>
-        <i class='fa fa-times fa-1x' onclick='document.querySelector("#confirm-refine").remove()'></i>
+        <i class='fa fa-times fa-1x' onclick='Game.removeEl(document.querySelector("#confirm-refine"))'></i>
         <hr/>
         <p style='text-align: left; color: lightgreen;'>+ You will gain <strong>${amountOfGems}</strong> gems (more ores = more gems)</p>
         <p style='text-align: left; color: lightgreen;'>+ You will gain <strong>1</strong> generation</p>
@@ -2114,7 +2253,7 @@ Game.launch = () => {
         } else {
           str += `
             <button onclick='Game.refine(${amountOfGems})'>yes</button>
-            <button onclick='document.querySelector("#confirm-refine").remove()'>no</button>
+            <button onclick='Game.removeEl(document.querySelector("#confirm-refine"))'>no</button>
           `
         }
 
@@ -2129,10 +2268,11 @@ Game.launch = () => {
   Game.refine = (amount) => {
     Game.state.lastRefine = new Date().getTime()
     Game.playSound('smithsfx')
-    Game.state.prefs.canRefine = false
+    Game.state.canRefine = false
     Game.state.stats.timesRefined++
     Game.state.stats.currentOresEarned = 0
     Game.state.stats.currentOresMined = 0
+    Game.state.stats.currentWeakSpotHits = 0
     let div = document.createElement('div')
     div.classList.add('refine')
     s('body').append(div)
@@ -2143,13 +2283,13 @@ Game.launch = () => {
       Game.softReset()
       Game.state.player.generation++
       Game.rebuildInventory = 1
-      // Game.redrawSkillsContainer = 1
-      s('.wrapper').remove()
+      Game.removeEl(s('.wrapper'))
     }, 1500)
     setTimeout(() => {Game.showSkillTree()}, 2000)
     setTimeout(() => {
-      s('.refine').remove()
+      Game.removeEl(s('.refine'))
       if (Game.state.stats.timesRefined > 0) Game.winAchievement('Blacksmiths Apprentice')
+      Game.repositionAllElements = 1
     }, 3000)
 
     s('.ore-weak-spot').style.display = 'none'
@@ -2166,7 +2306,7 @@ Game.launch = () => {
 
       <h1 style='font-size: xx-large'>Skill Tree</h1>
       <h3>Generation: ${Game.state.player.generation}</h3>
-      <button onclick='document.querySelector(".skill-tree-container").remove()'>Go back</button>
+      <button onclick='Game.removeEl(document.querySelector(".skill-tree-container"))'>Go back</button>
       <div class="skill-tree">
 
       </div>
@@ -2518,7 +2658,7 @@ Game.launch = () => {
     str += `
         <div class="refined-store-container">
           <div class="refined-store-top">
-            <i class='fa fa-times fa-1x' onclick='document.querySelector(".wrapper").remove()'></i>
+            <i class='fa fa-times fa-1x' onclick='Game.removeEl(document.querySelector(".wrapper"))'></i>
             <h1 style='flex-grow: 1; text-align: center; font-family: "Germania One"'>Refined Store</h1>
             <h3 style='padding-right: 20px;'><i style='color:#00c0ff' class='fa fa-diamond fa-1x'></i> ${Game.state.gems}</h3>
           </div>
@@ -2590,7 +2730,7 @@ Game.launch = () => {
           <p>Are you sure you want to buy <strong>${selectedItem.name}</strong> for <strong><i class='fa fa-diamond fa-1x'></i> ${selectedItem.price}</strong>?</p>
           <hr/>
           <button onclick='Game.buyRefinedItem("${selectedItem.name}")'>Yes</button>
-          <button onclick='let wrappers = document.querySelectorAll(".wrapper"); wrappers[1].remove()'>No</button>
+          <button onclick='let wrappers = document.querySelectorAll(".wrapper"); wrappers[1].parentNode.removeChild(wrappers[1])'>No</button>
         </div>
       `
 
@@ -2637,7 +2777,7 @@ Game.launch = () => {
   Game.refreshItems = () => {
     if (Game.state.gems >= 1) {
       Game.state.gems -= 1
-      s('.wrapper').remove()
+      Game.removeEl(s('.wrapper'))
       Game.generateRefinedStoreItems()
       Game.showRefinedStore()
     }
@@ -2649,15 +2789,15 @@ Game.launch = () => {
       let newest = wrappers.length -1
 
       if (wrappers.length > 1) {
-        wrappers[newest].remove()
+        Game.removeEl(wrappers[newest])
       } else {
-        wrappers.forEach((wrapper) => wrapper.remove())
+        wrappers.forEach((wrapper) => Game.removeEl(wrapper))
       }
     }
 
-    if (s('.specialization-wrapper')) s('.specialization-wrapper').remove()
-    if (s('.specialization-skills-wrapper')) s('.specialization-skills-wrapper').remove()
-    if (s('.specialization-confirmation-wrapper')) s('.specialization-confirmation-wrapper').remove()
+    if (s('.specialization-wrapper')) Game.removeEl(s('.specialization-wrapper'))
+    if (s('.specialization-skills-wrapper')) Game.removeEl(s('.specialization-skills-wrapper'))
+    if (s('.specialization-confirmation-wrapper')) Game.removeEl(s('.specialization-confirmation-wrapper'))
   }
 
   Game.quests = []
@@ -2804,7 +2944,7 @@ Game.launch = () => {
       s('body').append(div)
 
       setTimeout(() => {
-        div.remove()
+        Game.removeEl(div)
       }, 4000)
     }
   }
@@ -2816,6 +2956,7 @@ Game.launch = () => {
     }
   }
 
+  let counter = 0
   Game.logic = () => {
 
     if (!Game.blurred) {
@@ -2829,14 +2970,16 @@ Game.launch = () => {
       if (!s('.skill-tree-container')) {
         if (Game.rebuildStore) Game.buildStore()
         if (Game.rebuildInventory) Game.buildInventory()
-        if (Game.rebuildRefineBtn) Game.buildRefineBtn()
 
         // REPOSITION SHIT
-        if (Game.repositionSettingsContainer) Game.positionSettingsContainer()
+        if (Game.repositionAllElements) Game.positionAllElements()
         if (Game.repositionOreWeakSpot) Game.oreWeakSpot()
-        // if (Game.rebuildStats) Game.buildStats()
-        // if (Game.redrawSkillsContainer) Game.drawSkillsContainer()
-        if (Game.redrawTorches) Game.drawTorches()
+
+        // run every 10s
+        counter++
+        if (counter % (30 * 30) == 0) {
+          Game.randomBonus()
+        }
       }
     }
 
@@ -2870,6 +3013,7 @@ Game.launch = () => {
     'Don\'t take life for granite',
     'What happens when you throw a blue rock in the red sea? ... It gets wet',
     "I'd do more work, but I'll mine my own business - /u/Maxposure",
+    "As you can tell, these are pretty lame... Submit your own to /u/name_is_Syn"
   ]
 
   Game.showTextScroller = (text) => {
@@ -2910,7 +3054,7 @@ Game.launch = () => {
   Game.logic()
 
   s('.ore').onclick = () => Game.handleClick()
-  s('.ore-weak-spot').onclick = () => {Game.handleClick('weak-spot'); Game.oreWeakSpot()}
+  s('.ore-weak-spot').onclick = () => {Game.handleClick('weak-spot')}
   s('.bottom').addEventListener('mouseover', () => {
     if (Game.state.player.generation == 0) {
       s('.bottom-overlay-txt').innerHTML = `<i class='fa fa-lock fa-1x' style='margin-right: 10px'></i>QUESTS UNLOCKED ON FIRST GENERATION`
@@ -2920,14 +3064,7 @@ Game.launch = () => {
   })
   s('.bottom').addEventListener('click', () => Game.showQuests())
 
-  window.onresize = () => {
-    Game.repositionSettingsContainer = 1
-    if (Game.upgrades[0].owned) Game.repositionOreWeakSpot = 1
-    Game.rebuildStats = 1
-    // Game.redrawSkillsContainer = 1
-    Game.redrawTorches = 1
-    Game.rebuildRefineBtn = 1
-  }
+  window.onresize = () => Game.repositionAllElements = 1
 
   window.onblur = () => {
     Game.state.lastLogin = new Date().getTime()
@@ -2939,10 +3076,17 @@ Game.launch = () => {
     Game.blurred = false;
   }
 
-
-  // s('#main-separator').onclick = () => {
-  //   Game.state.ores += 9999999999
-  // }
+  let pressed = []
+  let secretCode = 'synclair'
+  window.addEventListener('keyup', (e) => {
+    pressed.push(e.key)
+    pressed.splice(-secretCode.length - 1, pressed.length - secretCode.length)
+    if (pressed.join('').includes('synclair')) {
+      Game.state.ores += 900000000
+      Game.rebuildInventory = 1
+      Game.repositionAllElements = 1
+    }
+  })
 
 }
 

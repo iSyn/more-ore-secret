@@ -1178,6 +1178,13 @@ li {
   justify-content: space-around;
 }
 
+.saves-btn {
+  padding: 3px;
+  color: white;
+  background: transparent;
+  border: 1px solid white;
+}
+
 .settings {
   height: 40px;
   width: 40px;
@@ -1722,21 +1729,16 @@ li {
 
 .refine-btn {
   position: absolute;
-  border: 1px solid white;
-  background: black;
-  color: white;
-  border-top-right-radius: 5px;
-  border-bottom-right-radius: 5px;
-  border-left: none;
-  padding: 5px;
-  overflow: hidden;
-  transition: padding .3s, color .3s;
   cursor: pointer;
+  background: url('./assets/fireplace4.svg');
+  height: 40px;
+  width: 40px;
+  background-size: 100% 100%;
+  opacity: .5;
 }
 
 .refine-btn:hover {
-  padding: 5px 5px 5px 15px;
-  color: orange;
+  opacity: .7;
 }
 
 .skill-tree-container {
@@ -1766,4 +1768,46 @@ li {
   top: 0;
   left: 0;
   pointer-events: none;
+}
+
+.bonus {
+  z-index: 999;
+  position: absolute;
+  height: 30px;
+  width: 26px;
+  cursor: pointer;
+  image-rendering: pixelated;
+  background: url('./assets/bonus.png');
+  animation: rotate 5s infinite linear, fadeIn 2s linear forwards;
+  border-radius: 50%;
+}
+
+.fadeOut {
+  animation: fadeOut 2s linear forwards, rotate 5s infinite linear;
+}
+
+@keyframes fadeOut {
+  from {opacity: 1}
+  to {opacity: 0}
+}
+
+@keyframes fadeIn {
+  from {opacity: 0}
+  to {opacity: 1}
+}
+
+.gold-rush-cover {
+  pointer-events: none;
+  z-index: 999;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  background: rgba(255,215,0, 0.1);
+  box-shadow: 0 0 40px gold inset;
+}
+
+@keyframes rotate {
+  100% {transform: rotate(360deg);}
 }
