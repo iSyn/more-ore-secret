@@ -351,13 +351,19 @@ Game.launch = () => {
   Game.import = () => {
     let save = prompt('Enter save code')
 
-    if (save.length > 2000) {
-      console.log(save.length)
-      let newState = JSON.parse(atob(save))
-      Game.state = newState
-      Game.save()
-      location.reload()
+    try {
+      if (save.length > 1500) {
+        let newState = JSON.parse(atob(save))
+        Game.state = newState
+        Game.save()
+        location.reload()
+      } else {
+        console.log('not a valid save')
+      }
+    } catch (err) {
+      console.log('not a valid save')
     }
+
   }
 
   Game.save = () => {
