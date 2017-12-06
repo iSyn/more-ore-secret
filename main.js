@@ -274,10 +274,10 @@ Game.launch = () => {
 
   Game.load = () => {
 
-    console.log(window.location)
-    if (window.location.hostname != 'synclairwang.com') {
-      window.location.replace('http://synclairwang.com/more-ore')
-    }
+    // console.log(window.location)
+    // if (window.location.hostname != 'synclairwang.com') {
+    //   window.location.replace('http://synclairwang.com/more-ore')
+    // }
 
     if (localStorage.getItem('state') !== null) {
       console.log('SAVE FILE FOUND')
