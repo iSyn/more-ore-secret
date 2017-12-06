@@ -363,7 +363,6 @@ Game.launch = () => {
     } catch (err) {
       console.log('not a valid save')
     }
-
   }
 
   Game.save = () => {
@@ -377,6 +376,11 @@ Game.launch = () => {
   }
 
   Game.load = () => {
+    Game.upgrades = []
+    Game.buildings = []
+    Game.skills = []
+    Game.achievements = []
+    Game.quests = []
 
     if (localStorage.getItem('state') !== null) {
       console.log('SAVE FILE FOUND')
@@ -409,8 +413,9 @@ Game.launch = () => {
       console.log('LOADING SAVE COMPLETE')
 
     } else {
-      console.log('NO SAVE FILE. LOADING BASE ITEMS', items)
+      console.log('NO SAVE FILE')
 
+      // BUILD ITEMS
       items.forEach((item) => {
         new Item(item)
       })
@@ -423,6 +428,11 @@ Game.launch = () => {
       // BUILD ACHIEVEMENTS
       achievements.forEach((achievement) => {
         new Achievement(achievement)
+      })
+
+      // BUILD QUESTS
+      quests.forEach((quest) => {
+        new Quest(quest)
       })
 
       Game.tutorialOne()
@@ -730,6 +740,7 @@ Game.launch = () => {
   }
 
   Game.handleClick = (type) => {
+
     let amount = Game.state.oresPerClick
     if (type) {
       if (type == 'weak-spot') {
@@ -755,10 +766,170 @@ Game.launch = () => {
 
     // CHECK CLICK RELATED ACHIEVEMENTS
 
+    Game.recentlyClicked = 0;
+
     // UNLOCK SHIT
     if (Game.state.stats.currentOreClicks == 3) Game.unlockUpgrade('Magnifying Glass')
     if (Game.state.stats.currentWeakSpotHits == 5) Game.unlockUpgrade('Clean Magnifying Glass')
     if (Game.state.stats.currentWeakSpotHits == 20) Game.unlockUpgrade('Polish Magnifying Glass')
+  }
+
+  Game.risingNumber = (amount, type) => {
+    if (Game.state.prefs.risingNumbers == true) {
+      let mouseX = (s('.ore').getBoundingClientRect().left + s('.ore').getBoundingClientRect().right)/2
+      let mouseY = (s('.ore').getBoundingClientRect().top + s('.ore').getBoundingClientRect().bottom)/2
+      if (event) {
+        mouseX = event.clientX
+        mouseY = event.clientY
+      }
+      let randomNumber = Math.floor(Math.random() * 20) + 1
+      let randomSign = Math.round(Math.random()) * 2 - 1
+      let randomMouseX = mouseX + (randomNumber * randomSign)
+
+      let risingNumber = document.createElement('div')
+      risingNumber.classList.add('rising-number')
+      if (amount) risingNumber.innerHTML = `+${beautify(amount.toFixed(1))}`
+      risingNumber.style.left = randomMouseX + 'px'
+      risingNumber.style.top = mouseY + 'px'
+
+      risingNumber.style.position = 'absolute'
+      risingNumber.style.fontSize = '15px'
+      risingNumber.style.animation = 'risingNumber 2s ease-out'
+      risingNumber.style.animationFillMode = 'forwards'
+      risingNumber.style.pointerEvents = 'none'
+      risingNumber.style.color = 'white'
+
+      if (type == 'weak-hit') {
+        risingNumber.style.fontSize = '30px'
+      }
+
+      if (type == 'crit-hit') {
+        risingNumber.style.fontSize = '25px'
+      }
+
+      if (type == 'level') {
+        risingNumber.style.fontSize = 'x-large'
+        risingNumber.innerHTML = 'LEVEL UP'
+      }
+
+      if (type == 'spendMoney') {
+        risingNumber.style.fontSize = 'xx-large'
+        risingNumber.style.color = 'red'
+        risingNumber.innerHTML = '-$'
+      }
+
+      if (type == 'spendGems') {
+        risingNumber.style.fontSize = 'xx-large'
+        risingNumber.style.color = 'red'
+        risingNumber.style.zIndex = 9999999
+        risingNumber.innerHTML = '-<i style="color: red" class="fa fa-diamond fa-1x"></i>'
+      }
+
+      if (type == 'combo') {
+        risingNumber.style.fontSize = 'xx-large'
+        risingNumber.style.color = getRandomColor()
+        risingNumber.style.animationDuration = '3s'
+        risingNumber.innerHTML = `${Game.state.stats.currentCombo} hit combo`
+      }
+
+      if (type == 'mega-crit') {
+        risingNumber.style.fontSize = '60px'
+        risingNumber.style.color = 'lightcyan'
+        risingNumber.style.animationDuration = '3.5s'
+      }
+
+      if (type == 'heavy-smash') {
+        risingNumber.style.left = (s('.ore').getBoundingClientRect().left + s('.ore').getBoundingClientRect().right)/2 + 'px'
+        risingNumber.style.top = (s('.ore').getBoundingClientRect().top + s('.ore').getBoundingClientRect().bottom)/2 + 'px'
+        risingNumber.style.animationDuration = '3s'
+        risingNumber.style.fontSize = '50px'
+        risingNumber.style.color = 'crimson'
+      }
+
+      if (type == 'auto-miner') {
+        risingNumber.style.left = (s('.ore').getBoundingClientRect().left + s('.ore').getBoundingClientRect().right)/2 + (randomNumber * randomSign) + 'px'
+        risingNumber.style.top = (s('.ore').getBoundingClientRect().top + s('.ore').getBoundingClientRect().bottom)/2 + 'px'
+      }
+
+      if (type == 'buildings') {
+        risingNumber.style.left = (s('.ore').getBoundingClientRect().left + s('.ore').getBoundingClientRect().right)/2 + (randomNumber * randomSign) + 'px'
+        risingNumber.style.top = (s('.ore').getBoundingClientRect().top + s('.ore').getBoundingClientRect().bottom)/2 + 'px'
+        risingNumber.style.animation = 'risingNumberBuildings 2s ease-out'
+        risingNumber.style.opacity = '.4'
+      }
+
+      if (type == 'passive') {
+        risingNumber.innerHTML = `+${beautify(amount.toFixed(1))}`
+        risingNumber.style.fontSize = '35px'
+      }
+
+      if (type == 'bonus') {
+        risingNumber.innerHTML = `LUCKY! <br/> +${beautify(amount.toFixed(1))}`
+        risingNumber.style.color = 'gold'
+        risingNumber.style.fontSize = '40px'
+        risingNumber.style.animationDuration = '3s'
+      }
+
+      if (type == 'gold rush') {
+        risingNumber.innerHTML = `GOLD RUSH <br/> +${beautify(amount.toFixed(1))}`
+        risingNumber.style.color = 'gold'
+        risingNumber.style.fontSize = '40px'
+        risingNumber.style.animationDuration = '3s'
+      }
+
+
+      s('.particles').append(risingNumber)
+
+      setTimeout(() => {
+        Game.removeEl(risingNumber)
+      }, 2000)
+    }
+  }
+
+  Game.drawRockParticles = () => {
+    if (Game.state.prefs.rockParticles == true) {
+      for (let i = 0; i < 3; i++) {
+        let div = document.createElement('div')
+        div.classList.add('particle')
+        div.style.background = 'lightgrey'
+        let x = event.clientX
+        let y = event.clientY
+
+        div.style.left = x + 'px'
+        div.style.top = y + 'px'
+
+        let particleY = y
+        let particleX = x
+
+        let randomNumber = Math.random()
+        let randomSign = Math.round(Math.random()) * 2 - 1
+
+        let particleUp = setInterval(() => {
+          particleX += randomNumber * randomSign
+          particleY -= 1
+          div.style.top = particleY + 'px'
+          div.style.left = particleX + 'px'
+        }, 10)
+
+        setTimeout(() => {
+          clearInterval(particleUp)
+
+          let particleDown = setInterval(() => {
+            particleX += randomNumber * randomSign / 2
+            particleY += 1.5
+            div.style.top = particleY + 'px'
+            div.style.left = particleX + 'px'
+          }, 10)
+
+          setTimeout(() => {
+            clearInterval(particleDown)
+            Game.removeEl(div)
+          }, 1000)
+        }, 100)
+
+        s('body').append(div)
+      }
+    }
   }
 
   Game.dropItem = () => {
@@ -1153,163 +1324,6 @@ Game.launch = () => {
     Game.removeEl(s('.item-modal-container'))
   }
 
-  Game.risingNumber = (amount, type) => {
-    if (Game.state.prefs.risingNumbers == true) {
-      let mouseX = (s('.ore').getBoundingClientRect().left + s('.ore').getBoundingClientRect().right)/2
-      let mouseY = (s('.ore').getBoundingClientRect().top + s('.ore').getBoundingClientRect().bottom)/2
-      if (event) {
-        mouseX = event.clientX
-        mouseY = event.clientY
-      }
-      let randomNumber = Math.floor(Math.random() * 20) + 1
-      let randomSign = Math.round(Math.random()) * 2 - 1
-      let randomMouseX = mouseX + (randomNumber * randomSign)
-
-      let risingNumber = document.createElement('div')
-      risingNumber.classList.add('rising-number')
-      if (amount) risingNumber.innerHTML = `+${beautify(amount.toFixed(1))}`
-      risingNumber.style.left = randomMouseX + 'px'
-      risingNumber.style.top = mouseY + 'px'
-
-      risingNumber.style.position = 'absolute'
-      risingNumber.style.fontSize = '15px'
-      risingNumber.style.animation = 'risingNumber 2s ease-out'
-      risingNumber.style.animationFillMode = 'forwards'
-      risingNumber.style.pointerEvents = 'none'
-      risingNumber.style.color = 'white'
-
-      if (type == 'weak-hit') {
-        risingNumber.style.fontSize = '30px'
-      }
-
-      if (type == 'crit-hit') {
-        risingNumber.style.fontSize = '25px'
-      }
-
-      if (type == 'level') {
-        risingNumber.style.fontSize = 'x-large'
-        risingNumber.innerHTML = 'LEVEL UP'
-      }
-
-      if (type == 'spendMoney') {
-        risingNumber.style.fontSize = 'xx-large'
-        risingNumber.style.color = 'red'
-        risingNumber.innerHTML = '-$'
-      }
-
-      if (type == 'spendGems') {
-        risingNumber.style.fontSize = 'xx-large'
-        risingNumber.style.color = 'red'
-        risingNumber.style.zIndex = 9999999
-        risingNumber.innerHTML = '-<i style="color: red" class="fa fa-diamond fa-1x"></i>'
-      }
-
-      if (type == 'combo') {
-        risingNumber.style.fontSize = 'xx-large'
-        risingNumber.style.color = getRandomColor()
-        risingNumber.style.animationDuration = '3s'
-        risingNumber.innerHTML = `${Game.state.stats.currentCombo} hit combo`
-      }
-
-      if (type == 'mega-crit') {
-        risingNumber.style.fontSize = '60px'
-        risingNumber.style.color = 'lightcyan'
-        risingNumber.style.animationDuration = '3.5s'
-      }
-
-      if (type == 'heavy-smash') {
-        risingNumber.style.left = (s('.ore').getBoundingClientRect().left + s('.ore').getBoundingClientRect().right)/2 + 'px'
-        risingNumber.style.top = (s('.ore').getBoundingClientRect().top + s('.ore').getBoundingClientRect().bottom)/2 + 'px'
-        risingNumber.style.animationDuration = '3s'
-        risingNumber.style.fontSize = '50px'
-        risingNumber.style.color = 'crimson'
-      }
-
-      if (type == 'auto-miner') {
-        risingNumber.style.left = (s('.ore').getBoundingClientRect().left + s('.ore').getBoundingClientRect().right)/2 + (randomNumber * randomSign) + 'px'
-        risingNumber.style.top = (s('.ore').getBoundingClientRect().top + s('.ore').getBoundingClientRect().bottom)/2 + 'px'
-      }
-
-      if (type == 'buildings') {
-        risingNumber.style.left = (s('.ore').getBoundingClientRect().left + s('.ore').getBoundingClientRect().right)/2 + (randomNumber * randomSign) + 'px'
-        risingNumber.style.top = (s('.ore').getBoundingClientRect().top + s('.ore').getBoundingClientRect().bottom)/2 + 'px'
-        risingNumber.style.animation = 'risingNumberBuildings 2s ease-out'
-        risingNumber.style.opacity = '.4'
-      }
-
-      if (type == 'passive') {
-        risingNumber.innerHTML = `+${beautify(amount.toFixed(1))}`
-        risingNumber.style.fontSize = '35px'
-      }
-
-      if (type == 'bonus') {
-        risingNumber.innerHTML = `LUCKY! <br/> +${beautify(amount.toFixed(1))}`
-        risingNumber.style.color = 'gold'
-        risingNumber.style.fontSize = '40px'
-        risingNumber.style.animationDuration = '3s'
-      }
-
-      if (type == 'gold rush') {
-        risingNumber.innerHTML = `GOLD RUSH <br/> +${beautify(amount.toFixed(1))}`
-        risingNumber.style.color = 'gold'
-        risingNumber.style.fontSize = '40px'
-        risingNumber.style.animationDuration = '3s'
-      }
-
-
-      s('.particles').append(risingNumber)
-
-      setTimeout(() => {
-        Game.removeEl(risingNumber)
-      }, 2000)
-    }
-  }
-
-  Game.drawRockParticles = () => {
-    if (Game.state.prefs.rockParticles == true) {
-      for (let i = 0; i < 3; i++) {
-        let div = document.createElement('div')
-        div.classList.add('particle')
-        div.style.background = 'lightgrey'
-        let x = event.clientX
-        let y = event.clientY
-        div.style.left = x + 'px'
-        div.style.top = y + 'px'
-
-        let particleY = y
-        let particleX = x
-
-        let randomNumber = Math.random()
-        let randomSign = Math.round(Math.random()) * 2 - 1
-
-        let particleUp = setInterval(() => {
-          particleX += randomNumber * randomSign
-          particleY -= 1
-          div.style.top = particleY + 'px'
-          div.style.left = particleX + 'px'
-        }, 10)
-
-        setTimeout(() => {
-          clearInterval(particleUp)
-
-          let particleDown = setInterval(() => {
-            particleX += randomNumber * randomSign / 2
-            particleY += 1.5
-            div.style.top = particleY + 'px'
-            div.style.left = particleX + 'px'
-          }, 10)
-
-          setTimeout(() => {
-            clearInterval(particleDown)
-            Game.removeEl(div)
-          }, 1000)
-        }, 100)
-
-        s('body').append(div)
-      }
-    }
-  }
-
   Game.buildStore = () => {
     let str = ''
     str += `
@@ -1609,169 +1623,6 @@ Game.launch = () => {
       s('.ore-hp').innerHTML = '100%'
     }
     s('.ore-hp').innerHTML = `${oreHpPercentage.toFixed(0)}%`
-  }
-
-  Game.skills = []
-  let Skill = function(skill) {
-    this.name = skill.name
-    this.img = skill.img
-    this.fillerTxt = skill.fillerTxt
-    this.desc = skill.desc
-    this.locked = skill.locked
-    this.generationLv = skill.generationLv
-    this.cooldown = skill.cooldown
-
-    this.cooldownTimer = skill.cooldownTimer || null
-
-    Game.skills.push(this)
-  }
-
-  let skills = [
-    {
-      name: 'Pickaxe Proficiency',
-      type: 'passive',
-      tier: 1,
-      img: 'pickaxe-proficiency',
-      desc: 'Permanantly increase your OpC by 30%',
-      fillerTxt: 'wip',
-      locked: 0
-    },
-    {
-      name: 'Management Training',
-      type: 'passive',
-      tier: 1,
-      img: 'wip',
-      desc: 'Permanantly increase your OpS by 10%',
-      fillerTxt: 'wip',
-      locked: 0
-    },
-  ]
-
-  Game.drawSkillsContainer = () => {
-    let div = s('.active-skills-container')
-    let anchorTop = s('.inventory-section').getBoundingClientRect()
-    let anchorRight = s('#main-separator').getBoundingClientRect()
-
-    s('body').append(div)
-
-    div.style.display = 'flex'
-    div.style.top = anchorTop.bottom + 20 + 'px'
-    div.style.marginTop = '10px'
-    div.style.left = anchorRight.left - div.getBoundingClientRect().width + 'px'
-
-    // Game.redrawSkillsContainer = 0
-    Game.drawActiveSkills()
-  }
-
-  Game.drawActiveSkills = () => {
-    let str = ''
-
-    for (let i in Game.skills) {
-      if (skills[i].generationLv <= Game.state.player.generation) { // IF ITS NOT LOCKED
-        str += `<div class='active-skill' style='background-image: url("./assets/${skills[i].img}.png"); cursor: pointer' onmouseover='Game.showTooltip(${i}, null, "skill", null)' onclick='Game.useSkill(${i})' onmouseout='Game.hideTooltip()' ></div>`
-      } else {
-        str += `<div class='active-skill' style='background-image: url("./assets/${skills[i].img}.png"); cursor: not-allowed; filter: brightness(0)' onmouseover='Game.showTooltip(${i}, null, "skill", null)' onmouseout='Game.hideTooltip()' ></div>`
-      }
-    }
-    s('.active-skills-area').innerHTML = str
-  }
-
-  Game.useSkill = (id) => {
-
-    let skill = Game.skills[id]
-    let now = new Date().getTime()
-
-    Game.hideTooltip()
-
-    if (skill.name == 'Heavy Smash') {
-      if (!skill.cooldownTimer || now > skill.cooldownTimer) {
-        Game.winAchievement('Hulk Smash')
-        Game.playSound('heavy-smash')
-
-        skill.cooldownTimer = (skill.cooldown * 60 * 1000) + new Date().getTime()
-
-        let orePos = s('.ore').getBoundingClientRect()
-
-
-        let div = document.createElement('div')
-        div.classList.add('heavy-smash-wrapper')
-        div.innerHTML = ` <div class="heavy-smash"></div>`
-
-        s('body').append(div)
-
-        div.classList.add('heavy-smash-anim')
-
-        s('.heavy-smash').style.left = (orePos.left + orePos.right) / 2 + 'px'
-        s('.heavy-smash').style.top = ((orePos.top + orePos.bottom) / 2) - ((s('.heavy-smash').getBoundingClientRect().top + s('.heavy-smash').getBoundingClientRect().bottom) / 2) + 'px'
-
-        s('body').classList.add('roid-rage')
-
-        // DO DAMAGE
-        let amount = Math.ceil(Game.state.oreHp/2.9)
-        Game.earn(amount)
-        Game.updatePercentage(amount)
-        Game.risingNumber(amount, 'heavy-smash')
-
-        // if (Game.skills['RoidRage'].inUse == true) Game.winAchievement('Roided Smash')
-
-        setTimeout(() => {
-          s('body').classList.remove('roid-rage')
-          Game.removeEl(div)
-        }, 500)
-      } else {
-        console.log('on cooldown')
-      }
-
-    }
-    // if (skill.name == 'Roid Rage') {
-    //   if (skill.inUse == false && skill.currentCooldown <= 0) {
-    //     Game.winAchievement('RAOOARARRWR')
-    //     skill.inUse = true
-    //     skill.currentCooldown = skill.cooldown * 60
-    //     calculateSkillCooldown()
-    //     setTimeout(() => {
-    //       skill.inUse = false
-    //     }, 10000)
-
-    //     let div = document.createElement('div')
-    //     div.style.width = '100vw'
-    //     div.style.height = '100vh'
-    //     div.style.position = 'absolute'
-    //     div.style.top = '0px'
-    //     div.style.background = 'darkred'
-    //     div.style.opacity = '0.2'
-    //     div.style.zindex = '99999'
-    //     div.style.pointerEvents = 'none'
-    //     s('body').classList.add('roid-rage')
-
-    //     s('body').append(div)
-
-    //     setTimeout(() => {
-    //       div.remove()
-    //       s('body').classList.remove('roid-rage')
-    //     }, 1000 * 10)
-    //   }
-    // }
-    // if (skill.name == 'Auto-Miner 5000') {
-    //   if (skill.currentCooldown <= 0) {
-    //     Game.winAchievement('Beep Boop')
-    //     skill.currentCooldown = skill.cooldown * 60
-    //     calculateSkillCooldown()
-    //     let autoMiner = setInterval(() => {
-    //       console.log('running')
-    //       let amount = calculateOPC()
-    //       earn(amount)
-    //       playSound('ore-hit')
-    //       updatePercentage(amount)
-    //       risingNumber(amount, 'auto-miner')
-    //     }, 1000 / 15)
-
-    //     setTimeout(() => {
-    //       clearInterval(autoMiner)
-    //     }, 1000 * 15)
-    //   }
-    // }
-    // drawActiveSkills()
   }
 
   Game.showTooltip = (itemInfo, anchorPoint, type, stat) => {
@@ -2174,6 +2025,7 @@ Game.launch = () => {
       s('body').append(cover)
       console.log('appended cover')
       Game.bonus = 'Gold Rush'
+      Game.playSound('ding')
       Game.goldRush()
 
       setTimeout(() => {
@@ -2806,34 +2658,6 @@ Game.launch = () => {
     if (s('.specialization-confirmation-wrapper')) Game.removeEl(s('.specialization-confirmation-wrapper'))
   }
 
-  Game.quests = []
-
-  let Quest = function(obj) {
-    this.name = obj.name
-    this.functionName = obj.name.replace(/ /g,'')
-    this.timesCompleted = 0
-    this.desc = obj.desc
-    this.locked = obj.locked
-    this.img = obj.img
-    this.completionTime = obj.completionTime
-    this.completionTimeTxt = obj.completionTimeTxt
-
-    Game.quests.push(this)
-  }
-
-  new Quest({
-    name: 'Abandoned Mineshaft',
-    locked: 0,
-    desc: 'Traverse into an abandoned mineshaft for hopes of greater rewards',
-    img: 'wip.png',
-    completionTime: 30,
-    completionTimeTxt: '30 minutes'
-  })
-  new Quest({name: 'Darkest Dungeon', locked: 1, desc: 'wip.png', img: 'wip.png'})
-  new Quest({name: 'Test name', locked: 2, desc: 'wip.png', img: 'wip.png'})
-  new Quest({name: 'Test name 2', locked: 2, desc: 'wip.png', img: 'wip.png'})
-  new Quest({name: 'Test name 3', locked: 2, desc: 'wip.png', img: 'wip.png'})
-
   Game.showQuests = () => {
     if (Game.state.player.generation >= 1) {
       let div = document.createElement('div')
@@ -2919,8 +2743,6 @@ Game.launch = () => {
     s('body').append(div)
   }
 
-  Game.achievements = []
-
   Game.winAchievement = (achievementName) => {
     let selectedAchievement;
     for (let i in Game.achievements) {
@@ -3000,9 +2822,6 @@ Game.launch = () => {
 
   setInterval(() => {Game.save()}, 1000 * 60) // save every minute
 
-  Game.buildings = []
-  Game.upgrades = []
-
   Game.resetItems = () => {
     console.log('resetItems', items)
     Game.buildings = []
@@ -3060,7 +2879,7 @@ Game.launch = () => {
   Game.logic()
 
   s('.ore').onclick = () => Game.handleClick()
-  s('.ore-weak-spot').onclick = () => {Game.handleClick('weak-spot')}
+  s('.ore-weak-spot').onclick = () => Game.handleClick('weak-spot')
   s('.bottom').addEventListener('mouseover', () => {
     if (Game.state.player.generation == 0) {
       s('.bottom-overlay-txt').innerHTML = `<i class='fa fa-lock fa-1x' style='margin-right: 10px'></i>QUESTS UNLOCKED ON FIRST GENERATION`
