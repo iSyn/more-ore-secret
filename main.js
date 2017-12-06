@@ -2940,9 +2940,9 @@ Game.launch = () => {
   }
 
 
-  s('#main-separator').onclick = () => {
-    Game.state.ores += 9999999999
-  }
+  // s('#main-separator').onclick = () => {
+  //   Game.state.ores += 9999999999
+  // }
 
 }
 
