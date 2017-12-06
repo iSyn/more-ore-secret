@@ -325,6 +325,16 @@ Game.launch = () => {
       Game.tutOneActive = true
     }
 
+    // PRELOAD ORE IMAGES
+    for (i = 1; i <= 4; i++) { // ore 1, ore 2, ore 3, ore 4
+      for (j = 1; j <= 5; j++) { // 1-1, 1-2, 1-2, 1-4, 1-5 etc
+        let preloadImage = new Image()
+        preloadImage.src = `./assets/ore${i}-${j}.png`
+      }
+    }
+
+    console.log('finished loading images')
+
     // PREREQUISITES
     Game.updatePercentage(0)
     // Game.playBgm()
