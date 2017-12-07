@@ -740,7 +740,6 @@ Game.launch = () => {
   }
 
   Game.handleClick = (type) => {
-
     let amount = Game.state.oresPerClick
     if (type) {
       if (type == 'weak-spot') {
@@ -887,48 +886,55 @@ Game.launch = () => {
   }
 
   Game.drawRockParticles = () => {
+    // let mouse = {x: event.clientX, y: event.clientY}
+
+    // particles.push(new Particle(mouse.x, mouse.y))
+
     if (Game.state.prefs.rockParticles == true) {
-      for (let i = 0; i < 3; i++) {
-        let div = document.createElement('div')
-        div.classList.add('particle')
-        div.style.background = 'lightgrey'
-        let x = event.clientX
-        let y = event.clientY
+      let allParticles = document.querySelectorAll('.particle')
+      if (allParticles.length >= 10) {
+        let selectedEl = allParticles[0]
+        Game.removeEl(selectedEl)
+      }
+      let div = document.createElement('div')
+      div.classList.add('particle')
+      div.style.background = 'lightgrey'
+      let x = event.clientX
+      let y = event.clientY
 
-        div.style.left = x + 'px'
-        div.style.top = y + 'px'
+      div.style.left = x + 'px'
+      div.style.top = y + 'px'
 
-        let particleY = y
-        let particleX = x
+      let particleY = y
+      let particleX = x
 
-        let randomNumber = Math.random()
-        let randomSign = Math.round(Math.random()) * 2 - 1
+      let randomNumber = Math.random()
+      let randomSign = Math.round(Math.random()) * 2 - 1
 
-        let particleUp = setInterval(() => {
-          particleX += randomNumber * randomSign
-          particleY -= 1
+      let particleUp = setInterval(() => {
+        particleX += randomNumber * randomSign
+        particleY -= 1
+        div.style.top = particleY + 'px'
+        div.style.left = particleX + 'px'
+      }, 10)
+
+      setTimeout(() => {
+        clearInterval(particleUp)
+
+        let particleDown = setInterval(() => {
+          particleX += randomNumber * randomSign / 2
+          particleY += 1.5
           div.style.top = particleY + 'px'
           div.style.left = particleX + 'px'
         }, 10)
 
         setTimeout(() => {
-          clearInterval(particleUp)
+          clearInterval(particleDown)
+          // Game.removeEl(div)
+        }, 1000)
+      }, 100)
 
-          let particleDown = setInterval(() => {
-            particleX += randomNumber * randomSign / 2
-            particleY += 1.5
-            div.style.top = particleY + 'px'
-            div.style.left = particleX + 'px'
-          }, 10)
-
-          setTimeout(() => {
-            clearInterval(particleDown)
-            Game.removeEl(div)
-          }, 1000)
-        }, 100)
-
-        s('body').append(div)
-      }
+      s('body').append(div)
     }
   }
 
