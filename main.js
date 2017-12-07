@@ -930,7 +930,7 @@ Game.launch = () => {
 
         setTimeout(() => {
           clearInterval(particleDown)
-          // Game.removeEl(div)
+          if (div.parentNode) div.parentNode.removeChild(div)
         }, 1000)
       }, 100)
 
