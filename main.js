@@ -863,7 +863,7 @@ Game.launch = () => {
       }
 
       if (type == 'bonus') {
-        risingNumber.innerHTML = `LUCKY! <br/> +${beautify(amount.toFixed(1))}`
+        risingNumber.innerHTML = `+${beautify(amount.toFixed(1))}`
         risingNumber.style.color = 'gold'
         risingNumber.style.fontSize = '40px'
         risingNumber.style.animationDuration = '3s'
@@ -872,6 +872,7 @@ Game.launch = () => {
       if (type == 'gold rush') {
         risingNumber.innerHTML = `GOLD RUSH <br/> +${beautify(amount.toFixed(1))}`
         risingNumber.style.color = 'gold'
+        risingNumber.style.textAlign = 'center'
         risingNumber.style.fontSize = '40px'
         risingNumber.style.animationDuration = '3s'
       }
@@ -1345,6 +1346,8 @@ Game.launch = () => {
       let item = Game.sortedUpgrades[i]
       if (item.hidden == 0) {
         hasContent = 1
+            // <div class="upgrade-item" id="${item.name.replace(/\s/g , "-")}" onclick='Game.sortedUpgrades[${i}].buy(); Game.hideTooltip();' onmouseover="Game.showTooltip({name: '${item.name}', type: '${item.type}s'}); Game.playSound('itemhover')" onmouseout="Game.hideTooltip()" style='background: url(./assets/${item.pic}); background-size: 100%;'></div>
+
         str += `
           <div class="upgrade-item-container" style='background-color: #b56535'>
             <div class="upgrade-item" id="${item.name.replace(/\s/g , "-")}" onclick='Game.sortedUpgrades[${i}].buy(); Game.hideTooltip();' onmouseover="Game.showTooltip({name: '${item.name}', type: '${item.type}s'}); Game.playSound('itemhover')" onmouseout="Game.hideTooltip()" style='background: url(./assets/${item.pic}); background-size: 100%;'></div>
@@ -1470,7 +1473,7 @@ Game.launch = () => {
     // }
 
     s('.generation').innerHTML = `Generation: ${Game.state.player.generation}`
-    s('.generation').onmouseover = () => Game.showTooltip(null, null, 'generation', null)
+    s('.generation').onmouseover = () => Game.showTooltip({type: 'generation'})
     s('.generation').onmouseout = () => Game.hideTooltip()
 
     Game.rebuildInventory = 0
@@ -1631,44 +1634,256 @@ Game.launch = () => {
     s('.ore-hp').innerHTML = `${oreHpPercentage.toFixed(0)}%`
   }
 
-  Game.showTooltip = (itemInfo, anchorPoint, type, stat) => {
+  // Game.showTooltip = (itemInfo, anchorPoint, type, stat) => {
 
-    let item;
+  //   let item;
 
-    // IF ITEM, GRAB SELECTED ITEM
-    if (itemInfo) {
-      for (let i in Game[`${itemInfo.type}`]) {
-        if (itemInfo.name == Game[`${itemInfo.type}`][i].name) item = Game[`${itemInfo.type}`][i]
-      }
-    }
+  //   // IF ITEM, GRAB SELECTED ITEM
+  //   if (itemInfo) {
+  //     for (let i in Game[`${itemInfo.type}`]) {
+  //       if (itemInfo.name == Game[`${itemInfo.type}`][i].name) item = Game[`${itemInfo.type}`][i]
+  //     }
+  //   }
 
+  //   let tooltip = s('.tooltip')
+  //   let anchor = s('#main-separator').getBoundingClientRect()
+
+  //   tooltip.classList.add('tooltip-container')
+  //   tooltip.style.display = 'block'
+  //   tooltip.style.width = '300px'
+  //   tooltip.style.background = '#222'
+  //   tooltip.style.border = '1px solid white'
+  //   tooltip.style.color = 'white'
+  //   tooltip.style.position = 'absolute'
+  //   tooltip.style.left = anchor.left - tooltip.getBoundingClientRect().width + 'px'
+  //   tooltip.style.zIndex = '9999'
+  //   tooltip.style.textAlign = 'left'
+
+  //   if (document.querySelector('#anchor-point')) {
+  //     tooltip.style.top = s('#anchor-point').getBoundingClientRect().bottom + 'px'
+  //   } else {
+  //     tooltip.style.top = s('.stat-sheet').getBoundingClientRect().top + 'px'
+  //   }
+
+  //   if (anchorPoint) {
+  //     tooltip.style.top = anchorPoint.getBoundingClientRect().top + 'px'
+  //   } else {
+  //     tooltip.style.top = event.clientY + 'px'
+  //   }
+
+  //   if (type == 'generation') {
+  //     tooltip.style.textAlign = 'center'
+  //     tooltip.style.width = 'auto'
+  //     tooltip.style.left = event.clientX - tooltip.getBoundingClientRect().width/2 + 'px'
+  //     tooltip.style.top = event.clientY + 20 + 'px'
+  //     tooltip.style.minWidth = '150px'
+  //     tooltip.innerHTML = `
+  //       <h3>You are currently on Generation ${Game.state.player.generation}</h3>
+  //       <hr/>
+  //       <p>+${Game.state.player.generation * 1} OpC multiplier</p>
+  //       <p>+${Game.state.player.generation * 1} OpS multiplier</p>
+  //       <hr/>
+  //       <p>Your generation goes up by 1 every time you refine</p>
+  //     `
+  //   } else if (type == 'stat') {
+  //     anchor = s('.stats-container-content-wrapper').getBoundingClientRect()
+  //     tooltip.style.width = 'auto'
+  //     tooltip.style.left = anchor.right + 'px'
+  //     tooltip.style.top = event.clientY + 'px'
+
+  //     if (stat == 'str') {
+  //       tooltip.innerHTML = `
+  //         <h3>Strength</h3>
+  //         <hr/>
+  //         <p>Increases your OpC</p>
+  //         <p>Increases your critical damage multiplier</p>
+  //       `
+  //     }
+  //     if (stat == 'dex') {
+  //       tooltip.innerHTML = `
+  //         <h3>Dexterity</h3>
+  //         <hr/>
+  //         <p>Increases your OpC slightly</p>
+  //         <p>Increases your critical strike chance slightly</p>
+  //       `
+  //       if (Game.state.player.dex > 0) {
+  //         tooltip.innerHTML += `
+  //           <hr/>
+  //           <p>Crit Chance: ${Math.floor((Math.pow((Game.state.player.dex/(Game.state.player.dex+10)), 2)) * 100) / 2}%
+  //         `
+  //       }
+  //     }
+  //     if (stat == 'int') {
+  //       tooltip.innerHTML = `
+  //         <h3>Intelligence</h3>
+  //         <hr/>
+  //         <p>Increases item drop chance</p>
+  //         <p>Increases store item output slightly</p>
+  //         <p>Lowers shop prices slightly</p>
+  //       `
+  //     }
+  //     if (stat == 'luk') {
+  //       tooltip.innerHTML = `
+  //         <h3>Luck</h3>
+  //         <hr/>
+  //         <p>Increases item rarity percentage</p>
+  //         <p>Increases item drop chance</p>
+  //         <p>Chance for critical strikes</p>
+  //       `
+  //     }
+  //     if (stat == 'cha') {
+  //       tooltip.innerHTML = `
+  //         <h3>Charisma</h3>
+  //         <hr/>
+  //         <p>Increases item output slightly</p>
+  //         <p>Lowers shop prices</p>
+  //       `
+  //     }
+  //     if (stat == 'spec') {
+  //       tooltip.innerHTML = `
+  //         <p>Unlocked at Level 5</p>
+  //       `
+  //     }
+  //   } else if (type == 'skill') {
+  //     let now = new Date().getTime()
+  //     let skill = Game.skills[itemInfo]
+  //     let timeRemaining = (skill.cooldownTimer - now)
+  //     let anchorRight = s('#skill-separator').getBoundingClientRect()
+  //     let mouseY = event.clientY
+
+  //     tooltip.style.left = anchorRight.left - tooltip.getBoundingClientRect().width + 'px'
+  //     tooltip.style.top = mouseY + 'px'
+
+  //     if (Game.state.player.generation < skill.generationLv) {
+  //       tooltip.innerHTML = `
+  //         <p>Unlocked at Generation ${skill.generationLv}</p>
+  //       `
+  //     } else {
+  //       let str = `
+  //         <h3>${skill.name}</h3>
+  //         <hr/>
+  //         <p>${skill.desc}</p>
+  //       `
+  //       if (timeRemaining > 0) str += `<p>Cooldown: ${beautifyMs(timeRemaining)}</p>`
+  //       console.log(timeRemaining)
+  //       tooltip.innerHTML = str
+  //     }
+  //   } else if (type == 'equipment'){
+  //     anchor = s('.stats-container-content-wrapper').getBoundingClientRect()
+  //     tooltip.style.width = 'auto'
+  //     tooltip.style.left = anchor.right + 'px'
+  //     tooltip.style.top = event.clientY + 'px'
+  //     tooltip.style.minWidth = '150px'
+  //     if (stat == 'pickaxe') {
+  //       tooltip.innerHTML = `
+  //         <p style='text-align: center; font-size: small;'><i>Currently Equipped</i></p>
+  //         <hr/>
+  //         <h3 class='${Game.state.player.pickaxe.rarity}' style='text-align: center'>${Game.state.player.pickaxe.name}</h3>
+  //         <hr/>
+  //         <p style='text-align: center'><i>${Game.state.player.pickaxe.rarity}</i></p>
+  //         <hr/>
+  //         <p>Damage: ${Game.state.player.pickaxe.damage}</p>
+  //       `
+  //       if (Game.state.player.pickaxe.prefixStat) {
+  //         tooltip.innerHTML += `
+  //           <p>${Game.state.player.pickaxe.prefixStat}: ${Game.state.player.pickaxe.prefixStatVal}</p>
+  //         `
+  //       }
+  //     } else if (stat == 'accessory'){
+  //       tooltip.innerHTML = `
+  //           <p>You don't have a trinket</p>
+  //       `
+  //     }
+  //   } else {
+  //     tooltip.innerHTML = `
+  //     <div class="tooltip-top">
+  //       <img src="./assets/${item.pic}" height='40px' alt="" />
+  //       <h3 style='flex-grow: 1'>${item.name}</h3>
+  //       <p>${beautify(item.price.toFixed(0))} ores</p>
+  //     </div>
+  //     <div class="tooltip-bottom">
+  //       <hr />
+  //       <p>${item.desc}</p>
+  //       `
+  //       if (item.type == 'building') {
+  //         if (item.owned > 0 && item.owned < 2) {
+  //           tooltip.innerHTML += `
+  //             <hr />
+  //             <p>Each ${item.name} generates ${beautify(item.production)} OpS</p>
+  //             <p><span class='bold'>${item.owned}</span> ${item.name} generating <span class='bold'>${beautify((item.production * item.owned).toFixed(1))}</span> ores per second</p>
+  //           `
+  //         } else {
+  //           tooltip.innerHTML += `
+  //             <hr />
+  //             <p>Each ${item.name} generates ${beautify(item.production)} OpS</p>
+  //             <p><span class='bold'>${item.owned}</span> ${item.namePlural} generating <span class='bold'>${beautify((item.production * item.owned).toFixed(1))}</span> ores per second</p>
+  //           `
+  //         }
+  //       }
+
+
+  //       tooltip.innerHTML += `
+  //       <hr/>
+  //       <p style='font-size: small; opacity: .6; float: right; padding-top: 5px;'><i>${item.fillerQuote}</i></p>
+
+  //     </div>
+  //   `
+  //   }
+  //   tooltip.style.animation = 'tooltip .3s'
+  // }
+
+  Game.showTooltip = (obj) => {
+    console.log('tooltip', obj)
     let tooltip = s('.tooltip')
+
     let anchor = s('#main-separator').getBoundingClientRect()
 
     tooltip.classList.add('tooltip-container')
     tooltip.style.display = 'block'
-    tooltip.style.width = '300px'
-    tooltip.style.background = '#222'
-    tooltip.style.border = '1px solid white'
-    tooltip.style.color = 'white'
-    tooltip.style.position = 'absolute'
+
     tooltip.style.left = anchor.left - tooltip.getBoundingClientRect().width + 'px'
-    tooltip.style.zIndex = '9999'
-    tooltip.style.textAlign = 'left'
+    tooltip.style.top = event.clientY + 'px'
 
-    if (document.querySelector('#anchor-point')) {
-      tooltip.style.top = s('#anchor-point').getBoundingClientRect().bottom + 'px'
-    } else {
-      tooltip.style.top = s('.stat-sheet').getBoundingClientRect().top + 'px'
+
+    if (obj.type == 'buildings' || obj.type == 'upgrades') {
+      tooltip.style.textAlign = 'left'
+      tooltip.style.width = '300px'
+
+      let selectedItem = Game.select(Game[obj.type], obj.name)
+      tooltip.innerHTML = `
+        <div class="tooltip-top">
+          <img src="./assets/${selectedItem.pic}" height='40px' alt="" />
+          <h3 style='flex-grow: 1'>${selectedItem.name}</h3>
+          <p>${beautify(selectedItem.price.toFixed(0))} ores</p>
+        </div>
+        <div class="tooltip-bottom">
+          <hr />
+          <p>${selectedItem.desc}</p>
+          `
+          if (selectedItem.type == 'building') {
+            if (selectedItem.owned > 0 && selectedItem.owned < 2) {
+              tooltip.innerHTML += `
+                <hr />
+                <p>Each ${selectedItem.name} generates ${beautify(selectedItem.production)} OpS</p>
+                <p><span class='bold'>${selectedItem.owned}</span> ${selectedItem.name} generating <span class='bold'>${beautify((selectedItem.production * selectedItem.owned).toFixed(1))}</span> ores per second</p>
+              `
+            } else {
+              tooltip.innerHTML += `
+                <hr />
+                <p>Each ${selectedItem.name} generates ${beautify(selectedItem.production)} OpS</p>
+                <p><span class='bold'>${selectedItem.owned}</span> ${selectedItem.namePlural} generating <span class='bold'>${beautify((selectedItem.production * selectedItem.owned).toFixed(1))}</span> ores per second</p>
+              `
+            }
+          }
+          tooltip.innerHTML += `
+          <hr/>
+          <p style='font-size: small; opacity: .6; float: right; padding-top: 5px;'><i>${selectedItem.fillerQuote}</i></p>
+
+        </div>
+      `
     }
 
-    if (anchorPoint) {
-      tooltip.style.top = anchorPoint.getBoundingClientRect().top + 'px'
-    } else {
-      tooltip.style.top = event.clientY + 'px'
-    }
-
-    if (type == 'generation') {
+    if (obj.type == 'generation') {
       tooltip.style.textAlign = 'center'
       tooltip.style.width = 'auto'
       tooltip.style.left = event.clientX - tooltip.getBoundingClientRect().width/2 + 'px'
@@ -1682,150 +1897,21 @@ Game.launch = () => {
         <hr/>
         <p>Your generation goes up by 1 every time you refine</p>
       `
-    } else if (type == 'stat') {
-      anchor = s('.stats-container-content-wrapper').getBoundingClientRect()
-      tooltip.style.width = 'auto'
-      tooltip.style.left = anchor.right + 'px'
-      tooltip.style.top = event.clientY + 'px'
-
-      if (stat == 'str') {
-        tooltip.innerHTML = `
-          <h3>Strength</h3>
-          <hr/>
-          <p>Increases your OpC</p>
-          <p>Increases your critical damage multiplier</p>
-        `
-      }
-      if (stat == 'dex') {
-        tooltip.innerHTML = `
-          <h3>Dexterity</h3>
-          <hr/>
-          <p>Increases your OpC slightly</p>
-          <p>Increases your critical strike chance slightly</p>
-        `
-        if (Game.state.player.dex > 0) {
-          tooltip.innerHTML += `
-            <hr/>
-            <p>Crit Chance: ${Math.floor((Math.pow((Game.state.player.dex/(Game.state.player.dex+10)), 2)) * 100) / 2}%
-          `
-        }
-      }
-      if (stat == 'int') {
-        tooltip.innerHTML = `
-          <h3>Intelligence</h3>
-          <hr/>
-          <p>Increases item drop chance</p>
-          <p>Increases store item output slightly</p>
-          <p>Lowers shop prices slightly</p>
-        `
-      }
-      if (stat == 'luk') {
-        tooltip.innerHTML = `
-          <h3>Luck</h3>
-          <hr/>
-          <p>Increases item rarity percentage</p>
-          <p>Increases item drop chance</p>
-          <p>Chance for critical strikes</p>
-        `
-      }
-      if (stat == 'cha') {
-        tooltip.innerHTML = `
-          <h3>Charisma</h3>
-          <hr/>
-          <p>Increases item output slightly</p>
-          <p>Lowers shop prices</p>
-        `
-      }
-      if (stat == 'spec') {
-        tooltip.innerHTML = `
-          <p>Unlocked at Level 5</p>
-        `
-      }
-    } else if (type == 'skill') {
-      let now = new Date().getTime()
-      let skill = Game.skills[itemInfo]
-      let timeRemaining = (skill.cooldownTimer - now)
-      let anchorRight = s('#skill-separator').getBoundingClientRect()
-      let mouseY = event.clientY
-
-      tooltip.style.left = anchorRight.left - tooltip.getBoundingClientRect().width + 'px'
-      tooltip.style.top = mouseY + 'px'
-
-      if (Game.state.player.generation < skill.generationLv) {
-        tooltip.innerHTML = `
-          <p>Unlocked at Generation ${skill.generationLv}</p>
-        `
-      } else {
-        let str = `
-          <h3>${skill.name}</h3>
-          <hr/>
-          <p>${skill.desc}</p>
-        `
-        if (timeRemaining > 0) str += `<p>Cooldown: ${beautifyMs(timeRemaining)}</p>`
-        console.log(timeRemaining)
-        tooltip.innerHTML = str
-      }
-    } else if (type == 'equipment'){
-      anchor = s('.stats-container-content-wrapper').getBoundingClientRect()
-      tooltip.style.width = 'auto'
-      tooltip.style.left = anchor.right + 'px'
-      tooltip.style.top = event.clientY + 'px'
-      tooltip.style.minWidth = '150px'
-      if (stat == 'pickaxe') {
-        tooltip.innerHTML = `
-          <p style='text-align: center; font-size: small;'><i>Currently Equipped</i></p>
-          <hr/>
-          <h3 class='${Game.state.player.pickaxe.rarity}' style='text-align: center'>${Game.state.player.pickaxe.name}</h3>
-          <hr/>
-          <p style='text-align: center'><i>${Game.state.player.pickaxe.rarity}</i></p>
-          <hr/>
-          <p>Damage: ${Game.state.player.pickaxe.damage}</p>
-        `
-        if (Game.state.player.pickaxe.prefixStat) {
-          tooltip.innerHTML += `
-            <p>${Game.state.player.pickaxe.prefixStat}: ${Game.state.player.pickaxe.prefixStatVal}</p>
-          `
-        }
-      } else if (stat == 'accessory'){
-        tooltip.innerHTML = `
-            <p>You don't have a trinket</p>
-        `
-      }
-    } else {
-      tooltip.innerHTML = `
-      <div class="tooltip-top">
-        <img src="./assets/${item.pic}" height='40px' alt="" />
-        <h3 style='flex-grow: 1'>${item.name}</h3>
-        <p>${beautify(item.price.toFixed(0))} ores</p>
-      </div>
-      <div class="tooltip-bottom">
-        <hr />
-        <p>${item.desc}</p>
-        `
-        if (item.type == 'building') {
-          if (item.owned > 0 && item.owned < 2) {
-            tooltip.innerHTML += `
-              <hr />
-              <p>Each ${item.name} generates ${beautify(item.production)} OpS</p>
-              <p><span class='bold'>${item.owned}</span> ${item.name} generating <span class='bold'>${beautify((item.production * item.owned).toFixed(1))}</span> ores per second</p>
-            `
-          } else {
-            tooltip.innerHTML += `
-              <hr />
-              <p>Each ${item.name} generates ${beautify(item.production)} OpS</p>
-              <p><span class='bold'>${item.owned}</span> ${item.namePlural} generating <span class='bold'>${beautify((item.production * item.owned).toFixed(1))}</span> ores per second</p>
-            `
-          }
-        }
-
-
-        tooltip.innerHTML += `
-        <hr/>
-        <p style='font-size: small; opacity: .6; float: right; padding-top: 5px;'><i>${item.fillerQuote}</i></p>
-
-      </div>
-    `
     }
+
+    if (obj.type == 'skill') {
+      let selectedSkill = Game.select(Game.skills, obj.name)
+      tooltip.style.textAlign = 'center'
+      tooltip.style.width = '200px'
+      tooltip.style.left = event.clientX + 30 + 'px'
+      tooltip.style.top = event.clientY - tooltip.getBoundingClientRect().height/2 + 'px'
+      tooltip.innerHTML = `
+        <h3>${selectedSkill.name}</h3>
+        <hr />
+        <p>${selectedSkill.fillerTxt}</p>
+      `
+    }
+
     tooltip.style.animation = 'tooltip .3s'
   }
 
@@ -2029,8 +2115,9 @@ Game.launch = () => {
       let cover = document.createElement('div')
       cover.classList.add('gold-rush-cover')
       s('body').append(cover)
-      console.log('appended cover')
       Game.bonus = 'Gold Rush'
+      let amount = (Game.state.oresPerSecond * 11 + Game.state.oresPerClick * 11)
+      Game.risingNumber(amount, 'gold rush')
       Game.playSound('ding')
       Game.goldRush()
 
@@ -2159,6 +2246,20 @@ Game.launch = () => {
     s('.ore-weak-spot').style.display = 'none'
   }
 
+  Game.buildMiddleSkills = () => {
+    let str = `<div class="skill-tree">`
+
+    for (i in Game.skills) {
+      if (Game.skills[i].section == 2) {
+        str += `<div style='margin: 10px auto;' onmouseover='Game.showTooltip({type: "skill", name: "${Game.skills[i].name}"})' onmouseout='Game.hideTooltip()' class="skill"></div>`
+      }
+    }
+
+    str += `</div>`
+
+    return str
+  }
+
   Game.showSkillTree = () => {
     console.log('show skill tree firing')
     let div = document.createElement('div')
@@ -2166,17 +2267,28 @@ Game.launch = () => {
     div.classList.add('skill-tree-container')
     div.id = 'particles-js'
 
-    div.innerHTML = `
-
-      <h1 style='font-size: xx-large'>Skill Tree</h1>
-      <h3>Generation: ${Game.state.player.generation}</h3>
-      <button onclick='Game.removeEl(document.querySelector(".skill-tree-container"))'>Go back</button>
-      <div class="skill-tree">
-
+    str = `
+      <div class="skill-tree-container-top">
+        <h1 style='font-size: xx-large'>Skill Tree</h1>
+        <h3>Generation: ${Game.state.player.generation}</h3>
+        <button onclick='Game.removeEl(document.querySelector(".skill-tree-container"))'>Go back</button>
       </div>
 
+      <div class="skill-tree-container-bottom">
+        <div class="skill-trees">
+        `
+        str += '<div class="skill-tree"></div>'
+        str += Game.buildMiddleSkills()
+        str += '<div class="skill-tree"></div>'
 
+        str += `
+        </div>
+      </div>
     `
+
+    div.innerHTML = str
+
+
 
     s('body').append(div)
 

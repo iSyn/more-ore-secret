@@ -1,6 +1,8 @@
 let Skill = function(skill) {
   this.name = skill.name
   this.desc = skill.desc
+  this.fillerTxt = skill.fillerTxt
+  this.section = skill.section
   this.locked = skill.locked
 
   Game.skills.push(this)
@@ -8,12 +10,36 @@ let Skill = function(skill) {
 
 let skills = [
   {
-    name: 'Pickaxe Efficiency',
-    desc: 'wip',
-    locked: 0
+    name: 'The Start',
+    fillerTxt: 'Where it all began...',
+    section: 2,
+    desc: 'Unlocks quests'
   }, {
     name: 'test',
-    desc: 'test',
-    locked: 0
+    fillerTxt: 'test',
+    section: 2,
+    desc: 'test'
+  }, {
+    name: 'test2',
+    fillerTxt: 'test2',
+    section: 2,
+    desc: 'test2'
   }
 ]
+
+let prospectorSkills = [
+
+]
+
+let neutralSkills = [
+  {
+    name: 'The Start',
+    fillerTxt: 'Where it all began...'
+  }
+]
+
+let managerSkills = [
+
+]
+
+//intellectual - start with schools, i watch rick and morty
