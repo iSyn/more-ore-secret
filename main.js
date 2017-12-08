@@ -137,12 +137,16 @@ Game.launch = () => {
     opcMulti: 0,
     critHitMulti: 2,
     weakHitMulti: 5,
-    canRefine: null,
     lastLogin: null,
-    lastRefine: null,
+    canRefine: false,
 
     player: {
-      generation: 0,
+      generation: {
+        lv: 0,
+        currentXp: 0,
+        xpNeeded: 100,
+        availableSp: 0
+      },
       pickaxe: {
         name: 'Beginners Wood Pickaxe',
         rarity: 'Common',
@@ -204,7 +208,7 @@ Game.launch = () => {
     settingsContainer.style.left = anchorVertical.left - settingsContainer.getBoundingClientRect().width  + 'px'
 
     // POSITION REFINE BUTTON
-    if (Game.state.canRefine == true || Game.state.stats.timesRefined > 0) {
+    if (Game.state.canRefine) {
       let refineBtn = s('.refine-btn')
       let anchorVertical = s('#left-separator').getBoundingClientRect()
       let anchorHorizontal = s('#horizontal-separator').getBoundingClientRect()
@@ -561,11 +565,11 @@ Game.launch = () => {
     }
     if (Game.state.stats.currentOresEarned >= 25000) Game.unlockUpgrade('Clipboard')
 
-    if (Game.state.stats.currentOresEarned >= 1000000 || Game.state.ores >= 1000000) {
-      if (Game.state.canRefine == null) {
+    if (Game.state.player.generation.lv == 0 && Game.state.canRefine == false) {
+      if (Game.state.stats.currentOresEarned >= 1000000 || Game.state.ores >= 1000000) {
         Game.state.canRefine = true
         Game.repositionAllElements = 1
-        setTimeout(() => {Game.tutorialRefine()}, 500)
+        setTimeout(() => {Game.tutorialRefine()}, 1000)
       }
     }
   }
@@ -634,25 +638,26 @@ Game.launch = () => {
 
   Game.showTutorialRefine = 0
   Game.tutorialRefine = () => {
-    console.log('tutorialRefine running')
-    Game.showTutorialRefine = 1
-    let div = document.createElement('div')
+    if (Game.showTutorialRefine == 0 && Game.state.player.generation.lv == 0) {
+      Game.showTutorialRefine = 1
+      let div = document.createElement('div')
 
-    div.classList.add('tutorial-container')
-    div.innerHTML = `
-      <div class="tutorial-arrow-left"></div>
-      <div class="tutorial-text">
-        <p>You can now refine!</p>
-        <p>It is highly recommended you refine now</p>
-      </div>
-    `
+      div.classList.add('tutorial-container')
+      div.innerHTML = `
+        <div class="tutorial-arrow-left"></div>
+        <div class="tutorial-text">
+          <p>You can now refine!</p>
+          <p>It is highly recommended to refine ASAP for your first refine</p>
+        </div>
+      `
 
-    let anchor = s('.refine-btn').getBoundingClientRect()
+      let anchor = s('.refine-btn').getBoundingClientRect()
 
-    s('body').append(div)
+      s('body').append(div)
 
-    div.style.top = anchor.top - (anchor.height / 2) + 'px'
-    div.style.left = anchor.right + 'px'
+      div.style.top = anchor.top - (anchor.height / 2) + 'px'
+      div.style.left = anchor.right + 'px'
+    }
   }
 
   Game.calculateOpC = (type) => {
@@ -677,7 +682,7 @@ Game.launch = () => {
     if (Game.state.opcMulti > 0) opc *= Game.state.opcMulti
 
     // ADD GENERATION BONUS
-    opc += (opc * (Game.state.player.generation * 1))
+    // opc += (opc * (Game.state.player.generation.lv * 1))
 
     Game.state.oresPerClick = opc
     Game.recalculateOpC = 0
@@ -698,7 +703,7 @@ Game.launch = () => {
     }
 
     // GENERATION BONUS
-    ops += (ops * (Game.state.player.generation * 1))
+    // ops += (ops * (Game.state.player.generation.lv * 1))
 
     // OPS MULTIeeeeeeeeeeeeeeee
     ops += (ops * Game.state.opsMulti)
@@ -710,6 +715,53 @@ Game.launch = () => {
     if (Game.state.oresPerSecond >= 401000) Game.winAchievement('401k')
     if (Game.state.oresPerSecond >= 5000000) Game.winAchievement('Retirement Plan')
     if (Game.state.oresPerSecond >= 1000000000) Game.winAchievement('Hedge Fund')
+  }
+
+  Game.calculateGenerationXp = () => {
+    let xp = Math.floor(Math.cbrt(Game.state.stats.currentOresEarned))
+    // let xpCopy = xp
+    // let lvs = 0
+
+    // let xpNeeded;
+    // while (xpCopy > 0) {
+    //   console.log(xpCopy)
+    //   xpNeeded = 100 * Math.pow(1.9, lvs)
+    //   if (Game.state.player.generation.currentXp + xpCopy > xpNeeded) {
+    //     xpCopy -= (xpNeeded - Game.state.player.generation.currentXp)
+    //     lvs++
+    //   } else {
+    //     xpCopy = 0
+    //   }
+    // }
+
+    let info = {
+      xp: xp,
+      // lvs: lvs
+    }
+    return info
+  }
+
+  Game.gainGenerationXp = () => {
+
+    let gain = Game.calculateGenerationXp()
+
+    let generation = Game.state.player.generation
+
+    while (gain.xp > 0) {
+      if (generation.currentXp + gain.xp < generation.xpNeeded) { // if you dont level up
+        generation.currentXp += gain.xp
+        gain.xp = 0
+      } else { // If you level up
+        gain.xp -= (generation.xpNeeded - generation.currentXp)
+        Game.state.player.generation.xpNeeded = 100 * Math.pow(1.9, Game.state.player.generation.lv)
+        Game.gainGenerationLv()
+      }
+    }
+  }
+
+  Game.gainGenerationLv = () => {
+    Game.state.player.generation.lv++
+    Game.state.player.generation.availableSp++
   }
 
   Game.getCombo = (type) => {
@@ -1472,7 +1524,7 @@ Game.launch = () => {
     //   lvlStr += `<br/> ${Game.state.player.specialization} Level: ${Game.state.player.specializationLv} (${Game.state.player.specializationXp.toFixed(0)}/${Game.state.player.specializationXpNeeded.toFixed(0)})`
     // }
 
-    s('.generation').innerHTML = `Generation: ${Game.state.player.generation}`
+    s('.generation').innerHTML = `Generation: ${Game.state.player.generation.lv}`
     s('.generation').onmouseover = () => Game.showTooltip({type: 'generation'})
     s('.generation').onmouseout = () => Game.hideTooltip()
 
@@ -1634,206 +1686,7 @@ Game.launch = () => {
     s('.ore-hp').innerHTML = `${oreHpPercentage.toFixed(0)}%`
   }
 
-  // Game.showTooltip = (itemInfo, anchorPoint, type, stat) => {
-
-  //   let item;
-
-  //   // IF ITEM, GRAB SELECTED ITEM
-  //   if (itemInfo) {
-  //     for (let i in Game[`${itemInfo.type}`]) {
-  //       if (itemInfo.name == Game[`${itemInfo.type}`][i].name) item = Game[`${itemInfo.type}`][i]
-  //     }
-  //   }
-
-  //   let tooltip = s('.tooltip')
-  //   let anchor = s('#main-separator').getBoundingClientRect()
-
-  //   tooltip.classList.add('tooltip-container')
-  //   tooltip.style.display = 'block'
-  //   tooltip.style.width = '300px'
-  //   tooltip.style.background = '#222'
-  //   tooltip.style.border = '1px solid white'
-  //   tooltip.style.color = 'white'
-  //   tooltip.style.position = 'absolute'
-  //   tooltip.style.left = anchor.left - tooltip.getBoundingClientRect().width + 'px'
-  //   tooltip.style.zIndex = '9999'
-  //   tooltip.style.textAlign = 'left'
-
-  //   if (document.querySelector('#anchor-point')) {
-  //     tooltip.style.top = s('#anchor-point').getBoundingClientRect().bottom + 'px'
-  //   } else {
-  //     tooltip.style.top = s('.stat-sheet').getBoundingClientRect().top + 'px'
-  //   }
-
-  //   if (anchorPoint) {
-  //     tooltip.style.top = anchorPoint.getBoundingClientRect().top + 'px'
-  //   } else {
-  //     tooltip.style.top = event.clientY + 'px'
-  //   }
-
-  //   if (type == 'generation') {
-  //     tooltip.style.textAlign = 'center'
-  //     tooltip.style.width = 'auto'
-  //     tooltip.style.left = event.clientX - tooltip.getBoundingClientRect().width/2 + 'px'
-  //     tooltip.style.top = event.clientY + 20 + 'px'
-  //     tooltip.style.minWidth = '150px'
-  //     tooltip.innerHTML = `
-  //       <h3>You are currently on Generation ${Game.state.player.generation}</h3>
-  //       <hr/>
-  //       <p>+${Game.state.player.generation * 1} OpC multiplier</p>
-  //       <p>+${Game.state.player.generation * 1} OpS multiplier</p>
-  //       <hr/>
-  //       <p>Your generation goes up by 1 every time you refine</p>
-  //     `
-  //   } else if (type == 'stat') {
-  //     anchor = s('.stats-container-content-wrapper').getBoundingClientRect()
-  //     tooltip.style.width = 'auto'
-  //     tooltip.style.left = anchor.right + 'px'
-  //     tooltip.style.top = event.clientY + 'px'
-
-  //     if (stat == 'str') {
-  //       tooltip.innerHTML = `
-  //         <h3>Strength</h3>
-  //         <hr/>
-  //         <p>Increases your OpC</p>
-  //         <p>Increases your critical damage multiplier</p>
-  //       `
-  //     }
-  //     if (stat == 'dex') {
-  //       tooltip.innerHTML = `
-  //         <h3>Dexterity</h3>
-  //         <hr/>
-  //         <p>Increases your OpC slightly</p>
-  //         <p>Increases your critical strike chance slightly</p>
-  //       `
-  //       if (Game.state.player.dex > 0) {
-  //         tooltip.innerHTML += `
-  //           <hr/>
-  //           <p>Crit Chance: ${Math.floor((Math.pow((Game.state.player.dex/(Game.state.player.dex+10)), 2)) * 100) / 2}%
-  //         `
-  //       }
-  //     }
-  //     if (stat == 'int') {
-  //       tooltip.innerHTML = `
-  //         <h3>Intelligence</h3>
-  //         <hr/>
-  //         <p>Increases item drop chance</p>
-  //         <p>Increases store item output slightly</p>
-  //         <p>Lowers shop prices slightly</p>
-  //       `
-  //     }
-  //     if (stat == 'luk') {
-  //       tooltip.innerHTML = `
-  //         <h3>Luck</h3>
-  //         <hr/>
-  //         <p>Increases item rarity percentage</p>
-  //         <p>Increases item drop chance</p>
-  //         <p>Chance for critical strikes</p>
-  //       `
-  //     }
-  //     if (stat == 'cha') {
-  //       tooltip.innerHTML = `
-  //         <h3>Charisma</h3>
-  //         <hr/>
-  //         <p>Increases item output slightly</p>
-  //         <p>Lowers shop prices</p>
-  //       `
-  //     }
-  //     if (stat == 'spec') {
-  //       tooltip.innerHTML = `
-  //         <p>Unlocked at Level 5</p>
-  //       `
-  //     }
-  //   } else if (type == 'skill') {
-  //     let now = new Date().getTime()
-  //     let skill = Game.skills[itemInfo]
-  //     let timeRemaining = (skill.cooldownTimer - now)
-  //     let anchorRight = s('#skill-separator').getBoundingClientRect()
-  //     let mouseY = event.clientY
-
-  //     tooltip.style.left = anchorRight.left - tooltip.getBoundingClientRect().width + 'px'
-  //     tooltip.style.top = mouseY + 'px'
-
-  //     if (Game.state.player.generation < skill.generationLv) {
-  //       tooltip.innerHTML = `
-  //         <p>Unlocked at Generation ${skill.generationLv}</p>
-  //       `
-  //     } else {
-  //       let str = `
-  //         <h3>${skill.name}</h3>
-  //         <hr/>
-  //         <p>${skill.desc}</p>
-  //       `
-  //       if (timeRemaining > 0) str += `<p>Cooldown: ${beautifyMs(timeRemaining)}</p>`
-  //       console.log(timeRemaining)
-  //       tooltip.innerHTML = str
-  //     }
-  //   } else if (type == 'equipment'){
-  //     anchor = s('.stats-container-content-wrapper').getBoundingClientRect()
-  //     tooltip.style.width = 'auto'
-  //     tooltip.style.left = anchor.right + 'px'
-  //     tooltip.style.top = event.clientY + 'px'
-  //     tooltip.style.minWidth = '150px'
-  //     if (stat == 'pickaxe') {
-  //       tooltip.innerHTML = `
-  //         <p style='text-align: center; font-size: small;'><i>Currently Equipped</i></p>
-  //         <hr/>
-  //         <h3 class='${Game.state.player.pickaxe.rarity}' style='text-align: center'>${Game.state.player.pickaxe.name}</h3>
-  //         <hr/>
-  //         <p style='text-align: center'><i>${Game.state.player.pickaxe.rarity}</i></p>
-  //         <hr/>
-  //         <p>Damage: ${Game.state.player.pickaxe.damage}</p>
-  //       `
-  //       if (Game.state.player.pickaxe.prefixStat) {
-  //         tooltip.innerHTML += `
-  //           <p>${Game.state.player.pickaxe.prefixStat}: ${Game.state.player.pickaxe.prefixStatVal}</p>
-  //         `
-  //       }
-  //     } else if (stat == 'accessory'){
-  //       tooltip.innerHTML = `
-  //           <p>You don't have a trinket</p>
-  //       `
-  //     }
-  //   } else {
-  //     tooltip.innerHTML = `
-  //     <div class="tooltip-top">
-  //       <img src="./assets/${item.pic}" height='40px' alt="" />
-  //       <h3 style='flex-grow: 1'>${item.name}</h3>
-  //       <p>${beautify(item.price.toFixed(0))} ores</p>
-  //     </div>
-  //     <div class="tooltip-bottom">
-  //       <hr />
-  //       <p>${item.desc}</p>
-  //       `
-  //       if (item.type == 'building') {
-  //         if (item.owned > 0 && item.owned < 2) {
-  //           tooltip.innerHTML += `
-  //             <hr />
-  //             <p>Each ${item.name} generates ${beautify(item.production)} OpS</p>
-  //             <p><span class='bold'>${item.owned}</span> ${item.name} generating <span class='bold'>${beautify((item.production * item.owned).toFixed(1))}</span> ores per second</p>
-  //           `
-  //         } else {
-  //           tooltip.innerHTML += `
-  //             <hr />
-  //             <p>Each ${item.name} generates ${beautify(item.production)} OpS</p>
-  //             <p><span class='bold'>${item.owned}</span> ${item.namePlural} generating <span class='bold'>${beautify((item.production * item.owned).toFixed(1))}</span> ores per second</p>
-  //           `
-  //         }
-  //       }
-
-
-  //       tooltip.innerHTML += `
-  //       <hr/>
-  //       <p style='font-size: small; opacity: .6; float: right; padding-top: 5px;'><i>${item.fillerQuote}</i></p>
-
-  //     </div>
-  //   `
-  //   }
-  //   tooltip.style.animation = 'tooltip .3s'
-  // }
-
   Game.showTooltip = (obj) => {
-    console.log('tooltip', obj)
     let tooltip = s('.tooltip')
 
     let anchor = s('#main-separator').getBoundingClientRect()
@@ -1890,25 +1743,34 @@ Game.launch = () => {
       tooltip.style.top = event.clientY + 20 + 'px'
       tooltip.style.minWidth = '150px'
       tooltip.innerHTML = `
-        <h3>You are currently on Generation ${Game.state.player.generation}</h3>
+        <h3>You are currently on Generation ${Game.state.player.generation.lv}</h3>
         <hr/>
-        <p>+${Game.state.player.generation * 1} OpC multiplier</p>
-        <p>+${Game.state.player.generation * 1} OpS multiplier</p>
+        <p style='opacity: .4; font-size: smaller'>Generation XP: ${beautify(Math.floor(Game.state.player.generation.currentXp))}/${beautify(Math.floor(Game.state.player.generation.xpNeeded))}</p>
         <hr/>
-        <p>Your generation goes up by 1 every time you refine</p>
+        <p>+${Game.state.player.generation.lv * 1} OpC multiplier</p>
+        <p>+${Game.state.player.generation.lv * 1} OpS multiplier</p>
+        <hr/>
+        <p>You will gain ${beautify(Game.calculateGenerationXp().xp)}xp on refine </p>
       `
     }
 
     if (obj.type == 'skill') {
       let selectedSkill = Game.select(Game.skills, obj.name)
       tooltip.style.textAlign = 'center'
-      tooltip.style.width = '200px'
+      tooltip.style.width = '300px'
       tooltip.style.left = event.clientX + 30 + 'px'
       tooltip.style.top = event.clientY - tooltip.getBoundingClientRect().height/2 + 'px'
       tooltip.innerHTML = `
-        <h3>${selectedSkill.name}</h3>
+        <h2 style='font-family: "Germania One"'>${selectedSkill.name}</h2>
         <hr />
-        <p>${selectedSkill.fillerTxt}</p>
+        <p style='font-size: small'><i style='opacity: .5'>${selectedSkill.fillerTxt}</i></p>
+        <hr />
+        <div style='text-align: left'>
+          <p>Current Level: ${selectedSkill.lvl}/${selectedSkill.maxLvl}</p>
+          <p>Skill Type: ${selectedSkill.type}</p>
+          <hr />
+          <p>${selectedSkill.desc}</p>
+        </div>
       `
     }
 
@@ -2166,11 +2028,6 @@ Game.launch = () => {
       Game.removeEl(s('.tutorial-container'))
     }
 
-    let difference, timeRemaining;
-    if (Game.state.lastRefine) {
-      difference = (new Date().getTime() - Game.state.lastRefine)
-      timeRemaining = (1000 * 60 * 60) - difference
-    }
     let div = document.createElement('div')
 
     let amountOfGems = 0
@@ -2188,27 +2045,15 @@ Game.launch = () => {
         <i class='fa fa-times fa-1x' onclick='Game.removeEl(document.querySelector("#confirm-refine"))'></i>
         <hr/>
         <p style='text-align: left; color: lightgreen;'>+ You will gain <strong>${amountOfGems}</strong> gems (more ores = more gems)</p>
-        <p style='text-align: left; color: lightgreen;'>+ You will gain <strong>1</strong> generation</p>
+        <p style='text-align: left; color: lightgreen;'>+ You will gain <strong>${Game.calculateGenerationXp().xp}</strong> generation xp</p>
         <p style='text-align: left; color: #c36d6d;'>- You will lose all current ores</p>
         <p style='text-align: left; color: #c36d6d;'>- You will lose all owned buildings and upgrades</p>
         <p style='text-align: left; color: #c36d6d;'>- You will lose your current pickaxe</p>
         <hr/>
         <p style='text-align: center;'>Are you sure you want to refine?</p>
-        <p style='text-align: center; font-size: larger; margin-bottom: 5px; color: #ff2f2f;'>-You can refine once every hour-</p>
-        `
-
-        if (timeRemaining > 0 ) {
-          str += `
-            <p>TIME REMAINING UNTIL NEXT REFINE: ${beautifyMs(timeRemaining)}</p>
-          `
-        } else {
-          str += `
-            <button onclick='Game.refine(${amountOfGems})'>yes</button>
-            <button onclick='Game.removeEl(document.querySelector("#confirm-refine"))'>no</button>
-          `
-        }
-
-        str += `
+        <hr />
+        <button onclick='Game.refine(${amountOfGems})'>yes</button>
+        <button onclick='Game.removeEl(document.querySelector("#confirm-refine"))'>no</button>
       </div>
     `
     div.innerHTML = str
@@ -2217,13 +2062,8 @@ Game.launch = () => {
   }
 
   Game.refine = (amount) => {
-    Game.state.lastRefine = new Date().getTime()
     Game.playSound('smithsfx')
-    Game.state.canRefine = false
     Game.state.stats.timesRefined++
-    Game.state.stats.currentOresEarned = 0
-    Game.state.stats.currentOresMined = 0
-    Game.state.stats.currentWeakSpotHits = 0
     let div = document.createElement('div')
     div.classList.add('refine')
     s('body').append(div)
@@ -2231,8 +2071,8 @@ Game.launch = () => {
     Game.state.gems += amount
 
     setTimeout(() => {
+      Game.gainGenerationXp()
       Game.softReset()
-      Game.state.player.generation++
       Game.rebuildInventory = 1
       Game.removeEl(s('.wrapper'))
     }, 1500)
@@ -2269,8 +2109,8 @@ Game.launch = () => {
 
     str = `
       <div class="skill-tree-container-top">
-        <h1 style='font-size: xx-large'>Skill Tree</h1>
-        <h3>Generation: ${Game.state.player.generation}</h3>
+        <h1 style='font-size: xx-large; font-family: "Germania One"'>Skill Tree</h1>
+        <h3>Generation: ${Game.state.player.generation.lv}</h3>
         <button onclick='Game.removeEl(document.querySelector(".skill-tree-container"))'>Go back</button>
       </div>
 
@@ -2423,18 +2263,9 @@ Game.launch = () => {
     }
 
     Game.state.stats.currentOreClicks = 0
-
-    if (Game.state.player.specializationXpStored > 0) {
-      while (Game.state.player.specializationXp + Game.state.player.specializationXpStored > Game.state.player.specializationXpNeeded) {
-        Game.state.player.specializationXpStored -= Game.state.player.specializationXpNeeded
-        Game.state.player.specializationLv++
-        Game.state.player.specializationSp++
-        Game.state.player.specializationXp = 0
-        Game.state.player.specializationXpNeeded = Math.pow(Game.state.player.specializationXpNeeded, 1.15)
-      }
-      Game.state.player.specializationXp = Game.state.player.specializationXpStored
-      Game.state.player.specializationXpStored = 0
-    }
+    Game.state.stats.currentOresEarned = 0
+    Game.state.stats.currentOresMined = 0
+    Game.state.stats.currentWeakSpotHits = 0
 
     Game.rebuildStore = 1
     Game.recalculateOpC = 1
@@ -2777,7 +2608,7 @@ Game.launch = () => {
   }
 
   Game.showQuests = () => {
-    if (Game.state.player.generation >= 1) {
+    if (Game.state.player.generation.lv >= 1) {
       let div = document.createElement('div')
       div.classList.add('wrapper')
 
@@ -2999,7 +2830,7 @@ Game.launch = () => {
   s('.ore').onclick = () => Game.handleClick()
   s('.ore-weak-spot').onclick = () => Game.handleClick('weak-spot')
   s('.bottom').addEventListener('mouseover', () => {
-    if (Game.state.player.generation == 0) {
+    if (Game.state.player.generation.lv == 0) {
       s('.bottom-overlay-txt').innerHTML = `<i class='fa fa-lock fa-1x' style='margin-right: 10px'></i>QUESTS UNLOCKED ON FIRST GENERATION`
     } else {
       s('.bottom-overlay-txt').innerHTML = ''
@@ -3025,7 +2856,7 @@ Game.launch = () => {
     pressed.push(e.key)
     pressed.splice(-secretCode.length - 1, pressed.length - secretCode.length)
     if (pressed.join('').includes('synclair')) {
-      Game.state.ores += 900000000
+      Game.earn(1000000000000)
       Game.rebuildInventory = 1
       Game.repositionAllElements = 1
     }

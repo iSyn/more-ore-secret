@@ -829,7 +829,6 @@ body {
 }
 
 .tooltip-container {
-  /*display: flex;*/
   flex-flow: column nowrap;
   padding: 10px;
   z-index: 999;
@@ -1075,14 +1074,6 @@ li {
 .specialization-skills-xp {
   height: 100%;
   background: white;
-}
-
-.skill-tier {
-  width: 100%;
-  display: flex;
-  flex-flow: row nowrap;
-  justify-content: center;
-  position: relative;
 }
 
 .settings-container {
@@ -1697,6 +1688,7 @@ li {
   width: 33%;
   height: 100%;
   background: rgba(255, 255, 255, 0.04);
+  padding: 30px;
 }
 
 .particles-js-canvas-el {
