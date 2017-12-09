@@ -997,7 +997,8 @@ li {
 .skill {
   height: 64px;
   width: 64px;
-  border: 1px solid white;
+  /*border: 1px solid white;*/
+  background-size: 100% 100%;
   margin: 10px;
   cursor: pointer;
   background-color: grey;

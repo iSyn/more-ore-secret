@@ -5,6 +5,7 @@ let Skill = function(skill) {
   this.fillerTxt = skill.fillerTxt
   this.type = skill.type
   this.generationNeeded = skill.generationNeeded
+  skill.pic ? this.pic = skill.pic : this.pic = 'nothing'
   // skill.generationNeeded > 0 ? this.generationNeeded = skill.generationNeeded - 1 : this.generationNeeded = skill.generationNeeded
   this.section = skill.section
   this.locked = skill.locked
@@ -83,6 +84,7 @@ let skills = [
   /* Section 2 Skills */
   {
     name: 'The Start',
+    pic: 'the-start',
     fillerTxt: 'In the beginning, there was nothing. Then... ORES',
     type: 'passive',
     generationNeeded: 1,
