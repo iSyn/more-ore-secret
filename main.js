@@ -1786,7 +1786,7 @@ Game.launch = () => {
       `
 
       tooltip.style.left = event.clientX + 30 + 'px'
-      if (obj.position) {
+      if (selectedSkill.tooltipSide) {
         console.log('showing tooltip on left side of mouse')
         console.log(tooltip.getBoundingClientRect().width)
         tooltip.style.left = event.clientX - tooltip.getBoundingClientRect().width*2 - 30 + 'px'

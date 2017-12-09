@@ -4,6 +4,11 @@ let Skill = function(skill) {
   this.fillerTxt = skill.fillerTxt
   this.type = skill.type
   this.section = skill.section[0]
+
+  // for tooltip
+  this.tooltipSide = 0
+  if (this.section == 3) this.tooltipSide = 1
+
   this.row = skill.section[1]
   this.locked = skill.locked
   skill.lvl ? this.lvl = skill.lvl : this.lvl = 0
