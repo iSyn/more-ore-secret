@@ -1658,7 +1658,7 @@ li {
   padding: 5px;
   text-align: center;
   z-index: 2;
-  display: flex;
+  display: none;
   flex-flow: column nowrap;
 }
 
@@ -1689,6 +1689,9 @@ li {
   height: 100%;
   background: rgba(255, 255, 255, 0.04);
   padding: 30px;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
 }
 
 .particles-js-canvas-el {
@@ -1740,4 +1743,9 @@ li {
 
 @keyframes rotate {
   100% {transform: rotate(360deg);}
+}
+
+.row {
+  display: flex;
+  flex-flow: row nowrap;
 }

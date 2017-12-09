@@ -415,7 +415,6 @@ Game.launch = () => {
       if (Game.state.oresPerSecond > 0 && Game.state.lastLogin) Game.earnOfflineGain()
 
       console.log('LOADING SAVE COMPLETE')
-
     } else {
       console.log('NO SAVE FILE')
 
@@ -641,6 +640,7 @@ Game.launch = () => {
     if (Game.showTutorialRefine == 0 && Game.state.player.generation.lv == 0) {
       Game.showTutorialRefine = 1
       let div = document.createElement('div')
+      div.id = 'refine-tut'
 
       div.classList.add('tutorial-container')
       div.innerHTML = `
@@ -836,6 +836,12 @@ Game.launch = () => {
       let randomNumber = Math.floor(Math.random() * 20) + 1
       let randomSign = Math.round(Math.random()) * 2 - 1
       let randomMouseX = mouseX + (randomNumber * randomSign)
+
+      let allRisingNumbers = document.querySelectorAll('.rising-number')
+      if (allRisingNumbers.length > 10) {
+        let selectedEl = allRisingNumbers[0]
+        Game.removeEl(selectedEl)
+      }
 
       let risingNumber = document.createElement('div')
       risingNumber.classList.add('rising-number')
@@ -1757,21 +1763,35 @@ Game.launch = () => {
     if (obj.type == 'skill') {
       let selectedSkill = Game.select(Game.skills, obj.name)
       tooltip.style.textAlign = 'center'
-      tooltip.style.width = '300px'
-      tooltip.style.left = event.clientX + 30 + 'px'
-      tooltip.style.top = event.clientY - tooltip.getBoundingClientRect().height/2 + 'px'
+      tooltip.style.width = 'auto'
+      tooltip.style.maxWidth = '400px'
+
       tooltip.innerHTML = `
-        <h2 style='font-family: "Germania One"'>${selectedSkill.name}</h2>
-        <hr />
-        <p style='font-size: small'><i style='opacity: .5'>${selectedSkill.fillerTxt}</i></p>
-        <hr />
-        <div style='text-align: left'>
-          <p>Current Level: ${selectedSkill.lvl}/${selectedSkill.maxLvl}</p>
-          <p>Skill Type: ${selectedSkill.type}</p>
-          <hr />
-          <p>${selectedSkill.desc}</p>
+        <div style='display: flex; flex-flow: row nowrap;'>
+          <div style='min-height: 64px; height: 64px; min-width: 64px; width: 64px; border: 1px solid white; margin-right: 5px;'></div>
+          <hr style='width: 1px; flex-grow: 1; margin-right: 5px; opacity: 0.1'/>
+          <div style='flex-grow: 1'>
+            <h2 style='font-family: "Germania One"'>${selectedSkill.name}</h2>
+            <hr />
+            <p style='font-size: small'><i style='opacity: .5'>${selectedSkill.fillerTxt}</i></p>
+            <hr />
+            <div style='text-align: left'>
+              <p>Current Level: ${selectedSkill.lvl}/${selectedSkill.maxLvl}</p>
+              <p>Skill Type: ${selectedSkill.type}</p>
+              <hr />
+              <p>${selectedSkill.desc}</p>
+            </div>
+          </div>
         </div>
       `
+
+      tooltip.style.left = event.clientX + 30 + 'px'
+      if (obj.position) {
+        console.log('showing tooltip on left side of mouse')
+        console.log(tooltip.getBoundingClientRect().width)
+        tooltip.style.left = event.clientX - tooltip.getBoundingClientRect().width*2 - 30 + 'px'
+      }
+      tooltip.style.top = event.clientY - tooltip.getBoundingClientRect().height/2 + 'px'
     }
 
     tooltip.style.animation = 'tooltip .3s'
@@ -2019,14 +2039,16 @@ Game.launch = () => {
   }
 
   Game.removeEl = (el) => {
-    el.parentNode.removeChild(el)
+    try {
+      el.parentNode.removeChild(el)
+    } catch (err) {
+      //
+    }
   }
 
   Game.confirmRefine = () => {
 
-    if (s('.tutorial-container')) {
-      Game.removeEl(s('.tutorial-container'))
-    }
+    if (s('#refine-tut')) Game.removeEl(s('#refine-tut'))
 
     let div = document.createElement('div')
 
@@ -2086,13 +2108,33 @@ Game.launch = () => {
     s('.ore-weak-spot').style.display = 'none'
   }
 
-  Game.buildMiddleSkills = () => {
+  Game.buildSkillTree = (section) => {
+
+    console.log('BUILDING SECTION', section
+      )
     let str = `<div class="skill-tree">`
 
+    let amountOfRows = 1
     for (i in Game.skills) {
-      if (Game.skills[i].section == 2) {
-        str += `<div style='margin: 10px auto;' onmouseover='Game.showTooltip({type: "skill", name: "${Game.skills[i].name}"})' onmouseout='Game.hideTooltip()' class="skill"></div>`
+      if (Game.skills[i].section == section) {
+        if (Game.skills[i].row > amountOfRows) amountOfRows = Game.skills[i].row
       }
+    }
+
+    for (i = 1; i <= amountOfRows; i++) {
+      str += `<div class="row">`
+
+      for (j in Game.skills) {
+        if (Game.skills[j].row == i && Game.skills[j].section == section) {
+          if (!Game.skills[j].locked) {
+            str += `<div class="skill" onclick="Game.skills[${j}].levelUp()" onmouseover='Game.showTooltip({type: "skill", name: "${Game.skills[j].name}"})' onmouseout='Game.hideTooltip()'></div>`
+          } else {
+            str += '<div style="opacity: .2" class="skill"></div>'
+          }
+        }
+      }
+
+      str += `</div>`
     }
 
     str += `</div>`
@@ -2101,25 +2143,25 @@ Game.launch = () => {
   }
 
   Game.showSkillTree = () => {
-    console.log('show skill tree firing')
-    let div = document.createElement('div')
-
-    div.classList.add('skill-tree-container')
-    div.id = 'particles-js'
+    let div = s('.skill-tree-container')
+    // div.classList.add('skill-tree-container')
+    // div.id = 'particles-js'
+    div.style.display = 'flex'
 
     str = `
       <div class="skill-tree-container-top">
         <h1 style='font-size: xx-large; font-family: "Germania One"'>Skill Tree</h1>
         <h3>Generation: ${Game.state.player.generation.lv}</h3>
-        <button onclick='Game.removeEl(document.querySelector(".skill-tree-container"))'>Go back</button>
+        <h4>Available Sp: ${Game.state.player.generation.availableSp}</h4>
+        <button onclick='document.querySelector(".skill-tree-container").style.display="none"'>Go back</button>
       </div>
 
       <div class="skill-tree-container-bottom">
         <div class="skill-trees">
         `
-        str += '<div class="skill-tree"></div>'
-        str += Game.buildMiddleSkills()
-        str += '<div class="skill-tree"></div>'
+        str += Game.buildSkillTree(1)
+        str += Game.buildSkillTree(2)
+        str += Game.buildSkillTree(3)
 
         str += `
         </div>
@@ -2127,123 +2169,6 @@ Game.launch = () => {
     `
 
     div.innerHTML = str
-
-
-
-    s('body').append(div)
-
-    /* ---- particles.js config ---- */
-
-    particlesJS("particles-js", {
-      "particles": {
-        "number": {
-          "value": 250,
-          "density": {
-            "enable": true,
-            "value_area": 800
-          }
-        },
-        "color": {
-          "value": "#ffffff"
-        },
-        "shape": {
-          "type": "circle",
-          "stroke": {
-            "width": 0,
-            "color": "#000000"
-          },
-          "polygon": {
-            "nb_sides": 5
-          },
-          "image": {
-            "src": "img/github.svg",
-            "width": 100,
-            "height": 100
-          }
-        },
-        "opacity": {
-          "value": 0.5,
-          "random": false,
-          "anim": {
-            "enable": false,
-            "speed": 1,
-            "opacity_min": 0.1,
-            "sync": false
-          }
-        },
-        "size": {
-          "value": 2,
-          "random": true,
-          "anim": {
-            "enable": false,
-            "speed": 20,
-            "size_min": 0.1,
-            "sync": false
-          }
-        },
-        "line_linked": {
-          "enable": false,
-          "distance": 150,
-          "color": "#ffffff",
-          "opacity": 0.4,
-          "width": 1
-        },
-        "move": {
-          "enable": true,
-          "speed": 3,
-          "direction": "none",
-          "random": false,
-          "straight": false,
-          "out_mode": "out",
-          "bounce": false,
-          "attract": {
-            "enable": false,
-            "rotateX": 600,
-            "rotateY": 1200
-          }
-        }
-      },
-      "interactivity": {
-        "detect_on": "canvas",
-        "events": {
-          "onhover": {
-            "enable": false,
-            "mode": "grab"
-          },
-          "onclick": {
-            "enable": false,
-            "mode": "push"
-          },
-          "resize": false
-        },
-        "modes": {
-          "grab": {
-            "distance": 140,
-            "line_linked": {
-              "opacity": 1
-            }
-          },
-          "bubble": {
-            "distance": 400,
-            "size": 40,
-            "duration": 2,
-            "opacity": 8,
-            "speed": 3
-          },
-          "repulse": {
-            "distance": 200,
-            "duration": 0.4
-          },
-          "push": {
-            "particles_nb": 4
-          },
-          "remove": {
-            "particles_nb": 2
-          }
-        }
-      },
-      "retina_detect": true
-    });
   }
 
   Game.softReset = () => {
@@ -2744,7 +2669,7 @@ Game.launch = () => {
       Game.earn(ops)
 
       // BUILD STORE & INVENTORY
-      if (!s('.skill-tree-container')) {
+      if (s('.skill-tree-container').style.display == 'none' || s('.skill-tree-container').style.display == '') {
         if (Game.rebuildStore) Game.buildStore()
         if (Game.rebuildInventory) Game.buildInventory()
 
