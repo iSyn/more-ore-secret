@@ -1690,6 +1690,7 @@ li {
   position: absolute;
   top: 0;
   left: 0;
+  pointer-events: none;
 }
 
 .skill-trees {
@@ -1715,6 +1716,7 @@ li {
   width: 0%;
   pointer-events: none;
   transition: width .3s;
+  z-index: -1;
 }
 
 .skill-tree-1-bg {

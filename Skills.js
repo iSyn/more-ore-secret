@@ -66,17 +66,16 @@ let skills = [
     locked: 1,
     // unlockSkills: ['Heavy Smash']
     drawLines: [
-      {from: 'right', to: 'test'}
+      {from: 'right', to: 'Heavy Strike'}
     ]
   },
-
   {
-    name: 'test',
-    fillerTxt: 'test',
-    type: 'test',
+    name: 'Heavy Strike',
+    fillerTxt: 'I fear not the man who has practiced 10,000 pickaxe swings once, but I fear the man who has practiced one pickaxe swing 10,000 times. - Michael Scott',
+    type: 'active',
     generationNeeded: 5,
     section: 1,
-    desc: 'test',
+    desc: 'Deal a strong strike',
     maxLvl: 5,
     locked: 1,
   },
@@ -118,8 +117,45 @@ let skills = [
     section: 3,
     desc: 'Increase your total OpS by 10% for each level in Managerial Mastery',
     maxLvl: 5,
+    locked: 1,
+    drawLines: [
+      {from: 'right', to: 'test3'},
+      {from: 'right', to: 'test4'}
+    ]
+  },
+  {
+    name: 'test3',
+    fillerTxt: 'test',
+    type: 'passive',
+    generationNeeded: 4,
+    section: 3,
+    desc: 'test',
+    maxLvl: 10,
     locked: 1
   },
+  {
+    name: 'test4',
+    fillerTxt: 'test',
+    type: 'passive',
+    generationNeeded: 4,
+    section: 3,
+    desc: 'test',
+    maxLvl: 10,
+    locked: 1,
+    drawLines: [
+      {from: 'right', to: 'test5'}
+    ]
+  },
+  {
+    name: 'test5',
+    fillerTxt: 'test',
+    type: 'passive',
+    generationNeeded: 7,
+    section: 3,
+    desc: 'test',
+    maxLvl: 10,
+    locked: 1
+  }
 ]
 
 //intellectual - start with schools, i watch rick and morty

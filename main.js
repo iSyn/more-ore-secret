@@ -767,7 +767,7 @@ Game.launch = () => {
 
   Game.gainGenerationLv = () => {
     Game.state.player.generation.lv++
-    Game.state.player.generation.availableSp++
+    Game.state.player.generation.availableSp += 2
   }
 
   Game.getCombo = (type) => {
@@ -2122,7 +2122,6 @@ Game.launch = () => {
 
     str = `
       <div id='skill-tree-${section}' class="skill-tree">
-        <div class='skill-tree-${section}-bg skill-tree-bg' style='width: ${sectionBgWidth}px;'></div>
     `
 
     for (i = 0; i <= highestGen; i++) {
@@ -2154,7 +2153,7 @@ Game.launch = () => {
       str += `</div>` // column closing div
     }
 
-    str += '</div>' // skill tree closing div
+    str += `<div class='skill-tree-${section}-bg skill-tree-bg' style='width: ${sectionBgWidth}px;'></div></div>` // skill tree closing div
 
     return str
   }
