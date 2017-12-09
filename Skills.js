@@ -1,5 +1,6 @@
 let Skill = function(skill) {
   this.name = skill.name
+  this.className = skill.name.replace(/\s/g, '');
   this.desc = skill.desc
   this.fillerTxt = skill.fillerTxt
   this.type = skill.type
@@ -10,6 +11,7 @@ let Skill = function(skill) {
   skill.lvl ? this.lvl = skill.lvl : this.lvl = 0
   skill.maxLvl ? this.maxLvl = skill.maxLvl : this.maxLvl = 100
   if (skill.unlockSkills) this.unlockSkills = skill.unlockSkills
+  if (skill.drawLines) this.drawLines = skill.drawLines
 
   Game.skills.push(this)
 
@@ -63,6 +65,9 @@ let skills = [
     maxLvl: 5,
     locked: 1,
     // unlockSkills: ['Heavy Smash']
+    drawLines: [
+      {from: 'right', to: 'test'}
+    ]
   },
 
   {
@@ -86,13 +91,18 @@ let skills = [
     desc: 'Increases your total OpC and Ops by 50%',
     maxLvl: 10,
     unlockSkills: ['Pickaxe Mastery', 'Managerial Mastery'],
-    locked: 0
+    locked: 0,
+    drawLines: [
+      {from: 'top', to: 'Pickaxe Mastery'},
+      {from: 'bottom', to: 'Managerial Mastery'},
+      {from: 'right', to: 'test2'}
+    ]
   },
   {
     name: 'test2',
     fillerTxt: 'test',
     type: 'passive',
-    generationNeeded: 5,
+    generationNeeded: 3,
     section: 2,
     desc: 'test',
     maxLvl: 10,

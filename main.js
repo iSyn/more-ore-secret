@@ -2139,9 +2139,9 @@ Game.launch = () => {
         for (k in Game.skills) {
           if (Game.skills[k].generationNeeded == i && Game.skills[k].section == section) {
             if (!Game.skills[k].locked) {
-              str += `<div class="skill" onclick="Game.skills[${k}].levelUp()" onmouseover='Game.showTooltip({type: "skill", name: "${Game.skills[k].name}"})' onmouseout='Game.hideTooltip()'></div>`
+              str += `<div class="skill skill-${Game.skills[k].className}" onclick="Game.skills[${k}].levelUp()" onmouseover='Game.showTooltip({type: "skill", name: "${Game.skills[k].name}"})' onmouseout='Game.hideTooltip()'></div>`
             } else {
-              str += '<div style="opacity: .2" class="skill"></div>'
+              str += `<div style="opacity: .2" class="skill skill-${Game.skills[k].className}"></div>`
             }
           }
         }
@@ -2166,6 +2166,7 @@ Game.launch = () => {
     div.style.display = 'flex'
 
     str = `
+      <canvas class="skill-lines"></canvas>
       <div class="skill-tree-container-top">
         <h1 style='font-size: 6rem; font-family: "Germania One"'>Generation: ${Game.state.player.generation.lv}</h1>
         <h4>Available Sp: ${Game.state.player.generation.availableSp}</h4>
@@ -2185,6 +2186,88 @@ Game.launch = () => {
     `
 
     div.innerHTML = str
+    Game.drawLines()
+  }
+
+  Game.drawLines = () => {
+    let canvas = s('.skill-lines')
+    let canvasWidth = window.innerWidth
+    // let canvasWidth = s('.skill-tree-container-bottom').getBoundingClientRect().width
+    let canvasHeight = window.innerHeight
+    // let canvasHeight = s('.skill-tree-container-bottom').getBoundingClientRect().height
+    canvas.width = canvasWidth
+    canvas.height = canvasHeight
+
+    let ctx = canvas.getContext('2d')
+
+    // reset canvas
+    ctx.clearRect(0, 0, canvasWidth, canvasHeight)
+
+    for (i in Game.skills) {
+      let skill = Game.skills[i]
+
+      if (skill.drawLines) {
+
+        for (j in skill.drawLines) {
+
+          if (skill.drawLines[j].from == 'top') {
+            let fromPos = {
+              x: s(`.skill-${skill.className}`).getBoundingClientRect().x + 32,
+              y: s(`.skill-${skill.className}`).getBoundingClientRect().y
+            }
+
+            let toSkill = Game.select(Game.skills, `${skill.drawLines[j].to}`)
+            let toPos = {
+              x: s(`.skill-${toSkill.className}`).getBoundingClientRect().x + 32,
+              y: s(`.skill-${toSkill.className}`).getBoundingClientRect().bottom
+            }
+
+            ctx.beginPath()
+            ctx.moveTo(fromPos.x, fromPos.y)
+            ctx.lineTo(toPos.x, toPos.y)
+            ctx.strokeStyle = 'white',
+            ctx.stroke()
+          }
+
+          if (skill.drawLines[j].from == 'bottom') {
+            let fromPos = {
+              x: s(`.skill-${skill.className}`).getBoundingClientRect().x + 32,
+              y: s(`.skill-${skill.className}`).getBoundingClientRect().y
+            }
+            let toSkill = Game.select(Game.skills, `${skill.drawLines[j].to}`)
+            let toPos = {
+              x: s(`.skill-${toSkill.className}`).getBoundingClientRect().x + 32,
+              y: s(`.skill-${toSkill.className}`).getBoundingClientRect().top
+            }
+            ctx.beginPath()
+            ctx.moveTo(fromPos.x, fromPos.y)
+            ctx.lineTo(toPos.x, toPos.y)
+            ctx.strokeStyle = 'white',
+            ctx.stroke()
+          }
+
+          if (skill.drawLines[j].from == 'right') {
+            let fromPos = {
+              x: s(`.skill-${skill.className}`).getBoundingClientRect().right,
+              y: s(`.skill-${skill.className}`).getBoundingClientRect().y + 32
+            }
+            let toSkill = Game.select(Game.skills, `${skill.drawLines[j].to}`)
+            let toPos = {
+              x: s(`.skill-${toSkill.className}`).getBoundingClientRect().left,
+              y: s(`.skill-${toSkill.className}`).getBoundingClientRect().y + 32
+            }
+            ctx.beginPath()
+            ctx.moveTo(fromPos.x, fromPos.y)
+            ctx.lineTo(toPos.x, toPos.y)
+            ctx.strokeStyle = 'white',
+            ctx.stroke()
+          }
+
+
+        }
+
+      }
+    }
   }
 
   Game.softReset = () => {

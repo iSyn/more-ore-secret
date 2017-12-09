@@ -1683,6 +1683,13 @@ li {
   flex-grow: 1;
   display: flex;
   margin-top: 10px;
+  position: relative;
+}
+
+.skill-lines {
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 .skill-trees {
