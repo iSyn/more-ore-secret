@@ -153,7 +153,12 @@ Game.launch = () => {
         iLv: 1,
         material: 'Wood',
         damage: 1
-      }
+      },
+      skills: {
+        spSection1: 0,
+        spSection2: 0,
+        spSection3: 0
+      },
     },
 
     stats: {
@@ -404,6 +409,7 @@ Game.launch = () => {
       let skills = []
       JSON.parse(localStorage.getItem('skills')).forEach((skill) => {skills.push(skill)})
       skills.forEach((skill) => {new Skill(skill)})
+      console.log('skills', Game.skills)
 
       // LOAD ACHIEVEMENTS
       console.log('LOADING ACHIEVEMENTS')
@@ -1762,7 +1768,7 @@ Game.launch = () => {
 
     if (obj.type == 'skill') {
       let selectedSkill = Game.select(Game.skills, obj.name)
-      tooltip.style.textAlign = 'center'
+      tooltip.style.textAlign = 'left'
       tooltip.style.width = 'auto'
       tooltip.style.maxWidth = '400px'
 
@@ -1775,22 +1781,15 @@ Game.launch = () => {
             <hr />
             <p style='font-size: small'><i style='opacity: .5'>${selectedSkill.fillerTxt}</i></p>
             <hr />
-            <div style='text-align: left'>
-              <p>Current Level: ${selectedSkill.lvl}/${selectedSkill.maxLvl}</p>
-              <p>Skill Type: ${selectedSkill.type}</p>
-              <hr />
-              <p>${selectedSkill.desc}</p>
-            </div>
+            <p>Current Level: ${selectedSkill.lvl}/${selectedSkill.maxLvl}</p>
+            <p>Skill Type: ${selectedSkill.type}</p>
+            <hr />
+            <p>${selectedSkill.desc}</p>
           </div>
         </div>
       `
 
       tooltip.style.left = event.clientX + 30 + 'px'
-      if (selectedSkill.tooltipSide) {
-        console.log('showing tooltip on left side of mouse')
-        console.log(tooltip.getBoundingClientRect().width)
-        tooltip.style.left = event.clientX - tooltip.getBoundingClientRect().width*2 - 30 + 'px'
-      }
       tooltip.style.top = event.clientY - tooltip.getBoundingClientRect().height/2 + 'px'
     }
 
@@ -2110,34 +2109,52 @@ Game.launch = () => {
 
   Game.buildSkillTree = (section) => {
 
-    console.log('BUILDING SECTION', section
-      )
-    let str = `<div class="skill-tree">`
+    let highestGen = Game.skills.reduce((prev, current) => (prev.generationNeeded > current.generationNeeded) ? prev : current).generationNeeded
+    let spacerNeeded = true;
 
-    let amountOfRows = 1
-    for (i in Game.skills) {
-      if (Game.skills[i].section == section) {
-        if (Game.skills[i].row > amountOfRows) amountOfRows = Game.skills[i].row
-      }
+    // let sectionBgWidth = Game.state.player.skills[`spSection${section}`] * 84
+    let sectionBgWidth = 0
+
+    if (Game.state.player.skills[`spSection${section}`] > 0) {
+      sectionBgWidth = Game.state.player.skills[`spSection${section}`] * 84 + 84
     }
 
-    for (i = 1; i <= amountOfRows; i++) {
-      str += `<div class="row">`
 
+    str = `
+      <div id='skill-tree-${section}' class="skill-tree">
+        <div class='skill-tree-${section}-bg skill-tree-bg' style='width: ${sectionBgWidth}px;'></div>
+    `
+
+    for (i = 0; i <= highestGen; i++) {
+      str += `<div class="column-${i}">`
+
+      // check is a spacer is needed
       for (j in Game.skills) {
-        if (Game.skills[j].row == i && Game.skills[j].section == section) {
-          if (!Game.skills[j].locked) {
-            str += `<div class="skill" onclick="Game.skills[${j}].levelUp()" onmouseover='Game.showTooltip({type: "skill", name: "${Game.skills[j].name}"})' onmouseout='Game.hideTooltip()'></div>`
-          } else {
-            str += '<div style="opacity: .2" class="skill"></div>'
-          }
+        if (Game.skills[j].section == section) {
+          if (Game.skills[j].generationNeeded == i) spacerNeeded = false
         }
       }
 
-      str += `</div>`
+      if (!spacerNeeded) {
+        for (k in Game.skills) {
+          if (Game.skills[k].generationNeeded == i && Game.skills[k].section == section) {
+            if (!Game.skills[k].locked) {
+              str += `<div class="skill" onclick="Game.skills[${k}].levelUp()" onmouseover='Game.showTooltip({type: "skill", name: "${Game.skills[k].name}"})' onmouseout='Game.hideTooltip()'></div>`
+            } else {
+              str += '<div style="opacity: .2" class="skill"></div>'
+            }
+          }
+        }
+      } else {
+        str += `<div class="skill-spacer"></div>`
+      }
+
+      spacerNeeded = true
+
+      str += `</div>` // column closing div
     }
 
-    str += `</div>`
+    str += '</div>' // skill tree closing div
 
     return str
   }
@@ -2150,8 +2167,7 @@ Game.launch = () => {
 
     str = `
       <div class="skill-tree-container-top">
-        <h1 style='font-size: xx-large; font-family: "Germania One"'>Skill Tree</h1>
-        <h3>Generation: ${Game.state.player.generation.lv}</h3>
+        <h1 style='font-size: 6rem; font-family: "Germania One"'>Generation: ${Game.state.player.generation.lv}</h1>
         <h4>Available Sp: ${Game.state.player.generation.availableSp}</h4>
         <button onclick='document.querySelector(".skill-tree-container").style.display="none"'>Go back</button>
       </div>
@@ -2781,7 +2797,7 @@ Game.launch = () => {
     pressed.push(e.key)
     pressed.splice(-secretCode.length - 1, pressed.length - secretCode.length)
     if (pressed.join('').includes('synclair')) {
-      Game.earn(1000000000000)
+      Game.earn(1000000000000000000000000000)
       Game.rebuildInventory = 1
       Game.repositionAllElements = 1
     }

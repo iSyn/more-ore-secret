@@ -1000,7 +1000,15 @@ li {
   border: 1px solid white;
   margin: 10px;
   cursor: pointer;
-  background-color: black;
+  background-color: grey;
+  z-index: 1;
+}
+
+.skill-spacer {
+  height: 64px;
+  width: 64px;
+  margin: 10px;
+  pointer-events: none;
 }
 
 .skill:hover {
@@ -1679,28 +1687,39 @@ li {
 
 .skill-trees {
   display: flex;
-  flex-flow: row nowrap;
+  flex-flow: column nowrap;
   justify-content: space-around;
   flex-grow: 1;
 }
 
 .skill-tree {
-  width: 33%;
+  position: relative;
+  width: 100%;
   height: 100%;
-  background: rgba(255, 255, 255, 0.04);
-  padding: 30px;
+  /*background: rgba(255, 255, 255, 0.04);*/
   display: flex;
-  flex-flow: column nowrap;
+  flex-flow: row nowrap;
   align-items: center;
 }
 
-.particles-js-canvas-el {
-  width: 100vw;
-  height: 100vh;
+.skill-tree-bg {
   position: absolute;
-  top: 0;
-  left: 0;
+  height: 100%;
+  width: 0%;
   pointer-events: none;
+  transition: width .3s;
+}
+
+.skill-tree-1-bg {
+  background: rgba(255, 0, 0, 0.3);
+}
+
+.skill-tree-2-bg {
+  background: rgba(0, 0, 255, 0.3);
+}
+
+.skill-tree-3-bg {
+  background: rgba(0, 255, 0, 0.3);
 }
 
 .bonus {
@@ -1745,7 +1764,7 @@ li {
   100% {transform: rotate(360deg);}
 }
 
-.row {
+.column {
   display: flex;
-  flex-flow: row nowrap;
+  flex-flow: column nowrap;
 }
