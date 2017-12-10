@@ -1018,6 +1018,11 @@ li {
   filter: brightness(100%);
 }
 
+.particles-js-canvas-el {
+  position: absolute;
+  pointer-events: none;
+}
+
 .confirm-refine {
   position: absolute;
   top: 50%;
