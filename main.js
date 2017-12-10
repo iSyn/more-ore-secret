@@ -685,7 +685,7 @@ Game.launch = () => {
     if (clipboard.owned > 0) opc += (Game.state.oresPerSecond * .02)
 
     // ADD OPC MULTIPLIER
-    if (Game.state.opcMulti > 0) opc *= Game.state.opcMulti
+    opc += (opc * Game.state.opcMulti)
 
     // ADD GENERATION BONUS
     // opc += (opc * (Game.state.player.generation.lv * 1))
@@ -759,7 +759,6 @@ Game.launch = () => {
         gain.xp = 0
       } else { // If you level up
         gain.xp -= (generation.xpNeeded - generation.currentXp)
-        Game.state.player.generation.xpNeeded = 100 * Math.pow(1.9, Game.state.player.generation.lv)
         Game.gainGenerationLv()
       }
     }
@@ -768,6 +767,7 @@ Game.launch = () => {
   Game.gainGenerationLv = () => {
     Game.state.player.generation.lv++
     Game.state.player.generation.availableSp += 1
+    Game.state.player.generation.xpNeeded = 100 * Math.pow(1.25, Game.state.player.generation.lv)
   }
 
   Game.getCombo = (type) => {
@@ -1759,9 +1759,6 @@ Game.launch = () => {
         <hr/>
         <p style='opacity: .4; font-size: smaller'>Generation XP: ${beautify(Math.floor(Game.state.player.generation.currentXp))}/${beautify(Math.floor(Game.state.player.generation.xpNeeded))}</p>
         <hr/>
-        <p>+${Game.state.player.generation.lv * 1} OpC multiplier</p>
-        <p>+${Game.state.player.generation.lv * 1} OpS multiplier</p>
-        <hr/>
         <p>You will gain ${beautify(Game.calculateGenerationXp().xp)}xp on refine </p>
       `
     }
@@ -2155,16 +2152,22 @@ Game.launch = () => {
     let lockedSkills = Game.skills.filter((skill) => skill.locked == 1)
 
     for (i in lockedSkills) {
-      for (j in lockedSkills[i].requires) {
-        let req = {
-          skill: Game.select(Game.skills, lockedSkills[i].requires[j][0]),
-          lvl: lockedSkills[i].requires[j][1]
-        }
-
-        if (Game.state.player.generation.lv >= lockedSkills[i].generationReq) {
-          if (req.skill.lvl >= req.lvl) {
-            lockedSkills[i].locked = 0
+      if (lockedSkills[i].requires) {
+        for (j in lockedSkills[i].requires) {
+          let req = {
+            skill: Game.select(Game.skills, lockedSkills[i].requires[j][0]),
+            lvl: lockedSkills[i].requires[j][1]
           }
+
+          if (Game.state.player.generation.lv >= lockedSkills[i].generationReq) {
+            if (req.skill.lvl >= req.lvl) {
+              lockedSkills[i].locked = 0
+            }
+          }
+        }
+      } else {
+        if (Game.state.player.generation.lv >= lockedSkills[i].generationReq) {
+          lockedSkills[i].locked = 0
         }
       }
     }
@@ -2180,7 +2183,7 @@ Game.launch = () => {
     `
 
     for (i = 0; i <= highestGen; i++) {
-      str += `<div class="column-${i}">`
+      str += `<div class="column">`
 
       // check is a spacer is needed
       for (j in Game.skills) {
@@ -2252,6 +2255,7 @@ Game.launch = () => {
     canvas.height = canvasHeight
 
     let ctx = canvas.getContext('2d')
+    ctx.lineWidth = 3
 
     // reset canvas
     ctx.clearRect(0, 0, canvasWidth, canvasHeight)
@@ -2260,6 +2264,18 @@ Game.launch = () => {
       let skill = Game.skills[i]
 
       if (skill.drawLines) {
+
+        if (skill.locked) {
+          console.log('locked')
+          ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)'
+        } else {
+          console.log('nto locked')
+          ctx.strokeStyle = 'white'
+        }
+
+        if (skill.lvl == 0) {
+          ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)'
+        }
 
         for (j in skill.drawLines) {
 
@@ -2271,16 +2287,16 @@ Game.launch = () => {
 
             let toSkill = Game.select(Game.skills, `${skill.drawLines[j].to}`)
             let toPos = {
-              x: s(`.skill-${toSkill.className}`).getBoundingClientRect().x + 32,
-              y: s(`.skill-${toSkill.className}`).getBoundingClientRect().bottom
+              x: s(`.skill-${toSkill.className}`).getBoundingClientRect().x - 32,
+              y: s(`.skill-${toSkill.className}`).getBoundingClientRect().y + 32
             }
 
             ctx.beginPath()
             ctx.moveTo(fromPos.x, fromPos.y)
             ctx.lineTo(toPos.x, toPos.y)
-            ctx.closePath()
-            ctx.strokeStyle = 'white',
+            ctx.lineTo(toPos.x + 32, toPos.y)
             ctx.stroke()
+            ctx.closePath()
           }
 
           if (skill.drawLines[j].from == 'bottom') {
@@ -2290,15 +2306,15 @@ Game.launch = () => {
             }
             let toSkill = Game.select(Game.skills, `${skill.drawLines[j].to}`)
             let toPos = {
-              x: s(`.skill-${toSkill.className}`).getBoundingClientRect().x + 32,
-              y: s(`.skill-${toSkill.className}`).getBoundingClientRect().top
+              x: s(`.skill-${toSkill.className}`).getBoundingClientRect().x - 32,
+              y: s(`.skill-${toSkill.className}`).getBoundingClientRect().y + 32
             }
             ctx.beginPath()
             ctx.moveTo(fromPos.x, fromPos.y)
             ctx.lineTo(toPos.x, toPos.y)
-            ctx.closePath()
-            ctx.strokeStyle = 'white',
+            ctx.lineTo(toPos.x + 32, toPos.y)
             ctx.stroke()
+            ctx.closePath()
           }
 
           if (skill.drawLines[j].from == 'right') {
@@ -2313,11 +2329,15 @@ Game.launch = () => {
             }
             ctx.beginPath()
             ctx.moveTo(fromPos.x, fromPos.y)
+            ctx.lineTo(fromPos.x + 32, fromPos.y)
+            ctx.lineTo(toPos.x - 32, toPos.y)
             ctx.lineTo(toPos.x, toPos.y)
-            ctx.closePath()
-            ctx.strokeStyle = 'white',
             ctx.stroke()
+            ctx.closePath()
           }
+
+
+
         }
       }
     }

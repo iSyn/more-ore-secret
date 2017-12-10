@@ -75,6 +75,7 @@ body {
 
 .rising-number {
   z-index: 3;
+  font-family: 'Germania One';
 }
 
 @keyframes risingNumber {
@@ -1004,6 +1005,7 @@ li {
   background-color: grey !important;
   z-index: 1;
   filter: brightness(90%);
+  box-shadow: 0 0 10px #222 inset;
 }
 
 .skill-spacer {
@@ -1014,7 +1016,7 @@ li {
 }
 
 .skill:hover {
-  box-shadow: 0 0 10px white inset;
+  box-shadow: 0 0 10px white inset, ;
   filter: brightness(100%);
 }
 
@@ -1785,4 +1787,5 @@ li {
 .column {
   display: flex;
   flex-flow: column nowrap;
+  width: 160px;
 }

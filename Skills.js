@@ -77,8 +77,39 @@ let skills = [
     locked: 1,
     requires: [
       ['Pickaxe Mastery', 5]
+    ],
+    drawLines: [
+      {from: 'right', to: 'Powerlifting'},
+      {from: 'right', to: 'Conditioning'}
     ]
   },
+  {
+    name: 'Powerlifting',
+    fillerTxt: 'I lift things up and put them down',
+    type: 'passive',
+    generationReq: 6,
+    section: 1,
+    desc: '+5 to base strength for each level in Powerlifting',
+    maxLvl: 10,
+    locked: 1,
+    requires: [
+      ['Heavy Strike', 1]
+    ]
+  },
+  {
+    name: 'Conditioning',
+    fillerTxt: 'Crossfit is, like, totally awesome.',
+    type: 'passive',
+    generationReq: 6,
+    section: 1,
+    desc: '+5 to base dex for each level in Powerlifting',
+    maxLvl: 10,
+    locked: 1,
+    requires: [
+      ['Heavy Strike', 1]
+    ]
+  },
+
 
   /* Section 2 Skills */
   {
@@ -95,20 +126,46 @@ let skills = [
     drawLines: [
       {from: 'top', to: 'Pickaxe Mastery'},
       {from: 'bottom', to: 'Managerial Mastery'},
-      {from: 'right', to: 'test2'}
     ]
   },
   {
-    name: 'test2',
-    fillerTxt: 'test',
+    name: '50 50',
+    fillerTxt: 'Best of both worlds',
     type: 'passive',
-    generationReq: 3,
+    generationReq: 2,
     section: 2,
-    desc: 'test',
+    desc: 'Increase your OpS and OpC by 5% for each point in 50/50',
+    maxLvl: 10,
+    locked: 1,
+    drawLines: [
+      {from: 'right', to: 'testing'},
+      {from: 'right', to: 'testing2'}
+    ]
+  },
+  {
+    name: 'testing2',
+    fillerTxt: 'testing',
+    type: 'testing',
+    generationReq: 4,
+    section: 2,
+    desc: 'testing',
     maxLvl: 10,
     locked: 1,
     requires: [
-      ['The Start', 1]
+      ['50 50', 1]
+    ]
+  },
+  {
+    name: 'testing',
+    fillerTxt: 'testing',
+    type: 'testing',
+    generationReq: 4,
+    section: 2,
+    desc: 'testing',
+    maxLvl: 10,
+    locked: 1,
+    requires: [
+      ['50 50', 1]
     ]
   },
 
@@ -120,24 +177,24 @@ let skills = [
     type: 'passive',
     generationReq: 2,
     section: 3,
-    desc: 'Increase your total OpS by 10% for each level in Managerial Mastery',
+    desc: 'Increase your total OpS by 10% for each point in Managerial Mastery',
     maxLvl: 5,
     locked: 1,
     drawLines: [
-      {from: 'right', to: 'test3'}
+      {from: 'right', to: 'Tax Break'}
     ],
     requires: [
       ['The Start', 1]
     ]
   },
   {
-    name: 'test3',
-    fillerTxt: 'test',
-    type: 'passive',
-    generationReq: 4,
+    name: 'Tax Break',
+    fillerTxt: 'Donald Trump up in here',
+    type: 'active',
+    generationReq: 5,
     section: 3,
-    desc: 'test',
-    maxLvl: 10,
+    desc: 'For 5 seconds, all your buildings has double production',
+    maxLvl: 5,
     locked: 1,
     requires: [
       ['Managerial Mastery', 5]
