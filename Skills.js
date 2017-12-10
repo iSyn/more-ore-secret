@@ -4,8 +4,8 @@ let Skill = function(skill) {
   this.desc = skill.desc
   this.fillerTxt = skill.fillerTxt
   this.type = skill.type
-  this.generationNeeded = skill.generationNeeded
-  skill.pic ? this.pic = skill.pic : this.pic = undefined
+  this.generationReq = skill.generationReq
+  skill.pic ? this.pic = skill.pic : this.pic = 'skill-container'
   // skill.generationNeeded > 0 ? this.generationNeeded = skill.generationNeeded - 1 : this.generationNeeded = skill.generationNeeded
   this.section = skill.section
   this.locked = skill.locked
@@ -13,6 +13,7 @@ let Skill = function(skill) {
   skill.maxLvl ? this.maxLvl = skill.maxLvl : this.maxLvl = 100
   if (skill.unlockSkills) this.unlockSkills = skill.unlockSkills
   if (skill.drawLines) this.drawLines = skill.drawLines
+  if (skill.requires) this.requires = skill.requires
 
   Game.skills.push(this)
 
@@ -35,17 +36,8 @@ let Skill = function(skill) {
           }
         }
 
-        // unlock other shit
-        for (i in Game.skills) {
-          if (Game.skills[i].section == this.section) {
-            if (Game.state.player.skills[`spSection${this.section}`] >= Game.skills[i].generationNeeded) {
-              if (Game.skills[i].locked) {
-                Game.skills[i].locked = 0
-              }
-            }
-          }
-        }
-
+        // check for unlocks
+        Game.unlockSkills()
 
         // rebuild skill tree
         Game.showSkillTree()
@@ -61,25 +53,31 @@ let skills = [
     pic: 'pickaxe-mastery',
     fillerTxt: 'Refine your knowledge with the ins and outs of everything pickaxe.',
     type: 'passive',
-    generationNeeded: 2,
+    generationReq: 2,
     section: 1,
     desc: 'Increase your total OpC by 10% for each level in Pickaxe Mastery',
     maxLvl: 5,
     locked: 1,
-    // unlockSkills: ['Heavy Smash']
     drawLines: [
       {from: 'right', to: 'Heavy Strike'}
+    ],
+    requires: [
+      ['The Start', 1]
     ]
   },
   {
     name: 'Heavy Strike',
+    pic: 'heavy-smash',
     fillerTxt: 'I fear not the man who has practiced 10,000 pickaxe swings once, but I fear the man who has practiced one pickaxe swing 10,000 times. - Michael Scott',
     type: 'active',
-    generationNeeded: 5,
+    generationReq: 5,
     section: 1,
     desc: 'Deal a strong strike',
     maxLvl: 5,
     locked: 1,
+    requires: [
+      ['Pickaxe Mastery', 5]
+    ]
   },
 
   /* Section 2 Skills */
@@ -88,10 +86,10 @@ let skills = [
     pic: 'the-start',
     fillerTxt: 'In the beginning, there was nothing. Then... ORES',
     type: 'passive',
-    generationNeeded: 1,
+    generationReq: 1,
     section: 2,
     desc: 'Increases your total OpC and Ops by 50%',
-    maxLvl: 10,
+    maxLvl: 1,
     unlockSkills: ['Pickaxe Mastery', 'Managerial Mastery'],
     locked: 0,
     drawLines: [
@@ -104,11 +102,14 @@ let skills = [
     name: 'test2',
     fillerTxt: 'test',
     type: 'passive',
-    generationNeeded: 3,
+    generationReq: 3,
     section: 2,
     desc: 'test',
     maxLvl: 10,
-    locked: 1
+    locked: 1,
+    requires: [
+      ['The Start', 1]
+    ]
   },
 
   /* Section 3 skills */
@@ -117,49 +118,31 @@ let skills = [
     pic: 'manager-mastery',
     fillerTxt: 'Manager workshop - Become a better manager today!',
     type: 'passive',
-    generationNeeded: 2,
+    generationReq: 2,
     section: 3,
     desc: 'Increase your total OpS by 10% for each level in Managerial Mastery',
     maxLvl: 5,
     locked: 1,
     drawLines: [
-      {from: 'right', to: 'test3'},
-      {from: 'right', to: 'test4'}
+      {from: 'right', to: 'test3'}
+    ],
+    requires: [
+      ['The Start', 1]
     ]
   },
   {
     name: 'test3',
     fillerTxt: 'test',
     type: 'passive',
-    generationNeeded: 4,
-    section: 3,
-    desc: 'test',
-    maxLvl: 10,
-    locked: 1
-  },
-  {
-    name: 'test4',
-    fillerTxt: 'test',
-    type: 'passive',
-    generationNeeded: 4,
+    generationReq: 4,
     section: 3,
     desc: 'test',
     maxLvl: 10,
     locked: 1,
-    drawLines: [
-      {from: 'right', to: 'test5'}
+    requires: [
+      ['Managerial Mastery', 5]
     ]
   },
-  {
-    name: 'test5',
-    fillerTxt: 'test',
-    type: 'passive',
-    generationNeeded: 7,
-    section: 3,
-    desc: 'test',
-    maxLvl: 10,
-    locked: 1
-  }
 ]
 
 //intellectual - start with schools, i watch rick and morty

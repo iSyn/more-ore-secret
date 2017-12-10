@@ -1008,7 +1008,7 @@ li {
 
 .skill-spacer {
   height: 64px;
-  width: 64px;
+  width: 128px;
   margin: 10px;
   pointer-events: none;
 }
@@ -1021,6 +1021,7 @@ li {
 .particles-js-canvas-el {
   position: absolute;
   pointer-events: none;
+  left: 0;
 }
 
 .confirm-refine {

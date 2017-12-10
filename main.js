@@ -767,7 +767,7 @@ Game.launch = () => {
 
   Game.gainGenerationLv = () => {
     Game.state.player.generation.lv++
-    Game.state.player.generation.availableSp += 2
+    Game.state.player.generation.availableSp += 1
   }
 
   Game.getCombo = (type) => {
@@ -1772,22 +1772,63 @@ Game.launch = () => {
       tooltip.style.width = 'auto'
       tooltip.style.maxWidth = '400px'
 
-      tooltip.innerHTML = `
-        <div style='display: flex; flex-flow: row nowrap;'>
-          <div style='background: url("./assets/${selectedSkill.pic}.png"); min-height: 64px; height: 64px; min-width: 64px; width: 64px; margin-right: 5px;'></div>
-          <hr style='width: 1px; flex-grow: 1; margin-right: 5px; opacity: 0.1'/>
-          <div style='flex-grow: 1'>
-            <h2 style='font-family: "Germania One"'>${selectedSkill.name}</h2>
-            <hr />
-            <p style='font-size: small'><i style='opacity: .5'>${selectedSkill.fillerTxt}</i></p>
-            <hr />
-            <p>Current Level: ${selectedSkill.lvl}/${selectedSkill.maxLvl}</p>
-            <p>Skill Type: ${selectedSkill.type}</p>
-            <hr />
-            <p>${selectedSkill.desc}</p>
+      if (!selectedSkill.locked) {
+        tooltip.innerHTML = `
+          <div style='display: flex; flex-flow: row nowrap;'>
+            <div style='background: url("./assets/${selectedSkill.pic}.png"); min-height: 64px; height: 64px; min-width: 64px; width: 64px; margin-right: 5px;'></div>
+            <hr style='width: 1px; flex-grow: 1; margin-right: 5px; opacity: 0.1'/>
+            <div style='flex-grow: 1'>
+              <h2 style='font-family: "Germania One"'>${selectedSkill.name}</h2>
+              <hr />
+              <p style='font-size: small'><i style='opacity: .5'>${selectedSkill.fillerTxt}</i></p>
+              <hr />
+              <p>Current Level: ${selectedSkill.lvl}/${selectedSkill.maxLvl}</p>
+              <p>Skill Type: ${selectedSkill.type}</p>
+              <hr />
+              <p>${selectedSkill.desc}</p>
+            </div>
           </div>
-        </div>
-      `
+        `
+      } else {
+        let str = ''
+        str += `
+          <div style='display: flex; flex-flow: row nowrap;'>
+            <div style='background: url("./assets/${selectedSkill.pic}.png"); min-height: 64px; height: 64px; min-width: 64px; width: 64px; margin-right: 5px; opacity: 0.2;'></div>
+            <hr style='width: 1px; flex-grow: 1; margin-right: 5px; opacity: 0.1'/>
+            <div style='flex-grow: 1'>
+              <h2 style='font-family: "Germania One"'>${selectedSkill.name}</h2>
+              <hr />
+              <p>Requirements</p>
+              <hr />
+              `
+
+              // Build out generation requirements
+              if (Game.state.player.generation.lv >= selectedSkill.generationReq) {
+                str += `<p>Generation Level: ${selectedSkill.generationReq}</p>`
+              } else {
+                str += `<p style='color: red'>Generation Level: ${selectedSkill.generationReq}</p>`
+              }
+
+              // Build out skill requirements
+              for (i in selectedSkill.requires) {
+                let skillNeeded = Game.select(Game.skills, selectedSkill.requires[i][0])
+                console.log(skillNeeded.lvl, '>=', selectedSkill.requires[i][1])
+                if (skillNeeded.lvl >= selectedSkill.requires[i][1]) {
+                  str += `<p>${selectedSkill.requires[i][0]} lv. ${selectedSkill.requires[i][1]}</p>`
+                } else {
+                  str += `<p style='color: red;'>${selectedSkill.requires[i][0]} lv. ${selectedSkill.requires[i][1]}</p>`
+                }
+              }
+
+              str += `
+            </div>
+          </div>
+        `
+
+        tooltip.innerHTML = str
+      }
+
+
 
       tooltip.style.left = event.clientX + 30 + 'px'
       tooltip.style.top = event.clientY - tooltip.getBoundingClientRect().height/2 + 'px'
@@ -2096,8 +2137,11 @@ Game.launch = () => {
       Game.softReset()
       Game.rebuildInventory = 1
       Game.removeEl(s('.wrapper'))
+      Game.unlockSkills()
     }, 1500)
-    setTimeout(() => {Game.showSkillTree()}, 2000)
+    setTimeout(() => {
+      Game.showSkillTree()
+    }, 2000)
     setTimeout(() => {
       Game.removeEl(s('.refine'))
       if (Game.state.stats.timesRefined > 0) Game.winAchievement('Blacksmiths Apprentice')
@@ -2107,18 +2151,29 @@ Game.launch = () => {
     s('.ore-weak-spot').style.display = 'none'
   }
 
+  Game.unlockSkills = () => {
+    let lockedSkills = Game.skills.filter((skill) => skill.locked == 1)
+
+    for (i in lockedSkills) {
+      for (j in lockedSkills[i].requires) {
+        let req = {
+          skill: Game.select(Game.skills, lockedSkills[i].requires[j][0]),
+          lvl: lockedSkills[i].requires[j][1]
+        }
+
+        if (Game.state.player.generation.lv >= lockedSkills[i].generationReq) {
+          if (req.skill.lvl >= req.lvl) {
+            lockedSkills[i].locked = 0
+          }
+        }
+      }
+    }
+  }
+
   Game.buildSkillTree = (section) => {
 
-    let highestGen = Game.skills.reduce((prev, current) => (prev.generationNeeded > current.generationNeeded) ? prev : current).generationNeeded
+    let highestGen = Game.skills.reduce((prev, current) => (prev.generationReq > current.generationReq) ? prev : current).generationReq
     let spacerNeeded = true;
-
-    // let sectionBgWidth = Game.state.player.skills[`spSection${section}`] * 84
-    let sectionBgWidth = 0
-
-    if (Game.state.player.skills[`spSection${section}`] > 0) {
-      sectionBgWidth = Game.state.player.skills[`spSection${section}`] * 84 + 84
-    }
-
 
     str = `
       <div id='skill-tree-${section}' class="skill-tree">
@@ -2130,17 +2185,17 @@ Game.launch = () => {
       // check is a spacer is needed
       for (j in Game.skills) {
         if (Game.skills[j].section == section) {
-          if (Game.skills[j].generationNeeded == i) spacerNeeded = false
+          if (Game.skills[j].generationReq == i) spacerNeeded = false
         }
       }
 
       if (!spacerNeeded) {
         for (k in Game.skills) {
-          if (Game.skills[k].generationNeeded == i && Game.skills[k].section == section) {
+          if (Game.skills[k].generationReq == i && Game.skills[k].section == section) {
             if (!Game.skills[k].locked) {
               str += `<div style='background: url("./assets/${Game.skills[k].pic}.png")' class="skill skill-${Game.skills[k].className}" onclick="Game.skills[${k}].levelUp()" onmouseover='Game.showTooltip({type: "skill", name: "${Game.skills[k].name}"})' onmouseout='Game.hideTooltip()'></div>`
             } else {
-              str += `<div style="opacity: .2; background: url('./assets/${Game.skills[k].pic}.png')" class="skill skill-${Game.skills[k].className}"></div>`
+              str += `<div style="opacity: .2; background: url('./assets/${Game.skills[k].pic}.png')" class="skill skill-${Game.skills[k].className}" onmouseover='Game.showTooltip({type: "skill", name: "${Game.skills[k].name}"})' onmouseout='Game.hideTooltip()'></div>`
             }
           }
         }
@@ -2153,16 +2208,14 @@ Game.launch = () => {
       str += `</div>` // column closing div
     }
 
-    str += `<div class='skill-tree-${section}-bg skill-tree-bg' style='width: ${sectionBgWidth}px;'></div></div>` // skill tree closing div
+    // str += `<div class='skill-tree-${section}-bg skill-tree-bg' style='width: ${sectionBgWidth}px;'></div></div>` // skill tree closing div
+    str += `</div>` // skill tree closing div
 
     return str
-
   }
 
   Game.showSkillTree = () => {
     let div = s('.skill-tree-container')
-    // div.classList.add('skill-tree-container')
-    // div.id = 'particles-js'
     div.style.display = 'flex'
 
     str = `
@@ -2187,116 +2240,6 @@ Game.launch = () => {
 
     div.innerHTML = str
     Game.drawLines()
-    particlesJS("particles-js", {
-      "particles": {
-        "number": {
-          "value": 250,
-          "density": {
-            "enable": true,
-            "value_area": 800
-          }
-        },
-        "color": {
-          "value": "#ffffff"
-        },
-        "shape": {
-          "type": "circle",
-          "stroke": {
-            "width": 0,
-            "color": "#000000"
-          },
-          "polygon": {
-            "nb_sides": 5
-          },
-          "image": {
-            "src": "img/github.svg",
-            "width": 100,
-            "height": 100
-          }
-        },
-        "opacity": {
-          "value": 0.5,
-          "random": false,
-          "anim": {
-            "enable": false,
-            "speed": 1,
-            "opacity_min": 0.1,
-            "sync": false
-          }
-        },
-        "size": {
-          "value": 2,
-          "random": true,
-          "anim": {
-            "enable": false,
-            "speed": 20,
-            "size_min": 0.1,
-            "sync": false
-          }
-        },
-        "line_linked": {
-          "enable": false,
-          "distance": 150,
-          "color": "#ffffff",
-          "opacity": 0.4,
-          "width": 1
-        },
-        "move": {
-          "enable": true,
-          "speed": 3,
-          "direction": "none",
-          "random": false,
-          "straight": false,
-          "out_mode": "out",
-          "bounce": false,
-          "attract": {
-            "enable": false,
-            "rotateX": 600,
-            "rotateY": 1200
-          }
-        }
-      },
-      "interactivity": {
-        "detect_on": "canvas",
-        "events": {
-          "onhover": {
-            "enable": false,
-            "mode": "grab"
-          },
-          "onclick": {
-            "enable": false,
-            "mode": "push"
-          },
-          "resize": false
-        },
-        "modes": {
-          "grab": {
-            "distance": 140,
-            "line_linked": {
-              "opacity": 1
-            }
-          },
-          "bubble": {
-            "distance": 400,
-            "size": 40,
-            "duration": 2,
-            "opacity": 8,
-            "speed": 3
-          },
-          "repulse": {
-            "distance": 200,
-            "duration": 0.4
-          },
-          "push": {
-            "particles_nb": 4
-          },
-          "remove": {
-            "particles_nb": 2
-          }
-        }
-      },
-      "retina_detect": true
-    });
   }
 
   Game.drawLines = () => {
@@ -2341,7 +2284,7 @@ Game.launch = () => {
 
           if (skill.drawLines[j].from == 'bottom') {
             let fromPos = {
-              x: s(`.skill-${skill.className}`).getBoundingClientRect().x + 32,
+              x: s(`.skill-${skill.className}`).getBoundingClientRect().x,
               y: s(`.skill-${skill.className}`).getBoundingClientRect().y
             }
             let toSkill = Game.select(Game.skills, `${skill.drawLines[j].to}`)
