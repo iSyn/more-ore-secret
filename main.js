@@ -2278,14 +2278,15 @@ Game.launch = () => {
             ctx.beginPath()
             ctx.moveTo(fromPos.x, fromPos.y)
             ctx.lineTo(toPos.x, toPos.y)
+            ctx.closePath()
             ctx.strokeStyle = 'white',
             ctx.stroke()
           }
 
           if (skill.drawLines[j].from == 'bottom') {
             let fromPos = {
-              x: s(`.skill-${skill.className}`).getBoundingClientRect().x,
-              y: s(`.skill-${skill.className}`).getBoundingClientRect().y
+              x: s(`.skill-${skill.className}`).getBoundingClientRect().x + 32,
+              y: s(`.skill-${skill.className}`).getBoundingClientRect().bottom
             }
             let toSkill = Game.select(Game.skills, `${skill.drawLines[j].to}`)
             let toPos = {
@@ -2295,6 +2296,7 @@ Game.launch = () => {
             ctx.beginPath()
             ctx.moveTo(fromPos.x, fromPos.y)
             ctx.lineTo(toPos.x, toPos.y)
+            ctx.closePath()
             ctx.strokeStyle = 'white',
             ctx.stroke()
           }
@@ -2312,13 +2314,11 @@ Game.launch = () => {
             ctx.beginPath()
             ctx.moveTo(fromPos.x, fromPos.y)
             ctx.lineTo(toPos.x, toPos.y)
+            ctx.closePath()
             ctx.strokeStyle = 'white',
             ctx.stroke()
           }
-
-
         }
-
       }
     }
   }
