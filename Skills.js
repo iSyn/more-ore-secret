@@ -5,7 +5,7 @@ let Skill = function(skill) {
   this.fillerTxt = skill.fillerTxt
   this.type = skill.type
   this.generationNeeded = skill.generationNeeded
-  skill.pic ? this.pic = skill.pic : this.pic = 'nothing'
+  skill.pic ? this.pic = skill.pic : this.pic = undefined
   // skill.generationNeeded > 0 ? this.generationNeeded = skill.generationNeeded - 1 : this.generationNeeded = skill.generationNeeded
   this.section = skill.section
   this.locked = skill.locked
@@ -58,9 +58,10 @@ let skills = [
   /* Section 1 Skills */
   {
     name: 'Pickaxe Mastery',
+    pic: 'pickaxe-mastery',
     fillerTxt: 'Refine your knowledge with the ins and outs of everything pickaxe.',
     type: 'passive',
-    generationNeeded: 1,
+    generationNeeded: 2,
     section: 1,
     desc: 'Increase your total OpC by 10% for each level in Pickaxe Mastery',
     maxLvl: 5,
@@ -113,9 +114,10 @@ let skills = [
   /* Section 3 skills */
   {
     name: 'Managerial Mastery',
+    pic: 'manager-mastery',
     fillerTxt: 'Manager workshop - Become a better manager today!',
     type: 'passive',
-    generationNeeded: 1,
+    generationNeeded: 2,
     section: 3,
     desc: 'Increase your total OpS by 10% for each level in Managerial Mastery',
     maxLvl: 5,

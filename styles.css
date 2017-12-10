@@ -1001,8 +1001,9 @@ li {
   background-size: 100% 100%;
   margin: 10px;
   cursor: pointer;
-  background-color: grey;
+  background-color: grey !important;
   z-index: 1;
+  filter: brightness(90%);
 }
 
 .skill-spacer {
@@ -1014,6 +1015,7 @@ li {
 
 .skill:hover {
   box-shadow: 0 0 10px white inset;
+  filter: brightness(100%);
 }
 
 .confirm-refine {

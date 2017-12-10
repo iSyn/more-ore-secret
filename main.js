@@ -1774,7 +1774,7 @@ Game.launch = () => {
 
       tooltip.innerHTML = `
         <div style='display: flex; flex-flow: row nowrap;'>
-          <div style='background: url("./assets/${selectedSkill.pic}.png");min-height: 64px; height: 64px; min-width: 64px; width: 64px; margin-right: 5px;'></div>
+          <div style='background: url("./assets/${selectedSkill.pic}.png"); min-height: 64px; height: 64px; min-width: 64px; width: 64px; margin-right: 5px;'></div>
           <hr style='width: 1px; flex-grow: 1; margin-right: 5px; opacity: 0.1'/>
           <div style='flex-grow: 1'>
             <h2 style='font-family: "Germania One"'>${selectedSkill.name}</h2>
@@ -2140,7 +2140,7 @@ Game.launch = () => {
             if (!Game.skills[k].locked) {
               str += `<div style='background: url("./assets/${Game.skills[k].pic}.png")' class="skill skill-${Game.skills[k].className}" onclick="Game.skills[${k}].levelUp()" onmouseover='Game.showTooltip({type: "skill", name: "${Game.skills[k].name}"})' onmouseout='Game.hideTooltip()'></div>`
             } else {
-              str += `<div style="opacity: .2" class="skill skill-${Game.skills[k].className}"></div>`
+              str += `<div style="opacity: .2; background: url('./assets/${Game.skills[k].pic}.png')" class="skill skill-${Game.skills[k].className}"></div>`
             }
           }
         }
