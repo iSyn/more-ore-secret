@@ -18,14 +18,24 @@
       overflow: hidden;
     }
 
-    canvas {
-      border: 1px solid black;
+    .container {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      border: 3px solid black;
+      width: 500px;
+      height: 300px;
+      overflow: auto;
     }
   </style>
 
   <body>
 
-    <canvas></canvas>
+    <div class="container">
+      <canvas></canvas>
+    </div>
+
 
 
     <script src="playground.js"></script>

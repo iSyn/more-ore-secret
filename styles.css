@@ -1103,6 +1103,15 @@ li {
   justify-content: space-around;
 }
 
+.bottom-left-btns-container {
+  position: absolute;
+  top: 0;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: space-around;
+  align-items: center;
+}
+
 .saves-btn {
   padding: 3px;
   color: white;
@@ -1653,18 +1662,16 @@ li {
 }
 
 .refine-btn {
-  position: absolute;
-  cursor: pointer;
   background: url('./assets/fireplace4.svg');
-  height: 40px;
+  height: 50px;
   width: 40px;
   background-size: 100% 100%;
-  opacity: .5;
+  opacity: .3;
   z-index: 1;
 }
 
 .refine-btn:hover {
-  opacity: .7;
+  opacity: .5;
 }
 
 .skill-tree-container {
@@ -1695,6 +1702,7 @@ li {
   display: flex;
   margin-top: 10px;
   position: relative;
+  overflow: auto;
 }
 
 .skill-lines {

@@ -163,6 +163,7 @@ Game.launch = () => {
 
     stats: {
       totalOresMined: 0,
+      totalOresEarned: 0,
       totalOresSpent: 0,
       currentOresEarned: 0,
       currentOresMined: 0,
@@ -212,19 +213,28 @@ Game.launch = () => {
     settingsContainer.style.top = anchorHorizontal.top - settingsContainer.getBoundingClientRect().height + 'px'
     settingsContainer.style.left = anchorVertical.left - settingsContainer.getBoundingClientRect().width  + 'px'
 
-    // POSITION REFINE BUTTON
-    if (Game.state.canRefine) {
-      let refineBtn = s('.refine-btn')
-      let anchorVertical = s('#left-separator').getBoundingClientRect()
-      let anchorHorizontal = s('#horizontal-separator').getBoundingClientRect()
+    // POSITION REFINE BTNS
 
-      refineBtn.style.display = 'block'
-
-      refineBtn.style.top = anchorHorizontal.top - refineBtn.getBoundingClientRect().height - 15 + 'px'
-      refineBtn.style.left = anchorVertical.right + 5 + 'px'
+    if (Game.state.stats.totalOresEarned > 1000000 || Game.state.stats.timesRefined > 0) {
+      s('.refine-btn').style.display = 'block'
     } else {
       s('.refine-btn').style.display = 'none'
     }
+
+    if (Game.state.stats.timesRefined > 0) {
+      s('.quest-btn').style.display = 'block'
+    } else {
+      s('.quest-btn').style.display = 'none'
+    }
+
+    let bottomLeftBtnsContainer = s('.bottom-left-btns-container')
+
+    anchorHorizontal = s('#horizontal-separator').getBoundingClientRect()
+    anchorVertical = s('#left-separator').getBoundingClientRect()
+
+    bottomLeftBtnsContainer.style.position = 'absolute'
+    bottomLeftBtnsContainer.style.top = anchorHorizontal.top - bottomLeftBtnsContainer.getBoundingClientRect().height + 'px'
+    bottomLeftBtnsContainer.style.left = anchorVertical.right + 'px'
 
     // POSITION ORE WEAK SPOT
     let magnifyingGlass = Game.select(Game.upgrades, 'Magnifying Glass')
@@ -2330,7 +2340,8 @@ Game.launch = () => {
             ctx.beginPath()
             ctx.moveTo(fromPos.x, fromPos.y)
             ctx.lineTo(fromPos.x + 32, fromPos.y)
-            ctx.lineTo(toPos.x - 32, toPos.y)
+            ctx.lineTo(fromPos.x + 64, toPos.y)
+            // ctx.lineTo(toPos.x - 32, toPos.y)
             ctx.lineTo(toPos.x, toPos.y)
             ctx.stroke()
             ctx.closePath()
@@ -2341,7 +2352,12 @@ Game.launch = () => {
         }
       }
     }
+
+    s('.skill-tree-container-bottom').onscroll = () => Game.drawLines()
   }
+
+
+
 
   Game.softReset = () => {
     Game.state.ores = 0

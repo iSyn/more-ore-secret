@@ -36,6 +36,8 @@ let Skill = function(skill) {
           }
         }
 
+        Game.hideTooltip()
+
         // check for unlocks
         Game.unlockSkills()
 
@@ -107,6 +109,22 @@ let skills = [
     locked: 1,
     requires: [
       ['Heavy Strike', 1]
+    ],
+    drawLines: [
+      {from: 'right', to: 'testtest'}
+    ]
+  },
+  {
+    name: 'testtest',
+    fillerTxt: 'test',
+    passive: 'passive',
+    generationReq: 15,
+    section: 1,
+    desc: 'test',
+    maxLvl: 10,
+    locked: 1,
+    requires: [
+      ['Conditioning', 1]
     ]
   },
 
@@ -130,6 +148,7 @@ let skills = [
   },
   {
     name: '50 50',
+    pic: '50-50',
     fillerTxt: 'Best of both worlds',
     type: 'passive',
     generationReq: 2,
@@ -189,6 +208,7 @@ let skills = [
   },
   {
     name: 'Tax Break',
+    pic: 'tax-break',
     fillerTxt: 'Donald Trump up in here',
     type: 'active',
     generationReq: 5,
