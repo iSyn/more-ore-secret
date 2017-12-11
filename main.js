@@ -221,11 +221,11 @@ Game.launch = () => {
       s('.refine-btn').style.display = 'none'
     }
 
-    if (Game.state.stats.timesRefined > 0) {
-      s('.quest-btn').style.display = 'block'
-    } else {
-      s('.quest-btn').style.display = 'none'
-    }
+    // if (Game.state.stats.timesRefined > 0) {
+    //   s('.quest-btn').style.display = 'block'
+    // } else {
+    //   s('.quest-btn').style.display = 'none'
+    // }
 
     let bottomLeftBtnsContainer = s('.bottom-left-btns-container')
 
@@ -949,6 +949,12 @@ Game.launch = () => {
         risingNumber.style.textAlign = 'center'
         risingNumber.style.fontSize = '40px'
         risingNumber.style.animationDuration = '3s'
+      }
+
+      if (type == 'skill up') {
+        risingNumber.innerHTML = `<i class='fa fa-level-up'></i>`
+        risingNumber.style.color = 'green'
+        risingNumber.style.fontSize = '30px'
       }
 
 
@@ -1841,6 +1847,18 @@ Game.launch = () => {
       tooltip.style.top = event.clientY - tooltip.getBoundingClientRect().height/2 + 'px'
     }
 
+    if (obj.type == 'quest') {
+      console.log('quest tooltip')
+      if (Game.state.stats.timesRefined < 1) {
+        tooltip.style.left = s('.quest-btn').getBoundingClientRect().right + 20 + 'px'
+        tooltip.style.top = s('.quest-btn').getBoundingClientRect().top + 'px'
+        tooltip.innerHTML = `
+          <p>Quests unlocked at Generation 1</p>
+        `
+        tooltip.style.width = 'auto'
+      }
+    }
+
     tooltip.style.animation = 'tooltip .3s'
   }
 
@@ -2162,6 +2180,8 @@ Game.launch = () => {
     let lockedSkills = Game.skills.filter((skill) => skill.locked == 1)
 
     for (i in lockedSkills) {
+      let selectedSkill = (Game.select(Game.skills, lockedSkills[i].name))
+      let selectedEl = document.querySelector(`.skill-${lockedSkills[i].className}`)
       if (lockedSkills[i].requires) {
         for (j in lockedSkills[i].requires) {
           let req = {
@@ -2172,15 +2192,19 @@ Game.launch = () => {
           if (Game.state.player.generation.lv >= lockedSkills[i].generationReq) {
             if (req.skill.lvl >= req.lvl) {
               lockedSkills[i].locked = 0
+              selectedEl.style.opacity = 1
             }
           }
         }
       } else {
         if (Game.state.player.generation.lv >= lockedSkills[i].generationReq) {
           lockedSkills[i].locked = 0
+          selectedEl.style.opacity = 1
         }
       }
     }
+
+    Game.drawLines()
   }
 
   Game.buildSkillTree = (section) => {
@@ -2208,7 +2232,7 @@ Game.launch = () => {
             if (!Game.skills[k].locked) {
               str += `<div style='background: url("./assets/${Game.skills[k].pic}.png")' class="skill skill-${Game.skills[k].className}" onclick="Game.skills[${k}].levelUp()" onmouseover='Game.showTooltip({type: "skill", name: "${Game.skills[k].name}"})' onmouseout='Game.hideTooltip()'></div>`
             } else {
-              str += `<div style="opacity: .2; background: url('./assets/${Game.skills[k].pic}.png')" class="skill skill-${Game.skills[k].className}" onmouseover='Game.showTooltip({type: "skill", name: "${Game.skills[k].name}"})' onmouseout='Game.hideTooltip()'></div>`
+              str += `<div style="opacity: .2; background: url('./assets/${Game.skills[k].pic}.png')" class="skill skill-${Game.skills[k].className}" onclick='Game.skills[${k}].levelUp()' onmouseover='Game.showTooltip({type: "skill", name: "${Game.skills[k].name}"})' onmouseout='Game.hideTooltip()'></div>`
             }
           }
         }
@@ -2232,11 +2256,12 @@ Game.launch = () => {
     div.style.display = 'flex'
 
     str = `
+      <div id="particles-js"></div>
       <canvas class="skill-lines"></canvas>
       <div class="skill-tree-container-top">
         <h1 style='font-size: 6rem; font-family: "Germania One"'>Generation: ${Game.state.player.generation.lv}</h1>
         <h4>Available Sp: ${Game.state.player.generation.availableSp}</h4>
-        <button onclick='document.querySelector(".skill-tree-container").style.display="none"'>Go back</button>
+        <button onclick='document.querySelector(".skill-tree-container").style.display="none"; window.pJSDom = []'>Go back</button>
       </div>
 
       <div class="skill-tree-container-bottom">
@@ -2253,6 +2278,117 @@ Game.launch = () => {
 
     div.innerHTML = str
     Game.drawLines()
+
+    particlesJS("particles-js", {
+      "particles": {
+        "number": {
+          "value": 250,
+          "density": {
+            "enable": true,
+            "value_area": 800
+          }
+        },
+        "color": {
+          "value": "#ffffff"
+        },
+        "shape": {
+          "type": "circle",
+          "stroke": {
+            "width": 0,
+            "color": "#000000"
+          },
+          "polygon": {
+            "nb_sides": 5
+          },
+          "image": {
+            "src": "img/github.svg",
+            "width": 100,
+            "height": 100
+          }
+        },
+        "opacity": {
+          "value": 0.5,
+          "random": false,
+          "anim": {
+            "enable": false,
+            "speed": 1,
+            "opacity_min": 0.1,
+            "sync": false
+          }
+        },
+        "size": {
+          "value": 2,
+          "random": true,
+          "anim": {
+            "enable": false,
+            "speed": 20,
+            "size_min": 0.1,
+            "sync": false
+          }
+        },
+        "line_linked": {
+          "enable": false,
+          "distance": 150,
+          "color": "#ffffff",
+          "opacity": 0.4,
+          "width": 1
+        },
+        "move": {
+          "enable": true,
+          "speed": 3,
+          "direction": "none",
+          "random": false,
+          "straight": false,
+          "out_mode": "out",
+          "bounce": false,
+          "attract": {
+            "enable": false,
+            "rotateX": 600,
+            "rotateY": 1200
+          }
+        }
+      },
+      "interactivity": {
+        "detect_on": "canvas",
+        "events": {
+          "onhover": {
+            "enable": false,
+            "mode": "grab"
+          },
+          "onclick": {
+            "enable": false,
+            "mode": "push"
+          },
+          "resize": false
+        },
+        "modes": {
+          "grab": {
+            "distance": 140,
+            "line_linked": {
+              "opacity": 1
+            }
+          },
+          "bubble": {
+            "distance": 400,
+            "size": 40,
+            "duration": 2,
+            "opacity": 8,
+            "speed": 3
+          },
+          "repulse": {
+            "distance": 200,
+            "duration": 0.4
+          },
+          "push": {
+            "particles_nb": 4
+          },
+          "remove": {
+            "particles_nb": 2
+          }
+        }
+      },
+      "retina_detect": true
+    });
   }
 
   Game.drawLines = () => {
@@ -2276,10 +2412,8 @@ Game.launch = () => {
       if (skill.drawLines) {
 
         if (skill.locked) {
-          console.log('locked')
           ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)'
         } else {
-          console.log('nto locked')
           ctx.strokeStyle = 'white'
         }
 
@@ -2355,9 +2489,6 @@ Game.launch = () => {
 
     s('.skill-tree-container-bottom').onscroll = () => Game.drawLines()
   }
-
-
-
 
   Game.softReset = () => {
     Game.state.ores = 0
@@ -2942,13 +3073,6 @@ Game.launch = () => {
 
   s('.ore').onclick = () => Game.handleClick()
   s('.ore-weak-spot').onclick = () => Game.handleClick('weak-spot')
-  s('.bottom').addEventListener('mouseover', () => {
-    if (Game.state.player.generation.lv == 0) {
-      s('.bottom-overlay-txt').innerHTML = `<i class='fa fa-lock fa-1x' style='margin-right: 10px'></i>QUESTS UNLOCKED ON FIRST GENERATION`
-    } else {
-      s('.bottom-overlay-txt').innerHTML = ''
-    }
-  })
   s('.bottom').addEventListener('click', () => Game.showQuests())
 
   window.onresize = () => Game.repositionAllElements = 1

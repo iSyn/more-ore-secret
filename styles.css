@@ -562,32 +562,6 @@ body {
   background-size: auto 100%;
 }
 
-.bottom-overlay {
-  display: none;
-  background-color: rgba(255, 255, 255, 0.02);
-  height: 100%;
-  width: 100%;
-  cursor: pointer;
-  position: relative;
-}
-
-.bottom-overlay-txt {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  color: white;
-  padding: 10px 15px;
-  /*border: 2px solid white;*/
-  font-size: xx-large;
-  width: 100%;
-  text-align: center;
-
-}
-
-.bottom:hover .bottom-overlay {
-  display: block;
-}
-
 .stats-container {
   position: absolute;
   display: flex;
@@ -1717,6 +1691,7 @@ li {
   flex-flow: column nowrap;
   justify-content: space-around;
   flex-grow: 1;
+  padding-right: 500px;
 }
 
 .skill-tree {

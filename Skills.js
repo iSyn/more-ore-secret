@@ -11,38 +11,26 @@ let Skill = function(skill) {
   this.locked = skill.locked
   skill.lvl ? this.lvl = skill.lvl : this.lvl = 0
   skill.maxLvl ? this.maxLvl = skill.maxLvl : this.maxLvl = 100
-  if (skill.unlockSkills) this.unlockSkills = skill.unlockSkills
   if (skill.drawLines) this.drawLines = skill.drawLines
   if (skill.requires) this.requires = skill.requires
 
   Game.skills.push(this)
 
   this.levelUp = () => {
-    if (this.lvl < this.maxLvl) {
-      if (Game.state.player.generation.availableSp > 0) {
-        Game.state.player.generation.availableSp--
-        this.lvl++
-        Game.state.player.skills[`spSection${this.section}`]++
+    if (!this.locked) {
+      if (this.lvl < this.maxLvl) {
+        if (Game.state.player.generation.availableSp > 0) {
+          Game.state.player.generation.availableSp--
+          this.lvl++
+          Game.risingNumber(null, 'skill up')
+          Game.state.player.skills[`spSection${this.section}`]++
+          Game.playSound('skill-lvl-up')
 
-        if (this.unlockSkills) {
-          for (i in this.unlockSkills) {
-            let selected;
-            for (j in Game.skills) {
-              if (Game.skills[j].name == this.unlockSkills[i]) {
-                selected = Game.skills[j]
-              }
-            }
-            if (selected.locked) selected.locked = 0
-          }
+          Game.hideTooltip()
+
+          // check for unlocks
+          Game.unlockSkills()
         }
-
-        Game.hideTooltip()
-
-        // check for unlocks
-        Game.unlockSkills()
-
-        // rebuild skill tree
-        Game.showSkillTree()
       }
     }
   }
@@ -139,7 +127,6 @@ let skills = [
     section: 2,
     desc: 'Increases your total OpC and Ops by 50%',
     maxLvl: 1,
-    unlockSkills: ['Pickaxe Mastery', 'Managerial Mastery'],
     locked: 0,
     drawLines: [
       {from: 'top', to: 'Pickaxe Mastery'},

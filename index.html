@@ -70,24 +70,20 @@
           <div class="ore-weak-spot" onclick='Game.handleClick(1)'></div>
         </div>
         <div class="settings-container">
-          <i onclick='Game.showSettings()' class='fa fa-cog fa-2x settings'></i>
-          <i onclick='Game.showAchievements()' class='fa fa-bar-chart fa-2x settings'></i>
-          <i onclick='Game.showRefinedStore()' class='fa fa-diamond fa-2x settings refined-store-btn'></i>
+          <i onclick='Game.showSettings(); Game.playSound("misc")' class='fa fa-cog fa-2x settings'></i>
+          <i onclick='Game.showAchievements(); Game.playSound("misc")' class='fa fa-bar-chart fa-2x settings'></i>
+          <i onclick='Game.showRefinedStore(); Game.playSound("misc")' class='fa fa-diamond fa-2x settings refined-store-btn'></i>
         </div>
         <div class="bottom-left-btns-container">
           <div class="refine-btn settings" onclick='Game.confirmRefine()'></div>
-          <i class="fa quest-btn fa-map-signs fa-2x settings"></i>
+          <i onclick='Game.showQuests()' onmouseover='Game.showTooltip({type: "quest"})' onmouseout='Game.hideTooltip()'  class="fa quest-btn fa-map-signs fa-2x settings"></i>
         </div>
         <div id='horizontal-separator' class="horizontal-separator"></div>
         <div class="text-scroller-container">
           <p class="text-scroller"></p>
         </div>
         <div class="horizontal-separator"></div>
-        <div class="bottom">
-          <div class="bottom-overlay">
-            <div class="bottom-overlay-txt"></div>
-          </div>
-        </div>
+        <div class="bottom"></div>
       </div>
 
       <div id='main-separator' class="vertical-separator"></div>
