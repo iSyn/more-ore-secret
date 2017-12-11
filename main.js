@@ -1848,13 +1848,14 @@ Game.launch = () => {
     }
 
     if (obj.type == 'quest') {
-      console.log('quest tooltip')
-      if (Game.state.stats.timesRefined < 1) {
-        tooltip.style.left = s('.quest-btn').getBoundingClientRect().right + 20 + 'px'
-        tooltip.style.top = s('.quest-btn').getBoundingClientRect().top + 'px'
-        tooltip.innerHTML = `
-          <p>Quests unlocked at Generation 1</p>
-        `
+      tooltip.style.left = s('.quest-btn').getBoundingClientRect().right + 20 + 'px'
+      tooltip.style.top = s('.quest-btn').getBoundingClientRect().top + 'px'
+
+      if (Game.state.stats.timesRefined == 0) {
+        tooltip.innerHTML = `<p>Quests unlocked at Generation 1</p>`
+        tooltip.style.width = 'auto'
+      } else {
+        tooltip.innerHTML = `<p>Quests available</p>`
         tooltip.style.width = 'auto'
       }
     }
@@ -2260,7 +2261,7 @@ Game.launch = () => {
       <canvas class="skill-lines"></canvas>
       <div class="skill-tree-container-top">
         <h1 style='font-size: 6rem; font-family: "Germania One"'>Generation: ${Game.state.player.generation.lv}</h1>
-        <h4>Available Sp: ${Game.state.player.generation.availableSp}</h4>
+        <h4 class='available-sp'>Available Sp: ${Game.state.player.generation.availableSp}</h4>
         <button onclick='document.querySelector(".skill-tree-container").style.display="none"; window.pJSDom = []'>Go back</button>
       </div>
 

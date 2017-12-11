@@ -25,6 +25,7 @@ let Skill = function(skill) {
           Game.risingNumber(null, 'skill up')
           Game.state.player.skills[`spSection${this.section}`]++
           Game.playSound('skill-lvl-up')
+          document.querySelector('.available-sp').innerHTML = `Available Sp: ${Game.state.player.generation.availableSp}`
 
           Game.hideTooltip()
 
