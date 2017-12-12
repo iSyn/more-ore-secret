@@ -99,24 +99,7 @@ let skills = [
     requires: [
       ['Heavy Strike', 1]
     ],
-    drawLines: [
-      {from: 'right', to: 'testtest'}
-    ]
   },
-  {
-    name: 'testtest',
-    fillerTxt: 'test',
-    passive: 'passive',
-    generationReq: 15,
-    section: 1,
-    desc: 'test',
-    maxLvl: 10,
-    locked: 1,
-    requires: [
-      ['Conditioning', 1]
-    ]
-  },
-
 
   /* Section 2 Skills */
   {
@@ -144,36 +127,6 @@ let skills = [
     desc: 'Increase your OpS and OpC by 5% for each point in Master of None',
     maxLvl: 10,
     locked: 1,
-    drawLines: [
-      {from: 'right', to: 'testing'},
-      {from: 'right', to: 'testing2'}
-    ]
-  },
-  {
-    name: 'testing2',
-    fillerTxt: 'testing',
-    type: 'testing',
-    generationReq: 4,
-    section: 2,
-    desc: 'testing',
-    maxLvl: 10,
-    locked: 1,
-    requires: [
-      ['50 50', 1]
-    ]
-  },
-  {
-    name: 'testing',
-    fillerTxt: 'testing',
-    type: 'testing',
-    generationReq: 4,
-    section: 2,
-    desc: 'testing',
-    maxLvl: 10,
-    locked: 1,
-    requires: [
-      ['50 50', 1]
-    ]
   },
 
   /* Section 3 skills */

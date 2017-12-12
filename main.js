@@ -2222,6 +2222,7 @@ Game.launch = () => {
               if (req.skill.lvl >= req.lvl) {
                 lockedSkills[i].locked = 0
                 selectedEl.style.opacity = 1
+                Game.drawLines()
               }
             }
           }
@@ -2231,15 +2232,16 @@ Game.launch = () => {
           lockedSkills[i].locked = 0
           if (selectedEl != null) {
             selectedEl.style.opacity = 1
+            Game.drawLines()
           }
         }
       }
     }
-
-    Game.drawLines()
   }
 
   Game.buildSkillTree = (section) => {
+
+    console.log('BUILDING SECTION', section)
 
     let highestGen = Game.skills.reduce((prev, current) => (prev.generationReq > current.generationReq) ? prev : current).generationReq
     let spacerNeeded = true;
@@ -2309,6 +2311,7 @@ Game.launch = () => {
     `
 
     div.innerHTML = str
+
     Game.drawLines()
 
     particlesJS("particles-js", {
