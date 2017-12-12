@@ -161,6 +161,13 @@ Game.launch = () => {
       },
     },
 
+    quest: {
+      active: false,
+      currentQuest: null,
+      currentQuestProgress: null,
+      questCompletionTime: null,
+    },
+
     stats: {
       totalOresMined: 0,
       totalOresEarned: 0,
@@ -387,10 +394,17 @@ Game.launch = () => {
   Game.save = () => {
     Game.state.lastLogin = new Date().getTime()
     localStorage.setItem('state', JSON.stringify(Game.state))
+    console.log('SAVED STATE')
     localStorage.setItem('buildings', JSON.stringify(Game.buildings))
+    console.log('SAVED BUILDINGS')
     localStorage.setItem('upgrades', JSON.stringify(Game.upgrades))
+    console.log('SAVED UPGRADES')
     localStorage.setItem('skills', JSON.stringify(Game.skills))
+    console.log('SAVED SKILLS')
+    localStorage.setItem('quests', JSON.stringify(Game.quests))
+    console.log('SAVED QUESTS')
     localStorage.setItem('achievements', JSON.stringify(Game.achievements))
+    console.log('SAVED ACHIEVEMENTS')
     Game.notify('Game Saved')
   }
 
@@ -410,22 +424,28 @@ Game.launch = () => {
       // LOAD BUILDINGS AND UPGRADES
       console.log('LOADING BUILDINGS AND UPGRADES')
       let items = []
-      JSON.parse(localStorage.getItem('buildings')).forEach((building) => {items.push(building)})
-      JSON.parse(localStorage.getItem('upgrades')).forEach((upgrade) => {items.push(upgrade)})
-      items.forEach((item) => {new Item(item)})
+      JSON.parse(localStorage.getItem('buildings')).forEach((building) => items.push(building))
+      JSON.parse(localStorage.getItem('upgrades')).forEach((upgrade) => items.push(upgrade))
+      items.forEach((item) => new Item(item))
 
       // LOAD SKILLS
       console.log('LOADING SKILLS')
       let skills = []
-      JSON.parse(localStorage.getItem('skills')).forEach((skill) => {skills.push(skill)})
-      skills.forEach((skill) => {new Skill(skill)})
+      JSON.parse(localStorage.getItem('skills')).forEach((skill) => skills.push(skill))
+      skills.forEach((skill) => new Skill(skill))
       console.log('skills', Game.skills)
 
       // LOAD ACHIEVEMENTS
       console.log('LOADING ACHIEVEMENTS')
       let achievements = []
-      JSON.parse(localStorage.getItem('achievements')).forEach((achievement) => {achievements.push(achievement)})
-      achievements.forEach((achievement) => {new Achievement(achievement)})
+      JSON.parse(localStorage.getItem('achievements')).forEach((achievement) => achievements.push(achievement))
+      achievements.forEach((achievement) => new Achievement(achievement))
+
+      // LOAD QUESTS
+      console.log('LOADING QUESTS')
+      let quests = []
+      JSON.parse(localStorage.getItem('quests')).forEach((quest) => quests.push(quest))
+      quests.forEach((quest) => new Quest(quest))
 
       // GAIN AWAY INCOME
       if (Game.state.oresPerSecond > 0 && Game.state.lastLogin) Game.earnOfflineGain()
@@ -476,6 +496,7 @@ Game.launch = () => {
     Game.rebuildInventory = 1
     Game.recalculateOpC = 1
     Game.recalculateOpS = 1
+    Game.redrawQuestInfo = 1
     s('.loading').classList.add('finished')
     setTimeout(() => {
       Game.removeEl(s('.loading'))
@@ -955,6 +976,13 @@ Game.launch = () => {
         risingNumber.innerHTML = `<i class='fa fa-level-up'></i>`
         risingNumber.style.color = 'green'
         risingNumber.style.fontSize = '30px'
+      }
+
+      if (type == 'quest-progress') {
+        risingNumber.innerHTML = `<i class='fa fa-angle-double-right fa-2x'></i>`
+        risingNumber.style.color = 'white'
+        // risingNumber.style.left = mouseX + 'px'
+        // risingNumber.style.top = mouseY + 'px'
       }
 
 
@@ -1825,7 +1853,6 @@ Game.launch = () => {
               // Build out skill requirements
               for (i in selectedSkill.requires) {
                 let skillNeeded = Game.select(Game.skills, selectedSkill.requires[i][0])
-                console.log(skillNeeded.lvl, '>=', selectedSkill.requires[i][1])
                 if (skillNeeded.lvl >= selectedSkill.requires[i][1]) {
                   str += `<p>${selectedSkill.requires[i][0]} lv. ${selectedSkill.requires[i][1]}</p>`
                 } else {
@@ -2191,16 +2218,20 @@ Game.launch = () => {
           }
 
           if (Game.state.player.generation.lv >= lockedSkills[i].generationReq) {
-            if (req.skill.lvl >= req.lvl) {
-              lockedSkills[i].locked = 0
-              selectedEl.style.opacity = 1
+            if (req.skill) {
+              if (req.skill.lvl >= req.lvl) {
+                lockedSkills[i].locked = 0
+                selectedEl.style.opacity = 1
+              }
             }
           }
         }
       } else {
         if (Game.state.player.generation.lv >= lockedSkills[i].generationReq) {
           lockedSkills[i].locked = 0
-          selectedEl.style.opacity = 1
+          if (selectedEl != null) {
+            selectedEl.style.opacity = 1
+          }
         }
       }
     }
@@ -2395,9 +2426,7 @@ Game.launch = () => {
   Game.drawLines = () => {
     let canvas = s('.skill-lines')
     let canvasWidth = window.innerWidth
-    // let canvasWidth = s('.skill-tree-container-bottom').getBoundingClientRect().width
     let canvasHeight = window.innerHeight
-    // let canvasHeight = s('.skill-tree-container-bottom').getBoundingClientRect().height
     canvas.width = canvasWidth
     canvas.height = canvasHeight
 
@@ -2871,9 +2900,8 @@ Game.launch = () => {
             for (let i=0; i<Game.quests.length; i++) {
               if (Game.quests[i].locked == 0) {
                 str += `
-                  <div class="available-quest unlocked" onclick="Game.showQuestInformation('${Game.quests[i].functionName}')">
-                    <p>${Game.quests[i].name}</p>
-                    <p class='quest-est-time' style='font-size: small'>completetion time: ${Game.quests[i].completionTimeTxt}</p>
+                  <div style='background: url("./assets/${Game.quests[i].pic}.png");' class="available-quest unlocked" onclick="Game.showQuestInformation('${Game.quests[i].functionName}')">
+                    <p style='font-family: "Germania One"; background: rgba(0, 0, 0, 0.3); width: 100%; padding: 10px'>${Game.quests[i].name}</p>
                   </div>
                 `
               } else if (Game.quests[i].locked == 1) {
@@ -2890,7 +2918,8 @@ Game.launch = () => {
                 `
               }
             }
-          `
+          str += `
+          <p style='opacity: .5'>More coming soon...</p>
           </div>
         </div>
       `
@@ -2915,26 +2944,104 @@ Game.launch = () => {
         <h1 style='padding:10px 0'>${selectedQuest.name}</h1>
         <p onclick='Game.closeCurrentWindow()' style='position: absolute; top: 5px; right: 5px; cursor: pointer'>X</p>
         <hr/>
-        <img src="./assets/${selectedQuest.img}" class="quest-img"'>
+        <img src="./assets/${selectedQuest.pic}.png" class="quest-img"'>
         <hr/>
-        <p>${selectedQuest.desc} <br/> Completion Time: ${selectedQuest.completionTimeTxt}</p>
+        <br/>
+        <h3>${selectedQuest.desc}</h3>
+        <p>Completion Time: ~${selectedQuest.completionTimeTxt}</p>
+        <br/>
         <hr/>
         <div class="quest-information-bottom">
-          <div style='width: 40%' class="quest-information-bottom-left">
-            <p>TIMES COMPLETED: 0</p>
-            <p>QUEST REWARDS</p>
-            <p>5 completions - ???</p>
-            <p>10 completions - ???</p>
-            <p>20 completions - ???</p>
-          </div>
-          <div style='width: 60%' class="quest-information-bottom-right">
-            <button>Adventure <i class='fa fa-long-arrow-right fa-1x'></i></button>
+          <div style='width: 100%' class="quest-information-bottom-right">
+            <button onclick='Game.startQuest("${selectedQuest.name}")'>Adventure <i class='fa fa-long-arrow-right fa-1x'></i></button>
           </div>
         </div>
       </div>
     `
 
     s('body').append(div)
+  }
+
+  Game.startQuest = (questName) => {
+    let quest = Game.select(Game.quests, questName)
+
+    document.querySelectorAll('.wrapper').forEach((wrapper) => Game.removeEl(wrapper))
+
+    if (!Game.state.quest.active) {
+      Game.state.quest.active = true
+      Game.state.quest.currentQuest = quest.name
+      Game.state.quest.questCompletionTime = quest.completionTime
+      Game.state.quest.currentQuestProgress = 0
+      Game.redrawQuestInfo = 1
+    }
+  }
+
+  Game.canBoost = true
+  Game.boostQuest = () => {
+    if (Game.canBoost) {
+      if (Game.state.quest.currentQuestProgress < Game.state.quest.questCompletionTime) {
+        Game.canBoost = false
+        Game.risingNumber(null, 'quest-progress')
+        Game.state.quest.currentQuestProgress += 5 * 1000
+
+        let progress = 0;
+        let max = 1 * 1000
+        s('.click-cooldown').style.height = progress
+
+        let height = setInterval(() => {
+          if (progress < max) {
+            progress += 30
+            s('.click-cooldown').style.height = (progress / max) * 100 + '%'
+          }
+        }, 30)
+
+
+        setTimeout(() => {
+          Game.canBoost = true
+          clearInterval(height)
+        }, 1000)
+
+      }
+    }
+  }
+
+  Game.drawQuestInfo = () => {
+    let div = s('.bottom')
+    if (Game.state.quest.active) {
+      div.innerHTML = `
+        <div onclick='Game.boostQuest()' class="bottom-quest-wrapper" style='cursor: pointer; width: 100%; height: 100%;'>
+          <div class="click-cooldown-container">
+            <div class="click-cooldown"></div>
+          </div>
+          <div class="bottom-active-quest-info">
+            <h3>${Game.state.quest.currentQuest}</h3>
+          </div>
+          <div class="progress-container">
+            <i class="fa fa-male fa-3x player-model" style='color: white;'></i>
+          </div>
+        </div>
+      `
+    } else {
+      div.innerHTML = ``
+    }
+
+    Game.redrawQuestInfo = 0
+  }
+
+  Game.calculateRemainingQuest = () => {
+    Game.state.quest.currentQuestProgress += 30
+
+    let leftPos = (Game.state.quest.currentQuestProgress / Game.state.quest.questCompletionTime) * 100
+    let playerModel = s('.player-model')
+    playerModel.style.left = leftPos + '%'
+
+    if (!playerModel.classList.contains('moving')) {
+      playerModel.classList.add('moving')
+    }
+
+    if (Game.state.quest.currentQuestProgress >= Game.state.quest.questCompletionTime) {
+      playerModel.classList.remove('moving')
+    }
   }
 
   Game.winAchievement = (achievementName) => {
@@ -2996,12 +3103,17 @@ Game.launch = () => {
         // REPOSITION SHIT
         if (Game.repositionAllElements) Game.positionAllElements()
         if (Game.repositionOreWeakSpot) Game.oreWeakSpot()
+        if (Game.redrawQuestInfo) Game.drawQuestInfo()
 
         // run every 10s
         counter++
         if (counter % (30 * 30) == 0) {
           Game.randomBonus()
         }
+      }
+
+      if (Game.state.quest.active) {
+        if (Game.state.quest.currentQuestProgress < Game.state.quest.questCompletionTime) Game.calculateRemainingQuest()
       }
     }
 
@@ -3074,7 +3186,6 @@ Game.launch = () => {
 
   s('.ore').onclick = () => Game.handleClick()
   s('.ore-weak-spot').onclick = () => Game.handleClick('weak-spot')
-  s('.bottom').addEventListener('click', () => Game.showQuests())
 
   window.onresize = () => Game.repositionAllElements = 1
 

@@ -135,13 +135,13 @@ let skills = [
     ]
   },
   {
-    name: '50 50',
+    name: 'Master of None',
     pic: '50-50',
     fillerTxt: 'Best of both worlds',
     type: 'passive',
     generationReq: 2,
     section: 2,
-    desc: 'Increase your OpS and OpC by 5% for each point in 50/50',
+    desc: 'Increase your OpS and OpC by 5% for each point in Master of None',
     maxLvl: 10,
     locked: 1,
     drawLines: [
