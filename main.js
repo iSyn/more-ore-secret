@@ -221,7 +221,6 @@ Game.launch = () => {
     settingsContainer.style.left = anchorVertical.left - settingsContainer.getBoundingClientRect().width  + 'px'
 
     // POSITION REFINE BTNS
-
     if (Game.state.stats.totalOresEarned > 1000000 || Game.state.stats.timesRefined > 0) {
       s('.refine-btn').style.display = 'block'
     } else {
@@ -233,6 +232,16 @@ Game.launch = () => {
     // } else {
     //   s('.quest-btn').style.display = 'none'
     // }
+
+    if (Game.state.timesRefined > 0) {
+      let verticalAnchor = s('.inventory-section').getBoundingClientRect()
+      let horizontalAnchor = s('#main-separator').getBoundingClientRect()
+
+      let btn = s('.open-quests-container')
+
+      btn.style.top = verticalAnchor.bottom + 'px'
+      btn.style.left = horizontalAnchor.left - btn.getBoundingClientRect().width - 30 + 'px'
+    }
 
     let bottomLeftBtnsContainer = s('.bottom-left-btns-container')
 
@@ -485,6 +494,11 @@ Game.launch = () => {
         preloadImage.src = `./assets/ore${i}-${j}.png`
       }
     }
+    let images = ['abandoned-mineshaft']
+    for (i in images) {
+      let newImage = new Image()
+      newImage.src = `./assets/${images[i]}.png`
+    }
 
     // PREREQUISITES
     Game.updatePercentage(0)
@@ -497,6 +511,7 @@ Game.launch = () => {
     Game.recalculateOpC = 1
     Game.recalculateOpS = 1
     Game.redrawQuestInfo = 1
+    Game.drawQuestBtn()
     s('.loading').classList.add('finished')
     setTimeout(() => {
       Game.removeEl(s('.loading'))
@@ -695,6 +710,29 @@ Game.launch = () => {
       div.style.top = anchor.top - (anchor.height / 2) + 'px'
       div.style.left = anchor.right + 'px'
     }
+  }
+
+  Game.tutorialQuest = () => {
+    // if (Game.state.stats.timesRefined == 1) {
+    //   let div = document.createElement('div')
+    //   div.id = 'quest-tut'
+
+    //   div.classList.add('tutorial-container')
+    //   div.innerHTML = `
+    //     <div class="tutorial-arrow-left"></div>
+    //     <div class="tutorial-text">
+    //       <p>Quests are now available!</p>
+    //       <p>Go on quests for Generation XP, Gems, and even <span style='color: #673AB7;text-shadow: 0 2px #e40b32;'>Mythical Artifacts!</span></p>
+    //     </div>
+    //   `
+
+    //   let anchor = s('.quest-btn').getBoundingClientRect()
+
+    //   s('body').append(div)
+
+    //   div.style.top = anchor.top - (anchor.height / 2) + 'px'
+    //   div.style.left = anchor.right + 'px'
+    // }
   }
 
   Game.calculateOpC = (type) => {
@@ -2241,8 +2279,6 @@ Game.launch = () => {
 
   Game.buildSkillTree = (section) => {
 
-    console.log('BUILDING SECTION', section)
-
     let highestGen = Game.skills.reduce((prev, current) => (prev.generationReq > current.generationReq) ? prev : current).generationReq
     let spacerNeeded = true;
 
@@ -2295,7 +2331,7 @@ Game.launch = () => {
       <div class="skill-tree-container-top">
         <h1 style='font-size: 6rem; font-family: "Germania One"'>Generation: ${Game.state.player.generation.lv}</h1>
         <h4 class='available-sp'>Available Sp: ${Game.state.player.generation.availableSp}</h4>
-        <button onclick='document.querySelector(".skill-tree-container").style.display="none"; window.pJSDom = []'>Go back</button>
+        <button onclick='document.querySelector(".skill-tree-container").style.display="none"; window.pJSDom = []; Game.tutorialQuest(); Game.drawQuestBtn()'>Go back</button>
       </div>
 
       <div class="skill-tree-container-bottom">
@@ -2884,8 +2920,34 @@ Game.launch = () => {
     if (s('.specialization-confirmation-wrapper')) Game.removeEl(s('.specialization-confirmation-wrapper'))
   }
 
+  Game.drawQuestBtn = () => {
+    if (Game.state.stats.timesRefined > 0) {
+      let div = s('.open-quests-container')
+
+      div.innerHTML = `
+        <div style='height: 30px;' class="open-quests-container-top">
+          <div class="wood-stick"></div>
+          <div class="wood-stick"></div>
+        </div>
+        <div class="open-quests-container-bottom" onclick='Game.showQuests()'>
+          <h2 style='font-family: "Germania One"; letter-spacing: 2px;'>Quests <i class='fa fa-map fa-1x'></i> </h2>
+        </div>
+      `
+
+      let verticalAnchor = s('.inventory-section').getBoundingClientRect()
+      let horizontalAnchor = s('#main-separator').getBoundingClientRect()
+
+      div.style.top = verticalAnchor.bottom + 'px'
+      div.style.left = horizontalAnchor.left - div.getBoundingClientRect().width - 30 + 'px'
+    }
+  }
+
   Game.showQuests = () => {
     if (Game.state.player.generation.lv >= 1) {
+
+      if (s('#quest-tut')) Game.removeEl(s('#quest-tut'))
+
+
       let div = document.createElement('div')
       div.classList.add('wrapper')
 

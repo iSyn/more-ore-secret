@@ -502,6 +502,7 @@ body {
   color: white;
   font-size: x-large;
   background-color: #201b17;
+  z-index: 2;
 }
 
 .ore-container {
@@ -1433,6 +1434,39 @@ li {
   color: #00c0ff;
 }
 
+.open-quests-container-top {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-around;
+}
+
+.open-quests-container-bottom {
+  padding: 5px 15px;
+  border: 2px solid #251a10;
+  color: white;
+  background: #472b0e;
+  cursor: pointer;
+}
+
+.open-quests-container-bottom:hover {
+  box-shadow: 0 0 5px saddlebrown inset;
+}
+
+.wood-stick {
+  background: url('./assets/verticalseparator.png');
+  background-size: 100% auto;
+  width: 7px;
+}
+
+.open-quests-container {
+  position: absolute;
+  display: flex;
+  flex-flow: column nowrap;
+  top: -100px;
+  transition: top .5s;
+  z-index: 1;
+}
+
 .quests-container {
   position: absolute;
   top: 50%; left: 50%;
@@ -1717,7 +1751,7 @@ li {
   color: white;
   padding: 5px;
   text-align: center;
-  z-index: 2;
+  z-index: 3;
   display: none;
   flex-flow: column nowrap;
 }
