@@ -6,8 +6,10 @@ let Quest = function(obj) {
   this.desc = obj.desc
   this.locked = obj.locked
   this.img = obj.img
-  this.completionTime = obj.completionTime * 60 * 1000
+  this.completionTime = obj.completionTime
   this.completionTimeTxt = obj.completionTimeTxt
+  this.xpGain = obj.xpGain
+  this.firstClearGemGain = obj.firstClearGemGain
 
   Game.quests.push(this)
 }
@@ -19,7 +21,9 @@ let quests  = [
     locked: 0,
     desc: 'Traverse into an abandoned mineshaft for hopes of greater rewards',
     img: 'wip.png',
-    completionTime: 30,
-    completionTimeTxt: '30 minutes'
+    completionTime: 5 * 60 * 1000,
+    completionTimeTxt: '5 minutes',
+    xpGain: 50,
+    firstClearGemGain: 1
   }
 ]

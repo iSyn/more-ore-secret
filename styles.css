@@ -74,7 +74,7 @@ body {
 }
 
 .rising-number {
-  z-index: 3;
+  z-index: 4;
   font-family: 'Germania One';
 }
 
@@ -215,7 +215,7 @@ body {
   top: 0px;
   left: 0px;
   color: white;
-  /*background: rgba(0, 0, 0, 0.7);*/
+  z-index: 4;
   animation: modalShowAnim .1s;
 }
 
@@ -474,7 +474,6 @@ body {
 }
 
 
-
 @-webkit-keyframes backgroundGradient {
     0%{background-position:0% 50%}
     50%{background-position:100% 50%}
@@ -512,6 +511,7 @@ body {
   justify-content: center;
   align-items: center;
   position: relative;
+  /*cursor: url(./assets/pickaxe-cursor.png), default !important;*/
 }
 
 .ore {
@@ -1590,6 +1590,18 @@ li {
   100% {transform: rotate(-5deg);}
 }
 
+.jumping {
+  animation: jumping 1s infinite linear;
+}
+
+@keyframes jumping {
+  0% {transform: translateY(0);}
+  30% {transform: translateY(0);}
+  50% {transform: translateY(-30px);}
+  80% {transform: translateY(-30px);}
+  100% {transform: translateY(0);}
+}
+
 .quest-information {
   position: absolute;
   top: 50%;
@@ -1865,4 +1877,55 @@ li {
   display: flex;
   flex-flow: column nowrap;
   width: 160px;
+}
+
+.quest-complete-modal {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  background: #222;
+  border: 1px solid white;
+  padding: 10px;
+  text-align: center;
+  overflow: hidden;
+}
+
+.quest-complete-modal button {
+  background: transparent;
+  width: 100%;
+  padding: 10px;
+  color: white;
+  cursor: pointer;
+  font-size: large;
+}
+
+.quest-complete-modal button:hover {
+  box-shadow: 0 0 5px white inset;
+}
+
+.quest-reward {
+  padding: 5px;
+  margin-bottom: 10px;
+  border: 1px solid;
+}
+
+.fadeUpIn {
+  animation: fadeUpIn .3s;
+}
+
+@keyframes fadeUpIn {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  50% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0px);
+  }
 }

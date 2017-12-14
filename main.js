@@ -227,13 +227,8 @@ Game.launch = () => {
       s('.refine-btn').style.display = 'none'
     }
 
-    // if (Game.state.stats.timesRefined > 0) {
-    //   s('.quest-btn').style.display = 'block'
-    // } else {
-    //   s('.quest-btn').style.display = 'none'
-    // }
-
-    if (Game.state.timesRefined > 0) {
+    // POSITION QUEST BTN
+    if (Game.state.stats.timesRefined > 0) {
       let verticalAnchor = s('.inventory-section').getBoundingClientRect()
       let horizontalAnchor = s('#main-separator').getBoundingClientRect()
 
@@ -713,26 +708,28 @@ Game.launch = () => {
   }
 
   Game.tutorialQuest = () => {
-    // if (Game.state.stats.timesRefined == 1) {
-    //   let div = document.createElement('div')
-    //   div.id = 'quest-tut'
+    setTimeout(() => {
+      if (Game.state.stats.timesRefined == 1) {
+        let div = document.createElement('div')
+        div.id = 'quest-tut'
 
-    //   div.classList.add('tutorial-container')
-    //   div.innerHTML = `
-    //     <div class="tutorial-arrow-left"></div>
-    //     <div class="tutorial-text">
-    //       <p>Quests are now available!</p>
-    //       <p>Go on quests for Generation XP, Gems, and even <span style='color: #673AB7;text-shadow: 0 2px #e40b32;'>Mythical Artifacts!</span></p>
-    //     </div>
-    //   `
+        div.classList.add('tutorial-container')
+        div.innerHTML = `
+          <div class="tutorial-text">
+            <p>Quests are now available!</p>
+            <p>Go on quests for Generation XP, Gems, and even <span style='color: #673AB7;text-shadow: 0 2px #e40b32;'>Mythical Artifacts!</span></p>
+          </div>
+          <div class="tutorial-arrow"></div>
+        `
 
-    //   let anchor = s('.quest-btn').getBoundingClientRect()
+        let anchor = s('.open-quests-container').getBoundingClientRect()
 
-    //   s('body').append(div)
+        s('body').append(div)
 
-    //   div.style.top = anchor.top - (anchor.height / 2) + 'px'
-    //   div.style.left = anchor.right + 'px'
-    // }
+        div.style.top = anchor.top + (anchor.height / 6) + 'px'
+        div.style.left = anchor.left - div.getBoundingClientRect().width + 'px'
+      }
+    }, 1000)
   }
 
   Game.calculateOpC = (type) => {
@@ -2930,7 +2927,7 @@ Game.launch = () => {
           <div class="wood-stick"></div>
         </div>
         <div class="open-quests-container-bottom" onclick='Game.showQuests()'>
-          <h2 style='font-family: "Germania One"; letter-spacing: 2px;'>Quests <i class='fa fa-map fa-1x'></i> </h2>
+          <h2 style='font-family: "Germania One"; letter-spacing: 2px;'>Quests <i class='fa fa-map-o fa-1x'></i> </h2>
         </div>
       `
 
@@ -2957,7 +2954,17 @@ Game.launch = () => {
           <p onclick='Game.closeCurrentWindow()' style='position: absolute; top: 5px; right: 5px; cursor: pointer'>X</p>
           <div class="active-quest-container">
             <hr/>
-            <p>No active quests :(</p>
+            `
+
+            if (Game.state.quest.active) {
+              str += `
+                <h1>${Game.state.quest.currentQuest}</h1>
+              `
+            } else {
+              str += `<p>No active quest</p>`
+            }
+
+            str += `
             <hr/>
           </div>
           <div class="available-quests-container">
@@ -3043,30 +3050,38 @@ Game.launch = () => {
 
   Game.canBoost = true
   Game.boostQuest = () => {
-    if (Game.canBoost) {
-      if (Game.state.quest.currentQuestProgress < Game.state.quest.questCompletionTime) {
-        Game.canBoost = false
-        Game.risingNumber(null, 'quest-progress')
-        Game.state.quest.currentQuestProgress += 5 * 1000
+    if (Game.state.quest.currentQuestProgress != Game.state.quest.questCompletionTime) {
+      if (Game.canBoost) {
+        if (Game.state.quest.currentQuestProgress + 5000 < Game.state.quest.questCompletionTime) {
+          Game.canBoost = false
+          Game.risingNumber(null, 'quest-progress')
+          Game.state.quest.currentQuestProgress += 5000
 
-        let progress = 0;
-        let max = 1 * 1000
-        s('.click-cooldown').style.height = progress
+          let progress = 0
+          let max = 5 * 1000
+          s('.click-cooldown').style.height = progress
 
-        let height = setInterval(() => {
-          if (progress < max) {
-            progress += 30
-            s('.click-cooldown').style.height = (progress / max) * 100 + '%'
-          }
-        }, 30)
+          let height = setInterval(() => {
+            if (progress < max) {
+              progress += 30
+              s('.click-cooldown').style.height = (progress / max) * 100 + '%'
+            }
+          }, 30)
 
-
-        setTimeout(() => {
+          setTimeout(() => {
+            Game.canBoost = true
+            clearInterval(height)
+            s('.click-cooldown').style.height = "100%"
+          }, 5000)
+        } else {
+          Game.risingNumber(null, 'quest-progress')
+          s('.click-cooldown').style.height = "100%"
           Game.canBoost = true
-          clearInterval(height)
-        }, 1000)
-
+          Game.state.quest.currentQuestProgress = Game.state.quest.questCompletionTime
+        }
       }
+    } else {
+      Game.questCompleteModal()
     }
   }
 
@@ -3082,7 +3097,7 @@ Game.launch = () => {
             <h3>${Game.state.quest.currentQuest}</h3>
           </div>
           <div class="progress-container">
-            <i class="fa fa-male fa-3x player-model" style='color: white;'></i>
+            <i class="fa fa-male fa-3x player-model moving" style='color: white;'></i>
           </div>
         </div>
       `
@@ -3094,19 +3109,68 @@ Game.launch = () => {
   }
 
   Game.calculateRemainingQuest = () => {
-    Game.state.quest.currentQuestProgress += 30
-
-    let leftPos = (Game.state.quest.currentQuestProgress / Game.state.quest.questCompletionTime) * 100
     let playerModel = s('.player-model')
-    playerModel.style.left = leftPos + '%'
+    let leftPos = (Game.state.quest.currentQuestProgress / Game.state.quest.questCompletionTime) * 100
 
-    if (!playerModel.classList.contains('moving')) {
-      playerModel.classList.add('moving')
-    }
-
-    if (Game.state.quest.currentQuestProgress >= Game.state.quest.questCompletionTime) {
+    if (Game.state.quest.currentQuestProgress + 30 < Game.state.quest.questCompletionTime) {
+      Game.state.quest.currentQuestProgress += 30
+      playerModel.style.left = leftPos + "%"
+    } else {
+      Game.state.quest.currentQuestProgress = Game.state.quest.questCompletionTime
+      playerModel.style.left = '100%'
       playerModel.classList.remove('moving')
+      playerModel.classList.add('jumping')
     }
+  }
+
+  Game.questCompleteModal = () => {
+    let div = document.createElement('div')
+    div.classList.add('wrapper')
+    div.id = 'quest-complete-modal'
+    let completedQuest = Game.select(Game.quests, Game.state.quest.currentQuest)
+    Game.playSound('quest-complete')
+
+    let str = `
+      <div class="quest-complete-modal">
+        <p>Quest Finished</p>
+        <hr />
+        <h1 style='font-family: "Germania One"'>${Game.state.quest.currentQuest}</h1>
+        <hr style='margin-bottom: 10px'/>
+        <p class='quest-reward fadeUpIn' style='color: #f3e56c' >Generation XP: +${completedQuest.xpGain}</p>
+        `
+        if (completedQuest.timesCompleted == 0) {
+            str += `<p class='quest-reward fadeUpIn' style='color: #00c0ff; animation-duration: .6s'>FIRST CLEAR BONUS: 1 <i class='fa fa-diamond fa-1x'></i></p>`
+        }
+        str += `
+        <hr />
+        <br />
+
+        <button onclick='Game.gainQuestRewards()'>COMPLETE QUEST</button>
+      </div>
+    `
+
+    div.innerHTML = str
+
+    s('body').append(div)
+  }
+
+  Game.gainQuestRewards = () => {
+    Game.removeEl(s('#quest-complete-modal'))
+    let completedQuest = Game.select(Game.quests, Game.state.quest.currentQuest)
+    completedQuest.timesCompleted++
+    if (completedQuest.timesCompleted == 1) {
+      Game.state.gems += completedQuest.firstClearGemGain
+    }
+    Game.state.player.generation.currentXp += completedQuest.xpGain
+
+    Game.state.quest.active = false,
+    Game.state.quest.currentQuest = null,
+    Game.state.quest.currentQuestProgress = null,
+    Game.state.quest.questCompletionTime = null,
+
+    Game.drawQuestInfo()
+
+    Game.rebuildInventory = 1
   }
 
   Game.winAchievement = (achievementName) => {
@@ -3177,9 +3241,7 @@ Game.launch = () => {
         }
       }
 
-      if (Game.state.quest.active) {
-        if (Game.state.quest.currentQuestProgress < Game.state.quest.questCompletionTime) Game.calculateRemainingQuest()
-      }
+      if (Game.state.quest.active) Game.calculateRemainingQuest()
     }
 
     setTimeout(Game.logic, 1000/Game.state.prefs.fps)
