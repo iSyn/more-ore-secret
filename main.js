@@ -2124,7 +2124,6 @@ Game.launch = () => {
     }
   }
 
-  Game.bonus = null
   Game.selectedBonus = (bonusNum) => {
     Game.playSound('ding')
     if (bonusNum == 1) {
@@ -2137,20 +2136,18 @@ Game.launch = () => {
       let cover = document.createElement('div')
       cover.classList.add('gold-rush-cover')
       s('body').append(cover)
-      Game.bonus = 'Gold Rush'
       let amount = (Game.state.oresPerSecond * 11 + Game.state.oresPerClick * 11)
       Game.risingNumber(amount, 'gold rush')
       Game.goldRush()
-
       setTimeout(() => {
         s('.gold-rush-cover').parentNode.removeChild(s('.gold-rush-cover'))
-        Game.bonus = null
-      },10 * 1000)
+      }, 15 * 1000)
     }
   }
 
   let goldRushCounter = 0
   Game.goldRush = () => {
+
     setTimeout(() => {
       if (goldRushCounter < 20) {
         goldRushCounter++
