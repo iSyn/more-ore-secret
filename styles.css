@@ -61,6 +61,7 @@ body {
 .vertical-separator {
   height: 100%;
   width: 30px;
+  image-rendering: -moz-crisp-edges;
   image-rendering: pixelated;
   background: url('./assets/verticalseparator.png');
   background-size: 100% auto;
@@ -143,6 +144,7 @@ body {
   width: 50px;
   background: url('./assets/item-pouch.png');
   background-size: cover;
+  image-rendering: -moz-crisp-edges;
   image-rendering: pixelated;
   cursor: pointer;
   transform: none;
@@ -260,6 +262,7 @@ body {
 
 .pickaxe-top, .pickaxe-bottom, .pickaxe-aura {
   position: absolute;
+  image-rendering: -moz-crisp-edges;
   image-rendering: pixelated;
   height: 250px;
   width: 250px;
@@ -468,6 +471,7 @@ body {
   background-image: url('./assets/main-bg.png');
   /*background-color: #60695d;*/
   background-size: auto 80%;
+  image-rendering: -moz-crisp-edges;
   image-rendering: pixelated;
   display: flex;
   flex-flow: column nowrap;
@@ -517,6 +521,7 @@ body {
 .ore {
   background: url('./assets/ore1-1.png');
   background-size: 100% 100%;
+  image-rendering: -moz-crisp-edges;
   image-rendering: pixelated;
   height: 300px;
   width: 300px;
@@ -787,6 +792,7 @@ body {
   background-size: 100% 100%;
   box-shadow: 0 0 30px #222 inset;
   /*margin: 1px;*/
+  image-rendering: -moz-crisp-edges;
   image-rendering: pixelated;
 }
 
@@ -802,6 +808,7 @@ body {
   height: 50px;
   width: 50px;
   cursor: pointer;
+  image-rendering: -moz-crisp-edges;
   image-rendering: pixelated;
 }
 
@@ -931,12 +938,14 @@ li {
 .specialization-prospector {
   background: url('./assets/prospector.png');
   background-size: 100% 100%;
+  image-rendering: -moz-crisp-edges;
   image-rendering: pixelated;
 }
 
 .specialization-manager {
   background: url('./assets/manager.png');
   background-size: 100% 100%;
+  image-rendering: -moz-crisp-edges;
   image-rendering: pixelated;
 }
 
@@ -1624,6 +1633,7 @@ li {
 
 .quest-img {
   height: 55%;
+  image-rendering: -moz-crisp-edges;
   image-rendering: pixelated;
 }
 
@@ -1682,6 +1692,7 @@ li {
   width: 128px;
   background: url('./assets/torch.gif');
   background-size: 100% 100%;
+  image-rendering: -moz-crisp-edges;
   image-rendering: pixelated;
 }
 
@@ -1837,6 +1848,7 @@ li {
   height: 30px;
   width: 26px;
   cursor: pointer;
+  image-rendering: -moz-crisp-edges;
   image-rendering: pixelated;
   background: url('./assets/bonus.png');
   animation: rotate 5s infinite linear, fadeIn 2s linear forwards;
@@ -1876,6 +1888,7 @@ li {
   height: 30px;
   width: 26px;
   cursor: pointer;
+  image-rendering: -moz-crisp-edges;
   image-rendering: pixelated;
   background: url('./assets/bonus.png');
   animation: falling 5s linear infinite;

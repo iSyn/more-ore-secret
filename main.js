@@ -1518,7 +1518,7 @@ Game.launch = () => {
           <div class="button" onclick="Game.buildings[${i}].buy();" onmouseover="Game.showTooltip({name: '${item.name}', type: '${item.type}s'}); Game.playSound('itemhover')" onmouseout="Game.hideTooltip()">
             <div style='pointer-events: none' class="button-top">
               <div class="button-left">
-                <img src="./assets/${item.pic}" style='filter: brightness(100%); image-rendering: pixelated'/>
+                <img src="./assets/${item.pic}" style='filter: brightness(100%); image-rendering: pixelated; image-rendering: -moz-crisp-edges'/>
               </div>
               <div style='pointer-events: none' class="button-middle">
                 <h3 style='font-size: x-large'>${item.name}</h3>
