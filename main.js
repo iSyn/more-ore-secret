@@ -2149,41 +2149,64 @@ Game.launch = () => {
     }
   }
 
+  let goldRushCounter = 0
+  Game.goldRush = () => {
+    setTimeout(() => {
+      if (goldRushCounter < 10) {
+        goldRushCounter++
+        let bonus = document.createElement('div')
+        bonus.classList.add('bonus', 'gold-rush-bonus')
+        let randomX = Math.random() * window.innerWidth
+        bonus.style.left = randomX + 'px'
+        s('body').append(bonus)
+        bonus.style.animation = 'falling 4s linear'
+        bonus.style.animationFillMode = 'forwards'
+        bonus.onclick = () => {Game.selectedBonus(1); Game.removeEl(bonus)}
+        Game.goldRush()
+      } else {
+        Game.goldRushCounter = 0
+      }
+    }, 1000)
+    setTimeout(() => {
+      console.log('removing leftovers')
+      if (s('.gold-rush-bonus')) {
+        let all = document.querySelectorAll('.gold-rush-bonus')
+        all.forEach((single) => {
+          Game.removeEl(single)
+        })
+      }
+    }, 20000)
+  }
+
   // Game.goldRush = () => {
   //   for (i = 0; i < 10; i++) {
+  //     let bonus = document.createElement('div')
+  //     bonus.classList.add('bonus')
 
+  //     let randomX = Math.random() * window.innerWidth
+  //     let randomY = Math.random() * window.innerHeight
+
+  //     bonus.style.left = randomX + 'px'
+  //     bonus.style.top = randomY + 'px'
+
+  //     bonus.onclick = () => {
+  //       let amount = (Game.state.oresPerSecond * 11 + Game.state.oresPerClick * 11)
+  //       if (Game.bonus == 'Gold Rush') {
+  //         Game.playSound('ding')
+  //         Game.earn(amount)
+  //         Game.risingNumber(amount, 'gold rush')
+  //         // Game.goldRush()
+  //       } else {
+  //         Game.playSound('ding')
+  //         Game.earn(amount)
+  //         Game.risingNumber(amount, 'bonus')
+  //       }
+  //       bonus.parentNode.removeChild(bonus)
+  //     }
+
+  //     s('body').append(bonus)
   //   }
   // }
-
-  Game.goldRush = () => {
-    for (i = 0; i < 10; i++) {
-      let bonus = document.createElement('div')
-      bonus.classList.add('bonus')
-
-      let randomX = Math.random() * window.innerWidth
-      let randomY = Math.random() * window.innerHeight
-
-      bonus.style.left = randomX + 'px'
-      bonus.style.top = randomY + 'px'
-
-      bonus.onclick = () => {
-        let amount = (Game.state.oresPerSecond * 11 + Game.state.oresPerClick * 11)
-        if (Game.bonus == 'Gold Rush') {
-          Game.playSound('ding')
-          Game.earn(amount)
-          Game.risingNumber(amount, 'gold rush')
-          // Game.goldRush()
-        } else {
-          Game.playSound('ding')
-          Game.earn(amount)
-          Game.risingNumber(amount, 'bonus')
-        }
-        bonus.parentNode.removeChild(bonus)
-      }
-
-      s('body').append(bonus)
-    }
-  }
 
   Game.removeEl = (el) => {
     try {

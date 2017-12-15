@@ -1869,6 +1869,15 @@ li {
   box-shadow: 0 0 40px gold inset;
 }
 
+.gold-rush-bonus {
+  top: 0px;
+}
+
+@keyframes falling {
+  0% {transform: translateY(0);}
+  100% {transform: translateY(100vh);}
+}
+
 @keyframes rotate {
   100% {transform: rotate(360deg);}
 }
