@@ -23,7 +23,7 @@ let quests  = [
     img: 'wip.png',
     completionTime: 5 * 60 * 1000,
     completionTimeTxt: '5 minutes',
-    xpGain: 50,
+    xpGain: 40,
     firstClearGemGain: 1
   }
 ]

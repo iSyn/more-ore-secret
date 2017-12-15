@@ -2085,10 +2085,8 @@ Game.launch = () => {
   }
 
   Game.randomBonus = (special) => {
-    console.log('firing randomBonus')
-
     if (Math.random() <= .3) { // 30% chance of this happening
-      console.log('success')
+      console.log('bonus!')
       let randomID = Math.floor(Math.random() * 1000000) + 1
       let chance = Math.random()
       let bonus = document.createElement('div')
@@ -2113,10 +2111,13 @@ Game.launch = () => {
       s('body').append(bonus)
 
       setTimeout(() => {
-        if (s(`#bonus-${randomID}`)) {
+        let b = s(`#bonus-${randomID}`)
+        if (b) {
           bonus.classList.add('fadeOut')
           setTimeout(() => {
-            s(`#bonus-${randomID}`).parentNode.removeChild(s(`#bonus-${randomID}`))
+            if (b) {
+              b.parentNode.removeChild(b)
+            }
           }, 2000)
         }
       }, 8 * 1000)
@@ -2125,9 +2126,9 @@ Game.launch = () => {
 
   Game.bonus = null
   Game.selectedBonus = (bonusNum) => {
+    Game.playSound('ding')
     if (bonusNum == 1) {
       let amount = (Game.state.oresPerSecond * 13 + Game.state.oresPerClick * 13)
-      Game.playSound('ding')
       Game.earn(amount)
       Game.risingNumber(amount, 'bonus')
     }
@@ -2139,7 +2140,6 @@ Game.launch = () => {
       Game.bonus = 'Gold Rush'
       let amount = (Game.state.oresPerSecond * 11 + Game.state.oresPerClick * 11)
       Game.risingNumber(amount, 'gold rush')
-      Game.playSound('ding')
       Game.goldRush()
 
       setTimeout(() => {
@@ -2148,6 +2148,12 @@ Game.launch = () => {
       },10 * 1000)
     }
   }
+
+  // Game.goldRush = () => {
+  //   for (i = 0; i < 10; i++) {
+
+  //   }
+  // }
 
   Game.goldRush = () => {
     for (i = 0; i < 10; i++) {
