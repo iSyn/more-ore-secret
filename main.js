@@ -182,6 +182,7 @@ Game.launch = () => {
       currentWeakSpotHits: 0,
       megaHits: 0,
       rocksDestroyed: 0,
+      globalRocksDestroyed: 0,
       itemsPickedUp: 0,
       timePlayed: 0,
       highestCombo: 0,
@@ -2172,36 +2173,6 @@ Game.launch = () => {
     }, 500)
   }
 
-  // Game.goldRush = () => {
-  //   for (i = 0; i < 10; i++) {
-  //     let bonus = document.createElement('div')
-  //     bonus.classList.add('bonus')
-
-  //     let randomX = Math.random() * window.innerWidth
-  //     let randomY = Math.random() * window.innerHeight
-
-  //     bonus.style.left = randomX + 'px'
-  //     bonus.style.top = randomY + 'px'
-
-  //     bonus.onclick = () => {
-  //       let amount = (Game.state.oresPerSecond * 11 + Game.state.oresPerClick * 11)
-  //       if (Game.bonus == 'Gold Rush') {
-  //         Game.playSound('ding')
-  //         Game.earn(amount)
-  //         Game.risingNumber(amount, 'gold rush')
-  //         // Game.goldRush()
-  //       } else {
-  //         Game.playSound('ding')
-  //         Game.earn(amount)
-  //         Game.risingNumber(amount, 'bonus')
-  //       }
-  //       bonus.parentNode.removeChild(bonus)
-  //     }
-
-  //     s('body').append(bonus)
-  //   }
-  // }
-
   Game.removeEl = (el) => {
     try {
       el.parentNode.removeChild(el)
@@ -2608,6 +2579,7 @@ Game.launch = () => {
       damage: 1,
     }
 
+    Game.state.stats.rocksDestroyed = 0
     Game.state.stats.currentOreClicks = 0
     Game.state.stats.currentOresEarned = 0
     Game.state.stats.currentOresMined = 0
