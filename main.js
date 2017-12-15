@@ -2152,30 +2152,27 @@ Game.launch = () => {
   let goldRushCounter = 0
   Game.goldRush = () => {
     setTimeout(() => {
-      if (goldRushCounter < 10) {
+      if (goldRushCounter < 20) {
         goldRushCounter++
         let bonus = document.createElement('div')
-        bonus.classList.add('bonus', 'gold-rush-bonus')
+        let randomID = Math.floor(Math.random() * 100000000) + 1
+        bonus.id = `bonus-${randomID}`
+        bonus.classList.add('gold-rush-bonus')
         let randomX = Math.random() * window.innerWidth
         bonus.style.left = randomX + 'px'
         s('body').append(bonus)
-        bonus.style.animation = 'falling 4s linear'
-        bonus.style.animationFillMode = 'forwards'
         bonus.onclick = () => {Game.selectedBonus(1); Game.removeEl(bonus)}
+
+        setTimeout(() => {
+          if (s(`#bonus-${randomID}`)) {
+            Game.removeEl(s(`#bonus-${randomID}`))
+          }
+        }, 5000) // TIME IT TAKES FOR ANIMATION TO FALL OFF SCREEN
         Game.goldRush()
       } else {
-        Game.goldRushCounter = 0
+        goldRushCounter = 0
       }
-    }, 1000)
-    setTimeout(() => {
-      console.log('removing leftovers')
-      if (s('.gold-rush-bonus')) {
-        let all = document.querySelectorAll('.gold-rush-bonus')
-        all.forEach((single) => {
-          Game.removeEl(single)
-        })
-      }
-    }, 20000)
+    }, 500)
   }
 
   // Game.goldRush = () => {
