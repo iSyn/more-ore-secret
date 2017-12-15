@@ -22,15 +22,42 @@ let achievements = [
   {name: 'Advanced Miner', desc: 'Break 50 rocks'},
 
   // COMBO RELATED ACHIEVEMENTS
-  {name: 'Combo Pleb', desc: 'Reach 5 hit combo'},
-  {name: 'Combo Squire', desc: 'Reach 15 hit combo'},
-  {name: 'Combo Knight', desc: 'Reach 40 hit combo'},
-  {name: 'Combo King', desc: 'Reach 100 hit combo'},
-  {name: 'Combo Master', desc: 'Reach 300 hit combo'},
-  {name: 'Combo Devil', desc: 'Reach 666 hit combo'},
-  {name: 'Combo God', desc: 'Reach 777 hit combo'},
-  {name: 'Combo Saiyan', desc: 'Reach 1000 hit combo'},
-  {name: 'Combo Saitama', desc: 'Reach 10000 hit combo'},
+  {name: 'Combo Pleb', desc: 'Reach 5 hit combo', reward: {
+    txt: 'weak-hit multiplier +1',
+    increaseWeakHitMulti: 1
+  }},
+  {name: 'Combo Squire', desc: 'Reach 15 hit combo', reward: {
+    txt: 'weak-hit multiplier +1',
+    increaseWeakHitMulti: 1
+  }},
+  {name: 'Combo Knight', desc: 'Reach 40 hit combo', reward: {
+    txt: 'weak-hit multiplier +1',
+    increaseWeakHitMulti: 1
+  }},
+  {name: 'Combo King', desc: 'Reach 100 hit combo', reward: {
+    txt: 'weak-hit multiplier +2',
+    increaseWeakHitMulti: 2
+  }},
+  {name: 'Combo Master', desc: 'Reach 300 hit combo', reward: {
+    txt: 'weak-hit multiplier +2',
+    increaseWeakHitMulti: 2
+  }},
+  {name: 'Combo Devil', desc: 'Reach 666 hit combo', reward: {
+    txt: 'weak-hit multiplier +3',
+    increaseWeakHitMulti: 3
+  }},
+  {name: 'Combo God', desc: 'Reach 777 hit combo', reward: {
+    txt: 'weak-hit multiplier +4',
+    increaseWeakHitMulti: 4
+  }},
+  {name: 'Combo Saiyan', desc: 'Reach 1000 hit combo', reward: {
+    txt: 'weak-hit multiplier +5',
+    increaseWeakHitMulti: 5
+  }},
+  {name: 'Combo Saitama', desc: 'Reach 10000 hit combo', reward: {
+    txt: 'weak-hit multiplier +5 (LAST ONE FOR NOW LOL)',
+    increaseWeakHitMulti: 5
+  }},
 
   // OPC ACHIEVEMENTS
   {name: 'Still a Baby', desc: 'Deal more than 1,000,000 in one hit'},

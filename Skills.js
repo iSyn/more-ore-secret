@@ -13,6 +13,7 @@ let Skill = function(skill) {
   skill.maxLvl ? this.maxLvl = skill.maxLvl : this.maxLvl = 100
   if (skill.drawLines) this.drawLines = skill.drawLines
   if (skill.requires) this.requires = skill.requires
+  if (skill.onLvl) this.onLvl = skill.onLvl
 
   Game.skills.push(this)
 
@@ -26,7 +27,12 @@ let Skill = function(skill) {
           Game.state.player.skills[`spSection${this.section}`]++
           Game.playSound('skill-lvl-up')
           document.querySelector('.available-sp').innerHTML = `Available Sp: ${Game.state.player.generation.availableSp}`
-
+          if (this.onLvl) {
+            if (this.onLvl.addPermaOpC) Game.state.permanentOpcMulti += this.onLvl.addPermaOpC
+            if (this.onLvl.addPermaOpS) Game.state.permanentOpsMulti += this.onLvl.addPermaOpS
+            Game.calculateOpS()
+            Game.calculateOpC()
+          }
           Game.hideTooltip()
 
           // check for unlocks
@@ -115,7 +121,11 @@ let skills = [
     drawLines: [
       {from: 'top', to: 'Pickaxe Mastery'},
       {from: 'bottom', to: 'Managerial Mastery'},
-    ]
+    ],
+    onLvl: {
+      addPermaOpC: .5,
+      addPermaOpS: .5
+    }
   },
   {
     name: 'Master of None',
@@ -127,6 +137,23 @@ let skills = [
     desc: 'Increase your OpS and OpC by 5% for each point in Master of None',
     maxLvl: 10,
     locked: 1,
+    drawLines: [
+      {from: 'right', to: 'The Unachieveable'}
+    ]
+  },
+  {
+    name: 'The Unachieveable',
+    pic: 'nothing',
+    fillerTxt: 'Unachieveable',
+    type: 'bleh',
+    generationReq: 100,
+    section: 2,
+    desc: 'This shouldnt be achievable',
+    maxLvl: 999,
+    locked: 1,
+    requires: [
+      ['Master of None', 1]
+    ]
   },
 
   /* Section 3 skills */

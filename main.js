@@ -135,8 +135,11 @@ Game.launch = () => {
     oresPerClick: 0,
     opsMulti: 0,
     opcMulti: 0,
+    permanentOpsMulti: 0,
+    permanentOpcMulti: 0,
     critHitMulti: 2,
     weakHitMulti: 5,
+    permanentWeakHitMulti: 0,
     lastLogin: null,
     canRefine: false,
 
@@ -732,7 +735,7 @@ Game.launch = () => {
     }, 1000)
   }
 
-  Game.calculateOpC = (type) => {
+  Game.calculateOpC = () => {
     let opc = 0
 
     opc += Game.state.player.pickaxe.damage
@@ -752,6 +755,9 @@ Game.launch = () => {
 
     // ADD OPC MULTIPLIER
     opc += (opc * Game.state.opcMulti)
+
+    // ADD PERMA OPC MULTI
+    opc += (opc * Game.state.permanentOpcMulti)
 
     // ADD GENERATION BONUS
     // opc += (opc * (Game.state.player.generation.lv * 1))
@@ -779,6 +785,9 @@ Game.launch = () => {
 
     // OPS MULTIeeeeeeeeeeeeeeee
     ops += (ops * Game.state.opsMulti)
+
+    // ADD PERMA OPS MULTI
+    ops += (ops * Game.state.permanentOpsMulti)
 
     Game.state.oresPerSecond = ops
     Game.recalculateOpS = 0
@@ -868,7 +877,7 @@ Game.launch = () => {
     if (type) {
       if (type == 'weak-spot') {
         Game.getCombo('hit')
-        amount *= Game.state.weakHitMulti
+        amount *= (Game.state.weakHitMulti + Game.state.permanentWeakHitMulti)
         Game.playSound('ore-crit-hit')
         Game.risingNumber(amount, 'weak-hit')
         Game.state.stats.currentWeakSpotHits++
@@ -1591,6 +1600,8 @@ Game.launch = () => {
         <p style='text-align: center; background: transparent; color: white; padding-bottom: 20px;'>
         Please consider disabling adblock! <br/>
         I am just a broke college student and the cents generated from this game will be for food.
+        <br/>
+        Or consider supporting me on <a target='_blank' href="https://www.patreon.com/user?u=8032477">patreon!</a> <br/>(Even a dollar helps!)
         </p>
       `
       s('#ads-im-sorry-please-dont-hate-me').innerHTML = str
@@ -2139,31 +2150,33 @@ Game.launch = () => {
   }
 
   Game.goldRush = () => {
-    let bonus = document.createElement('div')
-    bonus.classList.add('bonus')
+    for (i = 0; i < 10; i++) {
+      let bonus = document.createElement('div')
+      bonus.classList.add('bonus')
 
-    let randomX = Math.random() * window.innerWidth
-    let randomY = Math.random() * window.innerHeight
+      let randomX = Math.random() * window.innerWidth
+      let randomY = Math.random() * window.innerHeight
 
-    bonus.style.left = randomX + 'px'
-    bonus.style.top = randomY + 'px'
+      bonus.style.left = randomX + 'px'
+      bonus.style.top = randomY + 'px'
 
-    bonus.onclick = () => {
-      let amount = (Game.state.oresPerSecond * 11 + Game.state.oresPerClick * 11)
-      if (Game.bonus == 'Gold Rush') {
-        Game.playSound('ding')
-        Game.earn(amount)
-        Game.risingNumber(amount, 'gold rush')
-        Game.goldRush()
-      } else {
-        Game.playSound('ding')
-        Game.earn(amount)
-        Game.risingNumber(amount, 'bonus')
+      bonus.onclick = () => {
+        let amount = (Game.state.oresPerSecond * 11 + Game.state.oresPerClick * 11)
+        if (Game.bonus == 'Gold Rush') {
+          Game.playSound('ding')
+          Game.earn(amount)
+          Game.risingNumber(amount, 'gold rush')
+          // Game.goldRush()
+        } else {
+          Game.playSound('ding')
+          Game.earn(amount)
+          Game.risingNumber(amount, 'bonus')
+        }
+        bonus.parentNode.removeChild(bonus)
       }
-      bonus.parentNode.removeChild(bonus)
-    }
 
-    s('body').append(bonus)
+      s('body').append(bonus)
+    }
   }
 
   Game.removeEl = (el) => {
@@ -3132,7 +3145,7 @@ Game.launch = () => {
 
     let str = `
       <div class="quest-complete-modal">
-        <p>Quest Finished</p>
+        <p>Quest Complete</p>
         <hr />
         <h1 style='font-family: "Germania One"'>${Game.state.quest.currentQuest}</h1>
         <hr style='margin-bottom: 10px'/>
@@ -3145,7 +3158,7 @@ Game.launch = () => {
         <hr />
         <br />
 
-        <button onclick='Game.gainQuestRewards()'>COMPLETE QUEST</button>
+        <button onclick='Game.gainQuestRewards()'>COLLECT REWARDS</button>
       </div>
     `
 
@@ -3184,6 +3197,13 @@ Game.launch = () => {
 
     if (selectedAchievement.won == 0) {
       selectedAchievement.won = 1
+
+      if (selectedAchievement.reward) {
+        if (selectedAchievement.reward.increaseWeakHitMulti) {
+          Game.state.permanentWeakHitMulti += selectedAchievement.reward.increaseWeakHitMulti
+        }
+      }
+
       let div = document.createElement('div')
       div.classList.add('achievement')
 
@@ -3194,7 +3214,8 @@ Game.launch = () => {
       `
       if (selectedAchievement.reward) {
         str += `
-          <p>reward: bleh</p>
+          <hr />
+          <p>REWARD: ${selectedAchievement.reward.txt}</p>
         `
       }
 

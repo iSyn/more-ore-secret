@@ -1890,6 +1890,7 @@ li {
   padding: 10px;
   text-align: center;
   overflow: hidden;
+  box-shadow: 0 0 20px 1px gold;
 }
 
 .quest-complete-modal button {
