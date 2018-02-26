@@ -128,18 +128,24 @@ let skills = [
     }
   },
   {
-    name: 'Master of None',
-    pic: '50-50',
-    fillerTxt: 'Best of both worlds',
+    name: 'Golden Shower',
+    fillerTxt: 'Totally normal',
     type: 'passive',
-    generationReq: 2,
+    generationReq: 3,
     section: 2,
-    desc: 'Increase your OpS and OpC by 5% for each point in Master of None',
+    desc: 'Increases the duration of a Gold Rush by 5 for each level in Golden Shower',
     maxLvl: 10,
-    locked: 1,
-    drawLines: [
-      {from: 'right', to: 'The Unachieveable'}
-    ]
+    locked: 0,
+  },
+  {
+    name: 'Gold Scanner',
+    fillerTxt: 'beep beep beep',
+    type: 'passive',
+    generationReq: 3,
+    section: 2,
+    desc: 'Increases the chance of a Gold Nugget spawning',
+    maxLvl: 10,
+    locked: 0,
   },
   {
     name: 'The Unachieveable',
@@ -164,7 +170,7 @@ let skills = [
     type: 'passive',
     generationReq: 2,
     section: 3,
-    desc: 'Increase your total OpS by 10% for each point in Managerial Mastery',
+    desc: 'Increase your total OpS by 10% for each level in Managerial Mastery',
     maxLvl: 5,
     locked: 1,
     drawLines: [
