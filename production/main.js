@@ -804,6 +804,7 @@ Game.launch = function () {
 
   Game.handleClick = function (type) {
     var amount = Game.state.oresPerClick;
+    var event = event || window.event;
     if (type) {
       if (type == 'weak-spot') {
         Game.getCombo('hit');
@@ -821,7 +822,7 @@ Game.launch = function () {
     }
 
     Game.earn(amount);
-    Game.drawRockParticles(event);
+    Game.drawRockParticles();
     Game.state.stats.currentOreClicks++;
     Game.state.stats.currentOresMined += amount;
     Game.state.stats.totalOresMined += amount;
@@ -837,6 +838,7 @@ Game.launch = function () {
   };
 
   Game.risingNumber = function (amount, type) {
+    var event = event || window.event;
     if (Game.state.prefs.risingNumbers == true) {
       var mouseX = (s('.ore').getBoundingClientRect().left + s('.ore').getBoundingClientRect().right) / 2;
       var mouseY = (s('.ore').getBoundingClientRect().top + s('.ore').getBoundingClientRect().bottom) / 2;
@@ -968,23 +970,40 @@ Game.launch = function () {
   };
 
   Game.drawRockParticles = function () {
+
     if (Game.state.prefs.rockParticles == true) {
+
+      // var event = event || window.event
+      console.log(window.event)
+
+      var posx = 0;
+      var posy = 0;
+      if (event.pageX || event.pageY)   {
+        posx = event.pageX;
+        posy = event.pageY;
+      }
+      else if (event.clientX || event.clientY)  {
+        posx = event.clientX + document.body.scrollLeft
+          + document.documentElement.scrollLeft;
+        posy = event.clientY + document.body.scrollTop
+          + document.documentElement.scrollTop;
+      }
+
       var allParticles = document.querySelectorAll('.particle');
       if (allParticles.length >= 10) {
         var selectedEl = allParticles[0];
         Game.removeEl(selectedEl);
       }
+
       var div = document.createElement('div');
       div.classList.add('particle');
       div.style.background = 'lightgrey';
-      var x = event.clientX;
-      var y = event.clientY;
 
-      div.style.left = x + 'px';
-      div.style.top = y + 'px';
+      div.style.left = posx + 'px';
+      div.style.top = posy + 'px';
 
-      var particleY = y;
-      var particleX = x;
+      var particleY = posy;
+      var particleX = posx;
 
       var randomNumber = Math.random();
       var randomSign = Math.round(Math.random()) * 2 - 1;
@@ -1622,6 +1641,7 @@ Game.launch = function () {
   };
 
   Game.showTooltip = function (obj) {
+
     var tooltip = s('.tooltip');
     var event = event || window.event;
 

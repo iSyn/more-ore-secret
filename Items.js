@@ -80,6 +80,12 @@ let items = [
       ],
       addTextScroller: [
         {text: '[Breaking News] Farmers have now started farming for ores. How is this possible? More at 7pm'}
+      ],
+      achievements: [
+        {name: 'Farm Achievement I', amountNeeded: 10},
+        {name: 'Farm Achievement II', amountNeeded: 20},
+        {name: 'Farm Achievement III', amountNeeded: 50},
+        {name: 'Farm Achievement IV', amountNeeded: 100}
       ]
     }
   },
@@ -92,6 +98,12 @@ let items = [
         {name: 'Wooden Compass', amountNeeded: 20},
         {name: 'Ore Filter', amountNeeded: 50},
         {name: 'Waterproof Tape', amountNeeded: 100}
+      ],
+      achievements: [
+        {name: 'Quarry Achievement I', amountNeeded: 10},
+        {name: 'Quarry Achievement II', amountNeeded: 20},
+        {name: 'Quarry Achievement III', amountNeeded: 50},
+        {name: 'Quarry Achievement IV', amountNeeded: 100}
       ]
     }
   },
@@ -104,6 +116,12 @@ let items = [
         {name: 'Worship Session', amountNeeded: 20},
         {name: '7th Day', amountNeeded: 50},
         {name: 'Judgement Day', amountNeeded: 100},
+      ],
+      achievements: [
+        {name: 'Church Achievement I', amountNeeded: 10},
+        {name: 'Church Achievement II', amountNeeded: 20},
+        {name: 'Church Achievement III', amountNeeded: 50},
+        {name: 'Church Achievement IV', amountNeeded: 100}
       ]
     }
   },
@@ -116,6 +134,12 @@ let items = [
         {name: 'Clicky Squish Buttons', amountNeeded: 20},
         {name: 'Metallic Magnetic Panels', amountNeeded: 50},
         {name: 'Hydroponic Screws', amountNeeded: 100},
+      ],
+      achievements: [
+        {name: 'Factory Achievement I', amountNeeded: 10},
+        {name: 'Factory Achievement II', amountNeeded: 20},
+        {name: 'Factory Achievement III', amountNeeded: 50},
+        {name: 'Factory Achievement IV', amountNeeded: 100}
       ]
     }
   },
@@ -128,6 +152,12 @@ let items = [
         {name: 'Polished Shovel', amountNeeded: 20},
         {name: 'Fresh Bandages', amountNeeded: 50},
         {name: 'Oil Lanterns', amountNeeded: 100},
+      ],
+      achievements: [
+        {name: 'Crypt Achievement I', amountNeeded: 10},
+        {name: 'Crypt Achievement II', amountNeeded: 20},
+        {name: 'Crypt Achievement III', amountNeeded: 50},
+        {name: 'Crypt Achievement IV', amountNeeded: 100}
       ]
     }
   },
@@ -140,6 +170,12 @@ let items = [
         {name: 'Blood Transfusion', amountNeeded: 20},
         {name: 'CAT Scan', amountNeeded: 50},
         {name: 'Enhancement Surgery', amountNeeded: 100},
+      ],
+      achievements: [
+        {name: 'Hospital Achievement I', amountNeeded: 10},
+        {name: 'Hospital Achievement II', amountNeeded: 20},
+        {name: 'Hospital Achievement III', amountNeeded: 50},
+        {name: 'Hospital Achievement IV', amountNeeded: 100}
       ]
     }
   },
@@ -148,6 +184,12 @@ let items = [
     buyFunctions: {
       unlockUpgrades: [
         {name: 'Council of Rocks', amountNeeded: 1}
+      ],
+      achievements: [
+        {name: 'Citadel Achievement I', amountNeeded: 10},
+        {name: 'Citadel Achievement II', amountNeeded: 20},
+        {name: 'Citadel Achievement III', amountNeeded: 50},
+        {name: 'Citadel Achievement IV', amountNeeded: 100}
       ]
     }
   },
@@ -156,6 +198,12 @@ let items = [
     buyFunctions: {
       unlockUpgrades: [
         {name: 'Jet Fuel', amountNeeded: 1}
+      ],
+      achievements: [
+        {name: 'Xeno Spaceship Achievement I', amountNeeded: 10},
+        {name: 'Xeno Spaceship Achievement II', amountNeeded: 20},
+        {name: 'Xeno Spaceship Achievement III', amountNeeded: 50},
+        {name: 'Xeno Spaceship Achievement IV', amountNeeded: 100}
       ]
     }
   },
@@ -164,6 +212,12 @@ let items = [
     buyFunctions: {
       unlockUpgrades: [
         {name: 'Golden Eggs', amountNeeded: 1}
+      ],
+      achievements: [
+        {name: 'Sky Castle Achievement I', amountNeeded: 10},
+        {name: 'Sky Castle Achievement II', amountNeeded: 20},
+        {name: 'Sky Castle Achievement III', amountNeeded: 50},
+        {name: 'Sky Castle Achievement IV', amountNeeded: 100}
       ]
     }
   },
@@ -172,6 +226,12 @@ let items = [
     buyFunctions: {
       unlockUpgrades: [
         {name: 'Green Goop', amountNeeded: 1}
+      ],
+      achievements: [
+        {name: 'Eon Portal Achievement I', amountNeeded: 10},
+        {name: 'Eon Portal Achievement II', amountNeeded: 20},
+        {name: 'Eon Portal Achievement III', amountNeeded: 50},
+        {name: 'Eon Portal Achievement IV', amountNeeded: 100}
       ]
     }
   },
@@ -180,6 +240,12 @@ let items = [
     buyFunctions: {
       unlockUpgrades: [
         {name: 'Unholy Mineshaft', amountNeeded: 1}
+      ],
+      achievements: [
+        {name: 'Sacred Mines Achievement I', amountNeeded: 10},
+        {name: 'Sacred Mines Achievement II', amountNeeded: 20},
+        {name: 'Sacred Mines Achievement III', amountNeeded: 50},
+        {name: 'Sacred Mines Achievement IV', amountNeeded: 100}
       ]
     }
   },
@@ -188,6 +254,12 @@ let items = [
     buyFunctions: {
       unlockUpgrades: [
         {name: 'OARDISupgrade', amountNeeded: 1}
+      ],
+      achievements: [
+        {name: 'O.A.R.D.I.S. Achievement I', amountNeeded: 10},
+        {name: 'O.A.R.D.I.S. Achievement II', amountNeeded: 20},
+        {name: 'O.A.R.D.I.S. Achievement III', amountNeeded: 50},
+        {name: 'O.A.R.D.I.S. Achievement IV', amountNeeded: 100}
       ]
     }
   },

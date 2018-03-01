@@ -541,6 +541,25 @@ Game.launch = () => {
     }, 1500)
   }
 
+  Game.confirmWipe = () => {
+    let div = document.createElement('div')
+    div.classList.add('wrapper')
+    div.innerHTML = `
+      <div class="offline-gain-popup-container">
+        <h2 style='font-family: "Germania One"; letter-spacing: 1px;'>Confirm Wipe</h2>
+        <i class='fa fa-times fa-1x' onclick='Game.removeEl(document.querySelector(".wrapper"))'></i>
+        <hr />
+        <p style='color: red'>Are you sure you want to wipe your save?</p>
+        <p style='color: red'>You will lose all your progress and achievements</p>
+        <hr />
+        <button onclick='Game.closeCurrentWindow()'>No</button>
+        <button onclick='Game.wipe()'>Yes</button>
+      </div>
+    `
+
+    s('body').append(div)
+  }
+
   Game.wipe = () => {
     localStorage.clear()
     location.reload()
@@ -580,7 +599,7 @@ Game.launch = () => {
     let amountOfTimePassed = (current - past) / 1000 // GETS THE DIFFERENCE IN SECONDS
     let currentOpS = Game.state.oresPerSecond
     let amountToGain = (amountOfTimePassed * currentOpS)
-    if (amountToGain >= 1 && amountOfTimePassed >= 5) {
+    if (amountToGain >= 1 && amountOfTimePassed >= 30) {
       if (!s('.offline-gain-popup-container')) {
         let div = document.createElement('div')
         div.classList.add('wrapper')
@@ -1140,7 +1159,6 @@ Game.launch = () => {
         <div class="item-pouch-glow3"></div>
       `
 
-
       // POSITION ITEM CONTAINER NEAR ORE
       let orePos = s('.ore').getBoundingClientRect()
       itemContainer.style.position = 'absolute'
@@ -1535,7 +1553,6 @@ Game.launch = () => {
           <p>BUY AMOUNT:</p>
           <p onclick='Game.state.prefs.buyAmount = 1; Game.rebuildStore = 1' id='buy-1' class='bulk-buy-amt'>1</p>
           <p onclick='Game.state.prefs.buyAmount = 10; Game.rebuildStore = 1' id='buy-10' class='bulk-buy-amt''>10</p>
-          <p onclick='Game.state.prefs.buyAmount = 50; Game.rebuildStore = 1' id='buy-50' class='bulk-buy-amt''>50</p>
           <p onclick='Game.state.prefs.buyAmount = 100; Game.rebuildStore = 1' id='buy-100' class='bulk-buy-amt''>100</p>
         </div>
         <div class="horizontal-separator" style='height: 8px;'></div>
@@ -1606,7 +1623,6 @@ Game.launch = () => {
     if (Game.state.stats.timesRefined >= 1) {
       if (Game.state.prefs.buyAmount == 1) s('#buy-1').style.color = 'white'
       if (Game.state.prefs.buyAmount == 10) s('#buy-10').style.color = 'white'
-      if (Game.state.prefs.buyAmount == 50) s('#buy-50').style.color = 'white'
       if (Game.state.prefs.buyAmount == 100) s('#buy-100').style.color = 'white'
     }
   }
@@ -1974,6 +1990,35 @@ Game.launch = () => {
       }
     }
 
+    if (obj.type == 'achievement') {
+      let str;
+      let selectedAchievement = Game.select(Game.achievements, obj.achievementName)
+
+      tooltip.style.left = event.clientX + 20 + 'px'
+      tooltip.style.top = event.clientY + 20 + 'px'
+      tooltip.style.textAlign = 'left'
+
+      if (obj.missing) {
+        str = `
+          <h2>${selectedAchievement.name}</h2>
+          <hr/>
+          <p>???</p>
+        `
+      } else {
+        str = `
+          <h2>${selectedAchievement.name}</h2>
+          <hr/>
+          <p>${selectedAchievement.desc}</p>
+        `
+
+        if (selectedAchievement.reward) {
+          str += `<hr/><p style='color: lime'>Bonus: ${selectedAchievement.reward.txt}</p>`
+        }
+      }
+
+      tooltip.innerHTML = str
+    }
+
     tooltip.style.animation = 'tooltip .3s'
   }
 
@@ -1989,12 +2034,13 @@ Game.launch = () => {
 
     str += `
       <div class="setting-container">
-        <h3>settings</h3>
+        <h1 style='font-family: "Germania One"; font-size: 4em; text-align: center;'>Settings</h1>
         <i class='fa fa-times fa-1x' onclick='Game.removeEl(document.querySelector(".wrapper"))'></i>
         <hr/>
-        <p>Sound</p>
+        <h2 style='text-align: left;'>Sound</h2>
+        <hr/>
         <div class="single-setting">
-          <p style='padding-right: 10px;'>SFX Volume: </p>
+          <p style='padding-right: 10px;'>Volume: </p>
           <input class='volume-slider' type="range" min=0 max=1 step=0.1 list='tickmarks' onchange='Game.state.prefs.volume = document.querySelector(".volume-slider").value'/>
           <datalist id="tickmarks">
             <option value="0" label="0%">
@@ -2018,9 +2064,10 @@ Game.launch = () => {
           <input type="radio" name='bgm' id='bgmOff' value='false' onchange='Game.state.prefs.bgm = 0; Game.toggleBgm();'/>
             <label for="bgmOff" style='margin-right: 10px'>Off</label>
         </div>
-        <hr/>
         <br/>
-        <p>Video</p>
+        <hr/>
+        <h2 style='text-align: left;'>Video</h2>
+        <hr/>
         <div class="single-setting">
           <p style='padding-right: 20px;'>Enable Rock Particles:</p>
           <input type="radio" name='rockParticles' id='rockParticlesOn' value='true' onchange='Game.state.prefs.rockParticles = true'/>
@@ -2035,9 +2082,10 @@ Game.launch = () => {
           <input type="radio" name='risingNumbers' id='risingNumbersOff' value='false' onchange='Game.state.prefs.risingNumbers = false' />
             <label for="risingNumbersOff">Off</label>
         </div>
-        <hr/>
         <br/>
-        <p>Miscellaneous</p>
+        <hr/>
+        <h2 style='text-align: left;'>Miscellaneous</h2>
+        <hr/>
         <div class="single-setting">
           <p style='padding-right: 20px;'>Enable Scrolling Text:</p>
           <input type="radio" name='scrollingText' id='scrollingTextOn' value='true' onchange='Game.state.prefs.scrollingText = true'/>
@@ -2045,7 +2093,6 @@ Game.launch = () => {
           <input type="radio" name='scrollingText' id='scrollingTextOff' value='false' onchange='Game.state.prefs.scrollingText = false' />
             <label for="scrollingTextOff">Off</label>
         </div>
-        <hr/>
         <br/>
         <p>Saves (work-in-progress)</p>
         <button class='saves-btn' onclick='Game.export()'>Export Save</button> <button onclick='Game.import()' class='saves-btn'>Import Save</button>
@@ -2072,7 +2119,7 @@ Game.launch = () => {
 
     str += `
       <div class="statistics-container">
-        <h1>Statistics</h1>
+        <h1 style='font-family: "Germania One"; font-size: 4em;'>Statistics</h1>
         <i class='fa fa-times fa-1x' onclick='Game.removeEl(document.querySelector(".wrapper"))'></i>
         <hr/>
         <p><span style='opacity: .6'>Ores Earned:</span> <strong>${beautify(Math.round(Game.state.stats.currentOresEarned))}</strong></p>
@@ -2096,39 +2143,37 @@ Game.launch = () => {
   }
 
   Game.showAchievements = () => {
-
-    let achievementsWon = 0
-    let achievementsMissing = 0
-
-    for (let i = 0; i < Game.achievements.length; i++) {
-      Game.achievements[i].won == 1 ? achievementsWon++ : achievementsMissing++
-    }
-
     let div = document.createElement('div')
     div.classList.add('wrapper')
 
     let str = `
-      <div class='achievements-container'>
+      <div class="achievements-container">
         <h1>Achievements</h1>
-        <hr/>
-        <h2><span style='opacity: .6'>Achievements Won:</span> ${achievementsWon}</h2>
+        <i class='fa fa-times fa-1x' onclick='Game.removeEl(document.querySelector(".wrapper"))'></i>
+        <p>Achievements Won:</p>
+        <div class="won-achievements">
+        `
+        for (let i = 0; i < Game.achievements.length; i++) {
+          if (Game.achievements[i].won == 1) {
+            str += `<div onmouseover='Game.showTooltip({type: "achievement", achievementName: "${Game.achievements[i].name}"})' onmouseout='Game.hideTooltip()' class="single-achievement"></div>`
+          }
+        }
+
+        str += `
+        </div>
+        <p>Achievements Missing:</p>
+        <div class="missing-achievements">
+        `
+        for (let i = 0; i < Game.achievements.length; i++) {
+          if (Game.achievements[i].won == 0) {
+            str += `<div onmouseover='Game.showTooltip({type: "achievement", missing: 1, achievementName: "${Game.achievements[i].name}"})' onmouseout='Game.hideTooltip()' style='opacity: 0.3' class="single-achievement"></div>`
+          }
+        }
+
+        str += `</div>
+      </div>
+
     `
-
-    for (let i = 0; i < Game.achievements.length; i++) {
-      if (Game.achievements[i].won == 1) {
-        str += `<p><span style='opacity: .6'>${Game.achievements[i].name}</span> - <strong>${Game.achievements[i].desc}</strong></p>`
-      }
-    }
-
-    str += `<br/> <p><span style='opacity: .6'>Achievements Missing:</span> <strong>${achievementsMissing}</strong></p>`
-
-    for (let j = 0; j < Game.achievements.length; j++) {
-      if (Game.achievements[j].won == 0) {
-        str += `<p><span style='opacity: .6'>${Game.achievements[j].name}</span> - <strong>???</strong></p>`
-      }
-    }
-
-    str += `</div>`
 
     div.innerHTML = str
     s('body').append(div)
@@ -2142,13 +2187,17 @@ Game.launch = () => {
       let bonus = document.createElement('div')
       bonus.id = `bonus-${randomID}`
       bonus.classList.add('bonus')
-      if (chance >= 0 && chance <= .6) { // 60% chance of happening
+      // 60% chance of happening
+      if (chance >= 0 && chance <= .6) {
         bonus.onclick = () => {Game.selectedBonus(1); bonus.parentNode.removeChild(bonus)}
-      } else if (chance > .6 && chance <= .85) { // 25% chance of happening
+      // 25% chance of happening
+      } else if (chance > .6 && chance <= .85) {
         bonus.onclick = () => {Game.selectedBonus(2); bonus.parentNode.removeChild(bonus)}
-      } else if (chance > .85 && chance <= .95) { // 10% chance of happening
+      // 10% chance of happening
+      } else if (chance > .85 && chance <= .95) {
         bonus.onclick = () => {Game.selectedBonus(3); bonus.parentNode.removeChild(bonus)}
-      } else { // 5% chance
+      // 5% chance
+      } else {
         bonus.onclick = () => {Game.selectedBonus(4); bonus.parentNode.removeChild(bonus)}
       }
 
@@ -2182,7 +2231,7 @@ Game.launch = () => {
       Game.risingNumber(amount, 'bonus', event)
     }
 
-    if (bonusNum == 3 || bonusNum == 2 || bonusNum == 4) {
+    if (bonusNum == 2 || bonusNum == 3 || bonusNum == 4) {
       let cover = document.createElement('div')
       cover.classList.add('gold-rush-cover')
       s('body').append(cover)
@@ -2193,6 +2242,15 @@ Game.launch = () => {
         s('.gold-rush-cover').parentNode.removeChild(s('.gold-rush-cover'))
       }, 15 * 1000)
     }
+
+    // if (bonusNum == 3) {
+    //   let cover = document.createElement('div')
+    //   conver.classList.add('fury-cover')
+    //   s('body').append(cover)
+    //   setTimeout(() => {
+    //     s('.fury-cover').parentNode.removeChild(s('.fury-cover'))
+    //   }, 7 * 1000)
+    // }
   }
 
   let goldRushCounter = 0
@@ -2969,6 +3027,8 @@ Game.launch = () => {
       }
     }
 
+    Game.hideTooltip()
+
     if (s('.specialization-wrapper')) Game.removeEl(s('.specialization-wrapper'))
     if (s('.specialization-skills-wrapper')) Game.removeEl(s('.specialization-skills-wrapper'))
     if (s('.specialization-confirmation-wrapper')) Game.removeEl(s('.specialization-confirmation-wrapper'))
@@ -3246,6 +3306,13 @@ Game.launch = () => {
       if (selectedAchievement.reward) {
         if (selectedAchievement.reward.increaseWeakHitMulti) {
           Game.state.permanentWeakHitMulti += selectedAchievement.reward.increaseWeakHitMulti
+        }
+        if (selectedAchievement.reward.building) {
+          Game.select(Game.buildings, selectedAchievement.reward.building[0]).production *= selectedAchievement.reward.building[1]
+          Game.recalculateOpC = 1
+          Game.recalculateOpS = 1
+          Game.rebuildInventory = 1
+          Game.rebuildStore = 1
         }
       }
 
