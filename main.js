@@ -20,8 +20,11 @@ let beautify = (num) => {
     ],
   ]
 
+  if (num < 1) {
+    return num
+  }
   if (num < 1000000) {
-    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); //found on https://stackoverflow.com/questions/2901102/how-to-print-a-number-with-commas-as-thousands-separators-in-javascript
+    return Math.round(num).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); //found on https://stackoverflow.com/questions/2901102/how-to-print-a-number-with-commas-as-thousands-separators-in-javascript
   } else {
     if (num >= 1000000000000000000000000000000000) {
       return (num/1000000000000000000000000000000000).toFixed(0) + ' F*cktonillion'
@@ -198,7 +201,8 @@ Game.launch = () => {
       risingNumbers: true,
       scrollingText: true,
       fps: 30,
-      shownAlert: false
+      shownAlert: false,
+      buyAmount: 1
     }
   }
 
@@ -488,14 +492,14 @@ Game.launch = () => {
     }
 
     // PRELOAD ORE IMAGES
-    for (i = 1; i <= 4; i++) { // ore 1, ore 2, ore 3, ore 4
-      for (j = 1; j <= 5; j++) { // 1-1, 1-2, 1-2, 1-4, 1-5 etc
+    for (let i = 1; i <= 4; i++) { // ore 1, ore 2, ore 3, ore 4
+      for (let j = 1; j <= 5; j++) { // 1-1, 1-2, 1-2, 1-4, 1-5 etc
         let preloadImage = new Image()
         preloadImage.src = `./assets/ore${i}-${j}.png`
       }
     }
     let images = ['abandoned-mineshaft']
-    for (i in images) {
+    for (let i in images) {
       let newImage = new Image()
       newImage.src = `./assets/${images[i]}.png`
     }
@@ -1365,14 +1369,14 @@ Game.launch = () => {
       console.log('AMOUNT OF STATS:', rarity.maxStat)
       if (prefix && absolutePrefix == 0) {
         absolutePrefix = 1
-        for (j=0; j<stats.length; j++) {
+        for (let j=0; j<stats.length; j++) {
           if (prefix.stat == stats[j].name) {
             selectedStats.push(stats[j])
           }
         }
       } else if (suffix && absoluteSuffix == 0) {
         absoluteSuffix = 1
-        for (j=0; j<stats.length; j++) {
+        for (let j=0; j<stats.length; j++) {
           if (suffix.stat == stats[j].name) {
             selectedStats.push(stats[j])
           }
@@ -1525,8 +1529,22 @@ Game.launch = () => {
     if (hasContent == 0) str += `<h3 style="text-align: center; width: 100%; opacity: .5; height: 50px; line-height: 50px;">no upgrades available</h3>`
     str += `</div><div class="horizontal-separator" style='height: 8px;'></div>`
 
+    if (Game.state.stats.timesRefined >= 1) {
+      str += `
+        <div class='bulk-buy-container'>
+          <p>BUY AMOUNT:</p>
+          <p onclick='Game.state.prefs.buyAmount = 1; Game.rebuildStore = 1' id='buy-1' class='bulk-buy-amt'>1</p>
+          <p onclick='Game.state.prefs.buyAmount = 10; Game.rebuildStore = 1' id='buy-10' class='bulk-buy-amt''>10</p>
+          <p onclick='Game.state.prefs.buyAmount = 50; Game.rebuildStore = 1' id='buy-50' class='bulk-buy-amt''>50</p>
+          <p onclick='Game.state.prefs.buyAmount = 100; Game.rebuildStore = 1' id='buy-100' class='bulk-buy-amt''>100</p>
+        </div>
+        <div class="horizontal-separator" style='height: 8px;'></div>
+      `
+    }
+
     for (let i in Game.buildings) {
       let item = Game.buildings[i]
+      let price = (item.basePrice * ((Math.pow(1.15, item.owned + Game.state.prefs.buyAmount) - Math.pow(1.15, item.owned)))/.15)
       if (item.hidden == 0) {
         str += `
           <div class="button" onclick="Game.buildings[${i}].buy();" onmouseover="Game.showTooltip({name: '${item.name}', type: '${item.type}s'}, event); Game.playSound('itemhover')" onmouseout="Game.hideTooltip()">
@@ -1536,7 +1554,7 @@ Game.launch = () => {
               </div>
               <div style='pointer-events: none' class="button-middle">
                 <h3 style='font-size: x-large'>${item.name}</h3>
-                <p>cost: ${beautify(item.price.toFixed(0))} ores</p>
+                <p>cost: ${beautify(price)} ores</p>
               </div>
               <div style='pointer-events: none' class="button-right">
                 <p style='font-size: xx-large'>${item.owned}</p>
@@ -1583,6 +1601,14 @@ Game.launch = () => {
     Game.rebuildStore = 0
     Game.loadAd()
     s('.tab-content').innerHTML = str
+
+    //BULK BUY SETTINGS
+    if (Game.state.stats.timesRefined >= 1) {
+      if (Game.state.prefs.buyAmount == 1) s('#buy-1').style.color = 'white'
+      if (Game.state.prefs.buyAmount == 10) s('#buy-10').style.color = 'white'
+      if (Game.state.prefs.buyAmount == 50) s('#buy-50').style.color = 'white'
+      if (Game.state.prefs.buyAmount == 100) s('#buy-100').style.color = 'white'
+    }
   }
 
   Game.adsLoaded = false
@@ -1625,9 +1651,9 @@ Game.launch = () => {
 
   Game.buildInventory = () => {
     let str = ''
-    str += `Ores: ${beautify(Game.state.ores.toFixed(0))}`
+    str += `Ores: ${beautify(Game.state.ores)}`
     if (Game.state.oresPerSecond > 0) {
-      str += ` (${beautify(Game.state.oresPerSecond.toFixed(1))}/s)`
+      str += ` (${beautify(Game.state.oresPerSecond)}/s)`
     }
     if (Game.state.stats.timesRefined > 0) {
       str += `<br/> Gems: ${Game.state.gems}`
@@ -1714,7 +1740,7 @@ Game.launch = () => {
       }
       if (item.buyFunctions.achievements) {
         for (let i in item.buyFunctions.achievements) {
-          if (item.owned == item.buyFunctions.achievements[i].amountNeeded) {
+          if (item.owned >= item.buyFunctions.achievements[i].amountNeeded) {
             Game.winAchievement(item.buyFunctions.achievements[i].name)
           }
         }
@@ -1739,11 +1765,11 @@ Game.launch = () => {
     Game.recalculateOpS = 1
   }
 
-  soundPlayed1 = false
-  soundPlayed2 = false
-  soundPlayed3 = false
-  soundPlayed4 = false
-  soundPlayed5 = false
+  let soundPlayed1 = false
+  let soundPlayed2 = false
+  let soundPlayed3 = false
+  let soundPlayed4 = false
+  let soundPlayed5 = false
   let whichPic = Math.floor(Math.random() * 4) + 1
   Game.updatePercentage = (amount) => {
     let oreHpPercentage = (Game.state.oreCurrentHp/Game.state.oreHp) * 100
@@ -1912,7 +1938,7 @@ Game.launch = () => {
               }
 
               // Build out skill requirements
-              for (i in selectedSkill.requires) {
+              for (let i in selectedSkill.requires) {
                 let skillNeeded = Game.select(Game.skills, selectedSkill.requires[i][0])
                 if (skillNeeded.lvl >= selectedSkill.requires[i][1]) {
                   str += `<p>${selectedSkill.requires[i][0]} lv. ${selectedSkill.requires[i][1]}</p>`
@@ -2044,8 +2070,6 @@ Game.launch = () => {
     let achievementsMissing = 0
     div.classList.add('wrapper')
 
-
-
     str += `
       <div class="statistics-container">
         <h1>Statistics</h1>
@@ -2098,7 +2122,7 @@ Game.launch = () => {
 
     str += `<br/> <p><span style='opacity: .6'>Achievements Missing:</span> <strong>${achievementsMissing}</strong></p>`
 
-    for (j = 0; j < Game.achievements.length; j++) {
+    for (let j = 0; j < Game.achievements.length; j++) {
       if (Game.achievements[j].won == 0) {
         str += `<p><span style='opacity: .6'>${Game.achievements[j].name}</span> - <strong>???</strong></p>`
       }
@@ -2274,11 +2298,11 @@ Game.launch = () => {
   Game.unlockSkills = () => {
     let lockedSkills = Game.skills.filter((skill) => skill.locked == 1)
 
-    for (i in lockedSkills) {
+    for (let i in lockedSkills) {
       let selectedSkill = (Game.select(Game.skills, lockedSkills[i].name))
       let selectedEl = document.querySelector(`.skill-${lockedSkills[i].className}`)
       if (lockedSkills[i].requires) {
-        for (j in lockedSkills[i].requires) {
+        for (let j in lockedSkills[i].requires) {
           let req = {
             skill: Game.select(Game.skills, lockedSkills[i].requires[j][0]),
             lvl: lockedSkills[i].requires[j][1]
@@ -2315,18 +2339,18 @@ Game.launch = () => {
       <div id='skill-tree-${section}' class="skill-tree">
     `
 
-    for (i = 0; i <= highestGen; i++) {
+    for (let i = 0; i <= highestGen; i++) {
       str += `<div class="column">`
 
       // check is a spacer is needed
-      for (j in Game.skills) {
+      for (let j in Game.skills) {
         if (Game.skills[j].section == section) {
           if (Game.skills[j].generationReq == i) spacerNeeded = false
         }
       }
 
       if (!spacerNeeded) {
-        for (k in Game.skills) {
+        for (let k in Game.skills) {
           if (Game.skills[k].generationReq == i && Game.skills[k].section == section) {
             if (!Game.skills[k].locked) {
               str += `<div style='background: url("./assets/${Game.skills[k].pic}.png")' class="skill skill-${Game.skills[k].className}" onclick="Game.skills[${k}].levelUp()" onmouseover='Game.showTooltip({type: "skill", name: "${Game.skills[k].name}"}, event)' onmouseout='Game.hideTooltip()'></div>`
@@ -2504,7 +2528,7 @@ Game.launch = () => {
     // reset canvas
     ctx.clearRect(0, 0, canvasWidth, canvasHeight)
 
-    for (i in Game.skills) {
+    for (let i in Game.skills) {
       let skill = Game.skills[i]
 
       if (skill.drawLines) {
@@ -2519,7 +2543,7 @@ Game.launch = () => {
           ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)'
         }
 
-        for (j in skill.drawLines) {
+        for (let j in skill.drawLines) {
 
           if (skill.drawLines[j].from == 'top') {
             let fromPos = {

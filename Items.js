@@ -13,16 +13,23 @@ let Item = function(item) {
   if (item.buyFunctions) this.buyFunctions = item.buyFunctions
 
   this.buy = () => {
-    if (Game.state.ores >= this.price) {
+
+    let price = this.price
+    if (this.type == 'building') {
+      price = (this.basePrice * ((Math.pow(1.15, this.owned + Game.state.prefs.buyAmount) - Math.pow(1.15, this.owned)))/.15)
+    }
+
+    if (Game.state.ores >= price) {
       if (this.type == 'upgrade') {
         this.hidden = 2
       } else {
-        Game.state.stats.buildingsOwned++
+        Game.state.stats.buildingsOwned += Game.state.prefs.buyAmount
       }
       Game.spend(this.price)
       Game.playSound('buysound')
       Game.risingNumber(null, 'spendMoney')
-      this.owned++
+      // this.owned
+      this.type == 'building' ? this.owned += Game.state.prefs.buyAmount : this.owned++
       Game.buyFunction(this)
       this.price = this.basePrice * Math.pow(1.15, this.owned)
       Game.recalculateOpC = 1

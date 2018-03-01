@@ -1990,3 +1990,21 @@ li {
     transform: translateY(0px);
   }
 }
+
+.bulk-buy-container {
+  background: #4e3013;
+  box-shadow: 0 0 10px #222 inset;
+  color: #948a8a;
+  width: 100%;
+  padding-left: 5px;
+  display: flex;
+}
+
+.bulk-buy-amt {
+  padding: 0 5px;
+  cursor: pointer;
+}
+
+.bulk-buy-amt:hover {
+  color: white;
+}
