@@ -1623,6 +1623,7 @@ Game.launch = function () {
 
   Game.showTooltip = function (obj) {
     var tooltip = s('.tooltip');
+    var event = event || window.event;
 
     var anchor = s('#main-separator').getBoundingClientRect();
 
