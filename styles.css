@@ -1130,6 +1130,20 @@ li {
   cursor: pointer;
 }
 
+.statistics-container {
+  background: rgba(0, 0, 0, 0.9);
+  border: 1px solid lightgrey;
+  color: white;
+  /*height: 90vh;*/
+  /*width: 50vw;*/
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 10px 20px;
+  overflow: auto;
+}
+
 .achievements-container {
   background: rgba(0, 0, 0, 0.9);
   border: 1px solid lightgrey;

@@ -2037,23 +2037,17 @@ Game.launch = () => {
     Game.state.prefs.scrollingText == true ? s('#scrollingTextOn').checked = true : s('#scrollingTextOff').checked = true
   }
 
-  Game.showAchievements = () => {
+  Game.showStatistics = () => {
     let div = document.createElement('div')
     let str;
     let achievementsWon = 0
     let achievementsMissing = 0
     div.classList.add('wrapper')
 
-    for (let i = 0; i < Game.achievements.length; i++) {
-      if (Game.achievements[i].won == 1) {
-        achievementsWon++
-      } else {
-        achievementsMissing++
-      }
-    }
+
 
     str += `
-      <div class="achievements-container">
+      <div class="statistics-container">
         <h1>Statistics</h1>
         <i class='fa fa-times fa-1x' onclick='Game.removeEl(document.querySelector(".wrapper"))'></i>
         <hr/>
@@ -2069,33 +2063,50 @@ Game.launch = () => {
         <p><span style='opacity: .6'>Items Picked Up:</span> <strong>${Game.state.stats.itemsPickedUp}</strong></p>
         <p><span style='opacity: .6'>Refine Amount:</span> <strong>${Game.state.stats.timesRefined}</strong></p>
         <p><span style='opacity: .6'>Time Played:</span> <strong>${beautifyTime(Game.state.stats.timePlayed)}</strong></p>
-        <br/>
-        <h1>Achievements</h1>
-        <hr/>
-        <h2><span style='opacity: .6'>Achievements Won:</span> ${achievementsWon}</h2>
-        `
-        for (let i = 0; i < Game.achievements.length; i++) {
-          if (Game.achievements[i].won == 1) {
-            str += `<p><span style='opacity: .6'>${Game.achievements[i].name}</span> - <strong>${Game.achievements[i].desc}</strong></p>`
-          }
-        }
-
-        str += `<br/> <p><span style='opacity: .6'>Achievements Missing:</span> <strong>${achievementsMissing}</strong></p>`
-
-        for (j = 0; j < Game.achievements.length; j++) {
-          if (Game.achievements[j].won == 0) {
-            str += `<p><span style='opacity: .6'>${Game.achievements[j].name}</span> - <strong>???</strong></p>`
-          }
-        }
-
-        str += `
-    </div>
-
+      </div>
     `
-
 
     div.innerHTML = str
 
+    s('body').append(div)
+  }
+
+  Game.showAchievements = () => {
+
+    let achievementsWon = 0
+    let achievementsMissing = 0
+
+    for (let i = 0; i < Game.achievements.length; i++) {
+      Game.achievements[i].won == 1 ? achievementsWon++ : achievementsMissing++
+    }
+
+    let div = document.createElement('div')
+    div.classList.add('wrapper')
+
+    let str = `
+      <div class='achievements-container'>
+        <h1>Achievements</h1>
+        <hr/>
+        <h2><span style='opacity: .6'>Achievements Won:</span> ${achievementsWon}</h2>
+    `
+
+    for (let i = 0; i < Game.achievements.length; i++) {
+      if (Game.achievements[i].won == 1) {
+        str += `<p><span style='opacity: .6'>${Game.achievements[i].name}</span> - <strong>${Game.achievements[i].desc}</strong></p>`
+      }
+    }
+
+    str += `<br/> <p><span style='opacity: .6'>Achievements Missing:</span> <strong>${achievementsMissing}</strong></p>`
+
+    for (j = 0; j < Game.achievements.length; j++) {
+      if (Game.achievements[j].won == 0) {
+        str += `<p><span style='opacity: .6'>${Game.achievements[j].name}</span> - <strong>???</strong></p>`
+      }
+    }
+
+    str += `</div>`
+
+    div.innerHTML = str
     s('body').append(div)
   }
 
