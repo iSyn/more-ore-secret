@@ -1552,8 +1552,9 @@ Game.launch = () => {
         <div class='bulk-buy-container'>
           <p>BUY AMOUNT:</p>
           <p onclick='Game.state.prefs.buyAmount = 1; Game.rebuildStore = 1' id='buy-1' class='bulk-buy-amt'>1</p>
-          <p onclick='Game.state.prefs.buyAmount = 10; Game.rebuildStore = 1' id='buy-10' class='bulk-buy-amt''>10</p>
-          <p onclick='Game.state.prefs.buyAmount = 100; Game.rebuildStore = 1' id='buy-100' class='bulk-buy-amt''>100</p>
+          <p onclick='Game.state.prefs.buyAmount = 10; Game.rebuildStore = 1' id='buy-10' class='bulk-buy-amt'>10</p>
+          <p onclick='Game.state.prefs.buyAmount = 100; Game.rebuildStore = 1' id='buy-100' class='bulk-buy-amt'>100</p>
+          <p onclick='Game.state.prefs.buyAmount = "max"; Game.rebuildStore = 1' id='buy-max' class='bulk-buy-amt'>MAX</p>
         </div>
         <div class="horizontal-separator" style='height: 8px;'></div>
       `
@@ -1561,7 +1562,8 @@ Game.launch = () => {
 
     for (let i in Game.buildings) {
       let item = Game.buildings[i]
-      let price = (item.basePrice * ((Math.pow(1.15, item.owned + Game.state.prefs.buyAmount) - Math.pow(1.15, item.owned)))/.15)
+      price = Game.buildings[i].price
+      if (Game.state.prefs.buyAmount != 'max') price = (item.basePrice * ((Math.pow(1.15, item.owned + Game.state.prefs.buyAmount) - Math.pow(1.15, item.owned)))/.15)
       if (item.hidden == 0) {
         str += `
           <div class="button" onclick="Game.buildings[${i}].buy();" onmouseover="Game.showTooltip({name: '${item.name}', type: '${item.type}s'}, event); Game.playSound('itemhover')" onmouseout="Game.hideTooltip()">
@@ -1624,6 +1626,7 @@ Game.launch = () => {
       if (Game.state.prefs.buyAmount == 1) s('#buy-1').style.color = 'white'
       if (Game.state.prefs.buyAmount == 10) s('#buy-10').style.color = 'white'
       if (Game.state.prefs.buyAmount == 100) s('#buy-100').style.color = 'white'
+      if (Game.state.prefs.buyAmount == "max") s('#buy-max').style.color = 'white'
     }
   }
 
@@ -2344,6 +2347,12 @@ Game.launch = () => {
     }, 1500)
     setTimeout(() => {
       Game.showSkillTree()
+      let items = document.querySelectorAll('.item-container')
+      if (items) {
+        items.forEach((item) => {
+          item.parentNode.removeChild(item)
+        })
+      }
     }, 2000)
     setTimeout(() => {
       Game.removeEl(s('.refine'))
@@ -3396,6 +3405,15 @@ Game.launch = () => {
     items.forEach((item) => {
       new Item(item)
     })
+    for (let i in Game.achievements) {
+      if (Game.achievements[i].won) {
+        if (Game.achievements[i].reward) {
+          if (Game.achievements[i].reward.building) {
+            Game.select(Game.buildings, Game.achievements[i].reward.building[0]).production *= Game.achievements[i].reward.building[1]
+          }
+        }
+      }
+    }
   }
 
   Game.textScroller = [

@@ -69,7 +69,7 @@ let items = [
     }
   },
   {
-    name: 'Farm', namePlural: 'Farms', type: 'building', pic: 'farm.png', production: 1, desc: 'Cultivate the lands for higher quality ores', fillerQuote: 'This totally makes sense.', basePrice: 75, hidden: 1,
+    name: 'Farm', namePlural: 'Farms', type: 'building', pic: 'farm.png', production: 1, desc: 'Cultivate the lands for higher quality ores', fillerQuote: 'This totally makes sense.', basePrice: 210, hidden: 1,
     buyFunctions: {
       unlockUpgrades: [
         {name: 'Manure Spreader', amountNeeded: 1},
@@ -90,7 +90,7 @@ let items = [
     }
   },
   {
-    name: 'Quarry', namePlural: 'Quarries', type: 'building', pic: 'quarry.png', production: 20, desc: 'Designated mining area', fillerQuote: 'mine mine mine', basePrice: 1200, hidden: 1,
+    name: 'Quarry', namePlural: 'Quarries', type: 'building', pic: 'quarry.png', production: 20, desc: 'Designated mining area', fillerQuote: 'mine mine mine', basePrice: 2520, hidden: 1,
     buyFunctions: {
       unlockUpgrades: [
         {name: 'Headlights', amountNeeded: 1},
@@ -108,7 +108,7 @@ let items = [
     }
   },
   {
-    name: 'Church', namePlural: 'Churches', type: 'building', pic: 'church.png', production: 300, desc: 'Praise to the Ore Gods', fillerQuote: 'In Ore name we pray, Amen.', basePrice: 6660, hidden: 2,
+    name: 'Church', namePlural: 'Churches', type: 'building', pic: 'church.png', production: 320, desc: 'Praise to the Ore Gods', fillerQuote: 'In Ore name we pray, Amen.', basePrice: 37800, hidden: 2,
     buyFunctions: {
       unlockUpgrades: [
         {name: 'Scripture Reading', amountNeeded: 1},
@@ -126,7 +126,7 @@ let items = [
     }
   },
   {
-    name: 'Factory', namePlural: 'Factories', type: 'building', pic: 'factory.png', production: 5500, desc: 'Manufacture your ores', fillerQuote: 'Assembly line this sh&* up!', basePrice: 48000, hidden: 2,
+    name: 'Factory', namePlural: 'Factories', type: 'building', pic: 'factory.png', production: 4480, desc: 'Manufacture your ores', fillerQuote: 'Assembly line this sh&* up!', basePrice: 491400, hidden: 2,
     buyFunctions: {
       unlockUpgrades: [
         {name: 'Rubber Conveyor Belt', amountNeeded: 1},
@@ -144,7 +144,7 @@ let items = [
     }
   },
   {
-    name: 'Crypt', namePlural: 'Crypts', type: 'building', pic: 'crypt.png', production: 30000, desc: 'Raise dead ores from the graves', fillerQuote: 'spooky ores', basePrice: 290000, hidden: 2,
+    name: 'Crypt', namePlural: 'Crypts', type: 'building', pic: 'crypt.png', production: 67200, desc: 'Raise dead ores from the graves', fillerQuote: 'spooky ores', basePrice: 7862400, hidden: 2,
     buyFunctions: {
       unlockUpgrades: [
         {name: 'Metal Sarcophagus', amountNeeded: 1},
@@ -162,7 +162,7 @@ let items = [
     }
   },
   {
-    name: 'Hospital', namePlural: 'Hospitals', type: 'building', pic: 'hospital.png', production: 220000, desc: 'Heal your damaged ores', fillerQuote: 'An apple a day keeps the ore cancer away', basePrice: 20000000, hidden: 2,
+    name: 'Hospital', namePlural: 'Hospitals', type: 'building', pic: 'hospital.png', production: 1344000, desc: 'Heal your damaged ores', fillerQuote: 'An apple a day keeps the ore cancer away', basePrice: 196560000, hidden: 2,
     buyFunctions: {
       unlockUpgrades: [
         {name: 'Immunization Shot', amountNeeded: 1},
@@ -180,7 +180,7 @@ let items = [
     }
   },
   {
-    name: 'Citadel', namePlural: 'Citadels', type: 'building', pic: 'citadel.png', production: 1666666, desc: 'wip', fillerQuote: 'wip', basePrice: 6666666600, hidden: 2,
+    name: 'Citadel', namePlural: 'Citadels', type: 'building', pic: 'citadel.png', production: 14784000, desc: 'wip', fillerQuote: 'wip', basePrice: 2751840000, hidden: 2,
     buyFunctions: {
       unlockUpgrades: [
         {name: 'Council of Rocks', amountNeeded: 1}
@@ -194,7 +194,7 @@ let items = [
     }
   },
   {
-    name: 'Xeno Spaceship', namePlural: 'Xeno Spaceships', type: 'building', pic: 'xeno-spaceship.png', production: 45678910, desc: 'wip', fillerQuote: 'wip', basePrice: 75849204700, hidden: 2,
+    name: 'Xeno Spaceship', namePlural: 'Xeno Spaceships', type: 'building', pic: 'xeno-spaceship.png', production: 192192000, desc: 'wip', fillerQuote: 'wip', basePrice: 49533120000, hidden: 2,
     buyFunctions: {
       unlockUpgrades: [
         {name: 'Jet Fuel', amountNeeded: 1}
@@ -208,7 +208,7 @@ let items = [
     }
   },
   {
-    name: 'Sky Castle', namePlural: 'Sky Castles', type: 'building', pic: 'skycastle.png', production: 777777777, desc: 'wip', fillerQuote: 'wip', basePrice: 550000000000, hidden: 2,
+    name: 'Sky Castle', namePlural: 'Sky Castles', type: 'building', pic: 'skycastle.png', production: 3843840000, desc: 'wip', fillerQuote: 'wip', basePrice: 1238328000000, hidden: 2,
     buyFunctions: {
       unlockUpgrades: [
         {name: 'Golden Eggs', amountNeeded: 1}
@@ -222,7 +222,7 @@ let items = [
     }
   },
   {
-    name: 'Eon Portal', namePlural: 'Eon Portal', type: 'building', pic: 'eonportal.png', production: 8888800000, desc: 'wip', fillerQuote: 'wip', basePrice: 7943000000000, hidden: 2,
+    name: 'Eon Portal', namePlural: 'Eon Portal', type: 'building', pic: 'eonportal.png', production: 45126080000, desc: 'wip', fillerQuote: 'wip', basePrice: 18574920000000, hidden: 2,
     buyFunctions: {
       unlockUpgrades: [
         {name: 'Green Goop', amountNeeded: 1}
@@ -236,7 +236,7 @@ let items = [
     }
   },
   {
-    name: 'Sacred Mine', namePlural: 'Sacred Mines', type: 'building', pic: 'sacredmines.png', production: 40501030500, desc: 'wip', fillerQuote: 'wip', basePrice: 30000000000000, hidden: 2,
+    name: 'Sacred Mine', namePlural: 'Sacred Mines', type: 'building', pic: 'sacredmines.png', production: 691891200000, desc: 'wip', fillerQuote: 'wip', basePrice: 297198720000000, hidden: 2,
     buyFunctions: {
       unlockUpgrades: [
         {name: 'Unholy Mineshaft', amountNeeded: 1}
@@ -250,7 +250,7 @@ let items = [
     }
   },
   {
-    name: 'O.A.R.D.I.S.', namePlural: 'O.A.R.D.I.S.s', type: 'building', pic: 'oardis.png', production: 110100110110, desc: 'wip', fillerQuote: 'wip', basePrice: 600000000000000, hidden: 2,
+    name: 'O.A.R.D.I.S.', namePlural: 'O.A.R.D.I.S.s', type: 'building', pic: 'oardis.png', production: 17289780000000, desc: 'wip', fillerQuote: 'wip', basePrice: 8915961600000000, hidden: 2,
     buyFunctions: {
       unlockUpgrades: [
         {name: 'OARDISupgrade', amountNeeded: 1}
@@ -264,7 +264,7 @@ let items = [
     }
   },
   {
-    name: 'Final Destination', namePlural: 'Final Destination', type: 'building', pic: 'final-destination.png', production: 9999999999999990, desc: 'The final destination', fillerQuote: 'You Win', basePrice: 999999999999999999999999999999999, hidden: 3,
+    name: 'Final Destination', namePlural: 'Final Destination', type: 'building', pic: 'final-destination.png', production: 999999999999999999, desc: 'The final destination', fillerQuote: 'You Win', basePrice: 999999999999999999999999999999999, hidden: 3,
   },
 
 
