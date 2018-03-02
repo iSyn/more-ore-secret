@@ -162,7 +162,7 @@ let items = [
     }
   },
   {
-    name: 'Hospital', namePlural: 'Hospitals', type: 'building', pic: 'hospital.png', production: 220000, desc: 'Heal your damaged ores', fillerQuote: 'An apple a day keeps the ore cancer away', basePrice: 1000000, hidden: 2,
+    name: 'Hospital', namePlural: 'Hospitals', type: 'building', pic: 'hospital.png', production: 220000, desc: 'Heal your damaged ores', fillerQuote: 'An apple a day keeps the ore cancer away', basePrice: 20000000, hidden: 2,
     buyFunctions: {
       unlockUpgrades: [
         {name: 'Immunization Shot', amountNeeded: 1},
@@ -180,7 +180,7 @@ let items = [
     }
   },
   {
-    name: 'Citadel', namePlural: 'Citadels', type: 'building', pic: 'citadel.png', production: 1666666, desc: 'wip', fillerQuote: 'wip', basePrice: 666666660, hidden: 2,
+    name: 'Citadel', namePlural: 'Citadels', type: 'building', pic: 'citadel.png', production: 1666666, desc: 'wip', fillerQuote: 'wip', basePrice: 6666666600, hidden: 2,
     buyFunctions: {
       unlockUpgrades: [
         {name: 'Council of Rocks', amountNeeded: 1}
@@ -194,7 +194,7 @@ let items = [
     }
   },
   {
-    name: 'Xeno Spaceship', namePlural: 'Xeno Spaceships', type: 'building', pic: 'xeno-spaceship.png', production: 45678910, desc: 'wip', fillerQuote: 'wip', basePrice: 7584920470, hidden: 2,
+    name: 'Xeno Spaceship', namePlural: 'Xeno Spaceships', type: 'building', pic: 'xeno-spaceship.png', production: 45678910, desc: 'wip', fillerQuote: 'wip', basePrice: 75849204700, hidden: 2,
     buyFunctions: {
       unlockUpgrades: [
         {name: 'Jet Fuel', amountNeeded: 1}
@@ -208,7 +208,7 @@ let items = [
     }
   },
   {
-    name: 'Sky Castle', namePlural: 'Sky Castles', type: 'building', pic: 'skycastle.png', production: 777777777, desc: 'wip', fillerQuote: 'wip', basePrice: 55000000000, hidden: 2,
+    name: 'Sky Castle', namePlural: 'Sky Castles', type: 'building', pic: 'skycastle.png', production: 777777777, desc: 'wip', fillerQuote: 'wip', basePrice: 550000000000, hidden: 2,
     buyFunctions: {
       unlockUpgrades: [
         {name: 'Golden Eggs', amountNeeded: 1}
@@ -222,7 +222,7 @@ let items = [
     }
   },
   {
-    name: 'Eon Portal', namePlural: 'Eon Portal', type: 'building', pic: 'eonportal.png', production: 8888800000, desc: 'wip', fillerQuote: 'wip', basePrice: 794300000000, hidden: 2,
+    name: 'Eon Portal', namePlural: 'Eon Portal', type: 'building', pic: 'eonportal.png', production: 8888800000, desc: 'wip', fillerQuote: 'wip', basePrice: 7943000000000, hidden: 2,
     buyFunctions: {
       unlockUpgrades: [
         {name: 'Green Goop', amountNeeded: 1}
@@ -236,7 +236,7 @@ let items = [
     }
   },
   {
-    name: 'Sacred Mine', namePlural: 'Sacred Mines', type: 'building', pic: 'sacredmines.png', production: 40501030500, desc: 'wip', fillerQuote: 'wip', basePrice: 3000000000000, hidden: 2,
+    name: 'Sacred Mine', namePlural: 'Sacred Mines', type: 'building', pic: 'sacredmines.png', production: 40501030500, desc: 'wip', fillerQuote: 'wip', basePrice: 30000000000000, hidden: 2,
     buyFunctions: {
       unlockUpgrades: [
         {name: 'Unholy Mineshaft', amountNeeded: 1}
@@ -250,7 +250,7 @@ let items = [
     }
   },
   {
-    name: 'O.A.R.D.I.S.', namePlural: 'O.A.R.D.I.S.s', type: 'building', pic: 'oardis.png', production: 110100110110, desc: 'wip', fillerQuote: 'wip', basePrice: 60000000000000, hidden: 2,
+    name: 'O.A.R.D.I.S.', namePlural: 'O.A.R.D.I.S.s', type: 'building', pic: 'oardis.png', production: 110100110110, desc: 'wip', fillerQuote: 'wip', basePrice: 600000000000000, hidden: 2,
     buyFunctions: {
       unlockUpgrades: [
         {name: 'OARDISupgrade', amountNeeded: 1}

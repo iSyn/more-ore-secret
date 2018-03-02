@@ -12,7 +12,7 @@ var beautify = function beautify(num) {
   var amounts = [['Million', 'Billion', 'Trillion', 'Quadrillion', 'Quintillion', 'Sextillion', 'Alotillion', 'Waytoomanyillion', 'Fuckloadillion', 'Fucktonillion']];
 
   if (num < 1) {
-    return num;
+    return num.toFixed(1);
   }
   if (num < 1000000) {
     return Math.round(num).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); //found on https://stackoverflow.com/questions/2901102/how-to-print-a-number-with-commas-as-thousands-separators-in-javascript
@@ -472,6 +472,14 @@ Game.launch = function () {
     }, 1500);
   };
 
+  Game.confirmWipe = function () {
+    var div = document.createElement('div');
+    div.classList.add('wrapper');
+    div.innerHTML = '\n      <div class="offline-gain-popup-container">\n        <h2 style=\'font-family: "Germania One"; letter-spacing: 1px;\'>Confirm Wipe</h2>\n        <i class=\'fa fa-times fa-1x\' onclick=\'Game.removeEl(document.querySelector(".wrapper"))\'></i>\n        <hr />\n        <p style=\'color: red\'>Are you sure you want to wipe your save?</p>\n        <p style=\'color: red\'>You will lose all your progress and achievements</p>\n        <hr />\n        <button onclick=\'Game.closeCurrentWindow()\'>No</button>\n        <button onclick=\'Game.wipe()\'>Yes</button>\n      </div>\n    ';
+
+    s('body').append(div);
+  };
+
   Game.wipe = function () {
     localStorage.clear();
     location.reload();
@@ -517,7 +525,7 @@ Game.launch = function () {
     var amountOfTimePassed = (current - past) / 1000; // GETS THE DIFFERENCE IN SECONDS
     var currentOpS = Game.state.oresPerSecond;
     var amountToGain = amountOfTimePassed * currentOpS;
-    if (amountToGain >= 1 && amountOfTimePassed >= 5) {
+    if (amountToGain >= 1 && amountOfTimePassed >= 30) {
       if (!s('.offline-gain-popup-container')) {
         var div = document.createElement('div');
         div.classList.add('wrapper');
@@ -804,7 +812,6 @@ Game.launch = function () {
 
   Game.handleClick = function (type) {
     var amount = Game.state.oresPerClick;
-    var event = event || window.event;
     if (type) {
       if (type == 'weak-spot') {
         Game.getCombo('hit');
@@ -822,7 +829,7 @@ Game.launch = function () {
     }
 
     Game.earn(amount);
-    Game.drawRockParticles();
+    Game.drawRockParticles(event);
     Game.state.stats.currentOreClicks++;
     Game.state.stats.currentOresMined += amount;
     Game.state.stats.totalOresMined += amount;
@@ -838,7 +845,6 @@ Game.launch = function () {
   };
 
   Game.risingNumber = function (amount, type) {
-    var event = event || window.event;
     if (Game.state.prefs.risingNumbers == true) {
       var mouseX = (s('.ore').getBoundingClientRect().left + s('.ore').getBoundingClientRect().right) / 2;
       var mouseY = (s('.ore').getBoundingClientRect().top + s('.ore').getBoundingClientRect().bottom) / 2;
@@ -970,40 +976,23 @@ Game.launch = function () {
   };
 
   Game.drawRockParticles = function () {
-
     if (Game.state.prefs.rockParticles == true) {
-
-      // var event = event || window.event
-      console.log(window.event)
-
-      var posx = 0;
-      var posy = 0;
-      if (event.pageX || event.pageY)   {
-        posx = event.pageX;
-        posy = event.pageY;
-      }
-      else if (event.clientX || event.clientY)  {
-        posx = event.clientX + document.body.scrollLeft
-          + document.documentElement.scrollLeft;
-        posy = event.clientY + document.body.scrollTop
-          + document.documentElement.scrollTop;
-      }
-
       var allParticles = document.querySelectorAll('.particle');
       if (allParticles.length >= 10) {
         var selectedEl = allParticles[0];
         Game.removeEl(selectedEl);
       }
-
       var div = document.createElement('div');
       div.classList.add('particle');
       div.style.background = 'lightgrey';
+      var x = event.clientX;
+      var y = event.clientY;
 
-      div.style.left = posx + 'px';
-      div.style.top = posy + 'px';
+      div.style.left = x + 'px';
+      div.style.top = y + 'px';
 
-      var particleY = posy;
-      var particleX = posx;
+      var particleY = y;
+      var particleX = x;
 
       var randomNumber = Math.random();
       var randomSign = Math.round(Math.random()) * 2 - 1;
@@ -1340,7 +1329,7 @@ Game.launch = function () {
     var itemModal = document.createElement('div');
     itemModal.classList.add('item-modal-container');
 
-    var str = '\n      <div class="item-modal">\n        <div class="item-modal-top">\n          <h1>New Item!</h1>\n        </div>\n        <div class="item-modal-middle">\n          <div class="item-modal-middle-left">\n            <p>You Found</p>\n            <h2 class=\'' + Game.newItem.rarity + '\' style=\'font-size: xx-large\'>' + Game.newItem.name + '</h2>\n            <div class="item-modal-img">\n              <div class="pickaxe-aura aura-' + Game.newItem.rarity + '"></div>\n              <div class="pickaxe-top ' + Game.newItem.material + '"></div>\n              <div class="pickaxe-bottom"></div>\n            </div>\n            <div class="item-stats">\n              <p style=\'font-style: italic; font-size: small\'>' + Game.newItem.rarity + '</p>\n              <br/>\n              <p>Item Level: ' + Game.newItem.iLv + '</p>\n              <p>Damage: ' + beautify(Game.newItem.damage) + '</p>\n              ';
+    var str = '\n      <div class="item-modal">\n        <div class="item-modal-top">\n          <h1 style=\'font-family: "Germania One"; font-size: 70px;\'>New Item!</h1>\n        </div>\n        <div class="item-modal-middle">\n          <div class="item-modal-middle-left">\n            <p>You Found</p>\n            <h2 class=\'' + Game.newItem.rarity + '\' style=\'font-size: xx-large\'>' + Game.newItem.name + '</h2>\n            <div class="item-modal-img">\n              <div class="pickaxe-aura aura-' + Game.newItem.rarity + '"></div>\n              <div class="pickaxe-top ' + Game.newItem.material + '"></div>\n              <div class="pickaxe-bottom"></div>\n            </div>\n            <div class="item-stats">\n              <p style=\'font-style: italic; font-size: small\'>' + Game.newItem.rarity + '</p>\n              <br/>\n              <p>Item Level: ' + Game.newItem.iLv + '</p>\n              <p>Damage: ' + beautify(Game.newItem.damage) + '</p>\n              ';
 
     if (Game.newItem.stats.length > 0) {
       Game.newItem.stats.forEach(function (stat) {
@@ -1393,7 +1382,7 @@ Game.launch = function () {
     str += '</div><div class="horizontal-separator" style=\'height: 8px;\'></div>';
 
     if (Game.state.stats.timesRefined >= 1) {
-      str += '\n        <div class=\'bulk-buy-container\'>\n          <p>BUY AMOUNT:</p>\n          <p onclick=\'Game.state.prefs.buyAmount = 1; Game.rebuildStore = 1\' id=\'buy-1\' class=\'bulk-buy-amt\'>1</p>\n          <p onclick=\'Game.state.prefs.buyAmount = 10; Game.rebuildStore = 1\' id=\'buy-10\' class=\'bulk-buy-amt\'\'>10</p>\n          <p onclick=\'Game.state.prefs.buyAmount = 50; Game.rebuildStore = 1\' id=\'buy-50\' class=\'bulk-buy-amt\'\'>50</p>\n          <p onclick=\'Game.state.prefs.buyAmount = 100; Game.rebuildStore = 1\' id=\'buy-100\' class=\'bulk-buy-amt\'\'>100</p>\n        </div>\n        <div class="horizontal-separator" style=\'height: 8px;\'></div>\n      ';
+      str += '\n        <div class=\'bulk-buy-container\'>\n          <p>BUY AMOUNT:</p>\n          <p onclick=\'Game.state.prefs.buyAmount = 1; Game.rebuildStore = 1\' id=\'buy-1\' class=\'bulk-buy-amt\'>1</p>\n          <p onclick=\'Game.state.prefs.buyAmount = 10; Game.rebuildStore = 1\' id=\'buy-10\' class=\'bulk-buy-amt\'\'>10</p>\n          <p onclick=\'Game.state.prefs.buyAmount = 100; Game.rebuildStore = 1\' id=\'buy-100\' class=\'bulk-buy-amt\'\'>100</p>\n        </div>\n        <div class="horizontal-separator" style=\'height: 8px;\'></div>\n      ';
     }
 
     for (var _i3 in Game.buildings) {
@@ -1417,7 +1406,6 @@ Game.launch = function () {
     if (Game.state.stats.timesRefined >= 1) {
       if (Game.state.prefs.buyAmount == 1) s('#buy-1').style.color = 'white';
       if (Game.state.prefs.buyAmount == 10) s('#buy-10').style.color = 'white';
-      if (Game.state.prefs.buyAmount == 50) s('#buy-50').style.color = 'white';
       if (Game.state.prefs.buyAmount == 100) s('#buy-100').style.color = 'white';
     }
   };
@@ -1448,8 +1436,8 @@ Game.launch = function () {
     }
 
     if (s('#ads-im-sorry-please-dont-hate-me').innerHTML.length < 1000) {
-      var _str = '\n        <p style=\'text-align: center; background: transparent; color: white; padding-bottom: 20px;\'>\n        Please consider disabling adblock! <br/>\n        I am just a broke college student and the cents generated from this game will be for food.\n        <br/>\n        Or consider supporting me on <a target=\'_blank\' href="https://www.patreon.com/user?u=8032477">patreon!</a> <br/>(Even a dollar helps!)\n        </p>\n      ';
-      s('#ads-im-sorry-please-dont-hate-me').innerHTML = _str;
+      var str = '\n        <p style=\'text-align: center; background: transparent; color: white; padding-bottom: 20px;\'>\n        Please consider disabling adblock! <br/>\n        I am just a broke college student and the cents generated from this game will be for food.\n        <br/>\n        Or consider supporting me on <a target=\'_blank\' href="https://www.patreon.com/user?u=8032477">patreon!</a> <br/>(Even a dollar helps!)\n        </p>\n      ';
+      s('#ads-im-sorry-please-dont-hate-me').innerHTML = str;
     }
   };
 
@@ -1641,9 +1629,7 @@ Game.launch = function () {
   };
 
   Game.showTooltip = function (obj) {
-
     var tooltip = s('.tooltip');
-    var event = event || window.event;
 
     var anchor = s('#main-separator').getBoundingClientRect();
 
@@ -1687,29 +1673,29 @@ Game.launch = function () {
       if (!selectedSkill.locked) {
         tooltip.innerHTML = '\n          <div style=\'display: flex; flex-flow: row nowrap;\'>\n            <div style=\'background: url("./assets/' + selectedSkill.pic + '.png"); min-height: 64px; height: 64px; min-width: 64px; width: 64px; margin-right: 5px;\'></div>\n            <hr style=\'width: 1px; flex-grow: 1; margin-right: 5px; opacity: 0.1\'/>\n            <div style=\'flex-grow: 1\'>\n              <h2 style=\'font-family: "Germania One"\'>' + selectedSkill.name + '</h2>\n              <hr />\n              <p style=\'font-size: small\'><i style=\'opacity: .5\'>' + selectedSkill.fillerTxt + '</i></p>\n              <hr />\n              <p>Current Level: ' + selectedSkill.lvl + '/' + selectedSkill.maxLvl + '</p>\n              <p>Skill Type: ' + selectedSkill.type + '</p>\n              <hr />\n              <p>' + selectedSkill.desc + '</p>\n            </div>\n          </div>\n        ';
       } else {
-        var _str2 = '';
-        _str2 += '\n          <div style=\'display: flex; flex-flow: row nowrap;\'>\n            <div style=\'background: url("./assets/' + selectedSkill.pic + '.png"); min-height: 64px; height: 64px; min-width: 64px; width: 64px; margin-right: 5px; opacity: 0.2;\'></div>\n            <hr style=\'width: 1px; flex-grow: 1; margin-right: 5px; opacity: 0.1\'/>\n            <div style=\'flex-grow: 1\'>\n              <h2 style=\'font-family: "Germania One"\'>' + selectedSkill.name + '</h2>\n              <hr />\n              <p>Requirements</p>\n              <hr />\n              ';
+        var str = '';
+        str += '\n          <div style=\'display: flex; flex-flow: row nowrap;\'>\n            <div style=\'background: url("./assets/' + selectedSkill.pic + '.png"); min-height: 64px; height: 64px; min-width: 64px; width: 64px; margin-right: 5px; opacity: 0.2;\'></div>\n            <hr style=\'width: 1px; flex-grow: 1; margin-right: 5px; opacity: 0.1\'/>\n            <div style=\'flex-grow: 1\'>\n              <h2 style=\'font-family: "Germania One"\'>' + selectedSkill.name + '</h2>\n              <hr />\n              <p>Requirements</p>\n              <hr />\n              ';
 
         // Build out generation requirements
         if (Game.state.player.generation.lv >= selectedSkill.generationReq) {
-          _str2 += '<p>Generation Level: ' + selectedSkill.generationReq + '</p>';
+          str += '<p>Generation Level: ' + selectedSkill.generationReq + '</p>';
         } else {
-          _str2 += '<p style=\'color: red\'>Generation Level: ' + selectedSkill.generationReq + '</p>';
+          str += '<p style=\'color: red\'>Generation Level: ' + selectedSkill.generationReq + '</p>';
         }
 
         // Build out skill requirements
         for (var i in selectedSkill.requires) {
           var skillNeeded = Game.select(Game.skills, selectedSkill.requires[i][0]);
           if (skillNeeded.lvl >= selectedSkill.requires[i][1]) {
-            _str2 += '<p>' + selectedSkill.requires[i][0] + ' lv. ' + selectedSkill.requires[i][1] + '</p>';
+            str += '<p>' + selectedSkill.requires[i][0] + ' lv. ' + selectedSkill.requires[i][1] + '</p>';
           } else {
-            _str2 += '<p style=\'color: red;\'>' + selectedSkill.requires[i][0] + ' lv. ' + selectedSkill.requires[i][1] + '</p>';
+            str += '<p style=\'color: red;\'>' + selectedSkill.requires[i][0] + ' lv. ' + selectedSkill.requires[i][1] + '</p>';
           }
         }
 
-        _str2 += '\n            </div>\n          </div>\n        ';
+        str += '\n            </div>\n          </div>\n        ';
 
-        tooltip.innerHTML = _str2;
+        tooltip.innerHTML = str;
       }
 
       tooltip.style.left = event.clientX + 30 + 'px';
@@ -1729,6 +1715,27 @@ Game.launch = function () {
       }
     }
 
+    if (obj.type == 'achievement') {
+      var _str = void 0;
+      var selectedAchievement = Game.select(Game.achievements, obj.achievementName);
+
+      tooltip.style.left = event.clientX + 20 + 'px';
+      tooltip.style.top = event.clientY + 20 + 'px';
+      tooltip.style.textAlign = 'left';
+
+      if (obj.missing) {
+        _str = '\n          <h2>' + selectedAchievement.name + '</h2>\n          <hr/>\n          <p>???</p>\n        ';
+      } else {
+        _str = '\n          <h2>' + selectedAchievement.name + '</h2>\n          <hr/>\n          <p>' + selectedAchievement.desc + '</p>\n        ';
+
+        if (selectedAchievement.reward) {
+          _str += '<hr/><p style=\'color: lime\'>Bonus: ' + selectedAchievement.reward.txt + '</p>';
+        }
+      }
+
+      tooltip.innerHTML = _str;
+    }
+
     tooltip.style.animation = 'tooltip .3s';
   };
 
@@ -1742,7 +1749,7 @@ Game.launch = function () {
     var str = void 0;
     div.classList.add('wrapper');
 
-    str += '\n      <div class="setting-container">\n        <h3>settings</h3>\n        <i class=\'fa fa-times fa-1x\' onclick=\'Game.removeEl(document.querySelector(".wrapper"))\'></i>\n        <hr/>\n        <p>Sound</p>\n        <div class="single-setting">\n          <p style=\'padding-right: 10px;\'>SFX Volume: </p>\n          <input class=\'volume-slider\' type="range" min=0 max=1 step=0.1 list=\'tickmarks\' onchange=\'Game.state.prefs.volume = document.querySelector(".volume-slider").value\'/>\n          <datalist id="tickmarks">\n            <option value="0" label="0%">\n            <option value="0.1">\n            <option value="0.1">\n            <option value="0.2">\n            <option value="0.3">\n            <option value="0.4">\n            <option value="0.5" label="50%">\n            <option value="0.6">\n            <option value="0.7">\n            <option value="0.8">\n            <option value="0.9">\n            <option value=\'1.0\' label="100%">\n          </datalist>\n        </div>\n        <div class="single-setting">\n          <p style=\'padding-right: 20px;\'>BGM: </p>\n          <input type="radio" name=\'bgm\' id=\'bgmOn\' value=\'true\' onchange=\'Game.state.prefs.bgm = 1; Game.toggleBgm();\'/>\n            <label for="bgmOn" style=\'margin-right: 10px\'>On</label>\n          <input type="radio" name=\'bgm\' id=\'bgmOff\' value=\'false\' onchange=\'Game.state.prefs.bgm = 0; Game.toggleBgm();\'/>\n            <label for="bgmOff" style=\'margin-right: 10px\'>Off</label>\n        </div>\n        <hr/>\n        <br/>\n        <p>Video</p>\n        <div class="single-setting">\n          <p style=\'padding-right: 20px;\'>Enable Rock Particles:</p>\n          <input type="radio" name=\'rockParticles\' id=\'rockParticlesOn\' value=\'true\' onchange=\'Game.state.prefs.rockParticles = true\'/>\n            <label for="rockParticlesOn" style=\'margin-right: 10px\'>On</label>\n          <input type="radio" name=\'rockParticles\' id=\'rockParticlesOff\' value=\'false\' onchange=\'Game.state.prefs.rockParticles = false\' />\n            <label for="rockParticlesOff">Off</label>\n        </div>\n        <div class="single-setting">\n          <p style=\'padding-right: 20px;\'>Enable Rising Numbers:</p>\n          <input type="radio" name=\'risingNumbers\' id=\'risingNumbersOn\' value=\'true\' onchange=\'Game.state.prefs.risingNumbers = true\'/>\n            <label for="risingNumbersOn" style=\'margin-right: 10px\'>On</label>\n          <input type="radio" name=\'risingNumbers\' id=\'risingNumbersOff\' value=\'false\' onchange=\'Game.state.prefs.risingNumbers = false\' />\n            <label for="risingNumbersOff">Off</label>\n        </div>\n        <hr/>\n        <br/>\n        <p>Miscellaneous</p>\n        <div class="single-setting">\n          <p style=\'padding-right: 20px;\'>Enable Scrolling Text:</p>\n          <input type="radio" name=\'scrollingText\' id=\'scrollingTextOn\' value=\'true\' onchange=\'Game.state.prefs.scrollingText = true\'/>\n            <label for="scrollingTextOn" style=\'margin-right: 10px\'>On</label>\n          <input type="radio" name=\'scrollingText\' id=\'scrollingTextOff\' value=\'false\' onchange=\'Game.state.prefs.scrollingText = false\' />\n            <label for="scrollingTextOff">Off</label>\n        </div>\n        <hr/>\n        <br/>\n        <p>Saves (work-in-progress)</p>\n        <button class=\'saves-btn\' onclick=\'Game.export()\'>Export Save</button> <button onclick=\'Game.import()\' class=\'saves-btn\'>Import Save</button>\n      </div>\n\n    ';
+    str += '\n      <div class="setting-container">\n        <h1 style=\'font-family: "Germania One"; font-size: 4em; text-align: center;\'>Settings</h1>\n        <i class=\'fa fa-times fa-1x\' onclick=\'Game.removeEl(document.querySelector(".wrapper"))\'></i>\n        <hr/>\n        <h2 style=\'text-align: left;\'>Sound</h2>\n        <hr/>\n        <div class="single-setting">\n          <p style=\'padding-right: 10px;\'>Volume: </p>\n          <input class=\'volume-slider\' type="range" min=0 max=1 step=0.1 list=\'tickmarks\' onchange=\'Game.state.prefs.volume = document.querySelector(".volume-slider").value\'/>\n          <datalist id="tickmarks">\n            <option value="0" label="0%">\n            <option value="0.1">\n            <option value="0.1">\n            <option value="0.2">\n            <option value="0.3">\n            <option value="0.4">\n            <option value="0.5" label="50%">\n            <option value="0.6">\n            <option value="0.7">\n            <option value="0.8">\n            <option value="0.9">\n            <option value=\'1.0\' label="100%">\n          </datalist>\n        </div>\n        <div class="single-setting">\n          <p style=\'padding-right: 20px;\'>BGM: </p>\n          <input type="radio" name=\'bgm\' id=\'bgmOn\' value=\'true\' onchange=\'Game.state.prefs.bgm = 1; Game.toggleBgm();\'/>\n            <label for="bgmOn" style=\'margin-right: 10px\'>On</label>\n          <input type="radio" name=\'bgm\' id=\'bgmOff\' value=\'false\' onchange=\'Game.state.prefs.bgm = 0; Game.toggleBgm();\'/>\n            <label for="bgmOff" style=\'margin-right: 10px\'>Off</label>\n        </div>\n        <br/>\n        <hr/>\n        <h2 style=\'text-align: left;\'>Video</h2>\n        <hr/>\n        <div class="single-setting">\n          <p style=\'padding-right: 20px;\'>Enable Rock Particles:</p>\n          <input type="radio" name=\'rockParticles\' id=\'rockParticlesOn\' value=\'true\' onchange=\'Game.state.prefs.rockParticles = true\'/>\n            <label for="rockParticlesOn" style=\'margin-right: 10px\'>On</label>\n          <input type="radio" name=\'rockParticles\' id=\'rockParticlesOff\' value=\'false\' onchange=\'Game.state.prefs.rockParticles = false\' />\n            <label for="rockParticlesOff">Off</label>\n        </div>\n        <div class="single-setting">\n          <p style=\'padding-right: 20px;\'>Enable Rising Numbers:</p>\n          <input type="radio" name=\'risingNumbers\' id=\'risingNumbersOn\' value=\'true\' onchange=\'Game.state.prefs.risingNumbers = true\'/>\n            <label for="risingNumbersOn" style=\'margin-right: 10px\'>On</label>\n          <input type="radio" name=\'risingNumbers\' id=\'risingNumbersOff\' value=\'false\' onchange=\'Game.state.prefs.risingNumbers = false\' />\n            <label for="risingNumbersOff">Off</label>\n        </div>\n        <br/>\n        <hr/>\n        <h2 style=\'text-align: left;\'>Miscellaneous</h2>\n        <hr/>\n        <div class="single-setting">\n          <p style=\'padding-right: 20px;\'>Enable Scrolling Text:</p>\n          <input type="radio" name=\'scrollingText\' id=\'scrollingTextOn\' value=\'true\' onchange=\'Game.state.prefs.scrollingText = true\'/>\n            <label for="scrollingTextOn" style=\'margin-right: 10px\'>On</label>\n          <input type="radio" name=\'scrollingText\' id=\'scrollingTextOff\' value=\'false\' onchange=\'Game.state.prefs.scrollingText = false\' />\n            <label for="scrollingTextOff">Off</label>\n        </div>\n        <br/>\n        <p>Saves (work-in-progress)</p>\n        <button class=\'saves-btn\' onclick=\'Game.export()\'>Export Save</button> <button onclick=\'Game.import()\' class=\'saves-btn\'>Import Save</button>\n      </div>\n\n    ';
     div.innerHTML = str;
 
     s('body').append(div);
@@ -1761,7 +1768,7 @@ Game.launch = function () {
     var achievementsMissing = 0;
     div.classList.add('wrapper');
 
-    str += '\n      <div class="statistics-container">\n        <h1>Statistics</h1>\n        <i class=\'fa fa-times fa-1x\' onclick=\'Game.removeEl(document.querySelector(".wrapper"))\'></i>\n        <hr/>\n        <p><span style=\'opacity: .6\'>Ores Earned:</span> <strong>' + beautify(Math.round(Game.state.stats.currentOresEarned)) + '</strong></p>\n        <p><span style=\'opacity: .6\'>Ores Mined (By Clicks):</span> <strong>' + beautify(Math.round(Game.state.stats.currentOresMined)) + '</strong></p>\n        <p><span style=\'opacity: .6\'>Current Ore Clicks:</span> <strong>' + Game.state.stats.currentOreClicks + '</strong></p>\n        <p><span style=\'opacity: .6\'>Current Weak Spot Hits:</span> <strong>' + Game.state.stats.currentWeakSpotHits + '</strong></p>\n        <p><span style=\'opacity: .6\'>Crit Hits:</span> <strong>' + Game.state.stats.critHits + '</strong></p>\n        <p><span style=\'opacity: .6\'>Mega Hits: (Crit & Weak Spot Hit):</span> <strong>' + Game.state.stats.megaHits + '</strong></p>\n        <p><span style=\'opacity: .6\'>Highest Weak Spot Combo:</span> <strong>' + Game.state.stats.highestCombo + '</strong></p>\n        <p><span style=\'opacity: .6\'>Ores Spent:</span> <strong>' + beautify(Math.round(Game.state.stats.totalOresSpent)) + '</strong></p>\n        <p><span style=\'opacity: .6\'>Rocks Destroyed:</span> <strong>' + Game.state.stats.rocksDestroyed + '</strong></p>\n        <p><span style=\'opacity: .6\'>Items Picked Up:</span> <strong>' + Game.state.stats.itemsPickedUp + '</strong></p>\n        <p><span style=\'opacity: .6\'>Refine Amount:</span> <strong>' + Game.state.stats.timesRefined + '</strong></p>\n        <p><span style=\'opacity: .6\'>Time Played:</span> <strong>' + beautifyTime(Game.state.stats.timePlayed) + '</strong></p>\n      </div>\n    ';
+    str += '\n      <div class="statistics-container">\n        <h1 style=\'font-family: "Germania One"; font-size: 4em;\'>Statistics</h1>\n        <i class=\'fa fa-times fa-1x\' onclick=\'Game.removeEl(document.querySelector(".wrapper"))\'></i>\n        <hr/>\n        <p><span style=\'opacity: .6\'>Ores Earned:</span> <strong>' + beautify(Math.round(Game.state.stats.currentOresEarned)) + '</strong></p>\n        <p><span style=\'opacity: .6\'>Ores Mined (By Clicks):</span> <strong>' + beautify(Math.round(Game.state.stats.currentOresMined)) + '</strong></p>\n        <p><span style=\'opacity: .6\'>Current Ore Clicks:</span> <strong>' + Game.state.stats.currentOreClicks + '</strong></p>\n        <p><span style=\'opacity: .6\'>Current Weak Spot Hits:</span> <strong>' + Game.state.stats.currentWeakSpotHits + '</strong></p>\n        <p><span style=\'opacity: .6\'>Crit Hits:</span> <strong>' + Game.state.stats.critHits + '</strong></p>\n        <p><span style=\'opacity: .6\'>Mega Hits: (Crit & Weak Spot Hit):</span> <strong>' + Game.state.stats.megaHits + '</strong></p>\n        <p><span style=\'opacity: .6\'>Highest Weak Spot Combo:</span> <strong>' + Game.state.stats.highestCombo + '</strong></p>\n        <p><span style=\'opacity: .6\'>Ores Spent:</span> <strong>' + beautify(Math.round(Game.state.stats.totalOresSpent)) + '</strong></p>\n        <p><span style=\'opacity: .6\'>Rocks Destroyed:</span> <strong>' + Game.state.stats.rocksDestroyed + '</strong></p>\n        <p><span style=\'opacity: .6\'>Items Picked Up:</span> <strong>' + Game.state.stats.itemsPickedUp + '</strong></p>\n        <p><span style=\'opacity: .6\'>Refine Amount:</span> <strong>' + Game.state.stats.timesRefined + '</strong></p>\n        <p><span style=\'opacity: .6\'>Time Played:</span> <strong>' + beautifyTime(Game.state.stats.timePlayed) + '</strong></p>\n      </div>\n    ';
 
     div.innerHTML = str;
 
@@ -1769,34 +1776,24 @@ Game.launch = function () {
   };
 
   Game.showAchievements = function () {
-
-    var achievementsWon = 0;
-    var achievementsMissing = 0;
-
-    for (var i = 0; i < Game.achievements.length; i++) {
-      Game.achievements[i].won == 1 ? achievementsWon++ : achievementsMissing++;
-    }
-
     var div = document.createElement('div');
     div.classList.add('wrapper');
 
-    var str = '\n      <div class=\'achievements-container\'>\n        <h1>Achievements</h1>\n        <hr/>\n        <h2><span style=\'opacity: .6\'>Achievements Won:</span> ' + achievementsWon + '</h2>\n    ';
+    var str = '\n      <div class="achievements-container">\n        <h1>Achievements</h1>\n        <i class=\'fa fa-times fa-1x\' onclick=\'Game.removeEl(document.querySelector(".wrapper"))\'></i>\n        <p>Achievements Won:</p>\n        <div class="won-achievements">\n        ';
+    for (var i = 0; i < Game.achievements.length; i++) {
+      if (Game.achievements[i].won == 1) {
+        str += '<div onmouseover=\'Game.showTooltip({type: "achievement", achievementName: "' + Game.achievements[i].name + '"})\' onmouseout=\'Game.hideTooltip()\' class="single-achievement"></div>';
+      }
+    }
 
+    str += '\n        </div>\n        <br/>\n        <p>Achievements Missing:</p>\n        <div class="missing-achievements">\n        ';
     for (var _i8 = 0; _i8 < Game.achievements.length; _i8++) {
-      if (Game.achievements[_i8].won == 1) {
-        str += '<p><span style=\'opacity: .6\'>' + Game.achievements[_i8].name + '</span> - <strong>' + Game.achievements[_i8].desc + '</strong></p>';
+      if (Game.achievements[_i8].won == 0) {
+        str += '<div onmouseover=\'Game.showTooltip({type: "achievement", missing: 1, achievementName: "' + Game.achievements[_i8].name + '"})\' onmouseout=\'Game.hideTooltip()\' style=\'opacity: 0.3\' class="single-achievement"></div>';
       }
     }
 
-    str += '<br/> <p><span style=\'opacity: .6\'>Achievements Missing:</span> <strong>' + achievementsMissing + '</strong></p>';
-
-    for (var j = 0; j < Game.achievements.length; j++) {
-      if (Game.achievements[j].won == 0) {
-        str += '<p><span style=\'opacity: .6\'>' + Game.achievements[j].name + '</span> - <strong>???</strong></p>';
-      }
-    }
-
-    str += '</div>';
+    str += '</div>\n      </div>\n\n    ';
 
     div.innerHTML = str;
     s('body').append(div);
@@ -1811,23 +1808,23 @@ Game.launch = function () {
       var bonus = document.createElement('div');
       bonus.id = 'bonus-' + randomID;
       bonus.classList.add('bonus');
+      // 60% chance of happening
       if (chance >= 0 && chance <= .6) {
-        // 60% chance of happening
         bonus.onclick = function () {
           Game.selectedBonus(1);bonus.parentNode.removeChild(bonus);
         };
-      } else if (chance > .6 && chance <= .85) {
         // 25% chance of happening
+      } else if (chance > .6 && chance <= .85) {
         bonus.onclick = function () {
           Game.selectedBonus(2);bonus.parentNode.removeChild(bonus);
         };
-      } else if (chance > .85 && chance <= .95) {
         // 10% chance of happening
+      } else if (chance > .85 && chance <= .95) {
         bonus.onclick = function () {
           Game.selectedBonus(3);bonus.parentNode.removeChild(bonus);
         };
-      } else {
         // 5% chance
+      } else {
         bonus.onclick = function () {
           Game.selectedBonus(4);bonus.parentNode.removeChild(bonus);
         };
@@ -1863,7 +1860,7 @@ Game.launch = function () {
       Game.risingNumber(amount, 'bonus', event);
     }
 
-    if (bonusNum == 3 || bonusNum == 2 || bonusNum == 4) {
+    if (bonusNum == 2 || bonusNum == 3 || bonusNum == 4) {
       var cover = document.createElement('div');
       cover.classList.add('gold-rush-cover');
       s('body').append(cover);
@@ -1874,6 +1871,15 @@ Game.launch = function () {
         s('.gold-rush-cover').parentNode.removeChild(s('.gold-rush-cover'));
       }, 15 * 1000);
     }
+
+    // if (bonusNum == 3) {
+    //   let cover = document.createElement('div')
+    //   conver.classList.add('fury-cover')
+    //   s('body').append(cover)
+    //   setTimeout(() => {
+    //     s('.fury-cover').parentNode.removeChild(s('.fury-cover'))
+    //   }, 7 * 1000)
+    // }
   };
 
   var goldRushCounter = 0;
@@ -2006,7 +2012,7 @@ Game.launch = function () {
     }).generationReq;
     var spacerNeeded = true;
 
-    str = '\n      <div id=\'skill-tree-' + section + '\' class="skill-tree">\n    ';
+    var str = '\n      <div id=\'skill-tree-' + section + '\' class="skill-tree">\n    ';
 
     for (var i = 0; i <= highestGen; i++) {
       str += '<div class="column">';
@@ -2047,7 +2053,7 @@ Game.launch = function () {
     var div = s('.skill-tree-container');
     div.style.display = 'flex';
 
-    str = '\n      <div id="particles-js"></div>\n      <canvas class="skill-lines"></canvas>\n      <div class="skill-tree-container-top">\n        <h1 style=\'font-size: 6rem; font-family: "Germania One"\'>Generation: ' + Game.state.player.generation.lv + '</h1>\n        <h4 class=\'available-sp\'>Available Sp: ' + Game.state.player.generation.availableSp + '</h4>\n        <button onclick=\'document.querySelector(".skill-tree-container").style.display="none"; window.pJSDom = []; Game.tutorialQuest(); Game.drawQuestBtn()\'>Go back</button>\n      </div>\n\n      <div class="skill-tree-container-bottom">\n        <div class="skill-trees">\n        ';
+    var str = '\n      <div id="particles-js"></div>\n      <canvas class="skill-lines"></canvas>\n      <div class="skill-tree-container-top">\n        <h1 style=\'font-size: 6rem; font-family: "Germania One"\'>Generation: ' + Game.state.player.generation.lv + '</h1>\n        <h4 class=\'available-sp\'>Available Sp: ' + Game.state.player.generation.availableSp + '</h4>\n        <button onclick=\'document.querySelector(".skill-tree-container").style.display="none"; window.pJSDom = []; Game.tutorialQuest(); Game.drawQuestBtn()\'>Go back</button>\n      </div>\n\n      <div class="skill-tree-container-bottom">\n        <div class="skill-trees">\n        ';
     str += Game.buildSkillTree(1);
     str += Game.buildSkillTree(2);
     str += Game.buildSkillTree(3);
@@ -2590,6 +2596,8 @@ Game.launch = function () {
       }
     }
 
+    Game.hideTooltip();
+
     if (s('.specialization-wrapper')) Game.removeEl(s('.specialization-wrapper'));
     if (s('.specialization-skills-wrapper')) Game.removeEl(s('.specialization-skills-wrapper'));
     if (s('.specialization-confirmation-wrapper')) Game.removeEl(s('.specialization-confirmation-wrapper'));
@@ -2618,27 +2626,27 @@ Game.launch = function () {
       var div = document.createElement('div');
       div.classList.add('wrapper');
 
-      var _str3 = '\n        <div class="quests-container">\n          <h1 style=\'font-size: 3rem; padding: 10px 0;\'>Quests</h1>\n          <p onclick=\'Game.closeCurrentWindow()\' style=\'position: absolute; top: 5px; right: 5px; cursor: pointer\'>X</p>\n          <div class="active-quest-container">\n            <hr/>\n            ';
+      var str = '\n        <div class="quests-container">\n          <h1 style=\'font-size: 3rem; padding: 10px 0;\'>Quests</h1>\n          <p onclick=\'Game.closeCurrentWindow()\' style=\'position: absolute; top: 5px; right: 5px; cursor: pointer\'>X</p>\n          <div class="active-quest-container">\n            <hr/>\n            ';
 
       if (Game.state.quest.active) {
-        _str3 += '\n                <h1>' + Game.state.quest.currentQuest + '</h1>\n              ';
+        str += '\n                <h1>' + Game.state.quest.currentQuest + '</h1>\n              ';
       } else {
-        _str3 += '<p>No active quest</p>';
+        str += '<p>No active quest</p>';
       }
 
-      _str3 += '\n            <hr/>\n          </div>\n          <div class="available-quests-container">\n          ';
+      str += '\n            <hr/>\n          </div>\n          <div class="available-quests-container">\n          ';
       for (var i = 0; i < Game.quests.length; i++) {
         if (Game.quests[i].locked == 0) {
-          _str3 += '\n                  <div style=\'background: url("./assets/' + Game.quests[i].pic + '.png");\' class="available-quest unlocked" onclick="Game.showQuestInformation(\'' + Game.quests[i].functionName + '\')">\n                    <p style=\'font-family: "Germania One"; background: rgba(0, 0, 0, 0.3); width: 100%; padding: 10px\'>' + Game.quests[i].name + '</p>\n                  </div>\n                ';
+          str += '\n                  <div style=\'background: url("./assets/' + Game.quests[i].pic + '.png");\' class="available-quest unlocked" onclick="Game.showQuestInformation(\'' + Game.quests[i].functionName + '\')">\n                    <p style=\'font-family: "Germania One"; background: rgba(0, 0, 0, 0.3); width: 100%; padding: 10px\'>' + Game.quests[i].name + '</p>\n                  </div>\n                ';
         } else if (Game.quests[i].locked == 1) {
-          _str3 += '\n                  <div style=\'opacity: .7\' class="available-quest">\n                    <p>???</p>\n                  </div>\n                ';
+          str += '\n                  <div style=\'opacity: .7\' class="available-quest">\n                    <p>???</p>\n                  </div>\n                ';
         } else {
-          _str3 += '\n                  <div style=\'opacity: .2\' class="available-quest hidden-quest">\n                    <p>???</p>\n                  </div>\n                ';
+          str += '\n                  <div style=\'opacity: .2\' class="available-quest hidden-quest">\n                    <p>???</p>\n                  </div>\n                ';
         }
       }
-      _str3 += '\n          <p style=\'opacity: .5\'>More coming soon...</p>\n          </div>\n        </div>\n      ';
+      str += '\n          <p style=\'opacity: .5\'>More coming soon...</p>\n          </div>\n        </div>\n      ';
 
-      div.innerHTML = _str3;
+      div.innerHTML = str;
       s('body').append(div);
     }
   };
@@ -2785,17 +2793,24 @@ Game.launch = function () {
         if (selectedAchievement.reward.increaseWeakHitMulti) {
           Game.state.permanentWeakHitMulti += selectedAchievement.reward.increaseWeakHitMulti;
         }
+        if (selectedAchievement.reward.building) {
+          Game.select(Game.buildings, selectedAchievement.reward.building[0]).production *= selectedAchievement.reward.building[1];
+          Game.recalculateOpC = 1;
+          Game.recalculateOpS = 1;
+          Game.rebuildInventory = 1;
+          Game.rebuildStore = 1;
+        }
       }
 
       var div = document.createElement('div');
       div.classList.add('achievement');
 
-      var _str4 = '\n        <h3>Achievement Unlocked</h3>\n        <h1>' + selectedAchievement.name + '</h1>\n        <p>' + selectedAchievement.desc + '</p>\n      ';
+      var str = '\n        <h3>Achievement Unlocked</h3>\n        <h1>' + selectedAchievement.name + '</h1>\n        <p>' + selectedAchievement.desc + '</p>\n      ';
       if (selectedAchievement.reward) {
-        _str4 += '\n          <hr />\n          <p style=\'color: lime\'>REWARD: ' + selectedAchievement.reward.txt + '</p>\n        ';
+        str += '\n          <hr />\n          <p style=\'color: lime\'>REWARD: ' + selectedAchievement.reward.txt + '</p>\n        ';
       }
 
-      div.innerHTML = _str4;
+      div.innerHTML = str;
       s('body').append(div);
 
       setTimeout(function () {

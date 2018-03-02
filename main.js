@@ -21,7 +21,7 @@ let beautify = (num) => {
   ]
 
   if (num < 1) {
-    return num
+    return num.toFixed(1)
   }
   if (num < 1000000) {
     return Math.round(num).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); //found on https://stackoverflow.com/questions/2901102/how-to-print-a-number-with-commas-as-thousands-separators-in-javascript
@@ -970,7 +970,7 @@ Game.launch = () => {
 
       let risingNumber = document.createElement('div')
       risingNumber.classList.add('rising-number')
-      if (amount) risingNumber.innerHTML = `+${beautify(amount.toFixed(1))}`
+      if (amount) risingNumber.innerHTML = `+${beautify(amount)}`
       risingNumber.style.left = randomMouseX + 'px'
       risingNumber.style.top = mouseY + 'px'
 
@@ -1448,7 +1448,7 @@ Game.launch = () => {
     let str = `
       <div class="item-modal">
         <div class="item-modal-top">
-          <h1>New Item!</h1>
+          <h1 style='font-family: "Germania One"; font-size: 70px;'>New Item!</h1>
         </div>
         <div class="item-modal-middle">
           <div class="item-modal-middle-left">
@@ -1877,13 +1877,13 @@ Game.launch = () => {
               tooltip.innerHTML += `
                 <hr />
                 <p>Each ${selectedItem.name} generates ${beautify(selectedItem.production)} OpS</p>
-                <p><span class='bold'>${selectedItem.owned}</span> ${selectedItem.name} generating <span class='bold'>${beautify((selectedItem.production * selectedItem.owned).toFixed(1))}</span> ores per second</p>
+                <p><span class='bold'>${selectedItem.owned}</span> ${selectedItem.name} generating <span class='bold'>${beautify(selectedItem.production * selectedItem.owned)}</span> ores per second</p>
               `
             } else {
               tooltip.innerHTML += `
                 <hr />
                 <p>Each ${selectedItem.name} generates ${beautify(selectedItem.production)} OpS</p>
-                <p><span class='bold'>${selectedItem.owned}</span> ${selectedItem.namePlural} generating <span class='bold'>${beautify((selectedItem.production * selectedItem.owned).toFixed(1))}</span> ores per second</p>
+                <p><span class='bold'>${selectedItem.owned}</span> ${selectedItem.namePlural} generating <span class='bold'>${beautify(selectedItem.production * selectedItem.owned)}</span> ores per second</p>
               `
             }
           }
@@ -2161,6 +2161,7 @@ Game.launch = () => {
 
         str += `
         </div>
+        <br/>
         <p>Achievements Missing:</p>
         <div class="missing-achievements">
         `
@@ -2393,7 +2394,7 @@ Game.launch = () => {
     let highestGen = Game.skills.reduce((prev, current) => (prev.generationReq > current.generationReq) ? prev : current).generationReq
     let spacerNeeded = true;
 
-    str = `
+    let str = `
       <div id='skill-tree-${section}' class="skill-tree">
     `
 
@@ -2436,7 +2437,7 @@ Game.launch = () => {
     let div = s('.skill-tree-container')
     div.style.display = 'flex'
 
-    str = `
+    let str = `
       <div id="particles-js"></div>
       <canvas class="skill-lines"></canvas>
       <div class="skill-tree-container-top">
