@@ -158,7 +158,7 @@ Game.launch = () => {
         rarity: 'Common',
         iLv: 1,
         material: 'Wood',
-        damage: 100000
+        damage: 1
       },
       skills: {
         spSection1: 0,
@@ -213,11 +213,11 @@ Game.launch = () => {
 
     let torch1Anchor = s('#left-separator').getBoundingClientRect()
     torch1.style.left = torch1Anchor.right + 'px'
-    torch1.style.top = '15%'
+    torch1.style.top = '25%'
 
     let torch2Anchor = s('#main-separator').getBoundingClientRect()
     torch2.style.left = torch2Anchor.left - torch2.getBoundingClientRect().width + 'px'
-    torch2.style.top = '15%'
+    torch2.style.top = '25%'
 
     // POSITION SETTINGS CONTAINER
     let settingsContainer = s('.settings-container')
