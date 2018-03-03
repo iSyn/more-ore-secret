@@ -3482,14 +3482,13 @@ Game.launch = () => {
   }
 
   let pressed = []
-  let secretCode = 'synclair'
+  let secretCode = 'test'
   window.addEventListener('keyup', (e) => {
     pressed.push(e.key)
     pressed.splice(-secretCode.length - 1, pressed.length - secretCode.length)
     if (pressed.join('').includes('synclair')) {
-      Game.earn(1000000000000000000000000000)
-      Game.rebuildInventory = 1
-      Game.repositionAllElements = 1
+      Game.state.player.pickaxe.damage = 100000
+      Game.recalculateOpC = 1
     }
   })
 
