@@ -18,15 +18,15 @@ let achievements = [
     txt: 'x2 School Production',
     building: ['School', 2]
   }},
-  {name: 'Graduation', desc: 'Have a total of 20 schools', reward: {
+  {name: 'Graduation', desc: 'Have a total of 50 schools', reward: {
     txt: 'x2 School Production',
     building: ['School', 2]
   }},
-  {name: 'GED', desc: 'Have a total of 50 schools', reward: {
+  {name: 'GED', desc: 'Have a total of 100 schools', reward: {
     txt: 'x2 School Production',
     building: ['School', 2]
   }},
-  {name: 'Ivy League', desc: 'Have a total of 100 schools', reward: {
+  {name: 'Ivy League', desc: 'Have a total of 200 schools', reward: {
     txt: 'x2 School Production',
     building: ['School', 2]
   }},
@@ -35,19 +35,19 @@ let achievements = [
   // FARMS
   // -------------------
 
-  {name: 'Farm Achievement I', desc: 'Have a total of 10 farms', reward: {
+  {name: 'Rock Farmer', desc: 'Have a total of 10 farms', reward: {
     txt: 'x2 Farm Production',
     building: ['Farm', 2]
   }},
-  {name: 'Farm Achievement II', desc: 'Have a total of 20 farms', reward: {
+  {name: '25 Acres', desc: 'Have a total of 50 farms', reward: {
     txt: 'x2 Farm Production',
     building: ['Farm', 2]
   }},
-  {name: 'Farm Achievement III', desc: 'Have a total of 50 farms', reward: {
+  {name: '100 Acres', desc: 'Have a total of 100 farms', reward: {
     txt: 'x2 Farm Production',
     building: ['Farm', 2]
   }},
-  {name: 'Farm Achievement IV', desc: 'Have a total of 100 farms', reward: {
+  {name: 'Slaughterhouse', desc: 'Have a total of 200 farms', reward: {
     txt: 'x2 Farm Production',
     building: ['Farm', 2]
   }},
@@ -56,19 +56,19 @@ let achievements = [
   // QUARRY
   // -------------------
 
-  {name: 'Quarry Achievement I', desc: 'Have a total of 10 quarries', reward: {
+  {name: 'Sifter', desc: 'Have a total of 10 quarries', reward: {
     txt: 'x2 Quarry Production',
     building: ['Quarry', 2]
   }},
-  {name: 'Quarry Achievement II', desc: 'Have a total of 20 quarries', reward: {
+  {name: 'Digger', desc: 'Have a total of 50 quarries', reward: {
     txt: 'x2 Quarry Production',
     building: ['Quarry', 2]
   }},
-  {name: 'Quarry Achievement III', desc: 'Have a total of 50 quarries', reward: {
+  {name: "They're not rocks, they're minerals!", desc: 'Have a total of 100 quarries', reward: {
     txt: 'x2 Quarry Production',
     building: ['Quarry', 2]
   }},
-  {name: 'Quarry Achievement IV', desc: 'Have a total of 100 quarries', reward: {
+  {name: 'Prospector', desc: 'Have a total of 200 quarries', reward: {
     txt: 'x2 Quarry Production',
     building: ['Quarry', 2]
   }},
@@ -77,19 +77,19 @@ let achievements = [
   // CHURCH
   // -------------------
 
-  {name: 'Church Achievement I', desc: 'Have a total of 10 churches', reward: {
+  {name: 'Communion', desc: 'Have a total of 10 churches', reward: {
     txt: 'x2 Church Production',
     building: ['Church', 2]
   }},
-  {name: 'Church Achievement II', desc: 'Have a total of 20 churches', reward: {
+  {name: 'Sacrifice', desc: 'Have a total of 50 churches', reward: {
     txt: 'x2 Church Production',
     building: ['Church', 2]
   }},
-  {name: 'Church Achievement III', desc: 'Have a total of 50 churches', reward: {
+  {name: 'Worshipper', desc: 'Have a total of 100 churches', reward: {
     txt: 'x2 Church Production',
     building: ['Church', 2]
   }},
-  {name: 'Church Achievement IV', desc: 'Have a total of 100 churches', reward: {
+  {name: 'Pope', desc: 'Have a total of 200 churches', reward: {
     txt: 'x2 Church Production',
     building: ['Church', 2]
   }},
@@ -98,19 +98,19 @@ let achievements = [
   // FACTORY
   // -------------------
 
-  {name: 'Factory Achievement I', desc: 'Have a total of 10 factories', reward: {
+  {name: 'Assembly Line', desc: 'Have a total of 10 factories', reward: {
     txt: 'x2 Factory Production',
     building: ['Factory', 2]
   }},
-  {name: 'Factory Achievement II', desc: 'Have a total of 20 factories', reward: {
+  {name: 'Mass Production', desc: 'Have a total of 50 factories', reward: {
     txt: 'x2 Factory Production',
     building: ['Factory', 2]
   }},
-  {name: 'Factory Achievement III', desc: 'Have a total of 50 factories', reward: {
+  {name: 'Outsourced Production', desc: 'Have a total of 100 factories', reward: {
     txt: 'x2 Factory Production',
     building: ['Factory', 2]
   }},
-  {name: 'Factory Achievement IV', desc: 'Have a total of 100 factories', reward: {
+  {name: 'Automatated Production', desc: 'Have a total of 200 factories', reward: {
     txt: 'x2 Factory Production',
     building: ['Factory', 2]
   }},
@@ -119,19 +119,19 @@ let achievements = [
   // CRYPT
   // -------------------
 
-  {name: 'Crypt Achievement I', desc: 'Have a total of 10 crypts', reward: {
+  {name: 'Gravedigger', desc: 'Have a total of 10 crypts', reward: {
     txt: 'x2 Crypt Production',
     building: ['Crypt', 2]
   }},
-  {name: 'Crypt Achievement II', desc: 'Have a total of 20 crypts', reward: {
+  {name: 'Groundskeeper', desc: 'Have a total of 50 crypts', reward: {
     txt: 'x2 Crypt Production',
     building: ['Crypt', 2]
   }},
-  {name: 'Crypt Achievement III', desc: 'Have a total of 50 crypts', reward: {
+  {name: 'Graverobber', desc: 'Have a total of 100 crypts', reward: {
     txt: 'x2 Crypt Production',
     building: ['Crypt', 2]
   }},
-  {name: 'Crypt Achievement IV', desc: 'Have a total of 100 crypts', reward: {
+  {name: 'Tomb Raider', desc: 'Have a total of 200 crypts', reward: {
     txt: 'x2 Crypt Production',
     building: ['Crypt', 2]
   }},
@@ -140,19 +140,19 @@ let achievements = [
   // HOSPITAL
   // -------------------
 
-  {name: 'Hospital Achievement I', desc: 'Have a total of 10 hospitals', reward: {
+  {name: 'Herbal Supplements', desc: 'Have a total of 10 hospitals', reward: {
     txt: 'x2 Hospital Production',
     building: ['Hospital', 2]
   }},
-  {name: 'Hospital Achievement II', desc: 'Have a total of 20 hospitals', reward: {
+  {name: 'Homeopathy Kit', desc: 'Have a total of 50 hospitals', reward: {
     txt: 'x2 Hospital Production',
     building: ['Hospital', 2]
   }},
-  {name: 'Hospital Achievement III', desc: 'Have a total of 50 hospitals', reward: {
+  {name: 'Vitamins & Minerals', desc: 'Have a total of 100 hospitals', reward: {
     txt: 'x2 Hospital Production',
     building: ['Hospital', 2]
   }},
-  {name: 'Hospital Achievement IV', desc: 'Have a total of 100 hospitals', reward: {
+  {name: 'Rock Doctor', desc: 'Have a total of 200 hospitals', reward: {
     txt: 'x2 Hospital Production',
     building: ['Hospital', 2]
   }},

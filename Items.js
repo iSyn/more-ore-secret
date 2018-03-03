@@ -25,7 +25,7 @@ let Item = function(item) {
       } else {
         Game.state.stats.buildingsOwned += Game.state.prefs.buyAmount
       }
-      Game.spend(this.price)
+      Game.spend(price)
       Game.playSound('buysound')
       Game.risingNumber(null, 'spendMoney')
       // this.owned
@@ -62,9 +62,9 @@ let items = [
       ],
       achievements: [
         {name: 'Elementary', amountNeeded: 10},
-        {name: 'Graduation', amountNeeded: 20},
-        {name: 'GED', amountNeeded: 50},
-        {name: 'Ivy League', amountNeeded: 100}
+        {name: 'Graduation', amountNeeded: 50},
+        {name: 'GED', amountNeeded: 100},
+        {name: 'Ivy League', amountNeeded: 200}
       ]
     }
   },
@@ -82,10 +82,10 @@ let items = [
         {text: '[Breaking News] Farmers have now started farming for ores. How is this possible? More at 7pm'}
       ],
       achievements: [
-        {name: 'Farm Achievement I', amountNeeded: 10},
-        {name: 'Farm Achievement II', amountNeeded: 20},
-        {name: 'Farm Achievement III', amountNeeded: 50},
-        {name: 'Farm Achievement IV', amountNeeded: 100}
+        {name: 'Rock Farmer', amountNeeded: 10},
+        {name: '25 Acres', amountNeeded: 50},
+        {name: '100 Acres', amountNeeded: 100},
+        {name: 'Slaughterhouse', amountNeeded: 200}
       ]
     }
   },
@@ -100,10 +100,10 @@ let items = [
         {name: 'Waterproof Tape', amountNeeded: 100}
       ],
       achievements: [
-        {name: 'Quarry Achievement I', amountNeeded: 10},
-        {name: 'Quarry Achievement II', amountNeeded: 20},
-        {name: 'Quarry Achievement III', amountNeeded: 50},
-        {name: 'Quarry Achievement IV', amountNeeded: 100}
+        {name: 'Sifter', amountNeeded: 10},
+        {name: 'Digger', amountNeeded: 50},
+        {name: "They're not rocks, they're minerals!", amountNeeded: 100},
+        {name: 'Prospector', amountNeeded: 200}
       ]
     }
   },
@@ -118,10 +118,10 @@ let items = [
         {name: 'Judgement Day', amountNeeded: 100},
       ],
       achievements: [
-        {name: 'Church Achievement I', amountNeeded: 10},
-        {name: 'Church Achievement II', amountNeeded: 20},
-        {name: 'Church Achievement III', amountNeeded: 50},
-        {name: 'Church Achievement IV', amountNeeded: 100}
+        {name: 'Communion', amountNeeded: 10},
+        {name: 'Sacrifice', amountNeeded: 50},
+        {name: 'Worshipper', amountNeeded: 100},
+        {name: 'Pope', amountNeeded: 200}
       ]
     }
   },
@@ -136,10 +136,10 @@ let items = [
         {name: 'Hydroponic Screws', amountNeeded: 100},
       ],
       achievements: [
-        {name: 'Factory Achievement I', amountNeeded: 10},
-        {name: 'Factory Achievement II', amountNeeded: 20},
-        {name: 'Factory Achievement III', amountNeeded: 50},
-        {name: 'Factory Achievement IV', amountNeeded: 100}
+        {name: 'Assembly Line', amountNeeded: 10},
+        {name: 'Mass Production', amountNeeded: 50},
+        {name: 'Outsourced Production', amountNeeded: 100},
+        {name: 'Automated Production', amountNeeded: 200}
       ]
     }
   },
@@ -154,10 +154,10 @@ let items = [
         {name: 'Oil Lanterns', amountNeeded: 100},
       ],
       achievements: [
-        {name: 'Crypt Achievement I', amountNeeded: 10},
-        {name: 'Crypt Achievement II', amountNeeded: 20},
-        {name: 'Crypt Achievement III', amountNeeded: 50},
-        {name: 'Crypt Achievement IV', amountNeeded: 100}
+        {name: 'Gravedigger', amountNeeded: 10},
+        {name: 'Groundskeeper', amountNeeded: 50},
+        {name: 'Graverobber', amountNeeded: 100},
+        {name: 'Tomb Raider', amountNeeded: 200}
       ]
     }
   },
@@ -172,10 +172,10 @@ let items = [
         {name: 'Enhancement Surgery', amountNeeded: 100},
       ],
       achievements: [
-        {name: 'Hospital Achievement I', amountNeeded: 10},
-        {name: 'Hospital Achievement II', amountNeeded: 20},
-        {name: 'Hospital Achievement III', amountNeeded: 50},
-        {name: 'Hospital Achievement IV', amountNeeded: 100}
+        {name: 'Herbal Supplements', amountNeeded: 10},
+        {name: 'Homeopathy Kit', amountNeeded: 50},
+        {name: 'Vitamins & Minerals', amountNeeded: 100},
+        {name: 'Rock Doctor', amountNeeded: 200}
       ]
     }
   },
@@ -607,7 +607,7 @@ let items = [
     }
   },
   {
-    name: 'Flashlight', type: 'upgrade', pic: 'flashlight.png', desc: 'Gain 1% of your OpS as OpC', fillerQuote: 'wip', price: 50000, hidden: 1,
+    name: 'Flashlight', type: 'upgrade', pic: 'flashlight.png', desc: 'Gain 1% of your OpS as OpC', fillerQuote: 'wip', price: 55000, hidden: 1,
     buyFunctions: {
       multipliers: [
         {type: 'opc', amount: 2}

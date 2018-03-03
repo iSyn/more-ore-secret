@@ -158,7 +158,7 @@ Game.launch = () => {
         rarity: 'Common',
         iLv: 1,
         material: 'Wood',
-        damage: 1
+        damage: 100000
       },
       skills: {
         spSection1: 0,
@@ -1159,11 +1159,13 @@ Game.launch = () => {
         <div class="item-pouch-glow3"></div>
       `
 
-      // POSITION ITEM CONTAINER NEAR ORE
+      // POSITION ITEM ON ORE
       let orePos = s('.ore').getBoundingClientRect()
       itemContainer.style.position = 'absolute'
-      itemContainer.style.top = orePos.bottom + randomY + 'px'
-      itemContainer.style.left = (orePos.left + orePos.right)/2 + randomNumber + 'px'
+      itemContainer.style.top = (orePos.top + orePos.bottom)/1.5 + 'px'
+      itemContainer.style.left = (orePos.left + orePos.right)/2 + 'px'
+      itemContainer.style.transition = 'all .5s'
+      itemContainer.style.transitionTimingFunction = 'ease-out'
 
       // MAKE ITEM
       let item = document.createElement('div')
@@ -1175,6 +1177,11 @@ Game.launch = () => {
 
       s('body').append(itemContainer)
 
+      // SMALL ANIMATION FOR ITEM MOVEMENT
+      setTimeout(() => {
+        itemContainer.style.top = orePos.bottom + randomY + 'px'
+        itemContainer.style.left = (orePos.left + orePos.right)/2 + randomNumber + 'px'
+      }, 10)
 
       item.addEventListener('click', () => {
         let id = item.id
@@ -1415,15 +1422,15 @@ Game.launch = () => {
     // BUILD IT OUT
     if (suffix) {
       if (prefix) {
-        name = `${prefix.name} ${material.name} pickaxe ${suffix.name}`
+        name = `${prefix.name} ${material.name} Pickaxe ${suffix.name}`
       } else {
-        name = `${material.name} pickaxe ${suffix.name}`
+        name = `${material.name} Pickaxe ${suffix.name}`
       }
     } else {
       if (prefix) {
-        name = `${prefix.name} ${material.name} pickaxe`
+        name = `${prefix.name} ${material.name} Pickaxe`
       } else {
-        name = `${material.name} pickaxe`
+        name = `${material.name} Pickaxe`
       }
     }
 
@@ -1447,43 +1454,44 @@ Game.launch = () => {
 
     let str = `
       <div class="item-modal">
-        <div class="item-modal-top">
-          <h1 style='font-family: "Germania One"; font-size: 70px;'>New Item!</h1>
-        </div>
-        <div class="item-modal-middle">
-          <div class="item-modal-middle-left">
-            <p>You Found</p>
-            <h2 class='${Game.newItem.rarity}' style='font-size: xx-large'>${Game.newItem.name}</h2>
-            <div class="item-modal-img">
-              <div class="pickaxe-aura aura-${Game.newItem.rarity}"></div>
-              <div class="pickaxe-top ${Game.newItem.material}"></div>
-              <div class="pickaxe-bottom"></div>
-            </div>
-            <div class="item-stats">
-              <p style='font-style: italic; font-size: small'>${Game.newItem.rarity}</p>
-              <br/>
-              <p>Item Level: ${Game.newItem.iLv}</p>
-              <p>Damage: ${beautify(Game.newItem.damage)}</p>
-              `
-
-              if (Game.newItem.stats.length > 0) {
-                Game.newItem.stats.forEach((stat) => {
-                  str += `<p>${stat.name}: ${stat.val}</p>`
-                })
-              }
-
-              str += `
-            </div>
+        <div class="item-modal__left">
+          <h1 style='font-family: "Germania One"; font-size: 60px;'>New Item</h1>
+          <h2 class='${Game.newItem.rarity}' style='font-size: xx-large'>${Game.newItem.name}</h2>
+          <div class="item-modal-img">
+            <div class="pickaxe-aura aura-${Game.newItem.rarity}"></div>
+            <div class="pickaxe-top ${Game.newItem.material}"></div>
+            <div class="pickaxe-bottom"></div>
           </div>
-          <div class="item-modal-middle-right">
-            <p>Currently Equipped</p>
-            <h2 class='${Game.state.player.pickaxe.rarity}' style='font-size: xx-large'>${Game.state.player.pickaxe.name}</h2>
-            <div class="item-modal-img">
-              <div class="pickaxe-aura aura-${Game.state.player.pickaxe.rarity}"></div>
-              <div class="pickaxe-top ${Game.state.player.pickaxe.material}"></div>
-              <div class="pickaxe-bottom"></div>
-            </div>
-            <div class="item-stats">
+          <div class="item-stats">
+            <p style='font-style: italic; font-size: small'>${Game.newItem.rarity}</p>
+            <br/>
+            <p>Item Level: ${Game.newItem.iLv}</p>
+            <p>Damage: ${beautify(Game.newItem.damage)}</p>
+            `
+
+            if (Game.newItem.stats.length > 0) {
+              Game.newItem.stats.forEach((stat) => {
+                str += `<p>${stat.name}: ${stat.val}</p>`
+              })
+            }
+
+            str += `
+            <br/>
+          </div>
+          <div class="item-modal-bottom">
+            <button onclick=Game.itemModalClick('equip')>Equip</button>
+            <button onclick=Game.itemModalClick()>Discard</button>
+          </div>
+        </div>
+        <div class="item-modal__right">
+          <h1 style='font-family: "Germania One"; font-size: 30px;'>Equipped</h1>
+          <h2 class='${Game.state.player.pickaxe.rarity}' style='font-size: large'>${Game.state.player.pickaxe.name}</h2>
+          <div class="item-modal-img-small">
+            <div class="pickaxe-aura-small aura-${Game.state.player.pickaxe.rarity}"></div>
+            <div class="pickaxe-top-small ${Game.state.player.pickaxe.material}"></div>
+            <div class="pickaxe-bottom-small"></div>
+          </div>
+          <div class="item-stats">
               <p style='font-style: italic; font-size: small'>${Game.state.player.pickaxe.rarity}</p>
               <br/>
               <p>Item Level: ${Game.state.player.pickaxe.iLv}</p>
@@ -1500,11 +1508,6 @@ Game.launch = () => {
 
               str += `
             </div>
-          </div>
-        </div>
-        <div class="item-modal-bottom">
-          <button style='margin-right: 10px;' onclick=Game.itemModalClick('equip')>Equip</button>
-          <button style='margin-left: 10px;' onclick=Game.itemModalClick()>Discard</button>
         </div>
       </div>
     `

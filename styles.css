@@ -243,33 +243,47 @@ body {
 }
 
 .item-modal {
-  width: 800px;
-  background: rgba(24, 24, 24, 0.9);
-  /*background: black;*/
+  /*background: rgba(13, 13, 13, 0.9);*/
+  /*width: 400px;*/
+  align-items: center;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   display: flex;
+  flex-flow: row nowrap;
+  /*padding: 20px;*/
+  /*box-shadow: 0 0 40px gold;*/
+}
+
+.item-modal__left {
+  align-items: center;
+  background: rgba(13, 13, 13, 0.9);
+  border: 1px solid white;
+  display: flex;
   flex-flow: column nowrap;
   padding: 20px;
-  box-shadow: 0 0 40px gold;
-}
-
-.item-modal-top h1 {
   text-align: center;
-  padding: 20px;
-  font-size: 40px;
+  width: 400px;
+  box-shadow: 0 0 20px gold;
 }
 
-.item-modal-middle {
+.item-modal__right {
+  align-items: center;
+  background: rgba(13, 13, 13, 0.9);
   display: flex;
-  flex-flow: row nowrap;
+  flex-flow: column nowrap;
+  padding: 10px;
+  text-align: center;
+  width: 200px;
+  opacity: 0.3;
 }
 
-.item-modal-middle-left, .item-modal-middle-right {
-  width: 50%;
-  text-align: center;
+.item-modal__right:hover {
+  opacity: .7;
+  transition: opacity .2s;
+  border: 1px solid rgba(255,255,255,0.7);
+  /*box-shadow: 0 0 10px gold;*/
 }
 
 .pickaxe-top, .pickaxe-bottom, .pickaxe-aura {
@@ -278,6 +292,16 @@ body {
   image-rendering: pixelated;
   height: 250px;
   width: 250px;
+  background-size: 100% 100%;
+  z-index: 1;
+}
+
+.pickaxe-top-small, .pickaxe-bottom-small, .pickaxe-aura-small {
+  position: absolute;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: pixelated;
+  height: 150px;
+  width: 150px;
   background-size: 100% 100%;
   z-index: 1;
 }
@@ -341,18 +365,13 @@ body {
 .item-modal-img {
   position: relative;
   height: 260px;
-  border: 2px solid white;
   width: 250px;
-  left: 50%;
-  transform: translateX(-50%);
-  /*background-color: rgba(255, 255, 255, .3);*/
 }
 
-.item-modal-bottom {
-  padding-top: 50px;
-  display: flex;
-  flex-flow: row nowrap;
-  justify-content: center;
+.item-modal-img-small {
+  position: relative;
+  height: 150px;
+  width: 150px;
 }
 
 .item-modal-bottom button {
@@ -362,6 +381,11 @@ body {
   cursor: pointer;
   background: transparent;
   color: white;
+  margin: 0 10px;
+}
+
+.item-modal-bottom button:hover {
+  transform: scale(1.02);
 }
 
 .particle {
