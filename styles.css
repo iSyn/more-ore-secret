@@ -286,14 +286,39 @@ body {
   /*box-shadow: 0 0 10px gold;*/
 }
 
-.pickaxe-top, .pickaxe-bottom, .pickaxe-aura {
+.pickaxe-top, .pickaxe-bottom, .pickaxe-aura, .pickaxe-bg {
   position: absolute;
   image-rendering: -moz-crisp-edges;
   image-rendering: pixelated;
   height: 250px;
   width: 250px;
   background-size: 100% 100%;
+  z-index: 2;
+}
+
+.pickaxe-bottom {
+  background: url('./assets/pickaxe-bottom.png');
+  background-size: 100% 100%;
   z-index: 1;
+}
+
+.pickaxe-bg {
+  background: url('./assets/Fire_gif.gif');
+  background-size: 100% 100%;
+  z-index: 0;
+  opacity: 0.1;
+}
+
+.pickaxe-bg-small {
+  background: url('./assets/Fire_gif.gif');
+  opacity: 0.1;
+  position: absolute;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: pixelated;
+  height: 150px;
+  width: 150px;
+  background-size: 100% 100%;
+  z-index: 0;
 }
 
 .pickaxe-top-small, .pickaxe-bottom-small, .pickaxe-aura-small {
@@ -306,7 +331,7 @@ body {
   z-index: 1;
 }
 
-.pickaxe-bottom {
+.pickaxe-bottom-small {
   background: url('./assets/pickaxe-bottom.png');
   background-size: 100% 100%;
   z-index: 0;
@@ -417,6 +442,10 @@ body {
 
 .Legendary {
   color: orange;
+}
+
+.Mythical {
+  color: crimson;
 }
 
 .achievement {

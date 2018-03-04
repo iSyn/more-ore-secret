@@ -552,8 +552,8 @@ Game.launch = () => {
         <p style='color: red'>Are you sure you want to wipe your save?</p>
         <p style='color: red'>You will lose all your progress and achievements</p>
         <hr />
-        <button onclick='Game.closeCurrentWindow()'>No</button>
         <button onclick='Game.wipe()'>Yes</button>
+        <button onclick='Game.closeCurrentWindow()'>No</button>
       </div>
     `
 
@@ -1581,25 +1581,25 @@ Game.launch = () => {
 
     // SELECT AND BUILD BONUS STATS
     let pickaxeStats = {
-      Strength: 0,
-      Charisma: 0,
-      Luck: 0
+      Strength: [],
+      Charisma: [],
+      Luck: []
     }
 
     let statAmount = selectedRarity.stat_amount
     if (statAmount > 0) {
       if (selectedSuffix) {
         statAmount--
-        pickaxeStats[selectedSuffix.stat] += Math.floor(Math.random() * (totalMultiplier - (totalMultiplier / 2) + 1) + (totalMultiplier / 2))
+        pickaxeStats[selectedSuffix.stat].push(Math.floor(Math.random() * (totalMultiplier - (totalMultiplier / 2) + 1) + (totalMultiplier / 2)))
       }
       if (selectedPrefix) {
         statAmount--
-        pickaxeStats[selectedPrefix.stat] += Math.floor(Math.random() * (totalMultiplier - (totalMultiplier / 2) + 1) + (totalMultiplier / 2))
+        pickaxeStats[selectedPrefix.stat].push(Math.floor(Math.random() * (totalMultiplier - (totalMultiplier / 2) + 1) + (totalMultiplier / 2)))
       }
       if (statAmount > 0) {
         for (let i = 0; i < statAmount; i++) {
           let possibleStats = ['Strength', 'Charisma', 'Luck']
-          pickaxeStats[possibleStats[Math.floor(Math.random() * possibleStats.length)]] += Math.floor(Math.random() * (totalMultiplier - (totalMultiplier / 2) + 1) + (totalMultiplier / 2))
+          pickaxeStats[possibleStats[Math.floor(Math.random() * possibleStats.length)]].push(Math.floor(Math.random() * (totalMultiplier - (totalMultiplier / 2) + 1) + (totalMultiplier / 2)))
         }
       }
     }
@@ -1624,19 +1624,25 @@ Game.launch = () => {
 
   Game.pickUpItem = (iLvl) => {
     Game.state.stats.itemsPickedUp++
-    Game.newItem = Game.generateRandomItem2(iLvl)
+    Game.newItem = Game.generateRandomPickaxe(iLvl)
+    // Game.newItem = Game.generateRandomItem2(iLvl)
     let itemModal = document.createElement('div')
     itemModal.classList.add('item-modal-container')
 
     let str = `
       <div class="item-modal">
         <div class="item-modal__left">
-          <h1 style='font-family: "Germania One"; font-size: 60px;'>New Item</h1>
+          <h1 style='font-family: "Germania One"; font-size: 60px;'>New Pickaxe</h1>
           <h2 class='${Game.newItem.rarity}' style='font-size: xx-large'>${Game.newItem.name}</h2>
           <div class="item-modal-img">
-            <div class="pickaxe-aura aura-${Game.newItem.rarity}"></div>
-            <div class="pickaxe-top ${Game.newItem.material}"></div>
+            <div class="pickaxe-top" style='background: url("./assets/pickaxe-top-${Game.newItem.material.toLowerCase()}.png"); background-size: 100% 100%;'></div>
             <div class="pickaxe-bottom"></div>
+            `
+            if (Game.newItem.rarity == 'Legendary' || Game.newItem.rarity == 'Mythical') {
+              str += "<div class='pickaxe-bg'></div>"
+            }
+
+            str += `
           </div>
           <div class="item-stats">
             <p style='font-style: italic; font-size: small'>${Game.newItem.rarity}</p>
@@ -1645,9 +1651,21 @@ Game.launch = () => {
             <p>Damage: ${beautify(Game.newItem.damage)}</p>
             `
 
-            if (Game.newItem.stats.length > 0) {
-              Game.newItem.stats.forEach((stat) => {
-                str += `<p>${stat.name}: ${stat.val}</p>`
+            if (Game.newItem.stats.Strength.length > 0) {
+              Game.newItem.stats.Strength.forEach((val) => {
+                str += `<p>Strength: ${val}</p>`
+              })
+            }
+
+            if (Game.newItem.stats.Charisma.length > 0) {
+              Game.newItem.stats.Charisma.forEach((val) => {
+                str += `<p>Charisma: ${val}</p>`
+              })
+            }
+
+            if (Game.newItem.stats.Luck.length > 0) {
+              Game.newItem.stats.Luck.forEach((val) => {
+                str += `<p>Luck: ${val}</p>`
               })
             }
 
@@ -1663,9 +1681,14 @@ Game.launch = () => {
           <h1 style='font-family: "Germania One"; font-size: 30px;'>Equipped</h1>
           <h2 class='${Game.state.player.pickaxe.rarity}' style='font-size: large'>${Game.state.player.pickaxe.name}</h2>
           <div class="item-modal-img-small">
-            <div class="pickaxe-aura-small aura-${Game.state.player.pickaxe.rarity}"></div>
-            <div class="pickaxe-top-small ${Game.state.player.pickaxe.material}"></div>
+            <div class="pickaxe-top-small ${Game.state.player.pickaxe.material}" style='background: url("./assets/pickaxe-top-${Game.state.player.pickaxe.material.toLowerCase()}.png"); background-size: 100% 100%;'></div>
             <div class="pickaxe-bottom-small"></div>
+            `
+            if (Game.state.player.pickaxe.rarity == 'Legendary' || Game.state.player.pickaxe.rarity == 'Mythical') {
+              str += `<div class="pickaxe-bg-small"></div>`
+            }
+
+            str += `
           </div>
           <div class="item-stats">
               <p style='font-style: italic; font-size: small'>${Game.state.player.pickaxe.rarity}</p>
@@ -1675,9 +1698,21 @@ Game.launch = () => {
               `
 
               if (Game.state.player.pickaxe.stats) {
-                if (Game.state.player.pickaxe.stats.length > 0) {
-                  Game.state.player.pickaxe.stats.forEach((stat) => {
-                    str += `<p>${stat.name}: ${stat.val}</p>`
+                if (Game.state.player.pickaxe.stats.Strength.length > 0) {
+                  Game.state.player.pickaxe.stats.Strength.forEach((val) => {
+                    str += `<p>Strength: ${val}</p>`
+                  })
+                }
+
+                if (Game.state.player.pickaxe.stats.Charisma.length > 0) {
+                  Game.state.player.pickaxe.stats.Charisma.forEach((val) => {
+                    str += `<p>Charisma: ${val}</p>`
+                  })
+                }
+
+                if (Game.state.player.pickaxe.stats.Luck.length > 0) {
+                  Game.state.player.pickaxe.stats.Luck.forEach((val) => {
+                    str += `<p>Luck: ${val}</p>`
                   })
                 }
               }
@@ -3663,7 +3698,7 @@ Game.launch = () => {
     pressed.push(e.key)
     pressed.splice(-secretCode.length - 1, pressed.length - secretCode.length)
     if (pressed.join('').includes('test')) {
-      Game.state.player.pickaxe.damage += 10000000
+      Game.state.player.pickaxe.damage *= 10000000
       Game.recalculateOpC = 1
     }
   })
