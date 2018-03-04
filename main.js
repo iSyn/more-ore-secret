@@ -1443,7 +1443,183 @@ Game.launch = () => {
       damage: calculateDmg,
     }
 
+    console.log(newItem)
+
     return newItem
+  }
+
+  Game.generateRandomPickaxe = (iLvl) => {
+
+    let selected
+    let totalMultiplier = 0
+    let pickaxeName = ''
+
+    let allRarities = [
+      // [name, [stat range], multiplier]
+      ['Common', [0, 1], 1],
+      ['Uncommon', [0, 2], 1.5],
+      ['Rare', [1, 2], 2],
+      ['Unique', [2, 3], 3.5],
+      ['Legendary', [3, 4], 5],
+      ['Mythical', [4, 5], 10]
+    ]
+    let allMaterials = [
+      // [[names], multiplier]
+      [['Wood', 'Plastic', 'Cardboard', 'Glass', 'Tin'], .5],
+      [['Stone', 'Bronze', 'Copper', 'Bone', 'Lead'], 1],
+      [['Iron', 'Silver', 'Gold'], 3],
+      [['Steel', 'Platinum'], 5],
+      [['Diamond', 'Adamantite', 'Titanium', 'Alien'], 10]
+    ]
+    let allPrefixes = [
+      // common prefixes +1
+      [
+        ['Pointy', 'Strong', 'Refined', 'Big', 'Durable', 'Hard'],
+        ['Charming', 'Shiny'],
+        ['Lucky']
+      ],
+      // uncommon prefixes -1
+      [
+        ['Small', 'Broken', 'Shoddy', 'Frail', 'Hollow'],
+        ['Boring', 'Rusty', 'Rusted'],
+        ['Unlucky', 'Poor']
+      ],
+      // rare prefixes +2
+      [
+        ['Sharp', 'Gigantic'],
+        ['Elegant', 'Alluring'],
+        ['Fortuitous']
+      ]
+    ]
+    let allSuffixes = [
+      ['of the Giant', 'of the Beast'],
+      ['of the Prince', 'of the Sun'],
+      ['of the Beggar', 'of the Leprechaun']
+    ]
+
+    // SELECT RARITY
+    let randomNum = Math.random()
+    let selectedRarity
+    if (randomNum >= 0) selected = allRarities[0]   // 45%  Common
+    if (randomNum >= .45) selected = allRarities[1] // 25%  Uncommon
+    if (randomNum >= .70) selected = allRarities[2] // 15%  Rare
+    if (randomNum >= .85) selected = allRarities[3] // 9%   Unique
+    if (randomNum >= .94) selected = allRarities[4] // 5%   Legendary
+    if (randomNum >= .99) selected = allRarities[5] // 1%   Mythical
+    selectedRarity = {
+      name: selected[0],
+      stat_amount: Math.floor(Math.random() * (selected[1][1] - selected[1][0] + 1) + selected[1][0]),
+      multiplier: selected[2]
+    }
+    totalMultiplier += selectedRarity.multiplier
+
+    // SELECT PREFIX
+    randomNum = Math.random()
+    let selectedPrefix
+    if (selectedRarity.stat_amount > 0) {
+      if (randomNum <= .6) { // 60%
+        let multiplier, stat, name
+        let selectedType = Math.floor(Math.random() * allPrefixes.length)
+        let selectedStat = Math.floor(Math.random() * allPrefixes[selectedType].length)
+        let selectedName = Math.floor(Math.random() * allPrefixes[selectedType][selectedStat].length)
+
+        name = allPrefixes[selectedType][selectedStat][selectedName]
+        pickaxeName += name
+
+        if (selectedType == 0) multiplier = 1
+        if (selectedType == 1) multiplier = -1
+        if (selectedType == 2) multiplier = 2
+
+        if (selectedStat == 0) stat = 'Strength'
+        if (selectedStat == 1) stat = 'Charisma'
+        if (selectedStat == 2) stat = 'Luck'
+
+        selectedPrefix = { name, stat, multiplier }
+        totalMultiplier += selectedPrefix.multiplier
+      }
+    }
+
+    // SELECT MATERIAL
+    randomNum = Math.random()
+    if (randomNum >= 0) selected = allMaterials[0]    // 35%
+    if (randomNum >= .5) selected = allMaterials[1]   // 50%
+    if (randomNum >= .7) selected = allMaterials[2]   // 9%
+    if (randomNum >= .85) selected = allMaterials[3]  // 5%
+    if (randomNum >= .95) selected = allMaterials[4]  // 1%
+    let selectedMaterial = {
+      name: selected[0][Math.floor(Math.random() * selected[0].length)],
+      multiplier: selected[1]
+    }
+    pickaxeName += ` ${selectedMaterial.name} Pickaxe`
+    totalMultiplier += selectedMaterial.multiplier
+
+    // SELECT SUFFIX
+    randomNum = Math.random()
+    let selectedSuffix
+    if (selectedRarity.multiplier >= 3.5) {
+      if (randomNum <= .5) {
+        let stat, name
+        let selectedStat = Math.floor(Math.random() * allSuffixes.length)
+        let selectedName = Math.floor(Math.random() * allSuffixes[selectedStat].length)
+
+        if (selectedStat == 0) stat = 'Strength'
+        if (selectedStat == 1) stat = 'Charisma'
+        if (selectedStat == 2) stat = 'Luck'
+
+        name = allSuffixes[selectedStat][selectedName]
+        pickaxeName += ` ${name}`
+
+        selectedSuffix = { name, stat }
+        totalMultiplier += 10
+      }
+    }
+
+    totalMultiplier *= (iLvl * .5)
+
+    // DAMAGE
+    let damage = iLvl * totalMultiplier
+
+    // SELECT AND BUILD BONUS STATS
+    let pickaxeStats = {
+      Strength: 0,
+      Charisma: 0,
+      Luck: 0
+    }
+
+    let statAmount = selectedRarity.stat_amount
+    if (statAmount > 0) {
+      if (selectedSuffix) {
+        statAmount--
+        pickaxeStats[selectedSuffix.stat] += Math.floor(Math.random() * (totalMultiplier - (totalMultiplier / 2) + 1) + (totalMultiplier / 2))
+      }
+      if (selectedPrefix) {
+        statAmount--
+        pickaxeStats[selectedPrefix.stat] += Math.floor(Math.random() * (totalMultiplier - (totalMultiplier / 2) + 1) + (totalMultiplier / 2))
+      }
+      if (statAmount > 0) {
+        for (let i = 0; i < statAmount; i++) {
+          let possibleStats = ['Strength', 'Charisma', 'Luck']
+          pickaxeStats[possibleStats[Math.floor(Math.random() * possibleStats.length)]] += Math.floor(Math.random() * (totalMultiplier - (totalMultiplier / 2) + 1) + (totalMultiplier / 2))
+        }
+      }
+    }
+
+    let pickaxe = {
+      name: pickaxeName,
+      rarity: selectedRarity.name,
+      material: selectedMaterial.name,
+      stats: pickaxeStats,
+      iLv: iLvl,
+      damage: damage,
+      raw_info: {
+        rarity: selectedRarity,
+        prefix: selectedPrefix,
+        material: selectedMaterial,
+        suffix: selectedSuffix,
+      }
+    }
+
+    return pickaxe
   }
 
   Game.pickUpItem = (iLvl) => {
@@ -3486,8 +3662,8 @@ Game.launch = () => {
   window.addEventListener('keyup', (e) => {
     pressed.push(e.key)
     pressed.splice(-secretCode.length - 1, pressed.length - secretCode.length)
-    if (pressed.join('').includes('synclair')) {
-      Game.state.player.pickaxe.damage = 100000
+    if (pressed.join('').includes('test')) {
+      Game.state.player.pickaxe.damage += 10000000
       Game.recalculateOpC = 1
     }
   })
