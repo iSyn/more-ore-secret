@@ -1733,7 +1733,11 @@ Game.launch = () => {
       Game.state.player.pickaxe = Game.newItem
       Game.recalculateOpC = 1
     }
-    Game.removeEl(s('.item-modal-container'))
+
+    s('.item-modal').style.animation = 'itemFallOut .3s forwards'
+    s('.item-modal').addEventListener('animationend', () => Game.removeEl(s('.item-modal-container')))
+
+    // Game.removeEl(s('.item-modal-container'))
   }
 
   Game.buildStore = () => {
@@ -3269,7 +3273,7 @@ Game.launch = () => {
           <div class="wood-stick"></div>
         </div>
         <div class="open-quests-container-bottom" onclick='Game.showQuests()'>
-          <h2 style='font-family: "Germania One"; letter-spacing: 2px;'>Quests <i class='fa fa-map-o fa-1x'></i> </h2>
+          <h2 style='font-family: "Germania One"; letter-spacing: 2px;'>Quests</h2>
         </div>
       `
 

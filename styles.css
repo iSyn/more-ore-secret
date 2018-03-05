@@ -230,7 +230,7 @@ body {
   color: white;
   z-index: 4;
   /*background: rgba(0, 0, 0, 0.5);*/
-  animation: modalShowAnim .1s;
+  /*animation: modalShowAnim .1s;*/
 }
 
 @keyframes modalShowAnim {
@@ -243,17 +243,38 @@ body {
 }
 
 .item-modal {
-  /*background: rgba(13, 13, 13, 0.9);*/
-  /*width: 400px;*/
   align-items: center;
   position: absolute;
-  top: 50%;
+  top: -100%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translateX(-50%);
   display: flex;
   flex-flow: row nowrap;
-  /*padding: 20px;*/
-  /*box-shadow: 0 0 40px gold;*/
+  animation: itemFallIn .3s forwards;
+}
+
+@keyframes itemFallIn {
+  from {
+    top: -100%;
+  }
+  to {
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
+
+.remove-item {
+  animation: itemFallOut .5s forwards;
+}
+
+@keyframes itemFallOut {
+  from {
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+  to {
+    top: -100%;
+  }
 }
 
 .item-modal__left {
