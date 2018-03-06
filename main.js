@@ -5,21 +5,6 @@ let s = ((el) => {return document.querySelector(el)})
 
 let beautify = (num) => {
 
-  let amounts = [
-    [
-      'Million',
-      'Billion',
-      'Trillion',
-      'Quadrillion',
-      'Quintillion',
-      'Sextillion',
-      'Alotillion',
-      'Waytoomanyillion',
-      'Fuckloadillion',
-      'Fucktonillion'
-    ],
-  ]
-
   if (num < 1) {
     return num.toFixed(1)
   }
@@ -202,7 +187,8 @@ Game.launch = () => {
       scrollingText: true,
       fps: 30,
       shownAlert: false,
-      buyAmount: 1
+      buyAmount: 1,
+      inventoryOpen: false
     }
   }
 
@@ -272,6 +258,21 @@ Game.launch = () => {
       s('.ore-weak-spot').style.display = 'block'
     } else {
       s('.ore-weak-spot').style.display = 'none'
+    }
+
+    // POSITION INVENTORY SLIDE
+    if (Game.state.stats.itemsPickedUp > 0) {
+      let anchor = s('#left-separator').getBoundingClientRect()
+
+      if (!Game.state.prefs.inventoryOpen) {
+        s('.inventory-container').style.left = anchor.right - s('.inventory-container').getBoundingClientRect().width + s('.inventory-container__right').getBoundingClientRect().width + 'px'
+        s('.inventory-container').style.top = s('.ore-container').getBoundingClientRect().height - s('.inventory-container').getBoundingClientRect().height + 'px'
+        s('.inventory-container').style.visibility = 'visible'
+      } else {
+        s('.inventory-container').style.left = anchor.right + 'px'
+        s('.inventory-container').style.top = s('.ore-container').getBoundingClientRect().height - s('.inventory-container').getBoundingClientRect().height + 'px'
+        s('.inventory-container').style.visibility = 'visible'
+      }
     }
 
     Game.repositionAllElements = 0
@@ -1041,19 +1042,19 @@ Game.launch = () => {
       }
 
       if (type == 'passive') {
-        risingNumber.innerHTML = `+${beautify(amount.toFixed(1))}`
+        risingNumber.innerHTML = `+${beautify(amount)}`
         risingNumber.style.fontSize = '35px'
       }
 
       if (type == 'bonus') {
-        risingNumber.innerHTML = `+${beautify(amount.toFixed(1))}`
+        risingNumber.innerHTML = `+${beautify(amount)}`
         risingNumber.style.color = 'gold'
         risingNumber.style.fontSize = '40px'
         risingNumber.style.animationDuration = '3s'
       }
 
       if (type == 'gold rush') {
-        risingNumber.innerHTML = `GOLD RUSH <br/> +${beautify(amount.toFixed(1))}`
+        risingNumber.innerHTML = `GOLD RUSH <br/> +${beautify(amount)}`
         risingNumber.style.color = 'gold'
         risingNumber.style.textAlign = 'center'
         risingNumber.style.fontSize = '40px'
@@ -1624,6 +1625,7 @@ Game.launch = () => {
 
   Game.pickUpItem = (iLvl) => {
     Game.state.stats.itemsPickedUp++
+    if (Game.state.stats.itemsPickedUp == 1) Game.repositionAllElements = 1
     Game.newItem = Game.generateRandomPickaxe(iLvl)
     // Game.newItem = Game.generateRandomItem2(iLvl)
     let itemModal = document.createElement('div')
@@ -1898,12 +1900,6 @@ Game.launch = () => {
 
     s('.ores').innerHTML = str
 
-    // let lvlStr = ''
-    // lvlStr += `Level: ${Game.state.player.lv} (${Game.state.player.currentXp}/${Game.state.player.xpNeeded})`
-    // if (Game.state.player.specialization != null) {
-    //   lvlStr += `<br/> ${Game.state.player.specialization} Level: ${Game.state.player.specializationLv} (${Game.state.player.specializationXp.toFixed(0)}/${Game.state.player.specializationXpNeeded.toFixed(0)})`
-    // }
-
     s('.generation').innerHTML = `Generation: ${Game.state.player.generation.lv}`
     s('.generation').onmouseover = () => Game.showTooltip({type: 'generation'}, event)
     s('.generation').onmouseout = () => Game.hideTooltip()
@@ -2087,7 +2083,7 @@ Game.launch = () => {
         <div class="tooltip-top">
           <img src="./assets/${selectedItem.pic}" height='40px' alt="" />
           <h3 style='flex-grow: 1'>${selectedItem.name}</h3>
-          <p>${beautify(selectedItem.price.toFixed(0))} ores</p>
+          <p>${beautify(selectedItem.price)} ores</p>
         </div>
         <div class="tooltip-bottom">
           <hr />
@@ -2399,6 +2395,19 @@ Game.launch = () => {
 
     div.innerHTML = str
     s('body').append(div)
+  }
+
+  Game.toggleInventory = () => {
+    let anchor = s('#left-separator').getBoundingClientRect()
+    Game.state.prefs.inventoryOpen = !Game.state.prefs.inventoryOpen
+    if (Game.state.prefs.inventoryOpen) {
+      // inventory open
+      s('.inventory-container').style.left = anchor.right + 'px'
+      s('.inventory-container__right').classList.add('inventory-container--open')
+    } else {
+      s('.inventory-container').style.left = anchor.right - s('.inventory-container').getBoundingClientRect().width + s('.inventory-container__right').getBoundingClientRect().width + 'px'
+      s('.inventory-container__right').classList.remove('inventory-container--open')
+    }
   }
 
   Game.randomBonus = (special) => {
