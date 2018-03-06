@@ -2173,15 +2173,22 @@ li {
   text-align: center;
 }
 
-.inventory-container--equips {
+.inventory-container--equips, .inventory-container--items {
   display: flex;
   flex-flow: row nowrap;
   justify-content: space-evenly;
   margin-top: 10px;
 }
 
-.equip-container {
+.inventory-container--equip {
   height: 100px;
   width: 100px;
   border: 1px solid white;
 }
+
+.inventory-container--item {
+  height: 50px;
+  width: 50px;
+  border: 1px solid white;
+}
+
