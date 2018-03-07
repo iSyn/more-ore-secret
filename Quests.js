@@ -27,23 +27,7 @@ let quests  = [
     firstClearGemGain: 1
   },
   {
-    name: 'test1',
-    locked: 1
-  },
-  {
-    name: 'test2',
-    locked: 1
-  },
-  {
-    name: 'test3',
-    locked: 1
-  },
-  {
-    name: 'test4',
-    locked: 1
-  },
-  {
-    name: 'test5',
-    locked: 1
+    name: 'TEST QUEST',
+    locked: 0
   },
 ]

@@ -3354,7 +3354,7 @@ Game.launch = () => {
     div.classList.add('wrapper')
     div.innerHTML = `
       <div class="quest-information">
-        <h1 style='padding:10px 0'>${selectedQuest.name}</h1>
+        <h1>${selectedQuest.name}</h1>
         <p onclick='Game.closeCurrentWindow()' style='position: absolute; top: 5px; right: 5px; cursor: pointer'>X</p>
         <hr/>
         <img src="./assets/${selectedQuest.pic}.png" class="quest-img"'>
