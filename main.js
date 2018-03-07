@@ -525,6 +525,7 @@ Game.launch = () => {
 
     // PREREQUISITES
     Game.updatePercentage(0)
+    Game.state.prefs.inventoryOpen = false
     // Game.playBgm()
     Game.showTextScroller()
     Game.repositionAllElements = 1
@@ -936,7 +937,7 @@ Game.launch = () => {
     }
 
     Game.earn(amount)
-    Game.drawRockParticles(event)
+    Game.drawRockParticles()
     Game.state.stats.currentOreClicks++
     Game.state.stats.currentOresMined += amount
     Game.state.stats.totalOresMined += amount
@@ -1070,8 +1071,6 @@ Game.launch = () => {
       if (type == 'quest-progress') {
         risingNumber.innerHTML = `<i class='fa fa-angle-double-right fa-2x'></i>`
         risingNumber.style.color = 'white'
-        // risingNumber.style.left = mouseX + 'px'
-        // risingNumber.style.top = mouseY + 'px'
       }
 
 
@@ -1782,7 +1781,7 @@ Game.launch = () => {
 
     for (let i in Game.buildings) {
       let item = Game.buildings[i]
-      price = Game.buildings[i].price
+      let price = Game.buildings[i].price
       if (Game.state.prefs.buyAmount != 'max') price = (item.basePrice * ((Math.pow(1.15, item.owned + Game.state.prefs.buyAmount) - Math.pow(1.15, item.owned)))/.15)
       if (item.hidden == 0) {
         str += `
@@ -3305,42 +3304,29 @@ Game.launch = () => {
 
       let str = `
         <div class="quests-container">
-          <h1 style='font-size: 3rem; padding: 10px 0;'>Quests</h1>
+          <h1 style='font-size: 4rem; padding: 10px 0;'>Quest Board</h1>
           <p onclick='Game.closeCurrentWindow()' style='position: absolute; top: 5px; right: 5px; cursor: pointer'>X</p>
-          <div class="active-quest-container">
-            <hr/>
-            `
-
-            if (Game.state.quest.active) {
-              str += `
-                <h1>${Game.state.quest.currentQuest}</h1>
-              `
-            } else {
-              str += `<p>No active quest</p>`
-            }
-
-            str += `
-            <hr/>
-          </div>
           <div class="available-quests-container">
           `
             for (let i=0; i<Game.quests.length; i++) {
               if (Game.quests[i].locked == 0) {
                 str += `
-                  <div style='background: url("./assets/${Game.quests[i].pic}.png");' class="available-quest unlocked" onclick="Game.showQuestInformation('${Game.quests[i].functionName}')">
-                    <p style='font-family: "Germania One"; background: rgba(0, 0, 0, 0.3); width: 100%; padding: 10px'>${Game.quests[i].name}</p>
+                  <div class="available-quest unlocked" onclick="Game.showQuestInformation('${Game.quests[i].functionName}')">
+                    <i style='padding-top: 5px; color: black; font-size: xx-small;' class='fa fa-circle fa-1x'></i>
+                    <p class='quest-name'>${Game.quests[i].name}</p>
+                    <p class='quest-time'><i class='fa fa-clock-o fa-1x'></i> ${Game.quests[i].completionTimeTxt}</p>
                   </div>
                 `
               } else if (Game.quests[i].locked == 1) {
                 str += `
-                  <div style='opacity: .7' class="available-quest">
-                    <p>???</p>
+                  <div style='opacity: .3' class="available-quest">
+                    <p><i class='fa fa-lock fa-2x'></i></p>
                   </div>
                 `
               } else {
                 str += `
                   <div style='opacity: .2' class="available-quest hidden-quest">
-                    <p>???</p>
+                    <p><i class='fa fa-lock fa-2x'></i></p>
                   </div>
                 `
               }

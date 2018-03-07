@@ -17,7 +17,7 @@ let Quest = function(obj) {
 let quests  = [
   {
     name: 'Abandoned Mineshaft',
-    pic: 'abandoned-mineshaft',
+    pic: 'nothing',
     locked: 0,
     desc: 'Traverse into an abandoned mineshaft for hopes of greater rewards',
     img: 'wip.png',
@@ -25,5 +25,25 @@ let quests  = [
     completionTimeTxt: '5 minutes',
     xpGain: 40,
     firstClearGemGain: 1
-  }
+  },
+  {
+    name: 'test1',
+    locked: 1
+  },
+  {
+    name: 'test2',
+    locked: 1
+  },
+  {
+    name: 'test3',
+    locked: 1
+  },
+  {
+    name: 'test4',
+    locked: 1
+  },
+  {
+    name: 'test5',
+    locked: 1
+  },
 ]

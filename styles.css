@@ -1603,16 +1603,22 @@ li {
 
 .quests-container {
   position: absolute;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
+  top: -100%;
+  left: 50%;
+  transform: translateX(-50%);
   height: 80vh;
   width: 40vw;
   min-height: 700px;
   min-width: 500px;
-  background: black;
-  border: 2px solid #222;
+  width: 500px;
+  background: #553817;
+  border: 10px solid #412708;
   color: white;
   text-align: center;
+  box-shadow: 0 0 10px 5px black, 0 0 20px black inset;
+  border-radius: 5px;
+  overflow: hidden;
+  animation: itemFallIn .3s forwards;
 }
 
 .quests-container h1 {
@@ -1631,27 +1637,40 @@ li {
 
 .available-quests-container {
   display: flex;
-  flex-flow: column nowrap;
-  /*justify-content: center;*/
-  align-items: center;
-  height: 70%;
+  flex-flow: row wrap;
+  justify-content: space-evenly;
+  height: 86%;
   overflow: auto;
 }
 
+.quest-name {
+  color: black;
+  font-size: 40px;
+  font-family: 'Germania One';
+  width: 100%;
+  padding: 10px;
+  flex-grow: 1;
+  font-size: 40px;
+}
+
+.quest-time {
+  color: black;
+  font-size: 20px;
+}
+
 .available-quest {
-  width: 90%;
-  height: 150px;
+  width: 45%;
+  height: 310px;
   min-height: 100px;
-  border: 1px solid #222;
   margin-bottom: 20px;
   display: flex;
   flex-flow: column nowrap;
   justify-content: center;
   align-items: center;
-}
-
-.available-quest p {
-  font-size: x-large;
+  background: rgba(250, 235, 215, .7);
+  /*background: antiquewhite;*/
+  box-shadow: 0 2px 3px black;
+  border-radius: 2px;
 }
 
 .available-quest.unlocked:hover {
@@ -1899,7 +1918,7 @@ li {
   color: white;
   padding: 5px;
   text-align: center;
-  z-index: 3;
+  z-index: 6;
   display: none;
   flex-flow: column nowrap;
 }
@@ -2192,3 +2211,12 @@ li {
   border: 1px solid white;
 }
 
+@keyframes itemFallIn {
+  from {
+    top: -100%;
+  }
+  to {
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+}

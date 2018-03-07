@@ -864,7 +864,7 @@ Game.launch = function () {
 
       var _risingNumber = document.createElement('div');
       _risingNumber.classList.add('rising-number');
-      if (amount) _risingNumber.innerHTML = '+' + beautify(amount.toFixed(1));
+      if (amount) _risingNumber.innerHTML = '+' + beautify(amount);
       _risingNumber.style.left = randomMouseX + 'px';
       _risingNumber.style.top = mouseY + 'px';
 
@@ -935,19 +935,19 @@ Game.launch = function () {
       }
 
       if (type == 'passive') {
-        _risingNumber.innerHTML = '+' + beautify(amount.toFixed(1));
+        _risingNumber.innerHTML = '+' + beautify(amount);
         _risingNumber.style.fontSize = '35px';
       }
 
       if (type == 'bonus') {
-        _risingNumber.innerHTML = '+' + beautify(amount.toFixed(1));
+        _risingNumber.innerHTML = '+' + beautify(amount);
         _risingNumber.style.color = 'gold';
         _risingNumber.style.fontSize = '40px';
         _risingNumber.style.animationDuration = '3s';
       }
 
       if (type == 'gold rush') {
-        _risingNumber.innerHTML = 'GOLD RUSH <br/> +' + beautify(amount.toFixed(1));
+        _risingNumber.innerHTML = 'GOLD RUSH <br/> +' + beautify(amount);
         _risingNumber.style.color = 'gold';
         _risingNumber.style.textAlign = 'center';
         _risingNumber.style.fontSize = '40px';
@@ -1644,12 +1644,12 @@ Game.launch = function () {
       tooltip.style.width = '300px';
 
       var selectedItem = Game.select(Game[obj.type], obj.name);
-      tooltip.innerHTML = '\n        <div class="tooltip-top">\n          <img src="./assets/' + selectedItem.pic + '" height=\'40px\' alt="" />\n          <h3 style=\'flex-grow: 1\'>' + selectedItem.name + '</h3>\n          <p>' + beautify(selectedItem.price.toFixed(0)) + ' ores</p>\n        </div>\n        <div class="tooltip-bottom">\n          <hr />\n          <p>' + selectedItem.desc + '</p>\n          ';
+      tooltip.innerHTML = '\n        <div class="tooltip-top">\n          <img src="./assets/' + selectedItem.pic + '" height=\'40px\' alt="" />\n          <h3 style=\'flex-grow: 1\'>' + selectedItem.name + '</h3>\n          <p>' + beautify(selectedItem.price) + ' ores</p>\n        </div>\n        <div class="tooltip-bottom">\n          <hr />\n          <p>' + selectedItem.desc + '</p>\n          ';
       if (selectedItem.type == 'building') {
         if (selectedItem.owned > 0 && selectedItem.owned < 2) {
-          tooltip.innerHTML += '\n                <hr />\n                <p>Each ' + selectedItem.name + ' generates ' + beautify(selectedItem.production) + ' OpS</p>\n                <p><span class=\'bold\'>' + selectedItem.owned + '</span> ' + selectedItem.name + ' generating <span class=\'bold\'>' + beautify((selectedItem.production * selectedItem.owned).toFixed(1)) + '</span> ores per second</p>\n              ';
+          tooltip.innerHTML += '\n                <hr />\n                <p>Each ' + selectedItem.name + ' generates ' + beautify(selectedItem.production) + ' OpS</p>\n                <p><span class=\'bold\'>' + selectedItem.owned + '</span> ' + selectedItem.name + ' generating <span class=\'bold\'>' + beautify(selectedItem.production * selectedItem.owned) + '</span> ores per second</p>\n              ';
         } else {
-          tooltip.innerHTML += '\n                <hr />\n                <p>Each ' + selectedItem.name + ' generates ' + beautify(selectedItem.production) + ' OpS</p>\n                <p><span class=\'bold\'>' + selectedItem.owned + '</span> ' + selectedItem.namePlural + ' generating <span class=\'bold\'>' + beautify((selectedItem.production * selectedItem.owned).toFixed(1)) + '</span> ores per second</p>\n              ';
+          tooltip.innerHTML += '\n                <hr />\n                <p>Each ' + selectedItem.name + ' generates ' + beautify(selectedItem.production) + ' OpS</p>\n                <p><span class=\'bold\'>' + selectedItem.owned + '</span> ' + selectedItem.namePlural + ' generating <span class=\'bold\'>' + beautify(selectedItem.production * selectedItem.owned) + '</span> ores per second</p>\n              ';
         }
       }
       tooltip.innerHTML += '\n          <hr/>\n          <p style=\'font-size: small; opacity: .6; float: right; padding-top: 5px;\'><i>' + selectedItem.fillerQuote + '</i></p>\n\n        </div>\n      ';
