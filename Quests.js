@@ -28,6 +28,13 @@ let quests  = [
   },
   {
     name: 'TEST QUEST',
-    locked: 0
+    pic: 'nothing',
+    locked: 0,
+    desc: 'test desc',
+    img: 'wip.png',
+    completionTime: 30 * 60 * 1000,
+    completionTimeTxt: '30 minutes',
+    xpGain: 100,
+    firstClearGemGain: 1
   },
 ]

@@ -263,17 +263,18 @@ Game.launch = () => {
     // POSITION INVENTORY SLIDE
     if (Game.state.stats.itemsPickedUp > 0) {
       let anchor = s('#left-separator').getBoundingClientRect()
-
       if (!Game.state.prefs.inventoryOpen) {
         s('.inventory-container').style.left = anchor.right - s('.inventory-container').getBoundingClientRect().width + s('.inventory-container__right').getBoundingClientRect().width + 'px'
-        s('.inventory-container').style.top = s('.ore-container').getBoundingClientRect().height - s('.inventory-container').getBoundingClientRect().height + 'px'
+        s('.inventory-container').style.top = (s('.ore-container').getBoundingClientRect().bottom + s('.ore-container').getBoundingClientRect().top)/2 - (s('.inventory-container').getBoundingClientRect().height / 2) + 'px'
         s('.inventory-container').style.visibility = 'visible'
       } else {
         s('.inventory-container').style.left = anchor.right + 'px'
-        s('.inventory-container').style.top = s('.ore-container').getBoundingClientRect().height - s('.inventory-container').getBoundingClientRect().height + 'px'
+        s('.inventory-container').style.top = (s('.ore-container').getBoundingClientRect().bottom + s('.ore-container').getBoundingClientRect().top)/2 - (s('.inventory-container').getBoundingClientRect().height / 2) + 'px'
         s('.inventory-container').style.visibility = 'visible'
       }
     }
+
+    // console.log(s('.ore-container').getBoundingClientRect())
 
     Game.repositionAllElements = 0
   }
