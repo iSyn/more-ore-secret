@@ -1070,11 +1070,12 @@ li {
 }
 
 .skill {
+  position: absolute;
   height: 64px;
   width: 64px;
   /*border: 1px solid white;*/
   background-size: 100% 100%;
-  margin: 10px;
+  /* margin: 10px; */
   cursor: pointer;
   background-color: grey !important;
   z-index: 1;
@@ -1939,7 +1940,8 @@ li {
 .skill-tree-container-bottom {
   flex-grow: 1;
   display: flex;
-  margin-top: 10px;
+  width: 100%;
+  margin: 10px auto 0 auto;
   position: relative;
   overflow: auto;
 }
@@ -1949,45 +1951,6 @@ li {
   top: 0;
   left: 0;
   pointer-events: none;
-}
-
-.skill-trees {
-  display: flex;
-  flex-flow: column nowrap;
-  justify-content: space-around;
-  flex-grow: 1;
-  padding-right: 500px;
-}
-
-.skill-tree {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  /*background: rgba(255, 255, 255, 0.04);*/
-  display: flex;
-  flex-flow: row nowrap;
-  align-items: center;
-}
-
-.skill-tree-bg {
-  position: absolute;
-  height: 100%;
-  width: 0%;
-  pointer-events: none;
-  transition: width .3s;
-  z-index: -1;
-}
-
-.skill-tree-1-bg {
-  background: rgba(255, 0, 0, 0.3);
-}
-
-.skill-tree-2-bg {
-  background: rgba(0, 0, 255, 0.3);
-}
-
-.skill-tree-3-bg {
-  background: rgba(0, 255, 0, 0.3);
 }
 
 .bonus {

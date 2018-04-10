@@ -193,6 +193,7 @@ Game.launch = () => {
   }
 
   Game.positionAllElements = () => {
+
     // POSITION TORCHES
     let torch1 = s('.torch1')
     let torch2 = s('.torch2')
@@ -2625,57 +2626,31 @@ Game.launch = () => {
     }
   }
 
-  Game.buildSkillTree = (section) => {
+  Game.buildSkillTree = () => {
+    let str = ''
 
-    let highestGen = Game.skills.reduce((prev, current) => (prev.generationReq > current.generationReq) ? prev : current).generationReq
-    let spacerNeeded = true;
+    for (let i = 0; i < Game.skills.length; i++) {
 
-    let str = `
-      <div id='skill-tree-${section}' class="skill-tree">
-    `
+      let skillPadding = 64
+      let skillSize = 64
+      let middle = (window.innerWidth || document.body.clientWidth)/2 - skillSize/2 - 5
 
-    for (let i = 0; i <= highestGen; i++) {
-      str += `<div class="column">`
-
-      // check is a spacer is needed
-      for (let j in Game.skills) {
-        if (Game.skills[j].section == section) {
-          if (Game.skills[j].generationReq == i) spacerNeeded = false
-        }
+      let pos = {
+        generation: Game.skills[i].position[0] * (skillSize + skillPadding) - 100, // top
+        column: middle + (Game.skills[i].position[1] * (skillSize + skillPadding))     // left
       }
 
-      if (!spacerNeeded) {
-        for (let k in Game.skills) {
-          if (Game.skills[k].generationReq == i && Game.skills[k].section == section) {
-            if (!Game.skills[k].locked) {
-              str += `<div style='background: url("./assets/${Game.skills[k].pic}.png")' class="skill skill-${Game.skills[k].className}" onclick="Game.skills[${k}].levelUp()" onmouseover='Game.showTooltip({type: "skill", name: "${Game.skills[k].name}"}, event)' onmouseout='Game.hideTooltip()'></div>`
-            } else {
-              str += `<div style="opacity: .2; background: url('./assets/${Game.skills[k].pic}.png')" class="skill skill-${Game.skills[k].className}" onclick='Game.skills[${k}].levelUp()' onmouseover='Game.showTooltip({type: "skill", name: "${Game.skills[k].name}"}, event)' onmouseout='Game.hideTooltip()'></div>`
-            }
-          }
-        }
-      } else {
-        str += `<div class="skill-spacer"></div>`
-      }
-
-      spacerNeeded = true
-
-      str += `</div>` // column closing div
+      str += `<div class='skill' style='left: ${pos.column}px; top: ${pos.generation}px'></div>`
     }
-
-    // str += `<div class='skill-tree-${section}-bg skill-tree-bg' style='width: ${sectionBgWidth}px;'></div></div>` // skill tree closing div
-    str += `</div>` // skill tree closing div
-
+    
     return str
   }
 
   Game.showSkillTree = () => {
     let div = s('.skill-tree-container')
-    div.style.display = 'flex'
+    div.style.display = 'flex' // change display none to display flex
 
     let str = `
-      <div id="particles-js"></div>
-      <canvas class="skill-lines"></canvas>
       <div class="skill-tree-container-top">
         <h1 style='font-size: 6rem; font-family: "Germania One"'>Generation: ${Game.state.player.generation.lv}</h1>
         <h4 class='available-sp'>Available Sp: ${Game.state.player.generation.availableSp}</h4>
@@ -2683,131 +2658,13 @@ Game.launch = () => {
       </div>
 
       <div class="skill-tree-container-bottom">
-        <div class="skill-trees">
-        `
-        str += Game.buildSkillTree(1)
-        str += Game.buildSkillTree(2)
-        str += Game.buildSkillTree(3)
-
-        str += `
-        </div>
-      </div>
     `
+        
+    str += Game.buildSkillTree()
+
+    str += `</div>`
 
     div.innerHTML = str
-
-    Game.drawLines()
-
-    particlesJS("particles-js", {
-      "particles": {
-        "number": {
-          "value": 250,
-          "density": {
-            "enable": true,
-            "value_area": 800
-          }
-        },
-        "color": {
-          "value": "#ffffff"
-        },
-        "shape": {
-          "type": "circle",
-          "stroke": {
-            "width": 0,
-            "color": "#000000"
-          },
-          "polygon": {
-            "nb_sides": 5
-          },
-          "image": {
-            "src": "img/github.svg",
-            "width": 100,
-            "height": 100
-          }
-        },
-        "opacity": {
-          "value": 0.5,
-          "random": false,
-          "anim": {
-            "enable": false,
-            "speed": 1,
-            "opacity_min": 0.1,
-            "sync": false
-          }
-        },
-        "size": {
-          "value": 2,
-          "random": true,
-          "anim": {
-            "enable": false,
-            "speed": 20,
-            "size_min": 0.1,
-            "sync": false
-          }
-        },
-        "line_linked": {
-          "enable": false,
-          "distance": 150,
-          "color": "#ffffff",
-          "opacity": 0.4,
-          "width": 1
-        },
-        "move": {
-          "enable": true,
-          "speed": 3,
-          "direction": "none",
-          "random": false,
-          "straight": false,
-          "out_mode": "out",
-          "bounce": false,
-          "attract": {
-            "enable": false,
-            "rotateX": 600,
-            "rotateY": 1200
-          }
-        }
-      },
-      "interactivity": {
-        "detect_on": "canvas",
-        "events": {
-          "onhover": {
-            "enable": false,
-            "mode": "grab"
-          },
-          "onclick": {
-            "enable": false,
-            "mode": "push"
-          },
-          "resize": false
-        },
-        "modes": {
-          "grab": {
-            "distance": 140,
-            "line_linked": {
-              "opacity": 1
-            }
-          },
-          "bubble": {
-            "distance": 400,
-            "size": 40,
-            "duration": 2,
-            "opacity": 8,
-            "speed": 3
-          },
-          "repulse": {
-            "distance": 200,
-            "duration": 0.4
-          },
-          "push": {
-            "particles_nb": 4
-          },
-          "remove": {
-            "particles_nb": 2
-          }
-        }
-      },
-      "retina_detect": true
-    });
   }
 
   Game.drawLines = () => {
@@ -3680,7 +3537,14 @@ Game.launch = () => {
   s('.ore').onclick = () => Game.handleClick()
   s('.ore-weak-spot').onclick = () => Game.handleClick('weak-spot')
 
-  window.onresize = () => Game.repositionAllElements = 1
+  window.onresize = () => {
+    Game.repositionAllElements = 1
+    let skillTree = document.querySelector('.skill-tree-container')
+    if (skillTree.style.display === 'none' || skillTree.style.display === undefined || skillTree.style.display === '') {
+    } else {
+      Game.showSkillTree()
+    }
+  }
 
   window.onblur = () => {
     Game.state.lastLogin = new Date().getTime()
