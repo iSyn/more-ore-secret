@@ -1921,11 +1921,16 @@ li {
   width: 100vw;
   background-color: black;
   color: white;
-  padding: 5px;
+  /* padding: 5px; */
   text-align: center;
   z-index: 6;
   display: none;
   flex-flow: column nowrap;
+}
+
+.skill-tree-container-top {
+  background: black;
+  z-index: 1;
 }
 
 .skill-tree-container-top button {

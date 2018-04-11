@@ -2137,7 +2137,7 @@ Game.launch = () => {
       if (!selectedSkill.locked) {
         tooltip.innerHTML = `
           <div style='display: flex; flex-flow: row nowrap;'>
-            <div style='background: url("./assets/${selectedSkill.pic}.png"); min-height: 64px; height: 64px; min-width: 64px; width: 64px; margin-right: 5px;'></div>
+            <div style='background: url("./assets/${selectedSkill.img}"); min-height: 64px; height: 64px; min-width: 64px; width: 64px; margin-right: 5px;'></div>
             <hr style='width: 1px; flex-grow: 1; margin-right: 5px; opacity: 0.1'/>
             <div style='flex-grow: 1'>
               <h2 style='font-family: "Germania One"'>${selectedSkill.name}</h2>
@@ -2155,7 +2155,7 @@ Game.launch = () => {
         let str = ''
         str += `
           <div style='display: flex; flex-flow: row nowrap;'>
-            <div style='background: url("./assets/${selectedSkill.pic}.png"); min-height: 64px; height: 64px; min-width: 64px; width: 64px; margin-right: 5px; opacity: 0.2;'></div>
+            <div style='background: url("./assets/${selectedSkill.img}"); min-height: 64px; height: 64px; min-width: 64px; width: 64px; margin-right: 5px; opacity: 0.2;'></div>
             <hr style='width: 1px; flex-grow: 1; margin-right: 5px; opacity: 0.1'/>
             <div style='flex-grow: 1'>
               <h2 style='font-family: "Germania One"'>${selectedSkill.name}</h2>
@@ -2636,11 +2636,18 @@ Game.launch = () => {
       let middle = (window.innerWidth || document.body.clientWidth)/2 - skillSize/2 - 5
 
       let pos = {
-        generation: Game.skills[i].position[0] * (skillSize + skillPadding) - 100, // top
+        generation: Game.skills[i].position[0] * (skillSize + skillPadding + 32) - 100, // top
         column: middle + (Game.skills[i].position[1] * (skillSize + skillPadding))     // left
       }
 
-      str += `<div class='skill' style='left: ${pos.column}px; top: ${pos.generation}px'></div>`
+      str += `<div 
+                onclick='Game.skills[${i}].levelUp()'
+                onmouseover='Game.showTooltip({type: "skill", name: "${Game.skills[i].name}"})' 
+                onmouseout='Game.hideTooltip()' 
+                class='skill skill-${Game.skills[i].className}' 
+                style='left: ${pos.column}px; top: ${pos.generation}px; background: url("./assets/${Game.skills[i].img}")'
+              ></div>`;
+
     }
     
     return str
@@ -2651,6 +2658,7 @@ Game.launch = () => {
     div.style.display = 'flex' // change display none to display flex
 
     let str = `
+      <canvas class="skill-lines"></canvas>
       <div class="skill-tree-container-top">
         <h1 style='font-size: 6rem; font-family: "Germania One"'>Generation: ${Game.state.player.generation.lv}</h1>
         <h4 class='available-sp'>Available Sp: ${Game.state.player.generation.availableSp}</h4>
@@ -2665,6 +2673,7 @@ Game.launch = () => {
     str += `</div>`
 
     div.innerHTML = str
+    Game.drawLines()
   }
 
   Game.drawLines = () => {
@@ -2683,7 +2692,10 @@ Game.launch = () => {
     for (let i in Game.skills) {
       let skill = Game.skills[i]
 
+      console.log(skill)
+
       if (skill.drawLines) {
+        console.log('yes')
 
         if (skill.locked) {
           ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)'
@@ -2724,13 +2736,18 @@ Game.launch = () => {
             }
             let toSkill = Game.select(Game.skills, `${skill.drawLines[j].to}`)
             let toPos = {
-              x: s(`.skill-${toSkill.className}`).getBoundingClientRect().x - 32,
-              y: s(`.skill-${toSkill.className}`).getBoundingClientRect().y + 32
+              x: s(`.skill-${toSkill.className}`).getBoundingClientRect().x + 32,
+              y: s(`.skill-${toSkill.className}`).getBoundingClientRect().y
             }
             ctx.beginPath()
             ctx.moveTo(fromPos.x, fromPos.y)
+            // ctx.lineTo(toPos.x, toPos.y)
+            // ctx.lineTo(toPos.x + 32, toPos.y)
+
+            ctx.lineTo(fromPos.x, fromPos.y + 32)
+            ctx.lineTo(toPos.x, fromPos.y + 96)
             ctx.lineTo(toPos.x, toPos.y)
-            ctx.lineTo(toPos.x + 32, toPos.y)
+
             ctx.stroke()
             ctx.closePath()
           }
@@ -2745,18 +2762,16 @@ Game.launch = () => {
               x: s(`.skill-${toSkill.className}`).getBoundingClientRect().left,
               y: s(`.skill-${toSkill.className}`).getBoundingClientRect().y + 32
             }
+
             ctx.beginPath()
             ctx.moveTo(fromPos.x, fromPos.y)
             ctx.lineTo(fromPos.x + 32, fromPos.y)
             ctx.lineTo(fromPos.x + 64, toPos.y)
-            // ctx.lineTo(toPos.x - 32, toPos.y)
+            ctx.lineTo(toPos.x - 32, toPos.y)
             ctx.lineTo(toPos.x, toPos.y)
             ctx.stroke()
             ctx.closePath()
           }
-
-
-
         }
       }
     }
