@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>More Ore - Idle Clicker Incremental RPG about ORES!</title>
+    <link rel="shortcut icon" href="assets/tiny-rock.ico" />
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css?family=Asap+Condensed:400,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Abel" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <meta name="description" content="More Ore - A clicker, incremental, and idle game with RPG elements">
+    <meta name="keywords" content="game, clicker game, incremental game, idle game, more ore, isyn, incremental, idle, clicker, More Ore"/>
+    <meta name="author" content="Syn Studios"/>
+    <meta name="robots" content="follow"/>
+    <meta name="google-site-verification" content="Kcf483s9v0NmdgqhL4lOH6jXPisuMn_YtZqaeF05o7Q" />
+
+    <link href="https://fonts.googleapis.com/css?family=Germania+One" rel="stylesheet">
+
+    <!-- Global Site Tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-105854273-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments)};
+      gtag('js', new Date());
+
+      gtag('config', 'UA-105854273-1');
+    </script>
+
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({
+        google_ad_client: "ca-pub-4584563958870163",
+        enable_page_level_ads: true
+      });
+    </script>
+
+  </head>
+
+  <body>
+    <audio id='bgm'></audio>
+    <div class="particles"></div>
+    <div class="tooltip"></div>
+    <div class="torch1 torch"></div>
+    <div class="torch2 torch"></div>
+    <div class="skill-tree-container"></div>
+    <div class="inventory-container">
+      <div class="inventory-container__left">
+        <div class="inventory-container__left-top">
+          <h1>EQUIPPED</h1>
+          <hr/>
+          <div class="inventory-container--equips">
+            <div class="inventory-container--equip">artifact slot</div>
+            <div class="inventory-container--equip">offhand slot</div>
+            <div class="inventory-container--equip">pickaxe slot</div>
+          </div>
+        </div>
+        <div class="inventory-container__left-bottom">
+          <h3>INVENTORY</h3>
+          <hr/>
+          <div class="inventory-container--items">
+            <div class="inventory-container--item">locked slot</div>
+            <div class="inventory-container--item">locked slot</div>
+            <div class="inventory-container--item">locked slot</div>
+            <div class="inventory-container--item">locked slot</div>
+            <div class="inventory-container--item">locked slot</div>
+            <div class="inventory-container--item">locked slot</div>
+          </div>
+        </div>
+      </div>
+      <div class="inventory-container__right" onclick='Game.toggleInventory()'><i class='fa fa-caret-right fa-1x'></i></div>
+    </div>
+
+    <div class="loading">
+      <div class="loading-content">
+        <p>LOADING...</p>
+        <p style='font-size: 1rem; text-decoration: underline' onclick='localStorage.clear(); location.reload()'>IF THINGS DONT WORK, CLICK THIS</p>
+      </div>
+    </div>
+
+    <div class="game">
+
+      <div class="vertical-separator" id='left-separator'></div>
+
+      <div class="left-section">
+        <!-- <div class="stats-container"></div> -->
+        <div class="inventory-section">
+          <div class="ores"></div>
+          <div class="generation"></div>
+        </div>
+        <div class="ore-container">
+          <div class="ore" onclick='Game.handleClick(e)'></div>
+          <div class="ore-hp">100%</div>
+          <div class="ore-weak-spot" onclick='Game.handleClick(1)'></div>
+        </div>
+        <div class="settings-container">
+          <i onclick='Game.showSettings(); Game.playSound("misc")' class='fa fa-cog fa-2x settings'></i>
+          <i onclick='Game.showStatistics(); Game.playSound("misc")' class='fa fa-bar-chart fa-2x settings'></i>
+          <i onclick='Game.showAchievements(); Game.playSound("misc")' class='fa fa-trophy fa-2x settings'></i>
+          <i onclick='Game.showRefinedStore(); Game.playSound("misc")' class='fa fa-diamond fa-2x settings refined-store-btn'></i>
+        </div>
+        <div class="open-quests-container"></div>
+        <div class="bottom-left-btns-container">
+          <div class="refine-btn settings" onclick='Game.confirmRefine()'></div>
+        </div>
+        <div id='horizontal-separator' class="horizontal-separator"></div>
+        <div class="text-scroller-container">
+          <p class="text-scroller"></p>
+        </div>
+        <div class="horizontal-separator"></div>
+        <div class="bottom"></div>
+      </div>
+
+      <div id='main-separator' class="vertical-separator"></div>
+
+      <div class="right-section">
+        <div class="horizontal-separator" style='height: 8px'></div>
+        <h1>Store</h1>
+        <div id='anchor-point' class="horizontal-separator" style='height: 8px'></div>
+        <div class="tab-content-container">
+          <div class="tab-content"></div>
+          <div id="ads-im-sorry-please-dont-hate-me"></div>
+        </div>
+      </div>
+
+      <div class="vertical-separator"></div>
+
+    </div>
+
+    <footer>More Ore™ © Syn Studios | <a href='#' onclick='Game.showChangelog(1)'>View Changelog</a> | <a href="./versions.html">Previous Versions</a> | <a href='#' onclick='Game.confirmWipe()'>Wipe Save</a> | <a href='#' onclick='Game.save()'>Save Game</a> | <a href="https://www.patreon.com/user?u=8032477">Support Me!</a></footer>
+
+    <script src='particles.js'></script>
+    <script src='Achievements.js'></script>
+    <script src='Items.js'></script>
+    <script src='Quests.js'></script>
+    <!-- <script src='Skills.js'></script> -->
+    <script src='Skills2.js'></script>
+    <script src="main.js"></script>
+    <!-- <script src="firefox-testing.js"></script> -->
+
+  </body>
+
+</html>
