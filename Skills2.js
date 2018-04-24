@@ -16,19 +16,19 @@ let Skill = function(skill) {
     this.levelUp = () => {
         if (!this.locked) {
             if (this.lvl < this.maxLvl) {
-            if (Game.state.player.generation.availableSp > 0) {
-                Game.state.player.generation.availableSp--
-                this.lvl++
-                Game.risingNumber(null, 'skill up')
-                Game.state.player.skills[`spSection${this.section}`]++
-                Game.playSound('skill-lvl-up')
-                document.querySelector('.available-sp').innerHTML = `Available Sp: ${Game.state.player.generation.availableSp}`
-                if (this.onLvl) {
-                if (this.onLvl.addPermaOpC) Game.state.permanentOpcMulti += this.onLvl.addPermaOpC
-                if (this.onLvl.addPermaOpS) Game.state.permanentOpsMulti += this.onLvl.addPermaOpS
-                Game.calculateOpS()
-                Game.calculateOpC()
-                }
+                if (Game.state.player.generation.availableSp > 0) {
+                    Game.state.player.generation.availableSp--
+                    this.lvl++
+                    Game.risingNumber(null, 'skill up')
+                    Game.state.player.skills[`spSection${this.section}`]++
+                    Game.playSound('skill-lvl-up')
+                    document.querySelector('.available-sp').innerHTML = `Available Sp: ${Game.state.player.generation.availableSp}`
+                    if (this.onLvl) {
+                        if (this.onLvl.addPermaOpC) Game.state.permanentOpcMulti += this.onLvl.addPermaOpC
+                        if (this.onLvl.addPermaOpS) Game.state.permanentOpsMulti += this.onLvl.addPermaOpS
+                        Game.calculateOpS()
+                        Game.calculateOpC()
+                    }
                 Game.hideTooltip()
 
                 // check for unlocks
@@ -52,7 +52,11 @@ let skills = [
         drawLines: [
             {from: 'bottom', to: 'Managerial Proficiency'},
             {from: 'bottom', to: 'Prospector Proficiency'}
-        ]
+        ],
+        onLvl: {
+            addPermaOpC: .5,
+            addPermaOpS: .5
+        }
     }, {
         name: 'Keen Eyes',
         fillerTxt: 'Glasses',
@@ -71,7 +75,10 @@ let skills = [
         drawLines: [
             {from: 'bottom', to: 'Property Management'},
             {from: 'bottom', to: 'Tax Break'}
-        ]
+        ],
+        onLvl: {
+            addPermaOpS: .1
+        }
     }, {
         name: 'Prospector Proficiency',
         img: 'pickaxe-mastery.png',
@@ -83,7 +90,10 @@ let skills = [
         drawLines: [
             {from: 'bottom', to: 'Heavy Strike'},
             {from: 'bottom', to: 'Metal Detector'}
-        ]
+        ],
+        onLvl: {
+            addPermaOpC: .1
+        }
     }, {
         name: 'Back to Square One',
         type: 'Passive',

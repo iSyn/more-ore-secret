@@ -2640,14 +2640,28 @@ Game.launch = () => {
         column: middle + (Game.skills[i].position[1] * (skillSize + skillPadding))     // left
       }
 
-      str += `<div 
-                onclick='Game.skills[${i}].levelUp()'
-                onmouseover='Game.showTooltip({type: "skill", name: "${Game.skills[i].name}"})' 
-                onmouseout='Game.hideTooltip()' 
-                class='skill skill-${Game.skills[i].className}' 
-                style='left: ${pos.column}px; top: ${pos.generation}px; background: url("./assets/${Game.skills[i].img}")'
-              ></div>`;
-
+      console.log(Game.skills[i].locked)
+      if (Game.skills[i].locked == 1) {
+        str += `
+          <div 
+            onclick='Game.skills[${i}].levelUp()'
+            onmouseover='Game.showTooltip({type: "skill", name: "${Game.skills[i].name}"})' 
+            onmouseout='Game.hideTooltip()' 
+            class='skill skill-${Game.skills[i].className}' 
+            style='left: ${pos.column}px; top: ${pos.generation}px; background: url("./assets/${Game.skills[i].img}"); opacity: .5'
+          ></div>
+        `
+      } else {
+        str += `
+          <div 
+            onclick='Game.skills[${i}].levelUp()'
+            onmouseover='Game.showTooltip({type: "skill", name: "${Game.skills[i].name}"})' 
+            onmouseout='Game.hideTooltip()' 
+            class='skill skill-${Game.skills[i].className}' 
+            style='left: ${pos.column}px; top: ${pos.generation}px; background: url("./assets/${Game.skills[i].img}")'
+          ></div>
+        `
+      }
     }
     
     return str
