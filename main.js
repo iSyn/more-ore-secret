@@ -167,7 +167,7 @@ Game.launch = () => {
     canRefine: false,
 
     permanent: {
-      maxSockets: 1,
+      maxSockets: 2,
       opsMulti: 0,
       opcMulti: 0,
       weakHitMulti: 0
@@ -1420,7 +1420,7 @@ Game.launch = () => {
       damage,
       sharpness,
       hardness,
-      sockets: 5,
+      sockets,
       raw_info: {
         rarity: selectedRarity,
         prefix: selectedPrefix,
@@ -1439,7 +1439,7 @@ Game.launch = () => {
     if (Game.state.stats.itemsPickedUp == 1) Game.repositionAllElements = 1
 
     // Manually set the first few pickaxes for a more easier early-early game
-    if (amountOfRocksDestroyed === 1) { Game.newItem = { name: 'Big Lead Pickaxe', rarity: 'Common', material: 'Lead', stats: { Strength: [1], Charisma: [], Luck: [] }, iLv: 2, damage: 3, }
+    if (amountOfRocksDestroyed === 1) { Game.newItem = { name: 'Big Lead Pickaxe', rarity: 'Common', material: 'Lead', sockets: 1, stats: { Strength: [1], Charisma: [], Luck: [] }, iLv: 2, damage: 3, }
     } else if (amountOfRocksDestroyed === 4) { Game.newItem = { name: 'Lucky Iron Pickaxe', rarity: 'Uncommon', material: 'Iron', stats: { Strength: [2], Charisma: [], Luck: [4] }, iLv: 4, damage: 47 }
     } else { Game.newItem = Game.generateRandomPickaxe(iLvl) }
 
@@ -1455,7 +1455,7 @@ Game.launch = () => {
             <div class="item-modal-sockets-container">
               `
               for(i = 0; i < Game.newItem.sockets; i++) {
-                str += `<div class='item-modal-socket'></div>`
+                str += `<div class='item-modal-socket' onmouseover='Game.showTooltip({type: "help", text: "Empty socket"})' onmouseout='Game.hideTooltip()'></div>`
               }
               str += `
             </div>
@@ -2057,6 +2057,15 @@ Game.launch = () => {
       }
 
       tooltip.innerHTML = str
+    }
+
+    if (obj.type == 'help') {
+      tooltip.style.width = 'auto'
+      tooltip.style.left = event.clientX - tooltip.getBoundingClientRect().width/2 + 'px'
+      tooltip.style.top = event.clientY + 20 + 'px'
+      tooltip.innerHTML = `
+        <p>${obj.text}</p>
+      `
     }
 
     tooltip.style.animation = 'tooltip .3s'
