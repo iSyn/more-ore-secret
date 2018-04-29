@@ -16,7 +16,8 @@ let Item = function(item) {
 
     let price = this.price
     if (this.type == 'building') {
-      price = (this.basePrice * ((Math.pow(1.15, this.owned + Game.state.prefs.buyAmount) - Math.pow(1.15, this.owned)))/.15)
+      //price = (this.basePrice * ((Math.pow(1.15, this.owned + Game.state.prefs.buyAmount) - Math.pow(1.15, this.owned)))/.15)
+      price = BigNumber(this.basePrice * 1.15).exponentiatedBy(this.owned+Game.state.prefs.buyAmount)
     }
 
     if (Game.state.ores >= price) {
