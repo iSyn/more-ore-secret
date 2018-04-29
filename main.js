@@ -3,27 +3,82 @@
 ================= */
 let s = ((el) => {return document.querySelector(el)})
 
-let beautify = (num) => {
+let beautify = (number) => {
+
+  var SI_PREFIXES = [
+    "", // number is less than 1,000
+    "Thousand", // number is in the thousands
+    "Million", 
+    "Billion", 
+    "Trillion", 
+    "Quadrillion", 
+    "Quintillion", 
+    "Sextillion", 
+    "Alotillion", 
+    "Waytoomanyillion", 
+    "F*ckloadillion",
+    "F*cktonillion"
+  ];
+
+  if (!number) return 0;
+  if (number < 10){
+      if (Math.round(number) === number) return number;
+      return number.toFixed(1);
+  }
+  // what tier? (determines SI prefix)
+  var tier = Math.log10(number) / 3 | 0;
+
+  // if zero, we don't need a prefix
+  if (tier === 0) return Math.round(number)
+  // if (tier === 1) return Math.round(number)
+
+  // get prefix and determine scale
+  var prefix = SI_PREFIXES[tier];
+  var scale = Math.pow(10, tier * 3);
+
+  // scale the number
+  var scaled = number / scale;
+
+  // format number and add prefix as suffix
+  return parseFloat(scaled.toFixed(2)) + " " + prefix;
+
 
   if (num < 1) {
-    return num.toFixed(0)
+    return num.toFixed(1)
   }
   if (num < 1000000) {
     return Math.round(num).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); //found on https://stackoverflow.com/questions/2901102/how-to-print-a-number-with-commas-as-thousands-separators-in-javascript
   } else {
-	  
-	  let suffixes = ['ones','thousand',' Million',' Billion',' Trillion',' Quadrillion',' Quintillion',' Sextillion',' Alotillion',' Waytoomanyillion',' F*ckloadillion',' F*ckloadillion',' F*cktonillion'];
-	  
-	  let length = Math.floor(Math.log10(num)+1);//find length of number
-	  let suffixIndex = Math.floor(length/3);
-	  let reducedNum = num/(Math.pow(10,(length - 4)));//reduce number to a number less than 1000 
-	  let decimalPlace = (length - 4)%3;//determines how many decimal places to use
-	  if(suffixIndex > suffixes.length)//if out of bounds of index convert to engineering notation 
-	  {
-		  let engineeringPower = (length - 3)+decimalPlace;
-		  return (reducedNum + ' e^' + engineeringPower);
-	  }
-	  return reducedNum.toFixed(decimalPlace+1)+suffixes[suffixIndex];
+    if (num >= 1000000000000000000000000000000000) {
+      return (num/1000000000000000000000000000000000).toFixed(0) + ' F*cktonillion'
+    }
+    if (num >= 1000000000000000000000000000000) {
+      return (num/1000000000000000000000000000000).toFixed(1) + ' F*ckloadillion'
+    }
+    if (num >= 1000000000000000000000000000) {
+      return (num/1000000000000000000000000000).toFixed(1) + ' Waytoomanyillion'
+    }
+    if (num >= 1000000000000000000000000) {
+      return (num/1000000000000000000000000).toFixed(1) + ' Alotillion'
+    }
+    if (num >= 1000000000000000000000) {
+      return (num/1000000000000000000000).toFixed(1) + ' Sextillion'
+    }
+    if (num >= 1000000000000000000) {
+      return (num/1000000000000000000).toFixed(1) + ' Quintillion'
+    }
+    if (num >= 1000000000000000) {
+      return (num/1000000000000000).toFixed(1) + ' Quadrillion'
+    }
+    if (num >= 1000000000000) {
+      return (num/1000000000000).toFixed(1) + ' Trillion'
+    }
+    if (num >= 1000000000) {
+      return (num/1000000000).toFixed(1) + ' Billion'
+    }
+    if (num >= 1000000) {
+      return (num/1000000).toFixed(1) + ' Million'
+    }
   }
 }
 
@@ -920,6 +975,7 @@ Game.launch = () => {
     Game.state.stats.currentOreClicks++
     Game.state.stats.currentOresMined += amount
     Game.state.stats.totalOresMined += amount
+    console.log(amount)
 
     // CHECK CLICK RELATED ACHIEVEMENTS
 
@@ -1229,7 +1285,7 @@ Game.launch = () => {
       ['of the Beggar', 'of the Leprechaun']
     ]
 
-    // SELECT RARITY
+    // -------------------------------------- SELECT RARITY
     let randomNum = Math.random()
     let selectedRarity
     if (randomNum >= 0) selected = allRarities[0]   // 45%  Common
@@ -1245,7 +1301,7 @@ Game.launch = () => {
     }
     totalMultiplier += selectedRarity.multiplier
 
-    // SELECT PREFIX
+    // --------------------------------------  SELECT PREFIX
     randomNum = Math.random()
     let selectedPrefix
     if (selectedRarity.stat_amount > 0) {
@@ -1285,7 +1341,7 @@ Game.launch = () => {
     pickaxeName += ` ${selectedMaterial.name} Pickaxe`
     totalMultiplier += selectedMaterial.multiplier
 
-    // SELECT SUFFIX
+    // --------------------------------------  SELECT SUFFIX
     randomNum = Math.random()
     let selectedSuffix
     if (selectedRarity.multiplier >= 3.5) {
@@ -1308,10 +1364,14 @@ Game.launch = () => {
 
     totalMultiplier *= (iLvl * .5)
 
-    // DAMAGE
+    // --------------------------------------  DAMAGE
     let damage = iLvl * totalMultiplier
 
-    // SELECT AND BUILD BONUS STATS
+    //  -------------------------------------- SHARPNESS AND HARDNESS
+    let sharpness = Math.random() * 100
+    let hardness = Math.random() * 100
+
+    // --------------------------------------  SELECT AND BUILD BONUS STATS
     let pickaxeStats = {
       Strength: [],
       Charisma: [],
