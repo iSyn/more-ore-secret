@@ -14,7 +14,7 @@ let beautify = (num) => {
 	  
 	  let suffixes = ['ones','thousand',' Million',' Billion',' Trillion',' Quadrillion',' Quintillion',' Sextillion',' Alotillion',' Waytoomanyillion',' F*ckloadillion',' F*ckloadillion',' F*cktonillion'];
 	  
-	  let length = (Math.log10(num)+1);//find length of number
+	  let length = Math.floor(Math.log10(num)+1);//find length of number
 	  let suffixIndex = Math.floor(length/3);
 	  let reducedNum = num/(10^(length - 4));//reduce number to a number less than 1000 
 	  let decimalPlace = (length - 4)%3;//determines how many decimal places to use
