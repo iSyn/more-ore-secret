@@ -8,14 +8,14 @@ let beautify = (number) => {
   var SI_PREFIXES = [
     "", // number is less than 1,000
     "Thousand", // number is in the thousands
-    "Million", 
-    "Billion", 
-    "Trillion", 
-    "Quadrillion", 
-    "Quintillion", 
-    "Sextillion", 
-    "Alotillion", 
-    "Waytoomanyillion", 
+    "Million",
+    "Billion",
+    "Trillion",
+    "Quadrillion",
+    "Quintillion",
+    "Sextillion",
+    "Alotillion",
+    "Waytoomanyillion",
     "F*ckloadillion",
     "F*cktonillion"
   ];
@@ -182,19 +182,19 @@ Game.launch = () => {
       },
 
       pickaxe: {
-        name: 'Beginners Wood Pickaxe', 
-        rarity: 'Common', 
-        material: 'Wood', 
-        sockets: 0, 
+        name: 'Beginners Wood Pickaxe',
+        rarity: 'Common',
+        material: 'Wood',
+        sockets: 0,
         sharpness: 100,
         hardness: 100,
-        stats: { 
-          Strength: [], 
-          Charisma: [], 
-          Luck: [] 
-        }, 
-        iLv: 1, 
-        damage: 1, 
+        stats: {
+          Strength: [],
+          Charisma: [],
+          Luck: []
+        },
+        iLv: 1,
+        damage: 1,
       },
 
       skills: {
@@ -965,7 +965,8 @@ Game.launch = () => {
     }
   }
 
-  Game.handleClick = (type) => {
+  Game.handleClick = (evt, type) => {
+    evt = evt || window.event
     let amount = Game.state.oresPerClick
     if (type) {
       if (type == 'weak-spot') {
@@ -973,7 +974,7 @@ Game.launch = () => {
         amount *= (Game.state.player.pickaxe.sharpness/100)
         amount *= (Game.state.weakHitMulti + Game.state.permanent.weakHitMulti)
         Game.playSound('ore-crit-hit')
-        Game.risingNumber(amount, 'weak-hit', event)
+        Game.risingNumber(evt, amount, 'weak-hit')
         Game.state.stats.currentWeakSpotHits++
         Game.repositionAllElements = 1
       }
@@ -981,12 +982,12 @@ Game.launch = () => {
       amount *= (Game.state.player.pickaxe.hardness/100)
       Game.getCombo()
       Game.playSound('ore-hit')
-      Game.risingNumber(amount, event)
+      Game.risingNumber(evt, amount)
       // Game.gainXp()
     }
 
     Game.earn(amount)
-    Game.drawRockParticles()
+    Game.drawRockParticles(evt)
     Game.state.stats.currentOreClicks++
     Game.state.stats.currentOresMined += amount
     Game.state.stats.totalOresMined += amount
@@ -1002,13 +1003,13 @@ Game.launch = () => {
     if (Game.state.stats.currentWeakSpotHits == 20) Game.unlockUpgrade('Polish Magnifying Glass')
   }
 
-  Game.risingNumber = (amount, type) => {
+  Game.risingNumber = (evt, amount, type) => {
     if (Game.state.prefs.risingNumbers == true) {
       let mouseX = (s('.ore').getBoundingClientRect().left + s('.ore').getBoundingClientRect().right)/2
       let mouseY = (s('.ore').getBoundingClientRect().top + s('.ore').getBoundingClientRect().bottom)/2
-      if (event) {
-        mouseX = event.clientX
-        mouseY = event.clientY
+      if (evt && evt.clientX && evt.clientY) {
+        mouseX = evt.clientX
+        mouseY = evt.clientY
       }
       let randomNumber = Math.floor(Math.random() * 20) + 1
       let randomSign = Math.round(Math.random()) * 2 - 1
@@ -1132,7 +1133,7 @@ Game.launch = () => {
     }
   }
 
-  Game.drawRockParticles = () => {
+  Game.drawRockParticles = (evt) => {
     if (Game.state.prefs.rockParticles == true) {
       let allParticles = document.querySelectorAll('.particle')
       if (allParticles.length >= 10) {
@@ -1142,8 +1143,8 @@ Game.launch = () => {
       let div = document.createElement('div')
       div.classList.add('particle')
       div.style.background = 'lightgrey'
-      let x = event.clientX
-      let y = event.clientY
+      let x = evt.clientX
+      let y = evt.clientY
 
       div.style.left = x + 'px'
       div.style.top = y + 'px'
@@ -1459,35 +1460,35 @@ Game.launch = () => {
     if (Game.state.stats.itemsPickedUp == 1) Game.repositionAllElements = 1
 
     let firstPick = {
-      name: 'Sharp but Flimsy Cardboard Pickaxe', 
-      rarity: 'Uncommon', 
-      material: 'Cardboard', 
-      sockets: 1, 
+      name: 'Sharp but Flimsy Cardboard Pickaxe',
+      rarity: 'Uncommon',
+      material: 'Cardboard',
+      sockets: 1,
       sharpness: 127,
       hardness: 24,
-      stats: { 
-        Strength: [2, 1], 
-        Charisma: [], 
-        Luck: [] 
-      }, 
-      iLv: 2, 
-      damage: 3, 
+      stats: {
+        Strength: [2, 1],
+        Charisma: [],
+        Luck: []
+      },
+      iLv: 2,
+      damage: 3,
     }
 
     let secondPick = {
-      name: 'Dull Plastic Pickaxe', 
-      rarity: 'Common', 
-      material: 'Plastic', 
-      sockets: 0, 
+      name: 'Dull Plastic Pickaxe',
+      rarity: 'Common',
+      material: 'Plastic',
+      sockets: 0,
       sharpness: 114,
       hardness: 96,
-      stats: { 
-        Strength: [], 
-        Charisma: [], 
-        Luck: [1] 
-      }, 
-      iLv: 4, 
-      damage: 47, 
+      stats: {
+        Strength: [],
+        Charisma: [],
+        Luck: [1]
+      },
+      iLv: 4,
+      damage: 47,
     }
 
     // Manually set the first few pickaxes for a more easier early-early game
@@ -1507,7 +1508,7 @@ Game.launch = () => {
             <div class="item-modal-sockets-container">
               `
               for(i = 0; i < Game.newItem.sockets; i++) {
-                str += `<div class='item-modal-socket' onmouseover='Game.showTooltip({type: "help", text: "Empty socket"})' onmouseout='Game.hideTooltip()'></div>`
+                str += `<div class='item-modal-socket' onmouseover='Game.showTooltip(event, {type: "help", text: "Empty socket"})' onmouseout='Game.hideTooltip()'></div>`
               }
               str += `
             </div>
@@ -1524,11 +1525,11 @@ Game.launch = () => {
             <p style='font-style: italic; font-size: small'>${Game.newItem.rarity}</p>
             <br/>
             <div>
-              <p onmouseover='Game.showTooltip({type: "help", text: "Sharpness is the % damage dealt on weak spot hits"})' onmouseout='Game.hideTooltip()' >Sharpness: ${Game.newItem.sharpness}%</p>
-              <p onmouseover='Game.showTooltip({type: "help", text: "Hardness is the % damage dealt on regular hits"})' onmouseout='Game.hideTooltip()'>Hardness: ${Game.newItem.hardness}%</p>
+              <p onmouseover='Game.showTooltip(event, {type: "help", text: "Sharpness is the % damage dealt on weak spot hits"})' onmouseout='Game.hideTooltip()' >Sharpness: ${Game.newItem.sharpness}%</p>
+              <p onmouseover='Game.showTooltip(event, {type: "help", text: "Hardness is the % damage dealt on regular hits"})' onmouseout='Game.hideTooltip()'>Hardness: ${Game.newItem.hardness}%</p>
             </div>
             <br/>
-            
+
             <p>Item Level: ${Game.newItem.iLv}</p>
             <p>Damage: ${beautify(Game.newItem.damage)}</p>
             `
@@ -1567,7 +1568,7 @@ Game.launch = () => {
             <div class="item-modal-sockets-container-small">
               `
               for(i = 0; i < Game.state.player.pickaxe.sockets; i++) {
-                str += `<div class='item-modal-socket-small' onmouseover='Game.showTooltip({type: "help", text: "Empty socket"})' onmouseout='Game.hideTooltip()'></div>`
+                str += `<div class='item-modal-socket-small' onmouseover='Game.showTooltip(event, {type: "help", text: "Empty socket"})' onmouseout='Game.hideTooltip()'></div>`
               }
               str += `
             </div>
@@ -1585,8 +1586,8 @@ Game.launch = () => {
               <p style='font-style: italic; font-size: small'>${Game.state.player.pickaxe.rarity}</p>
               <br/>
               <div>
-                <p onmouseover='Game.showTooltip({type: "help", text: "Sharpness is the % damage dealt on weak spot hits"})' onmouseout='Game.hideTooltip()' >Sharpness ${Game.state.player.pickaxe.sharpness}%</p>
-                <p onmouseover='Game.showTooltip({type: "help", text: "Hardness is the % damage dealt on regular hits"})' onmouseout='Game.hideTooltip()'>Hardness ${Game.state.player.pickaxe.hardness}%</p>
+                <p onmouseover='Game.showTooltip(event, {type: "help", text: "Sharpness is the % damage dealt on weak spot hits"})' onmouseout='Game.hideTooltip()' >Sharpness ${Game.state.player.pickaxe.sharpness}%</p>
+                <p onmouseover='Game.showTooltip(event, {type: "help", text: "Hardness is the % damage dealt on regular hits"})' onmouseout='Game.hideTooltip()'>Hardness ${Game.state.player.pickaxe.hardness}%</p>
               </div>
               <br/>
               <p>Item Level: ${Game.state.player.pickaxe.iLv}</p>
@@ -1653,7 +1654,7 @@ Game.launch = () => {
         hasContent = 1
         str += `
           <div class="upgrade-item-container" style='background-color: #b56535'>
-            <div class="upgrade-item" id="${item.name.replace(/\s/g , "-")}" onclick='Game.sortedUpgrades[${i}].buy(); Game.hideTooltip();' onmouseover="Game.showTooltip({name: '${item.name}', type: '${item.type}s'}, event); Game.playSound('itemhover')" onmouseout="Game.hideTooltip()" style='background: url(./assets/images/${item.pic}); background-size: 100%;'></div>
+            <div class="upgrade-item" id="${item.name.replace(/\s/g , "-")}" onclick='Game.sortedUpgrades[${i}].buy(); Game.hideTooltip();' onmouseover="Game.showTooltip(event, {name: '${item.name}', type: '${item.type}s'}); Game.playSound('itemhover')" onmouseout="Game.hideTooltip()" style='background: url(./assets/images/${item.pic}); background-size: 100%;'></div>
           </div>
         `
       }
@@ -1680,7 +1681,7 @@ Game.launch = () => {
       if (Game.state.prefs.buyAmount != 'max') price = (item.basePrice * ((Math.pow(1.15, item.owned + Game.state.prefs.buyAmount) - Math.pow(1.15, item.owned)))/.15)
       if (item.hidden == 0) {
         str += `
-          <div class="button" onclick="Game.buildings[${i}].buy();" onmouseover="Game.showTooltip({name: '${item.name}', type: '${item.type}s'}, event); Game.playSound('itemhover')" onmouseout="Game.hideTooltip()">
+          <div class="button" onclick="Game.buildings[${i}].buy();" onmouseover="Game.showTooltip(event, {name: '${item.name}', type: '${item.type}s'}); Game.playSound('itemhover')" onmouseout="Game.hideTooltip()">
             <div style='pointer-events: none' class="button-top">
               <div class="button-left">
                 <img src="./assets/images/${item.pic}" style='filter: brightness(100%); image-rendering: pixelated; image-rendering: -moz-crisp-edges'/>
@@ -1795,7 +1796,7 @@ Game.launch = () => {
     s('.ores').innerHTML = str
 
     s('.generation').innerHTML = `Generation: ${Game.state.player.generation.lv}`
-    s('.generation').onmouseover = () => Game.showTooltip({type: 'generation'}, event)
+    s('.generation').onmouseover = (evt) => Game.showTooltip(evt || window.event, {type: 'generation'})
     s('.generation').onmouseout = () => Game.hideTooltip()
 
     Game.rebuildInventory = 0
@@ -1956,7 +1957,7 @@ Game.launch = () => {
     s('.ore-hp').innerHTML = `${oreHpPercentage.toFixed(0)}%`
   }
 
-  Game.showTooltip = (obj) => {
+  Game.showTooltip = (evt, obj) => {
     let tooltip = s('.tooltip')
 
     let anchor = s('#main-separator').getBoundingClientRect()
@@ -1965,7 +1966,7 @@ Game.launch = () => {
     tooltip.style.display = 'block'
 
     tooltip.style.left = anchor.left - tooltip.getBoundingClientRect().width + 'px'
-    tooltip.style.top = event.clientY + 'px'
+    tooltip.style.top = evt.clientY + 'px'
 
 
     if (obj.type == 'buildings' || obj.type == 'upgrades') {
@@ -2010,8 +2011,8 @@ Game.launch = () => {
     if (obj.type == 'generation') {
       tooltip.style.textAlign = 'center'
       tooltip.style.width = 'auto'
-      tooltip.style.left = event.clientX - tooltip.getBoundingClientRect().width/2 + 'px'
-      tooltip.style.top = event.clientY + 20 + 'px'
+      tooltip.style.left = evt.clientX - tooltip.getBoundingClientRect().width/2 + 'px'
+      tooltip.style.top = evt.clientY + 20 + 'px'
       tooltip.style.minWidth = '150px'
       tooltip.innerHTML = `
         <h3>You are currently on Generation ${Game.state.player.generation.lv}</h3>
@@ -2085,8 +2086,8 @@ Game.launch = () => {
 
 
 
-      tooltip.style.left = event.clientX + 30 + 'px'
-      tooltip.style.top = event.clientY - tooltip.getBoundingClientRect().height/2 + 'px'
+      tooltip.style.left = evt.clientX + 30 + 'px'
+      tooltip.style.top = evt.clientY - tooltip.getBoundingClientRect().height/2 + 'px'
     }
 
     if (obj.type == 'quest') {
@@ -2106,8 +2107,8 @@ Game.launch = () => {
       let str;
       let selectedAchievement = Game.select(Game.achievements, obj.achievementName)
 
-      tooltip.style.left = event.clientX + 20 + 'px'
-      tooltip.style.top = event.clientY + 20 + 'px'
+      tooltip.style.left = evt.clientX + 20 + 'px'
+      tooltip.style.top = evt.clientY + 20 + 'px'
       tooltip.style.textAlign = 'left'
 
       if (obj.missing) {
@@ -2133,8 +2134,8 @@ Game.launch = () => {
 
     if (obj.type == 'help') {
       tooltip.style.width = 'auto'
-      tooltip.style.left = event.clientX - tooltip.getBoundingClientRect().width/2 + 'px'
-      tooltip.style.top = event.clientY + 20 + 'px'
+      tooltip.style.left = evt.clientX - tooltip.getBoundingClientRect().width/2 + 'px'
+      tooltip.style.top = evt.clientY + 20 + 'px'
       tooltip.innerHTML = `
         <p>${obj.text}</p>
       `
@@ -2276,7 +2277,7 @@ Game.launch = () => {
         `
         for (let i = 0; i < Game.achievements.length; i++) {
           if (Game.achievements[i].won == 1) {
-            str += `<div onmouseover='Game.showTooltip({type: "achievement", achievementName: "${Game.achievements[i].name}"})' onmouseout='Game.hideTooltip()' class="single-achievement"></div>`
+            str += `<div onmouseover='Game.showTooltip(event, {type: "achievement", achievementName: "${Game.achievements[i].name}"})' onmouseout='Game.hideTooltip()' class="single-achievement"></div>`
           }
         }
 
@@ -2288,7 +2289,7 @@ Game.launch = () => {
         `
         for (let i = 0; i < Game.achievements.length; i++) {
           if (Game.achievements[i].won == 0) {
-            str += `<div onmouseover='Game.showTooltip({type: "achievement", missing: 1, achievementName: "${Game.achievements[i].name}"})' onmouseout='Game.hideTooltip()' style='opacity: 0.3' class="single-achievement"></div>`
+            str += `<div onmouseover='Game.showTooltip(event, {type: "achievement", missing: 1, achievementName: "${Game.achievements[i].name}"})' onmouseout='Game.hideTooltip()' style='opacity: 0.3' class="single-achievement"></div>`
           }
         }
 
@@ -2545,27 +2546,27 @@ Game.launch = () => {
 
       if (Game.skills[i].locked == 1) {
         str += `
-          <div 
+          <div
             onclick='Game.skills[${i}].levelUp()'
-            onmouseover='Game.showTooltip({type: "skill", name: "${Game.skills[i].name}"})' 
-            onmouseout='Game.hideTooltip()' 
-            class='skill skill-${Game.skills[i].className}' 
+            onmouseover='Game.showTooltip(event, {type: "skill", name: "${Game.skills[i].name}"})'
+            onmouseout='Game.hideTooltip()'
+            class='skill skill-${Game.skills[i].className}'
             style='left: ${pos.column}px; top: ${pos.generation}px; background: url("./assets/images/skill_${Game.skills[i].img}"); opacity: .5'
           ></div>
         `
       } else {
         str += `
-          <div 
+          <div
             onclick='Game.skills[${i}].levelUp()'
-            onmouseover='Game.showTooltip({type: "skill", name: "${Game.skills[i].name}"})' 
-            onmouseout='Game.hideTooltip()' 
-            class='skill skill-${Game.skills[i].className}' 
+            onmouseover='Game.showTooltip(event, {type: "skill", name: "${Game.skills[i].name}"})'
+            onmouseout='Game.hideTooltip()'
+            class='skill skill-${Game.skills[i].className}'
             style='left: ${pos.column}px; top: ${pos.generation}px; background: url("./assets/images/skill_${Game.skills[i].img}")'
           ></div>
         `
       }
     }
-    
+
     return str
   }
 
@@ -2583,7 +2584,7 @@ Game.launch = () => {
 
       <div class="skill-tree-container-bottom">
     `
-        
+
     str += Game.buildSkillTree()
 
     str += `</div>`
@@ -3462,8 +3463,8 @@ Game.launch = () => {
   Game.load()
   Game.logic()
 
-  s('.ore').onclick = () => Game.handleClick()
-  s('.ore-weak-spot').onclick = () => Game.handleClick('weak-spot')
+  s('.ore').onclick = (evt) => Game.handleClick(evt)
+  s('.ore-weak-spot').onclick = (evt) => Game.handleClick(evt, 'weak-spot')
 
   window.onresize = () => {
     Game.repositionAllElements = 1
