@@ -678,7 +678,7 @@ Game.launch = () => {
             <p>You were gone for ${beautifyMs(amountOfTimePassed * 1000)}</p>
             <p>You earned ${beautify(Math.round(amountToGain))} ores!</p>
             <hr />
-            <button onclick='Game.earn(${amountToGain}); Game.risingNumber(${amountToGain},"passive", event); Game.removeEl(document.querySelector(".wrapper")); Game.save();'>Ok</button>
+            <button onclick='Game.earn(${amountToGain}); Game.risingNumber(event, ${amountToGain},"passive"); Game.removeEl(document.querySelector(".wrapper")); Game.save();'>Ok</button>
           </div>
         `
         s('body').append(div)
@@ -960,7 +960,7 @@ Game.launch = () => {
     if (type) { // IF WEAK SPOT HIT
       Game.state.stats.currentCombo++
       if (Game.state.stats.currentCombo % 5 == 0) {
-        Game.risingNumber(0, 'combo', event)
+        Game.risingNumber(event, 0, 'combo')
       }
       if (Game.state.stats.currentCombo > Game.state.stats.highestCombo) {
         Game.state.stats.highestCombo = Game.state.stats.currentCombo
@@ -2385,7 +2385,7 @@ Game.launch = () => {
     if (bonusNum == 1) {
       let amount = (Game.state.oresPerSecond * 13 + Game.state.oresPerClick * 13)
       Game.earn(amount)
-      Game.risingNumber(amount, 'bonus', event)
+      Game.risingNumber(event, amount, 'bonus')
     }
 
     if (bonusNum == 2 || bonusNum == 3 || bonusNum == 4) {
@@ -2393,7 +2393,7 @@ Game.launch = () => {
       cover.classList.add('gold-rush-cover')
       s('body').append(cover)
       let amount = (Game.state.oresPerSecond * 11 + Game.state.oresPerClick * 11)
-      Game.risingNumber(amount, 'gold rush', event)
+      Game.risingNumber(event, amount, 'gold rush')
       Game.goldRush()
       setTimeout(() => {
         s('.gold-rush-cover').parentNode.removeChild(s('.gold-rush-cover'))
@@ -3025,7 +3025,7 @@ Game.launch = () => {
     if (selectedItem) { // IF THERE IS A SELECTED ITEM
       if (Game.state.gems >= selectedItem.price) { // IF YOU HAVE ENOUGH MONEY
         Game.state.gems -= selectedItem.price
-        risingNumber(0, 'spendGems', event)
+        risingNumber(event, 0, 'spendGems')
         Game.closeCurrentWindow()
         if (selectedItem.type) {
           if (selectedItem.type.type == 'Building Multiplier') {
@@ -3203,7 +3203,7 @@ Game.launch = () => {
       if (Game.canBoost) {
         if (Game.state.quest.currentQuestProgress + 5000 < Game.state.quest.questCompletionTime) {
           Game.canBoost = false
-          Game.risingNumber(null, 'quest-progress', event)
+          Game.risingNumber(event, null, 'quest-progress')
           Game.state.quest.currentQuestProgress += 5000
 
           let progress = 0
@@ -3223,7 +3223,7 @@ Game.launch = () => {
             s('.click-cooldown').style.height = "100%"
           }, 5000)
         } else {
-          Game.risingNumber(null, 'quest-progress')
+          Game.risingNumber(event, null, 'quest-progress')
           s('.click-cooldown').style.height = "100%"
           Game.canBoost = true
           Game.state.quest.currentQuestProgress = Game.state.quest.questCompletionTime
