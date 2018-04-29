@@ -353,6 +353,36 @@ body {
   z-index: 1;
 }
 
+.item-modal-sockets-container {
+  position: absolute;
+  height: 260px;
+  width: 70%;
+  /* background: red; */
+  opacity: 0.1;
+  z-index: 3;
+  left: 50%;
+  transform: translateX(-50%);
+  transition: opacity 0.3s;
+
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+}
+
+.item-modal-sockets-container:hover {
+  opacity: 1;
+}
+
+.item-modal-socket {
+  height: 50px;
+  width: 50px;
+  margin: 10px;
+  border: 2px solid white;
+  background: rgba(255, 255, 255, 0.5);
+  position: relative;
+}
+
+
 .pickaxe-bottom-small {
   background: url('./assets/images/pickaxe-bottom.png');
   background-size: 100% 100%;

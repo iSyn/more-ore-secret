@@ -1377,12 +1377,13 @@ Game.launch = () => {
     // -------------------------------------- SOCKETS
     let sockets = 0
     let socketsRand = Math.random()
-    if (socketsRand <= .5) sockets++
-    if (socketsRand <= .3) sockets++
-    if (socketsRand <= .15) sockets++
-    if (socketsRand <= .05) sockets++
-    if (socketsRand <= .01) sockets++
-    if (socketsRand <= .005) sockets++
+    if (socketsRand <= .4) sockets++      // 40% chance for 1 socket
+    if (socketsRand <= .25) sockets++     // 25% chance for 2 sockets
+    if (socketsRand <= .15) sockets++     // 15% chance for 3 sockets
+    if (socketsRand <= .05) sockets++     // 5% chance for 4 sockets
+    if (socketsRand <= .01) sockets++     // 1% chance for 5 sockets
+    if (socketsRand <= .005) sockets++    // .5% chance for 6 sockets
+
     if (sockets > Game.state.permanent.maxSockets) sockets = Game.state.permanent.maxSockets
 
     // -------------------------------------- SELECT AND BUILD BONUS STATS
@@ -1419,7 +1420,7 @@ Game.launch = () => {
       damage,
       sharpness,
       hardness,
-      sockets,
+      sockets: 5,
       raw_info: {
         rarity: selectedRarity,
         prefix: selectedPrefix,
@@ -1437,6 +1438,7 @@ Game.launch = () => {
     Game.state.stats.itemsPickedUp++
     if (Game.state.stats.itemsPickedUp == 1) Game.repositionAllElements = 1
 
+    // Manually set the first few pickaxes for a more easier early-early game
     if (amountOfRocksDestroyed === 1) { Game.newItem = { name: 'Big Lead Pickaxe', rarity: 'Common', material: 'Lead', stats: { Strength: [1], Charisma: [], Luck: [] }, iLv: 2, damage: 3, }
     } else if (amountOfRocksDestroyed === 4) { Game.newItem = { name: 'Lucky Iron Pickaxe', rarity: 'Uncommon', material: 'Iron', stats: { Strength: [2], Charisma: [], Luck: [4] }, iLv: 4, damage: 47 }
     } else { Game.newItem = Game.generateRandomPickaxe(iLvl) }
@@ -1450,10 +1452,11 @@ Game.launch = () => {
           <h1 style='font-family: "Germania One"; font-size: 60px;'>New Pickaxe</h1>
           <h2 class='${Game.newItem.rarity}' style='font-size: xx-large'>${Game.newItem.name}</h2>
           <div class="item-modal-img">
-            <div className="item-modal-sockets-container">
+            <div class="item-modal-sockets-container">
               `
-
-              
+              for(i = 0; i < Game.newItem.sockets; i++) {
+                str += `<div class='item-modal-socket'></div>`
+              }
               str += `
             </div>
             <div class="pickaxe-top" style='background: url("./assets/images/pickaxe-top-${Game.newItem.material.toLowerCase()}.png"); background-size: 100% 100%;'></div>
