@@ -27,7 +27,7 @@ let Item = function(item) {
       }
       Game.spend(price)
       Game.playSound('buysound')
-      Game.risingNumber(null, 'spendMoney')
+      Game.risingNumber(event, null, 'spendMoney')
       // this.owned
       this.type == 'building' ? this.owned += Game.state.prefs.buyAmount : this.owned++
       Game.buyFunction(this)

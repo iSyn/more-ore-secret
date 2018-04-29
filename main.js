@@ -1022,6 +1022,9 @@ Game.launch = () => {
   }
 
   Game.risingNumber = (evt, amount, type) => {
+
+    console.log('FIRING', evt, amount, type)
+
     if (Game.state.prefs.risingNumbers == true) {
       let mouseX = (s('.ore').getBoundingClientRect().left + s('.ore').getBoundingClientRect().right)/2
       let mouseY = (s('.ore').getBoundingClientRect().top + s('.ore').getBoundingClientRect().bottom)/2
@@ -3410,7 +3413,7 @@ Game.launch = () => {
 
   setInterval(() => {
     if (!Game.blurred) {
-      if (Game.state.oresPerSecond) Game.risingNumber(Game.state.oresPerSecond, 'buildings', event)
+      if (Game.state.oresPerSecond) Game.risingNumber(event, Game.state.oresPerSecond, 'buildings')
     }
   }, 1000)
 
