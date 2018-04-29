@@ -501,27 +501,37 @@ Game.launch = () => {
       quests.forEach((quest) => new Quest(quest))
 
 	  
-	  // SHOW WELCOME TEXT
-    let welcomeTxt = document.createElement('div')
-    welcomeTxt.classList.add('wrapper')
-    welcomeTxt.innerHTML = `
-      <div class="welcome-text" onClick='Game.removeEl(document.querySelector(".wrapper"));'>
-        <h1>Welcome to More Ore Alpha v.0.9</h1>
-        <br />
-        <p>After a long hiatus from programming, I am finally excited to work on More Ore again</p>
-        <p>Since this game is in its early alpha stages, current features might be changed or scrapped in the final version.</p>
-        <p>If you have any interesting gameplay ideas, let me know! Post in the comments or email me!</p>
-        <p style='color: red;'>Game is only compatible in Google Chrome as of now</p>
-        <br />
-        <p style='text-align: center;'>[ Press ESC or click to close window ]</p>
-      </div>
+	  
+		if (Game.state.oresPerSecond > 0 && Game.state.lastLogin) 
+			//gain away income
+		{
+			Game.earnOfflineGain()
+		}
+		else
+		{
+			// SHOW WELCOME TEXT
+		let welcomeTxt = document.createElement('div')
+		welcomeTxt.classList.add('wrapper')
+		welcomeTxt.innerHTML = `
+		<div class="welcome-text" onClick='Game.removeEl(document.querySelector(".wrapper"));'>
+			<h1>Welcome to More Ore Alpha v.0.9</h1>
+			<br />
+			<p>After a long hiatus from programming, I am finally excited to work on More Ore again</p>
+			<p>Since this game is in its early alpha stages, current features might be changed or scrapped in the final version.</p>
+			<p>If you have any interesting gameplay ideas, let me know! Post in the comments or email me!</p>
+			<p style='color: red;'>Game is only compatible in Google Chrome as of now</p>
+			<br />
+			<p style='text-align: center;'>[ Press ESC or click to close window ]</p>
+		</div>
+	  
+		
     `
+		
 
-    s('body').append(welcomeTxt)
+		s('body').append(welcomeTxt)
+	}
 	
-	
-      // GAIN AWAY INCOME
-      if (Game.state.oresPerSecond > 0 && Game.state.lastLogin) Game.earnOfflineGain()
+
 
       console.log('LOADING SAVE COMPLETE')
     } else {
@@ -645,15 +655,19 @@ Game.launch = () => {
         div.classList.add('wrapper')
         div.innerHTML = `
           <div class="offline-gain-popup-container">
-            <h2 style='font-family: "Germania One"; letter-spacing: 1px;'>Welcome Back!</h2>
-            <hr />
+            <h1>Welcome to More Ore Alpha v.0.9</h1>
+			<br />
+			<p>After a long hiatus from programming, I am finally excited to work on More Ore again</p>
+			<p>Since this game is in its early alpha stages, current features might be changed or scrapped in the final version.</p>
+			<p>If you have any interesting gameplay ideas, let me know! Post in the comments or email me!</p>
+			<p style='color: red;'>Game is only compatible in Google Chrome as of now</p>
+			<br />
             <p>You were gone for ${beautifyMs(amountOfTimePassed * 1000)}</p>
             <p>You earned ${beautify(Math.round(amountToGain))} ores!</p>
             <hr />
             <button onclick='Game.earn(${amountToGain}); Game.risingNumber(${amountToGain},"passive", event); Game.removeEl(document.querySelector(".wrapper")); Game.save();'>Ok</button>
           </div>
         `
-
         s('body').append(div)
       }
     }
