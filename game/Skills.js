@@ -43,7 +43,7 @@ let Skill = function(skill) {
 let skills = [
     {
         name: 'The Start',
-        img: 'skill-the-start.png',
+        img: 'the-start.png',
         type: 'Passive',
         fillerTxt: 'Where it all begins',
         desc: 'Increases total OpC and OpS by 50%',

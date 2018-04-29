@@ -1391,35 +1391,10 @@ Game.launch = () => {
     Game.state.stats.itemsPickedUp++
     if (Game.state.stats.itemsPickedUp == 1) Game.repositionAllElements = 1
 
-    if (amountOfRocksDestroyed === 1) {
-      Game.newItem = {
-        name: 'Big Lead Pickaxe',
-        rarity: 'Common',
-        material: 'Lead',
-        stats: {
-          Strength: [1],
-          Charisma: [],
-          Luck: []
-        },
-        iLv: 2,
-        damage: 3,
-      }
-    } else if (amountOfRocksDestroyed === 4) {
-      Game.newItem = {
-        name: 'Lucky Iron Pickaxe',
-        rarity: 'Uncommon',
-        material: 'Iron',
-        stats: {
-          Strength: [2],
-          Charisma: [],
-          Luck: [4]
-        },
-        iLv: 4,
-        damage: 47
-      }
-    } else {
-      Game.newItem = Game.generateRandomPickaxe(iLvl)
-    }
+    if (amountOfRocksDestroyed === 1) { Game.newItem = { name: 'Big Lead Pickaxe', rarity: 'Common', material: 'Lead', stats: { Strength: [1], Charisma: [], Luck: [] }, iLv: 2, damage: 3, }
+    } else if (amountOfRocksDestroyed === 4) { Game.newItem = { name: 'Lucky Iron Pickaxe', rarity: 'Uncommon', material: 'Iron', stats: { Strength: [2], Charisma: [], Luck: [4] }, iLv: 4, damage: 47 }
+    } else { Game.newItem = Game.generateRandomPickaxe(iLvl) }
+
     let itemModal = document.createElement('div')
     itemModal.classList.add('item-modal-container')
 
