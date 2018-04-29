@@ -180,13 +180,23 @@ Game.launch = () => {
         xpNeeded: 100,
         availableSp: 0
       },
+
       pickaxe: {
-        name: 'Beginners Wood Pickaxe',
-        rarity: 'Common',
-        iLv: 1,
-        material: 'Wood',
-        damage: 1
+        name: 'Beginners Wood Pickaxe', 
+        rarity: 'Common', 
+        material: 'Wood', 
+        sockets: 0, 
+        sharpness: 100,
+        hardness: 100,
+        stats: { 
+          Strength: [], 
+          Charisma: [], 
+          Luck: [] 
+        }, 
+        iLv: 1, 
+        damage: 1, 
       },
+
       skills: {
         spSection1: 0,
         spSection2: 0,
@@ -960,6 +970,7 @@ Game.launch = () => {
     if (type) {
       if (type == 'weak-spot') {
         Game.getCombo('hit')
+        amount *= (Game.state.player.pickaxe.sharpness/100)
         amount *= (Game.state.weakHitMulti + Game.state.permanent.weakHitMulti)
         Game.playSound('ore-crit-hit')
         Game.risingNumber(amount, 'weak-hit', event)
@@ -967,6 +978,7 @@ Game.launch = () => {
         Game.repositionAllElements = 1
       }
     } else {
+      amount *= (Game.state.player.pickaxe.hardness/100)
       Game.getCombo()
       Game.playSound('ore-hit')
       Game.risingNumber(amount, event)
@@ -1371,8 +1383,16 @@ Game.launch = () => {
     let damage = iLvl * totalMultiplier
 
     // -------------------------------------- SHARPNESS AND HARDNESS
-    let sharpness = Math.floor(Math.random() * 100)
-    let hardness = Math.floor(Math.random() * 100)
+    // Math.random() * (max - min) + min;
+    let minRange = 70
+    let maxRange = 150
+    let sharpness = Math.floor(Math.random() * (maxRange - minRange) + minRange)
+    let hardness = Math.floor(Math.random() * (maxRange - minRange) + minRange)
+    // // if both hardness and sharpness are low, up one or the other
+    // if (hardness <= 70 && sharpness <= 70) {
+    //   if (Math.random() > .5) { sharpness += Math.floor(Math.random() * (60 - 30) + 30) }
+    //   else { hardness += Math.floor(Math.random() * (60 - 30) + 30) }
+    // }
 
     // -------------------------------------- SOCKETS
     let sockets = 0
@@ -1438,10 +1458,42 @@ Game.launch = () => {
     Game.state.stats.itemsPickedUp++
     if (Game.state.stats.itemsPickedUp == 1) Game.repositionAllElements = 1
 
+    let firstPick = {
+      name: 'Sharp but Flimsy Cardboard Pickaxe', 
+      rarity: 'Uncommon', 
+      material: 'Cardboard', 
+      sockets: 1, 
+      sharpness: 127,
+      hardness: 24,
+      stats: { 
+        Strength: [2, 1], 
+        Charisma: [], 
+        Luck: [] 
+      }, 
+      iLv: 2, 
+      damage: 3, 
+    }
+
+    let secondPick = {
+      name: 'Dull Plastic Pickaxe', 
+      rarity: 'Common', 
+      material: 'Plastic', 
+      sockets: 0, 
+      sharpness: 114,
+      hardness: 96,
+      stats: { 
+        Strength: [], 
+        Charisma: [], 
+        Luck: [1] 
+      }, 
+      iLv: 4, 
+      damage: 47, 
+    }
+
     // Manually set the first few pickaxes for a more easier early-early game
-    if (amountOfRocksDestroyed === 1) { Game.newItem = { name: 'Big Lead Pickaxe', rarity: 'Common', material: 'Lead', sockets: 1, stats: { Strength: [1], Charisma: [], Luck: [] }, iLv: 2, damage: 3, }
-    } else if (amountOfRocksDestroyed === 4) { Game.newItem = { name: 'Lucky Iron Pickaxe', rarity: 'Uncommon', material: 'Iron', stats: { Strength: [2], Charisma: [], Luck: [4] }, iLv: 4, damage: 47 }
-    } else { Game.newItem = Game.generateRandomPickaxe(iLvl) }
+    if (amountOfRocksDestroyed === 1) { Game.newItem = firstPick }
+    else if (amountOfRocksDestroyed === 4) { Game.newItem = secondPick }
+    else { Game.newItem = Game.generateRandomPickaxe(iLvl) }
 
     let itemModal = document.createElement('div')
     itemModal.classList.add('item-modal-container')
@@ -1472,8 +1524,8 @@ Game.launch = () => {
             <p style='font-style: italic; font-size: small'>${Game.newItem.rarity}</p>
             <br/>
             <div>
-              <p>Sharpness: ${Game.newItem.sharpness}</p>
-              <p>Hardness: ${Game.newItem.hardness}</p>
+              <p onmouseover='Game.showTooltip({type: "help", text: "Sharpness is the % damage dealt on weak spot hits"})' onmouseout='Game.hideTooltip()' >Sharpness: ${Game.newItem.sharpness}%</p>
+              <p onmouseover='Game.showTooltip({type: "help", text: "Hardness is the % damage dealt on regular hits"})' onmouseout='Game.hideTooltip()'>Hardness: ${Game.newItem.hardness}%</p>
             </div>
             <br/>
             
@@ -1511,6 +1563,15 @@ Game.launch = () => {
           <h1 style='font-family: "Germania One"; font-size: 30px;'>Equipped</h1>
           <h2 class='${Game.state.player.pickaxe.rarity}' style='font-size: large'>${Game.state.player.pickaxe.name}</h2>
           <div class="item-modal-img-small">
+
+            <div class="item-modal-sockets-container-small">
+              `
+              for(i = 0; i < Game.state.player.pickaxe.sockets; i++) {
+                str += `<div class='item-modal-socket-small' onmouseover='Game.showTooltip({type: "help", text: "Empty socket"})' onmouseout='Game.hideTooltip()'></div>`
+              }
+              str += `
+            </div>
+
             <div class="pickaxe-top-small ${Game.state.player.pickaxe.material}" style='background: url("./assets/images/pickaxe-top-${Game.state.player.pickaxe.material.toLowerCase()}.png"); background-size: 100% 100%;'></div>
             <div class="pickaxe-bottom-small"></div>
             `
@@ -1522,6 +1583,11 @@ Game.launch = () => {
           </div>
           <div class="item-stats">
               <p style='font-style: italic; font-size: small'>${Game.state.player.pickaxe.rarity}</p>
+              <br/>
+              <div>
+                <p onmouseover='Game.showTooltip({type: "help", text: "Sharpness is the % damage dealt on weak spot hits"})' onmouseout='Game.hideTooltip()' >Sharpness ${Game.state.player.pickaxe.sharpness}%</p>
+                <p onmouseover='Game.showTooltip({type: "help", text: "Hardness is the % damage dealt on regular hits"})' onmouseout='Game.hideTooltip()'>Hardness ${Game.state.player.pickaxe.hardness}%</p>
+              </div>
               <br/>
               <p>Item Level: ${Game.state.player.pickaxe.iLv}</p>
               <p>Damage: ${beautify(Game.state.player.pickaxe.damage)}</p>

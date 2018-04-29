@@ -304,12 +304,11 @@ body {
 .item-modal__right:hover {
   opacity: 1;
   transition: opacity .2s;
-  border: 1px solid rgba(255,255,255,0.7);
   /*box-shadow: 0 0 10px gold;*/
 }
 
 .item-stats {
-  width: 80%;
+  width: 90%;
 }
 
 .item-stats div {
@@ -365,7 +364,7 @@ body {
   z-index: 1;
 }
 
-.item-modal-sockets-container {
+.item-modal-sockets-container, .item-modal-sockets-container-small {
   position: absolute;
   height: 260px;
   width: 70%;
@@ -381,11 +380,15 @@ body {
   justify-content: space-between;
 }
 
-.item-modal-sockets-container:hover {
+.item-modal-sockets-container-small {
+  height: 150px;
+}
+
+.item-modal-sockets-container:hover, .item-modal-sockets-container-small:hover {
   opacity: 1;
 }
 
-.item-modal-socket {
+.item-modal-socket, .item-modal-socket-small {
   height: 50px;
   width: 50px;
   margin: 10px;
@@ -394,6 +397,11 @@ body {
   position: relative;
 }
 
+.item-modal-socket-small {
+  height: 25px;
+  width: 25px;
+  border-width: 1px;
+}
 
 .pickaxe-bottom-small {
   background: url('./assets/images/pickaxe-bottom.png');
