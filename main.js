@@ -1383,6 +1383,7 @@ Game.launch = () => {
     if (socketsRand <= .05) sockets++
     if (socketsRand <= .01) sockets++
     if (socketsRand <= .005) sockets++
+    if (sockets > Game.state.permanent.maxSockets) sockets = Game.state.permanent.maxSockets
 
     // -------------------------------------- SELECT AND BUILD BONUS STATS
     let pickaxeStats = {
