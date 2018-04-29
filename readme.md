@@ -1,5 +1,3 @@
-# MORE ORE
-
-[Click here](https://isyn.github.io/More-Ore/) to visit the game!
+# [MORE ORE](https://isyn.github.io/More-Ore/)
 
 ![screenshot](./assets/other/screenshot.png)
