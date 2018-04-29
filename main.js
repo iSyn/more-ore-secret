@@ -16,9 +16,9 @@ let beautify = (num) => {
 	  
 	  let length = Math.floor(Math.log10(num)+1);//find length of number
 	  let suffixIndex = Math.floor(length/3);
-	  let reducedNum = num/(Math.Pow(10,(length - 4)));//reduce number to a number less than 1000 
+	  let reducedNum = num/(Math.pow(10,(length - 4)));//reduce number to a number less than 1000 
 	  let decimalPlace = (length - 4)%3;//determines how many decimal places to use
-	  if(suffixNum > suffixes.length)//if out of bounds of index convert to engineering notation 
+	  if(suffixIndex > suffixes.length)//if out of bounds of index convert to engineering notation 
 	  {
 		  let engineeringPower = (length - 3)+decimalPlace;
 		  return (reducedNum + ' e^' + engineeringPower);
@@ -951,6 +951,7 @@ Game.launch = () => {
     Game.state.stats.currentOreClicks++
     Game.state.stats.currentOresMined += amount
     Game.state.stats.totalOresMined += amount
+    console.log(amount)
 
     // CHECK CLICK RELATED ACHIEVEMENTS
 
