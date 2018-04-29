@@ -6,7 +6,7 @@ let s = ((el) => {return document.querySelector(el)})
 let beautify = (num) => {
 
   if (num < 1) {
-    return num.toFixed(1)
+    return num.toFixed(0)
   }
   if (num < 1000000) {
     return Math.round(num).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); //found on https://stackoverflow.com/questions/2901102/how-to-print-a-number-with-commas-as-thousands-separators-in-javascript
