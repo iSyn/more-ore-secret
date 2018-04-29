@@ -1844,6 +1844,7 @@ li {
   right: 0;
   animation: notify 3s linear;
   animation-fill-mode: forwards;
+  z-index: 4;
 }
 
 @keyframes notify {
@@ -2000,10 +2001,14 @@ li {
   position: absolute;
   height: 30px;
   width: 26px;
+  padding: 15px;
+  /* border: 4px solid white; */
   cursor: pointer;
   image-rendering: -moz-crisp-edges;
   image-rendering: pixelated;
   background: url('./assets/images/misc_bonus.png');
+  background-repeat: no-repeat;
+  background-position: center;
   animation: falling 5s linear infinite;
   animation-fill-mode: forwards;
 }
