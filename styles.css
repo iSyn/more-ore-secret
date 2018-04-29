@@ -63,7 +63,7 @@ body {
   width: 30px;
   image-rendering: -moz-crisp-edges;
   image-rendering: pixelated;
-  background: url('./assets/verticalseparator.png');
+  background: url('./assets/images/misc_verticalseparator.png');
   background-size: 100% auto;
   z-index: 5;
 }
@@ -71,7 +71,7 @@ body {
 .horizontal-separator {
   height: 8px;
   width: 100%;
-  background: url('./assets/horizontalseparator.png');
+  background: url('./assets/images/misc_horizontalseparator.png');
   background-size: auto 100%;
 }
 
@@ -154,7 +154,7 @@ body {
 .item-drop {
   height: 50px;
   width: 50px;
-  background: url('./assets/item-pouch.png');
+  background: url('./assets/images/misc_item-pouch.png');
   background-size: cover;
   image-rendering: -moz-crisp-edges;
   image-rendering: pixelated;
@@ -175,7 +175,7 @@ body {
   height: 60px;
   width: 60px;
   position: absolute;
-  background: url('./assets/item-glow-3.png');
+  background: url('./assets/images/misc_item-glow-3.png');
   background-size: cover;
   animation: clockwiseSpin 6s infinite linear;
 }
@@ -319,20 +319,20 @@ body {
 }
 
 .pickaxe-bottom {
-  background: url('./assets/pickaxe-bottom.png');
+  background: url('./assets/images/pickaxe-bottom.png');
   background-size: 100% 100%;
   z-index: 1;
 }
 
 .pickaxe-bg {
-  background: url('./assets/Fire_gif.gif');
+  background: url('./assets/images/misc_Fire_gif.gif');
   background-size: 100% 100%;
   z-index: 0;
   opacity: 0.1;
 }
 
 .pickaxe-bg-small {
-  background: url('./assets/Fire_gif.gif');
+  background: url('./assets/images/misc_Fire_gif.gif');
   opacity: 0.1;
   position: absolute;
   image-rendering: -moz-crisp-edges;
@@ -354,58 +354,58 @@ body {
 }
 
 .pickaxe-bottom-small {
-  background: url('./assets/pickaxe-bottom.png');
+  background: url('./assets/images/pickaxe-bottom.png');
   background-size: 100% 100%;
   z-index: 0;
 }
 
 .Wood {
-  background: url('./assets/pickaxe-top-wood.png');
+  background: url('./assets/images/pickaxe-top-wood.png');
   background-size: 100% 100%;
 }
 
 .Stone {
-  background: url('./assets/pickaxe-top-stone.png');
+  background: url('./assets/images/pickaxe-top-stone.png');
   background-size: 100% 100%;
 }
 
 .Iron {
-  background: url('./assets/pickaxe-top-iron.png');
+  background: url('./assets/images/pickaxe-top-iron.png');
   background-size: 100% 100%;
 }
 
 .Steel {
-  background: url('./assets/pickaxe-top-steel.png');
+  background: url('./assets/images/pickaxe-top-steel.png');
   background-size: 100% 100%;
 }
 
 .Diamond {
-  background: url('./assets/pickaxe-top-diamond.png');
+  background: url('./assets/images/pickaxe-top-diamond.png');
   background-size: 100% 100%;
 }
 
 .aura-Common {
-  background: url('./assets/pickaxe-common-aura.png');
+  background: url('./assets/images/pickaxe-common-aura.png');
   background-size: 100% 100%;
 }
 
 .aura-Uncommon {
-  background: url('./assets/pickaxe-uncommon-aura.png');
+  background: url('./assets/images/pickaxe-uncommon-aura.png');
   background-size: 100% 100%;
 }
 
 .aura-Unique {
-  background: url('./assets/pickaxe-unique-aura.png');
+  background: url('./assets/images/pickaxe-unique-aura.png');
   background-size: 100% 100%;
 }
 
 .aura-Rare {
-  background: url('./assets/pickaxe-rare-aura.png');
+  background: url('./assets/images/pickaxe-rare-aura.png');
   background-size: 100% 100%;
 }
 
 .aura-Legendary {
-  background: url('./assets/pickaxe-legendary-aura.png');
+  background: url('./assets/images/pickaxe-legendary-aura.png');
   background-size: 100% 100%;
 }
 
@@ -556,7 +556,7 @@ body {
 .left-section {
   /*width: 70%;*/
   flex-grow: 1;
-  background-image: url('./assets/main-bg.png');
+  background-image: url('./assets/images/bg_main-bg.png');
   /*background-color: #60695d;*/
   background-size: auto 80%;
   image-rendering: -moz-crisp-edges;
@@ -603,11 +603,10 @@ body {
   justify-content: center;
   align-items: center;
   position: relative;
-  /*cursor: url(./assets/pickaxe-cursor.png), default !important;*/
 }
 
 .ore {
-  background: url('./assets/ore1-1.png');
+  background: url('./assets/images/ore1-1.png');
   background-size: 100% 100%;
   image-rendering: -moz-crisp-edges;
   image-rendering: pixelated;
@@ -652,7 +651,7 @@ body {
 
 .bottom {
   height: 18%;
-  background: url('./assets/mineshaft.png');
+  background: url('./assets/images/misc_mineshaft.png');
   background-size: auto 100%;
   position: relative;
 }
@@ -807,7 +806,7 @@ body {
   flex-flow: column nowrap;
   box-shadow: 0 4px #222;
   justify-content: center;
-  background: url('./assets/item-container.png');
+  background: url('./assets/images/misc_item-container.png');
   background-size: 100% 100%;
   box-shadow: 0 0 20px #222 inset;
 }
@@ -874,7 +873,7 @@ body {
 }
 
 .upgrade-item-container {
-  background: url('./assets/upgrade-item-container.png');
+  background: url('./assets/images/misc_upgrade-item-container.png');
   height: 50px;
   width: 50px;
   background-size: 100% 100%;
@@ -1021,20 +1020,6 @@ li {
   border: 2px solid white;
   cursor: pointer;
   overflow-y: hidden;
-}
-
-.specialization-prospector {
-  background: url('./assets/prospector.png');
-  background-size: 100% 100%;
-  image-rendering: -moz-crisp-edges;
-  image-rendering: pixelated;
-}
-
-.specialization-manager {
-  background: url('./assets/manager.png');
-  background-size: 100% 100%;
-  image-rendering: -moz-crisp-edges;
-  image-rendering: pixelated;
 }
 
 .specialization-prospector:hover .prospector-txt {
@@ -1505,7 +1490,7 @@ li {
 .refined-store-item-top {
   height: 50%;
   width: 100%;
-  background-image: url('./assets/wip.png');
+  background-image: url('./assets/images/misc_wip.png');
   background-size: 100% 100%;
 }
 
@@ -1588,7 +1573,7 @@ li {
 }
 
 .wood-stick {
-  background: url('./assets/verticalseparator.png');
+  background: url('./assets/images/misc_verticalseparator.png');
   background-size: 100% auto;
   width: 7px;
 }
@@ -1839,7 +1824,7 @@ li {
   position: absolute;
   height: 128px;
   width: 128px;
-  background: url('./assets/torch.gif');
+  background: url('./assets/images/misc_torch.gif');
   background-size: 100% 100%;
   image-rendering: -moz-crisp-edges;
   image-rendering: pixelated;
@@ -1902,7 +1887,7 @@ li {
 }
 
 .refine-btn {
-  background: url('./assets/fireplace4.svg');
+  background: url('./assets/images/misc_fireplace.svg');
   height: 50px;
   width: 40px;
   background-size: 100% 100%;
@@ -1966,7 +1951,7 @@ li {
   cursor: pointer;
   image-rendering: -moz-crisp-edges;
   image-rendering: pixelated;
-  background: url('./assets/bonus.png');
+  background: url('./assets/images/misc_bonus.png');
   animation: rotate 5s infinite linear, fadeIn 2s linear forwards;
   border-radius: 50%;
 }
@@ -2018,7 +2003,7 @@ li {
   cursor: pointer;
   image-rendering: -moz-crisp-edges;
   image-rendering: pixelated;
-  background: url('./assets/bonus.png');
+  background: url('./assets/images/misc_bonus.png');
   animation: falling 5s linear infinite;
   animation-fill-mode: forwards;
 }

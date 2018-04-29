@@ -498,13 +498,13 @@ Game.launch = () => {
     for (let i = 1; i <= 4; i++) { // ore 1, ore 2, ore 3, ore 4
       for (let j = 1; j <= 5; j++) { // 1-1, 1-2, 1-2, 1-4, 1-5 etc
         let preloadImage = new Image()
-        preloadImage.src = `./assets/ore${i}-${j}.png`
+        preloadImage.src = `./assets/images/ore${i}-${j}.png`
       }
     }
     let images = ['abandoned-mineshaft']
     for (let i in images) {
       let newImage = new Image()
-      newImage.src = `./assets/${images[i]}.png`
+      newImage.src = `./assets/images/bg_${images[i]}.png`
     }
 
     // SHOW WELCOME TEXT
@@ -570,7 +570,7 @@ Game.launch = () => {
   }
 
   Game.playSound = (snd) => {
-    let sfx = new Audio(`./assets/${snd}.wav`)
+    let sfx = new Audio(`./assets/sounds/${snd}.wav`)
     sfx.volume = Game.state.prefs.volume
     sfx.play()
   }
@@ -578,7 +578,7 @@ Game.launch = () => {
   Game.playBgm = () => {
     let selected = Math.floor(Math.random() * 4) + 1
     let bgm = s('#bgm')
-    bgm.src = `./assets/bgm${selected}.mp3`
+    bgm.src = `./assets/sounds/bgm${selected}.mp3`
     bgm.play()
     bgm.onended = () => Game.playBgm()
   }
@@ -586,7 +586,7 @@ Game.launch = () => {
   Game.toggleBgm = () => {
     let selected = Math.floor(Math.random() * 4) + 1
     let audio = s('audio')
-    audio.src = `./assets/bgm${selected}.mp3`
+    audio.src = `./assets/sounds/bgm${selected}.mp3`
     audio.onended = () => Game.toggleBgm('on')
     audio.volume = 0.1
     bgm.onended = () => Game.playBgm()
@@ -1638,7 +1638,7 @@ Game.launch = () => {
           <h1 style='font-family: "Germania One"; font-size: 60px;'>New Pickaxe</h1>
           <h2 class='${Game.newItem.rarity}' style='font-size: xx-large'>${Game.newItem.name}</h2>
           <div class="item-modal-img">
-            <div class="pickaxe-top" style='background: url("./assets/pickaxe-top-${Game.newItem.material.toLowerCase()}.png"); background-size: 100% 100%;'></div>
+            <div class="pickaxe-top" style='background: url("./assets/images/pickaxe-top-${Game.newItem.material.toLowerCase()}.png"); background-size: 100% 100%;'></div>
             <div class="pickaxe-bottom"></div>
             `
             if (Game.newItem.rarity == 'Legendary' || Game.newItem.rarity == 'Mythical') {
@@ -1684,7 +1684,7 @@ Game.launch = () => {
           <h1 style='font-family: "Germania One"; font-size: 30px;'>Equipped</h1>
           <h2 class='${Game.state.player.pickaxe.rarity}' style='font-size: large'>${Game.state.player.pickaxe.name}</h2>
           <div class="item-modal-img-small">
-            <div class="pickaxe-top-small ${Game.state.player.pickaxe.material}" style='background: url("./assets/pickaxe-top-${Game.state.player.pickaxe.material.toLowerCase()}.png"); background-size: 100% 100%;'></div>
+            <div class="pickaxe-top-small ${Game.state.player.pickaxe.material}" style='background: url("./assets/images/pickaxe-top-${Game.state.player.pickaxe.material.toLowerCase()}.png"); background-size: 100% 100%;'></div>
             <div class="pickaxe-bottom-small"></div>
             `
             if (Game.state.player.pickaxe.rarity == 'Legendary' || Game.state.player.pickaxe.rarity == 'Mythical') {
@@ -1760,7 +1760,7 @@ Game.launch = () => {
         hasContent = 1
         str += `
           <div class="upgrade-item-container" style='background-color: #b56535'>
-            <div class="upgrade-item" id="${item.name.replace(/\s/g , "-")}" onclick='Game.sortedUpgrades[${i}].buy(); Game.hideTooltip();' onmouseover="Game.showTooltip({name: '${item.name}', type: '${item.type}s'}, event); Game.playSound('itemhover')" onmouseout="Game.hideTooltip()" style='background: url(./assets/${item.pic}); background-size: 100%;'></div>
+            <div class="upgrade-item" id="${item.name.replace(/\s/g , "-")}" onclick='Game.sortedUpgrades[${i}].buy(); Game.hideTooltip();' onmouseover="Game.showTooltip({name: '${item.name}', type: '${item.type}s'}, event); Game.playSound('itemhover')" onmouseout="Game.hideTooltip()" style='background: url(./assets/images/${item.pic}); background-size: 100%;'></div>
           </div>
         `
       }
@@ -1790,7 +1790,7 @@ Game.launch = () => {
           <div class="button" onclick="Game.buildings[${i}].buy();" onmouseover="Game.showTooltip({name: '${item.name}', type: '${item.type}s'}, event); Game.playSound('itemhover')" onmouseout="Game.hideTooltip()">
             <div style='pointer-events: none' class="button-top">
               <div class="button-left">
-                <img src="./assets/${item.pic}" style='filter: brightness(100%); image-rendering: pixelated; image-rendering: -moz-crisp-edges'/>
+                <img src="./assets/images/${item.pic}" style='filter: brightness(100%); image-rendering: pixelated; image-rendering: -moz-crisp-edges'/>
               </div>
               <div style='pointer-events: none' class="button-middle">
                 <h3 style='font-size: x-large'>${item.name}</h3>
@@ -1808,7 +1808,7 @@ Game.launch = () => {
           <div class="button" style='cursor: not-allowed; box-shadow: 0 4px black; opacity: .7; filter: brightness(60%)'>
             <div class="button-top">
               <div class="button-left">
-                <img src="./assets/${item.pic}" style='filter: brightness(0%)'/>
+                <img src="./assets/images/${item.pic}" style='filter: brightness(0%)'/>
               </div>
               <div class="button-middle">
                 <h3 style='font-size: larger'>???</h3>
@@ -1825,7 +1825,7 @@ Game.launch = () => {
           <div class="button" style='cursor: not-allowed; box-shadow: 0 4px black; opacity: .7; filter: brightness(60%)'>
             <div class="button-top">
               <div class="button-left">
-                <img src="./assets/${item.pic}" style='filter: brightness(0%)'/>
+                <img src="./assets/images/${item.pic}" style='filter: brightness(0%)'/>
               </div>
               <div class="button-middle">
                 <h3 style='font-size: larger'>???</h3>
@@ -2010,29 +2010,29 @@ Game.launch = () => {
     if (Game.state.oreCurrentHp - amount > 0) {
       Game.state.oreCurrentHp -= amount
       if (oreHpPercentage > 80 ) {
-        s('.ore').style.background = `url("./assets/ore${whichPic}-1.png")`
+        s('.ore').style.background = `url("./assets/images/ore${whichPic}-1.png")`
         s('.ore').style.backgroundSize = 'cover'
       }
       if (oreHpPercentage <= 80 && soundPlayed1 == false) {
-        s('.ore').style.background = `url("assets/ore${whichPic}-2.png")`
+        s('.ore').style.background = `url("assets/images/ore${whichPic}-2.png")`
         s('.ore').style.backgroundSize = 'cover'
         Game.playSound('explosion')
         soundPlayed1 = true
       }
       if (oreHpPercentage <= 60 && soundPlayed2 == false) {
-        s('.ore').style.background = `url("assets/ore${whichPic}-3.png")`
+        s('.ore').style.background = `url("assets/images/ore${whichPic}-3.png")`
         s('.ore').style.backgroundSize = 'cover'
         Game.playSound('explosion')
         soundPlayed2 = true
       }
       if (oreHpPercentage <= 40 && soundPlayed3 == false) {
-        s('.ore').style.background = `url("assets/ore${whichPic}-4.png")`
+        s('.ore').style.background = `url("assets/images/ore${whichPic}-4.png")`
         s('.ore').style.backgroundSize = 'cover'
         Game.playSound('explosion')
         soundPlayed3 = true
       }
       if (oreHpPercentage <= 20 && soundPlayed4 == false) {
-        s('.ore').style.background = `url("assets/ore${whichPic}-5.png")`
+        s('.ore').style.background = `url("assets/images/ore${whichPic}-5.png")`
         s('.ore').style.backgroundSize = 'cover'
         Game.playSound('explosion')
         soundPlayed4 = true
@@ -2056,7 +2056,7 @@ Game.launch = () => {
       soundPlayed4 = false
       soundPlayed5 = false
       whichPic = Math.floor(Math.random() * 4) + 1
-      s('.ore').style.background = `url("./assets/ore${whichPic}-1.png")`
+      s('.ore').style.background = `url("./assets/images/ore${whichPic}-1.png")`
       s('.ore').style.backgroundSize = 'cover'
       s('.ore-hp').innerHTML = '100%'
     }
@@ -2080,9 +2080,10 @@ Game.launch = () => {
       tooltip.style.width = '300px'
 
       let selectedItem = Game.select(Game[obj.type], obj.name)
+
       tooltip.innerHTML = `
         <div class="tooltip-top">
-          <img src="./assets/${selectedItem.pic}" height='40px' alt="" />
+          <img src="./assets/images/${selectedItem.pic}" height='40px' alt="" />
           <h3 style='flex-grow: 1'>${selectedItem.name}</h3>
           <p>${beautify(selectedItem.price)} ores</p>
         </div>
@@ -2137,7 +2138,7 @@ Game.launch = () => {
       if (!selectedSkill.locked) {
         tooltip.innerHTML = `
           <div style='display: flex; flex-flow: row nowrap;'>
-            <div style='background: url("./assets/${selectedSkill.img}"); min-height: 64px; height: 64px; min-width: 64px; width: 64px; margin-right: 5px;'></div>
+            <div style='background: url("./assets/images/skill_${selectedSkill.img}"); min-height: 64px; height: 64px; min-width: 64px; width: 64px; margin-right: 5px;'></div>
             <hr style='width: 1px; flex-grow: 1; margin-right: 5px; opacity: 0.1'/>
             <div style='flex-grow: 1'>
               <h2 style='font-family: "Germania One"'>${selectedSkill.name}</h2>
@@ -2155,7 +2156,7 @@ Game.launch = () => {
         let str = ''
         str += `
           <div style='display: flex; flex-flow: row nowrap;'>
-            <div style='background: url("./assets/${selectedSkill.img}"); min-height: 64px; height: 64px; min-width: 64px; width: 64px; margin-right: 5px; opacity: 0.2;'></div>
+            <div style='background: url("./assets/images/skill_${selectedSkill.img}"); min-height: 64px; height: 64px; min-width: 64px; width: 64px; margin-right: 5px; opacity: 0.2;'></div>
             <hr style='width: 1px; flex-grow: 1; margin-right: 5px; opacity: 0.1'/>
             <div style='flex-grow: 1'>
               <h2 style='font-family: "Germania One"'>${selectedSkill.name}</h2>
@@ -2648,7 +2649,7 @@ Game.launch = () => {
             onmouseover='Game.showTooltip({type: "skill", name: "${Game.skills[i].name}"})' 
             onmouseout='Game.hideTooltip()' 
             class='skill skill-${Game.skills[i].className}' 
-            style='left: ${pos.column}px; top: ${pos.generation}px; background: url("./assets/${Game.skills[i].img}"); opacity: .5'
+            style='left: ${pos.column}px; top: ${pos.generation}px; background: url("./assets/images/skill_${Game.skills[i].img}"); opacity: .5'
           ></div>
         `
       } else {
@@ -2658,7 +2659,7 @@ Game.launch = () => {
             onmouseover='Game.showTooltip({type: "skill", name: "${Game.skills[i].name}"})' 
             onmouseout='Game.hideTooltip()' 
             class='skill skill-${Game.skills[i].className}' 
-            style='left: ${pos.column}px; top: ${pos.generation}px; background: url("./assets/${Game.skills[i].img}")'
+            style='left: ${pos.column}px; top: ${pos.generation}px; background: url("./assets/images/skill_${Game.skills[i].img}")'
           ></div>
         `
       }
@@ -3244,7 +3245,7 @@ Game.launch = () => {
         <h1>${selectedQuest.name}</h1>
         <p onclick='Game.closeCurrentWindow()' style='position: absolute; top: 5px; right: 5px; cursor: pointer'>X</p>
         <hr/>
-        <img src="./assets/${selectedQuest.pic}.png" class="quest-img"'>
+        <img src="./assets/images/quest_${selectedQuest.pic}.png" class="quest-img"'>
         <hr/>
         <br/>
         <h3>${selectedQuest.desc}</h3>
