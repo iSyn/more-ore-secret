@@ -123,13 +123,14 @@ Game.launch = () => {
     oresPerClick: 0,
     opsMulti: 0,
     opcMulti: 0,
-    permanentOpsMulti: 0,
-    permanentOpcMulti: 0,
     critHitMulti: 2,
     weakHitMulti: 5,
-    permanentWeakHitMulti: 0,
     lastLogin: null,
     canRefine: false,
+
+    permanentOpsMulti: 0,
+    permanentOpcMulti: 0,
+    permanentWeakHitMulti: 0,
 
     player: {
       generation: {
@@ -274,8 +275,6 @@ Game.launch = () => {
         s('.inventory-container').style.visibility = 'visible'
       }
     }
-
-    // console.log(s('.ore-container').getBoundingClientRect())
 
     Game.repositionAllElements = 0
   }
@@ -500,11 +499,6 @@ Game.launch = () => {
         let preloadImage = new Image()
         preloadImage.src = `./assets/images/ore${i}-${j}.png`
       }
-    }
-    let images = ['abandoned-mineshaft']
-    for (let i in images) {
-      let newImage = new Image()
-      newImage.src = `./assets/images/bg_${images[i]}.png`
     }
 
     // SHOW WELCOME TEXT
@@ -1133,321 +1127,74 @@ Game.launch = () => {
     }
   }
 
+  Game.checkDrop = () => {
+    let amountOfRocksDestroyed = Game.state.stats.rocksDestroyed
+    let itemDropChance = .3 // 30%
+
+    if (amountOfRocksDestroyed <= 5) {
+      if (amountOfRocksDestroyed === 1 || amountOfRocksDestroyed === 4) {
+        Game.dropItem()
+      }
+    } else {
+      if (Math.random() < itemDropChance) {
+        Game.dropItem()
+      }
+    }
+  }
+
   Game.dropItem = () => {
     let randomSign = Math.round(Math.random()) * 2 - 1
     let randomNumber = (Math.floor(Math.random() * 200) + 1) * randomSign
     let randomY = Math.floor(Math.random() * 50) + 1
-    let thisItemClicked = false
     let amountOfRocksDestroyed = Game.state.stats.rocksDestroyed
     let iLvl = amountOfRocksDestroyed
+    let thisItemClicked = false
+    let itemContainer = document.createElement('div')
 
-    // CALCULATES DROP CHANCE
-    let itemDropChance = .3 // 30%
-    if (Game.state.player.int > 0) {
-      itemDropChance += Game.state.player.int / (Game.state.player.int + 30)
-    }
-    if (Game.state.player.luk > 0) {
-      itemDropChance += Game.state.player.int / (Game.state.player.int + 20)
-    }
+    itemContainer.classList.add('item-container')
+    itemContainer.id = `item-${amountOfRocksDestroyed}`
+    itemContainer.innerHTML = `
+      <div class="item-pouch-glow"></div>
+      <div class="item-pouch-glow2"></div>
+      <div class="item-pouch-glow3"></div>
+    `
 
-    // IF ITEM DROPS CREATE A CONTAINER
-    if (Math.random() < itemDropChance || amountOfRocksDestroyed <= 1) {
-      let itemContainer = document.createElement('div')
-      itemContainer.classList.add('item-container')
-      itemContainer.id = `item-${amountOfRocksDestroyed}`
-      itemContainer.innerHTML = `
-        <div class="item-pouch-glow"></div>
-        <div class="item-pouch-glow2"></div>
-        <div class="item-pouch-glow3"></div>
-      `
+    // POSITION ITEM ON ORE
+    let orePos = s('.ore').getBoundingClientRect()
+    itemContainer.style.position = 'absolute'
+    itemContainer.style.top = (orePos.top + orePos.bottom)/1.5 + 'px'
+    itemContainer.style.left = (orePos.left + orePos.right)/2 + 'px'
+    itemContainer.style.transition = 'all .5s'
+    itemContainer.style.transitionTimingFunction = 'ease-out'
 
-      // POSITION ITEM ON ORE
-      let orePos = s('.ore').getBoundingClientRect()
-      itemContainer.style.position = 'absolute'
-      itemContainer.style.top = (orePos.top + orePos.bottom)/1.5 + 'px'
-      itemContainer.style.left = (orePos.left + orePos.right)/2 + 'px'
-      itemContainer.style.transition = 'all .5s'
-      itemContainer.style.transitionTimingFunction = 'ease-out'
+    // MAKE ITEM
+    let item = document.createElement('div')
+    item.classList.add('item-drop')
+    item.style.position = 'relative'
+    item.id = `item-${amountOfRocksDestroyed}`
 
-      // MAKE ITEM
-      let item = document.createElement('div')
-      item.classList.add('item-drop')
-      item.style.position = 'relative'
-      item.id = `item-${amountOfRocksDestroyed}`
+    itemContainer.append(item)
 
-      itemContainer.append(item)
+    s('body').append(itemContainer)
 
-      s('body').append(itemContainer)
+    // SMALL ANIMATION FOR ITEM MOVEMENT
+    setTimeout(() => {
+      itemContainer.style.top = orePos.bottom + randomY + 'px'
+      itemContainer.style.left = (orePos.left + orePos.right)/2 + randomNumber + 'px'
+    }, 10)
 
-      // SMALL ANIMATION FOR ITEM MOVEMENT
+    item.addEventListener('click', () => {
+      let id = item.id
+      item.style.pointerEvents = 'none'
+      s(`#${id}`).classList.add('item-pickup-animation')
       setTimeout(() => {
-        itemContainer.style.top = orePos.bottom + randomY + 'px'
-        itemContainer.style.left = (orePos.left + orePos.right)/2 + randomNumber + 'px'
-      }, 10)
-
-      item.addEventListener('click', () => {
-        let id = item.id
-        item.style.pointerEvents = 'none'
-        s(`#${id}`).classList.add('item-pickup-animation')
-        setTimeout(() => {
-          let items = document.querySelectorAll(`#${id}`)
-          items.forEach((item) => {
-            Game.removeEl(item)
-          })
-          Game.pickUpItem(iLvl)
-        }, 800)
-      })
-    }
-  }
-
-  Game.generateRandomItem2 = (iLv) => {
-
-    let rarity, material, prefix, suffix, totalMult, selectedStats, name
-
-    let rarities = [
-      {
-        name: 'Common',
-        maxStat: 0,
-        mult: 1
-      }, {
-        name: 'Uncommon',
-        maxStat: 1,
-        mult: 1.5
-      }, {
-        name: 'Unique',
-        maxStat: 2,
-        mult: 2
-      }, {
-        name: 'Rare',
-        maxStat: 3,
-        mult: 3
-      }, {
-        name: 'Legendary',
-        maxStat: 4,
-        mult: 5
-      }
-    ]
-    let prefixes = [
-      {
-        name: 'Lucky',
-        stat: 'Luck',
-        mult: 1
-      }, {
-        name: 'Unlucky',
-        stat: 'Luck',
-        mult: -1
-      }, {
-        name: 'Fortuitous',
-        stat: 'Luck',
-        mult: 2
-      }, {
-        name: 'Poor',
-        stat: 'Luck',
-        mult: -1
-      }, {
-        name: 'Strong',
-        stat: 'Strength',
-        mult: 1
-      }, {
-        name: 'Weak',
-        stat: 'Strength',
-        mult: -1
-      }, {
-        name: 'Big',
-        stat: 'Strength',
-        mult: 1
-      }, {
-        name: 'Small',
-        stat: 'Strength',
-        mult: -1
-      }, {
-        name: 'Baby',
-        stat: 'Strength',
-        mult: -2
-      }, {
-        name: 'Gigantic',
-        stat: 'Strength',
-        mult: 2
-      },   {
-        name: 'Durable',
-        stat: 'Strength',
-        mult: 1
-      }, {
-        name: 'Frail',
-        stat: 'Strength',
-        mult: -1.5
-      }, {
-        name: 'Hard',
-        stat: 'Strength',
-        mult: 1
-      }, {
-        name: 'Weak',
-        stat: 'Strength',
-        mult: -1
-      }, {
-        name: 'Broken',
-        stat: 'Strength',
-        mult: -2
-      }, {
-        name: 'Shoddy',
-        stat: 'Strength',
-        mult: -1
-      }
-    ]
-    let materials = [
-      {
-        name: 'Wood',
-        mult: .5
-      }, {
-        name: 'Stone',
-        mult: 1.5
-      }, {
-        name: 'Iron',
-        mult: 3
-      }, {
-        name: 'Steel',
-        mult: 5
-      }, {
-        name: 'Diamond',
-        mult: 10
-      }
-    ]
-    let suffixes = [
-      {
-        name: 'of the Giant',
-        stat: 'Strength',
-        mult: 10
-      }, {
-        name: 'of the Leprechaun',
-        stat: 'Luck',
-        mult: 10
-      }
-    ]
-    let stats = [
-      {name: 'Strength', val: null},
-      {name: 'Dexterity', val: null},
-      {name: 'Intelligence', val: null},
-      {name: 'Luck', val: null},
-      {name: 'Charisma', val: null}
-    ]
-
-    let chooseRarity = () => {
-      let selectedRarity
-      let randomNum = Math.random()
-      if (randomNum >= 0) {
-        selectedRarity = rarities[0]
-      }
-      if (randomNum >= .5) {
-        selectedRarity = rarities[1]
-      }
-      if (randomNum >= .7) {
-        selectedRarity = rarities[2]
-      }
-      if (randomNum >= .9) {
-        selectedRarity = rarities[3]
-      }
-      if (randomNum >= .95) {
-        selectedRarity = rarities[4]
-      }
-      return selectedRarity
-    }
-    let chooseMaterial = () => {
-      let selectedMaterial
-      let randomNum = Math.random()
-      if (randomNum >= 0) {
-        selectedMaterial = materials[0]
-      }
-      if (randomNum >= .4) {
-        selectedMaterial = materials[1]
-      }
-      if (randomNum >= .7) {
-        selectedMaterial = materials[2]
-      }
-      if (randomNum >= .9) {
-        selectedMaterial = materials[3]
-      }
-      if (randomNum >= .95) {
-        selectedMaterial = materials[4]
-      }
-      return selectedMaterial
-    }
-    let choosePrefix = () => prefixes[Math.floor(Math.random() * prefixes.length)]
-    let chooseSuffix = () => suffixes[Math.floor(Math.random() * suffixes.length)]
-
-    rarity = chooseRarity()
-    material = chooseMaterial()
-    if (Math.random() >= .6 && rarity.name != 'Common') prefix = choosePrefix()
-    if (rarity.name == 'Rare' || rarity.name == 'Legendary') suffix = chooseSuffix()
-
-    // CALCULATE MULT
-    totalMult = 0
-    totalMult += rarity.mult
-    totalMult += material.mult
-    if (prefix) totalMult += prefix.mult
-    if (suffix) totalMult += suffix.mult
-    totalMult *= (iLv * .5)
-
-    // DETERMINE STATS
-    selectedStats = []
-    let absolutePrefix = 0
-    let absoluteSuffix = 0
-
-    for (let i=0; i<rarity.maxStat; i++) {
-      console.log('AMOUNT OF STATS:', rarity.maxStat)
-      if (prefix && absolutePrefix == 0) {
-        absolutePrefix = 1
-        for (let j=0; j<stats.length; j++) {
-          if (prefix.stat == stats[j].name) {
-            selectedStats.push(stats[j])
-          }
-        }
-      } else if (suffix && absoluteSuffix == 0) {
-        absoluteSuffix = 1
-        for (let j=0; j<stats.length; j++) {
-          if (suffix.stat == stats[j].name) {
-            selectedStats.push(stats[j])
-          }
-        }
-      } else {
-        selectedStats.push(stats[Math.floor(Math.random() * stats.length)])
-      }
-    }
-
-    // DETERMINE STAT VALUES
-    for (let i in selectedStats) {
-      selectedStats[i].val = Math.floor(Math.random() * (totalMult - (totalMult / 2) + 1) + (totalMult / 2))
-    }
-
-    // DAMAGE
-    let calculateDmg = iLv * totalMult
-
-    // BUILD IT OUT
-    if (suffix) {
-      if (prefix) {
-        name = `${prefix.name} ${material.name} Pickaxe ${suffix.name}`
-      } else {
-        name = `${material.name} Pickaxe ${suffix.name}`
-      }
-    } else {
-      if (prefix) {
-        name = `${prefix.name} ${material.name} Pickaxe`
-      } else {
-        name = `${material.name} Pickaxe`
-      }
-    }
-
-    let newItem = {
-      name: name,
-      rarity: rarity.name,
-      material: material.name,
-      stats: selectedStats,
-      iLv: iLv,
-      damage: calculateDmg,
-    }
-
-    console.log(newItem)
-
-    return newItem
+        let items = document.querySelectorAll(`#${id}`)
+        items.forEach((item) => {
+          Game.removeEl(item)
+        })
+        Game.pickUpItem(iLvl)
+      }, 800)
+    })
   }
 
   Game.generateRandomPickaxe = (iLvl) => {
@@ -1621,14 +1368,44 @@ Game.launch = () => {
       }
     }
 
+    console.log('generating pickaxe:', pickaxe)
     return pickaxe
   }
 
   Game.pickUpItem = (iLvl) => {
+    let amountOfRocksDestroyed = Game.state.stats.rocksDestroyed
     Game.state.stats.itemsPickedUp++
     if (Game.state.stats.itemsPickedUp == 1) Game.repositionAllElements = 1
-    Game.newItem = Game.generateRandomPickaxe(iLvl)
-    // Game.newItem = Game.generateRandomItem2(iLvl)
+
+    if (amountOfRocksDestroyed === 1) {
+      Game.newItem = {
+        name: 'Big Lead Pickaxe',
+        rarity: 'Common',
+        material: 'Lead',
+        stats: {
+          Strength: [1],
+          Charisma: [],
+          Luck: []
+        },
+        iLv: 2,
+        damage: 3,
+      }
+    } else if (amountOfRocksDestroyed === 4) {
+      Game.newItem = {
+        name: 'Lucky Iron Pickaxe',
+        rarity: 'Uncommon',
+        material: 'Iron',
+        stats: {
+          Strength: [2],
+          Charisma: [],
+          Luck: [4]
+        },
+        iLv: 4,
+        damage: 47
+      }
+    } else {
+      Game.newItem = Game.generateRandomPickaxe(iLvl)
+    }
     let itemModal = document.createElement('div')
     itemModal.classList.add('item-modal-container')
 
@@ -2039,7 +1816,7 @@ Game.launch = () => {
       }
     } else {
       Game.state.stats.rocksDestroyed++
-      Game.dropItem()
+      Game.checkDrop()
       // Game.gainXp(10)
       Game.playSound('explosion2')
       Game.state.oreHp = Math.pow(Game.state.oreHp, 1.09)
@@ -2641,7 +2418,6 @@ Game.launch = () => {
         column: middle + (Game.skills[i].position[1] * (skillSize + skillPadding))     // left
       }
 
-      console.log(Game.skills[i].locked)
       if (Game.skills[i].locked == 1) {
         str += `
           <div 
@@ -2707,10 +2483,7 @@ Game.launch = () => {
     for (let i in Game.skills) {
       let skill = Game.skills[i]
 
-      console.log(skill)
-
       if (skill.drawLines) {
-        console.log('yes')
 
         if (skill.locked) {
           ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)'
