@@ -12,7 +12,7 @@ let Item = function(item) {
   this.owned = item.owned || 0
   if (item.buyFunctions) this.buyFunctions = item.buyFunctions
 
-  this.buy = () => {
+  this.buy = (event) => {
 
     let price = this.price
     if (this.type == 'building') {

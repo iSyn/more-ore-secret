@@ -1023,8 +1023,6 @@ Game.launch = () => {
 
   Game.risingNumber = (evt, amount, type) => {
 
-    console.log('FIRING', evt, amount, type)
-
     if (Game.state.prefs.risingNumbers == true) {
       let mouseX = (s('.ore').getBoundingClientRect().left + s('.ore').getBoundingClientRect().right)/2
       let mouseY = (s('.ore').getBoundingClientRect().top + s('.ore').getBoundingClientRect().bottom)/2
@@ -1675,7 +1673,7 @@ Game.launch = () => {
         hasContent = 1
         str += `
           <div class="upgrade-item-container" style='background-color: #b56535'>
-            <div class="upgrade-item" id="${item.name.replace(/\s/g , "-")}" onclick='Game.sortedUpgrades[${i}].buy(); Game.hideTooltip();' onmouseover="Game.showTooltip(event, {name: '${item.name}', type: '${item.type}s'}); Game.playSound('itemhover')" onmouseout="Game.hideTooltip()" style='background: url(./assets/images/${item.pic}); background-size: 100%;'></div>
+            <div class="upgrade-item" id="${item.name.replace(/\s/g , "-")}" onclick='Game.sortedUpgrades[${i}].buy(event); Game.hideTooltip();' onmouseover="Game.showTooltip(event, {name: '${item.name}', type: '${item.type}s'}); Game.playSound('itemhover')" onmouseout="Game.hideTooltip()" style='background: url(./assets/images/${item.pic}); background-size: 100%;'></div>
           </div>
         `
       }
@@ -1702,7 +1700,7 @@ Game.launch = () => {
       if (Game.state.prefs.buyAmount != 'max') price = (item.basePrice * ((Math.pow(1.15, item.owned + Game.state.prefs.buyAmount) - Math.pow(1.15, item.owned)))/.15)
       if (item.hidden == 0) {
         str += `
-          <div class="button" onclick="Game.buildings[${i}].buy();" onmouseover="Game.showTooltip(event, {name: '${item.name}', type: '${item.type}s'}); Game.playSound('itemhover')" onmouseout="Game.hideTooltip()">
+          <div class="button" onclick="Game.buildings[${i}].buy(event);" onmouseover="Game.showTooltip(event, {name: '${item.name}', type: '${item.type}s'}); Game.playSound('itemhover')" onmouseout="Game.hideTooltip()">
             <div style='pointer-events: none' class="button-top">
               <div class="button-left">
                 <img src="./assets/images/${item.pic}" style='filter: brightness(100%); image-rendering: pixelated; image-rendering: -moz-crisp-edges'/>
@@ -3411,7 +3409,7 @@ Game.launch = () => {
     setTimeout(Game.logic, 1000/Game.state.prefs.fps)
   }
 
-  setInterval(() => {
+  setInterval((event) => {
     if (!Game.blurred) {
       if (Game.state.oresPerSecond) Game.risingNumber(event, Game.state.oresPerSecond, 'buildings')
     }
