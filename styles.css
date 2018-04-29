@@ -308,6 +308,18 @@ body {
   /*box-shadow: 0 0 10px gold;*/
 }
 
+.item-stats {
+  width: 80%;
+}
+
+.item-stats div {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-around;
+  border: 1px solid white;
+  padding: 10px;
+}
+
 .pickaxe-top, .pickaxe-bottom, .pickaxe-aura, .pickaxe-bg {
   position: absolute;
   image-rendering: -moz-crisp-edges;

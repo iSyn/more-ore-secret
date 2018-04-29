@@ -1371,8 +1371,8 @@ Game.launch = () => {
     let damage = iLvl * totalMultiplier
 
     // -------------------------------------- SHARPNESS AND HARDNESS
-    let sharpness = Math.random() * 100
-    let hardness = Math.random() * 100
+    let sharpness = Math.floor(Math.random() * 100)
+    let hardness = Math.floor(Math.random() * 100)
 
     // -------------------------------------- SOCKETS
     let sockets = 0
@@ -1471,6 +1471,12 @@ Game.launch = () => {
           <div class="item-stats">
             <p style='font-style: italic; font-size: small'>${Game.newItem.rarity}</p>
             <br/>
+            <div>
+              <p>Sharpness: ${Game.newItem.sharpness}</p>
+              <p>Hardness: ${Game.newItem.hardness}</p>
+            </div>
+            <br/>
+            
             <p>Item Level: ${Game.newItem.iLv}</p>
             <p>Damage: ${beautify(Game.newItem.damage)}</p>
             `
