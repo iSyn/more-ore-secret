@@ -24,8 +24,8 @@ let Skill = function(skill) {
                     Game.playSound('skill-lvl-up')
                     document.querySelector('.available-sp').innerHTML = `Available Sp: ${Game.state.player.generation.availableSp}`
                     if (this.onLvl) {
-                        if (this.onLvl.addPermaOpC) Game.state.permanentOpcMulti += this.onLvl.addPermaOpC
-                        if (this.onLvl.addPermaOpS) Game.state.permanentOpsMulti += this.onLvl.addPermaOpS
+                        if (this.onLvl.addPermaOpC) Game.state.permanent.opcMulti += this.onLvl.addPermaOpC
+                        if (this.onLvl.addPermaOpS) Game.state.permanent.opsMulti += this.onLvl.addPermaOpS
                         Game.calculateOpS()
                         Game.calculateOpC()
                     }

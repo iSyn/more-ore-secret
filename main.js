@@ -166,9 +166,12 @@ Game.launch = () => {
     lastLogin: null,
     canRefine: false,
 
-    permanentOpsMulti: 0,
-    permanentOpcMulti: 0,
-    permanentWeakHitMulti: 0,
+    permanent: {
+      maxSockets: 1,
+      opsMulti: 0,
+      opcMulti: 0,
+      weakHitMulti: 0
+    },
 
     player: {
       generation: {
@@ -837,7 +840,7 @@ Game.launch = () => {
     opc += (opc * Game.state.opcMulti)
 
     // ADD PERMA OPC MULTI
-    opc += (opc * Game.state.permanentOpcMulti)
+    opc += (opc * Game.state.permanent.opcMulti)
 
     // ADD GENERATION BONUS
     // opc += (opc * (Game.state.player.generation.lv * 1))
@@ -867,7 +870,7 @@ Game.launch = () => {
     ops += (ops * Game.state.opsMulti)
 
     // ADD PERMA OPS MULTI
-    ops += (ops * Game.state.permanentOpsMulti)
+    ops += (ops * Game.state.permanent.opsMulti)
 
     Game.state.oresPerSecond = ops
     Game.recalculateOpS = 0
@@ -957,7 +960,7 @@ Game.launch = () => {
     if (type) {
       if (type == 'weak-spot') {
         Game.getCombo('hit')
-        amount *= (Game.state.weakHitMulti + Game.state.permanentWeakHitMulti)
+        amount *= (Game.state.weakHitMulti + Game.state.permanent.weakHitMulti)
         Game.playSound('ore-crit-hit')
         Game.risingNumber(amount, 'weak-hit', event)
         Game.state.stats.currentWeakSpotHits++
@@ -1301,7 +1304,7 @@ Game.launch = () => {
     }
     totalMultiplier += selectedRarity.multiplier
 
-    // --------------------------------------  SELECT PREFIX
+    // -------------------------------------- SELECT PREFIX
     randomNum = Math.random()
     let selectedPrefix
     if (selectedRarity.stat_amount > 0) {
@@ -1341,7 +1344,7 @@ Game.launch = () => {
     pickaxeName += ` ${selectedMaterial.name} Pickaxe`
     totalMultiplier += selectedMaterial.multiplier
 
-    // --------------------------------------  SELECT SUFFIX
+    // -------------------------------------- SELECT SUFFIX
     randomNum = Math.random()
     let selectedSuffix
     if (selectedRarity.multiplier >= 3.5) {
@@ -1364,14 +1367,24 @@ Game.launch = () => {
 
     totalMultiplier *= (iLvl * .5)
 
-    // --------------------------------------  DAMAGE
+    // -------------------------------------- DAMAGE
     let damage = iLvl * totalMultiplier
 
-    //  -------------------------------------- SHARPNESS AND HARDNESS
+    // -------------------------------------- SHARPNESS AND HARDNESS
     let sharpness = Math.random() * 100
     let hardness = Math.random() * 100
 
-    // --------------------------------------  SELECT AND BUILD BONUS STATS
+    // -------------------------------------- SOCKETS
+    let sockets = 0
+    let socketsRand = Math.random()
+    if (socketsRand <= .5) sockets++
+    if (socketsRand <= .3) sockets++
+    if (socketsRand <= .15) sockets++
+    if (socketsRand <= .05) sockets++
+    if (socketsRand <= .01) sockets++
+    if (socketsRand <= .005) sockets++
+
+    // -------------------------------------- SELECT AND BUILD BONUS STATS
     let pickaxeStats = {
       Strength: [],
       Charisma: [],
@@ -1402,7 +1415,10 @@ Game.launch = () => {
       material: selectedMaterial.name,
       stats: pickaxeStats,
       iLv: iLvl,
-      damage: damage,
+      damage,
+      sharpness,
+      hardness,
+      sockets,
       raw_info: {
         rarity: selectedRarity,
         prefix: selectedPrefix,
@@ -1433,6 +1449,12 @@ Game.launch = () => {
           <h1 style='font-family: "Germania One"; font-size: 60px;'>New Pickaxe</h1>
           <h2 class='${Game.newItem.rarity}' style='font-size: xx-large'>${Game.newItem.name}</h2>
           <div class="item-modal-img">
+            <div className="item-modal-sockets-container">
+              `
+
+              
+              str += `
+            </div>
             <div class="pickaxe-top" style='background: url("./assets/images/pickaxe-top-${Game.newItem.material.toLowerCase()}.png"); background-size: 100% 100%;'></div>
             <div class="pickaxe-bottom"></div>
             `
@@ -3207,7 +3229,7 @@ Game.launch = () => {
 
       if (selectedAchievement.reward) {
         if (selectedAchievement.reward.increaseWeakHitMulti) {
-          Game.state.permanentWeakHitMulti += selectedAchievement.reward.increaseWeakHitMulti
+          Game.state.permanent.weakHitMulti += selectedAchievement.reward.increaseWeakHitMulti
         }
         if (selectedAchievement.reward.building) {
           Game.select(Game.buildings, selectedAchievement.reward.building[0]).production *= selectedAchievement.reward.building[1]
