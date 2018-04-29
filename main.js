@@ -500,6 +500,26 @@ Game.launch = () => {
       JSON.parse(localStorage.getItem('quests')).forEach((quest) => quests.push(quest))
       quests.forEach((quest) => new Quest(quest))
 
+	  
+	  // SHOW WELCOME TEXT
+    let welcomeTxt = document.createElement('div')
+    welcomeTxt.classList.add('wrapper')
+    welcomeTxt.innerHTML = `
+      <div class="welcome-text" onClick='Game.removeEl(document.querySelector(".wrapper"));'>
+        <h1>Welcome to More Ore Alpha v.0.9</h1>
+        <br />
+        <p>After a long hiatus from programming, I am finally excited to work on More Ore again</p>
+        <p>Since this game is in its early alpha stages, current features might be changed or scrapped in the final version.</p>
+        <p>If you have any interesting gameplay ideas, let me know! Post in the comments or email me!</p>
+        <p style='color: red;'>Game is only compatible in Google Chrome as of now</p>
+        <br />
+        <p style='text-align: center;'>[ Press ESC or click to close window ]</p>
+      </div>
+    `
+
+    s('body').append(welcomeTxt)
+	
+	
       // GAIN AWAY INCOME
       if (Game.state.oresPerSecond > 0 && Game.state.lastLogin) Game.earnOfflineGain()
 
@@ -539,23 +559,7 @@ Game.launch = () => {
       }
     }
 
-    // SHOW WELCOME TEXT
-    let welcomeTxt = document.createElement('div')
-    welcomeTxt.classList.add('wrapper')
-    welcomeTxt.innerHTML = `
-      <div class="welcome-text" onClick='Game.removeEl(document.querySelector(".wrapper"));'>
-        <h1>Welcome to More Ore Alpha v.0.9</h1>
-        <br />
-        <p>After a long hiatus from programming, I am finally excited to work on More Ore again</p>
-        <p>Since this game is in its early alpha stages, current features might be changed or scrapped in the final version.</p>
-        <p>If you have any interesting gameplay ideas, let me know! Post in the comments or email me!</p>
-        <p style='color: red;'>Game is only compatible in Google Chrome as of now</p>
-        <br />
-        <p style='text-align: center;'>[ Press ESC or click to close window ]</p>
-      </div>
-    `
-
-    s('body').append(welcomeTxt)
+   
 
     // PREREQUISITES
     Game.updatePercentage(0)
