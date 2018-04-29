@@ -3,7 +3,45 @@
 ================= */
 let s = ((el) => {return document.querySelector(el)})
 
-let beautify = (num) => {
+let beautify = (number) => {
+
+  var SI_PREFIXES = [
+    "", // number is less than 1,000
+    "Thousand", // number is in the thousands
+    "Million", 
+    "Billion", 
+    "Trillion", 
+    "Quadrillion", 
+    "Quintillion", 
+    "Sextillion", 
+    "Alotillion", 
+    "Waytoomanyillion", 
+    "F*ckloadillion",
+    "F*cktonillion"
+  ];
+
+  if (!number) return 0;
+  if (number < 10){
+      if (Math.round(number) === number) return number;
+      return number.toFixed(1);
+  }
+  // what tier? (determines SI prefix)
+  var tier = Math.log10(number) / 3 | 0;
+
+  // if zero, we don't need a prefix
+  if (tier === 0) return Math.round(number)
+  // if (tier === 1) return Math.round(number)
+
+  // get prefix and determine scale
+  var prefix = SI_PREFIXES[tier];
+  var scale = Math.pow(10, tier * 3);
+
+  // scale the number
+  var scaled = number / scale;
+
+  // format number and add prefix as suffix
+  return parseFloat(scaled.toFixed(2)) + " " + prefix;
+
 
   if (num < 1) {
     return num.toFixed(1)
@@ -1247,7 +1285,7 @@ Game.launch = () => {
       ['of the Beggar', 'of the Leprechaun']
     ]
 
-    // SELECT RARITY
+    // -------------------------------------- SELECT RARITY
     let randomNum = Math.random()
     let selectedRarity
     if (randomNum >= 0) selected = allRarities[0]   // 45%  Common
@@ -1263,7 +1301,7 @@ Game.launch = () => {
     }
     totalMultiplier += selectedRarity.multiplier
 
-    // SELECT PREFIX
+    // --------------------------------------  SELECT PREFIX
     randomNum = Math.random()
     let selectedPrefix
     if (selectedRarity.stat_amount > 0) {
@@ -1303,7 +1341,7 @@ Game.launch = () => {
     pickaxeName += ` ${selectedMaterial.name} Pickaxe`
     totalMultiplier += selectedMaterial.multiplier
 
-    // SELECT SUFFIX
+    // --------------------------------------  SELECT SUFFIX
     randomNum = Math.random()
     let selectedSuffix
     if (selectedRarity.multiplier >= 3.5) {
@@ -1326,10 +1364,14 @@ Game.launch = () => {
 
     totalMultiplier *= (iLvl * .5)
 
-    // DAMAGE
+    // --------------------------------------  DAMAGE
     let damage = iLvl * totalMultiplier
 
-    // SELECT AND BUILD BONUS STATS
+    //  -------------------------------------- SHARPNESS AND HARDNESS
+    let sharpness = Math.random() * 100
+    let hardness = Math.random() * 100
+
+    // --------------------------------------  SELECT AND BUILD BONUS STATS
     let pickaxeStats = {
       Strength: [],
       Charisma: [],
