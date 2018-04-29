@@ -6,17 +6,18 @@ let Item = function(item) {
   if (item.production) this.production = item.production
   this.desc = item.desc
   this.fillerQuote = item.fillerQuote
-  item.price ? this.price = item.price : this.price = item.basePrice
-  if (item.basePrice) this.basePrice = item.basePrice
+  item.price ? this.price = BigNumber(item.price) : this.price = BigNumber(item.basePrice)
+  if (item.basePrice) this.basePrice = BigNumber(item.basePrice)
   this.hidden = item.hidden
   this.owned = item.owned || 0
   if (item.buyFunctions) this.buyFunctions = item.buyFunctions
 
   this.buy = () => {
 
-    let price = this.price
+    let price = BigNumber(this.price)
     if (this.type == 'building') {
-      price = (this.basePrice * ((Math.pow(1.15, this.owned + Game.state.prefs.buyAmount) - Math.pow(1.15, this.owned)))/.15)
+      //price = (this.basePrice * ((Math.pow(1.15, this.owned + Game.state.prefs.buyAmount) - Math.pow(1.15, this.owned)))/.15)
+      price = (this.basePrice * 1.15).exponentiatedBy(this.owned+Game.state.prefs.buyAmount)
     }
 
     if (Game.state.ores >= price) {
@@ -31,7 +32,7 @@ let Item = function(item) {
       // this.owned
       this.type == 'building' ? this.owned += Game.state.prefs.buyAmount : this.owned++
       Game.buyFunction(this)
-      this.price = this.basePrice * Math.pow(1.15, this.owned)
+      this.price = (this.basePrice * 1.15).exponentiatedBy(this.owned)
       Game.recalculateOpC = 1
       Game.recalculateOpS = 1
       Game.rebuildStore = 1
@@ -623,10 +624,3 @@ let items = [
     }
   },
 ]
-
-
-
-
-
-
-
