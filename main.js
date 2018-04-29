@@ -12,7 +12,7 @@ let beautify = (num) => {
     return Math.round(num).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); //found on https://stackoverflow.com/questions/2901102/how-to-print-a-number-with-commas-as-thousands-separators-in-javascript
   } else {
 	  
-	  let suffixes = ['ones','thousand',' Million',' Billion',' Trillion',' Quadrillion',' Quintillion',' Sextillion',' Alotillion',' Waytoomanyillion',' F*ckloadillion',' F*ckloadillion',' F*cktonillion']
+	  let suffixes = ['ones','thousand',' Million',' Billion',' Trillion',' Quadrillion',' Quintillion',' Sextillion',' Alotillion',' Waytoomanyillion',' F*ckloadillion',' F*ckloadillion',' F*cktonillion'];
 	  
 	  let length = (Math.log10(num)+1);//find length of number
 	  let suffixIndex = Math.floor(length/3);
