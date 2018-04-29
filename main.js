@@ -6,7 +6,7 @@ let s = ((el) => {return document.querySelector(el)})
 let beautify = (num) => {
 
   if (num < 1) {
-    return num.toFixed(1);
+    return num.toFixed(1)
   }
   if (num < 1000000) {
     return Math.round(num).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); //found on https://stackoverflow.com/questions/2901102/how-to-print-a-number-with-commas-as-thousands-separators-in-javascript
@@ -16,7 +16,7 @@ let beautify = (num) => {
 	  
 	  let length = Math.floor(Math.log10(num)+1);//find length of number
 	  let suffixIndex = Math.floor(length/3);
-	  let reducedNum = num/(Math.Pow(10,(length - 4)));//reduce number to a number less than 1000 
+	  let reducedNum = num/(Math.pow(10,(length - 4)));//reduce number to a number less than 1000 
 	  let decimalPlace = (length - 4)%3;//determines how many decimal places to use
 	  if(suffixNum > suffixes.length)//if out of bounds of index convert to engineering notation 
 	  {
@@ -24,37 +24,6 @@ let beautify = (num) => {
 		  return (reducedNum + ' e^' + engineeringPower);
 	  }
 	  return reducedNum.toFixed(decimalPlace+1)+suffixes[suffixIndex];
-	  
-    /*if (num >= 1000000000000000000000000000000000) {
-      return (num/1000000000000000000000000000000000).toFixed(0) + ' F*cktonillion'
-    }
-    if (num >= 1000000000000000000000000000000) {
-      return (num/1000000000000000000000000000000).toFixed(1) + ' F*ckloadillion'
-    }
-    if (num >= 1000000000000000000000000000) {
-      return (num/1000000000000000000000000000).toFixed(1) + ' Waytoomanyillion'
-    }
-    if (num >= 1000000000000000000000000) {
-      return (num/1000000000000000000000000).toFixed(1) + ' Alotillion'
-    }
-    if (num >= 1000000000000000000000) {
-      return (num/1000000000000000000000).toFixed(1) + ' Sextillion'
-    }
-    if (num >= 1000000000000000000) {
-      return (num/1000000000000000000).toFixed(1) + ' Quintillion'
-    }
-    if (num >= 1000000000000000) {
-      return (num/1000000000000000).toFixed(1) + ' Quadrillion'
-    }
-    if (num >= 1000000000000) {
-      return (num/1000000000000).toFixed(1) + ' Trillion'
-    }
-    if (num >= 1000000000) {
-      return (num/1000000000).toFixed(1) + ' Billion'
-    }
-    if (num >= 1000000) {
-      return (num/1000000).toFixed(1) + ' Million'
-    }*/
   }
 }
 
@@ -1391,35 +1360,10 @@ Game.launch = () => {
     Game.state.stats.itemsPickedUp++
     if (Game.state.stats.itemsPickedUp == 1) Game.repositionAllElements = 1
 
-    if (amountOfRocksDestroyed === 1) {
-      Game.newItem = {
-        name: 'Big Lead Pickaxe',
-        rarity: 'Common',
-        material: 'Lead',
-        stats: {
-          Strength: [1],
-          Charisma: [],
-          Luck: []
-        },
-        iLv: 2,
-        damage: 3,
-      }
-    } else if (amountOfRocksDestroyed === 4) {
-      Game.newItem = {
-        name: 'Lucky Iron Pickaxe',
-        rarity: 'Uncommon',
-        material: 'Iron',
-        stats: {
-          Strength: [2],
-          Charisma: [],
-          Luck: [4]
-        },
-        iLv: 4,
-        damage: 47
-      }
-    } else {
-      Game.newItem = Game.generateRandomPickaxe(iLvl)
-    }
+    if (amountOfRocksDestroyed === 1) { Game.newItem = { name: 'Big Lead Pickaxe', rarity: 'Common', material: 'Lead', stats: { Strength: [1], Charisma: [], Luck: [] }, iLv: 2, damage: 3, }
+    } else if (amountOfRocksDestroyed === 4) { Game.newItem = { name: 'Lucky Iron Pickaxe', rarity: 'Uncommon', material: 'Iron', stats: { Strength: [2], Charisma: [], Luck: [4] }, iLv: 4, damage: 47 }
+    } else { Game.newItem = Game.generateRandomPickaxe(iLvl) }
+
     let itemModal = document.createElement('div')
     itemModal.classList.add('item-modal-container')
 
