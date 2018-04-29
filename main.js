@@ -8,14 +8,14 @@ let beautify = (number) => {
   var SI_PREFIXES = [
     "", // number is less than 1,000
     "Thousand", // number is in the thousands
-    "Million", 
-    "Billion", 
-    "Trillion", 
-    "Quadrillion", 
-    "Quintillion", 
-    "Sextillion", 
-    "Alotillion", 
-    "Waytoomanyillion", 
+    "Million",
+    "Billion",
+    "Trillion",
+    "Quadrillion",
+    "Quintillion",
+    "Sextillion",
+    "Alotillion",
+    "Waytoomanyillion",
     "F*ckloadillion",
     "F*cktonillion"
   ];
@@ -1580,6 +1580,14 @@ Game.launch = () => {
       let item = Game.buildings[i]
       let price = Game.buildings[i].price
       if (Game.state.prefs.buyAmount != 'max') price = (item.basePrice * ((Math.pow(1.15, item.owned + Game.state.prefs.buyAmount) - Math.pow(1.15, item.owned)))/.15)
+      else {
+          let tempPrice = price
+          Game.state.prefs.buyAmount = 0;
+          while(tempPrice < Game.state.ores){
+              buyAmount++
+              tempPrice = (item.basePrice * ((Math.pow(1.15, item.owned + Game.state.prefs.buyAmount) - Math.pow(1.15, item.owned)))/.15)
+          }
+      }
       if (item.hidden == 0) {
         str += `
           <div class="button" onclick="Game.buildings[${i}].buy();" onmouseover="Game.showTooltip({name: '${item.name}', type: '${item.type}s'}, event); Game.playSound('itemhover')" onmouseout="Game.hideTooltip()">
@@ -2438,27 +2446,27 @@ Game.launch = () => {
 
       if (Game.skills[i].locked == 1) {
         str += `
-          <div 
+          <div
             onclick='Game.skills[${i}].levelUp()'
-            onmouseover='Game.showTooltip({type: "skill", name: "${Game.skills[i].name}"})' 
-            onmouseout='Game.hideTooltip()' 
-            class='skill skill-${Game.skills[i].className}' 
+            onmouseover='Game.showTooltip({type: "skill", name: "${Game.skills[i].name}"})'
+            onmouseout='Game.hideTooltip()'
+            class='skill skill-${Game.skills[i].className}'
             style='left: ${pos.column}px; top: ${pos.generation}px; background: url("./assets/images/skill_${Game.skills[i].img}"); opacity: .5'
           ></div>
         `
       } else {
         str += `
-          <div 
+          <div
             onclick='Game.skills[${i}].levelUp()'
-            onmouseover='Game.showTooltip({type: "skill", name: "${Game.skills[i].name}"})' 
-            onmouseout='Game.hideTooltip()' 
-            class='skill skill-${Game.skills[i].className}' 
+            onmouseover='Game.showTooltip({type: "skill", name: "${Game.skills[i].name}"})'
+            onmouseout='Game.hideTooltip()'
+            class='skill skill-${Game.skills[i].className}'
             style='left: ${pos.column}px; top: ${pos.generation}px; background: url("./assets/images/skill_${Game.skills[i].img}")'
           ></div>
         `
       }
     }
-    
+
     return str
   }
 
@@ -2476,7 +2484,7 @@ Game.launch = () => {
 
       <div class="skill-tree-container-bottom">
     `
-        
+
     str += Game.buildSkillTree()
 
     str += `</div>`
