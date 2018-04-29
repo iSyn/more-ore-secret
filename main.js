@@ -166,9 +166,12 @@ Game.launch = () => {
     lastLogin: null,
     canRefine: false,
 
-    permanentOpsMulti: 0,
-    permanentOpcMulti: 0,
-    permanentWeakHitMulti: 0,
+    permanent: {
+      maxSockets: 2,
+      opsMulti: 0,
+      opcMulti: 0,
+      weakHitMulti: 0
+    },
 
     player: {
       generation: {
@@ -177,13 +180,23 @@ Game.launch = () => {
         xpNeeded: 100,
         availableSp: 0
       },
+
       pickaxe: {
-        name: 'Beginners Wood Pickaxe',
-        rarity: 'Common',
-        iLv: 1,
-        material: 'Wood',
-        damage: 1
+        name: 'Beginners Wood Pickaxe', 
+        rarity: 'Common', 
+        material: 'Wood', 
+        sockets: 0, 
+        sharpness: 100,
+        hardness: 100,
+        stats: { 
+          Strength: [], 
+          Charisma: [], 
+          Luck: [] 
+        }, 
+        iLv: 1, 
+        damage: 1, 
       },
+
       skills: {
         spSection1: 0,
         spSection2: 0,
@@ -837,7 +850,7 @@ Game.launch = () => {
     opc += (opc * Game.state.opcMulti)
 
     // ADD PERMA OPC MULTI
-    opc += (opc * Game.state.permanentOpcMulti)
+    opc += (opc * Game.state.permanent.opcMulti)
 
     // ADD GENERATION BONUS
     // opc += (opc * (Game.state.player.generation.lv * 1))
@@ -867,7 +880,7 @@ Game.launch = () => {
     ops += (ops * Game.state.opsMulti)
 
     // ADD PERMA OPS MULTI
-    ops += (ops * Game.state.permanentOpsMulti)
+    ops += (ops * Game.state.permanent.opsMulti)
 
     Game.state.oresPerSecond = ops
     Game.recalculateOpS = 0
@@ -957,13 +970,15 @@ Game.launch = () => {
     if (type) {
       if (type == 'weak-spot') {
         Game.getCombo('hit')
-        amount *= (Game.state.weakHitMulti + Game.state.permanentWeakHitMulti)
+        amount *= (Game.state.player.pickaxe.sharpness/100)
+        amount *= (Game.state.weakHitMulti + Game.state.permanent.weakHitMulti)
         Game.playSound('ore-crit-hit')
         Game.risingNumber(amount, 'weak-hit', event)
         Game.state.stats.currentWeakSpotHits++
         Game.repositionAllElements = 1
       }
     } else {
+      amount *= (Game.state.player.pickaxe.hardness/100)
       Game.getCombo()
       Game.playSound('ore-hit')
       Game.risingNumber(amount, event)
@@ -1301,7 +1316,7 @@ Game.launch = () => {
     }
     totalMultiplier += selectedRarity.multiplier
 
-    // --------------------------------------  SELECT PREFIX
+    // -------------------------------------- SELECT PREFIX
     randomNum = Math.random()
     let selectedPrefix
     if (selectedRarity.stat_amount > 0) {
@@ -1341,7 +1356,7 @@ Game.launch = () => {
     pickaxeName += ` ${selectedMaterial.name} Pickaxe`
     totalMultiplier += selectedMaterial.multiplier
 
-    // --------------------------------------  SELECT SUFFIX
+    // -------------------------------------- SELECT SUFFIX
     randomNum = Math.random()
     let selectedSuffix
     if (selectedRarity.multiplier >= 3.5) {
@@ -1364,14 +1379,34 @@ Game.launch = () => {
 
     totalMultiplier *= (iLvl * .5)
 
-    // --------------------------------------  DAMAGE
+    // -------------------------------------- DAMAGE
     let damage = iLvl * totalMultiplier
 
-    //  -------------------------------------- SHARPNESS AND HARDNESS
-    let sharpness = Math.random() * 100
-    let hardness = Math.random() * 100
+    // -------------------------------------- SHARPNESS AND HARDNESS
+    // Math.random() * (max - min) + min;
+    let minRange = 70
+    let maxRange = 150
+    let sharpness = Math.floor(Math.random() * (maxRange - minRange) + minRange)
+    let hardness = Math.floor(Math.random() * (maxRange - minRange) + minRange)
+    // // if both hardness and sharpness are low, up one or the other
+    // if (hardness <= 70 && sharpness <= 70) {
+    //   if (Math.random() > .5) { sharpness += Math.floor(Math.random() * (60 - 30) + 30) }
+    //   else { hardness += Math.floor(Math.random() * (60 - 30) + 30) }
+    // }
 
-    // --------------------------------------  SELECT AND BUILD BONUS STATS
+    // -------------------------------------- SOCKETS
+    let sockets = 0
+    let socketsRand = Math.random()
+    if (socketsRand <= .4) sockets++      // 40% chance for 1 socket
+    if (socketsRand <= .25) sockets++     // 25% chance for 2 sockets
+    if (socketsRand <= .15) sockets++     // 15% chance for 3 sockets
+    if (socketsRand <= .05) sockets++     // 5% chance for 4 sockets
+    if (socketsRand <= .01) sockets++     // 1% chance for 5 sockets
+    if (socketsRand <= .005) sockets++    // .5% chance for 6 sockets
+
+    if (sockets > Game.state.permanent.maxSockets) sockets = Game.state.permanent.maxSockets
+
+    // -------------------------------------- SELECT AND BUILD BONUS STATS
     let pickaxeStats = {
       Strength: [],
       Charisma: [],
@@ -1402,7 +1437,10 @@ Game.launch = () => {
       material: selectedMaterial.name,
       stats: pickaxeStats,
       iLv: iLvl,
-      damage: damage,
+      damage,
+      sharpness,
+      hardness,
+      sockets,
       raw_info: {
         rarity: selectedRarity,
         prefix: selectedPrefix,
@@ -1420,9 +1458,42 @@ Game.launch = () => {
     Game.state.stats.itemsPickedUp++
     if (Game.state.stats.itemsPickedUp == 1) Game.repositionAllElements = 1
 
-    if (amountOfRocksDestroyed === 1) { Game.newItem = { name: 'Big Lead Pickaxe', rarity: 'Common', material: 'Lead', stats: { Strength: [1], Charisma: [], Luck: [] }, iLv: 2, damage: 3, }
-    } else if (amountOfRocksDestroyed === 4) { Game.newItem = { name: 'Lucky Iron Pickaxe', rarity: 'Uncommon', material: 'Iron', stats: { Strength: [2], Charisma: [], Luck: [4] }, iLv: 4, damage: 47 }
-    } else { Game.newItem = Game.generateRandomPickaxe(iLvl) }
+    let firstPick = {
+      name: 'Sharp but Flimsy Cardboard Pickaxe', 
+      rarity: 'Uncommon', 
+      material: 'Cardboard', 
+      sockets: 1, 
+      sharpness: 127,
+      hardness: 24,
+      stats: { 
+        Strength: [2, 1], 
+        Charisma: [], 
+        Luck: [] 
+      }, 
+      iLv: 2, 
+      damage: 3, 
+    }
+
+    let secondPick = {
+      name: 'Dull Plastic Pickaxe', 
+      rarity: 'Common', 
+      material: 'Plastic', 
+      sockets: 0, 
+      sharpness: 114,
+      hardness: 96,
+      stats: { 
+        Strength: [], 
+        Charisma: [], 
+        Luck: [1] 
+      }, 
+      iLv: 4, 
+      damage: 47, 
+    }
+
+    // Manually set the first few pickaxes for a more easier early-early game
+    if (amountOfRocksDestroyed === 1) { Game.newItem = firstPick }
+    else if (amountOfRocksDestroyed === 4) { Game.newItem = secondPick }
+    else { Game.newItem = Game.generateRandomPickaxe(iLvl) }
 
     let itemModal = document.createElement('div')
     itemModal.classList.add('item-modal-container')
@@ -1433,6 +1504,13 @@ Game.launch = () => {
           <h1 style='font-family: "Germania One"; font-size: 60px;'>New Pickaxe</h1>
           <h2 class='${Game.newItem.rarity}' style='font-size: xx-large'>${Game.newItem.name}</h2>
           <div class="item-modal-img">
+            <div class="item-modal-sockets-container">
+              `
+              for(i = 0; i < Game.newItem.sockets; i++) {
+                str += `<div class='item-modal-socket' onmouseover='Game.showTooltip({type: "help", text: "Empty socket"})' onmouseout='Game.hideTooltip()'></div>`
+              }
+              str += `
+            </div>
             <div class="pickaxe-top" style='background: url("./assets/images/pickaxe-top-${Game.newItem.material.toLowerCase()}.png"); background-size: 100% 100%;'></div>
             <div class="pickaxe-bottom"></div>
             `
@@ -1445,6 +1523,12 @@ Game.launch = () => {
           <div class="item-stats">
             <p style='font-style: italic; font-size: small'>${Game.newItem.rarity}</p>
             <br/>
+            <div>
+              <p onmouseover='Game.showTooltip({type: "help", text: "Sharpness is the % damage dealt on weak spot hits"})' onmouseout='Game.hideTooltip()' >Sharpness: ${Game.newItem.sharpness}%</p>
+              <p onmouseover='Game.showTooltip({type: "help", text: "Hardness is the % damage dealt on regular hits"})' onmouseout='Game.hideTooltip()'>Hardness: ${Game.newItem.hardness}%</p>
+            </div>
+            <br/>
+            
             <p>Item Level: ${Game.newItem.iLv}</p>
             <p>Damage: ${beautify(Game.newItem.damage)}</p>
             `
@@ -1479,6 +1563,15 @@ Game.launch = () => {
           <h1 style='font-family: "Germania One"; font-size: 30px;'>Equipped</h1>
           <h2 class='${Game.state.player.pickaxe.rarity}' style='font-size: large'>${Game.state.player.pickaxe.name}</h2>
           <div class="item-modal-img-small">
+
+            <div class="item-modal-sockets-container-small">
+              `
+              for(i = 0; i < Game.state.player.pickaxe.sockets; i++) {
+                str += `<div class='item-modal-socket-small' onmouseover='Game.showTooltip({type: "help", text: "Empty socket"})' onmouseout='Game.hideTooltip()'></div>`
+              }
+              str += `
+            </div>
+
             <div class="pickaxe-top-small ${Game.state.player.pickaxe.material}" style='background: url("./assets/images/pickaxe-top-${Game.state.player.pickaxe.material.toLowerCase()}.png"); background-size: 100% 100%;'></div>
             <div class="pickaxe-bottom-small"></div>
             `
@@ -1490,6 +1583,11 @@ Game.launch = () => {
           </div>
           <div class="item-stats">
               <p style='font-style: italic; font-size: small'>${Game.state.player.pickaxe.rarity}</p>
+              <br/>
+              <div>
+                <p onmouseover='Game.showTooltip({type: "help", text: "Sharpness is the % damage dealt on weak spot hits"})' onmouseout='Game.hideTooltip()' >Sharpness ${Game.state.player.pickaxe.sharpness}%</p>
+                <p onmouseover='Game.showTooltip({type: "help", text: "Hardness is the % damage dealt on regular hits"})' onmouseout='Game.hideTooltip()'>Hardness ${Game.state.player.pickaxe.hardness}%</p>
+              </div>
               <br/>
               <p>Item Level: ${Game.state.player.pickaxe.iLv}</p>
               <p>Damage: ${beautify(Game.state.player.pickaxe.damage)}</p>
@@ -2031,6 +2129,15 @@ Game.launch = () => {
       }
 
       tooltip.innerHTML = str
+    }
+
+    if (obj.type == 'help') {
+      tooltip.style.width = 'auto'
+      tooltip.style.left = event.clientX - tooltip.getBoundingClientRect().width/2 + 'px'
+      tooltip.style.top = event.clientY + 20 + 'px'
+      tooltip.innerHTML = `
+        <p>${obj.text}</p>
+      `
     }
 
     tooltip.style.animation = 'tooltip .3s'
@@ -3207,7 +3314,7 @@ Game.launch = () => {
 
       if (selectedAchievement.reward) {
         if (selectedAchievement.reward.increaseWeakHitMulti) {
-          Game.state.permanentWeakHitMulti += selectedAchievement.reward.increaseWeakHitMulti
+          Game.state.permanent.weakHitMulti += selectedAchievement.reward.increaseWeakHitMulti
         }
         if (selectedAchievement.reward.building) {
           Game.select(Game.buildings, selectedAchievement.reward.building[0]).production *= selectedAchievement.reward.building[1]
