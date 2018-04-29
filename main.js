@@ -18,7 +18,7 @@ let beautify = (num) => {
 	  let suffixIndex = Math.floor(length/3);
 	  let reducedNum = num/(Math.pow(10,(length - 4)));//reduce number to a number less than 1000 
 	  let decimalPlace = (length - 4)%3;//determines how many decimal places to use
-	  if(suffixNum > suffixes.length)//if out of bounds of index convert to engineering notation 
+	  if(suffixIndex > suffixes.length)//if out of bounds of index convert to engineering notation 
 	  {
 		  let engineeringPower = (length - 3)+decimalPlace;
 		  return (reducedNum + ' e^' + engineeringPower);
