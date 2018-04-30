@@ -2161,6 +2161,7 @@ li {
   visibility: hidden;
   z-index: 2;
   transition: all .3s;
+  display: none;
 }
 
 .inventory-container__right:hover {
