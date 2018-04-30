@@ -2051,15 +2051,15 @@ li {
   position: absolute;
   height: 30px;
   width: 26px;
-  padding: 15px;
-  /* border: 4px solid white; */
+  padding: 25px;
+  border: 4px solid white;
   cursor: pointer;
   image-rendering: -moz-crisp-edges;
   image-rendering: pixelated;
   background: url('./assets/images/misc_bonus.png');
   background-repeat: no-repeat;
   background-position: center;
-  animation: falling 5s linear infinite;
+  animation: falling 3s linear infinite;
   animation-fill-mode: forwards;
 }
 
