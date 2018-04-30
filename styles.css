@@ -2052,7 +2052,7 @@ li {
   height: 30px;
   width: 26px;
   padding: 25px;
-  border: 4px solid white;
+  /* border: 4px solid white; */
   cursor: pointer;
   image-rendering: -moz-crisp-edges;
   image-rendering: pixelated;

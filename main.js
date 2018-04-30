@@ -2424,7 +2424,6 @@ Game.launch = () => {
 
         setTimeout(() => {
           if (s(`#bonus-${randomID}`)) {
-            console.log(`removing #bonus-${randomID}`)
             Game.removeEl(s(`#bonus-${randomID}`))
           }
         }, 2900) // TIME IT TAKES FOR ANIMATION TO FALL OFF SCREEN
