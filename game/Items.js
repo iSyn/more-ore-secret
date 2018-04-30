@@ -242,10 +242,10 @@ let items = [
         {name: 'Unholy Mineshaft', amountNeeded: 1}
       ],
       achievements: [
-        {name: 'Sacred Mines Achievement I', amountNeeded: 10},
-        {name: 'Sacred Mines Achievement II', amountNeeded: 20},
-        {name: 'Sacred Mines Achievement III', amountNeeded: 50},
-        {name: 'Sacred Mines Achievement IV', amountNeeded: 100}
+        {name: 'Sacred Mine Achievement I', amountNeeded: 10},
+        {name: 'Sacred Mine Achievement II', amountNeeded: 20},
+        {name: 'Sacred Mine Achievement III', amountNeeded: 50},
+        {name: 'Sacred Mine Achievement IV', amountNeeded: 100}
       ]
     }
   },

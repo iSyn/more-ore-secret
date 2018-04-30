@@ -244,7 +244,6 @@ let achievements = [
   // ------------------
   // SACRED MINE
   // -------------------
-
   {name: 'Sacred Mine Achievement I', desc: 'Have a total of 10 Sacred Mines', reward: {
     txt: 'x2 Permanent Sacred Mine Production',
     building: ['Sacred Mine', 2]

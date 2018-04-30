@@ -2488,6 +2488,7 @@ Game.launch = () => {
     s('body').append(div)
 
     Game.state.diamonds += amount
+    console.log(Game.state.diamonds)
 
     setTimeout(() => {
       Game.gainGenerationXp()
@@ -3336,6 +3337,9 @@ Game.launch = () => {
         break
       }
     }
+
+    console.log('selected achievement:', selectedAchievement)
+    console.log('achievement name:', achievementName)
 
     if (selectedAchievement.won == 0) {
       selectedAchievement.won = 1
