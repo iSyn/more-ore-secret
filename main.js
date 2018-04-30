@@ -956,7 +956,7 @@ Game.launch = () => {
     Game.state.player.generation.xpNeeded = 100 * Math.pow(1.25, Game.state.player.generation.lv)
   }
 
-  Game.getCombo = (type) => {
+  Game.getCombo = (event, type) => {
     if (type) { // IF WEAK SPOT HIT
       Game.state.stats.currentCombo++
       if (Game.state.stats.currentCombo % 5 == 0) {
@@ -988,7 +988,7 @@ Game.launch = () => {
     let amount = Game.state.oresPerClick
     if (type) {
       if (type == 'weak-spot') {
-        Game.getCombo('hit')
+        Game.getCombo(event, 'hit')
         amount *= (Game.state.player.pickaxe.sharpness/100)
         amount *= (Game.state.weakHitMulti + Game.state.permanent.weakHitMulti)
         Game.playSound('ore-crit-hit')
@@ -998,7 +998,7 @@ Game.launch = () => {
       }
     } else {
       amount *= (Game.state.player.pickaxe.hardness/100)
-      Game.getCombo()
+      Game.getCombo(event)
       Game.playSound('ore-hit')
       Game.risingNumber(evt, amount)
       // Game.gainXp()
