@@ -532,7 +532,7 @@ Game.launch = () => {
 			<p>After a long hiatus from programming, I am finally excited to work on More Ore again</p>
 			<p>Since this game is in its early alpha stages, current features might be changed or scrapped in the final version.</p>
 			<p>If you have any interesting gameplay ideas, let me know! Post in the comments or email me!</p>
-			<p style='color: red;'>Game is only compatible in Google Chrome as of now</p>
+			<p style='color: red;'>Game runs best in Google Chrome</p>
 			<br />
 			<p style='text-align: center;'>[ Press ESC or click to close window ]</p>
 		</div>
