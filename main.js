@@ -2325,6 +2325,29 @@ Game.launch = () => {
     Game.state.prefs.inventoryOpen = !Game.state.prefs.inventoryOpen
     if (Game.state.prefs.inventoryOpen) {
       // inventory open
+      let str = ''
+      str += `
+        <div class="item-modal-img-small">
+
+        <div class="item-modal-sockets-container-small">
+          `
+          for(i = 0; i < Game.state.player.pickaxe.sockets; i++) {
+            str += `<div class='item-modal-socket-small' onmouseover='Game.showTooltip(event, {type: "help", text: "Empty socket"})' onmouseout='Game.hideTooltip()'></div>`
+          }
+          str += `
+        </div>
+
+        <div class="pickaxe-top-small ${Game.state.player.pickaxe.material}" style='background: url("./assets/images/pickaxe-top-${Game.state.player.pickaxe.material.toLowerCase()}.png"); background-size: 100% 100%;'></div>
+        <div class="pickaxe-bottom-small"></div>
+        `
+        if (Game.state.player.pickaxe.rarity == 'Legendary' || Game.state.player.pickaxe.rarity == 'Mythical') {
+          str += `<div class="pickaxe-bg"></div>`
+        }
+
+        str += `
+      </div>
+      `
+      s('.inventory-pickaxe').innerHTML = str
       s('.inventory-container').style.left = anchor.right + 'px'
       s('.inventory-container__right').classList.add('inventory-container--open')
     } else {
