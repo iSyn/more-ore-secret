@@ -12,7 +12,7 @@ let Item = function(item) {
   this.owned = item.owned || 0
   if (item.buyFunctions) this.buyFunctions = item.buyFunctions
 
-  this.buy = () => {
+  this.buy = (event) => {
 
     let price = this.price
     if (this.type == 'building') {
@@ -27,7 +27,7 @@ let Item = function(item) {
       }
       Game.spend(price)
       Game.playSound('buysound')
-      Game.risingNumber(null, 'spendMoney')
+      Game.risingNumber(event, null, 'spendMoney')
       // this.owned
       this.type == 'building' ? this.owned += Game.state.prefs.buyAmount : this.owned++
       Game.buyFunction(this)
@@ -242,10 +242,10 @@ let items = [
         {name: 'Unholy Mineshaft', amountNeeded: 1}
       ],
       achievements: [
-        {name: 'Sacred Mines Achievement I', amountNeeded: 10},
-        {name: 'Sacred Mines Achievement II', amountNeeded: 20},
-        {name: 'Sacred Mines Achievement III', amountNeeded: 50},
-        {name: 'Sacred Mines Achievement IV', amountNeeded: 100}
+        {name: 'Sacred Mine Achievement I', amountNeeded: 10},
+        {name: 'Sacred Mine Achievement II', amountNeeded: 20},
+        {name: 'Sacred Mine Achievement III', amountNeeded: 50},
+        {name: 'Sacred Mine Achievement IV', amountNeeded: 100}
       ]
     }
   },

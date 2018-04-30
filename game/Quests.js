@@ -9,7 +9,7 @@ let Quest = function(obj) {
   this.completionTime = obj.completionTime
   this.completionTimeTxt = obj.completionTimeTxt
   this.xpGain = obj.xpGain
-  this.firstClearGemGain = obj.firstClearGemGain
+  this.firstClearRewards = obj.firstClearRewards
 
   Game.quests.push(this)
 }
@@ -24,9 +24,10 @@ let quests  = [
     completionTime: 5 * 60 * 1000,
     completionTimeTxt: '5 minutes',
     xpGain: 40,
-    firstClearGemGain: 1
-  },
-  {
+    firstClearRewards: {
+      diamonds: 1,
+    },
+  }, {
     name: 'TEST QUEST',
     pic: 'nothing',
     locked: 0,
@@ -35,6 +36,8 @@ let quests  = [
     completionTime: 30 * 60 * 1000,
     completionTimeTxt: '30 minutes',
     xpGain: 100,
-    firstClearGemGain: 1
+    firstClearRewards: {
+      diamonds: 1,
+    },
   },
 ]

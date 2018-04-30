@@ -8,14 +8,14 @@ let beautify = (number) => {
   var SI_PREFIXES = [
     "", // number is less than 1,000
     "Thousand", // number is in the thousands
-    "Million", 
-    "Billion", 
-    "Trillion", 
-    "Quadrillion", 
-    "Quintillion", 
-    "Sextillion", 
-    "Alotillion", 
-    "Waytoomanyillion", 
+    "Million",
+    "Billion",
+    "Trillion",
+    "Quadrillion",
+    "Quintillion",
+    "Sextillion",
+    "Alotillion",
+    "Waytoomanyillion",
     "F*ckloadillion",
     "F*cktonillion"
   ];
@@ -153,7 +153,7 @@ let Game = {}
 Game.launch = () => {
 
   Game.state = {
-    gems: 0,
+    diamonds: 0,
     ores: 0,
     oreHp: 50,
     oreCurrentHp: 50,
@@ -166,9 +166,12 @@ Game.launch = () => {
     lastLogin: null,
     canRefine: false,
 
-    permanentOpsMulti: 0,
-    permanentOpcMulti: 0,
-    permanentWeakHitMulti: 0,
+    permanent: {
+      maxSockets: 2,
+      opsMulti: 0,
+      opcMulti: 0,
+      weakHitMulti: 0
+    },
 
     player: {
       generation: {
@@ -177,13 +180,23 @@ Game.launch = () => {
         xpNeeded: 100,
         availableSp: 0
       },
+
       pickaxe: {
         name: 'Beginners Wood Pickaxe',
         rarity: 'Common',
-        iLv: 1,
         material: 'Wood',
-        damage: 1
+        sockets: 0,
+        sharpness: 100,
+        hardness: 100,
+        stats: {
+          Strength: [],
+          Charisma: [],
+          Luck: []
+        },
+        iLv: 1,
+        damage: 1,
       },
+
       skills: {
         spSection1: 0,
         spSection2: 0,
@@ -519,14 +532,12 @@ Game.launch = () => {
 			<p>After a long hiatus from programming, I am finally excited to work on More Ore again</p>
 			<p>Since this game is in its early alpha stages, current features might be changed or scrapped in the final version.</p>
 			<p>If you have any interesting gameplay ideas, let me know! Post in the comments or email me!</p>
-			<p style='color: red;'>Game is only compatible in Google Chrome as of now</p>
+			<p style='color: red;'>Game runs best in Google Chrome</p>
 			<br />
 			<p style='text-align: center;'>[ Press ESC or click to close window ]</p>
 		</div>
-	  
-		
     `
-		
+	
 
 		s('body').append(welcomeTxt)
 	}
@@ -656,16 +667,17 @@ Game.launch = () => {
         div.innerHTML = `
           <div class="offline-gain-popup-container">
             <h1>Welcome to More Ore Alpha v.0.9</h1>
-			<br />
-			<p>After a long hiatus from programming, I am finally excited to work on More Ore again</p>
-			<p>Since this game is in its early alpha stages, current features might be changed or scrapped in the final version.</p>
-			<p>If you have any interesting gameplay ideas, let me know! Post in the comments or email me!</p>
-			<p style='color: red;'>Game is only compatible in Google Chrome as of now</p>
-			<br />
+            <br />
+            <p>After a long hiatus from programming, I am finally excited to work on More Ore again</p>
+            <p>Since this game is in its early alpha stages, current features might be changed or scrapped in the final version.</p>
+            <p>If you have any interesting gameplay ideas, let me know! Post in the comments or email me!</p>
+            <p style='color: red;'>Game works best in Google Chrome as of now</p>
+            <br />
             <p>You were gone for ${beautifyMs(amountOfTimePassed * 1000)}</p>
             <p>You earned ${beautify(Math.round(amountToGain))} ores!</p>
+            <br/>
             <hr />
-            <button onclick='Game.earn(${amountToGain}); Game.risingNumber(${amountToGain},"passive", event); Game.removeEl(document.querySelector(".wrapper")); Game.save();'>Ok</button>
+            <button onclick='Game.earn(${amountToGain}); Game.risingNumber(event, ${amountToGain},"passive"); Game.removeEl(document.querySelector(".wrapper")); Game.save();'>Ok</button>
           </div>
         `
         s('body').append(div)
@@ -818,7 +830,7 @@ Game.launch = () => {
         div.innerHTML = `
           <div class="tutorial-text">
             <p>Quests are now available!</p>
-            <p>Go on quests for Generation XP, Gems, and even <span style='color: #673AB7;text-shadow: 0 2px #e40b32;'>Mythical Artifacts!</span></p>
+            <p>Go on quests for Generation XP, Diamonds, Gems, and even <span style='color: #673AB7;text-shadow: 0 2px #e40b32;'>Mythical Artifacts!</span></p>
           </div>
           <div class="tutorial-arrow"></div>
         `
@@ -855,7 +867,7 @@ Game.launch = () => {
     opc += (opc * Game.state.opcMulti)
 
     // ADD PERMA OPC MULTI
-    opc += (opc * Game.state.permanentOpcMulti)
+    opc += (opc * Game.state.permanent.opcMulti)
 
     // ADD GENERATION BONUS
     // opc += (opc * (Game.state.player.generation.lv * 1))
@@ -885,7 +897,7 @@ Game.launch = () => {
     ops += (ops * Game.state.opsMulti)
 
     // ADD PERMA OPS MULTI
-    ops += (ops * Game.state.permanentOpsMulti)
+    ops += (ops * Game.state.permanent.opsMulti)
 
     Game.state.oresPerSecond = ops
     Game.recalculateOpS = 0
@@ -943,11 +955,11 @@ Game.launch = () => {
     Game.state.player.generation.xpNeeded = 100 * Math.pow(1.25, Game.state.player.generation.lv)
   }
 
-  Game.getCombo = (type) => {
+  Game.getCombo = (event, type) => {
     if (type) { // IF WEAK SPOT HIT
       Game.state.stats.currentCombo++
       if (Game.state.stats.currentCombo % 5 == 0) {
-        Game.risingNumber(0, 'combo', event)
+        Game.risingNumber(event, 0, 'combo')
       }
       if (Game.state.stats.currentCombo > Game.state.stats.highestCombo) {
         Game.state.stats.highestCombo = Game.state.stats.currentCombo
@@ -970,26 +982,29 @@ Game.launch = () => {
     }
   }
 
-  Game.handleClick = (type) => {
+  Game.handleClick = (evt, type) => {
+    evt = evt || window.event
     let amount = Game.state.oresPerClick
     if (type) {
       if (type == 'weak-spot') {
-        Game.getCombo('hit')
-        amount *= (Game.state.weakHitMulti + Game.state.permanentWeakHitMulti)
+        Game.getCombo(event, 'hit')
+        amount *= (Game.state.player.pickaxe.sharpness/100)
+        amount *= (Game.state.weakHitMulti + Game.state.permanent.weakHitMulti)
         Game.playSound('ore-crit-hit')
-        Game.risingNumber(amount, 'weak-hit', event)
+        Game.risingNumber(evt, amount, 'weak-hit')
         Game.state.stats.currentWeakSpotHits++
         Game.repositionAllElements = 1
       }
     } else {
-      Game.getCombo()
+      amount *= (Game.state.player.pickaxe.hardness/100)
+      Game.getCombo(event)
       Game.playSound('ore-hit')
-      Game.risingNumber(amount, event)
+      Game.risingNumber(evt, amount)
       // Game.gainXp()
     }
 
     Game.earn(amount)
-    Game.drawRockParticles()
+    Game.drawRockParticles(evt)
     Game.state.stats.currentOreClicks++
     Game.state.stats.currentOresMined += amount
     Game.state.stats.totalOresMined += amount
@@ -1005,13 +1020,14 @@ Game.launch = () => {
     if (Game.state.stats.currentWeakSpotHits == 20) Game.unlockUpgrade('Polish Magnifying Glass')
   }
 
-  Game.risingNumber = (amount, type) => {
+  Game.risingNumber = (evt, amount, type) => {
+
     if (Game.state.prefs.risingNumbers == true) {
       let mouseX = (s('.ore').getBoundingClientRect().left + s('.ore').getBoundingClientRect().right)/2
       let mouseY = (s('.ore').getBoundingClientRect().top + s('.ore').getBoundingClientRect().bottom)/2
-      if (event) {
-        mouseX = event.clientX
-        mouseY = event.clientY
+      if (evt && evt.clientX && evt.clientY) {
+        mouseX = evt.clientX
+        mouseY = evt.clientY
       }
       let randomNumber = Math.floor(Math.random() * 20) + 1
       let randomSign = Math.round(Math.random()) * 2 - 1
@@ -1055,7 +1071,7 @@ Game.launch = () => {
         risingNumber.innerHTML = '-$'
       }
 
-      if (type == 'spendGems') {
+      if (type == 'spendDiamonds') {
         risingNumber.style.fontSize = 'xx-large'
         risingNumber.style.color = 'red'
         risingNumber.style.zIndex = 9999999
@@ -1135,7 +1151,7 @@ Game.launch = () => {
     }
   }
 
-  Game.drawRockParticles = () => {
+  Game.drawRockParticles = (evt) => {
     if (Game.state.prefs.rockParticles == true) {
       let allParticles = document.querySelectorAll('.particle')
       if (allParticles.length >= 10) {
@@ -1145,8 +1161,8 @@ Game.launch = () => {
       let div = document.createElement('div')
       div.classList.add('particle')
       div.style.background = 'lightgrey'
-      let x = event.clientX
-      let y = event.clientY
+      let x = evt.clientX
+      let y = evt.clientY
 
       div.style.left = x + 'px'
       div.style.top = y + 'px'
@@ -1319,7 +1335,7 @@ Game.launch = () => {
     }
     totalMultiplier += selectedRarity.multiplier
 
-    // --------------------------------------  SELECT PREFIX
+    // -------------------------------------- SELECT PREFIX
     randomNum = Math.random()
     let selectedPrefix
     if (selectedRarity.stat_amount > 0) {
@@ -1359,7 +1375,7 @@ Game.launch = () => {
     pickaxeName += ` ${selectedMaterial.name} Pickaxe`
     totalMultiplier += selectedMaterial.multiplier
 
-    // --------------------------------------  SELECT SUFFIX
+    // -------------------------------------- SELECT SUFFIX
     randomNum = Math.random()
     let selectedSuffix
     if (selectedRarity.multiplier >= 3.5) {
@@ -1382,14 +1398,34 @@ Game.launch = () => {
 
     totalMultiplier *= (iLvl * .5)
 
-    // --------------------------------------  DAMAGE
+    // -------------------------------------- DAMAGE
     let damage = iLvl * totalMultiplier
 
-    //  -------------------------------------- SHARPNESS AND HARDNESS
-    let sharpness = Math.random() * 100
-    let hardness = Math.random() * 100
+    // -------------------------------------- SHARPNESS AND HARDNESS
+    // Math.random() * (max - min) + min;
+    let minRange = 70
+    let maxRange = 150
+    let sharpness = Math.floor(Math.random() * (maxRange - minRange) + minRange)
+    let hardness = Math.floor(Math.random() * (maxRange - minRange) + minRange)
+    // // if both hardness and sharpness are low, up one or the other
+    // if (hardness <= 70 && sharpness <= 70) {
+    //   if (Math.random() > .5) { sharpness += Math.floor(Math.random() * (60 - 30) + 30) }
+    //   else { hardness += Math.floor(Math.random() * (60 - 30) + 30) }
+    // }
 
-    // --------------------------------------  SELECT AND BUILD BONUS STATS
+    // -------------------------------------- SOCKETS
+    let sockets = 0
+    let socketsRand = Math.random()
+    if (socketsRand <= .4) sockets++      // 40% chance for 1 socket
+    if (socketsRand <= .25) sockets++     // 25% chance for 2 sockets
+    if (socketsRand <= .15) sockets++     // 15% chance for 3 sockets
+    if (socketsRand <= .05) sockets++     // 5% chance for 4 sockets
+    if (socketsRand <= .01) sockets++     // 1% chance for 5 sockets
+    if (socketsRand <= .005) sockets++    // .5% chance for 6 sockets
+
+    if (sockets > Game.state.permanent.maxSockets) sockets = Game.state.permanent.maxSockets
+
+    // -------------------------------------- SELECT AND BUILD BONUS STATS
     let pickaxeStats = {
       Strength: [],
       Charisma: [],
@@ -1420,7 +1456,10 @@ Game.launch = () => {
       material: selectedMaterial.name,
       stats: pickaxeStats,
       iLv: iLvl,
-      damage: damage,
+      damage,
+      sharpness,
+      hardness,
+      sockets,
       raw_info: {
         rarity: selectedRarity,
         prefix: selectedPrefix,
@@ -1438,9 +1477,42 @@ Game.launch = () => {
     Game.state.stats.itemsPickedUp++
     if (Game.state.stats.itemsPickedUp == 1) Game.repositionAllElements = 1
 
-    if (amountOfRocksDestroyed === 1) { Game.newItem = { name: 'Big Lead Pickaxe', rarity: 'Common', material: 'Lead', stats: { Strength: [1], Charisma: [], Luck: [] }, iLv: 2, damage: 3, }
-    } else if (amountOfRocksDestroyed === 4) { Game.newItem = { name: 'Lucky Iron Pickaxe', rarity: 'Uncommon', material: 'Iron', stats: { Strength: [2], Charisma: [], Luck: [4] }, iLv: 4, damage: 47 }
-    } else { Game.newItem = Game.generateRandomPickaxe(iLvl) }
+    let firstPick = {
+      name: 'Sharp but Flimsy Cardboard Pickaxe',
+      rarity: 'Uncommon',
+      material: 'Cardboard',
+      sockets: 1,
+      sharpness: 127,
+      hardness: 14,
+      stats: {
+        Strength: [2, 1],
+        Charisma: [],
+        Luck: []
+      },
+      iLv: 2,
+      damage: 3,
+    }
+
+    let secondPick = {
+      name: 'Dull Plastic Pickaxe',
+      rarity: 'Common',
+      material: 'Plastic',
+      sockets: 0,
+      sharpness: 114,
+      hardness: 96,
+      stats: {
+        Strength: [],
+        Charisma: [],
+        Luck: [1]
+      },
+      iLv: 4,
+      damage: 47,
+    }
+
+    // Manually set the first few pickaxes for a more easier early-early game
+    if (amountOfRocksDestroyed === 1) { Game.newItem = firstPick }
+    else if (amountOfRocksDestroyed === 4) { Game.newItem = secondPick }
+    else { Game.newItem = Game.generateRandomPickaxe(iLvl) }
 
     let itemModal = document.createElement('div')
     itemModal.classList.add('item-modal-container')
@@ -1451,6 +1523,13 @@ Game.launch = () => {
           <h1 style='font-family: "Germania One"; font-size: 60px;'>New Pickaxe</h1>
           <h2 class='${Game.newItem.rarity}' style='font-size: xx-large'>${Game.newItem.name}</h2>
           <div class="item-modal-img">
+            <div class="item-modal-sockets-container">
+              `
+              for(i = 0; i < Game.newItem.sockets; i++) {
+                str += `<div class='item-modal-socket' onmouseover='Game.showTooltip(event, {type: "help", text: "Empty socket"})' onmouseout='Game.hideTooltip()'></div>`
+              }
+              str += `
+            </div>
             <div class="pickaxe-top" style='background: url("./assets/images/pickaxe-top-${Game.newItem.material.toLowerCase()}.png"); background-size: 100% 100%;'></div>
             <div class="pickaxe-bottom"></div>
             `
@@ -1463,6 +1542,12 @@ Game.launch = () => {
           <div class="item-stats">
             <p style='font-style: italic; font-size: small'>${Game.newItem.rarity}</p>
             <br/>
+            <div>
+              <p onmouseover='Game.showTooltip(event, {type: "help", text: "Sharpness is the % damage dealt on weak spot hits"})' onmouseout='Game.hideTooltip()' >Sharpness: ${Game.newItem.sharpness}%</p>
+              <p onmouseover='Game.showTooltip(event, {type: "help", text: "Hardness is the % damage dealt on regular hits"})' onmouseout='Game.hideTooltip()'>Hardness: ${Game.newItem.hardness}%</p>
+            </div>
+            <br/>
+
             <p>Item Level: ${Game.newItem.iLv}</p>
             <p>Damage: ${beautify(Game.newItem.damage)}</p>
             `
@@ -1497,6 +1582,15 @@ Game.launch = () => {
           <h1 style='font-family: "Germania One"; font-size: 30px;'>Equipped</h1>
           <h2 class='${Game.state.player.pickaxe.rarity}' style='font-size: large'>${Game.state.player.pickaxe.name}</h2>
           <div class="item-modal-img-small">
+
+            <div class="item-modal-sockets-container-small">
+              `
+              for(i = 0; i < Game.state.player.pickaxe.sockets; i++) {
+                str += `<div class='item-modal-socket-small' onmouseover='Game.showTooltip(event, {type: "help", text: "Empty socket"})' onmouseout='Game.hideTooltip()'></div>`
+              }
+              str += `
+            </div>
+
             <div class="pickaxe-top-small ${Game.state.player.pickaxe.material}" style='background: url("./assets/images/pickaxe-top-${Game.state.player.pickaxe.material.toLowerCase()}.png"); background-size: 100% 100%;'></div>
             <div class="pickaxe-bottom-small"></div>
             `
@@ -1508,6 +1602,11 @@ Game.launch = () => {
           </div>
           <div class="item-stats">
               <p style='font-style: italic; font-size: small'>${Game.state.player.pickaxe.rarity}</p>
+              <br/>
+              <div>
+                <p onmouseover='Game.showTooltip(event, {type: "help", text: "Sharpness is the % damage dealt on weak spot hits"})' onmouseout='Game.hideTooltip()' >Sharpness ${Game.state.player.pickaxe.sharpness}%</p>
+                <p onmouseover='Game.showTooltip(event, {type: "help", text: "Hardness is the % damage dealt on regular hits"})' onmouseout='Game.hideTooltip()'>Hardness ${Game.state.player.pickaxe.hardness}%</p>
+              </div>
               <br/>
               <p>Item Level: ${Game.state.player.pickaxe.iLv}</p>
               <p>Damage: ${beautify(Game.state.player.pickaxe.damage)}</p>
@@ -1573,7 +1672,7 @@ Game.launch = () => {
         hasContent = 1
         str += `
           <div class="upgrade-item-container" style='background-color: #b56535'>
-            <div class="upgrade-item" id="${item.name.replace(/\s/g , "-")}" onclick='Game.sortedUpgrades[${i}].buy(); Game.hideTooltip();' onmouseover="Game.showTooltip({name: '${item.name}', type: '${item.type}s'}, event); Game.playSound('itemhover')" onmouseout="Game.hideTooltip()" style='background: url(./assets/images/${item.pic}); background-size: 100%;'></div>
+            <div class="upgrade-item" id="${item.name.replace(/\s/g , "-")}" onclick='Game.sortedUpgrades[${i}].buy(event); Game.hideTooltip();' onmouseover="Game.showTooltip(event, {name: '${item.name}', type: '${item.type}s'}); Game.playSound('itemhover')" onmouseout="Game.hideTooltip()" style='background: url(./assets/images/${item.pic}); background-size: 100%;'></div>
           </div>
         `
       }
@@ -1600,7 +1699,7 @@ Game.launch = () => {
       if (Game.state.prefs.buyAmount != 'max') price = (item.basePrice * ((Math.pow(1.15, item.owned + Game.state.prefs.buyAmount) - Math.pow(1.15, item.owned)))/.15)
       if (item.hidden == 0) {
         str += `
-          <div class="button" onclick="Game.buildings[${i}].buy();" onmouseover="Game.showTooltip({name: '${item.name}', type: '${item.type}s'}, event); Game.playSound('itemhover')" onmouseout="Game.hideTooltip()">
+          <div class="button" onclick="Game.buildings[${i}].buy(event);" onmouseover="Game.showTooltip(event, {name: '${item.name}', type: '${item.type}s'}); Game.playSound('itemhover')" onmouseout="Game.hideTooltip()">
             <div style='pointer-events: none' class="button-top">
               <div class="button-left">
                 <img src="./assets/images/${item.pic}" style='filter: brightness(100%); image-rendering: pixelated; image-rendering: -moz-crisp-edges'/>
@@ -1709,13 +1808,13 @@ Game.launch = () => {
       str += ` (${beautify(Game.state.oresPerSecond)}/s)`
     }
     if (Game.state.stats.timesRefined > 0) {
-      str += `<br/> Gems: ${Game.state.gems}`
+      str += `<br/> Diamonds: ${Game.state.diamonds}`
     }
 
     s('.ores').innerHTML = str
 
     s('.generation').innerHTML = `Generation: ${Game.state.player.generation.lv}`
-    s('.generation').onmouseover = () => Game.showTooltip({type: 'generation'}, event)
+    s('.generation').onmouseover = (evt) => Game.showTooltip(evt || window.event, {type: 'generation'})
     s('.generation').onmouseout = () => Game.hideTooltip()
 
     Game.rebuildInventory = 0
@@ -1876,7 +1975,7 @@ Game.launch = () => {
     s('.ore-hp').innerHTML = `${oreHpPercentage.toFixed(0)}%`
   }
 
-  Game.showTooltip = (obj) => {
+  Game.showTooltip = (evt, obj) => {
     let tooltip = s('.tooltip')
 
     let anchor = s('#main-separator').getBoundingClientRect()
@@ -1885,7 +1984,7 @@ Game.launch = () => {
     tooltip.style.display = 'block'
 
     tooltip.style.left = anchor.left - tooltip.getBoundingClientRect().width + 'px'
-    tooltip.style.top = event.clientY + 'px'
+    tooltip.style.top = evt.clientY + 'px'
 
 
     if (obj.type == 'buildings' || obj.type == 'upgrades') {
@@ -1930,8 +2029,8 @@ Game.launch = () => {
     if (obj.type == 'generation') {
       tooltip.style.textAlign = 'center'
       tooltip.style.width = 'auto'
-      tooltip.style.left = event.clientX - tooltip.getBoundingClientRect().width/2 + 'px'
-      tooltip.style.top = event.clientY + 20 + 'px'
+      tooltip.style.left = evt.clientX - tooltip.getBoundingClientRect().width/2 + 'px'
+      tooltip.style.top = evt.clientY + 20 + 'px'
       tooltip.style.minWidth = '150px'
       tooltip.innerHTML = `
         <h3>You are currently on Generation ${Game.state.player.generation.lv}</h3>
@@ -2005,8 +2104,8 @@ Game.launch = () => {
 
 
 
-      tooltip.style.left = event.clientX + 30 + 'px'
-      tooltip.style.top = event.clientY - tooltip.getBoundingClientRect().height/2 + 'px'
+      tooltip.style.left = evt.clientX + 30 + 'px'
+      tooltip.style.top = evt.clientY - tooltip.getBoundingClientRect().height/2 + 'px'
     }
 
     if (obj.type == 'quest') {
@@ -2026,8 +2125,8 @@ Game.launch = () => {
       let str;
       let selectedAchievement = Game.select(Game.achievements, obj.achievementName)
 
-      tooltip.style.left = event.clientX + 20 + 'px'
-      tooltip.style.top = event.clientY + 20 + 'px'
+      tooltip.style.left = evt.clientX + 20 + 'px'
+      tooltip.style.top = evt.clientY + 20 + 'px'
       tooltip.style.textAlign = 'left'
 
       if (obj.missing) {
@@ -2049,6 +2148,15 @@ Game.launch = () => {
       }
 
       tooltip.innerHTML = str
+    }
+
+    if (obj.type == 'help') {
+      tooltip.style.width = 'auto'
+      tooltip.style.left = evt.clientX - tooltip.getBoundingClientRect().width/2 + 'px'
+      tooltip.style.top = evt.clientY + 20 + 'px'
+      tooltip.innerHTML = `
+        <p>${obj.text}</p>
+      `
     }
 
     tooltip.style.animation = 'tooltip .3s'
@@ -2187,7 +2295,7 @@ Game.launch = () => {
         `
         for (let i = 0; i < Game.achievements.length; i++) {
           if (Game.achievements[i].won == 1) {
-            str += `<div onmouseover='Game.showTooltip({type: "achievement", achievementName: "${Game.achievements[i].name}"})' onmouseout='Game.hideTooltip()' class="single-achievement"></div>`
+            str += `<div onmouseover='Game.showTooltip(event, {type: "achievement", achievementName: "${Game.achievements[i].name}"})' onmouseout='Game.hideTooltip()' class="single-achievement"></div>`
           }
         }
 
@@ -2199,7 +2307,7 @@ Game.launch = () => {
         `
         for (let i = 0; i < Game.achievements.length; i++) {
           if (Game.achievements[i].won == 0) {
-            str += `<div onmouseover='Game.showTooltip({type: "achievement", missing: 1, achievementName: "${Game.achievements[i].name}"})' onmouseout='Game.hideTooltip()' style='opacity: 0.3' class="single-achievement"></div>`
+            str += `<div onmouseover='Game.showTooltip(event, {type: "achievement", missing: 1, achievementName: "${Game.achievements[i].name}"})' onmouseout='Game.hideTooltip()' style='opacity: 0.3' class="single-achievement"></div>`
           }
         }
 
@@ -2274,7 +2382,7 @@ Game.launch = () => {
     if (bonusNum == 1) {
       let amount = (Game.state.oresPerSecond * 13 + Game.state.oresPerClick * 13)
       Game.earn(amount)
-      Game.risingNumber(amount, 'bonus', event)
+      Game.risingNumber(event, amount, 'bonus')
     }
 
     if (bonusNum == 2 || bonusNum == 3 || bonusNum == 4) {
@@ -2282,7 +2390,7 @@ Game.launch = () => {
       cover.classList.add('gold-rush-cover')
       s('body').append(cover)
       let amount = (Game.state.oresPerSecond * 11 + Game.state.oresPerClick * 11)
-      Game.risingNumber(amount, 'gold rush', event)
+      Game.risingNumber(event, amount, 'gold rush')
       Game.goldRush()
       setTimeout(() => {
         s('.gold-rush-cover').parentNode.removeChild(s('.gold-rush-cover'))
@@ -2318,7 +2426,8 @@ Game.launch = () => {
           if (s(`#bonus-${randomID}`)) {
             Game.removeEl(s(`#bonus-${randomID}`))
           }
-        }, 5000) // TIME IT TAKES FOR ANIMATION TO FALL OFF SCREEN
+        }, 2900) // TIME IT TAKES FOR ANIMATION TO FALL OFF SCREEN
+
         Game.goldRush()
       } else {
         goldRushCounter = 0
@@ -2340,12 +2449,12 @@ Game.launch = () => {
 
     let div = document.createElement('div')
 
-    let amountOfGems = 0
-    if (Game.state.ores >= 1000000) amountOfGems += 1
-    if (Game.state.ores >= 1000000000) amountOfGems += 1
-    if (Game.state.ores >= 1000000000000) amountOfGems += 1
-    if (Game.state.ores >= 1000000000000000) amountOfGems += 1
-    if (Game.state.ores >= 1000000000000000000) amountOfGems += 1
+    let amountOfDiamonds = 0
+    if (Game.state.ores >= 1000000) amountOfDiamonds += 1
+    if (Game.state.ores >= 1000000000) amountOfDiamonds += 1
+    if (Game.state.ores >= 1000000000000) amountOfDiamonds += 1
+    if (Game.state.ores >= 1000000000000000) amountOfDiamonds += 1
+    if (Game.state.ores >= 1000000000000000000) amountOfDiamonds += 1
 
     div.classList.add('wrapper')
     div.id = 'confirm-refine'
@@ -2354,7 +2463,7 @@ Game.launch = () => {
         <h2 style='text-align: center; font-family: "Germania One"; letter-spacing: 1px'>Refine</h2>
         <i class='fa fa-times fa-1x' onclick='Game.removeEl(document.querySelector("#confirm-refine"))'></i>
         <hr/>
-        <p style='text-align: left; color: lightgreen;'>+ You will gain <strong>${amountOfGems}</strong> gems (more ores = more gems)</p>
+        <p style='text-align: left; color: lightgreen;'>+ You will gain <strong>${amountOfDiamonds}</strong> diamonds (more ores = more diamonds)</p>
         <p style='text-align: left; color: lightgreen;'>+ You will gain <strong>${Game.calculateGenerationXp().xp}</strong> generation xp</p>
         <p style='text-align: left; color: #c36d6d;'>- You will lose all current ores</p>
         <p style='text-align: left; color: #c36d6d;'>- You will lose all owned buildings and upgrades</p>
@@ -2362,7 +2471,7 @@ Game.launch = () => {
         <hr/>
         <p style='text-align: center;'>Are you sure you want to refine?</p>
         <hr />
-        <button onclick='Game.refine(${amountOfGems})'>yes</button>
+        <button onclick='Game.refine(${amountOfDiamonds})'>yes</button>
         <button onclick='Game.removeEl(document.querySelector("#confirm-refine"))'>no</button>
       </div>
     `
@@ -2378,7 +2487,8 @@ Game.launch = () => {
     div.classList.add('refine')
     s('body').append(div)
 
-    Game.state.gems += amount
+    Game.state.diamonds += amount
+    console.log(Game.state.diamonds)
 
     setTimeout(() => {
       Game.gainGenerationXp()
@@ -2456,27 +2566,27 @@ Game.launch = () => {
 
       if (Game.skills[i].locked == 1) {
         str += `
-          <div 
+          <div
             onclick='Game.skills[${i}].levelUp()'
-            onmouseover='Game.showTooltip({type: "skill", name: "${Game.skills[i].name}"})' 
-            onmouseout='Game.hideTooltip()' 
-            class='skill skill-${Game.skills[i].className}' 
+            onmouseover='Game.showTooltip(event, {type: "skill", name: "${Game.skills[i].name}"})'
+            onmouseout='Game.hideTooltip()'
+            class='skill skill-${Game.skills[i].className}'
             style='left: ${pos.column}px; top: ${pos.generation}px; background: url("./assets/images/skill_${Game.skills[i].img}"); opacity: .5'
           ></div>
         `
       } else {
         str += `
-          <div 
+          <div
             onclick='Game.skills[${i}].levelUp()'
-            onmouseover='Game.showTooltip({type: "skill", name: "${Game.skills[i].name}"})' 
-            onmouseout='Game.hideTooltip()' 
-            class='skill skill-${Game.skills[i].className}' 
+            onmouseover='Game.showTooltip(event, {type: "skill", name: "${Game.skills[i].name}"})'
+            onmouseout='Game.hideTooltip()'
+            class='skill skill-${Game.skills[i].className}'
             style='left: ${pos.column}px; top: ${pos.generation}px; background: url("./assets/images/skill_${Game.skills[i].img}")'
           ></div>
         `
       }
     }
-    
+
     return str
   }
 
@@ -2494,7 +2604,7 @@ Game.launch = () => {
 
       <div class="skill-tree-container-bottom">
     `
-        
+
     str += Game.buildSkillTree()
 
     str += `</div>`
@@ -2614,8 +2724,16 @@ Game.launch = () => {
     Game.state.player.pickaxe = {
       name: 'Beginners Wood Pickaxe',
       rarity: 'Common',
-      iLv: 1,
       material: 'Wood',
+      sockets: 0,
+      sharpness: 100,
+      hardness: 100,
+      stats: {
+        Strength: [],
+        Charisma: [],
+        Luck: []
+      },
+      iLv: 1,
       damage: 1,
     }
 
@@ -2825,13 +2943,13 @@ Game.launch = () => {
           <div class="refined-store-top">
             <i class='fa fa-times fa-1x' onclick='Game.removeEl(document.querySelector(".wrapper"))'></i>
             <h1 style='flex-grow: 1; text-align: center; font-family: "Germania One"'>Refined Store</h1>
-            <h3 style='padding-right: 20px;'><i style='color:#00c0ff' class='fa fa-diamond fa-1x'></i> ${Game.state.gems}</h3>
+            <h3 style='padding-right: 20px;'><i style='color:#00c0ff' class='fa fa-diamond fa-1x'></i> ${Game.state.diamonds}</h3>
           </div>
           <hr/>
           <div class="refined-store-middle">
             <p onclick='Game.changeRefineTab("trinkets")' id='trinkets-tab' class='refine-tab selected'>Trinkets</p>
             <p onclick='Game.changeRefineTab("potions")' id='potions-tab' class='refine-tab' >Potions</p>
-            <p onclick='Game.changeRefineTab("gems")' id='gems-tab' class='refine-tab' >Gems</p>
+            <p onclick='Game.changeRefineTab("diamonds")' id='diamonds-tab' class='refine-tab' >Diamonds</p>
           </div>
           <hr/>
           <div class="refined-store-bottom"></div>
@@ -2912,9 +3030,9 @@ Game.launch = () => {
     }
 
     if (selectedItem) { // IF THERE IS A SELECTED ITEM
-      if (Game.state.gems >= selectedItem.price) { // IF YOU HAVE ENOUGH MONEY
-        Game.state.gems -= selectedItem.price
-        risingNumber(0, 'spendGems', event)
+      if (Game.state.diamonds >= selectedItem.price) { // IF YOU HAVE ENOUGH MONEY
+        Game.state.diamonds -= selectedItem.price
+        risingNumber(event, 0, 'spendDiamonds')
         Game.closeCurrentWindow()
         if (selectedItem.type) {
           if (selectedItem.type.type == 'Building Multiplier') {
@@ -2940,8 +3058,8 @@ Game.launch = () => {
   }
 
   Game.refreshItems = () => {
-    if (Game.state.gems >= 1) {
-      Game.state.gems -= 1
+    if (Game.state.diamonds >= 1) {
+      Game.state.diamonds -= 1
       Game.removeEl(s('.wrapper'))
       Game.generateRefinedStoreItems()
       Game.showRefinedStore()
@@ -3092,7 +3210,7 @@ Game.launch = () => {
       if (Game.canBoost) {
         if (Game.state.quest.currentQuestProgress + 5000 < Game.state.quest.questCompletionTime) {
           Game.canBoost = false
-          Game.risingNumber(null, 'quest-progress', event)
+          Game.risingNumber(event, null, 'quest-progress')
           Game.state.quest.currentQuestProgress += 5000
 
           let progress = 0
@@ -3112,7 +3230,7 @@ Game.launch = () => {
             s('.click-cooldown').style.height = "100%"
           }, 5000)
         } else {
-          Game.risingNumber(null, 'quest-progress')
+          Game.risingNumber(event, null, 'quest-progress')
           s('.click-cooldown').style.height = "100%"
           Game.canBoost = true
           Game.state.quest.currentQuestProgress = Game.state.quest.questCompletionTime
@@ -3197,7 +3315,7 @@ Game.launch = () => {
     let completedQuest = Game.select(Game.quests, Game.state.quest.currentQuest)
     completedQuest.timesCompleted++
     if (completedQuest.timesCompleted == 1) {
-      Game.state.gems += completedQuest.firstClearGemGain
+      Game.state.diamonds += completedQuest.firstClearRewards.diamonds
     }
     Game.state.player.generation.currentXp += completedQuest.xpGain
 
@@ -3220,12 +3338,15 @@ Game.launch = () => {
       }
     }
 
+    console.log('selected achievement:', selectedAchievement)
+    console.log('achievement name:', achievementName)
+
     if (selectedAchievement.won == 0) {
       selectedAchievement.won = 1
 
       if (selectedAchievement.reward) {
         if (selectedAchievement.reward.increaseWeakHitMulti) {
-          Game.state.permanentWeakHitMulti += selectedAchievement.reward.increaseWeakHitMulti
+          Game.state.permanent.weakHitMulti += selectedAchievement.reward.increaseWeakHitMulti
         }
         if (selectedAchievement.reward.building) {
           Game.select(Game.buildings, selectedAchievement.reward.building[0]).production *= selectedAchievement.reward.building[1]
@@ -3300,9 +3421,9 @@ Game.launch = () => {
     setTimeout(Game.logic, 1000/Game.state.prefs.fps)
   }
 
-  setInterval(() => {
+  setInterval((event) => {
     if (!Game.blurred) {
-      if (Game.state.oresPerSecond) Game.risingNumber(Game.state.oresPerSecond, 'buildings', event)
+      if (Game.state.oresPerSecond) Game.risingNumber(event, Game.state.oresPerSecond, 'buildings')
     }
   }, 1000)
 
@@ -3373,8 +3494,8 @@ Game.launch = () => {
   Game.load()
   Game.logic()
 
-  s('.ore').onclick = () => Game.handleClick()
-  s('.ore-weak-spot').onclick = () => Game.handleClick('weak-spot')
+  s('.ore').onclick = (evt) => Game.handleClick(evt)
+  s('.ore-weak-spot').onclick = (evt) => Game.handleClick(evt, 'weak-spot')
 
   window.onresize = () => {
     Game.repositionAllElements = 1
