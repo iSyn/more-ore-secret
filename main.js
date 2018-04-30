@@ -2295,7 +2295,7 @@ Game.launch = () => {
         `
         for (let i = 0; i < Game.achievements.length; i++) {
           if (Game.achievements[i].won == 1) {
-            str += `<div onmouseover='Game.showTooltip(event, {type: "achievement", achievementName: "${Game.achievements[i].name}"})' onmouseout='Game.hideTooltip()' class="single-achievement"></div>`
+            str += `<div style='background: url("./assets/images/achievements/${Game.achievements[i].img}.png")' onmouseover='Game.showTooltip(event, {type: "achievement", achievementName: "${Game.achievements[i].name}"})' onmouseout='Game.hideTooltip()' class="single-achievement"></div>`
           }
         }
 
