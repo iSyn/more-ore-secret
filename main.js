@@ -240,7 +240,7 @@ Game.launch = () => {
       fps: 30,
       shownAlert: false,
       buyAmount: 1,
-      inventoryOpen: false,
+      inventoryOpen: false
     }
 
   }
