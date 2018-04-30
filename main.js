@@ -1483,7 +1483,7 @@ Game.launch = () => {
       material: 'Cardboard',
       sockets: 1,
       sharpness: 127,
-      hardness: 24,
+      hardness: 14,
       stats: {
         Strength: [2, 1],
         Charisma: [],
