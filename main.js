@@ -153,7 +153,7 @@ let Game = {}
 Game.launch = () => {
 
   Game.state = {
-    gems: 0,
+    diamonds: 0,
     ores: 0,
     oreHp: 50,
     oreCurrentHp: 50,
@@ -536,10 +536,8 @@ Game.launch = () => {
 			<br />
 			<p style='text-align: center;'>[ Press ESC or click to close window ]</p>
 		</div>
-	  
-		
     `
-		
+	
 
 		s('body').append(welcomeTxt)
 	}
@@ -678,6 +676,7 @@ Game.launch = () => {
             <p>You were gone for ${beautifyMs(amountOfTimePassed * 1000)}</p>
             <p>You earned ${beautify(Math.round(amountToGain))} ores!</p>
             <hr />
+            <br/>
             <button onclick='Game.earn(${amountToGain}); Game.risingNumber(event, ${amountToGain},"passive"); Game.removeEl(document.querySelector(".wrapper")); Game.save();'>Ok</button>
           </div>
         `
@@ -831,7 +830,7 @@ Game.launch = () => {
         div.innerHTML = `
           <div class="tutorial-text">
             <p>Quests are now available!</p>
-            <p>Go on quests for Generation XP, Gems, and even <span style='color: #673AB7;text-shadow: 0 2px #e40b32;'>Mythical Artifacts!</span></p>
+            <p>Go on quests for Generation XP, Diamonds, Gems, and even <span style='color: #673AB7;text-shadow: 0 2px #e40b32;'>Mythical Artifacts!</span></p>
           </div>
           <div class="tutorial-arrow"></div>
         `
@@ -1072,7 +1071,7 @@ Game.launch = () => {
         risingNumber.innerHTML = '-$'
       }
 
-      if (type == 'spendGems') {
+      if (type == 'spendDiamonds') {
         risingNumber.style.fontSize = 'xx-large'
         risingNumber.style.color = 'red'
         risingNumber.style.zIndex = 9999999
@@ -1809,7 +1808,7 @@ Game.launch = () => {
       str += ` (${beautify(Game.state.oresPerSecond)}/s)`
     }
     if (Game.state.stats.timesRefined > 0) {
-      str += `<br/> Gems: ${Game.state.gems}`
+      str += `<br/> Diamonds: ${Game.state.diamonds}`
     }
 
     s('.ores').innerHTML = str
@@ -2449,12 +2448,12 @@ Game.launch = () => {
 
     let div = document.createElement('div')
 
-    let amountOfGems = 0
-    if (Game.state.ores >= 1000000) amountOfGems += 1
-    if (Game.state.ores >= 1000000000) amountOfGems += 1
-    if (Game.state.ores >= 1000000000000) amountOfGems += 1
-    if (Game.state.ores >= 1000000000000000) amountOfGems += 1
-    if (Game.state.ores >= 1000000000000000000) amountOfGems += 1
+    let amountOfDiamonds = 0
+    if (Game.state.ores >= 1000000) amountOfDiamonds += 1
+    if (Game.state.ores >= 1000000000) amountOfDiamonds += 1
+    if (Game.state.ores >= 1000000000000) amountOfDiamonds += 1
+    if (Game.state.ores >= 1000000000000000) amountOfDiamonds += 1
+    if (Game.state.ores >= 1000000000000000000) amountOfDiamonds += 1
 
     div.classList.add('wrapper')
     div.id = 'confirm-refine'
@@ -2463,7 +2462,7 @@ Game.launch = () => {
         <h2 style='text-align: center; font-family: "Germania One"; letter-spacing: 1px'>Refine</h2>
         <i class='fa fa-times fa-1x' onclick='Game.removeEl(document.querySelector("#confirm-refine"))'></i>
         <hr/>
-        <p style='text-align: left; color: lightgreen;'>+ You will gain <strong>${amountOfGems}</strong> gems (more ores = more gems)</p>
+        <p style='text-align: left; color: lightgreen;'>+ You will gain <strong>${amountOfDiamonds}</strong> diamonds (more ores = more diamonds)</p>
         <p style='text-align: left; color: lightgreen;'>+ You will gain <strong>${Game.calculateGenerationXp().xp}</strong> generation xp</p>
         <p style='text-align: left; color: #c36d6d;'>- You will lose all current ores</p>
         <p style='text-align: left; color: #c36d6d;'>- You will lose all owned buildings and upgrades</p>
@@ -2471,7 +2470,7 @@ Game.launch = () => {
         <hr/>
         <p style='text-align: center;'>Are you sure you want to refine?</p>
         <hr />
-        <button onclick='Game.refine(${amountOfGems})'>yes</button>
+        <button onclick='Game.refine(${amountOfDiamonds})'>yes</button>
         <button onclick='Game.removeEl(document.querySelector("#confirm-refine"))'>no</button>
       </div>
     `
@@ -2487,7 +2486,7 @@ Game.launch = () => {
     div.classList.add('refine')
     s('body').append(div)
 
-    Game.state.gems += amount
+    Game.state.diamonds += amount
 
     setTimeout(() => {
       Game.gainGenerationXp()
@@ -2723,8 +2722,16 @@ Game.launch = () => {
     Game.state.player.pickaxe = {
       name: 'Beginners Wood Pickaxe',
       rarity: 'Common',
-      iLv: 1,
       material: 'Wood',
+      sockets: 0,
+      sharpness: 100,
+      hardness: 100,
+      stats: {
+        Strength: [],
+        Charisma: [],
+        Luck: []
+      },
+      iLv: 1,
       damage: 1,
     }
 
@@ -2934,13 +2941,13 @@ Game.launch = () => {
           <div class="refined-store-top">
             <i class='fa fa-times fa-1x' onclick='Game.removeEl(document.querySelector(".wrapper"))'></i>
             <h1 style='flex-grow: 1; text-align: center; font-family: "Germania One"'>Refined Store</h1>
-            <h3 style='padding-right: 20px;'><i style='color:#00c0ff' class='fa fa-diamond fa-1x'></i> ${Game.state.gems}</h3>
+            <h3 style='padding-right: 20px;'><i style='color:#00c0ff' class='fa fa-diamond fa-1x'></i> ${Game.state.diamonds}</h3>
           </div>
           <hr/>
           <div class="refined-store-middle">
             <p onclick='Game.changeRefineTab("trinkets")' id='trinkets-tab' class='refine-tab selected'>Trinkets</p>
             <p onclick='Game.changeRefineTab("potions")' id='potions-tab' class='refine-tab' >Potions</p>
-            <p onclick='Game.changeRefineTab("gems")' id='gems-tab' class='refine-tab' >Gems</p>
+            <p onclick='Game.changeRefineTab("diamonds")' id='diamonds-tab' class='refine-tab' >Diamonds</p>
           </div>
           <hr/>
           <div class="refined-store-bottom"></div>
@@ -3021,9 +3028,9 @@ Game.launch = () => {
     }
 
     if (selectedItem) { // IF THERE IS A SELECTED ITEM
-      if (Game.state.gems >= selectedItem.price) { // IF YOU HAVE ENOUGH MONEY
-        Game.state.gems -= selectedItem.price
-        risingNumber(event, 0, 'spendGems')
+      if (Game.state.diamonds >= selectedItem.price) { // IF YOU HAVE ENOUGH MONEY
+        Game.state.diamonds -= selectedItem.price
+        risingNumber(event, 0, 'spendDiamonds')
         Game.closeCurrentWindow()
         if (selectedItem.type) {
           if (selectedItem.type.type == 'Building Multiplier') {
@@ -3049,8 +3056,8 @@ Game.launch = () => {
   }
 
   Game.refreshItems = () => {
-    if (Game.state.gems >= 1) {
-      Game.state.gems -= 1
+    if (Game.state.diamonds >= 1) {
+      Game.state.diamonds -= 1
       Game.removeEl(s('.wrapper'))
       Game.generateRefinedStoreItems()
       Game.showRefinedStore()
@@ -3306,7 +3313,7 @@ Game.launch = () => {
     let completedQuest = Game.select(Game.quests, Game.state.quest.currentQuest)
     completedQuest.timesCompleted++
     if (completedQuest.timesCompleted == 1) {
-      Game.state.gems += completedQuest.firstClearGemGain
+      Game.state.diamonds += completedQuest.firstClearRewards.diamonds
     }
     Game.state.player.generation.currentXp += completedQuest.xpGain
 
