@@ -2161,6 +2161,7 @@ li {
   visibility: hidden;
   z-index: 2;
   transition: all .3s;
+  display: none;
 }
 
 .inventory-container__right:hover {
@@ -2170,9 +2171,22 @@ li {
 
 .inventory-container__left {
   padding: 5px;
-  width: 400px;
-  background: rgba(0, 0, 0, 0.9);
+  width: 550px;
+  background-color: rgba(0, 0, 0, 0.9);
+  display: flex;
+  flex-flow: row nowrap;
 }
+
+.inventory-gems {
+  width: 300px;
+}
+
+.inventory-pickaxe {
+  width: 250px;
+  display: flex;
+  align-items: center;
+}
+
 
 .inventory-container--open {
   opacity: 0.9 !important;

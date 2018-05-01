@@ -1,6 +1,7 @@
 let Achievement = function(obj) {
   this.name = obj.name
   // this.funcName = obj.name.replace(/ /g,'')
+  this.img = obj.img
   this.desc = obj.desc
   this.won = obj.won || 0
   if (obj.reward) this.reward = obj.reward
@@ -14,19 +15,19 @@ let achievements = [
   // SCHOOLS
   // -------------------
 
-  {name: 'Elementary', desc: 'Have a total of 10 schools', reward: {
+  {name: 'Elementary', desc: 'Have a total of 10 schools', img: 'achievement_school_I', reward: {
     txt: 'x2 Permanent School Production',
     building: ['School', 2]
   }},
-  {name: 'Graduation', desc: 'Have a total of 50 schools', reward: {
+  {name: 'Graduation', desc: 'Have a total of 50 schools', img: 'achievement_school_II', reward: {
     txt: 'x2 Permanent School Production',
     building: ['School', 2]
   }},
-  {name: 'GED', desc: 'Have a total of 100 schools', reward: {
+  {name: 'GED', desc: 'Have a total of 100 schools', img: 'achievement_school_III', reward: {
     txt: 'x2 Permanent School Production',
     building: ['School', 2]
   }},
-  {name: 'Ivy League', desc: 'Have a total of 200 schools', reward: {
+  {name: 'Ivy League', desc: 'Have a total of 200 schools', img: 'achievement_school_IV', reward: {
     txt: 'x2 Permanent School Production',
     building: ['School', 2]
   }},
@@ -35,19 +36,19 @@ let achievements = [
   // FARMS
   // -------------------
 
-  {name: 'Rock Farmer', desc: 'Have a total of 10 farms', reward: {
+  {name: 'Rock Farmer', desc: 'Have a total of 10 farms', img: 'achievement_farm_I', reward: {
     txt: 'x2 Permanent Farm Production',
     building: ['Farm', 2]
   }},
-  {name: '25 Acres', desc: 'Have a total of 50 farms', reward: {
+  {name: '25 Acres', desc: 'Have a total of 50 farms', img: 'achievement_farm_II', reward: {
     txt: 'x2 Permanent Farm Production',
     building: ['Farm', 2]
   }},
-  {name: '100 Acres', desc: 'Have a total of 100 farms', reward: {
+  {name: '100 Acres', desc: 'Have a total of 100 farms', img: 'achievement_farm_III', reward: {
     txt: 'x2 Permanent Farm Production',
     building: ['Farm', 2]
   }},
-  {name: 'Slaughterhouse', desc: 'Have a total of 200 farms', reward: {
+  {name: 'Slaughterhouse', desc: 'Have a total of 200 farms', img: 'achievement_farm_IV', reward: {
     txt: 'x2 Permanent Farm Production',
     building: ['Farm', 2]
   }},

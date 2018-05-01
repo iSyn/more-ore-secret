@@ -1427,7 +1427,7 @@ Game.launch = () => {
     if (socketsRand <= .005) sockets++    // .5% chance for 6 sockets
 
     if (sockets > Game.state.permanent.maxSockets) sockets = Game.state.permanent.maxSockets
-
+    
     // -------------------------------------- SELECT AND BUILD BONUS STATS
     let pickaxeStats = {
       Strength: [],
@@ -2184,7 +2184,7 @@ Game.launch = () => {
         <hr/>
         <div class="single-setting">
           <p style='padding-right: 10px;'>Volume: </p>
-          <input class='volume-slider' type="range" min=0 max=1 step=0.1 list='tickmarks' onchange='Game.state.prefs.volume = document.querySelector(".volume-slider").value'/>
+          <input class='volume-slider' type="range" min=0 max=1 value=0.25 step=0.1 list='tickmarks' onchange='Game.state.prefs.volume = document.querySelector(".volume-slider").value'/>
           <datalist id="tickmarks">
             <option value="0" label="0%">
             <option value="0.1">
@@ -2298,7 +2298,7 @@ Game.launch = () => {
         `
         for (let i = 0; i < Game.achievements.length; i++) {
           if (Game.achievements[i].won == 1) {
-            str += `<div onmouseover='Game.showTooltip(event, {type: "achievement", achievementName: "${Game.achievements[i].name}"})' onmouseout='Game.hideTooltip()' class="single-achievement"></div>`
+            str += `<div style='background: url("./assets/images/achievements/${Game.achievements[i].img}.png")' onmouseover='Game.showTooltip(event, {type: "achievement", achievementName: "${Game.achievements[i].name}"})' onmouseout='Game.hideTooltip()' class="single-achievement"></div>`
           }
         }
 
@@ -2328,6 +2328,29 @@ Game.launch = () => {
     Game.state.prefs.inventoryOpen = !Game.state.prefs.inventoryOpen
     if (Game.state.prefs.inventoryOpen) {
       // inventory open
+      let str = ''
+      str += `
+        <div class="item-modal-img-small">
+
+        <div class="item-modal-sockets-container-small">
+          `
+          for(i = 0; i < Game.state.player.pickaxe.sockets; i++) {
+            str += `<div class='item-modal-socket-small' onmouseover='Game.showTooltip(event, {type: "help", text: "Empty socket"})' onmouseout='Game.hideTooltip()'></div>`
+          }
+          str += `
+        </div>
+
+        <div class="pickaxe-top-small ${Game.state.player.pickaxe.material}" style='background: url("./assets/images/pickaxe-top-${Game.state.player.pickaxe.material.toLowerCase()}.png"); background-size: 100% 100%;'></div>
+        <div class="pickaxe-bottom-small"></div>
+        `
+        if (Game.state.player.pickaxe.rarity == 'Legendary' || Game.state.player.pickaxe.rarity == 'Mythical') {
+          str += `<div class="pickaxe-bg"></div>`
+        }
+
+        str += `
+      </div>
+      `
+      s('.inventory-pickaxe').innerHTML = str
       s('.inventory-container').style.left = anchor.right + 'px'
       s('.inventory-container__right').classList.add('inventory-container--open')
     } else {
