@@ -2332,7 +2332,6 @@ Game.launch = () => {
     console.log('handleClickFiring', e.target.dataset.item)
     let selectedItem = Game.state.permanent.inventory[e.target.dataset.item]
     let el = e.target
-
   }
 
   Game.toggleInventory = () => {
