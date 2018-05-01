@@ -2181,7 +2181,7 @@ Game.launch = () => {
         <hr/>
         <div class="single-setting">
           <p style='padding-right: 10px;'>Volume: </p>
-          <input class='volume-slider' type="range" min=0 max=1 step=0.1 list='tickmarks' onchange='Game.state.prefs.volume = document.querySelector(".volume-slider").value'/>
+          <input class='volume-slider' type="range" min=0 max=1 value=0.25 step=0.1 list='tickmarks' onchange='Game.state.prefs.volume = document.querySelector(".volume-slider").value'/>
           <datalist id="tickmarks">
             <option value="0" label="0%">
             <option value="0.1">
