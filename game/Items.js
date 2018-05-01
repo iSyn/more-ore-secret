@@ -275,37 +275,37 @@ let items = [
 
 
   {name: 'Magnifying Glass', type: 'upgrade', pic: 'upgrade_magnifying-glass.png', desc: 'Allows you to spot weakpoints inside the rock', fillerQuote: 'These sure will help...', price: 5, hidden: 1},
-  {name: 'Clean Magnifying Glass', type: 'upgrade', pic: 'upgrade_clean-magnifying-glass.png', desc: 'Increases weak hit multiplier by 5x', fillerQuote: 'wip', price: 100, hidden: 1},
-  {name: 'Polish Magnifying Glass', type: 'upgrade', pic: 'misc_wip.png', desc: 'Increases weak hit multiplier by 5x', fillerQuote: 'wip', price: 50000, hidden: 1},
+  {name: 'Clean Magnifying Glass', type: 'upgrade', pic: 'upgrade_clean-magnifying-glass.png', desc: 'Increases weak hit multiplier by 5x', fillerQuote: 'Now with 50% less smudging!', price: 100, hidden: 1},
+  {name: 'Polish Magnifying Glass', type: 'upgrade', pic: 'misc_wip.png', desc: 'Increases weak hit multiplier by 5x', fillerQuote: 'Polish, not Polish', price: 50000, hidden: 1},
 
 
   // School
   {
-    name: 'Composition Notebooks', type: 'upgrade', pic: 'upgrade_compositionnotebook.png', desc: 'Doubles the production of Schools', fillerQuote: 'wip', price: 80, hidden: 1,
+    name: 'Composition Notebooks', type: 'upgrade', pic: 'upgrade_compositionnotebook.png', desc: 'Doubles the production of Schools', fillerQuote: 'College Ruled!', price: 80, hidden: 1,
     buyFunctions: {
       increaseProduction: {building: 'School', multi: 2}
     }
   },
   {
-    name: 'No. 2 Pencil', type: 'upgrade', pic: 'upgrade_no2pencil.png', desc: 'Triples the production of Schools', fillerQuote: 'wip', price: 1000, hidden: 1,
+    name: 'No. 2 Pencil', type: 'upgrade', pic: 'upgrade_no2pencil.png', desc: 'Triples the production of Schools', fillerQuote: 'Test ready!', price: 1000, hidden: 1,
     buyFunctions: {
       increaseProduction: {building: 'School', multi: 3}
     }
   },
   {
-    name: '3 Ring Binder', type: 'upgrade', pic: 'upgrade_3ringbinder.png', desc: 'Doubles the production of Schools', fillerQuote: 'wip', price: 12000, hidden: 1,
+    name: '3 Ring Binder', type: 'upgrade', pic: 'upgrade_3ringbinder.png', desc: 'Doubles the production of Schools', fillerQuote: 'Be the Lord of the Rings with our new 2.5\" binder!', price: 12000, hidden: 1,
     buyFunctions: {
       increaseProduction: {building: 'School', multi: 2}
     }
   },
   {
-    name: 'Looseleaf', type: 'upgrade', pic: 'misc_wip.png', desc: 'Triples the production of Schools', fillerQuote: 'wip', price: 450000, hidden: 1,
+    name: 'Looseleaf', type: 'upgrade', pic: 'misc_wip.png', desc: 'Triples the production of Schools', fillerQuote: 'Can I borrow a sheet?', price: 450000, hidden: 1,
     buyFunctions: {
       increaseProduction: {building: 'School', multi: 3}
     }
   },
   {
-    name: 'Schoolbag', type: 'upgrade', pic: 'misc_wip.png', desc: 'Quintuples the production of Schools', fillerQuote: 'wip', price: 5500000, hidden: 1,
+    name: 'Schoolbag', type: 'upgrade', pic: 'misc_wip.png', desc: 'Quintuples the production of Schools', fillerQuote: 'Break your back carrying one of these stylish bags!', price: 5500000, hidden: 1,
     buyFunctions: {
       increaseProduction: {building: 'School', multi: 5}
     }
@@ -313,19 +313,19 @@ let items = [
 
   // Farm
   {
-    name: 'Manure Spreader', type: 'upgrade', pic: 'upgrade_manure-spreader.png', desc: 'Doubles the production of Farms', fillerQuote: 'wip', price: 950, hidden: 1,
+    name: 'Manure Spreader', type: 'upgrade', pic: 'upgrade_manure-spreader.png', desc: 'Doubles the production of Farms', fillerQuote: 'The poop helps the ore.', price: 950, hidden: 1,
     buyFunctions: {
       increaseProduction: {building: 'Farm', multi: 2}
     }
   },
   {
-    name: 'Pitchfork', type: 'upgrade', pic: 'misc_wip.png', desc: 'Triples the production of Farms', fillerQuote: 'wip', price: 12500, hidden: 1,
+    name: 'Pitchfork', type: 'upgrade', pic: 'misc_wip.png', desc: 'Triples the production of Farms', fillerQuote: 'Torches not included.', price: 12500, hidden: 1,
     buyFunctions: {
       increaseProduction: {building: 'Farm', multi: 3}
     }
   },
   {
-    name: 'Tractor', type: 'upgrade', pic: 'misc_wip.png', desc: 'Doubles the production of Farms', fillerQuote: 'wip', price: 265000, hidden: 1,
+    name: 'Tractor', type: 'upgrade', pic: 'misc_wip.png', desc: 'Doubles the production of Farms', fillerQuote: 'Firmware crack preinstalled!', price: 265000, hidden: 1,
     buyFunctions: {
       increaseProduction: {building: 'Farm', multi: 2}
     }
@@ -345,31 +345,31 @@ let items = [
 
   // Quarry
   {
-    name: 'Headlights', type: 'upgrade', pic: 'upgrade_headlights.png', desc: 'Doubles the production of Quarrys', fillerQuote: 'wip', price: 1900, hidden: 1,
+    name: 'Floodlights', type: 'upgrade', pic: 'upgrade_headlights.png', desc: 'Doubles the production of Quarrys', fillerQuote: 'Staring into one of them is like staring into a billion suns.', price: 1900, hidden: 1,
     buyFunctions: {
       increaseProduction: {building: 'Quarry', multi: 2}
     }
   },
   {
-    name: 'Twill Rope', type: 'upgrade', pic: 'misc_wip.png', desc: 'Triples the production of Quarrys', fillerQuote: 'wip', price: 11000, hidden: 1,
+    name: 'Twill Rope', type: 'upgrade', pic: 'misc_wip.png', desc: 'Triples the production of Quarrys', fillerQuote: 'Sturdy enough.', price: 11000, hidden: 1,
     buyFunctions: {
       increaseProduction: {building: 'Quarry', multi: 3}
     }
   },
   {
-    name: 'Wooden Compass', type: 'upgrade', pic: 'misc_wip.png', desc: 'Doubles the production of Quarrys', fillerQuote: 'wip', price: 510000, hidden: 1,
+    name: 'Wooden Compass', type: 'upgrade', pic: 'misc_wip.png', desc: 'Doubles the production of Quarrys', fillerQuote: 'Never eat soggy waffles.', price: 510000, hidden: 1,
     buyFunctions: {
       increaseProduction: {building: 'Quarry', multi: 2}
     }
   },
   {
-    name: 'Ore Filter', type: 'upgrade', pic: 'misc_wip.png', desc: 'Triples the production of Quarrys', fillerQuote: 'wip', price:7000000, hidden: 1,
+    name: 'Ore Filter', type: 'upgrade', pic: 'misc_wip.png', desc: 'Triples the production of Quarrys', fillerQuote: 'Less sorting, more ore.', price:7000000, hidden: 1,
     buyFunctions: {
       increaseProduction: {building: 'Quarry', multi: 3}
     }
   },
   {
-    name: 'Waterproof Tape', type: 'upgrade', pic: 'misc_wip.png', desc: 'Quintuples the production of Quarrys', fillerQuote: 'wip', price:80000000, hidden: 1,
+    name: 'Waterproof Tape', type: 'upgrade', pic: 'misc_wip.png', desc: 'Quintuples the production of Quarrys', fillerQuote: 'Works underwater!', price:80000000, hidden: 1,
     buyFunctions: {
       increaseProduction: {building: 'Quarry', multi: 5}
     }
@@ -383,7 +383,7 @@ let items = [
     }
   },
   {
-    name: 'Communion', type: 'upgrade', pic: 'misc_wip.png', desc: 'Triples the production of Churches', fillerQuote: 'Not communism', price: 740000, hidden: 1,
+    name: 'Communion', type: 'upgrade', pic: 'misc_wip.png', desc: 'Triples the production of Churches', fillerQuote: 'Not communism.', price: 740000, hidden: 1,
     buyFunctions: {
       increaseProduction: {building: 'Church', multi: 3}
     }
@@ -409,31 +409,31 @@ let items = [
 
   // Factory
   {
-    name: 'Rubber Conveyor Belt', type: 'upgrade', pic: 'upgrade_rubber-conveyor-belt.png', desc: 'Doubles the production of Factories', fillerQuote: 'wip', price: 300000, hidden: 1,
+    name: 'Rubber Conveyor Belt', type: 'upgrade', pic: 'upgrade_rubber-conveyor-belt.png', desc: 'Doubles the production of Factories', fillerQuote: 'These move the things to there, that\'s all I know.', price: 300000, hidden: 1,
     buyFunctions: {
       increaseProduction: {building: 'Factory', multi: 2}
     }
   },
   {
-    name: 'Floppy Squiggle Tubes', type: 'upgrade', pic: 'misc_wip.png', desc: 'Triples the production of Factories', fillerQuote: 'wip', price: 3000000, hidden: 1,
+    name: 'Floppy Squiggle Tubes', type: 'upgrade', pic: 'misc_wip.png', desc: 'Triples the production of Factories', fillerQuote: 'If I could tell you what these were for you\'d buy twice as many.', price: 3000000, hidden: 1,
     buyFunctions: {
       increaseProduction: {building: 'Factory', multi: 3}
     }
   },
   {
-    name: 'Clicky Squish Buttons', type: 'upgrade', pic: 'misc_wip.png', desc: 'Doubles the production of Factories', fillerQuote: 'wip', price: 44000000, hidden: 1,
+    name: 'Clicky Squish Buttons', type: 'upgrade', pic: 'misc_wip.png', desc: 'Doubles the production of Factories', fillerQuote: 'These go next to the squishy click buttons.', price: 44000000, hidden: 1,
     buyFunctions: {
       increaseProduction: {building: 'Factory', multi: 2}
     }
   },
   {
-    name: 'Metallic Magnetic Panels', type: 'upgrade', pic: 'misc_wip.png', desc: 'Triples the production of Factories', fillerQuote: 'wip', price: 800000000, hidden: 1,
+    name: 'Metallic Magnetic Panels', type: 'upgrade', pic: 'misc_wip.png', desc: 'Triples the production of Factories', fillerQuote: 'These are actually for my fridge.', price: 800000000, hidden: 1,
     buyFunctions: {
       increaseProduction: {building: 'Factory', multi: 3}
     }
   },
   {
-    name: 'Hydroponic Screws', type: 'upgrade', pic: 'misc_wip.png', desc: 'Quintuples the production of Factories', fillerQuote: 'wip', price: 5300000000, hidden: 1,
+    name: 'Hydroponic Screws', type: 'upgrade', pic: 'misc_wip.png', desc: 'Quintuples the production of Factories', fillerQuote: 'I don\'t know what these do but we need a lot of them.', price: 5300000000, hidden: 1,
     buyFunctions: {
       increaseProduction: {building: 'Factory', multi: 5}
     }
@@ -441,31 +441,31 @@ let items = [
 
   // Crypt
   {
-    name: 'Metal Sarcophagus', type: 'upgrade', pic: 'upgrade_metal-sarcophagus.png', desc: 'Doubles the production of Crypt', fillerQuote: 'wip', price: 5200000, hidden: 1,
+    name: 'Metal Sarcophagus', type: 'upgrade', pic: 'upgrade_metal-sarcophagus.png', desc: 'Doubles the production of Crypts', fillerQuote: 'wip', price: 5200000, hidden: 1,
     buyFunctions: {
       increaseProduction: {building: 'Crypt', multi: 2}
     }
   },
   {
-    name: 'Scarecrow', type: 'upgrade', pic: 'misc_wip.png', desc: 'Triples the production of factories', fillerQuote: 'Scare the ghosties away', price: 72000000, hidden: 1,
+    name: 'Scarecrow', type: 'upgrade', pic: 'misc_wip.png', desc: 'Triples the production of Crypts', fillerQuote: 'Scare the ghosties away.', price: 72000000, hidden: 1,
     buyFunction: {
       increaseProduction: {building: 'Crypt', multi: 3}
     }
   },
   {
-    name: 'Polished Shovel', type: 'upgrade', pic: 'misc_wip.png', desc: 'Doubles the production of factories', fillerQuote: 'wip', price: 150000000, hidden: 1,
+    name: 'Polished Shovel', type: 'upgrade', pic: 'misc_wip.png', desc: 'Doubles the production of Crypts', fillerQuote: 'Tool of choice for a knight or an archaeologist.', price: 150000000, hidden: 1,
     buyFunction: {
       increaseProduction: {building: 'Crypt', multi: 2}
     }
   },
   {
-    name: 'Fresh Bandages', type: 'upgrade', pic: 'misc_wip.png', desc: 'Triples the production of factories', fillerQuote: 'wip', price: 2500000000, hidden: 1,
+    name: 'Fresh Bandages', type: 'upgrade', pic: 'misc_wip.png', desc: 'Triples the production of Crypts', fillerQuote: 'Even though used were $20 cheaper...', price: 2500000000, hidden: 1,
     buyFunction: {
       increaseProduction: {building: 'Crypt', multi: 3}
     }
   },
   {
-    name: 'Oil Lanterns', type: 'upgrade', pic: 'misc_wip.png', desc: 'Quintuples the production of factories', fillerQuote: 'Sets the mood', price: 50000000000, hidden: 1,
+    name: 'Oil Lanterns', type: 'upgrade', pic: 'misc_wip.png', desc: 'Quintuples the production of Crypts', fillerQuote: 'Sets the mood.', price: 50000000000, hidden: 1,
     buyFunction: {
       increaseProduction: {building: 'Crypt', multi: 5}
     }
@@ -531,7 +531,7 @@ let items = [
 
   // Eon Portal
   {
-    name: 'Green Goop', type: 'upgrade', pic: 'upgrade_green-goop.png', desc: 'Doubles the production of Eon Portals', fillerQuote: 'wip', price: 150000000000, hidden: 1,
+    name: 'Green Goop', type: 'upgrade', pic: 'upgrade_green-goop.png', desc: 'Doubles the production of Eon Portals', fillerQuote: 'Goopy!', price: 150000000000, hidden: 1,
     buyFunctions: {
       increaseProduction: {building: 'Eon Portal', multi: 2}
     }
@@ -539,7 +539,7 @@ let items = [
 
   // Sacred Mine
   {
-    name: 'Unholy Mineshaft', type: 'upgrade', pic: 'upgrade_unholy-mineshaft.png', desc: 'Doubles the production of Sacred Mines', fillerQuote: 'wip', price: 2200000000000, hidden: 1,
+    name: 'Unholy Mineshaft', type: 'upgrade', pic: 'upgrade_unholy-mineshaft.png', desc: 'Doubles the production of Sacred Mines', fillerQuote: 'Creepy.', price: 2200000000000, hidden: 1,
     buyFunctions: {
       increaseProduction: {building: 'Sacred Mine', multi: 2}
     }
@@ -564,7 +564,7 @@ let items = [
     }
   },
   {
-    name: 'Shiny Watch', type: 'upgrade', pic: 'upgrade_shinywatch.png', desc: 'Increase all ore production by 2%', fillerQuote: 'wip', price: 7000, hidden: 1,
+    name: 'Shiny Watch', type: 'upgrade', pic: 'upgrade_shinywatch.png', desc: 'Increase all ore production by 2%', fillerQuote: 'My grandfather gave it to me but I guess you can have it.', price: 7000, hidden: 1,
     buyFunctions: {
       multipliers: [
         {type: 'ops', amount: .03},
@@ -607,7 +607,7 @@ let items = [
     }
   },
   {
-    name: 'Flashlight', type: 'upgrade', pic: 'upgrade_flashlight.png', desc: 'Gain 1% of your OpS as OpC', fillerQuote: 'wip', price: 55000, hidden: 1,
+    name: 'Flashlight', type: 'upgrade', pic: 'upgrade_flashlight.png', desc: 'Gain 1% of your OpS as OpC', fillerQuote: 'Or a torch if you\'re so inclined.', price: 55000, hidden: 1,
     buyFunctions: {
       multipliers: [
         {type: 'opc', amount: 2}
@@ -615,7 +615,7 @@ let items = [
     }
   },
   {
-    name: 'Clipboard', type: 'upgrade', pic: 'upgrade_clipboard.png', desc: 'Gain 2% of your OpS as OpC', fillerQuote: 'wip', price: 200000, hidden: 1,
+    name: 'Clipboard', type: 'upgrade', pic: 'upgrade_clipboard.png', desc: 'Gain 2% of your OpS as OpC', fillerQuote: 'Makes you look all official.', price: 200000, hidden: 1,
     buyFunctions: {
       multipliers: [
         {type: 'opc', amount: 2}
@@ -623,10 +623,3 @@ let items = [
     }
   },
 ]
-
-
-
-
-
-
-
