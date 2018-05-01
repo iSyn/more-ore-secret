@@ -242,6 +242,7 @@ Game.launch = () => {
       buyAmount: 1,
       inventoryOpen: false
     }
+
   }
 
   Game.positionAllElements = () => {
@@ -600,6 +601,8 @@ Game.launch = () => {
     setTimeout(() => {
       Game.removeEl(s('.loading'))
     }, 1500)
+    //setTimeout(Game.logic, 1000 / Game.state.prefs.fps)
+
   }
 
   Game.confirmWipe = () => {
@@ -1008,7 +1011,7 @@ Game.launch = () => {
     Game.state.stats.currentOreClicks++
     Game.state.stats.currentOresMined += amount
     Game.state.stats.totalOresMined += amount
-    console.log(amount)
+    //console.log(amount)
 
     // CHECK CLICK RELATED ACHIEVEMENTS
 
@@ -1424,7 +1427,7 @@ Game.launch = () => {
     if (socketsRand <= .005) sockets++    // .5% chance for 6 sockets
 
     if (sockets > Game.state.permanent.maxSockets) sockets = Game.state.permanent.maxSockets
-
+    
     // -------------------------------------- SELECT AND BUILD BONUS STATS
     let pickaxeStats = {
       Strength: [],
@@ -2181,7 +2184,7 @@ Game.launch = () => {
         <hr/>
         <div class="single-setting">
           <p style='padding-right: 10px;'>Volume: </p>
-          <input class='volume-slider' type="range" min=0 max=1 step=0.1 list='tickmarks' onchange='Game.state.prefs.volume = document.querySelector(".volume-slider").value'/>
+          <input class='volume-slider' type="range" min=0 max=1 value=0.25 step=0.1 list='tickmarks' onchange='Game.state.prefs.volume = document.querySelector(".volume-slider").value'/>
           <datalist id="tickmarks">
             <option value="0" label="0%">
             <option value="0.1">
@@ -3287,12 +3290,12 @@ Game.launch = () => {
     Game.redrawQuestInfo = 0
   }
 
-  Game.calculateRemainingQuest = () => {
+  Game.calculateRemainingQuest = (timePassed) => {
     let playerModel = s('.player-model')
     let leftPos = (Game.state.quest.currentQuestProgress / Game.state.quest.questCompletionTime) * 100
 
-    if (Game.state.quest.currentQuestProgress + 30 < Game.state.quest.questCompletionTime) {
-      Game.state.quest.currentQuestProgress += 30
+    if (Game.state.quest.currentQuestProgress + timePassed < Game.state.quest.questCompletionTime) {
+      Game.state.quest.currentQuestProgress += timePassed
       playerModel.style.left = leftPos + "%"
     } else {
       Game.state.quest.currentQuestProgress = Game.state.quest.questCompletionTime
@@ -3411,35 +3414,40 @@ Game.launch = () => {
     }
   }
 
-  let counter = 0
+  var lastTimeLogic = Date.now();
+  var lastTimeBonus = Date.now();
+
   Game.logic = () => {
 
-    if (!Game.blurred) {
+
+      let timePassed = Date.now() - Game.state.prefs.lastTimeLogic;
+      Game.state.prefs.lastTimeLogic = Date.now();
+
       // HANDLE ORES N SHIT
       if (Game.recalculateOpC) Game.calculateOpC()
       if (Game.recalculateOpS) Game.calculateOpS()
-      let ops = Game.state.oresPerSecond/Game.state.prefs.fps
-      Game.earn(ops)
+      let toEarn = (Game.state.oresPerSecond / 1000) * timePassed;
+      Game.earn(toEarn)
 
       // BUILD STORE & INVENTORY
       if (s('.skill-tree-container').style.display == 'none' || s('.skill-tree-container').style.display == '') {
-        if (Game.rebuildStore) Game.buildStore()
-        if (Game.rebuildInventory) Game.buildInventory()
+          if (Game.rebuildStore) Game.buildStore()
+          if (Game.rebuildInventory) Game.buildInventory()
 
-        // REPOSITION SHIT
-        if (Game.repositionAllElements) Game.positionAllElements()
-        if (Game.repositionOreWeakSpot) Game.oreWeakSpot()
-        if (Game.redrawQuestInfo) Game.drawQuestInfo()
+          // REPOSITION SHIT
+          if (Game.repositionAllElements) Game.positionAllElements()
+          if (Game.repositionOreWeakSpot) Game.oreWeakSpot()
+          if (Game.redrawQuestInfo) Game.drawQuestInfo()
 
-        // run every 10s
-        counter++
-        if (counter % (30 * 30) == 0) {
-          Game.randomBonus()
-        }
+          // run every 10s
+          // 
+          if ((Date.now() - Game.state.prefs.lastTimeBonus) > (10 * 1000)) {
+              Game.randomBonus()
+              Game.state.prefs.lastTimeBonus = Date.now();
+          }
       }
 
-      if (Game.state.quest.active) Game.calculateRemainingQuest()
-    }
+      if (Game.state.quest.active) Game.calculateRemainingQuest(timePassed)
 
     setTimeout(Game.logic, 1000/Game.state.prefs.fps)
   }
