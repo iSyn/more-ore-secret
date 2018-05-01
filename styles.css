@@ -364,6 +364,11 @@ body {
   z-index: 1;
 }
 
+.item-medium {
+  height: 200px !important;
+  width: 200px !important;
+}
+
 .item-modal-sockets-container, .item-modal-sockets-container-small {
   position: absolute;
   height: 260px;
@@ -2161,7 +2166,6 @@ li {
   visibility: hidden;
   z-index: 2;
   transition: all .3s;
-  display: none;
 }
 
 .inventory-container__right:hover {
@@ -2170,7 +2174,7 @@ li {
 }
 
 .inventory-container__left {
-  padding: 5px;
+  padding: 15px 0px 15px 10px;
   width: 550px;
   background-color: rgba(0, 0, 0, 0.9);
   display: flex;
@@ -2178,13 +2182,55 @@ li {
 }
 
 .inventory-gems {
-  width: 300px;
+  width: 350px;
+  margin-right: 15px;
+  border-radius: 5px;
+  background-color: rgba(255, 255, 255, 0.1);
+  display: flex;
+  flex-flow: column nowrap;
+  position: relative;
+}
+
+.inventory-gems h1 {
+  font-family: "Germania One";
+  font-size: 45px;
+  width: 100%;
+  text-align: center;
+  padding: 5px 0;
+}
+
+.inventory-gems div {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+}
+
+.inventory-gems p {
+  font-size: 13px;
+  text-align: center;
+  bottom: 0;
+  position: absolute;
+  width: 100%;
+  padding: 5px;
+  opacity: .3;
 }
 
 .inventory-pickaxe {
-  width: 250px;
+  width: 200px;
   display: flex;
   align-items: center;
+  /* border: 2px solid black; */
+  border-radius: 5px;
+  background-color: rgba(255, 255, 255, 0.1)
+}
+
+.medium-sockets {
+  height: 200px !important;
+}
+
+.medium-sockets div{
+  height: 40px;
+  width: 40px;
 }
 
 
@@ -2209,33 +2255,24 @@ li {
   cursor: pointer;
 }
 
-.inventory-container__left-top {
-  text-align: center;
-  height: 60%;
-}
-
-.inventory-container__left-bottom {
-  text-align: center;
-}
-
-.inventory-container--equips, .inventory-container--items {
-  display: flex;
-  flex-flow: row nowrap;
-  justify-content: space-evenly;
-  margin-top: 10px;
-}
-
-.inventory-container--equip {
-  height: 100px;
-  width: 100px;
-  border: 1px solid white;
-}
-
-.inventory-container--item {
+.inventory-slot {
   height: 50px;
   width: 50px;
-  border: 1px solid white;
+  /* border: 1px solid rgba(0, 0, 0, 0.6); */
+  box-shadow: 0 1px 2px rgb(40, 40, 40, 0.6);
+  border-radius: 3px;
+  margin: 5px;
+  border-color: rgba(0, 0, 0, 0.4);
+  background-color: rgba(0, 0, 0, 0.2);
+  /* filter: brightness(20%); */
 }
+
+.inventory-item {
+  height: 50px;
+  width: 50px;
+  background-size: 100% 100%;
+}
+
 
 @keyframes itemFallIn {
   from {

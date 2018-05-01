@@ -170,7 +170,15 @@ Game.launch = () => {
       maxSockets: 2,
       opsMulti: 0,
       opcMulti: 0,
-      weakHitMulti: 0
+      weakHitMulti: 0,
+      inventorySlots: 1,
+      inventory: [
+        {
+          name: 'Dirty Ruby',
+          type: 'Ruby',
+          img: 'gem_ruby'
+        }
+      ]
     },
 
     player: {
@@ -997,7 +1005,7 @@ Game.launch = () => {
       }
     } else {
       amount *= (Game.state.player.pickaxe.hardness/100)
-      Game.getCombo(event)
+      Game.getCombo(evt)
       Game.playSound('ore-hit')
       Game.risingNumber(evt, amount)
       // Game.gainXp()
@@ -2320,34 +2328,64 @@ Game.launch = () => {
     s('body').append(div)
   }
 
+  Game.handleItemClick = (e) => {
+    console.log('handleClickFiring', e.target.dataset.item)
+    let selectedItem = Game.state.permanent.inventory[e.target.dataset.item]
+    let el = e.target
+
+  }
+
   Game.toggleInventory = () => {
+    let { inventorySlots, inventory } = Game.state.permanent
     let anchor = s('#left-separator').getBoundingClientRect()
     Game.state.prefs.inventoryOpen = !Game.state.prefs.inventoryOpen
     if (Game.state.prefs.inventoryOpen) {
       // inventory open
-      let str = ''
-      str += `
-        <div class="item-modal-img-small">
+      let pickaxe_html = ''
+      pickaxe_html += `
+        <div class="item-modal-img item-medium">
 
-        <div class="item-modal-sockets-container-small">
+        <div class="item-modal-sockets-container medium-sockets">
           `
           for(i = 0; i < Game.state.player.pickaxe.sockets; i++) {
-            str += `<div class='item-modal-socket-small' onmouseover='Game.showTooltip(event, {type: "help", text: "Empty socket"})' onmouseout='Game.hideTooltip()'></div>`
+            pickaxe_html += `<div class='item-modal-socket' onmouseover='Game.showTooltip(event, {type: "help", text: "Empty socket"})' onmouseout='Game.hideTooltip()'></div>`
           }
-          str += `
+          pickaxe_html += `
         </div>
 
-        <div class="pickaxe-top-small ${Game.state.player.pickaxe.material}" style='background: url("./assets/images/pickaxe-top-${Game.state.player.pickaxe.material.toLowerCase()}.png"); background-size: 100% 100%;'></div>
-        <div class="pickaxe-bottom-small"></div>
+        <div class="pickaxe-top item-medium ${Game.state.player.pickaxe.material}" style='background: url("./assets/images/pickaxe-top-${Game.state.player.pickaxe.material.toLowerCase()}.png"); background-size: 100% 100%;'></div>
+        <div class="pickaxe-bottom item-medium"></div>
         `
         if (Game.state.player.pickaxe.rarity == 'Legendary' || Game.state.player.pickaxe.rarity == 'Mythical') {
-          str += `<div class="pickaxe-bg"></div>`
+          pickaxe_html += `<div class="pickaxe-bg"></div>`
         }
 
-        str += `
+        pickaxe_html += `</div>`
+      s('.inventory-pickaxe').innerHTML = pickaxe_html
+
+      let inventory_html = ''
+      for (i = 0; i < inventorySlots; i++) {
+        console.log('inventory', inventory[i])
+        if (inventory[i]) {
+          inventory_html += `
+            <div class='inventory-slot'>
+            <div data-item='${i}' onmousedown='Game.handleItemClick(event)'class="inventory-item" style='background: url("./assets/images/${inventory[i].img}.png")'></div>
+            </div>
+          `
+        } else {
+          inventory_html += `<div class='inventory-slot'></div>`
+        }
+      }
+
+      s('.inventory-gems').innerHTML = `
+      <h1>Inventory</h1>
+      <div>
+        ${inventory_html}
       </div>
+      <p>Level the skill Backpacking to increase max inventory size</p>
+      
       `
-      s('.inventory-pickaxe').innerHTML = str
+
       s('.inventory-container').style.left = anchor.right + 'px'
       s('.inventory-container__right').classList.add('inventory-container--open')
     } else {
@@ -3548,6 +3586,16 @@ Game.launch = () => {
       Game.state.player.pickaxe.damage *= 10000000
       Game.recalculateOpC = 1
     }
+  })
+
+  window.addEventListener('mousedown', (e) => {
+    console.log('mousedown')
+    Game.mousedown = 1
+  })
+
+  window.addEventListener('mouseup', (e) => {
+    console.log('mouseup')
+    Game.mousedown = 0
   })
 
 }
