@@ -42,44 +42,45 @@ let beautify = (number) => {
   // format number and add prefix as suffix
   return parseFloat(scaled.toFixed(2)) + " " + prefix;
 
-
-  if (num < 1) {
-    return num.toFixed(1)
-  }
-  if (num < 1000000) {
-    return Math.round(num).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); //found on https://stackoverflow.com/questions/2901102/how-to-print-a-number-with-commas-as-thousands-separators-in-javascript
-  } else {
-    if (num >= 1000000000000000000000000000000000) {
-      return (num/1000000000000000000000000000000000).toFixed(0) + ' F*cktonillion'
-    }
-    if (num >= 1000000000000000000000000000000) {
-      return (num/1000000000000000000000000000000).toFixed(1) + ' F*ckloadillion'
-    }
-    if (num >= 1000000000000000000000000000) {
-      return (num/1000000000000000000000000000).toFixed(1) + ' Waytoomanyillion'
-    }
-    if (num >= 1000000000000000000000000) {
-      return (num/1000000000000000000000000).toFixed(1) + ' Alotillion'
-    }
-    if (num >= 1000000000000000000000) {
-      return (num/1000000000000000000000).toFixed(1) + ' Sextillion'
-    }
-    if (num >= 1000000000000000000) {
-      return (num/1000000000000000000).toFixed(1) + ' Quintillion'
-    }
-    if (num >= 1000000000000000) {
-      return (num/1000000000000000).toFixed(1) + ' Quadrillion'
-    }
-    if (num >= 1000000000000) {
-      return (num/1000000000000).toFixed(1) + ' Trillion'
-    }
-    if (num >= 1000000000) {
-      return (num/1000000000).toFixed(1) + ' Billion'
-    }
-    if (num >= 1000000) {
-      return (num/1000000).toFixed(1) + ' Million'
-    }
-  }
+  // this code never runs, commented for clarity
+  //
+  // if (num < 1) {
+  //   return num.toFixed(1)
+  // }
+  // if (num < 1000000) {
+  //   return Math.round(num).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); //found on https://stackoverflow.com/questions/2901102/how-to-print-a-number-with-commas-as-thousands-separators-in-javascript
+  // } else {
+  //   if (num >= 1000000000000000000000000000000000) {
+  //     return (num/1000000000000000000000000000000000).toFixed(0) + ' F*cktonillion'
+  //   }
+  //   if (num >= 1000000000000000000000000000000) {
+  //     return (num/1000000000000000000000000000000).toFixed(1) + ' F*ckloadillion'
+  //   }
+  //   if (num >= 1000000000000000000000000000) {
+  //     return (num/1000000000000000000000000000).toFixed(1) + ' Waytoomanyillion'
+  //   }
+  //   if (num >= 1000000000000000000000000) {
+  //     return (num/1000000000000000000000000).toFixed(1) + ' Alotillion'
+  //   }
+  //   if (num >= 1000000000000000000000) {
+  //     return (num/1000000000000000000000).toFixed(1) + ' Sextillion'
+  //   }
+  //   if (num >= 1000000000000000000) {
+  //     return (num/1000000000000000000).toFixed(1) + ' Quintillion'
+  //   }
+  //   if (num >= 1000000000000000) {
+  //     return (num/1000000000000000).toFixed(1) + ' Quadrillion'
+  //   }
+  //   if (num >= 1000000000000) {
+  //     return (num/1000000000000).toFixed(1) + ' Trillion'
+  //   }
+  //   if (num >= 1000000000) {
+  //     return (num/1000000000).toFixed(1) + ' Billion'
+  //   }
+  //   if (num >= 1000000) {
+  //     return (num/1000000).toFixed(1) + ' Million'
+  //   }
+  // }
 }
 
 let beautifyTime = (num) => {
@@ -120,13 +121,12 @@ let beautifyMs = (ms) => {
 }
 
 //https://stackoverflow.com/questions/3369593/how-to-detect-escape-key-press-with-javascript-or-jquery
-document.onkeydown = function(evt) {
-  evt = evt || window.event;
+document.onkeydown = function(event) {
   var isEscape = false;
-  if ("key" in evt) {
-      isEscape = (evt.key == "Escape" || evt.key == "Esc");
+  if ("key" in event) {
+      isEscape = (event.key == "Escape" || event.key == "Esc");
   } else {
-      isEscape = (evt.keyCode == 27);
+      isEscape = (event.keyCode == 27);
   }
   if (isEscape) {
     Game.closeCurrentWindow()
@@ -513,9 +513,9 @@ Game.launch = () => {
       JSON.parse(localStorage.getItem('quests')).forEach((quest) => quests.push(quest))
       quests.forEach((quest) => new Quest(quest))
 
-	  
-	  
-		if (Game.state.oresPerSecond > 0 && Game.state.lastLogin) 
+
+
+		if (Game.state.oresPerSecond > 0 && Game.state.lastLogin)
 			//gain away income
 		{
 			Game.earnOfflineGain()
@@ -537,11 +537,11 @@ Game.launch = () => {
 			<p style='text-align: center;'>[ Press ESC or click to close window ]</p>
 		</div>
     `
-	
+
 
 		s('body').append(welcomeTxt)
 	}
-	
+
 
 
       console.log('LOADING SAVE COMPLETE')
@@ -580,7 +580,7 @@ Game.launch = () => {
       }
     }
 
-   
+
 
     // PREREQUISITES
     Game.updatePercentage(0)
@@ -982,8 +982,7 @@ Game.launch = () => {
     }
   }
 
-  Game.handleClick = (evt, type) => {
-    evt = evt || window.event
+  Game.handleClick = (event, type) => {
     let amount = Game.state.oresPerClick
     if (type) {
       if (type == 'weak-spot') {
@@ -991,7 +990,7 @@ Game.launch = () => {
         amount *= (Game.state.player.pickaxe.sharpness/100)
         amount *= (Game.state.weakHitMulti + Game.state.permanent.weakHitMulti)
         Game.playSound('ore-crit-hit')
-        Game.risingNumber(evt, amount, 'weak-hit')
+        Game.risingNumber(event, amount, 'weak-hit')
         Game.state.stats.currentWeakSpotHits++
         Game.repositionAllElements = 1
       }
@@ -999,12 +998,12 @@ Game.launch = () => {
       amount *= (Game.state.player.pickaxe.hardness/100)
       Game.getCombo(event)
       Game.playSound('ore-hit')
-      Game.risingNumber(evt, amount)
+      Game.risingNumber(event, amount)
       // Game.gainXp()
     }
 
     Game.earn(amount)
-    Game.drawRockParticles(evt)
+    Game.drawRockParticles(event)
     Game.state.stats.currentOreClicks++
     Game.state.stats.currentOresMined += amount
     Game.state.stats.totalOresMined += amount
@@ -1020,14 +1019,14 @@ Game.launch = () => {
     if (Game.state.stats.currentWeakSpotHits == 20) Game.unlockUpgrade('Polish Magnifying Glass')
   }
 
-  Game.risingNumber = (evt, amount, type) => {
+  Game.risingNumber = (event, amount, type) => {
 
     if (Game.state.prefs.risingNumbers == true) {
       let mouseX = (s('.ore').getBoundingClientRect().left + s('.ore').getBoundingClientRect().right)/2
       let mouseY = (s('.ore').getBoundingClientRect().top + s('.ore').getBoundingClientRect().bottom)/2
-      if (evt && evt.clientX && evt.clientY) {
-        mouseX = evt.clientX
-        mouseY = evt.clientY
+      if (event && event.clientX && event.clientY) {
+        mouseX = event.clientX
+        mouseY = event.clientY
       }
       let randomNumber = Math.floor(Math.random() * 20) + 1
       let randomSign = Math.round(Math.random()) * 2 - 1
@@ -1151,7 +1150,7 @@ Game.launch = () => {
     }
   }
 
-  Game.drawRockParticles = (evt) => {
+  Game.drawRockParticles = (event) => {
     if (Game.state.prefs.rockParticles == true) {
       let allParticles = document.querySelectorAll('.particle')
       if (allParticles.length >= 10) {
@@ -1161,8 +1160,8 @@ Game.launch = () => {
       let div = document.createElement('div')
       div.classList.add('particle')
       div.style.background = 'lightgrey'
-      let x = evt.clientX
-      let y = evt.clientY
+      let x = event.clientX
+      let y = event.clientY
 
       div.style.left = x + 'px'
       div.style.top = y + 'px'
@@ -1814,7 +1813,7 @@ Game.launch = () => {
     s('.ores').innerHTML = str
 
     s('.generation').innerHTML = `Generation: ${Game.state.player.generation.lv}`
-    s('.generation').onmouseover = (evt) => Game.showTooltip(evt || window.event, {type: 'generation'})
+    s('.generation').onmouseover = (event) => Game.showTooltip(event, {type: 'generation'})
     s('.generation').onmouseout = () => Game.hideTooltip()
 
     Game.rebuildInventory = 0
@@ -1975,7 +1974,7 @@ Game.launch = () => {
     s('.ore-hp').innerHTML = `${oreHpPercentage.toFixed(0)}%`
   }
 
-  Game.showTooltip = (evt, obj) => {
+  Game.showTooltip = (event, obj) => {
     let tooltip = s('.tooltip')
 
     let anchor = s('#main-separator').getBoundingClientRect()
@@ -1984,7 +1983,7 @@ Game.launch = () => {
     tooltip.style.display = 'block'
 
     tooltip.style.left = anchor.left - tooltip.getBoundingClientRect().width + 'px'
-    tooltip.style.top = evt.clientY + 'px'
+    tooltip.style.top = event.clientY + 'px'
 
 
     if (obj.type == 'buildings' || obj.type == 'upgrades') {
@@ -2029,8 +2028,8 @@ Game.launch = () => {
     if (obj.type == 'generation') {
       tooltip.style.textAlign = 'center'
       tooltip.style.width = 'auto'
-      tooltip.style.left = evt.clientX - tooltip.getBoundingClientRect().width/2 + 'px'
-      tooltip.style.top = evt.clientY + 20 + 'px'
+      tooltip.style.left = event.clientX - tooltip.getBoundingClientRect().width/2 + 'px'
+      tooltip.style.top = event.clientY + 20 + 'px'
       tooltip.style.minWidth = '150px'
       tooltip.innerHTML = `
         <h3>You are currently on Generation ${Game.state.player.generation.lv}</h3>
@@ -2104,8 +2103,8 @@ Game.launch = () => {
 
 
 
-      tooltip.style.left = evt.clientX + 30 + 'px'
-      tooltip.style.top = evt.clientY - tooltip.getBoundingClientRect().height/2 + 'px'
+      tooltip.style.left = event.clientX + 30 + 'px'
+      tooltip.style.top = event.clientY - tooltip.getBoundingClientRect().height/2 + 'px'
     }
 
     if (obj.type == 'quest') {
@@ -2125,8 +2124,8 @@ Game.launch = () => {
       let str;
       let selectedAchievement = Game.select(Game.achievements, obj.achievementName)
 
-      tooltip.style.left = evt.clientX + 20 + 'px'
-      tooltip.style.top = evt.clientY + 20 + 'px'
+      tooltip.style.left = event.clientX + 20 + 'px'
+      tooltip.style.top = event.clientY + 20 + 'px'
       tooltip.style.textAlign = 'left'
 
       if (obj.missing) {
@@ -2152,8 +2151,8 @@ Game.launch = () => {
 
     if (obj.type == 'help') {
       tooltip.style.width = 'auto'
-      tooltip.style.left = evt.clientX - tooltip.getBoundingClientRect().width/2 + 'px'
-      tooltip.style.top = evt.clientY + 20 + 'px'
+      tooltip.style.left = event.clientX - tooltip.getBoundingClientRect().width/2 + 'px'
+      tooltip.style.top = event.clientY + 20 + 'px'
       tooltip.innerHTML = `
         <p>${obj.text}</p>
       `
@@ -2361,38 +2360,43 @@ Game.launch = () => {
       console.log('bonus!')
       let randomID = Math.floor(Math.random() * 1000000) + 1
       let chance = Math.random()
-      let bonus = document.createElement('div')
-      bonus.id = `bonus-${randomID}`
-      bonus.classList.add('bonus')
+      let bonusGrade
+      let bonusEl = document.createElement('div')
+
+      bonusEl.id = `bonus-${randomID}`
+      bonusEl.classList.add('bonus')
       // 60% chance of happening
       if (chance >= 0 && chance <= .6) {
-        bonus.onclick = () => {Game.selectedBonus(1); bonus.parentNode.removeChild(bonus)}
+        bonusGrade = 1;
       // 25% chance of happening
       } else if (chance > .6 && chance <= .85) {
-        bonus.onclick = () => {Game.selectedBonus(2); bonus.parentNode.removeChild(bonus)}
+        bonusGrade = 2;
       // 10% chance of happening
       } else if (chance > .85 && chance <= .95) {
-        bonus.onclick = () => {Game.selectedBonus(3); bonus.parentNode.removeChild(bonus)}
+        bonusGrade = 3;
       // 5% chance
       } else {
-        bonus.onclick = () => {Game.selectedBonus(4); bonus.parentNode.removeChild(bonus)}
+        bonusGrade = 4;
       }
+
+      bonusEl.onclick = (event) => { Game.selectedBonus(event, bonusEl, bonusGrade) }
 
       let randomX = Math.random() * window.innerWidth
       let randomY = Math.random() * window.innerHeight
 
-      bonus.style.left = randomX + 'px'
-      bonus.style.top = randomY + 'px'
+      bonusEl.style.left = randomX + 'px'
+      bonusEl.style.top = randomY + 'px'
 
-      s('body').append(bonus)
+      s('body').append(bonusEl)
 
       setTimeout(() => {
-        let b = s(`#bonus-${randomID}`)
-        if (b) {
-          bonus.classList.add('fadeOut')
+        bonusEl = s(`#bonus-${randomID}`)
+        if (bonusEl) {
+          bonusEl.classList.add('fadeOut')
           setTimeout(() => {
-            if (b) {
-              b.parentNode.removeChild(b)
+            bonusEl = s(`#bonus-${randomID}`)
+            if (bonusEl) {
+              bonusEl.parentNode.removeChild(bonusEl)
             }
           }, 2000)
         }
@@ -2400,7 +2404,10 @@ Game.launch = () => {
     }
   }
 
-  Game.selectedBonus = (bonusNum) => {
+  Game.selectedBonus = (event, el, bonusNum) => {
+    // remove the UI element first
+    el.parentNode.removeChild(el)
+
     Game.playSound('ding')
     if (bonusNum == 1) {
       let amount = (Game.state.oresPerSecond * 13 + Game.state.oresPerClick * 13)
@@ -2443,7 +2450,7 @@ Game.launch = () => {
         let randomX = Math.random() * window.innerWidth
         bonus.style.left = randomX + 'px'
         s('body').append(bonus)
-        bonus.onclick = () => {Game.selectedBonus(1); Game.removeEl(bonus)}
+        bonus.onclick = (event) => { Game.selectedBonus(event, bonus, 1) }
 
         setTimeout(() => {
           if (s(`#bonus-${randomID}`)) {
@@ -2590,7 +2597,7 @@ Game.launch = () => {
       if (Game.skills[i].locked == 1) {
         str += `
           <div
-            onclick='Game.skills[${i}].levelUp()'
+            onclick='Game.skills[${i}].levelUp(event)'
             onmouseover='Game.showTooltip(event, {type: "skill", name: "${Game.skills[i].name}"})'
             onmouseout='Game.hideTooltip()'
             class='skill skill-${Game.skills[i].className}'
@@ -2600,7 +2607,7 @@ Game.launch = () => {
       } else {
         str += `
           <div
-            onclick='Game.skills[${i}].levelUp()'
+            onclick='Game.skills[${i}].levelUp(event)'
             onmouseover='Game.showTooltip(event, {type: "skill", name: "${Game.skills[i].name}"})'
             onmouseout='Game.hideTooltip()'
             class='skill skill-${Game.skills[i].className}'
@@ -3195,7 +3202,7 @@ Game.launch = () => {
         <h1>${selectedQuest.name}</h1>
         <p onclick='Game.closeCurrentWindow()' style='position: absolute; top: 5px; right: 5px; cursor: pointer'>X</p>
         <hr/>
-        <img src="./assets/images/quest_${selectedQuest.pic}.png" class="quest-img"'>
+        <img src="./assets/images/quest_${selectedQuest.pic}.png" class="quest-img">
         <hr/>
         <br/>
         <h3>${selectedQuest.desc}</h3>
@@ -3228,7 +3235,7 @@ Game.launch = () => {
   }
 
   Game.canBoost = true
-  Game.boostQuest = () => {
+  Game.boostQuest = (event) => {
     if (Game.state.quest.currentQuestProgress != Game.state.quest.questCompletionTime) {
       if (Game.canBoost) {
         if (Game.state.quest.currentQuestProgress + 5000 < Game.state.quest.questCompletionTime) {
@@ -3268,7 +3275,7 @@ Game.launch = () => {
     let div = s('.bottom')
     if (Game.state.quest.active) {
       div.innerHTML = `
-        <div onclick='Game.boostQuest()' class="bottom-quest-wrapper" style='cursor: pointer; width: 100%; height: 100%;'>
+        <div onclick='Game.boostQuest(event)' class="bottom-quest-wrapper" style='cursor: pointer; width: 100%; height: 100%;'>
           <div class="click-cooldown-container">
             <div class="click-cooldown"></div>
           </div>
@@ -3517,8 +3524,8 @@ Game.launch = () => {
   Game.load()
   Game.logic()
 
-  s('.ore').onclick = (evt) => Game.handleClick(evt)
-  s('.ore-weak-spot').onclick = (evt) => Game.handleClick(evt, 'weak-spot')
+  s('.ore').onclick = (event) => Game.handleClick(event)
+  s('.ore-weak-spot').onclick = (event) => Game.handleClick(event, 'weak-spot')
 
   window.onresize = () => {
     Game.repositionAllElements = 1
