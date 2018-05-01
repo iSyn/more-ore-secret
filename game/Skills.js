@@ -13,7 +13,7 @@ let Skill = function(skill) {
 
     Game.skills.push(this)
 
-    this.levelUp = () => {
+    this.levelUp = (event) => {
         if (!this.locked) {
             if (this.lvl < this.maxLvl) {
                 if (Game.state.player.generation.availableSp > 0) {
