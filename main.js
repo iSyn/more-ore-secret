@@ -513,9 +513,9 @@ Game.launch = () => {
       JSON.parse(localStorage.getItem('quests')).forEach((quest) => quests.push(quest))
       quests.forEach((quest) => new Quest(quest))
 
-	  
-	  
-		if (Game.state.oresPerSecond > 0 && Game.state.lastLogin) 
+
+
+		if (Game.state.oresPerSecond > 0 && Game.state.lastLogin)
 			//gain away income
 		{
 			Game.earnOfflineGain()
@@ -537,11 +537,11 @@ Game.launch = () => {
 			<p style='text-align: center;'>[ Press ESC or click to close window ]</p>
 		</div>
     `
-	
+
 
 		s('body').append(welcomeTxt)
 	}
-	
+
 
 
       console.log('LOADING SAVE COMPLETE')
@@ -580,7 +580,7 @@ Game.launch = () => {
       }
     }
 
-   
+
 
     // PREREQUISITES
     Game.updatePercentage(0)
@@ -2360,38 +2360,43 @@ Game.launch = () => {
       console.log('bonus!')
       let randomID = Math.floor(Math.random() * 1000000) + 1
       let chance = Math.random()
-      let bonus = document.createElement('div')
-      bonus.id = `bonus-${randomID}`
-      bonus.classList.add('bonus')
+      let bonusGrade
+      let bonusEl = document.createElement('div')
+
+      bonusEl.id = `bonus-${randomID}`
+      bonusEl.classList.add('bonus')
       // 60% chance of happening
       if (chance >= 0 && chance <= .6) {
-        bonus.onclick = () => {Game.selectedBonus(1); bonus.parentNode.removeChild(bonus)}
+        bonusGrade = 1;
       // 25% chance of happening
       } else if (chance > .6 && chance <= .85) {
-        bonus.onclick = () => {Game.selectedBonus(2); bonus.parentNode.removeChild(bonus)}
+        bonusGrade = 2;
       // 10% chance of happening
       } else if (chance > .85 && chance <= .95) {
-        bonus.onclick = () => {Game.selectedBonus(3); bonus.parentNode.removeChild(bonus)}
+        bonusGrade = 3;
       // 5% chance
       } else {
-        bonus.onclick = () => {Game.selectedBonus(4); bonus.parentNode.removeChild(bonus)}
+        bonusGrade = 4;
       }
+
+      bonusEl.onclick = (event) => { Game.selectedBonus(event, bonusEl, bonusGrade) }
 
       let randomX = Math.random() * window.innerWidth
       let randomY = Math.random() * window.innerHeight
 
-      bonus.style.left = randomX + 'px'
-      bonus.style.top = randomY + 'px'
+      bonusEl.style.left = randomX + 'px'
+      bonusEl.style.top = randomY + 'px'
 
-      s('body').append(bonus)
+      s('body').append(bonusEl)
 
       setTimeout(() => {
-        let b = s(`#bonus-${randomID}`)
-        if (b) {
-          bonus.classList.add('fadeOut')
+        bonusEl = s(`#bonus-${randomID}`)
+        if (bonusEl) {
+          bonusEl.classList.add('fadeOut')
           setTimeout(() => {
-            if (b) {
-              b.parentNode.removeChild(b)
+            bonusEl = s(`#bonus-${randomID}`)
+            if (bonusEl) {
+              bonusEl.parentNode.removeChild(bonusEl)
             }
           }, 2000)
         }
@@ -2399,7 +2404,10 @@ Game.launch = () => {
     }
   }
 
-  Game.selectedBonus = (bonusNum) => {
+  Game.selectedBonus = (event, el, bonusNum) => {
+    // remove the UI element first
+    el.parentNode.removeChild(el)
+
     Game.playSound('ding')
     if (bonusNum == 1) {
       let amount = (Game.state.oresPerSecond * 13 + Game.state.oresPerClick * 13)
@@ -2442,7 +2450,7 @@ Game.launch = () => {
         let randomX = Math.random() * window.innerWidth
         bonus.style.left = randomX + 'px'
         s('body').append(bonus)
-        bonus.onclick = () => {Game.selectedBonus(1); Game.removeEl(bonus)}
+        bonus.onclick = (event) => { Game.selectedBonus(event, bonus, 1) }
 
         setTimeout(() => {
           if (s(`#bonus-${randomID}`)) {
@@ -2589,7 +2597,7 @@ Game.launch = () => {
       if (Game.skills[i].locked == 1) {
         str += `
           <div
-            onclick='Game.skills[${i}].levelUp()'
+            onclick='Game.skills[${i}].levelUp(event)'
             onmouseover='Game.showTooltip(event, {type: "skill", name: "${Game.skills[i].name}"})'
             onmouseout='Game.hideTooltip()'
             class='skill skill-${Game.skills[i].className}'
@@ -2599,7 +2607,7 @@ Game.launch = () => {
       } else {
         str += `
           <div
-            onclick='Game.skills[${i}].levelUp()'
+            onclick='Game.skills[${i}].levelUp(event)'
             onmouseover='Game.showTooltip(event, {type: "skill", name: "${Game.skills[i].name}"})'
             onmouseout='Game.hideTooltip()'
             class='skill skill-${Game.skills[i].className}'
@@ -3227,7 +3235,7 @@ Game.launch = () => {
   }
 
   Game.canBoost = true
-  Game.boostQuest = () => {
+  Game.boostQuest = (event) => {
     if (Game.state.quest.currentQuestProgress != Game.state.quest.questCompletionTime) {
       if (Game.canBoost) {
         if (Game.state.quest.currentQuestProgress + 5000 < Game.state.quest.questCompletionTime) {
@@ -3267,7 +3275,7 @@ Game.launch = () => {
     let div = s('.bottom')
     if (Game.state.quest.active) {
       div.innerHTML = `
-        <div onclick='Game.boostQuest()' class="bottom-quest-wrapper" style='cursor: pointer; width: 100%; height: 100%;'>
+        <div onclick='Game.boostQuest(event)' class="bottom-quest-wrapper" style='cursor: pointer; width: 100%; height: 100%;'>
           <div class="click-cooldown-container">
             <div class="click-cooldown"></div>
           </div>
