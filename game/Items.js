@@ -59,6 +59,7 @@ let items = [
       addTextScroller: [
         {text: 'First day of class has started', amountNeeded: 1},
         {text: '[Breaking News] The school district superintendent has announced new ore related classes to take', amountNeeded: 10}
+        {text: 'Geology PHD becoming increasingly common among graduates.', amountNeeded: 20}
       ],
       achievements: [
         {name: 'Elementary', amountNeeded: 10},
@@ -117,6 +118,9 @@ let items = [
         {name: '7th Day', amountNeeded: 50},
         {name: 'Judgement Day', amountNeeded: 100},
       ],
+      addTextScroller: [
+        {text: '[Breaking News] Religious fanatics take miners hostage, do mining themselves', amountNeeded: 10}
+      ],
       achievements: [
         {name: 'Communion', amountNeeded: 10},
         {name: 'Sacrifice', amountNeeded: 50},
@@ -134,6 +138,9 @@ let items = [
         {name: 'Clicky Squish Buttons', amountNeeded: 20},
         {name: 'Metallic Magnetic Panels', amountNeeded: 50},
         {name: 'Hydroponic Screws', amountNeeded: 100},
+      ],
+      addTextScroller: [
+        {text: 'How it\'s made: Ores airs tonight at 6. Take a look into the ore industries factories and watch it each step of the way.', amountNeeded: 5}
       ],
       achievements: [
         {name: 'Assembly Line', amountNeeded: 10},
@@ -171,6 +178,9 @@ let items = [
         {name: 'CAT Scan', amountNeeded: 50},
         {name: 'Enhancement Surgery', amountNeeded: 100},
       ],
+      addTextScroller: [
+        {text: '[Breaking News] Ore Pox cured! Billions saved!', amountNeeded: 10}
+      ],
       achievements: [
         {name: 'Herbal Supplements', amountNeeded: 10},
         {name: 'Homeopathy Kit', amountNeeded: 50},
@@ -194,10 +204,14 @@ let items = [
     }
   },
   {
-    name: 'Xeno Spaceship', namePlural: 'Xeno Spaceships', type: 'building', pic: 'building_xeno-spaceship.png', production: 192192000, desc: 'wip', fillerQuote: 'wip', basePrice: 49533120000, hidden: 2,
+    name: 'Xeno Spaceship', namePlural: 'Xeno Spaceships', type: 'building', pic: 'building_xeno-spaceship.png', production: 192192000, desc: 'Import ores from the ore filled galaxy', fillerQuote: 'A universe full of intelligent life, too intelligent to come here.', basePrice: 49533120000, hidden: 2,
     buyFunctions: {
       unlockUpgrades: [
         {name: 'Jet Fuel', amountNeeded: 1}
+      ],
+      addTextScroller: [
+        {text: '[Breaking News] Alien Abductions startingly more common', amountNeeded: 2}
+        {text: '[Breaking News] Man abducted by aliens and experimented on now Ore-Human hybrid', amountNeeded: 5 }
       ],
       achievements: [
         {name: 'Xeno Spaceship Achievement I', amountNeeded: 10},
@@ -208,10 +222,13 @@ let items = [
     }
   },
   {
-    name: 'Sky Castle', namePlural: 'Sky Castles', type: 'building', pic: 'building_skycastle.png', production: 3843840000, desc: 'wip', fillerQuote: 'wip', basePrice: 1238328000000, hidden: 2,
+    name: 'Sky Castle', namePlural: 'Sky Castles', type: 'building', pic: 'building_skycastle.png', production: 3843840000, desc: 'Use magic beans to reach an egg based source of ore', fillerQuote: 'wip', basePrice: 1238328000000, hidden: 2,
     buyFunctions: {
       unlockUpgrades: [
         {name: 'Golden Eggs', amountNeeded: 1}
+      ],
+      addTextScroller: [
+        {text: '[Breaking News] Magic beanstalk accident kills 7 today in what has been called the largest beanstalk related accident in history', amountNeeded: 5}
       ],
       achievements: [
         {name: 'Sky Castle Achievement I', amountNeeded: 10},
@@ -222,7 +239,7 @@ let items = [
     }
   },
   {
-    name: 'Eon Portal', namePlural: 'Eon Portal', type: 'building', pic: 'building_eonportal.png', production: 45126080000, desc: 'wip', fillerQuote: 'wip', basePrice: 18574920000000, hidden: 2,
+    name: 'Eon Portal', namePlural: 'Eon Portal', type: 'building', pic: 'building_eonportal.png', production: 45126080000, desc: 'Steal ore from your past and future self', fillerQuote: 'wip', basePrice: 18574920000000, hidden: 2,
     buyFunctions: {
       unlockUpgrades: [
         {name: 'Green Goop', amountNeeded: 1}
@@ -331,7 +348,7 @@ let items = [
     }
   },
   {
-    name: 'Rotary Cutter', type: 'upgrade', pic: 'misc_wip.png', desc: 'Triples the production of Farms', fillerQuote: 'wip', price: 3450000, hidden: 1,
+    name: 'Rotary Cutter', type: 'upgrade', pic: 'misc_wip.png', desc: 'Triples the production of Farms', fillerQuote: 'Now not even grass can stop us.', price: 3450000, hidden: 1,
     buyFunctions: {
       increaseProduction: {building: 'Farm', multi: 3}
     }
@@ -377,7 +394,7 @@ let items = [
 
   // Church
   {
-    name: 'Scripture Reading', type: 'upgrade', pic: 'upgrade_scripture-reading.png', desc: 'Doubles the production of Churches', fillerQuote: 'wip', price: 60000, hidden: 1,
+    name: 'Scripture Reading', type: 'upgrade', pic: 'upgrade_scripture-reading.png', desc: 'Doubles the production of Churches', fillerQuote: 'Read the word of our l-ore-d and savior.', price: 60000, hidden: 1,
     buyFunctions: {
       increaseProduction: {building: 'Church', multi: 2}
     }
@@ -389,19 +406,19 @@ let items = [
     }
   },
   {
-    name: 'Worship Session', type: 'upgrade', pic: 'misc_wip.png', desc: 'Double the production of Churches', fillerQuote: 'wip', price: 2800000, hidden: 1,
+    name: 'Worship Session', type: 'upgrade', pic: 'misc_wip.png', desc: 'Double the production of Churches', fillerQuote: 'More like W-ore-ship haha', price: 2800000, hidden: 1,
     buyFunctions: {
       increaseProduction: {building: 'Church', multi: 2}
     }
   },
   {
-    name: '7th Day', type: 'upgrade', pic: 'misc_wip.png', desc: 'Triples the production of Churches', fillerQuote: 'wip', price: 62000000, hidden: 1,
+    name: '7th Day', type: 'upgrade', pic: 'misc_wip.png', desc: 'Triples the production of Churches', fillerQuote: 'You would think a day of worship is one less day of work but somehow it works out to more ore!', price: 62000000, hidden: 1,
     buyFunctions: {
       increaseProduction: {building: 'Church', multi: 3}
     }
   },
   {
-    name: 'Judgement Day', type: 'upgrade', pic: 'misc_wip.png', desc: 'Quintuples the production of Churches', fillerQuote: 'wip', price: 777000000, hidden: 1,
+    name: 'Judgement Day', type: 'upgrade', pic: 'misc_wip.png', desc: 'Quintuples the production of Churches', fillerQuote: 'And just as there was light, there was now only dark.', price: 777000000, hidden: 1,
     buyFunctions: {
       increaseProduction: {building: 'Church', multi: 5}
     }
@@ -441,7 +458,7 @@ let items = [
 
   // Crypt
   {
-    name: 'Metal Sarcophagus', type: 'upgrade', pic: 'upgrade_metal-sarcophagus.png', desc: 'Doubles the production of Crypts', fillerQuote: 'wip', price: 5200000, hidden: 1,
+    name: 'Metal Sarcophagus', type: 'upgrade', pic: 'upgrade_metal-sarcophagus.png', desc: 'Doubles the production of Crypts', fillerQuote: 'Sellers note: sarcophagus does not come with mummy preinstalled.', price: 5200000, hidden: 1,
     buyFunctions: {
       increaseProduction: {building: 'Crypt', multi: 2}
     }
@@ -473,31 +490,31 @@ let items = [
 
   // Hospital
   {
-    name: 'Immunization Shots', type: 'upgrade', pic: 'upgrade_immunization-shot.png', desc: 'Doubles the production of Hospitals', fillerQuote: 'wip', price: 10000000, hidden: 1,
+    name: 'Immunization Shots', type: 'upgrade', pic: 'upgrade_immunization-shot.png', desc: 'Doubles the production of Hospitals', fillerQuote: 'The reason polio was eradicated for orekind', price: 10000000, hidden: 1,
     buyFunctions: {
       increaseProduction: {building: 'Hospital', multi: 2}
     }
   },
   {
-    name: 'Blood Test', type: 'upgrade', pic: 'misc_wip.png', desc: 'Triples the production of Hospitals', fillerQuote: 'wip', price: 300000000, hidden: 1,
+    name: 'Blood Test', type: 'upgrade', pic: 'misc_wip.png', desc: 'Triples the production of Hospitals', fillerQuote: 'Find out the blood type of your ores to better understand them.', price: 300000000, hidden: 1,
     buyFunctions: {
       increaseProduction: {building: 'Hospital', multi: 3}
     }
   },
   {
-    name: 'Blood Transfusion', type: 'upgrade', pic: 'misc_wip.png', desc: 'Doubles the production of Hospitals', fillerQuote: 'wip', price: 2900000000, hidden: 1,
+    name: 'Blood Transfusion', type: 'upgrade', pic: 'misc_wip.png', desc: 'Doubles the production of Hospitals', fillerQuote: 'Give the ores what they want: blood.', price: 2900000000, hidden: 1,
     buyFunctions: {
       increaseProduction: {building: 'Hospital', multi: 2}
     }
   },
   {
-    name: 'CAT Scan', type: 'upgrade', pic: 'misc_wip.png', desc: 'Triples the production of Hospitals', fillerQuote: 'wip', price: 82000000000, hidden: 1,
+    name: 'CAT Scan', type: 'upgrade', pic: 'misc_wip.png', desc: 'Triples the production of Hospitals', fillerQuote: 'Not to be confused with PET scan.', price: 82000000000, hidden: 1,
     buyFunctions: {
       increaseProduction: {building: 'Hospital', multi: 3}
     }
   },
   {
-    name: 'Enhancement Surgery', type: 'upgrade', pic: 'misc_wip.png', desc: 'Quintuples the production of Hospitals', fillerQuote: 'wip', price: 900000000000, hidden: 1,
+    name: 'Enhancement Surgery', type: 'upgrade', pic: 'misc_wip.png', desc: 'Quintuples the production of Hospitals', fillerQuote: 'Give the ores a much needed facelift.', price: 900000000000, hidden: 1,
     buyFunctions: {
       increaseProduction: {building: 'Hospital', multi: 5}
     }
@@ -506,7 +523,7 @@ let items = [
 
   // Citadel
   {
-    name: 'Council of Rocks', type: 'upgrade', pic: 'upgrade_council-of-rocks.png', desc: 'Doubles the production of Citadel', fillerQuote: 'wip', price: 400000000, hidden: 1,
+    name: 'Council of Rocks', type: 'upgrade', pic: 'upgrade_council-of-rocks.png', desc: 'Doubles the production of Citadel', fillerQuote: 'Hushed voices, stony faces.', price: 400000000, hidden: 1,
     buyFunctions: {
       increaseProduction: {building: 'Citadel', multi: 2}
     }
@@ -515,7 +532,7 @@ let items = [
 
   // Xeno Spaceship
   {
-    name: 'Jet Fuel', type: 'upgrade', pic: 'upgrade_jet-fuel.png', desc: 'Doubles the production of Xeno Spaceships', fillerQuote: 'wip', price: 5500000000, hidden: 1,
+    name: 'Jet Fuel', type: 'upgrade', pic: 'upgrade_jet-fuel.png', desc: 'Doubles the production of Xeno Spaceships', fillerQuote: 'Steel beams nowhere in sight...', price: 5500000000, hidden: 1,
     buyFunctions: {
       increaseProduction: {building: 'Xeno Spaceship', multi: 2}
     }
@@ -573,7 +590,7 @@ let items = [
     }
   },
   {
-    name: 'Safety Vest', type: 'upgrade', pic: 'misc_wip.png', desc: 'Increase all ore production by 2%', fillerQuote: 'wip', price: 85000, hidden: 1,
+    name: 'Safety Vest', type: 'upgrade', pic: 'misc_wip.png', desc: 'Increase all ore production by 2%', fillerQuote: 'Makes it easier for the ores to see you.', price: 85000, hidden: 1,
     buyFunctions: {
       multipliers: [
         {type: 'ops', amount: .05},
@@ -583,7 +600,7 @@ let items = [
   },
 
   {
-    name: 'Painkillers', type: 'upgrade', pic: 'upgrade_painkillers.png', desc: 'Double your OpC', fillerQuote: 'wip', price: 15000, hidden: 1,
+    name: 'Painkillers', type: 'upgrade', pic: 'upgrade_painkillers.png', desc: 'Double your OpC', fillerQuote: 'Pills here!', price: 15000, hidden: 1,
     buyFunctions: {
       multipliers: [
         {type: 'opc', amount: 2}
@@ -591,7 +608,7 @@ let items = [
     }
   },
   {
-    name: 'Whetstone', type: 'upgrade', pic: 'upgrade_whetstone.png', desc: 'Double your OpC', fillerQuote: 'wip', price:  400000, hidden: 1,
+    name: 'Whetstone', type: 'upgrade', pic: 'upgrade_whetstone.png', desc: 'Double your OpC', fillerQuote: 'Steel thy pickaxe!', price:  400000, hidden: 1,
     buyFunctions: {
       multipliers: [
         {type: 'opc', amount: 2}
@@ -599,7 +616,7 @@ let items = [
     }
   },
   {
-    name: 'Steroids', type: 'upgrade', pic: 'upgrade_steroids.png', desc: 'Double your OpC', fillerQuote: 'wip', price: 1000000, hidden: 1,
+    name: 'Steroids', type: 'upgrade', pic: 'upgrade_steroids.png', desc: 'Double your OpC', fillerQuote: 'Lets you dual wield.', price: 1000000, hidden: 1,
     buyFunctions: {
       multipliers: [
         {type: 'opc', amount: 2}
