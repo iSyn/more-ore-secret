@@ -2328,21 +2328,25 @@ Game.launch = () => {
     s('body').append(div)
   }
 
-  Game.handleItemClick = (e) => {
-    console.log('handleClickFiring', e.target.dataset.item)
-    let selectedItem = Game.state.permanent.inventory[e.target.dataset.item]
-    let el = e.target
-    console.log('game.mousedown', Game.mousedown)
+  Game.handleItemClick = (event) => {
+    console.log('handleClickFiring', event.target.dataset.item)
+    let selectedItem = Game.state.permanent.inventory[event.target.dataset.item]
+    let el = event.target
     setTimeout(() => {
-      console.log(Game.mousedown,'here')
-      if (Game.mousedown === 1) Game.moveItem()
+      if (Game.mousedown === 1) Game.moveItem(event, el, selectedItem)
     }, Game.state.prefs.fps)
   }
 
-  Game.moveItem = () => {
+  Game.moveItem = (event, element, item) => {
     console.log('moveitem firing')
     if (Game.mousedown === 1) {
-      setTimeout(Game.moveItem, Game.state.prefs.fps)
+
+      console.log('MOVING:', element)
+
+      setTimeout(() => {
+        Game.moveItem(event, element, item)
+      }, Game.state.prefs.fps)
+
     } else {
       console.log('mouse released')
     }
