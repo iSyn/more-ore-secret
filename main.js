@@ -2332,6 +2332,20 @@ Game.launch = () => {
     console.log('handleClickFiring', e.target.dataset.item)
     let selectedItem = Game.state.permanent.inventory[e.target.dataset.item]
     let el = e.target
+    console.log('game.mousedown', Game.mousedown)
+    setTimeout(() => {
+      console.log(Game.mousedown,'here')
+      if (Game.mousedown === 1) Game.moveItem()
+    }, Game.state.prefs.fps)
+  }
+
+  Game.moveItem = () => {
+    console.log('moveitem firing')
+    if (Game.mousedown === 1) {
+      setTimeout(Game.moveItem, Game.state.prefs.fps)
+    } else {
+      console.log('mouse released')
+    }
   }
 
   Game.toggleInventory = () => {
@@ -3588,12 +3602,10 @@ Game.launch = () => {
   })
 
   window.addEventListener('mousedown', (e) => {
-    console.log('mousedown')
     Game.mousedown = 1
   })
 
   window.addEventListener('mouseup', (e) => {
-    console.log('mouseup')
     Game.mousedown = 0
   })
 
