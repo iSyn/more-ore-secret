@@ -2341,7 +2341,8 @@ Game.launch = () => {
     console.log('moveitem firing')
     if (Game.mousedown === 1) {
 
-      console.log('MOVING:', element)
+      let el = element
+      
 
       setTimeout(() => {
         Game.moveItem(event, element, item)
