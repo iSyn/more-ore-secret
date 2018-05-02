@@ -2424,7 +2424,7 @@ Game.launch = () => {
       Game.goldRush()
       setTimeout(() => {
         s('.gold-rush-cover').parentNode.removeChild(s('.gold-rush-cover'))
-      }, 12 * 1000)
+      }, 12.5 * 1000)
     }
 
     // if (bonusNum == 3) {
