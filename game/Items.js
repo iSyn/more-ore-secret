@@ -58,7 +58,7 @@ let items = [
       ],
       addTextScroller: [
         {text: 'First day of class has started', amountNeeded: 1},
-        {text: '[Breaking News] The school district superintendent has announced new ore related classes to take', amountNeeded: 10}
+        {text: '[Breaking News] The school district superintendent has announced new ore related classes to take', amountNeeded: 10},
         {text: 'Geology PHD becoming increasingly common among graduates.', amountNeeded: 20}
       ],
       achievements: [
@@ -210,7 +210,7 @@ let items = [
         {name: 'Jet Fuel', amountNeeded: 1}
       ],
       addTextScroller: [
-        {text: '[Breaking News] Alien Abductions startingly more common', amountNeeded: 2}
+        {text: '[Breaking News] Alien Abductions startingly more common', amountNeeded: 2},
         {text: '[Breaking News] Man abducted by aliens and experimented on now Ore-Human hybrid', amountNeeded: 5 }
       ],
       achievements: [
