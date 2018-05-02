@@ -232,7 +232,7 @@ Game.launch = () => {
     },
 
     prefs: {
-      volume: 0.5,
+      volume: 0.3,
       bgm: 0,
       rockParticles: true,
       risingNumbers: true,
