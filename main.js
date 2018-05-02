@@ -2341,7 +2341,15 @@ Game.launch = () => {
     console.log('moveitem firing')
     if (Game.mousedown === 1) {
 
+      let mouse = {}
+
+      if (event && event.clientX && event.clientY) {
+        mouse.x = event.clientX
+        mouse.y = event.clientY
+      }
+
       let el = element
+      console.log('mousex:', mouse.x, 'mousey:', mouse.y)
       
 
       setTimeout(() => {
