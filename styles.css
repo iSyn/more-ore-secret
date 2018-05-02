@@ -374,7 +374,7 @@ body {
   height: 260px;
   width: 70%;
   /* background: red; */
-  opacity: 0.1;
+  opacity: 1;
   z-index: 3;
   left: 50%;
   transform: translateX(-50%);
@@ -389,9 +389,9 @@ body {
   height: 150px;
 }
 
-.item-modal-sockets-container:hover, .item-modal-sockets-container-small:hover {
+/* .item-modal-sockets-container:hover, .item-modal-sockets-container-small:hover {
   opacity: 1;
-}
+} */
 
 .item-modal-socket, .item-modal-socket-small {
   height: 50px;
@@ -400,12 +400,17 @@ body {
   border: 2px solid white;
   background: rgba(255, 255, 255, 0.5);
   position: relative;
+  opacity: .3;
 }
 
 .item-modal-socket-small {
   height: 25px;
   width: 25px;
   border-width: 1px;
+}
+
+.item-modal-socket:hover, .item-modal-socket-small:hover {
+  opacity: 1;
 }
 
 .pickaxe-bottom-small {
