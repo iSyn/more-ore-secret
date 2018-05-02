@@ -2334,6 +2334,15 @@ Game.launch = () => {
     let el = event.target
   }
 
+  startDrag = (event) => {
+    console.log('startDrag')
+    event.dropEffect = 'move'
+  }
+
+  draggedOver = (event) => {
+    console.log('YUP', event)
+  }
+
   Game.toggleInventory = () => {
     let { inventorySlots, inventory } = Game.state.permanent
     let anchor = s('#left-separator').getBoundingClientRect()
@@ -2347,7 +2356,14 @@ Game.launch = () => {
         <div class="item-modal-sockets-container medium-sockets">
           `
           for(i = 0; i < Game.state.player.pickaxe.sockets; i++) {
-            pickaxe_html += `<div class='item-modal-socket' onmouseover='Game.showTooltip(event, {type: "help", text: "Empty socket"})' onmouseout='Game.hideTooltip()'></div>`
+            pickaxe_html += `
+              <div 
+                class='item-modal-socket' 
+                ondragstart='startDrag(event)'
+                ondragover='draggedOver(event)' 
+                onmouseover='Game.showTooltip(event, {type: "help", text: "Empty socket"})' 
+                onmouseout='Game.hideTooltip()'>
+              </div>`
           }
           pickaxe_html += `
         </div>
@@ -2368,7 +2384,7 @@ Game.launch = () => {
         if (inventory[i]) {
           inventory_html += `
             <div class='inventory-slot'>
-            <div data-item='${i}' onmousedown='Game.handleItemClick(event)'class="inventory-item" style='background: url("./assets/images/${inventory[i].img}.png")'></div>
+              <div draggable='true' data-item='${i}' class="inventory-item" style='background: url("./assets/images/${inventory[i].img}.png")'></div>
             </div>
           `
         } else {
@@ -3586,15 +3602,6 @@ Game.launch = () => {
       Game.recalculateOpC = 1
     }
   })
-
-  window.addEventListener('mousedown', (e) => {
-    Game.mousedown = 1
-  })
-
-  window.addEventListener('mouseup', (e) => {
-    Game.mousedown = 0
-  })
-
 }
 
 
