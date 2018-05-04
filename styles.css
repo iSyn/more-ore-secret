@@ -534,7 +534,7 @@ body {
   pointer-events: none;
   color: white;
   display: flex;
-  flex-flow: column nowrap;
+  flex-flow: row nowrap;
   box-shadow: 0 0 10px yellow;
 }
 

@@ -590,7 +590,7 @@ let items = [
     }
   },
   {
-    name: 'Safety Vest', type: 'upgrade', pic: 'misc_wip.png', desc: 'Increase all ore production by 2%', fillerQuote: 'Makes it easier for the ores to see you.', price: 85000, hidden: 1,
+    name: 'Safety Vest', type: 'upgrade', pic: 'upgrade_safety-vest.png', desc: 'Increase all ore production by 2%', fillerQuote: 'Makes it easier for the ores to see you.', price: 85000, hidden: 1,
     buyFunctions: {
       multipliers: [
         {type: 'ops', amount: .05},

@@ -3391,9 +3391,10 @@ Game.launch = () => {
       div.classList.add('achievement')
 
       let str = `
-        <h3>Achievement Unlocked</h3>
-        <h1>${selectedAchievement.name}</h1>
-        <p>${selectedAchievement.desc}</p>
+        <div>
+          <h3>Achievement Unlocked</h3>
+          <h1>${selectedAchievement.name}</h1>
+          <p>${selectedAchievement.desc}</p>
       `
       if (selectedAchievement.reward) {
         str += `
@@ -3401,6 +3402,8 @@ Game.launch = () => {
           <p style='color: lime'>REWARD: ${selectedAchievement.reward.txt}</p>
         `
       }
+
+      str += '</div>'
 
       div.innerHTML = str
       s('body').append(div)
