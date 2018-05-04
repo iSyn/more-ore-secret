@@ -78,19 +78,19 @@ let achievements = [
   // CHURCH
   // -------------------
 
-  {name: 'Communion', desc: 'Have a total of 10 churches', reward: {
+  {name: 'Communion', desc: 'Have a total of 10 churches', img: 'achievement_church_I', reward: {
     txt: 'x2 Permanent Church Production',
     building: ['Church', 2]
   }},
-  {name: 'Sacrifice', desc: 'Have a total of 50 churches', reward: {
+  {name: 'Sacrifice', desc: 'Have a total of 50 churches', img: 'achievement_church_II', reward: {
     txt: 'x2 Permanent Church Production',
     building: ['Church', 2]
   }},
-  {name: 'Worshipper', desc: 'Have a total of 100 churches', reward: {
+  {name: 'Worshipper', desc: 'Have a total of 100 churches', img: 'achievement_church_III', reward: {
     txt: 'x2 Permanent Church Production',
     building: ['Church', 2]
   }},
-  {name: 'Pope', desc: 'Have a total of 200 churches', reward: {
+  {name: 'Pope', desc: 'Have a total of 200 churches', img: 'achievement_church_IV', reward: {
     txt: 'x2 Permanent Church Production',
     building: ['Church', 2]
   }},
@@ -290,15 +290,15 @@ let achievements = [
   {name: 'Advanced Miner', desc: 'Break 50 rocks'},
 
   // COMBO RELATED ACHIEVEMENTS
-  {name: 'Combo Pleb', desc: 'Reach 5 hit combo', reward: {
+  {name: 'Combo Pleb', desc: 'Reach 5 hit combo', img: 'achievement_combo_5', reward: {
     txt: 'Permanent weak-hit multiplier +1',
     increaseWeakHitMulti: 1
   }},
-  {name: 'Combo Squire', desc: 'Reach 15 hit combo', reward: {
+  {name: 'Combo Squire', desc: 'Reach 15 hit combo', img: 'achievement_combo_15', reward: {
     txt: 'Permanent weak-hit multiplier +1',
     increaseWeakHitMulti: 1
   }},
-  {name: 'Combo Knight', desc: 'Reach 40 hit combo', reward: {
+  {name: 'Combo Knight', desc: 'Reach 40 hit combo', img: 'achievement_combo_40', reward: {
     txt: 'Permanent weak-hit multiplier +1',
     increaseWeakHitMulti: 1
   }},
