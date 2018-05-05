@@ -25,7 +25,6 @@ let Skill = function(skill) {
                     Game.playSound('skill-lvl-up')
                     document.querySelector('.available-sp').innerHTML = `Available Sp: ${Game.state.player.generation.availableSp}`
                     if (this.onLvl) {
-                        console.log("asdfasdfasdfasdfasdfasdfasdf")
                         if (this.onLvl.addPermaOpC) Game.state.permanent.opcMulti += this.onLvl.addPermaOpC
                         if (this.onLvl.addPermaOpS) Game.state.permanent.opsMulti += this.onLvl.addPermaOpS
                         Game.calculateOpS()
@@ -87,7 +86,7 @@ let skills = [
         type: 'Passive',
         fillerTxt: 'bleh',
         desc: 'Increases total OpC by 10% per level',
-        maxLvl: 1,
+        maxLvl: 10,
         position: [3, 1],
         drawLines: [
             {from: 'bottom', to: 'Heavy Strike'},
