@@ -398,6 +398,7 @@ body {
   width: 50px;
   margin: 10px;
   border: 2px solid white;
+  box-sizing: initial;
   background: rgba(255, 255, 255, 0.5);
   position: relative;
   opacity: .3;
@@ -2276,6 +2277,13 @@ li {
   height: 50px;
   width: 50px;
   background-size: 100% 100%;
+  z-index: 3;
+}
+
+.equipped-inventory-item {
+  height: 40px !important;
+  width: 40px !important;
+  background-size: 100% 100% !important;
   z-index: 3;
 }
 

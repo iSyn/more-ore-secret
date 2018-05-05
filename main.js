@@ -3,6 +3,11 @@
 ================= */
 let s = ((el) => {return document.querySelector(el)})
 
+let isEmpty = (obj) => {
+  for (let key in obj) { if (obj.hasOwnProperty(key)) return false }
+  return true
+}
+
 let beautify = (number) => {
 
   var SI_PREFIXES = [
@@ -193,7 +198,7 @@ Game.launch = () => {
         name: 'Beginners Wood Pickaxe',
         rarity: 'Common',
         material: 'Wood',
-        sockets: 0,
+        sockets: [],
         sharpness: 100,
         hardness: 100,
         stats: {
@@ -1422,16 +1427,20 @@ Game.launch = () => {
     // }
 
     // -------------------------------------- SOCKETS
-    let sockets = 0
+    let numSockets = 0
+    let sockets = []
     let socketsRand = Math.random()
-    if (socketsRand <= .4) sockets++      // 40% chance for 1 socket
-    if (socketsRand <= .25) sockets++     // 25% chance for 2 sockets
-    if (socketsRand <= .15) sockets++     // 15% chance for 3 sockets
-    if (socketsRand <= .05) sockets++     // 5% chance for 4 sockets
-    if (socketsRand <= .01) sockets++     // 1% chance for 5 sockets
-    if (socketsRand <= .005) sockets++    // .5% chance for 6 sockets
+    if (socketsRand <= .4) numSockets++      // 40% chance for 1 socket
+    if (socketsRand <= .25) numSockets++     // 25% chance for 2 sockets
+    if (socketsRand <= .15) numSockets++     // 15% chance for 3 sockets
+    if (socketsRand <= .05) numSockets++     // 5% chance for 4 sockets
+    if (socketsRand <= .01) numSockets++     // 1% chance for 5 sockets
+    if (socketsRand <= .005) numSockets++    // .5% chance for 6 sockets
 
-    if (sockets > Game.state.permanent.maxSockets) sockets = Game.state.permanent.maxSockets
+    if (numSockets > Game.state.permanent.maxSockets) numSockets = Game.state.permanent.maxSockets
+    for (let i = 0; i < numSockets; i++) {
+      sockets.push({})
+    }
 
     // -------------------------------------- SELECT AND BUILD BONUS STATS
     let pickaxeStats = {
@@ -1489,7 +1498,7 @@ Game.launch = () => {
       name: 'Sharp but Flimsy Cardboard Pickaxe',
       rarity: 'Uncommon',
       material: 'Cardboard',
-      sockets: 1,
+      sockets: [{}],
       sharpness: 127,
       hardness: 14,
       stats: {
@@ -1505,7 +1514,7 @@ Game.launch = () => {
       name: 'Dull Plastic Pickaxe',
       rarity: 'Common',
       material: 'Plastic',
-      sockets: 0,
+      sockets: [],
       sharpness: 114,
       hardness: 96,
       stats: {
@@ -1533,7 +1542,7 @@ Game.launch = () => {
           <div class="item-modal-img">
             <div class="item-modal-sockets-container">
               `
-              for(i = 0; i < Game.newItem.sockets; i++) {
+              for(i = 0; i < Game.newItem.sockets.length; i++) {
                 str += `<div class='item-modal-socket' onmouseover='Game.showTooltip(event, {type: "help", text: "Empty socket"})' onmouseout='Game.hideTooltip()'></div>`
               }
               str += `
@@ -1593,7 +1602,7 @@ Game.launch = () => {
 
             <div class="item-modal-sockets-container-small">
               `
-              for(i = 0; i < Game.state.player.pickaxe.sockets; i++) {
+              for(i = 0; i < Game.state.player.pickaxe.sockets.length; i++) {
                 str += `<div class='item-modal-socket-small' onmouseover='Game.showTooltip(event, {type: "help", text: "Empty socket"})' onmouseout='Game.hideTooltip()'></div>`
               }
               str += `
@@ -2328,12 +2337,37 @@ Game.launch = () => {
     s('body').append(div)
   }
 
-  Game.socketGem = (event) => {
-    console.log('socket gem firing', event)
+  Game.socketGem = (event, itemNumber) => {
+    let gem = Game.state.permanent.inventory[itemNumber]
+    console.log('attempting to socket', gem)
+
+    let pickaxe = Game.state.player.pickaxe
+    if (pickaxe.sockets.length > 0) {
+
+      for (let i = 0; i < pickaxe.sockets.length; i++) {
+
+        if (isEmpty(pickaxe.sockets[i])) {
+          console.log(`slot ${i} is empty`)
+
+          Game.state.player.pickaxe.sockets[i] = gem
+
+          // remove just equipped item from inventory
+          Game.state.permanent.inventory.splice(itemNumber, 1)
+          let items = document.querySelectorAll('.inventory-item')
+          console.log('items', items)
+          console.log('itemNumber', itemNumber)
+          Game.removeEl(items[itemNumber])
+
+
+          Game.updateInventoryPickaxe()
+
+          break
+        }
+      }
+    }
   }
 
-
-  Game.showItemDropdown = (event) => {
+  Game.showItemDropdown = (event, itemNumber) => {
     if (!s('.item-dropdown-menu')) {
       event.stopPropagation()
     }
@@ -2343,8 +2377,8 @@ Game.launch = () => {
     let div = document.createElement('div')
     div.classList.add('item-dropdown-menu')
     let str = `
-      <p onclick='Game.socketGem(event)'>Socket Gem</p>
-      <p onclick='Game.removeGem(e)'>Trash Gem</p>
+      <p onclick='Game.socketGem(event, ${itemNumber})'>Socket Gem</p>
+      <p onclick='Game.removeGem(event)'>Trash Gem</p>
     `
 
     div.innerHTML = str
@@ -2355,46 +2389,58 @@ Game.launch = () => {
     div.style.top = mouse.y + "px"
   }
 
+  Game.updateInventoryPickaxe = () => {
+    let str = `
+      <div class="item-modal-img item-medium">
+        <div class="item-modal-sockets-container medium-sockets">
+        `
+        for (let i = 0; i < Game.state.player.pickaxe.sockets.length; i++) {
+          str += `
+            <div class='item-modal-socket' onmouseover='Game.showTooltip(event, {type: "help", text: "Empty socket"})' onmouseout='Game.hideTooltip()'>
+            `
+            if (!isEmpty(Game.state.player.pickaxe.sockets[i])) {
+              str += `<div onclick='Game.showItemDropdown(event, ${i})' class="equipped-inventory-item" style='background: url("./assets/images/${Game.state.player.pickaxe.sockets[i].img}.png")'></div>`
+            }
+
+            str += `
+            </div>
+          `
+        }
+
+        str += `
+        </div>
+
+        <div class="pickaxe-top item-medium ${Game.state.player.pickaxe.material}" style='background: url("./assets/images/pickaxe-top-${Game.state.player.pickaxe.material.toLowerCase()}.png"); background-size: 100% 100%;'></div>
+        <div class="pickaxe-bottom item-medium"></div>
+        `
+
+        if (Game.state.player.pickaxe.rarity == 'Legendary' || Game.state.player.pickaxe.rarity == 'Mythical') {
+          str += `<div class="pickaxe-bg item-medium"></div>`
+        }
+
+        str += `
+      </div>
+    `
+      
+    s('.inventory-pickaxe').innerHTML = str
+    // return str
+  }
+
   Game.toggleInventory = () => {
     let { inventorySlots, inventory } = Game.state.permanent
     let anchor = s('#left-separator').getBoundingClientRect()
     Game.state.prefs.inventoryOpen = !Game.state.prefs.inventoryOpen
     if (Game.state.prefs.inventoryOpen) {
       // inventory open
-      let pickaxe_html = ''
-      pickaxe_html += `
-        <div class="item-modal-img item-medium">
 
-        <div class="item-modal-sockets-container medium-sockets">
-          `
-          for(i = 0; i < Game.state.player.pickaxe.sockets; i++) {
-            pickaxe_html += `
-              <div 
-                class='item-modal-socket' 
-                onmouseover='Game.showTooltip(event, {type: "help", text: "Empty socket"})' 
-                onmouseout='Game.hideTooltip()'>
-              </div>`
-          }
-          pickaxe_html += `
-        </div>
-
-        <div class="pickaxe-top item-medium ${Game.state.player.pickaxe.material}" style='background: url("./assets/images/pickaxe-top-${Game.state.player.pickaxe.material.toLowerCase()}.png"); background-size: 100% 100%;'></div>
-        <div class="pickaxe-bottom item-medium"></div>
-        `
-        if (Game.state.player.pickaxe.rarity == 'Legendary' || Game.state.player.pickaxe.rarity == 'Mythical') {
-          pickaxe_html += `<div class="pickaxe-bg item-medium"></div>`
-        }
-
-        pickaxe_html += `</div>`
-      s('.inventory-pickaxe').innerHTML = pickaxe_html
+     Game.updateInventoryPickaxe()
 
       let inventory_html = ''
       for (i = 0; i < inventorySlots; i++) {
-        console.log('inventory', inventory[i])
         if (inventory[i]) {
           inventory_html += `
             <div class='inventory-slot'>
-              <div onclick='Game.showItemDropdown(event)' class="inventory-item" style='background: url("./assets/images/${inventory[i].img}.png")'></div>
+              <div onclick='Game.showItemDropdown(event, ${i})' class="inventory-item" style='background: url("./assets/images/${inventory[i].img}.png")'></div>
             </div>
           `
         } else {
