@@ -41,46 +41,6 @@ let beautify = (number) => {
 
   // format number and add prefix as suffix
   return parseFloat(scaled.toFixed(2)) + " " + prefix;
-
-  // this code never runs, commented for clarity
-  //
-  // if (num < 1) {
-  //   return num.toFixed(1)
-  // }
-  // if (num < 1000000) {
-  //   return Math.round(num).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); //found on https://stackoverflow.com/questions/2901102/how-to-print-a-number-with-commas-as-thousands-separators-in-javascript
-  // } else {
-  //   if (num >= 1000000000000000000000000000000000) {
-  //     return (num/1000000000000000000000000000000000).toFixed(0) + ' F*cktonillion'
-  //   }
-  //   if (num >= 1000000000000000000000000000000) {
-  //     return (num/1000000000000000000000000000000).toFixed(1) + ' F*ckloadillion'
-  //   }
-  //   if (num >= 1000000000000000000000000000) {
-  //     return (num/1000000000000000000000000000).toFixed(1) + ' Waytoomanyillion'
-  //   }
-  //   if (num >= 1000000000000000000000000) {
-  //     return (num/1000000000000000000000000).toFixed(1) + ' Alotillion'
-  //   }
-  //   if (num >= 1000000000000000000000) {
-  //     return (num/1000000000000000000000).toFixed(1) + ' Sextillion'
-  //   }
-  //   if (num >= 1000000000000000000) {
-  //     return (num/1000000000000000000).toFixed(1) + ' Quintillion'
-  //   }
-  //   if (num >= 1000000000000000) {
-  //     return (num/1000000000000000).toFixed(1) + ' Quadrillion'
-  //   }
-  //   if (num >= 1000000000000) {
-  //     return (num/1000000000000).toFixed(1) + ' Trillion'
-  //   }
-  //   if (num >= 1000000000) {
-  //     return (num/1000000000).toFixed(1) + ' Billion'
-  //   }
-  //   if (num >= 1000000) {
-  //     return (num/1000000).toFixed(1) + ' Million'
-  //   }
-  // }
 }
 
 let beautifyTime = (num) => {
@@ -541,8 +501,6 @@ Game.launch = () => {
 
 		s('body').append(welcomeTxt)
 	}
-
-
 
       console.log('LOADING SAVE COMPLETE')
     } else {
@@ -1915,7 +1873,7 @@ Game.launch = () => {
   let soundPlayed3 = false
   let soundPlayed4 = false
   let soundPlayed5 = false
-  let whichPic = Math.floor(Math.random() * 4) + 1
+  let whichPic = Math.floor(Math.random() * 5) + 1
   Game.updatePercentage = (amount) => {
     let oreHpPercentage = (Game.state.oreCurrentHp/Game.state.oreHp) * 100
     if (Game.state.oreCurrentHp - amount > 0) {
@@ -1966,7 +1924,7 @@ Game.launch = () => {
       soundPlayed3 = false
       soundPlayed4 = false
       soundPlayed5 = false
-      whichPic = Math.floor(Math.random() * 4) + 1
+      whichPic = Math.floor(Math.random() * 5) + 1
       s('.ore').style.background = `url("./assets/images/ore${whichPic}-1.png")`
       s('.ore').style.backgroundSize = 'cover'
       s('.ore-hp').innerHTML = '100%'
