@@ -15,21 +15,36 @@ let Item = function(item) {
   this.buy = (event) => {
 
     let price = this.price
+    let buyAmount = Game.state.prefs.buyAmount
     if (this.type == 'building') {
-      price = (this.basePrice * ((Math.pow(1.15, this.owned + Game.state.prefs.buyAmount) - Math.pow(1.15, this.owned)))/.15)
+      if (buyAmount != 'max') {
+        price = (this.basePrice * ((Math.pow(1.15, this.owned + buyAmount) - Math.pow(1.15, this.owned)))/.15)
+      } else {
+        buyAmount = 1
+        price = (this.basePrice * ((Math.pow(1.15, this.owned + buyAmount) - Math.pow(1.15, this.owned)))/.15)
+
+        while(Game.state.ores >= price) {
+          if (Game.state.ores >= (this.basePrice * ((Math.pow(1.15, this.owned + buyAmount + 1) - Math.pow(1.15, this.owned)))/.15)) {
+            buyAmount++
+            price = (this.basePrice * ((Math.pow(1.15, this.owned + buyAmount) - Math.pow(1.15, this.owned)))/.15)
+          } else {
+            break;
+          }
+        }
+      }
     }
 
     if (Game.state.ores >= price) {
       if (this.type == 'upgrade') {
         this.hidden = 2
       } else {
-        Game.state.stats.buildingsOwned += Game.state.prefs.buyAmount
+        Game.state.stats.buildingsOwned += buyAmount
       }
       Game.spend(price)
       Game.playSound('buysound')
       Game.risingNumber(event, null, 'spendMoney')
       // this.owned
-      this.type == 'building' ? this.owned += Game.state.prefs.buyAmount : this.owned++
+      this.type == 'building' ? this.owned += buyAmount : this.owned++
       Game.buyFunction(this)
       this.price = this.basePrice * Math.pow(1.15, this.owned)
       Game.recalculateOpC = 1

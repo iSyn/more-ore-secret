@@ -3367,10 +3367,7 @@ Game.launch = () => {
         break
       }
     }
-
-    console.log('selected achievement:', selectedAchievement)
-    console.log('achievement name:', achievementName)
-
+    
     if (selectedAchievement.won == 0) {
       selectedAchievement.won = 1
 
