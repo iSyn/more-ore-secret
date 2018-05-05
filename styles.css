@@ -2264,7 +2264,7 @@ li {
   height: 50px;
   width: 50px;
   /* border: 1px solid rgba(0, 0, 0, 0.6); */
-  box-shadow: 0 1px 2px rgb(40, 40, 40, 0.6);
+  box-shadow: 0 1px 2px rgba(40, 40, 40, 0.6);
   border-radius: 3px;
   margin: 5px;
   border-color: rgba(0, 0, 0, 0.4);
@@ -2277,6 +2277,21 @@ li {
   width: 50px;
   background-size: 100% 100%;
   z-index: 3;
+}
+
+.item-dropdown-menu {
+  position: absolute;
+  background: white;
+  z-index: 10;
+}
+
+.item-dropdown-menu p {
+  padding: 3px 6px;
+  cursor: pointer;
+}
+
+.item-dropdown-menu p:hover {
+  background: grey
 }
 
 

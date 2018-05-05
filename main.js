@@ -2328,19 +2328,31 @@ Game.launch = () => {
     s('body').append(div)
   }
 
-  Game.handleItemClick = (event) => {
-    console.log('handleClickFiring', event.target.dataset.item)
-    let selectedItem = Game.state.permanent.inventory[event.target.dataset.item]
-    let el = event.target
+  Game.socketGem = (event) => {
+    console.log('socket gem firing', event)
   }
 
-  startDrag = (event) => {
-    console.log('startDrag')
-    event.dropEffect = 'move'
-  }
 
-  draggedOver = (event) => {
-    console.log('YUP', event)
+  Game.showItemDropdown = (event) => {
+    if (!s('.item-dropdown-menu')) {
+      event.stopPropagation()
+    }
+    
+    console.log('showItemDropdown firing')
+
+    let div = document.createElement('div')
+    div.classList.add('item-dropdown-menu')
+    let str = `
+      <p onclick='Game.socketGem(event)'>Socket Gem</p>
+      <p onclick='Game.removeGem(e)'>Trash Gem</p>
+    `
+
+    div.innerHTML = str
+    s('body').append(div)
+
+    let mouse = {x: event.clientX, y: event.clientY}
+    div.style.left = mouse.x + "px"
+    div.style.top = mouse.y + "px"
   }
 
   Game.toggleInventory = () => {
@@ -2359,8 +2371,6 @@ Game.launch = () => {
             pickaxe_html += `
               <div 
                 class='item-modal-socket' 
-                ondragstart='startDrag(event)'
-                ondragover='draggedOver(event)' 
                 onmouseover='Game.showTooltip(event, {type: "help", text: "Empty socket"})' 
                 onmouseout='Game.hideTooltip()'>
               </div>`
@@ -2372,7 +2382,7 @@ Game.launch = () => {
         <div class="pickaxe-bottom item-medium"></div>
         `
         if (Game.state.player.pickaxe.rarity == 'Legendary' || Game.state.player.pickaxe.rarity == 'Mythical') {
-          pickaxe_html += `<div class="pickaxe-bg"></div>`
+          pickaxe_html += `<div class="pickaxe-bg item-medium"></div>`
         }
 
         pickaxe_html += `</div>`
@@ -2384,7 +2394,7 @@ Game.launch = () => {
         if (inventory[i]) {
           inventory_html += `
             <div class='inventory-slot'>
-              <div draggable='true' data-item='${i}' class="inventory-item" style='background: url("./assets/images/${inventory[i].img}.png")'></div>
+              <div onclick='Game.showItemDropdown(event)' class="inventory-item" style='background: url("./assets/images/${inventory[i].img}.png")'></div>
             </div>
           `
         } else {
@@ -3601,6 +3611,9 @@ Game.launch = () => {
       Game.state.player.pickaxe.damage *= 10000000
       Game.recalculateOpC = 1
     }
+  })
+  window.addEventListener('click', (e) => {
+    Game.removeEl(s('.item-dropdown-menu'))
   })
 }
 
