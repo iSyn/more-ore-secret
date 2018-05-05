@@ -963,7 +963,7 @@ Game.launch = () => {
       }
     } else {
       amount *= (Game.state.player.pickaxe.hardness/100)
-      Game.getCombo(evt)
+      Game.getCombo(event)
       Game.playSound('ore-hit')
       Game.risingNumber(event, amount)
       // Game.gainXp()
@@ -2132,8 +2132,8 @@ Game.launch = () => {
     if (obj.type == 'inventory-item') {
       let item = Game.state.permanent.inventory[obj.itemNum]
       tooltip.style.width = 'auto'
-      tooltip.style.left = evt.clientX + 'px'
-      tooltip.style.top = evt.clientY + 'px'
+      tooltip.style.left = event.clientX + 'px'
+      tooltip.style.top = event.clientY + 'px'
       tooltip.innerHTML = `
         <p>${item.name}</p>
         <p>${item.desc}</p>
@@ -2144,8 +2144,8 @@ Game.launch = () => {
     if (obj.type == 'socketed-item') {
       let item = Game.state.player.pickaxe.sockets[obj.itemNum]
       tooltip.style.width = 'auto'
-      tooltip.style.left = evt.clientX + 'px'
-      tooltip.style.top = evt.clientY + 'px'
+      tooltip.style.left = event.clientX + 'px'
+      tooltip.style.top = event.clientY + 'px'
       tooltip.innerHTML = `
         <p>${item.name}</p>
         <p>${item.desc}</p>
