@@ -8,6 +8,7 @@ let Skill = function(skill) {
     this.lvl = skill.lvl || 0
     this.maxLvl = skill.maxLvl
     this.position = skill.position
+    this.onLvl = skill.onLvl
 
     this.drawLines = skill.drawLines
 
@@ -24,6 +25,7 @@ let Skill = function(skill) {
                     Game.playSound('skill-lvl-up')
                     document.querySelector('.available-sp').innerHTML = `Available Sp: ${Game.state.player.generation.availableSp}`
                     if (this.onLvl) {
+                        console.log("asdfasdfasdfasdfasdfasdfasdf")
                         if (this.onLvl.addPermaOpC) Game.state.permanent.opcMulti += this.onLvl.addPermaOpC
                         if (this.onLvl.addPermaOpS) Game.state.permanent.opsMulti += this.onLvl.addPermaOpS
                         Game.calculateOpS()
