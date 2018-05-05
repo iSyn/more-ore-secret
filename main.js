@@ -2480,7 +2480,7 @@ Game.launch = () => {
     }
 
     s('.inventory-gems').innerHTML = `
-      <h1>Inventory</h1>
+      <h1>Inventory <span style='font-size: small'>work in progress</span></h1>
       <div>${str}</div>
       <p>Level the skill Backpacking to increase max inentory size</p>
     `
