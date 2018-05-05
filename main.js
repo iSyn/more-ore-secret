@@ -178,13 +178,7 @@ Game.launch = () => {
       weakHitMulti: 0,
       inventorySlots: 1,
       inventory: [
-        {
-          name: 'Dirty Ruby',
-          type: 'Ruby',
-          desc: '+5 damage',
-          flavorText: 'A small and dirty ruby',
-          img: 'gem_ruby'
-        }
+        {}
       ]
     },
 
@@ -2433,6 +2427,14 @@ Game.launch = () => {
                   style='background: url("./assets/images/${Game.state.player.pickaxe.sockets[i].img}.png")'
                 ></div>
               `
+            } else {
+              str += `
+                <div 
+                  onmouseover='Game.showTooltip(event, {type: "help", text: "empty socket"})'
+                  onmouseout='Game.hideTooltip()'
+                  class="equipped-inventory-item" 
+                ></div>
+              `
             }
 
             str += `
@@ -2462,7 +2464,7 @@ Game.launch = () => {
     let { inventorySlots, inventory } = Game.state.permanent
     let str = ``
     for (let i = 0; i < inventorySlots; i++) {
-      if (inventory[i]) {
+      if (!isEmpty(inventory[i])) {
         str += `
           <div class='inventory-slot'>
             <div 
