@@ -971,6 +971,7 @@ body {
   box-shadow: 0 0px 5px white inset;
   background: #222;
   width: 300px;
+  pointer-events: none;
 }
 
 @keyframes tooltip {

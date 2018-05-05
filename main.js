@@ -181,6 +181,8 @@ Game.launch = () => {
         {
           name: 'Dirty Ruby',
           type: 'Ruby',
+          desc: '+5 damage',
+          flavorText: 'A small and dirty ruby',
           img: 'gem_ruby'
         }
       ]
@@ -2176,7 +2178,32 @@ Game.launch = () => {
       `
     }
 
+    if (obj.type == 'inventory-item') {
+      let item = Game.state.permanent.inventory[obj.itemNum]
+      tooltip.style.width = 'auto'
+      tooltip.style.left = evt.clientX + 'px'
+      tooltip.style.top = evt.clientY + 'px'
+      tooltip.innerHTML = `
+        <p>${item.name}</p>
+        <p>${item.desc}</p>
+        <p>${item.flavorText}</p>
+      `
+    }
+
+    if (obj.type == 'socketed-item') {
+      let item = Game.state.player.pickaxe.sockets[obj.itemNum]
+      tooltip.style.width = 'auto'
+      tooltip.style.left = evt.clientX + 'px'
+      tooltip.style.top = evt.clientY + 'px'
+      tooltip.innerHTML = `
+        <p>${item.name}</p>
+        <p>${item.desc}</p>
+        <p>${item.flavorText}</p>
+      `
+    }
+
     tooltip.style.animation = 'tooltip .3s'
+
   }
 
   Game.hideTooltip = () => {
@@ -2347,8 +2374,7 @@ Game.launch = () => {
       for (let i = 0; i < pickaxe.sockets.length; i++) {
 
         if (isEmpty(pickaxe.sockets[i])) {
-          console.log(`slot ${i} is empty`)
-
+          Game.playSound('ding')
           Game.state.player.pickaxe.sockets[i] = gem
 
           // remove just equipped item from inventory
@@ -2357,7 +2383,6 @@ Game.launch = () => {
           console.log('items', items)
           console.log('itemNumber', itemNumber)
           Game.removeEl(items[itemNumber])
-
 
           Game.updateInventoryPickaxe()
 
@@ -2396,10 +2421,18 @@ Game.launch = () => {
         `
         for (let i = 0; i < Game.state.player.pickaxe.sockets.length; i++) {
           str += `
-            <div class='item-modal-socket' onmouseover='Game.showTooltip(event, {type: "help", text: "Empty socket"})' onmouseout='Game.hideTooltip()'>
+            <div class='item-modal-socket'>
             `
             if (!isEmpty(Game.state.player.pickaxe.sockets[i])) {
-              str += `<div onclick='Game.showItemDropdown(event, ${i})' class="equipped-inventory-item" style='background: url("./assets/images/${Game.state.player.pickaxe.sockets[i].img}.png")'></div>`
+              str += `
+                <div 
+                  onmouseover='Game.showTooltip(event, {type: "socketed-item", itemNum: ${i}})'
+                  onmouseout='Game.hideTooltip()'
+                  onclick='Game.showItemDropdown(event, ${i})' 
+                  class="equipped-inventory-item" 
+                  style='background: url("./assets/images/${Game.state.player.pickaxe.sockets[i].img}.png")'
+                ></div>
+              `
             }
 
             str += `
@@ -2423,7 +2456,34 @@ Game.launch = () => {
     `
       
     s('.inventory-pickaxe').innerHTML = str
-    // return str
+  }
+
+  Game.updateInventoryItems = () => {
+    let { inventorySlots, inventory } = Game.state.permanent
+    let str = ``
+    for (let i = 0; i < inventorySlots; i++) {
+      if (inventory[i]) {
+        str += `
+          <div class='inventory-slot'>
+            <div 
+              onmouseover='Game.showTooltip(event, {type: "inventory-item", itemNum: ${i}})'
+              onmouseout='Game.hideTooltip()'
+              onclick='Game.showItemDropdown(event, ${i})' 
+              class="inventory-item" 
+              style='background: url("./assets/images/${inventory[i].img}.png")'
+            ></div>
+          </div>
+        `
+      } else {
+        str += `<div class='inventory-slot'></div>`
+      }
+    }
+
+    s('.inventory-gems').innerHTML = `
+      <h1>Inventory</h1>
+      <div>${str}</div>
+      <p>Level the skill Backpacking to increase max inentory size</p>
+    `
   }
 
   Game.toggleInventory = () => {
@@ -2433,29 +2493,8 @@ Game.launch = () => {
     if (Game.state.prefs.inventoryOpen) {
       // inventory open
 
-     Game.updateInventoryPickaxe()
-
-      let inventory_html = ''
-      for (i = 0; i < inventorySlots; i++) {
-        if (inventory[i]) {
-          inventory_html += `
-            <div class='inventory-slot'>
-              <div onclick='Game.showItemDropdown(event, ${i})' class="inventory-item" style='background: url("./assets/images/${inventory[i].img}.png")'></div>
-            </div>
-          `
-        } else {
-          inventory_html += `<div class='inventory-slot'></div>`
-        }
-      }
-
-      s('.inventory-gems').innerHTML = `
-      <h1>Inventory</h1>
-      <div>
-        ${inventory_html}
-      </div>
-      <p>Level the skill Backpacking to increase max inventory size</p>
-      
-      `
+      Game.updateInventoryPickaxe()
+      Game.updateInventoryItems()
 
       s('.inventory-container').style.left = anchor.right + 'px'
       s('.inventory-container__right').classList.add('inventory-container--open')
