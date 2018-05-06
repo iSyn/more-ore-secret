@@ -2,12 +2,12 @@
     --[ REGULAR GEMS ]--------------------------
     Diamonds        = flat sharpness + hardness
     Ruby            = flat damage
-    Opal            = flat hardness
+    Shapphire       = flat hardness
     Topaz           = flat sharpness
 
-    Lonsdaleite     = %sharpness + %hardness
+    Vibranium       = %sharpness + %hardness
     Titanium        = %damage
-    Vibranium       = %hardness
+    Mythril         = %hardness
     Iridium         = %sharpness
 
     --[ SPECIAL GEMS ]--------------------------
@@ -32,13 +32,22 @@ let generateGem = (iLvl) => {
 
     // ----------------------------------------------------------- SELECT GEM
     let allGems = [
-        ['Ruby', 'Sapphire', 'Topaz', 'Opal', 'Diamond'],
-        ['Lonsdaleite', 'Iridium', 'Vibranium', 'Titanium']
+        [
+            {gem: 'Ruby', bonus: 'damage'},
+            {gem: 'Sapphire', bonus: 'hardness'},
+            {gem: 'Topaz', bonus: 'sharpness'},
+            {gem: 'Diamond', bonus: 'both'}
+        ], [
+            {gem: 'Titanium', bonus: 'damage'},
+            {gem: 'Mythril', bonus: 'hardness'},
+            {gem: 'Iridium', bonus: 'sharpness'},
+            {gem: 'Vibranium', bonus: 'both'}
+        ]
     ]
+
     let selectedGem
 
-    randomNum = Math.random()
-    if (randomNum <= .2) { // 20% for special
+    if (Math.random() <= .2) { // 20% for special
         selectedGem = allGems[1][Math.floor(Math.random() * allGems[1].length)]
     } else {
         selectedGem = allGems[0][Math.floor(Math.random() * allGems[0].length)]
@@ -46,7 +55,7 @@ let generateGem = (iLvl) => {
 
     let selected = {
         rarity: selectedRarity,
-        gem: selectedGem
+        gem: selectedGem.gem
     }
 
     console.log(selected)

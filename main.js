@@ -136,10 +136,8 @@ Game.launch = () => {
       opsMulti: 0,
       opcMulti: 0,
       weakHitMulti: 0,
-      inventorySlots: 1,
-      inventory: [
-        {}
-      ]
+      inventorySlots: 5,
+      inventory: [{}, {}, {}, {}, {}]
     },
 
     player: {
@@ -2429,7 +2427,7 @@ Game.launch = () => {
               onmouseout='Game.hideTooltip()'
               onclick='Game.showItemDropdown(event, ${i})' 
               class="inventory-item" 
-              style='background: url("./assets/images/${inventory[i].img}.png")'
+              style='background: url("./assets/images/${inventory[i].img}.png"); background-size: 100% 100%'
             ></div>
           </div>
         `
