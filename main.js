@@ -1243,7 +1243,7 @@ Game.launch = () => {
     let pickaxeName = ''
 
     let allRarities = [
-      // [name, [stat range], multiplier]
+      // [name, [amount of stats], multiplier]
       ['Common', [0, 1], 1],
       ['Uncommon', [0, 2], 1.5],
       ['Rare', [1, 2], 2],
@@ -3637,6 +3637,10 @@ Game.launch = () => {
 
   Game.load()
   Game.logic()
+
+  for (i=0;i<20;i++) {
+    generateGem(4)
+  }
 
   s('.ore').onclick = (event) => Game.handleClick(event)
   s('.ore-weak-spot').onclick = (event) => Game.handleClick(event, 'weak-spot')
