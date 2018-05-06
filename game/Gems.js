@@ -22,13 +22,23 @@ let generateGem = (iLvl) => {
     let randomNum;
 
     // ----------------------------------------------------------- SELECT RARITY
-    let allRarities = ['Common', 'Uncommon', 'Rare']
+    let allRarities = [
+        ['Common', [1, 10]],
+        ['Uncommon', [10, 30]],
+        ['Rare', [40, 100]],
+        ['Unique', [100, 140]]
+    ]
     let selectedRarity
 
     randomNum = Math.random()
     if (randomNum >= 0) selectedRarity = allRarities[0]
-    if (randomNum >= .7) selectedRarity = allRarities[1] // 30%
+    if (randomNum >= .7) selectedRarity = allRarities[1]  // 30%
     if (randomNum >= .95) selectedRarity = allRarities[2] // 5%
+    if (randomNum >= .99) selectedRarity = allRarities[3] // 1%
+
+    // ----------------------------------------------------------- SELECT RARITY AMOUNT
+    // Math.floor(Math.random() * (maxRange - minRange) + minRange)
+    selectedRarity.amount = Math.floor(Math.random() * (selectedRarity[1][1] - selectedRarity[1][0]) + selectedRarity[1][0])
 
     // ----------------------------------------------------------- SELECT GEM
     let allGems = [
@@ -53,9 +63,12 @@ let generateGem = (iLvl) => {
         selectedGem = allGems[0][Math.floor(Math.random() * allGems[0].length)]
     }
 
+    // ----------------------------------------------------------- SELECT GEM
+
     let selected = {
         rarity: selectedRarity,
-        gem: selectedGem.gem
+        gem: selectedGem.gem,
+        bonus: selectedGem.bonus,
     }
 
     console.log(selected)
