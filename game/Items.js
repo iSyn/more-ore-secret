@@ -369,7 +369,7 @@ let items = [
     }
   },
   {
-    name: 'Hoe', type: 'upgrade', pic: 'misc_wip.png', desc: 'Quintuples the production of Farms', fillerQuote: ';)', price: 69000000, hidden: 1,
+    name: 'Hoe', type: 'upgrade', pic: 'upgrade_hoe.png', desc: 'Quintuples the production of Farms', fillerQuote: ';)', price: 69000000, hidden: 1,
     buyFunctions: {
       increaseProduction: {building: 'Farm', multi: 5}
     }
@@ -401,7 +401,7 @@ let items = [
     }
   },
   {
-    name: 'Waterproof Tape', type: 'upgrade', pic: 'misc_wip.png', desc: 'Quintuples the production of Quarrys', fillerQuote: 'Works underwater!', price:80000000, hidden: 1,
+    name: 'Waterproof Tape', type: 'upgrade', pic: 'upgrade_waterproof-tape.png', desc: 'Quintuples the production of Quarrys', fillerQuote: 'Works underwater!', price:80000000, hidden: 1,
     buyFunctions: {
       increaseProduction: {building: 'Quarry', multi: 5}
     }
@@ -465,7 +465,7 @@ let items = [
     }
   },
   {
-    name: 'Hydroponic Screws', type: 'upgrade', pic: 'misc_wip.png', desc: 'Quintuples the production of Factories', fillerQuote: 'I don\'t know what these do but we need a lot of them.', price: 5300000000, hidden: 1,
+    name: 'Hydroponic Screws', type: 'upgrade', pic: 'upgrade_hydroponic-screw.png', desc: 'Quintuples the production of Factories', fillerQuote: 'I don\'t know what these do but we need a lot of them.', price: 5300000000, hidden: 1,
     buyFunctions: {
       increaseProduction: {building: 'Factory', multi: 5}
     }
@@ -511,7 +511,7 @@ let items = [
     }
   },
   {
-    name: 'Blood Test', type: 'upgrade', pic: 'misc_wip.png', desc: 'Triples the production of Hospitals', fillerQuote: 'Find out the blood type of your ores to better understand them.', price: 300000000, hidden: 1,
+    name: 'Blood Test', type: 'upgrade', pic: 'upgrade_blood-test.png', desc: 'Triples the production of Hospitals', fillerQuote: 'Find out the blood type of your ores to better understand them.', price: 300000000, hidden: 1,
     buyFunctions: {
       increaseProduction: {building: 'Hospital', multi: 3}
     }
