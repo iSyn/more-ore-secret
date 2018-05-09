@@ -56,19 +56,28 @@ let generateGem = (iLvl) => {
     ]
 
     let selectedGem
+    let bonusType
 
     if (Math.random() <= .2) { // 20% for special
         selectedGem = allGems[1][Math.floor(Math.random() * allGems[1].length)]
+        bonusType = 'percent'
     } else {
         selectedGem = allGems[0][Math.floor(Math.random() * allGems[0].length)]
+        bonusType = 'flat'
     }
+
+    let amount = selectedRarity.amount * iLvl
 
     // ----------------------------------------------------------- SELECT GEM
 
     let selected = {
         rarity: selectedRarity,
         gem: selectedGem.gem,
-        bonus: selectedGem.bonus,
+        bonus: {
+            stat: selectedGem.bonus,
+            type: bonusType,
+            amount: amount
+        },
     }
 
     console.log(selected)
