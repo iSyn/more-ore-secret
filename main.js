@@ -3301,6 +3301,8 @@ Game.launch = () => {
       }
     }
 
+    console.log('selected quest:', selectedQuest)
+
     let div = document.createElement('div')
     div.classList.add('wrapper')
     div.innerHTML = `
@@ -3308,7 +3310,7 @@ Game.launch = () => {
         <h1>${selectedQuest.name}</h1>
         <p onclick='Game.closeCurrentWindow()' style='position: absolute; top: 5px; right: 5px; cursor: pointer'>X</p>
         <hr/>
-        <img src="./assets/images/quest_${selectedQuest.pic}.png" class="quest-img">
+        <img src="./assets/images/${selectedQuest.pic}.png" class="quest-img">
         <hr/>
         <br/>
         <h3>${selectedQuest.desc}</h3>
