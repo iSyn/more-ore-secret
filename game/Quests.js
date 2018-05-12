@@ -1,11 +1,11 @@
 let Quest = function(obj) {
   this.name = obj.name
-  this.pic = obj.pic
   this.functionName = obj.name.replace(/ /g,'')
   this.timesCompleted = 0
   this.desc = obj.desc
   this.locked = obj.locked
   this.img = obj.img
+  this.artifact = obj.artifact
   this.completionTime = obj.completionTime
   this.completionTimeTxt = obj.completionTimeTxt
   this.xpGain = obj.xpGain
@@ -17,25 +17,78 @@ let Quest = function(obj) {
 let quests  = [
   {
     name: 'Abandoned Mineshaft',
-    pic: 'nothing',
     locked: 0,
     desc: 'Traverse into an abandoned mineshaft for hopes of greater rewards',
     img: 'quest_abandoned-mineshaft',
-    completionTime: 5 * 60 * 1000,
-    completionTimeTxt: '5 minutes',
+    completionTime: 5 * 1000,
+    completionTimeTxt: '30 seconds',
     xpGain: 40,
+    artifact: {
+      found: false,
+      chance: .4
+    },
+    firstClearRewards: {
+      diamonds: 1,
+    },
+  }, 
+  // ============================================================================================================
+  {
+    name: 'TEST QUEST',
+    locked: 1,
+    desc: 'test desc',
+    img: 'misc_wip',
+    completionTime: 30 * 60 * 1000,
+    completionTimeTxt: '30 minutes',
+    xpGain: 100,
+    artifact: {
+      found: false,
+      chance: .4
+    },
     firstClearRewards: {
       diamonds: 1,
     },
   }, {
     name: 'TEST QUEST',
-    pic: 'nothing',
-    locked: 0,
+    locked: 1,
     desc: 'test desc',
-    img: 'misc_wip.png',
+    img: 'misc_wip',
     completionTime: 30 * 60 * 1000,
     completionTimeTxt: '30 minutes',
     xpGain: 100,
+    artifact: {
+      found: false,
+      chance: .4
+    },
+    firstClearRewards: {
+      diamonds: 1,
+    },
+  }, {
+    name: 'TEST QUEST',
+    locked: 1,
+    desc: 'test desc',
+    img: 'misc_wip',
+    completionTime: 30 * 60 * 1000,
+    completionTimeTxt: '30 minutes',
+    xpGain: 100,
+    artifact: {
+      found: false,
+      chance: .4
+    },
+    firstClearRewards: {
+      diamonds: 1,
+    },
+  }, {
+    name: 'TEST QUEST',
+    locked: 1,
+    desc: 'test desc',
+    img: 'misc_wip',
+    completionTime: 30 * 60 * 1000,
+    completionTimeTxt: '30 minutes',
+    xpGain: 100,
+    artifact: {
+      found: false,
+      chance: .4
+    },
     firstClearRewards: {
       diamonds: 1,
     },

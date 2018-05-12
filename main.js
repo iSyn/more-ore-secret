@@ -3301,8 +3301,6 @@ Game.launch = () => {
       }
     }
 
-    console.log('selected quest:', selectedQuest)
-
     let div = document.createElement('div')
     div.classList.add('wrapper')
     div.innerHTML = `
@@ -3310,8 +3308,10 @@ Game.launch = () => {
         <h1>${selectedQuest.name}</h1>
         <p onclick='Game.closeCurrentWindow()' style='position: absolute; top: 5px; right: 5px; cursor: pointer'>X</p>
         <hr/>
-        <img src="./assets/images/${selectedQuest.pic}.png" class="quest-img">
+        <img src="./assets/images/${selectedQuest.img}.png" class="quest-img">
         <hr/>
+        <br/>
+        <h2>Artifact Retrieved: ${selectedQuest.artifact.found}</h2>
         <br/>
         <h3>${selectedQuest.desc}</h3>
         <p>Completion Time: ~${selectedQuest.completionTimeTxt}</p>
@@ -3422,6 +3422,16 @@ Game.launch = () => {
     div.classList.add('wrapper')
     div.id = 'quest-complete-modal'
     let completedQuest = Game.select(Game.quests, Game.state.quest.currentQuest)
+    let chance = completedQuest.artifact.chance
+    let foundArtifact = false
+
+    if (Math.random() <= chance) { // SUCCESS
+      foundArtifact = true
+    }
+
+    console.log('foundArtifact', foundArtifact)
+
+
     Game.playSound('quest-complete')
 
     let str = `
@@ -3434,6 +3444,9 @@ Game.launch = () => {
         `
         if (completedQuest.timesCompleted == 0) {
             str += `<p class='quest-reward fadeUpIn' style='color: #00c0ff; animation-duration: .6s'>FIRST CLEAR BONUS: 1 <i class='fa fa-diamond fa-1x'></i></p>`
+        }
+        if (foundArtifact) {
+          str += `ARTIFACT RETRIEVED: [artifact-name-here]`
         }
         str += `
         <hr />
@@ -3637,10 +3650,6 @@ Game.launch = () => {
 
   Game.load()
   Game.logic()
-
-  for (i=0;i<20;i++) {
-    generateGem(4)
-  }
 
   s('.ore').onclick = (event) => Game.handleClick(event)
   s('.ore-weak-spot').onclick = (event) => Game.handleClick(event, 'weak-spot')
