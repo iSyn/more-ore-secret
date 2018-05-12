@@ -351,7 +351,7 @@ let items = [
     }
   },
   {
-    name: 'Pitchfork', type: 'upgrade', pic: 'misc_wip.png', desc: 'Triples the production of Farms', fillerQuote: 'Torches not included.', price: 12500, hidden: 1,
+    name: 'Pitchfork', type: 'upgrade', pic: 'upgrade_pitchfork.png', desc: 'Triples the production of Farms', fillerQuote: 'Torches not included.', price: 12500, hidden: 1,
     buyFunctions: {
       increaseProduction: {building: 'Farm', multi: 3}
     }
@@ -363,7 +363,7 @@ let items = [
     }
   },
   {
-    name: 'Rotary Cutter', type: 'upgrade', pic: 'misc_wip.png', desc: 'Triples the production of Farms', fillerQuote: 'Now not even grass can stop us.', price: 3450000, hidden: 1,
+    name: 'Rotary Cutter', type: 'upgrade', pic: 'upgrade_rotary-cutter.png', desc: 'Triples the production of Farms', fillerQuote: 'Now not even grass can stop us.', price: 3450000, hidden: 1,
     buyFunctions: {
       increaseProduction: {building: 'Farm', multi: 3}
     }
@@ -389,7 +389,7 @@ let items = [
     }
   },
   {
-    name: 'Wooden Compass', type: 'upgrade', pic: 'misc_wip.png', desc: 'Doubles the production of Quarrys', fillerQuote: 'Never eat soggy waffles.', price: 510000, hidden: 1,
+    name: 'Wooden Compass', type: 'upgrade', pic: 'upgrade_wooden-compass.png', desc: 'Doubles the production of Quarrys', fillerQuote: 'Never eat soggy waffles.', price: 510000, hidden: 1,
     buyFunctions: {
       increaseProduction: {building: 'Quarry', multi: 2}
     }
@@ -479,13 +479,13 @@ let items = [
     }
   },
   {
-    name: 'Scarecrow', type: 'upgrade', pic: 'misc_wip.png', desc: 'Triples the production of Crypts', fillerQuote: 'Scare the ghosties away.', price: 72000000, hidden: 1,
+    name: 'Scarecrow', type: 'upgrade', pic: 'upgrade_scarecrow.png', desc: 'Triples the production of Crypts', fillerQuote: 'Scare the ghosties away.', price: 72000000, hidden: 1,
     buyFunction: {
       increaseProduction: {building: 'Crypt', multi: 3}
     }
   },
   {
-    name: 'Polished Shovel', type: 'upgrade', pic: 'misc_wip.png', desc: 'Doubles the production of Crypts', fillerQuote: 'Tool of choice for a knight or an archaeologist.', price: 150000000, hidden: 1,
+    name: 'Polished Shovel', type: 'upgrade', pic: 'upgrade_polished-shovel.png', desc: 'Doubles the production of Crypts', fillerQuote: 'Tool of choice for a knight or an archaeologist.', price: 150000000, hidden: 1,
     buyFunction: {
       increaseProduction: {building: 'Crypt', multi: 2}
     }
