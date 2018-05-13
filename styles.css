@@ -2305,6 +2305,13 @@ li {
   background: grey
 }
 
+.inventory-item__flavorText, .building__flavorText {
+  float: right;
+  opacity: .6;
+  font-size: small;
+  padding-top: 5px;
+}
+
 
 @keyframes itemFallIn {
   from {

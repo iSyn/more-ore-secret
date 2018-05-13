@@ -136,8 +136,16 @@ Game.launch = () => {
       opsMulti: 0,
       opcMulti: 0,
       weakHitMulti: 0,
-      inventorySlots: 5,
-      inventory: [{}, {}, {}, {}, {}]
+      inventorySlots: 3,
+      inventory: [
+        {}, 
+        {}, 
+        {}
+      ]
+    },
+
+    artifacts: {
+      ComboStone: false,
     },
 
     player: {
@@ -303,8 +311,8 @@ Game.launch = () => {
     if (Game.state.currentVersion != newestVersion || Game.state.ores == 0 || show == 1) {
       Game.state.currentVersion = newestVersion
       let div = document.createElement('div')
-      div.classList.add('wrapper')
-      div.onclick = () => Game.removeEl(s('.wrapper'))
+      div.classList.add('wrapper', 'esc')
+      div.onclick = () => Game.removeEl(s('.wrapper.esc'))
       div.innerHTML = `
         <div class="changelog-container">
           <h1>Changelog</h1>
@@ -491,7 +499,7 @@ Game.launch = () => {
 		{
 			// SHOW WELCOME TEXT
 		let welcomeTxt = document.createElement('div')
-		welcomeTxt.classList.add('wrapper')
+		welcomeTxt.classList.add('wrapper', 'esc')
 		welcomeTxt.innerHTML = `
 		<div class="welcome-text" onClick='Game.removeEl(document.querySelector(".wrapper"));'>
 			<h1>Welcome to More Ore Alpha v.0.9</h1>
@@ -504,7 +512,6 @@ Game.launch = () => {
 			<p style='text-align: center;'>[ Press ESC or click to close window ]</p>
 		</div>
     `
-
 
 		s('body').append(welcomeTxt)
 	}
@@ -896,7 +903,7 @@ Game.launch = () => {
     }
     return info
   }
-
+  
   Game.gainGenerationXp = () => {
 
     let gain = Game.calculateGenerationXp()
@@ -922,7 +929,13 @@ Game.launch = () => {
 
   Game.getCombo = (event, type) => {
     if (type) { // IF WEAK SPOT HIT
-      Game.state.stats.currentCombo++
+      if (Game.state.stats.currentCombo >= 20 && Game.state.artifacts.ComboStone) {
+        Game.risingNumber(event, 0, 'combo-stone')
+        Game.state.stats.currentCombo += 2
+      } else {
+        Game.state.stats.currentCombo++
+      }
+      
       if (Game.state.stats.currentCombo % 5 == 0) {
         Game.risingNumber(event, 0, 'combo')
       }
@@ -1047,6 +1060,13 @@ Game.launch = () => {
         risingNumber.style.color = getRandomColor()
         risingNumber.style.animationDuration = '3s'
         risingNumber.innerHTML = `${Game.state.stats.currentCombo} hit combo`
+      }
+
+      if (type == 'combo-stone') {
+        risingNumber.style.fontSize = 'small'
+        risingNumber.style.color = 'lightgreen'
+        risingNumber.style.animationDuration = '1.5s'
+        risingNumber.innerHTML = `Combo++`
       }
 
       if (type == 'mega-crit') {
@@ -1988,7 +2008,7 @@ Game.launch = () => {
           }
           tooltip.innerHTML += `
           <hr/>
-          <p style='font-size: small; opacity: .6; float: right; padding-top: 5px;'><i>${selectedItem.fillerQuote}</i></p>
+          <p class='building__flavorText'><i>${selectedItem.fillerQuote}</i></p>
 
         </div>
       `
@@ -2127,27 +2147,18 @@ Game.launch = () => {
       `
     }
 
-    if (obj.type == 'inventory-item') {
+    if (obj.type == 'inventory-item' || obj.type == 'socketed-item') {
       let item = Game.state.permanent.inventory[obj.itemNum]
+      if (obj.type == 'socketed-item') { item = Game.state.player.pickaxe.sockets[obj.itemNum] }
       tooltip.style.width = 'auto'
+      tooltip.style.maxWidth = '300px'
       tooltip.style.left = event.clientX + 'px'
       tooltip.style.top = event.clientY + 'px'
       tooltip.innerHTML = `
-        <p>${item.name}</p>
-        <p>${item.desc}</p>
-        <p>${item.flavorText}</p>
-      `
-    }
-
-    if (obj.type == 'socketed-item') {
-      let item = Game.state.player.pickaxe.sockets[obj.itemNum]
-      tooltip.style.width = 'auto'
-      tooltip.style.left = event.clientX + 'px'
-      tooltip.style.top = event.clientY + 'px'
-      tooltip.innerHTML = `
-        <p>${item.name}</p>
-        <p>${item.desc}</p>
-        <p>${item.flavorText}</p>
+        <h2 class='inventory-item__name'>${item.name}</h2>
+        <hr/>
+        <p class='inventory-item__desc'>${item.desc}</p>
+        <p class='inventory-item__flavorText'>${item.flavorText}</p>
       `
     }
 
@@ -2163,7 +2174,7 @@ Game.launch = () => {
   Game.showSettings = () => {
     let div = document.createElement('div')
     let str;
-    div.classList.add('wrapper')
+    div.classList.add('wrapper', 'esc')
 
     str += `
       <div class="setting-container">
@@ -2248,7 +2259,7 @@ Game.launch = () => {
     let str;
     let achievementsWon = 0
     let achievementsMissing = 0
-    div.classList.add('wrapper')
+    div.classList.add('wrapper', 'esc')
 
     str += `
       <div class="statistics-container">
@@ -2277,7 +2288,7 @@ Game.launch = () => {
 
   Game.showAchievements = () => {
     let div = document.createElement('div')
-    div.classList.add('wrapper')
+    div.classList.add('wrapper', 'esc')
 
     let str = `
       <div class="achievements-container">
@@ -2313,9 +2324,10 @@ Game.launch = () => {
     s('body').append(div)
   }
 
-  Game.socketGem = (event, itemNumber) => {
-    let gem = Game.state.permanent.inventory[itemNumber]
-    console.log('attempting to socket', gem)
+  Game.socketItem = (event, itemNumber) => {
+
+    let item = Game.state.permanent.inventory[itemNumber]
+    if (item.name == 'Combo Stone') { Game.state.artifacts.ComboStone = true }
 
     let pickaxe = Game.state.player.pickaxe
     if (pickaxe.sockets.length > 0) {
@@ -2324,7 +2336,7 @@ Game.launch = () => {
 
         if (isEmpty(pickaxe.sockets[i])) {
           Game.playSound('ding')
-          Game.state.player.pickaxe.sockets[i] = gem
+          Game.state.player.pickaxe.sockets[i] = item
 
           // remove just equipped item from inventory
           Game.state.permanent.inventory.splice(itemNumber, 1)
@@ -2335,7 +2347,7 @@ Game.launch = () => {
 
           Game.updateInventoryPickaxe()
 
-          break
+          return
         }
       }
     }
@@ -2345,13 +2357,11 @@ Game.launch = () => {
     if (!s('.item-dropdown-menu')) {
       event.stopPropagation()
     }
-    
-    console.log('showItemDropdown firing')
 
     let div = document.createElement('div')
     div.classList.add('item-dropdown-menu')
     let str = `
-      <p onclick='Game.socketGem(event, ${itemNumber})'>Socket Gem</p>
+      <p onclick='Game.socketItem(event, ${itemNumber})'>Socket Gem</p>
       <p onclick='Game.removeGem(event)'>Trash Gem</p>
     `
 
@@ -2592,7 +2602,7 @@ Game.launch = () => {
     if (Game.state.ores >= 1000000000000000) amountOfDiamonds += 1
     if (Game.state.ores >= 1000000000000000000) amountOfDiamonds += 1
 
-    div.classList.add('wrapper')
+    div.classList.add('wrapper', 'esc')
     div.id = 'confirm-refine'
     let str = `
       <div class="confirm-refine">
@@ -3069,7 +3079,7 @@ Game.launch = () => {
   Game.selectedRefineTab = 'trinkets'
   Game.showRefinedStore = () => {
     let div = document.createElement('div')
-    div.classList.add('wrapper')
+    div.classList.add('wrapper', 'esc')
     let str = ''
 
     let items = Game.state.currentRefinedStoreItems
@@ -3140,7 +3150,7 @@ Game.launch = () => {
 
     if (selectedItem) {
       let div = document.createElement('div')
-      div.classList.add('wrapper')
+      div.classList.add('wrapper', 'esc')
 
       div.innerHTML = `
         <div class="confirm-buy-refined-item">
@@ -3203,8 +3213,8 @@ Game.launch = () => {
   }
 
   Game.closeCurrentWindow = () => {
-    if (s('.wrapper')) {
-      let wrappers = document.querySelectorAll('.wrapper')
+    if (s('.wrapper.esc')) {
+      let wrappers = document.querySelectorAll('.wrapper.esc')
       let newest = wrappers.length -1
 
       if (wrappers.length > 1) {
@@ -3251,7 +3261,7 @@ Game.launch = () => {
 
 
       let div = document.createElement('div')
-      div.classList.add('wrapper')
+      div.classList.add('wrapper', 'esc')
 
       let str = `
         <div class="quests-container">
@@ -3302,7 +3312,7 @@ Game.launch = () => {
     }
 
     let div = document.createElement('div')
-    div.classList.add('wrapper')
+    div.classList.add('wrapper', 'esc')
     div.innerHTML = `
       <div class="quest-information">
         <h1>${selectedQuest.name}</h1>
@@ -3419,7 +3429,7 @@ Game.launch = () => {
 
   Game.questCompleteModal = () => {
     let div = document.createElement('div')
-    div.classList.add('wrapper')
+    div.classList.add('wrapper', 'esc')
     div.id = 'quest-complete-modal'
     let completedQuest = Game.select(Game.quests, Game.state.quest.currentQuest)
     let chance = completedQuest.artifact.chance
@@ -3427,10 +3437,9 @@ Game.launch = () => {
 
     if (Math.random() <= chance) { // SUCCESS
       foundArtifact = true
+      Game.getItem(`${completedQuest.artifact.name}`)
+
     }
-
-    console.log('foundArtifact', foundArtifact)
-
 
     Game.playSound('quest-complete')
 
@@ -3446,7 +3455,7 @@ Game.launch = () => {
             str += `<p class='quest-reward fadeUpIn' style='color: #00c0ff; animation-duration: .6s'>FIRST CLEAR BONUS: 1 <i class='fa fa-diamond fa-1x'></i></p>`
         }
         if (foundArtifact) {
-          str += `ARTIFACT RETRIEVED: [artifact-name-here]`
+          str += `ARTIFACT RETRIEVED: ${completedQuest.artifact.name}`
         }
         str += `
         <hr />
@@ -3459,6 +3468,23 @@ Game.launch = () => {
     div.innerHTML = str
 
     s('body').append(div)
+  }
+
+  Game.getItem = (name) => {
+    console.log('get item', name)
+
+    let item = Game.select(artifacts, name)
+    let inventory = Game.state.permanent.inventory
+
+    item.owned = true
+    
+    for (let i = 0; i < inventory.length; i++) {
+      if (isEmpty(inventory[i])) {
+        inventory[i] = item;
+        return;
+      }
+    }
+
   }
 
   Game.gainQuestRewards = () => {

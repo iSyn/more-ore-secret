@@ -24,6 +24,7 @@ let quests  = [
     completionTimeTxt: '30 seconds',
     xpGain: 40,
     artifact: {
+      name: 'Combo Stone',
       found: false,
       chance: .4
     },
