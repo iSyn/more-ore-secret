@@ -1706,6 +1706,7 @@ li {
   justify-content: space-evenly;
   height: 86%;
   overflow: auto;
+  padding: 10px 0;
 }
 
 .quest-name {
@@ -1725,6 +1726,7 @@ li {
 }
 
 .available-quest {
+  position: relative;
   width: 45%;
   height: 310px;
   min-height: 100px;
@@ -1737,11 +1739,13 @@ li {
   /*background: antiquewhite;*/
   box-shadow: 0 2px 3px black;
   border-radius: 2px;
+  top: 0;
+  transition: top .2s;
 }
 
 .available-quest.unlocked:hover {
-  box-shadow: 0 0 10px 2px white inset;
   cursor: pointer;
+  top: -5px;
 }
 
 .available-quest.unlocked:hover .quest-est-time {
@@ -1827,7 +1831,8 @@ li {
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: #cbbaa4;
-  height: 95%;
+  max-height: 95%;
+  height: auto;
   width: 600px;
   color: black;
   text-align: center;
@@ -1835,45 +1840,66 @@ li {
   display: flex;
   flex-flow: column nowrap;
   animation: itemFallIn .3s forwards;
+  box-shadow: 0 10px 6px -6px #222;
+  z-index: 200;
 }
 
 .quest-information h1 {
-  font-family: 'Germania One';
   padding: 10px 0;
   font-size: 4rem;
+  font-family: 'Germania One';
 }
 
 .quest-img {
-  height: 55%;
-  image-rendering: -moz-crisp-edges;
-  image-rendering: pixelated;
+  /* height: 55%; */
+  height: 300px;
+  /* image-rendering: -moz-crisp-edges; */
+  /* image-rendering: pixelated; */
 }
 
-.quest-information-bottom {
-  display: flex;
-  flex-flow: row nowrap;
-  flex-grow: 1;
-  align-items: center;
-}
-
-.quest-information-bottom-right button {
-  width: 90%;
-  background: black;
-  border: 1px solid white;
-  color: white;
-  font-size: xx-large;
+.quest-information button {
+  width: 100%;
+  background: transparent;
+  border: 4px solid black;
+  color: black;
+  font-size: 40px;
   cursor: pointer;
   padding: 15px 0;
   transition: transform .1s;
   -webkit-font-smoothing: antialiased;
+  font-family: 'Germania One';
+}
 
+.quest-information button:hover {
+  transform: translateY(-5px);
 }
 
 .fa-long-arrow-right {
   transition: transform .1s;
 }
 
-.quest-information-bottom-right button:hover .fa-long-arrow-right {
+.quest-information__stats {
+  padding-top: 20px;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-around;
+  font-size: 20px;
+}
+
+.quest-information__stats p {
+  font-family: 'Germania One';
+}
+
+.quest-information__desc{
+  padding: 20px 0;
+  width: 60%;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 20px;
+}
+
+.quest-information button:hover .fa-long-arrow-right {
   animation: sideToSide .5s infinite;
 }
 

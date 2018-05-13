@@ -1,11 +1,11 @@
 let Quest = function(obj) {
   this.name = obj.name
   this.functionName = obj.name.replace(/ /g,'')
-  this.timesCompleted = 0
   this.desc = obj.desc
   this.locked = obj.locked
   this.img = obj.img
   this.artifact = obj.artifact
+  this.timesCompleted = obj.timesCompleted || 0
   this.completionTime = obj.completionTime
   this.completionTimeTxt = obj.completionTimeTxt
   this.xpGain = obj.xpGain

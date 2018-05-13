@@ -3293,7 +3293,7 @@ Game.launch = () => {
       let str = `
         <div class="quests-container">
           <h1 style='font-size: 4rem; padding: 10px 0;'>Quest Board</h1>
-          <p onclick='Game.closeCurrentWindow()' style='position: absolute; top: 5px; right: 5px; cursor: pointer'>X</p>
+          <i onclick='Game.closeCurrentWindow()' class="fa fa-times fa-1x"></i>
           <div class="available-quests-container">
           `
             for (let i=0; i<Game.quests.length; i++) {
@@ -3338,29 +3338,34 @@ Game.launch = () => {
       }
     }
 
+    let str = ''
     let div = document.createElement('div')
     div.classList.add('wrapper', 'esc')
-    div.innerHTML = `
+
+    str = `
       <div class="quest-information">
         <h1>${selectedQuest.name}</h1>
-        <p onclick='Game.closeCurrentWindow()' style='position: absolute; top: 5px; right: 5px; cursor: pointer'>X</p>
-        <hr/>
+        <i onclick='Game.closeCurrentWindow()' class="fa fa-times fa-1x"></i>
         <img src="./assets/images/${selectedQuest.img}.png" class="quest-img">
-        <hr/>
-        <br/>
-        <h2>Artifact Retrieved: ${selectedQuest.artifact.found}</h2>
-        <br/>
-        <h3>${selectedQuest.desc}</h3>
-        <p>Completion Time: ~${selectedQuest.completionTimeTxt}</p>
-        <br/>
-        <hr/>
-        <div class="quest-information-bottom">
-          <div style='width: 100%' class="quest-information-bottom-right">
-            <button onclick='Game.startQuest("${selectedQuest.name}")'>Adventure <i class='fa fa-long-arrow-right fa-1x'></i></button>
-          </div>
+        <div class='quest-information__stats'>
+        `
+        if (selectedQuest.artifact.found) {
+          str += `<p>Artifact Found: ${selectedQuest.artifact.name}<p>`
+        } else {
+          str += `<p>Artifact Found: ???</p>`
+        }
+
+        str += `
+          <p>Times Completed: ${selectedQuest.timesCompleted}</p>
         </div>
+        <div class='quest-information__desc'>
+          <p>${selectedQuest.desc}</p>
+        </div>
+        <button onclick='Game.startQuest("${selectedQuest.name}")'>Adventure <i class='fa fa-long-arrow-right fa-1x'></i></button>
       </div>
     `
+
+    div.innerHTML = str
 
     s('body').append(div)
   }
