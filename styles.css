@@ -947,6 +947,13 @@ body {
   flex-flow: row wrap;
   justify-content: flex-start;
   width: 100%;
+  overflow: hidden;
+  max-height: 50px;
+  transition: max-height .2s;
+}
+
+.upgrades-container:hover {
+  max-height: 1000px;
 }
 
 .upgrade-item-container {
