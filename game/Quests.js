@@ -20,7 +20,7 @@ let quests  = [
     locked: 0,
     desc: 'Traverse into an abandoned mineshaft for hopes of greater rewards',
     img: 'quest_abandoned-mineshaft',
-    completionTime: 5 * 1000,
+    completionTime: 30 * 1000,
     completionTimeTxt: '30 seconds',
     xpGain: 40,
     artifact: {

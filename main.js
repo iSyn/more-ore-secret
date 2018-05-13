@@ -3429,7 +3429,7 @@ Game.launch = () => {
 
   Game.questCompleteModal = () => {
     let div = document.createElement('div')
-    div.classList.add('wrapper', 'esc')
+    div.classList.add('wrapper')
     div.id = 'quest-complete-modal'
     let completedQuest = Game.select(Game.quests, Game.state.quest.currentQuest)
     let chance = completedQuest.artifact.chance
