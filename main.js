@@ -2327,28 +2327,46 @@ Game.launch = () => {
   Game.socketItem = (event, itemNumber) => {
 
     let item = Game.state.permanent.inventory[itemNumber]
-    if (item.name == 'Combo Stone') { Game.state.artifacts.ComboStone = true }
-
     let pickaxe = Game.state.player.pickaxe
     if (pickaxe.sockets.length > 0) {
-
       for (let i = 0; i < pickaxe.sockets.length; i++) {
 
         if (isEmpty(pickaxe.sockets[i])) {
           Game.playSound('ding')
           Game.state.player.pickaxe.sockets[i] = item
 
+          if (item.name == 'Combo Stone') { Game.state.artifacts.ComboStone = true }
+
           // remove just equipped item from inventory
-          Game.state.permanent.inventory.splice(itemNumber, 1)
+          Game.state.permanent.inventory[itemNumber] = {}
           let items = document.querySelectorAll('.inventory-item')
-          console.log('items', items)
-          console.log('itemNumber', itemNumber)
           Game.removeEl(items[itemNumber])
 
+          console.log('socketing', item.name)
+          Game.updateInventoryItems()
           Game.updateInventoryPickaxe()
 
           return
         }
+      }
+    }
+  }
+
+  Game.unsocketItem = (event, itemNumber) => {
+    let item = Game.state.player.pickaxe.sockets[itemNumber]
+    let inventory = Game.state.permanent.inventory
+    Game.state.player.pickaxe.sockets[itemNumber] = {}
+
+    for (let i = 0; i < inventory.length; i++) {
+      if (isEmpty(inventory[i])) {
+        inventory[i] = item
+
+        if (item.name == 'Combo Stone') { Game.state.artifacts.ComboStone = false }
+
+        Game.updateInventoryItems()
+        Game.updateInventoryPickaxe()
+
+        return;
       }
     }
   }
@@ -2358,12 +2376,21 @@ Game.launch = () => {
       event.stopPropagation()
     }
 
+    let equipped = event.target.classList.contains('equipped-inventory-item')
+
     let div = document.createElement('div')
     div.classList.add('item-dropdown-menu')
-    let str = `
-      <p onclick='Game.socketItem(event, ${itemNumber})'>Socket Gem</p>
-      <p onclick='Game.removeGem(event)'>Trash Gem</p>
-    `
+
+    let str = ''
+    if (equipped) {
+      str += `<p onclick='Game.unsocketItem(event, ${itemNumber})'>Unsocket Item</p>`
+
+    } else {
+      str += `
+        <p onclick='Game.socketItem(event, ${itemNumber})'>Socket Item</p>
+        <p>Trash Item</p>
+      `
+    }
 
     div.innerHTML = str
     s('body').append(div)
@@ -3429,16 +3456,17 @@ Game.launch = () => {
 
   Game.questCompleteModal = () => {
     let div = document.createElement('div')
-    div.classList.add('wrapper')
+    div.classList.add('wrapper', 'esc')
     div.id = 'quest-complete-modal'
     let completedQuest = Game.select(Game.quests, Game.state.quest.currentQuest)
     let chance = completedQuest.artifact.chance
-    let foundArtifact = false
+    let foundArtifact = completedQuest.artifact.found
 
-    if (Math.random() <= chance) { // SUCCESS
-      foundArtifact = true
-      Game.getItem(`${completedQuest.artifact.name}`)
-
+    if (!foundArtifact) {
+      if (Math.random() <= chance) { // SUCCESS
+        foundArtifact = true
+        Game.getItem(`${completedQuest.artifact.name}`)
+      }
     }
 
     Game.playSound('quest-complete')
@@ -3455,7 +3483,7 @@ Game.launch = () => {
             str += `<p class='quest-reward fadeUpIn' style='color: #00c0ff; animation-duration: .6s'>FIRST CLEAR BONUS: 1 <i class='fa fa-diamond fa-1x'></i></p>`
         }
         if (foundArtifact) {
-          str += `ARTIFACT RETRIEVED: ${completedQuest.artifact.name}`
+          str += `<p class='artifact-retrieved fadeUpIn'>ARTIFACT RETRIEVED: ${completedQuest.artifact.name}</p>`
         }
         str += `
         <hr />
@@ -3713,8 +3741,6 @@ Game.launch = () => {
     Game.removeEl(s('.item-dropdown-menu'))
   })
 }
-
-
 
 window.onload = () => {
   Game.launch()
