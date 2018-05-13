@@ -3465,7 +3465,6 @@ Game.launch = () => {
     if (!foundArtifact) {
       if (Math.random() <= chance) { // SUCCESS
         foundArtifact = true
-        Game.getItem(`${completedQuest.artifact.name}`)
       }
     }
 
@@ -3489,7 +3488,7 @@ Game.launch = () => {
         <hr />
         <br />
 
-        <button onclick='Game.gainQuestRewards()'>COLLECT REWARDS</button>
+        <button onclick='Game.gainQuestRewards(${foundArtifact})'>COLLECT REWARDS</button>
       </div>
     `
 
@@ -3509,20 +3508,28 @@ Game.launch = () => {
     for (let i = 0; i < inventory.length; i++) {
       if (isEmpty(inventory[i])) {
         inventory[i] = item;
+
+        Game.updateInventoryItems()
         return;
       }
     }
 
   }
 
-  Game.gainQuestRewards = () => {
+  Game.gainQuestRewards = (foundArtifact) => {
     Game.removeEl(s('#quest-complete-modal'))
+
     let completedQuest = Game.select(Game.quests, Game.state.quest.currentQuest)
     completedQuest.timesCompleted++
     if (completedQuest.timesCompleted == 1) {
       Game.state.diamonds += completedQuest.firstClearRewards.diamonds
     }
     Game.state.player.generation.currentXp += completedQuest.xpGain
+
+    if (foundArtifact) {
+      Game.getItem(`${completedQuest.artifact.name}`)
+    }
+
 
     Game.state.quest.active = false,
     Game.state.quest.currentQuest = null,
