@@ -1639,6 +1639,57 @@ li {
   color: #00c0ff;
 }
 
+.quest-chest-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000000;
+  height: calc(47px * 5);
+  width: calc(77px * 5);
+  animation: chestAnim 1s forwards;
+  display: flex;
+  align-items: center;
+}
+
+@keyframes chestAnim {
+  0% {
+    transform: translate(-50%, -50%);
+    top: 100%;
+  }
+  100% {
+    transform: translate(-50%, -50%);
+    top: 50%;
+  }
+}
+
+.quest-chest {
+  background: url('./assets/images/misc_chest2.png');
+  background-size: 100% 100%;
+  image-rendering: pixelated;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  z-index: 1;
+  transition: transform .1s;
+  cursor: pointer;
+}
+
+.quest-chest:hover {
+  transform: scale(1.1)
+}
+
+.quest-chest:active {
+  transform: scale(1.0) rotate(4deg);
+}
+
+.quest-chest-container .item-pouch-glow, .quest-chest-container .item-pouch-glow2, .quest-chest-container .item-pouch-glow3 {
+  height: 350px;
+  width: 350px;
+  background-size: 100% 100%;
+  z-index: 0;
+}
+
 .open-quests-container-top {
   display: flex;
   flex-flow: row nowrap;

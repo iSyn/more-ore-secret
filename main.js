@@ -3417,8 +3417,35 @@ Game.launch = () => {
         }
       }
     } else {
-      Game.questCompleteModal()
+      // Game.questCompleteModal()
+      Game.showQuestChest()
     }
+  }
+
+  Game.showQuestChest = () => {
+    Game.playSound('quest-complete')
+
+    let chest = document.createElement('div')
+    chest.classList.add('quest-chest-container')
+    chest.innerHTML = `
+      <div class="item-pouch-glow"></div>
+      <div class="item-pouch-glow2"></div>
+      <div class="item-pouch-glow3"></div>
+      <div class="quest-chest"></div>
+    `
+
+    Game.clearQuest()
+
+    s('body').append(chest)
+  }
+
+  Game.clearQuest = () => {
+    Game.state.quest.active = false,
+    Game.state.quest.currentQuest = null,
+    Game.state.quest.currentQuestProgress = null,
+    Game.state.quest.questCompletionTime = null,
+
+    Game.drawQuestInfo()
   }
 
   Game.drawQuestInfo = () => {
@@ -3536,12 +3563,7 @@ Game.launch = () => {
     }
 
 
-    Game.state.quest.active = false,
-    Game.state.quest.currentQuest = null,
-    Game.state.quest.currentQuestProgress = null,
-    Game.state.quest.questCompletionTime = null,
-
-    Game.drawQuestInfo()
+    Game.clearQuest()
 
     Game.rebuildInventory = 1
   }
