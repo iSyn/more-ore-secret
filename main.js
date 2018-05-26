@@ -3453,6 +3453,7 @@ Game.launch = () => {
     let firstClear = false
     let timer = 500
     let artifact;
+    let rewards = {}
 
     // IF ARTIFACT FOR SPECIFIC QUEST HAS YET TO BE FOUND
     // RANDOM ROLL TO SEE IF YOU FIND IT
@@ -3460,7 +3461,6 @@ Game.launch = () => {
       if (Math.random() <= quest.artifact.chance) {
         artifactFound = true
         quest.artifact.found = true
-        Game.getItem(quest.artifact.name)
         artifact = Game.select(artifacts, quest.artifact.name)
       }
     }
@@ -3485,6 +3485,7 @@ Game.launch = () => {
       <h1>+${quest.xpGain}</h1>
     `
     s('.rewards').append(xpReward)
+    rewards.xp = quest.xpGain
 
     // APPEND FIRST CLEAR REWARD
     if (firstClear) {
@@ -3496,6 +3497,8 @@ Game.launch = () => {
         <h1>First Clear Bonus</h1>
         <h1>+${quest.firstClearRewards.diamonds} Diamonds</h1>
       `
+
+      rewards.firstClear = {...quest.firstClearRewards}
       setTimeout(() => {
         Game.playSound(`sound_piano-e`)
         s('.rewards').append(firstClearEl)  
@@ -3503,7 +3506,7 @@ Game.launch = () => {
     }
 
     if (artifactFound) {
-      console.log('OVER HERE', artifact)
+      rewards.artifactFound = artifact
       timer += timer
       let artifactFoundEl = document.createElement('div')
       artifactFoundEl.classList.add('reward')
@@ -3524,13 +3527,28 @@ Game.launch = () => {
       button.classList.add('collect-rewards-btn')
       rewardsContainer.append(button)
       button.addEventListener('click', () => {
-        Game.collectQuestRewards()
+        Game.collectQuestRewards(rewards)
       })
-    }, timer)    
+    }, timer + timer)    
   }
 
-  Game.collectQuestRewards = () => {
-    console.log('collect quest rewards firing')
+  Game.collectQuestRewards = (reward) => {
+    Game.removeEl(s('.rewards-container'))
+    Game.removeEl(s('.quest-chest-container'))
+
+    console.log('rewards:', reward)
+
+    Game.state.player.generation.currentXp += reward.xp
+
+    if (reward.firstClear) {
+      if (reward.firstClear.diamonds) {
+        Game.state.diamonds += reward.firstClear.diamonds
+      }
+    }
+
+    if (reward.artifactFound) {
+      Game.getItem(reward.artifactFound.name)
+    }
   }
 
   Game.clearQuest = () => {
