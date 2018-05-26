@@ -1665,19 +1665,24 @@ li {
 
 .rewards-container {
   width: 100%;
-  height: 400px;
   /* background: rgba(0, 0, 0, 0.7); */
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
   z-index: 99999999999;
   display: flex;
+  flex-flow: column nowrap;
+}
+
+.rewards {
+  height: 100%;
+  display: flex;
   flex-flow: row nowrap;
   justify-content: center;
 }
 
 .reward {
-  height: 100%;
+  height: 400px;
   width: 300px;
   padding: 10px;
   background: rgba(0, 0, 0, 0.8);
@@ -1688,6 +1693,20 @@ li {
   text-align: center;
   animation: rewardAnim 1s forwards;
   border: 10px double white;
+}
+
+.collect-rewards-btn {
+  position: relative;
+  cursor: pointer;
+  color: white;
+  background: rgba(0, 0, 0, 0.8);
+  border: 2px solid white;
+  font-size: 25px;
+  padding: 30px 60px;
+  width: 50%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 20px;
 }
 
 .reward img {

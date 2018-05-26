@@ -3449,9 +3449,10 @@ Game.launch = () => {
   Game.showQuestRewards = (questName) => {
     console.log('firing')
     let quest = Game.select(Game.quests, questName)
-    let artifactFound = true
-    let firstClear = true
-    let timer = 1300
+    let artifactFound = false
+    let firstClear = false
+    let timer = 500
+    let artifact;
 
     // IF ARTIFACT FOR SPECIFIC QUEST HAS YET TO BE FOUND
     // RANDOM ROLL TO SEE IF YOU FIND IT
@@ -3460,6 +3461,7 @@ Game.launch = () => {
         artifactFound = true
         quest.artifact.found = true
         Game.getItem(quest.artifact.name)
+        artifact = Game.select(artifacts, quest.artifact.name)
       }
     }
 
@@ -3469,21 +3471,24 @@ Game.launch = () => {
 
     let rewardsContainer = document.createElement('div')
     rewardsContainer.classList.add('rewards-container')
+    rewardsContainer.innerHTML = '<div class="rewards"></div>'
 
     s('body').append(rewardsContainer)
 
     // APPEND XP REWARDS
     let xpReward = document.createElement('div')
+    Game.playSound(`sound_piano-c`)
     xpReward.classList.add('reward')
     xpReward.innerHTML = `
       <h1>Generation XP</h1>
       <img src="./assets/images/misc_brain.png" alt=""/>
       <h1>+${quest.xpGain}</h1>
     `
-    s('.rewards-container').append(xpReward)
+    s('.rewards').append(xpReward)
 
     // APPEND FIRST CLEAR REWARD
     if (firstClear) {
+      
       timer += timer
       let firstClearEl = document.createElement('div')
       firstClearEl.classList.add('reward')
@@ -3492,25 +3497,40 @@ Game.launch = () => {
         <h1>+${quest.firstClearRewards.diamonds} Diamonds</h1>
       `
       setTimeout(() => {
-        s('.rewards-container').append(firstClearEl)  
-      }, 1300)
+        Game.playSound(`sound_piano-e`)
+        s('.rewards').append(firstClearEl)  
+      }, timer)
     }
 
     if (artifactFound) {
+      console.log('OVER HERE', artifact)
+      timer += timer
       let artifactFoundEl = document.createElement('div')
       artifactFoundEl.classList.add('reward')
       artifactFoundEl.innerHTML = `
         <h1>Artifact Found!</h1>
+        <img src="./assets/images/${artifact.img}.png" alt=""/>
+        <h1>${artifact.name}</h1>
       `
       setTimeout(() => {
-        s('.rewards-container').append(artifactFoundEl)  
-      }, 2600)
+        Game.playSound(`sound_piano-g`)
+        s('.rewards').append(artifactFoundEl)  
+      }, timer)
     }
 
+    setTimeout(() => {
+      let button = document.createElement('button')
+      button.innerHTML = 'Collect Rewards'
+      button.classList.add('collect-rewards-btn')
+      rewardsContainer.append(button)
+      button.addEventListener('click', () => {
+        Game.collectQuestRewards()
+      })
+    }, timer)    
+  }
 
-    console.log('quest', quest)
-    
-
+  Game.collectQuestRewards = () => {
+    console.log('collect quest rewards firing')
   }
 
   Game.clearQuest = () => {
