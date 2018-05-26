@@ -3417,14 +3417,18 @@ Game.launch = () => {
         }
       }
     } else {
-      // Game.questCompleteModal()
-      Game.showQuestChest()
+      Game.completeQuest()
     }
   }
 
-  Game.showQuestChest = () => {
+  Game.completeQuest = () => {
     Game.playSound('quest-complete')
+    let quest = Game.select(Game.quests, Game.state.quest.currentQuest)
+    quest.timesCompleted++
+    Game.showQuestChest(quest.name)
+  }
 
+  Game.showQuestChest = (questName) => {
     let chest = document.createElement('div')
     chest.classList.add('quest-chest-container')
     chest.innerHTML = `
@@ -3433,10 +3437,80 @@ Game.launch = () => {
       <div class="item-pouch-glow3"></div>
       <div class="quest-chest"></div>
     `
+    chest.addEventListener('click', () => {
+      Game.showQuestRewards(questName)
+    })
 
     Game.clearQuest()
 
     s('body').append(chest)
+  }
+
+  Game.showQuestRewards = (questName) => {
+    console.log('firing')
+    let quest = Game.select(Game.quests, questName)
+    let artifactFound = true
+    let firstClear = true
+    let timer = 1300
+
+    // IF ARTIFACT FOR SPECIFIC QUEST HAS YET TO BE FOUND
+    // RANDOM ROLL TO SEE IF YOU FIND IT
+    if (!quest.artifact.found) {
+      if (Math.random() <= quest.artifact.chance) {
+        artifactFound = true
+        quest.artifact.found = true
+        Game.getItem(quest.artifact.name)
+      }
+    }
+
+    if (quest.timesCompleted === 1) {
+      firstClear = true
+    }
+
+    let rewardsContainer = document.createElement('div')
+    rewardsContainer.classList.add('rewards-container')
+
+    s('body').append(rewardsContainer)
+
+    // APPEND XP REWARDS
+    let xpReward = document.createElement('div')
+    xpReward.classList.add('reward')
+    xpReward.innerHTML = `
+      <h1>Generation XP</h1>
+      <img src="./assets/images/misc_brain.png" alt=""/>
+      <h1>+${quest.xpGain}</h1>
+    `
+    s('.rewards-container').append(xpReward)
+
+    // APPEND FIRST CLEAR REWARD
+    if (firstClear) {
+      timer += timer
+      let firstClearEl = document.createElement('div')
+      firstClearEl.classList.add('reward')
+      firstClearEl.innerHTML = `
+        <h1>First Clear Bonus</h1>
+        <h1>+${quest.firstClearRewards.diamonds} Diamonds</h1>
+      `
+      setTimeout(() => {
+        s('.rewards-container').append(firstClearEl)  
+      }, 1300)
+    }
+
+    if (artifactFound) {
+      let artifactFoundEl = document.createElement('div')
+      artifactFoundEl.classList.add('reward')
+      artifactFoundEl.innerHTML = `
+        <h1>Artifact Found!</h1>
+      `
+      setTimeout(() => {
+        s('.rewards-container').append(artifactFoundEl)  
+      }, 2600)
+    }
+
+
+    console.log('quest', quest)
+    
+
   }
 
   Game.clearQuest = () => {
@@ -3486,6 +3560,7 @@ Game.launch = () => {
     }
   }
 
+  // old - need to remove
   Game.questCompleteModal = () => {
     let div = document.createElement('div')
     div.classList.add('wrapper', 'esc')
@@ -3530,8 +3605,6 @@ Game.launch = () => {
   }
 
   Game.getItem = (name) => {
-    console.log('get item', name)
-
     let item = Game.select(artifacts, name)
     let inventory = Game.state.permanent.inventory
 

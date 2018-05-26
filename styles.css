@@ -1663,6 +1663,52 @@ li {
   }
 }
 
+.rewards-container {
+  width: 100%;
+  height: 400px;
+  /* background: rgba(0, 0, 0, 0.7); */
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 99999999999;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+}
+
+.reward {
+  height: 100%;
+  width: 300px;
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  margin: 0 20px;
+  transition: all .4s;
+  overflow: hidden;
+  text-align: center;
+  animation: rewardAnim 1s forwards;
+  border: 10px double white;
+}
+
+.reward img {
+  height: 100px;
+  width: 100px;
+  image-rendering: pixelated;
+}
+
+@keyframes rewardAnim {
+  0% {
+    opacity: 0;
+    transform: translateY(150px);
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
 .quest-chest {
   background: url('./assets/images/misc_chest2.png');
   background-size: 100% 100%;
