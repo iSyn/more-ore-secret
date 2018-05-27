@@ -1696,7 +1696,7 @@ li {
 }
 
 .collect-rewards-btn {
-  position: relative;
+  position: absolute;
   cursor: pointer;
   color: white;
   background: rgba(0, 0, 0, 0.8);
@@ -1706,7 +1706,6 @@ li {
   width: 50%;
   left: 50%;
   transform: translateX(-50%);
-  margin-top: 20px;
 }
 
 .reward img {

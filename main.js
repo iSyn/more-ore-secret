@@ -3524,6 +3524,8 @@ Game.launch = () => {
       button.innerHTML = 'Collect Rewards'
       button.classList.add('collect-rewards-btn')
       rewardsContainer.append(button)
+      console.log(s('.reward').getBoundingClientRect())
+      button.style.top = s('.reward').getBoundingClientRect().height + 20 + 'px'
       button.addEventListener('click', () => {
         Game.collectQuestRewards(rewards)
       })
