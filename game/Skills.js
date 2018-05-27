@@ -9,6 +9,9 @@ let Skill = function(skill) {
     this.maxLvl = skill.maxLvl
     this.position = skill.position
     this.onLvl = skill.onLvl
+    this.locked = skill.locked
+    this.requires = skill.requires
+    console.log('SKILL', skill)
 
     this.drawLines = skill.drawLines
 
@@ -47,6 +50,7 @@ let skills = [
         img: 'the-start.png',
         type: 'Passive',
         fillerTxt: 'Where it all begins',
+        locked: 0,
         desc: 'Increases total OpC and OpS by 50%',
         maxLvl: 1,
         position: [1, 0], // row 1, col 0
@@ -60,6 +64,7 @@ let skills = [
         }
     }, {
         name: 'Keen Eyes',
+        locked: 1,
         fillerTxt: 'Glasses',
         type: 'Passive',
         desc: 'Start off with Magnifying Glasses',
@@ -67,12 +72,16 @@ let skills = [
         position: [2, 0],
     }, {
         name: 'Managerial Proficiency',
+        locked: 1,
         img: 'manager-mastery.png',
         type: 'Passive',
         fillerTxt: 'manager classes',
         desc: 'Increases total OpS by 10% per level',
         maxLvl: 10,
         position: [3, -1],
+        requires: [
+            ['The Start', 1]
+        ],
         drawLines: [
             {from: 'bottom', to: 'Property Management'},
             {from: 'bottom', to: 'Tax Break'}
@@ -82,12 +91,16 @@ let skills = [
         }
     }, {
         name: 'Prospector Proficiency',
+        locked: 1,
         img: 'pickaxe-mastery.png',
         type: 'Passive',
         fillerTxt: 'bleh',
         desc: 'Increases total OpC by 10% per level',
         maxLvl: 10,
         position: [3, 1],
+        requires: [
+            ['The Start', 1]
+        ],
         drawLines: [
             {from: 'bottom', to: 'Heavy Strike'},
             {from: 'bottom', to: 'Metal Detector'}
@@ -97,6 +110,7 @@ let skills = [
         }
     }, {
         name: 'Back to Square One',
+        locked: 1,
         type: 'Passive',
         fillerTxt: 'test',
         desc: 'Start with a random common pickaxe and at level 5',
@@ -104,6 +118,7 @@ let skills = [
         position: [5, 0]
     }, {
         name: 'Property Management',
+        locked: 1,
         type: 'Passive',
         fillerTxt: 'test2',
         desc: 'Increase specific building OpS by 50%',
@@ -111,6 +126,7 @@ let skills = [
         position: [5, -2]
     }, {
         name: 'Metal Detector',
+        locked: 1,
         type: 'Passive',
         fillerTxt: 'test2',
         desc: 'Beep when an gold nugget spawns',
@@ -122,6 +138,7 @@ let skills = [
         ]
     }, {
         name: 'Golden Shower',
+        locked: 1,
         type: 'Passive',
         fillerTxt: 'test2',
         desc: 'Increases duration of gold rush',
@@ -129,6 +146,7 @@ let skills = [
         position: [8, 2]
     }, {
         name: 'Stone Polisher',
+        locked: 1,
         type: 'Passive',
         fillerTxt: 'test2',
         desc: 'Increases gold nugget multiplier',
@@ -136,6 +154,7 @@ let skills = [
         position: [8, 3]
     }, {
         name: 'Tax Break',
+        locked: 1,
         type: 'Active',
         fillerTxt: 'test2',
         desc: 'test2',
@@ -143,6 +162,7 @@ let skills = [
         position: [10, -1]
     }, {
         name: 'Heavy Strike',
+        locked: 1,
         type: 'Active',
         fillerTxt: 'test2',
         desc: 'test2',

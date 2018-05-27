@@ -190,6 +190,7 @@ Game.launch = () => {
       totalOresMined: 0,
       totalOresEarned: 0,
       totalOresSpent: 0,
+      totalRocksDestroyed: 0,
       currentOresEarned: 0,
       currentOresMined: 0,
       currentOreClicks: 0,
@@ -197,7 +198,6 @@ Game.launch = () => {
       currentWeakSpotHits: 0,
       megaHits: 0,
       rocksDestroyed: 0,
-      globalRocksDestroyed: 0,
       itemsPickedUp: 0,
       timePlayed: 0,
       highestCombo: 0,
@@ -1185,7 +1185,7 @@ Game.launch = () => {
   }
 
   Game.checkDrop = () => {
-    let amountOfRocksDestroyed = Game.state.stats.rocksDestroyed
+    let amountOfRocksDestroyed = Game.state.stats.totalRocksDestroyed
     let itemDropChance = .3 // 30%
 
     if (amountOfRocksDestroyed <= 5) {
@@ -1461,7 +1461,7 @@ Game.launch = () => {
   }
 
   Game.pickUpItem = (iLvl) => {
-    let amountOfRocksDestroyed = Game.state.stats.rocksDestroyed
+    let amountOfRocksDestroyed = Game.state.stats.totalRocksDestroyed
     Game.state.stats.itemsPickedUp++
     if (Game.state.stats.itemsPickedUp == 1) Game.repositionAllElements = 1
 
@@ -1939,6 +1939,7 @@ Game.launch = () => {
       }
     } else {
       Game.state.stats.rocksDestroyed++
+      Game.state.stats.totalRocksDestroyed++
       Game.checkDrop()
       // Game.gainXp(10)
       Game.playSound('explosion2')
@@ -2064,12 +2065,11 @@ Game.launch = () => {
               <p>Requirements</p>
               <hr />
               `
-
               // Build out generation requirements
-              if (Game.state.player.generation.lv >= selectedSkill.generationReq) {
-                str += `<p>Generation Level: ${selectedSkill.generationReq}</p>`
+              if (Game.state.player.generation.lv >= selectedSkill.position[0]) {
+                str += `<p>Generation Level: ${selectedSkill.position[0]}</p>`
               } else {
-                str += `<p style='color: red'>Generation Level: ${selectedSkill.generationReq}</p>`
+                str += `<p style='color: red'>Generation Level: ${selectedSkill.position[0]}</p>`
               }
 
               // Build out skill requirements
@@ -2474,9 +2474,8 @@ Game.launch = () => {
     }
 
     s('.inventory-gems').innerHTML = `
-      <h1>Inventory <span style='font-size: small'>work in progress</span></h1>
+      <h1>Inventory</h1>
       <div>${str}</div>
-      <p>Level the skill Backpacking to increase max inentory size</p>
     `
   }
 
@@ -2740,7 +2739,6 @@ Game.launch = () => {
       if (Game.skills[i].locked == 1) {
         str += `
           <div
-            onclick='Game.skills[${i}].levelUp(event)'
             onmouseover='Game.showTooltip(event, {type: "skill", name: "${Game.skills[i].name}"})'
             onmouseout='Game.hideTooltip()'
             class='skill skill-${Game.skills[i].className}'
