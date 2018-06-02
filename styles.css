@@ -658,6 +658,17 @@ body {
   padding: 0 10%;
 }
 
+.join-discord {
+  color: white;
+  text-align: center;
+  padding: 30px 30px 0 30px;
+}
+
+.join-discord a {
+  color: #7289da;
+  font-weight: bold;
+}
+
 .ores {
   flex-grow: 1;
 }

@@ -1788,6 +1788,8 @@ Game.launch = () => {
 
   Game.adsLoaded = false
   Game.loadAd = () => {
+    let div = s('#ads-im-sorry-please-dont-hate-me')
+
     if (Game.adsLoaded == false) {
       Game.adsLoaded = true
       for (let i = 0; i < 3; i++) {
@@ -1799,7 +1801,6 @@ Game.launch = () => {
         ins.setAttribute('data-ad-client', 'ca-pub-4584563958870163')
         ins.setAttribute('data-ad-slot', '6565116738')
 
-        let div = s('#ads-im-sorry-please-dont-hate-me')
         div.append(script)
         div.append(ins)
 
@@ -1807,17 +1808,14 @@ Game.launch = () => {
           ins.setAttribute('data-ad-format', 'rectangle, horizontal');
           (adsbygoogle = window.adsbygoogle || []).push({});
         }
-      s('.tab-content-container').append(div)
+        s('.tab-content-container').append(div)
       }
     }
 
     if (s('#ads-im-sorry-please-dont-hate-me').innerHTML.length < 1000) {
       let str = `
         <p style='text-align: center; background: transparent; color: white; padding-bottom: 20px;'>
-        Please consider disabling adblock! <br/>
-        I am just a broke college student and the cents generated from this game will be for food.
-        <br/>
-        Or consider supporting me on <a target='_blank' href="https://www.patreon.com/user?u=8032477">patreon!</a> <br/>(Even a dollar helps!)
+        Please consider disabling adblock!
         </p>
       `
       s('#ads-im-sorry-please-dont-hate-me').innerHTML = str
