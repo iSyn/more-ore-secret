@@ -3163,14 +3163,7 @@ Game.launch = () => {
             <h3 style='padding-right: 20px;'><i style='color:#00c0ff' class='fa fa-diamond fa-1x'></i> ${Game.state.diamonds}</h3>
           </div>
           <hr/>
-          <div class="refined-store-middle">
-            <p onclick='Game.changeRefineTab("trinkets")' id='trinkets-tab' class='refine-tab selected'>Trinkets</p>
-            <p onclick='Game.changeRefineTab("potions")' id='potions-tab' class='refine-tab' >Potions</p>
-            <p onclick='Game.changeRefineTab("diamonds")' id='diamonds-tab' class='refine-tab' >Diamonds</p>
-          </div>
-          <hr/>
-          <div class="refined-store-bottom"></div>
-          <div class="refined-store-refresh-btn"></div>
+          <h1>work in progress</h1>
         </div>
     `
 
@@ -3926,6 +3919,10 @@ Game.launch = () => {
     if (pressed.join('').includes('test')) {
       Game.state.player.pickaxe.damage *= 10000000
       Game.recalculateOpC = 1
+
+      Game.quests.forEach((quest) => {
+        quest.completionTime = 5000
+      })
     }
   })
   window.addEventListener('click', (e) => {
