@@ -655,6 +655,11 @@ body {
   font-size: x-large;
   background-color: #201b17;
   z-index: 2;
+  padding: 0 10%;
+}
+
+.ores {
+  flex-grow: 1;
 }
 
 .ore-container {

@@ -19,8 +19,39 @@ let beautify = (number) => {
     "Quadrillion",
     "Quintillion",
     "Sextillion",
-    "Alotillion",
-    "Waytoomanyillion",
+    "Septillion",
+    "Octillion",
+    "Nonillion",
+    "Decillion",
+    "Undecillion",
+    "Dodecillion",
+    "Tredecillion",
+    "Quattuordecillion",
+    "Quindecillion",
+    "Sexdecillion",
+    "Septendecillion",
+    "Octodecillion",
+    "Novemdecillion",
+    "Vigintillion",
+    "Unvigintillion",
+    "Dovigintillion",
+    "Trevigintillion",
+    "Quattuorvigintillion",
+    "Quinvigintillion",
+    "Sexvigintillion",
+    "Septenvigintillion",
+    "Octovigintillion",
+    "Novemvigintillion",
+    "Trigintillion",
+    "Untrigintillion",
+    "Dotrigintillion",
+    "Tretrigintillion",
+    "Quattuortrigintillion",
+    "Quintrigintillion",
+    "Sextrigintillion",
+    "Septentrigintillion",
+    "Octotrigintillion",
+    "Novemtrigintillion",
     "F*ckloadillion",
     "F*cktonillion"
   ];
@@ -2720,6 +2751,7 @@ Game.launch = () => {
         }
       }
     }
+
   }
 
   Game.buildSkillTree = () => {

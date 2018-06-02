@@ -11,7 +11,6 @@ let Skill = function(skill) {
     this.onLvl = skill.onLvl
     this.locked = skill.locked
     this.requires = skill.requires
-    console.log('SKILL', skill)
 
     this.drawLines = skill.drawLines
 
@@ -33,11 +32,11 @@ let Skill = function(skill) {
                         Game.calculateOpS()
                         Game.calculateOpC()
                     }
-                Game.hideTooltip()
+                    Game.hideTooltip()
 
-                // check for unlocks
-                Game.unlockSkills()
-                Game.drawLines()
+                    // check for unlocks
+                    Game.unlockSkills()
+                    Game.drawLines()
                 }
             }
         }
