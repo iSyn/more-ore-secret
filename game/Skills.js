@@ -22,6 +22,7 @@ let Skill = function(skill) {
                 if (Game.state.player.generation.availableSp > 0) {
                     Game.state.player.generation.availableSp--
                     this.lvl++
+                    Game.lvlFunc(this.name)
                     Game.risingNumber(event, null, 'skill up')
                     Game.state.player.skills[`spSection${this.section}`]++
                     Game.playSound('skill-lvl-up')

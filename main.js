@@ -172,7 +172,10 @@ Game.launch = () => {
         {}, 
         {}, 
         {}
-      ]
+      ],
+      skills: {
+        keenEyes: 0
+      }
     },
 
     artifacts: {
@@ -303,7 +306,8 @@ Game.launch = () => {
 
     // POSITION ORE WEAK SPOT
     let magnifyingGlass = Game.select(Game.upgrades, 'Magnifying Glass')
-    if (magnifyingGlass.owned) {
+    if (magnifyingGlass.owned || Game.state.permanent.skills.keenEyes) {
+      if (!magnifyingGlass.owned) magnifyingGlass.owned = 1
       let randomNumber = () => Math.floor(Math.random() * 80) + 1
       let orePos = s('.ore').getBoundingClientRect()
       let randomSign = Math.round(Math.random()) * 2 - 1
@@ -1930,6 +1934,13 @@ Game.launch = () => {
     Game.recalculateOpS = 1
   }
 
+  Game.lvlFunc = (name) => {
+    console.log('lvlFunc firing on:', name);
+    if (name === 'Keen Eyes') {
+      Game.state.permanent.skills.keenEyes = 1
+    }
+  }
+
   let soundPlayed1 = false
   let soundPlayed2 = false
   let soundPlayed3 = false
@@ -2700,6 +2711,7 @@ Game.launch = () => {
       Game.removeEl(s('.wrapper'))
       Game.unlockSkills()
     }, 1500)
+
     setTimeout(() => {
       Game.showSkillTree()
       let items = document.querySelectorAll('.item-container')
@@ -2709,17 +2721,19 @@ Game.launch = () => {
         })
       }
     }, 2000)
+
     setTimeout(() => {
       Game.removeEl(s('.refine'))
       if (Game.state.stats.timesRefined > 0) Game.winAchievement('Blacksmiths Apprentice')
+
       Game.repositionAllElements = 1
     }, 3000)
-
-    s('.ore-weak-spot').style.display = 'none'
   }
 
   Game.unlockSkills = () => {
+    
     let lockedSkills = Game.skills.filter((skill) => skill.locked == 1)
+    console.log('lockedSkills:', lockedSkills)
 
     for (let i in lockedSkills) {
       let selectedSkill = (Game.select(Game.skills, lockedSkills[i].name))
@@ -2731,7 +2745,7 @@ Game.launch = () => {
             lvl: lockedSkills[i].requires[j][1]
           }
 
-          if (Game.state.player.generation.lv >= lockedSkills[i].generationReq) {
+          if (Game.state.player.generation.lv >= lockedSkills[i].position[0]) {
             if (req.skill) {
               if (req.skill.lvl >= req.lvl) {
                 lockedSkills[i].locked = 0
@@ -2742,7 +2756,7 @@ Game.launch = () => {
           }
         }
       } else {
-        if (Game.state.player.generation.lv >= lockedSkills[i].generationReq) {
+        if (Game.state.player.generation.lv >= lockedSkills[i].position[0]) {
           lockedSkills[i].locked = 0
           if (selectedEl != null) {
             selectedEl.style.opacity = 1
