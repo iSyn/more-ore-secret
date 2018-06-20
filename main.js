@@ -2539,7 +2539,10 @@ Game.launch = () => {
 
   Game.randomBonus = (special) => {
     if (Math.random() <= .3) { // 30% chance of this happening
-      console.log('bonus!')
+      
+      let metalDetector = Game.select(Game.skills, 'Metal Detector')
+      if (metalDetector.lvl === 1) Game.playSound('skill-lvl-up')
+
       let randomID = Math.floor(Math.random() * 1000000) + 1
       let chance = Math.random()
       let bonusGrade

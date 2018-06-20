@@ -111,18 +111,13 @@ let skills = [
             addPermaOpC: .1
         }
     }, {
-        name: 'Back to Square One',
-        locked: 1,
-        type: 'Passive',
-        fillerTxt: 'test',
-        desc: 'Start with a random common pickaxe and at level 5',
-        maxLvl: 1,
-        position: [5, 0]
-    }, {
         name: 'Property Management',
         locked: 1,
         type: 'Passive',
         fillerTxt: 'test2',
+        requires: [
+            ['Managerial Mastery', 1]
+        ],
         desc: 'Increase specific building OpS by 50%',
         maxLvl: 1,
         position: [5, -2]
@@ -132,6 +127,9 @@ let skills = [
         type: 'Passive',
         fillerTxt: 'test2',
         desc: 'Beep when an gold nugget spawns',
+        requires: [
+            ['Prospector Proficiency', 1]
+        ],
         maxLvl: 1,
         position: [5, 2],
         drawLines: [
