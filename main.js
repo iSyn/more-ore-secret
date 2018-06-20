@@ -2735,6 +2735,7 @@ Game.launch = () => {
 
     for (let i in lockedSkills) {
       let selectedSkill = (Game.select(Game.skills, lockedSkills[i].name))
+      console.log('selectedSkill', selectedSkill)
       let selectedEl = document.querySelector(`.skill-${lockedSkills[i].className}`)
       if (lockedSkills[i].requires) {
         for (let j in lockedSkills[i].requires) {
@@ -2783,6 +2784,7 @@ Game.launch = () => {
       if (Game.skills[i].locked == 1) {
         str += `
           <div
+            onclick='Game.skills[${i}].levelUp(event)'
             onmouseover='Game.showTooltip(event, {type: "skill", name: "${Game.skills[i].name}"})'
             onmouseout='Game.hideTooltip()'
             class='skill skill-${Game.skills[i].className}'
