@@ -749,6 +749,21 @@ body {
   position: relative;
 }
 
+.bottom:hover .unlock-on-refine-txt {
+  /* display: block; */
+  opacity: 1;
+}
+
+.bottom .unlock-on-refine-txt {
+  transition: opacity .3s;
+  color: white;
+  opacity: .2;
+  position: absolute;
+  left: 50%;
+  top: 35%;
+  transform: translate(-50%, -50%);
+}
+
 .stats-container {
   position: absolute;
   display: flex;

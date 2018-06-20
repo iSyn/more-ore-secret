@@ -44,6 +44,8 @@ let Skill = function(skill) {
     }
 }
 
+// POSITION: GENERATION LVL , POSITION
+
 let skills = [
     {
         name: 'The Start',

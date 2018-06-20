@@ -3614,7 +3614,11 @@ Game.launch = () => {
         </div>
       `
     } else {
-      div.innerHTML = ``
+      if (Game.state.stats.timesRefined === 0) {
+        div.innerHTML = `<h1 class='unlock-on-refine-txt'><i class='fa fa-lock fa-1x'></i> Unlocked on First Refine</h1>`
+      } else {
+        div.innerHTML = ``
+      }
     }
 
     Game.redrawQuestInfo = 0
