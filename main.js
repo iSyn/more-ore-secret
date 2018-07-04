@@ -1668,6 +1668,28 @@ Game.launch = () => {
   Game.itemModalClick = (str) => {
 
     if (str == 'equip') {
+
+      let sockets = Game.state.player.pickaxe.sockets
+
+      if (sockets.length > 0) {
+        console.log('pickaxe currently has a gem')
+        for (i = 0; i < sockets.length; i++) {
+          let gem = sockets[i]
+          let inventory = Game.state.permanent.inventory
+          for (let j = 0; j < inventory.length; j++) {
+            if (isEmpty(inventory[j])) {
+              inventory[j] = gem;
+      
+              Game.updateInventoryItems()
+              return;
+            }
+          }
+        }
+      } else {
+        console.log('no gems')
+      }
+
+
       Game.state.player.pickaxe = Game.newItem
       Game.recalculateOpC = 1
     }
@@ -2791,7 +2813,7 @@ Game.launch = () => {
             onmouseover='Game.showTooltip(event, {type: "skill", name: "${Game.skills[i].name}"})'
             onmouseout='Game.hideTooltip()'
             class='skill skill-${Game.skills[i].className}'
-            style='left: ${pos.column}px; top: ${pos.generation}px; background: url("./assets/images/skill_${Game.skills[i].img}"); opacity: .5'
+            style='left: ${pos.column}px; top: ${pos.generation}px; background: url("./assets/images/skill_${Game.skills[i].img}"); opacity: .3; filter: grayscale(100%);'
           ></div>
         `
       } else {
@@ -2852,13 +2874,13 @@ Game.launch = () => {
       if (skill.drawLines) {
 
         if (skill.locked) {
-          ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)'
+          ctx.strokeStyle = '#1a1a1a'
         } else {
           ctx.strokeStyle = 'white'
         }
 
         if (skill.lvl == 0) {
-          ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)'
+          ctx.strokeStyle = '#1a1a1a'
         }
 
         for (let j in skill.drawLines) {
@@ -2889,6 +2911,14 @@ Game.launch = () => {
               y: s(`.skill-${skill.className}`).getBoundingClientRect().bottom
             }
             let toSkill = Game.select(Game.skills, `${skill.drawLines[j].to}`)
+            console.log(toSkill.className)
+
+            console.log('============= START DEBUG =============')
+
+            let selected = s(`.skill-${toSkill.className}`)
+            console.log('looking for:', `.skill-${toSkill.className}` )
+
+            console.log('============= END DEBUG =============')
             let toPos = {
               x: s(`.skill-${toSkill.className}`).getBoundingClientRect().x + 32,
               y: s(`.skill-${toSkill.className}`).getBoundingClientRect().y
@@ -3487,7 +3517,6 @@ Game.launch = () => {
   }
 
   Game.showQuestRewards = (questName) => {
-    console.log('firing')
     let quest = Game.select(Game.quests, questName)
     let artifactFound = false
     let firstClear = false
@@ -3566,7 +3595,6 @@ Game.launch = () => {
       button.innerHTML = 'Collect Rewards'
       button.classList.add('collect-rewards-btn')
       rewardsContainer.append(button)
-      console.log(s('.reward').getBoundingClientRect())
       button.style.top = s('.reward').getBoundingClientRect().height + 20 + 'px'
       button.addEventListener('click', () => {
         Game.collectQuestRewards(rewards)

@@ -1184,13 +1184,6 @@ li {
   box-shadow: 0 0 10px #222 inset;
 }
 
-.skill-spacer {
-  height: 64px;
-  width: 128px;
-  margin: 10px;
-  pointer-events: none;
-}
-
 .skill:hover {
   box-shadow: 0 0 10px white inset, ;
   filter: brightness(100%);
@@ -2512,6 +2505,11 @@ li {
   opacity: .6;
   font-size: small;
   padding-top: 5px;
+}
+
+.skill-spacer {
+  visibility: hidden;
+  pointer-events: none;
 }
 
 

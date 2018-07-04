@@ -1,6 +1,6 @@
 let Skill = function(skill) {
     this.name = skill.name
-    this.className = skill.name.replace(/\s/g, '')
+    this.className = skill.name.replace(/\s/g, '').replace(/\./g,'')
     this.img = skill.img
     this.type = skill.type
     this.fillerTxt = skill.fillerTxt
@@ -85,7 +85,7 @@ let skills = [
             ['The Start', 1]
         ],
         drawLines: [
-            {from: 'bottom', to: 'Property Management'},
+            {from: 'bottom', to: 'School Management'},
             {from: 'bottom', to: 'Tax Break'}
         ],
         onLvl: {
@@ -110,17 +110,6 @@ let skills = [
         onLvl: {
             addPermaOpC: .1
         }
-    }, {
-        name: 'Property Management',
-        locked: 1,
-        type: 'Passive',
-        fillerTxt: 'test2',
-        requires: [
-            ['Managerial Mastery', 1]
-        ],
-        desc: 'Increase specific building OpS by 50%',
-        maxLvl: 1,
-        position: [5, -2]
     }, {
         name: 'Metal Detector',
         locked: 1,
@@ -170,3 +159,194 @@ let skills = [
         position: [10, 1]
     }
 ]
+
+
+let buildingBonusSkills = [
+    {
+        name: 'School Management',
+        locked: 1,
+        type: 'Passive',
+        fillerTxt: 'test2',
+        requires: [
+            ['Managerial Proficiency', 1]
+        ],
+        drawLines: [
+            {from: 'bottom', to: 'Farm Management'},
+        ],
+        desc: 'Increase School OpS by 50% per level',
+        maxLvl: 10,
+        position: [5, -2]
+    }, {
+        name: 'Farm Management',
+        locked: 1,
+        type: 'Passive',
+        fillerTxt: 'test2',
+        requires: [
+            ['School Management', 1]
+        ],
+        drawLines: [
+            {from: 'bottom', to: 'Quarry Management'}
+        ],
+        desc: 'Increase Farm OpS by 50% per level',
+        maxLvl: 10,
+        position: [6, -2]
+    }, 
+    
+    {
+        name: 'Quarry Management',
+        locked: 1,
+        type: 'Passive',
+        fillerTxt: 'test2',
+        requires: [
+            ['Farm Management', 1]
+        ],
+        drawLines: [
+            {from: 'bottom', to: 'Church Management'}
+        ],
+        desc: 'Increase Quarry OpS by 50% per level',
+        maxLvl: 10,
+        position: [7, -2]
+    }, {
+        name: 'Church Management',
+        locked: 1,
+        type: 'Passive',
+        fillerTxt: 'test2',
+        requires: [
+            ['Quarry Management', 1]
+        ],
+        drawLines: [
+            {from: 'bottom', to: 'Factory Management'}
+        ],
+        desc: 'Increase Church OpS by 50% per level',
+        maxLvl: 10,
+        position: [8, -2]
+    }, {
+        name: 'Factory Management',
+        locked: 1,
+        type: 'Passive',
+        fillerTxt: 'test2',
+        requires: [
+            ['Church Management', 1]
+        ],
+        drawLines: [
+            {from: 'bottom', to: 'Crypt Management'}
+        ],
+        desc: 'Increase Factory OpS by 50% per level',
+        maxLvl: 10,
+        position: [9, -2]
+    }, {
+        name: 'Crypt Management',
+        locked: 1,
+        type: 'Passive',
+        fillerTxt: 'test2',
+        requires: [
+            ['Factory Management', 1]
+        ],
+        drawLines: [
+            {from: 'bottom', to: 'Hospital Management'}
+        ],
+        desc: 'Increase Crypt OpS by 50% per level',
+        maxLvl: 10,
+        position: [10, -2]
+    }, {
+        name: 'Hospital Management',
+        locked: 1,
+        type: 'Passive',
+        fillerTxt: 'test2',
+        requires: [
+            ['Crypt Management', 1]
+        ],
+        drawLines: [
+            {from: 'bottom', to: 'Citadel Management'}
+        ],
+        desc: 'Increase Hospital OpS by 50% per level',
+        maxLvl: 10,
+        position: [11, -2]
+    }, {
+        name: 'Citadel Management',
+        locked: 1,
+        type: 'Passive',
+        fillerTxt: 'test2',
+        requires: [
+            ['Hospital Management', 1]
+        ],
+        drawLines: [
+            {from: 'bottom', to: 'Xeno Spaceship Management'}
+        ],
+        desc: 'Increase Citadel OpS by 50% per level',
+        maxLvl: 10,
+        position: [12, -2]
+    }, {
+        name: 'Xeno Spaceship Management',
+        locked: 1,
+        type: 'Passive',
+        fillerTxt: 'test2',
+        requires: [
+            ['Citadel Management', 1]
+        ],
+        drawLines: [
+            {from: 'bottom', to: 'Sky Castle Management'}
+        ],
+        desc: 'Increase Xeno Spaceship OpS by 50% per level',
+        maxLvl: 10,
+        position: [13, -2]
+    }, {
+        name: 'Sky Castle Management',
+        locked: 1,
+        type: 'Passive',
+        fillerTxt: 'test2',
+        requires: [
+            ['Xeno Spaceship Management', 1]
+        ],
+        drawLines: [
+            {from: 'bottom', to: 'Eon Portal Management'}
+        ],
+        desc: 'Increase Sky Castle OpS by 50% per level',
+        maxLvl: 10,
+        position: [14, -2]
+    }, {
+        name: 'Eon Portal Management',
+        locked: 1,
+        type: 'Passive',
+        fillerTxt: 'test2',
+        requires: [
+            ['Sky Castle Management', 1]
+        ],
+        drawLines: [
+            {from: 'bottom', to: 'Sacred Mine Management'}
+        ],
+        desc: 'Increase Eon Portal OpS by 50% per level',
+        maxLvl: 10,
+        position: [15, -2]
+    }, {
+        name: 'Sacred Mine Management',
+        locked: 1,
+        type: 'Passive',
+        fillerTxt: 'test2',
+        requires: [
+            ['Eon Portal Management', 1]
+        ],
+        drawLines: [
+            {from: 'bottom', to: 'O.A.R.D.I.S. Management'}
+        ],
+        desc: 'Increase Sacred Mine OpS by 50% per level',
+        maxLvl: 10,
+        position: [16, -2]
+    }, {
+        name: 'O.A.R.D.I.S. Management',
+        locked: 1,
+        type: 'Passive',
+        fillerTxt: 'test2',
+        requires: [
+            ['Sacred Mine Management', 1]
+        ],
+        desc: 'Increase O.A.R.D.I.S. OpS by 50% per level',
+        maxLvl: 10,
+        position: [17, -2]
+    }, {
+        name: 'spacer',
+        position: [20, 0]
+    }
+]
+
+buildingBonusSkills.forEach(skill => skills.push(skill))
