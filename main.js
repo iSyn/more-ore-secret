@@ -1681,14 +1681,15 @@ Game.launch = () => {
               inventory[j] = gem;
       
               Game.updateInventoryItems()
+              Game.state.player.pickaxe = Game.newItem
+              Game.recalculateOpC = 1
+              s('.item-modal').style.animation = 'itemFallOut .3s forwards'
+              s('.item-modal').addEventListener('animationend', () => Game.removeEl(s('.item-modal-container')))
               return;
             }
           }
         }
-      } else {
-        console.log('no gems')
       }
-
 
       Game.state.player.pickaxe = Game.newItem
       Game.recalculateOpC = 1
