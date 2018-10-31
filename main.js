@@ -1020,7 +1020,6 @@ Game.launch = () => {
     Game.state.stats.currentOreClicks++
     Game.state.stats.currentOresMined += amount
     Game.state.stats.totalOresMined += amount
-    console.log(amount)
 
     // CHECK CLICK RELATED ACHIEVEMENTS
 
@@ -3925,8 +3924,13 @@ Game.launch = () => {
   Game.load()
   Game.logic()
 
-  s('.ore').onclick = (event) => Game.handleClick(event)
-  s('.ore-weak-spot').onclick = (event) => Game.handleClick(event, 'weak-spot')
+  s('.ore').onclick = (event) => {
+    if ( event.target.className == 'ore-weak-spot' ) {
+      Game.handleClick(event, 'weak-spot')
+    } else {
+      Game.handleClick(event)
+    }
+  }
 
   window.onresize = () => {
     Game.repositionAllElements = 1
