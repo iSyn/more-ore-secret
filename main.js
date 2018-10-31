@@ -2019,7 +2019,7 @@ Game.launch = () => {
       soundPlayed3 = false
       soundPlayed4 = false
       soundPlayed5 = false
-      whichPic = Math.floor(Math.random() * 5) + 1
+      whichPic = Math.floor(Math.random() * 6) + 1
       s('.ore').style.background = `url("./assets/images/ore${whichPic}-1.png")`
       s('.ore').style.backgroundSize = 'cover'
       s('.ore-hp').innerHTML = '100%'
