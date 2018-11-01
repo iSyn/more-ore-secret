@@ -1,5 +1,5 @@
 let gulp = require( 'gulp' )
-let sass = require( 'sass' )
+let sass = require( 'gulp-sass' )
 let autoprefixer = require( 'gulp-autoprefixer' )
 let plumber = require( 'gulp-plumber' )
 let browserSync = require( 'browser-sync' )
@@ -7,7 +7,7 @@ let browserSync = require( 'browser-sync' )
 gulp.task( 'browserSync', () => {
     browserSync.init( {
         server: {
-            baseDir: '/app',
+            baseDir: './app',
         }
     } )
 } )
