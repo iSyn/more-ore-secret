@@ -1,0 +1,52 @@
+.container {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-flow: column nowrap;
+  position: relative;
+  overflow: hidden;
+}
+
+.game-container {
+  display: flex;
+  flex-flow: row nowrap;
+  height: 100%;
+  width: 100%;
+
+  .left {
+    flex-grow: 1;
+  }
+
+  .right-container {
+    display: flex;
+    flex-flow: row nowrap;
+    transition: transform .3s ease-in-out;
+
+    &.closed {
+      transform: translateX( $thickness + 400px);
+    }
+
+    .hide-shop-btn {
+      height: 60px;
+      width: 40px;
+      border-top-left-radius: 50%;
+      border-bottom-left-radius: 50%;
+      background: black;
+      display: flex;
+      align-self: center;
+      align-items: center;
+      justify-content: center;
+
+      .fa-caret-left {
+        color: white;
+        font-size: 25px;
+      }
+    }
+
+    .right {
+      width: 400px;
+      height: 100%;
+      background: darkgray;
+    }
+  }
+}

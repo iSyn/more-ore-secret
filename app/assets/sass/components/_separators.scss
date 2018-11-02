@@ -1,0 +1,13 @@
+$thickness: 20px;
+
+.vertical-separator {
+  height: 100%;
+  width: $thickness;
+  background: black;
+}
+
+.horizontal-separator {
+  height: $thickness;
+  width: 100%;
+  background: black;
+}
