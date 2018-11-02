@@ -6,11 +6,11 @@
 
 .vertical-separator {
   height: 100%;
-  width: 20px;
+  width: 15px;
   background: black; }
 
 .horizontal-separator {
-  height: 20px;
+  height: 15px;
   width: 100%;
   background: black; }
 
@@ -40,8 +40,40 @@
   .game-container .left {
     -webkit-box-flex: 1;
     -ms-flex-positive: 1;
-    flex-grow: 1; }
+    flex-grow: 1;
+    background: lightcoral; }
+    .game-container .left .topbar-inventory-container {
+      width: calc( 100% - 40px);
+      margin: 0 20px;
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-orient: vertical;
+      -webkit-box-direction: normal;
+      -ms-flex-flow: column nowrap;
+      flex-flow: column nowrap; }
+      .game-container .left .topbar-inventory-container .inventory-hanger-container {
+        height: 40px;
+        width: 100%;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-orient: horizontal;
+        -webkit-box-direction: normal;
+        -ms-flex-flow: row nowrap;
+        flex-flow: row nowrap;
+        -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+        justify-content: space-between; }
+        .game-container .left .topbar-inventory-container .inventory-hanger-container .vertical-separator {
+          margin: 0 40px;
+          background: lightgrey; }
+      .game-container .left .topbar-inventory-container .inventory {
+        height: 80px;
+        background: lightgrey;
+        width: 100%; }
   .game-container .right-container {
+    position: relative;
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -54,11 +86,13 @@
     transition: transform .3s ease-in-out;
     transition: transform .3s ease-in-out, -webkit-transform .3s ease-in-out; }
     .game-container .right-container.closed {
-      -webkit-transform: translateX(420px);
-      transform: translateX(420px); }
+      -webkit-transform: translateX(415px);
+      transform: translateX(415px); }
     .game-container .right-container .hide-shop-btn {
+      position: absolute;
       height: 60px;
       width: 40px;
+      left: -40px;
       border-top-left-radius: 50%;
       border-bottom-left-radius: 50%;
       background: black;

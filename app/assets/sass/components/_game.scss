@@ -15,9 +15,37 @@
 
   .left {
     flex-grow: 1;
+    background: lightcoral;
+
+    .topbar-inventory-container {
+      width: calc( 100% - 40px );
+      margin: 0 20px;
+      display: flex;
+      flex-flow: column nowrap;
+
+      .inventory-hanger-container {
+        height: 40px;
+        width: 100%;
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: space-between;
+
+        .vertical-separator {
+          margin: 0 40px;
+          background: lightgrey;
+        }
+      }
+
+      .inventory {
+        height: 80px;
+        background: lightgrey;
+        width: 100%;
+      }
+    }
   }
 
   .right-container {
+    position: relative;
     display: flex;
     flex-flow: row nowrap;
     transition: transform .3s ease-in-out;
@@ -27,8 +55,10 @@
     }
 
     .hide-shop-btn {
+      position: absolute;
       height: 60px;
       width: 40px;
+      left: -40px;
       border-top-left-radius: 50%;
       border-bottom-left-radius: 50%;
       background: black;
