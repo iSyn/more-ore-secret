@@ -8,7 +8,11 @@ let State = function( state_obj = {} ) {
     stats: {
       total_ores_earned: 0,
       total_gems_earned: 0
+    },
+
+    prefs: {
+      game_speed: 30
     }
   }
-
+  
 }

@@ -1,9 +1,14 @@
 let S = new State().state
 
-let Game = {}
+let init_game = () => {
+  start_loop()
+}
 
-let hide_shop_btn = s('.hide-shop-btn')
-let right_container = s('.right-container')
+let start_loop = () => {
+  setInterval(() => {
+    update_topbar_inventory()
+  }, 1000 / S.prefs.game_speed)
+}
 
 let update_topbar_inventory = () => {
   let inventory_el = s('.topbar-inventory')
@@ -25,4 +30,8 @@ let update_topbar_inventory = () => {
   inventory_el.innerHTML = str
 }
 
+let hide_shop_btn = s('.hide-shop-btn')
+let right_container = s('.right-container')
 hide_shop_btn.onclick = () => right_container.classList.toggle('closed')
+
+window.onload = () => { init_game() }
