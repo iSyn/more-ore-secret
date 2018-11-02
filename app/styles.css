@@ -75,7 +75,7 @@
         .game-container .left .topbar-inventory-container .inventory-hanger-container .vertical-separator {
           margin: 0 40px;
           background: lightgrey; }
-      .game-container .left .topbar-inventory-container .inventory {
+      .game-container .left .topbar-inventory-container .topbar-inventory {
         padding: 15px;
         background: lightgrey;
         width: 100%;
@@ -89,7 +89,7 @@
         -webkit-box-align: center;
         -ms-flex-align: center;
         align-items: center; }
-        .game-container .left .topbar-inventory-container .inventory p {
+        .game-container .left .topbar-inventory-container .topbar-inventory p {
           font-size: 20px; }
     .game-container .left .ore-container {
       -webkit-box-flex: 1;
