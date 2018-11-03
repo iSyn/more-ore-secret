@@ -93,7 +93,7 @@
           position: relative;
 
           .ore-weak-spot {
-            display: none;
+            pointer-events: all;
             position: absolute;
             top: 0px;
             left: 0px;

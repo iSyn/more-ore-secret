@@ -156,7 +156,7 @@
           pointer-events: none;
           position: relative; }
           .game-container .left .ore-container-wrapper .ore-container .ore-weak-spot-container .ore-weak-spot {
-            display: none;
+            pointer-events: all;
             position: absolute;
             top: 0px;
             left: 0px;
@@ -254,3 +254,19 @@
     opacity: 0;
     -webkit-transform: translateY(-200px);
     transform: translateY(-200px); } }
+
+@-webkit-keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg); }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg); } }
+
+@keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg); }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg); } }

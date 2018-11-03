@@ -62,12 +62,19 @@ let generate_weak_spot = () => {
 let handle_click = ( e, type ) => {
 
   let opc = calculate_opc( type )
-  
-  SFX.ore_hit_sfx.play()
+
+  if ( type ) {
+    SFX.ore_weak_spot_hit_sfx.play()
+    S.stats.total_weak_hit_clicks++
+    RN.new( event, 'weak-hit-click', opc )
+  } else {
+    SFX.ore_hit_sfx.play()
+    RN.new( event, 'click', opc )
+  }
+
   S.stats.total_clicks++
 
   earn( opc )
-  RN.new( event, 'click', opc )
 }
 
 let start_loop = () => {
