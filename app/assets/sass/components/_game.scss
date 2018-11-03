@@ -62,30 +62,24 @@
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
+        
+        .ore-sprite {
+          width: 100%;
+          height: auto;
+          position: absolute;
+          bottom: 0;
+          image-rendering: pixelated;
+          transition: transform .1s;
+          cursor: pointer;
 
-        .ore {
-          position: relative;
-          
-          .ore-sprite {
-            width: 100%;
-            height: auto;
-            position: absolute;
-            bottom: 0;
-            image-rendering: pixelated;
-            transition: transform .1s;
-            cursor: pointer;
-  
-            &:hover {
-              transform: scale( 1.03 );
-            }
-  
-            &:active {
-              transform: scale( 0.97 );
-            }
+          &:hover {
+            transform: scale( 1.03 );
+          }
+
+          &:active {
+            transform: scale( 0.97 );
           }
         }
-
-        
       }
     }
 

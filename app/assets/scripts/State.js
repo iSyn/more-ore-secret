@@ -7,6 +7,9 @@ let State = function( s = {} ) {
     ops: s.ops || 0,
     opc: s.opc || 1,
 
+    current_ore_hp: 100,
+    current_ore_map_hp: 100,
+
     stats: {
       total_ores_earned: 0,
       total_gems_earned: 0

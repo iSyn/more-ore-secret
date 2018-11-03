@@ -1,17 +1,37 @@
+const ORE_SPRITE = s( '.ore-sprite' )
+const HIDE_SHOP_BTN = s( '.hide-shop-btn' )
+const RIGHT_CONTAINER = s( '.right-container' )
+const INVENTORY_EL = s('.topbar-inventory')
+
 let S = new State().state
+
+let earn = ( event ) => {
+  let opc = calculate_opc()
+  S.ores += opc
+}
+
+let calculate_opc = () => {
+  let opc = S.opc
+  return opc
+}
 
 let init_game = () => {
   start_loop()
+  ORE_SPRITE.addEventListener( 'click', earn )
 }
 
 let start_loop = () => {
   setInterval(() => {
     update_topbar_inventory()
+    update_ore_sprite()
   }, 1000 / S.prefs.game_speed)
 }
 
+let update_ore_sprite = () => {
+
+}
+
 let update_topbar_inventory = () => {
-  let inventory_el = s('.topbar-inventory')
   let str = `
     <div class='left'>
       <p>Ores: ${ S.ores }</p>
@@ -27,11 +47,9 @@ let update_topbar_inventory = () => {
     </div>
   `
 
-  inventory_el.innerHTML = str
+  INVENTORY_EL.innerHTML = str
 }
 
-let hide_shop_btn = s('.hide-shop-btn')
-let right_container = s('.right-container')
-hide_shop_btn.onclick = () => right_container.classList.toggle('closed')
+HIDE_SHOP_BTN.onclick = () => RIGHT_CONTAINER.classList.toggle( 'closed' )
 
 window.onload = () => { init_game() }

@@ -104,29 +104,27 @@
         left: 50%;
         -webkit-transform: translate(-50%, -50%);
         transform: translate(-50%, -50%); }
-        .game-container .left .ore-container-wrapper .ore-container .ore {
-          position: relative; }
-          .game-container .left .ore-container-wrapper .ore-container .ore .ore-sprite {
-            width: 100%;
-            height: auto;
-            position: absolute;
-            bottom: 0;
-            -ms-interpolation-mode: nearest-neighbor;
-            image-rendering: -webkit-optimize-contrast;
-            image-rendering: -moz-crisp-edges;
-            image-rendering: -o-pixelated;
-            image-rendering: pixelated;
-            -webkit-transition: -webkit-transform .1s;
-            transition: -webkit-transform .1s;
-            transition: transform .1s;
-            transition: transform .1s, -webkit-transform .1s;
-            cursor: pointer; }
-            .game-container .left .ore-container-wrapper .ore-container .ore .ore-sprite:hover {
-              -webkit-transform: scale(1.03);
-              transform: scale(1.03); }
-            .game-container .left .ore-container-wrapper .ore-container .ore .ore-sprite:active {
-              -webkit-transform: scale(0.97);
-              transform: scale(0.97); }
+        .game-container .left .ore-container-wrapper .ore-container .ore-sprite {
+          width: 100%;
+          height: auto;
+          position: absolute;
+          bottom: 0;
+          -ms-interpolation-mode: nearest-neighbor;
+          image-rendering: -webkit-optimize-contrast;
+          image-rendering: -moz-crisp-edges;
+          image-rendering: -o-pixelated;
+          image-rendering: pixelated;
+          -webkit-transition: -webkit-transform .1s;
+          transition: -webkit-transform .1s;
+          transition: transform .1s;
+          transition: transform .1s, -webkit-transform .1s;
+          cursor: pointer; }
+          .game-container .left .ore-container-wrapper .ore-container .ore-sprite:hover {
+            -webkit-transform: scale(1.03);
+            transform: scale(1.03); }
+          .game-container .left .ore-container-wrapper .ore-container .ore-sprite:active {
+            -webkit-transform: scale(0.97);
+            transform: scale(0.97); }
     .game-container .left .quest-area-container {
       height: 200px;
       width: 100%;

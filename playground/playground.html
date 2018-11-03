@@ -22,6 +22,11 @@
     left: 50%;
     transform: translate(-50%, -50%);
   }
+  .sprite-container {
+    height: 300px;
+    width: 300px;
+    position: relative;
+  }
   .ore-sprite {
     height: auto;
     width: 100%;
@@ -33,15 +38,31 @@
   .ore-sprite:hover {
     transform: scale(1.03);
   }
+  .test:hover + .ore-sprite {
+    transform: scale(1.03);
+  }
   .ore-sprite:active {
     transform: scale(0.97);
+  }
+  .test:hover + .ore-sprite {
+    transform: scale(0.97);
+  }
+  .test {
+    height: 50px;
+    width: 50px;
+    position:absolute;
+    top: 0;
+    background: green;
+  }
+  .test:hover {
+    background: yellow;
   }
 </style>
 
 <body>
     <div class="ore-container">
-      <!-- <div class="ore-sprite"></div> -->
       <div class="sprite-container">
+        <div class="test"></div>
         <img class='ore-sprite' src="./ore1-1.png" alt="">
       </div>
     </div>
