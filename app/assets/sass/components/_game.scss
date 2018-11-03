@@ -78,7 +78,6 @@
           image-rendering: pixelated;
           transition: transform .1s;
           cursor: pointer;
-          background: rgba(15, 0, 0, 0.5);
 
           &:hover {
             transform: scale( 1.03 );

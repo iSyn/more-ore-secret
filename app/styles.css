@@ -145,8 +145,7 @@
           transition: -webkit-transform .1s;
           transition: transform .1s;
           transition: transform .1s, -webkit-transform .1s;
-          cursor: pointer;
-          background: rgba(15, 0, 0, 0.5); }
+          cursor: pointer; }
           .game-container .left .ore-container-wrapper .ore-container .ore-sprite:hover {
             -webkit-transform: scale(1.03);
             transform: scale(1.03); }

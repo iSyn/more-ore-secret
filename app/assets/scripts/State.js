@@ -6,6 +6,7 @@ let State = function( s = {} ) {
     generation: s.generation || 1,
     ops: s.ops || 0,
     opc: s.opc || 1,
+    weak_hit_multi: s.weak_hit_multi || 5,
 
     current_ore_hp: 50,
     current_ore_max_hp: 50,

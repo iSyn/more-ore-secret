@@ -16,8 +16,15 @@ let earn = ( amount ) => {
   S.ores += amount
 }
 
-let calculate_opc = () => {
+let calculate_opc = ( type ) => {
   let opc = S.opc
+
+  if ( type ) {
+    if ( type == 'weak-spot' ) {
+      opc *= S.weak_hit_multi
+    }
+  }
+
   return opc
 }
 
@@ -25,7 +32,10 @@ let init_game = () => {
   start_loop()
   generate_weak_spot()
   ORE_SPRITE.addEventListener( 'click', handle_click )
-  ORE_WEAK_SPOT.addEventListener( 'click', handle_click )
+  ORE_WEAK_SPOT.addEventListener( 'click', ( e ) => {
+    handle_click( e, 'weak-spot' )
+    generate_weak_spot()
+  })
 }
 
 let generate_weak_spot = () => {
@@ -37,7 +47,6 @@ let generate_weak_spot = () => {
   ORE_WEAK_SPOT_CONTAINER.style.width = ore_sprite_coords.width + 'px'
   ORE_WEAK_SPOT_CONTAINER.style.height = ore_sprite_coords.height + 'px'
   ORE_WEAK_SPOT_CONTAINER.style.bottom = 0
-  ORE_WEAK_SPOT_CONTAINER.style.background = 'rgba(0, 0, 0, 0.5)'
 
   // PICK RANDOM COORDS FOR WEAK SPOT
   let ore_weak_spot_container_coords = ORE_WEAK_SPOT_CONTAINER.getBoundingClientRect()
@@ -50,11 +59,9 @@ let generate_weak_spot = () => {
 
 }
 
-let handle_click = ( e ) => {
+let handle_click = ( e, type ) => {
 
-  console.log(event.target.className)
-
-  let opc = calculate_opc( e )
+  let opc = calculate_opc( type )
   
   SFX.ore_hit_sfx.play()
   S.stats.total_clicks++
