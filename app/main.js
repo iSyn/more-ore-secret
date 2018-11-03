@@ -5,6 +5,7 @@ const INVENTORY_EL = s('.topbar-inventory')
 
 let S = new State().state
 let SFX = new SoundEngine()
+let RN = new RisingNumber()
 
 let earn = ( amount ) => {
   update_ore_hp( amount )
@@ -23,11 +24,12 @@ let init_game = () => {
   ORE_SPRITE.addEventListener( 'click', handle_click )
 }
 
-let handle_click = () => {
+let handle_click = ( event ) => {
   let opc = calculate_opc()
   SFX.ore_hit_sfx.play()
 
   earn( opc )
+  RN.new( event, 'click', opc )
 }
 
 let start_loop = () => {

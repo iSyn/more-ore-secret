@@ -2,7 +2,7 @@ let SoundEngine = function() {
 
     this.ore_hit_sfx = new Howl({
         src: [ './assets/sounds/ore-hit.wav' ],
-        volume: .5 * S.prefs.sfx_volume
+        volume: .5 * S.prefs.sfx_volume,
     })
 
     this.ore_weak_spot_hit_sfx = new Howl({

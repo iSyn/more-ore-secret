@@ -155,7 +155,8 @@
     .game-container .left .quest-area-container {
       height: 200px;
       width: 100%;
-      background: gray; }
+      background: url("./assets/images/misc-mineshaft.png");
+      background-size: auto 100%; }
   .game-container .right-container {
     position: relative;
     display: -webkit-box;
@@ -196,3 +197,41 @@
       width: 300px;
       height: 100%;
       background: darkgray; }
+
+@-webkit-keyframes flyingNumber {
+  0% {
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+    -webkit-transform: scale(1);
+    transform: scale(1); }
+  5% {
+    -webkit-transform: scale(1.8);
+    transform: scale(1.8); }
+  10% {
+    -webkit-transform: scale(1);
+    transform: scale(1); }
+  50% {
+    opacity: 1; }
+  100% {
+    opacity: 0;
+    -webkit-transform: translateY(-200px);
+    transform: translateY(-200px); } }
+
+@keyframes flyingNumber {
+  0% {
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+    -webkit-transform: scale(1);
+    transform: scale(1); }
+  5% {
+    -webkit-transform: scale(1.8);
+    transform: scale(1.8); }
+  10% {
+    -webkit-transform: scale(1);
+    transform: scale(1); }
+  50% {
+    opacity: 1; }
+  100% {
+    opacity: 0;
+    -webkit-transform: translateY(-200px);
+    transform: translateY(-200px); } }

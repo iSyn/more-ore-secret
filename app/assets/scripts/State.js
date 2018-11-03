@@ -21,6 +21,8 @@ let State = function( s = {} ) {
       game_speed: 30,
       sfx_volume: 1,
       bgm_volume: 1,
+      show_rising_numbers: true,
+      
     }
   }
   
