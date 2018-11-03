@@ -4,6 +4,7 @@ const RIGHT_CONTAINER = s( '.right-container' )
 const INVENTORY_EL = s('.topbar-inventory')
 
 let S = new State().state
+let SFX = new SoundEngine()
 
 let earn = ( amount ) => {
   update_ore_hp( amount )
@@ -24,6 +25,7 @@ let init_game = () => {
 
 let handle_click = () => {
   let opc = calculate_opc()
+  SFX.ore_hit_sfx.play()
 
   earn( opc )
 }
@@ -41,25 +43,37 @@ let update_ore_hp = ( amount ) => {
     S.stats.total_rocks_destroyed += 1
     S.current_ore_max_hp *= 1.5
     S.current_ore_hp = S.current_ore_max_hp
+    current_sprite = 0
   } else {
     S.current_ore_hp -= amount
   }
 }
 
+let current_sprite = 0
 let update_ore_sprite = () => {
-  let current_percentage = S.current_ore_hp/S.current_ore_max_hp * 100
+  let current_percentage = S.current_ore_hp / S.current_ore_max_hp * 100
 
-  if ( current_percentage < 20 ) {
-    ORE_SPRITE.src = '/assets/images/ore1-5.png'
-  } else if ( current_percentage < 40 ) {
-    ORE_SPRITE.src = '/assets/images/ore1-4.png'
-  } else if ( current_percentage < 60 ) {
-    ORE_SPRITE.src = '/assets/images/ore1-3.png'
-  } else if ( current_percentage < 80 ) {
-    ORE_SPRITE.src = '/assets/images/ore1-2.png'
-  } else {
+  if ( current_percentage <= 100 && current_percentage > 80 && current_sprite != 1 ) {
     ORE_SPRITE.src = '/assets/images/ore1-1.png'
+    current_sprite = 1
+  } else if ( current_percentage <= 80 && current_percentage > 60 && current_sprite != 2 ) {
+    SFX.ore_percentage_lost_sfx.play()
+    ORE_SPRITE.src = '/assets/images/ore1-2.png'
+    current_sprite = 2
+  } else if ( current_percentage <= 60 && current_percentage > 40 && current_sprite != 3 ) {
+    SFX.ore_percentage_lost_sfx.play()
+    ORE_SPRITE.src = '/assets/images/ore1-3.png'
+    current_sprite = 3
+  } else if ( current_percentage <= 40 && current_percentage > 20 && current_sprite != 4 ) {
+    SFX.ore_percentage_lost_sfx.play()
+    ORE_SPRITE.src = '/assets/images/ore1-4.png'
+    current_sprite = 4
+  } else if ( current_percentage <= 20 && current_sprite != 5 ) {
+    SFX.ore_percentage_lost_sfx.play()
+    ORE_SPRITE.src = '/assets/images/ore1-5.png'
+    current_sprite = 5
   }
+
 }
 
 let update_topbar_inventory = () => {

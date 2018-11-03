@@ -7,8 +7,8 @@ let State = function( s = {} ) {
     ops: s.ops || 0,
     opc: s.opc || 1,
 
-    current_ore_hp: 100,
-    current_ore_max_hp: 100,
+    current_ore_hp: 50,
+    current_ore_max_hp: 50,
 
     stats: {
       current_rocks_destroyed: 0,
@@ -18,7 +18,9 @@ let State = function( s = {} ) {
     },
 
     prefs: {
-      game_speed: 30
+      game_speed: 30,
+      sfx_volume: 1,
+      bgm_volume: 1,
     }
   }
   
