@@ -85,7 +85,7 @@
       -ms-flex-flow: column nowrap;
       flex-flow: column nowrap; }
       .game-container .left .topbar-inventory-container .inventory-hanger-container {
-        height: 30px;
+        height: 20px;
         width: 100%;
         display: -webkit-box;
         display: -ms-flexbox;

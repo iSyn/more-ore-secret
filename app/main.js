@@ -27,6 +27,7 @@ let init_game = () => {
 let handle_click = ( event ) => {
   let opc = calculate_opc()
   SFX.ore_hit_sfx.play()
+  S.stats.total_clicks++
 
   earn( opc )
   RN.new( event, 'click', opc )

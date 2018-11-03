@@ -14,7 +14,8 @@ let State = function( s = {} ) {
       current_rocks_destroyed: 0,
       total_rocks_destroyed: 0,
       total_ores_earned: 0,
-      total_gems_earned: 0
+      total_gems_earned: 0,
+      total_clicks: 0
     },
 
     prefs: {
@@ -22,7 +23,7 @@ let State = function( s = {} ) {
       sfx_volume: 1,
       bgm_volume: 1,
       show_rising_numbers: true,
-      
+
     }
   }
   
