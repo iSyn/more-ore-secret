@@ -17,6 +17,10 @@
     display: flex;
     flex-flow: column nowrap;
     flex-grow: 1;
+    background-color: #60695d;
+    background-image: url('./assets/images/bg-main_bg.png');
+    background-size: cover;
+    image-rendering: pixelated;
 
     .topbar-inventory-container {
       width: calc( 100% - 40px );
@@ -33,20 +37,23 @@
 
         .vertical-separator {
           margin: 0 40px;
-          background: lightgrey;
         }
       }
 
+      $topbar-bg-color: #322011;
       .topbar-inventory {
-        padding: 25px;
-        background: lightgrey;
+        background: $topbar-bg-color;
+        padding: 25px 50px;
         width: 100%;
         display: flex;
         flex-flow: row nowrap;
         align-items: center;
+        border: 2px solid #251910;
 
         p {
-          font-size: 25px;
+          font-size: 22px;
+          color: white;
+          background: $topbar-bg-color;
         }
       }
     }
@@ -86,7 +93,7 @@
     .quest-area-container {
       height: 200px;
       width: 100%;
-      background: darkgray;
+      background: gray;
     }
   }
 

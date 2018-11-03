@@ -3,11 +3,15 @@ $separator-thickness: 15px;
 .vertical-separator {
   height: 100%;
   width: $separator-thickness;
-  background: black;
+  image-rendering: pixelated;
+  background: url('./assets/images/misc-vertical_separator.png');
+  background-size: 100% auto;
 }
 
 .horizontal-separator {
   height: $separator-thickness;
   width: 100%;
-  background: black;
+  image-rendering: pixelated;
+  background: url('./assets/images/misc-horizontal_separator.png');
+  background-size: auto 100%;
 }

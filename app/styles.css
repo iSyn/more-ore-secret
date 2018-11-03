@@ -13,12 +13,24 @@
 .vertical-separator {
   height: 100%;
   width: 15px;
-  background: black; }
+  -ms-interpolation-mode: nearest-neighbor;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: -o-pixelated;
+  image-rendering: pixelated;
+  background: url("./assets/images/misc-vertical_separator.png");
+  background-size: 100% auto; }
 
 .horizontal-separator {
   height: 15px;
   width: 100%;
-  background: black; }
+  -ms-interpolation-mode: nearest-neighbor;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: -o-pixelated;
+  image-rendering: pixelated;
+  background: url("./assets/images/misc-horizontal_separator.png");
+  background-size: auto 100%; }
 
 .container {
   height: 100vh;
@@ -53,7 +65,15 @@
     flex-flow: column nowrap;
     -webkit-box-flex: 1;
     -ms-flex-positive: 1;
-    flex-grow: 1; }
+    flex-grow: 1;
+    background-color: #60695d;
+    background-image: url("./assets/images/bg-main_bg.png");
+    background-size: cover;
+    -ms-interpolation-mode: nearest-neighbor;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: -o-pixelated;
+    image-rendering: pixelated; }
     .game-container .left .topbar-inventory-container {
       width: calc( 100% - 40px);
       margin: 0 20px;
@@ -78,11 +98,10 @@
         -ms-flex-pack: justify;
         justify-content: space-between; }
         .game-container .left .topbar-inventory-container .inventory-hanger-container .vertical-separator {
-          margin: 0 40px;
-          background: lightgrey; }
+          margin: 0 40px; }
       .game-container .left .topbar-inventory-container .topbar-inventory {
-        padding: 25px;
-        background: lightgrey;
+        background: #322011;
+        padding: 25px 50px;
         width: 100%;
         display: -webkit-box;
         display: -ms-flexbox;
@@ -93,9 +112,12 @@
         flex-flow: row nowrap;
         -webkit-box-align: center;
         -ms-flex-align: center;
-        align-items: center; }
+        align-items: center;
+        border: 2px solid #251910; }
         .game-container .left .topbar-inventory-container .topbar-inventory p {
-          font-size: 25px; }
+          font-size: 22px;
+          color: white;
+          background: #322011; }
     .game-container .left .ore-container-wrapper {
       -webkit-box-flex: 1;
       -ms-flex-positive: 1;
@@ -133,7 +155,7 @@
     .game-container .left .quest-area-container {
       height: 200px;
       width: 100%;
-      background: darkgray; }
+      background: gray; }
   .game-container .right-container {
     position: relative;
     display: -webkit-box;
