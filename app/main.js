@@ -25,6 +25,7 @@ let init_game = () => {
   start_loop()
   generate_weak_spot()
   ORE_SPRITE.addEventListener( 'click', handle_click )
+  ORE_WEAK_SPOT.addEventListener( 'click', handle_click )
 }
 
 let generate_weak_spot = () => {
@@ -49,8 +50,12 @@ let generate_weak_spot = () => {
 
 }
 
-let handle_click = ( event ) => {
-  let opc = calculate_opc()
+let handle_click = ( e ) => {
+
+  console.log(event.target.className)
+
+  let opc = calculate_opc( e )
+  
   SFX.ore_hit_sfx.play()
   S.stats.total_clicks++
 
