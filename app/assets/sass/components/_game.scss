@@ -78,6 +78,7 @@
           image-rendering: pixelated;
           transition: transform .1s;
           cursor: pointer;
+          background: rgba(15, 0, 0, 0.5);
 
           &:hover {
             transform: scale( 1.03 );
@@ -85,6 +86,20 @@
 
           &:active {
             transform: scale( 0.97 );
+          }
+        }
+        
+        .ore-weak-spot-container {
+          pointer-events: none;
+          position: relative;
+
+          .ore-weak-spot {
+            position: absolute;
+            height: 20px;
+            width: 20px;
+            background: white;
+            border-radius: 50%;
+            pointer-events: all;
           }
         }
       }

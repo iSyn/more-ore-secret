@@ -1,7 +1,9 @@
 const ORE_SPRITE = s( '.ore-sprite' )
 const HIDE_SHOP_BTN = s( '.hide-shop-btn' )
 const RIGHT_CONTAINER = s( '.right-container' )
-const INVENTORY_EL = s('.topbar-inventory')
+const INVENTORY_EL = s( '.topbar-inventory' )
+const ORE_WEAK_SPOT_CONTAINER = s( '.ore-weak-spot-container' )
+const ORE_WEAK_SPOT = s( '.ore-weak-spot' )
 
 let S = new State().state
 let SFX = new SoundEngine()
@@ -21,7 +23,30 @@ let calculate_opc = () => {
 
 let init_game = () => {
   start_loop()
+  generate_weak_spot()
   ORE_SPRITE.addEventListener( 'click', handle_click )
+}
+
+let generate_weak_spot = () => {
+
+  let ore_sprite_coords = ORE_SPRITE.getBoundingClientRect()
+
+  // POSITION CONTAINER AROUND ORE SPRITE
+  ORE_WEAK_SPOT_CONTAINER.style.position = 'absolute'
+  ORE_WEAK_SPOT_CONTAINER.style.width = ore_sprite_coords.width + 'px'
+  ORE_WEAK_SPOT_CONTAINER.style.height = ore_sprite_coords.height + 'px'
+  ORE_WEAK_SPOT_CONTAINER.style.bottom = 0
+  ORE_WEAK_SPOT_CONTAINER.style.background = 'rgba(0, 0, 0, 0.5)'
+
+  // PICK RANDOM COORDS FOR WEAK SPOT
+  let ore_weak_spot_container_coords = ORE_WEAK_SPOT_CONTAINER.getBoundingClientRect()
+
+  let x = get_random_num( 0, ( ore_weak_spot_container_coords.right - ore_weak_spot_container_coords.left ) )
+  let y = get_random_num( 0, ( ore_weak_spot_container_coords.bottom - ore_weak_spot_container_coords.top ) )
+
+  ORE_WEAK_SPOT.style.left = x + 'px'
+  ORE_WEAK_SPOT.style.top = y + 'px'
+
 }
 
 let handle_click = ( event ) => {
