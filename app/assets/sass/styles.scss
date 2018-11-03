@@ -4,6 +4,7 @@
   box-sizing: border-box; 
   font-family: 'Asap Condensed';
   user-select: none;
+  -webkit-user-drag: none;
 }
 
 @import './common/variables';

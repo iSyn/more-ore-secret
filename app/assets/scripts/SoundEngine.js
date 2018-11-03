@@ -15,4 +15,9 @@ let SoundEngine = function() {
         volume: .5 * S.prefs.sfx_volume
     })
 
+    this.ore_destroyed_sfx = new Howl({
+        src: [ './assets/sounds/ore-destroyed.wav' ],
+        volume: .5 * S.prefs.sfx_volume
+    })
+
 }

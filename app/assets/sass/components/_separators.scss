@@ -1,13 +1,13 @@
-$thickness: 15px;
+$separator-thickness: 15px;
 
 .vertical-separator {
   height: 100%;
-  width: $thickness;
+  width: $separator-thickness;
   background: black;
 }
 
 .horizontal-separator {
-  height: $thickness;
+  height: $separator-thickness;
   width: 100%;
   background: black;
 }

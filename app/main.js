@@ -39,6 +39,7 @@ let start_loop = () => {
 
 let update_ore_hp = ( amount ) => {
   if (S.current_ore_hp - amount <= 0 ) {
+    SFX.ore_destroyed_sfx.play()
     S.stats.current_rocks_destroyed += 1
     S.stats.total_rocks_destroyed += 1
     S.current_ore_max_hp *= 1.5
