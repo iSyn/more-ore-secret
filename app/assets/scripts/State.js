@@ -8,9 +8,11 @@ let State = function( s = {} ) {
     opc: s.opc || 1,
 
     current_ore_hp: 100,
-    current_ore_map_hp: 100,
+    current_ore_max_hp: 100,
 
     stats: {
+      current_rocks_destroyed: 0,
+      total_rocks_destroyed: 0,
       total_ores_earned: 0,
       total_gems_earned: 0
     },

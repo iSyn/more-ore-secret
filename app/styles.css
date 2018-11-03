@@ -3,7 +3,11 @@
   padding: 0;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
-  font-family: 'Asap Condensed'; }
+  font-family: 'Asap Condensed';
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none; }
 
 .vertical-separator {
   height: 100%;
