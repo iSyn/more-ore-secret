@@ -187,31 +187,6 @@
     flex-flow: row nowrap;
     -webkit-transition: margin-right .3s ease-in-out;
     transition: margin-right .3s ease-in-out; }
-    .game-container .right-container.closed {
-      margin-right: -315px; }
-    .game-container .right-container .hide-shop-btn {
-      position: absolute;
-      height: 60px;
-      width: 40px;
-      left: -40px;
-      border-top-left-radius: 50%;
-      border-bottom-left-radius: 50%;
-      background: black;
-      display: -webkit-box;
-      display: -ms-flexbox;
-      display: flex;
-      -ms-flex-item-align: center;
-      align-self: center;
-      -webkit-box-align: center;
-      -ms-flex-align: center;
-      align-items: center;
-      -webkit-box-pack: center;
-      -ms-flex-pack: center;
-      justify-content: center;
-      cursor: pointer; }
-      .game-container .right-container .hide-shop-btn .fa-caret-left {
-        color: white;
-        font-size: 25px; }
     .game-container .right-container .right {
       width: 300px;
       height: 100%;
@@ -289,3 +264,20 @@
   100% {
     -webkit-transform: rotate(360deg);
     transform: rotate(360deg); } }
+
+.torch {
+  position: absolute;
+  height: 128px;
+  width: 128px;
+  background: url("./assets/images/misc_torch.gif");
+  background-size: 100% 100%;
+  image-rendering: -moz-crisp-edges;
+  -ms-interpolation-mode: nearest-neighbor;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: -o-pixelated;
+  image-rendering: pixelated;
+  top: 30%; }
+
+.torch-left {
+  -webkit-transform: scaleX(-1);
+  transform: scaleX(-1); }

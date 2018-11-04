@@ -1,9 +1,13 @@
 const ORE_SPRITE = s( '.ore-sprite' )
-const HIDE_SHOP_BTN = s( '.hide-shop-btn' )
 const RIGHT_CONTAINER = s( '.right-container' )
 const INVENTORY_EL = s( '.topbar-inventory' )
 const ORE_WEAK_SPOT_CONTAINER = s( '.ore-weak-spot-container' )
 const ORE_WEAK_SPOT = s( '.ore-weak-spot' )
+const LEFT_VERTICAL_SEPARATOR = s( '.left-vertical-separator' )
+const MIDDLE_VERTICAL_SEPARATOR = s( '.middle-vertical-separator' )
+const RIGHT_VERTICAL_SEPARATOR = s( '.right-vertical-separator' )
+const TORCH_LEFT = s('.torch-left')
+const TORCH_RIGHT = s('.torch-right')
 
 let S = new State().state
 let SFX = new SoundEngine()
@@ -14,6 +18,18 @@ let earn = ( amount ) => {
 
   S.stats.total_ores_earned += amount
   S.ores += amount
+}
+
+let reposition_elements = () => {
+  console.log('reposition firing')
+  let left_vertical_separator_coords = LEFT_VERTICAL_SEPARATOR.getBoundingClientRect()
+  let middle_vertical_separator_coords = MIDDLE_VERTICAL_SEPARATOR.getBoundingClientRect()
+  let torch_coords = TORCH_LEFT.getBoundingClientRect()
+
+  // Position torches to the separators
+  TORCH_LEFT.style.left = left_vertical_separator_coords.right + 'px'
+  TORCH_RIGHT.style.left = middle_vertical_separator_coords.left - torch_coords.width + 'px'
+
 }
 
 let calculate_opc = ( type ) => {
@@ -31,6 +47,7 @@ let calculate_opc = ( type ) => {
 let init_game = () => {
   start_loop()
   generate_weak_spot()
+  reposition_elements()
   ORE_SPRITE.addEventListener( 'click', handle_click )
   ORE_WEAK_SPOT.addEventListener( 'click', ( e ) => {
     handle_click( e, 'weak-spot' )
@@ -143,6 +160,5 @@ let update_topbar_inventory = () => {
   INVENTORY_EL.innerHTML = str
 }
 
-HIDE_SHOP_BTN.onclick = () => RIGHT_CONTAINER.classList.toggle( 'closed' )
-
 window.onload = () => { init_game() }
+window.onresize = () => { reposition_elements() }

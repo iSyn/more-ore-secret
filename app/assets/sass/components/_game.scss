@@ -130,30 +130,6 @@
     flex-flow: row nowrap;
     transition: margin-right .3s ease-in-out;
 
-    &.closed {
-      margin-right: -( $separator-thickness + 300px );
-    }
-
-    .hide-shop-btn {
-      position: absolute;
-      height: 60px;
-      width: 40px;
-      left: -40px;
-      border-top-left-radius: 50%;
-      border-bottom-left-radius: 50%;
-      background: black;
-      display: flex;
-      align-self: center;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-
-      .fa-caret-left {
-        color: white;
-        font-size: 25px;
-      }
-    }
-
     .right {
       width: 300px;
       height: 100%;

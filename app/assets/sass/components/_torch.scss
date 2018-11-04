@@ -1,0 +1,15 @@
+.torch {
+    position: absolute;
+    height: 128px;
+    width: 128px;
+    background: url('./assets/images/misc_torch.gif');
+    background-size: 100% 100%;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: pixelated;
+    top: 30%;
+  }
+  
+.torch-left {
+    transform: scaleX(-1);
+}
+  
