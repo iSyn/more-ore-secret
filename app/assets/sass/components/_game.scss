@@ -49,11 +49,13 @@
         flex-flow: row nowrap;
         align-items: center;
         border: 2px solid #251910;
+        box-shadow: 0 0 40px #222 inset;
 
         p {
           font-size: 22px;
           color: white;
           background: $topbar-bg-color;
+          letter-spacing: .5px;
         }
       }
     }
@@ -139,14 +141,16 @@
         display: flex;
         flex-flow: row nowrap;
         justify-content: space-around;
-        background: black;
+        box-shadow: 0 0 40px #222 inset;
+        background-color: #4e3013;
+        text-shadow: 0 0 4px black;
         
         .tab {
           font-family: 'Germania One';
           padding: 5px 0;
           font-size: 50px;
           color: white;
-          letter-spacing: 1px;
+          letter-spacing: 3px;
 
           &.blacksmith-tab {
             display: none;

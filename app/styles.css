@@ -113,11 +113,14 @@
         -webkit-box-align: center;
         -ms-flex-align: center;
         align-items: center;
-        border: 2px solid #251910; }
+        border: 2px solid #251910;
+        -webkit-box-shadow: 0 0 40px #222 inset;
+        box-shadow: 0 0 40px #222 inset; }
         .game-container .left .topbar-inventory-container .topbar-inventory p {
           font-size: 22px;
           color: white;
-          background: #322011; }
+          background: #322011;
+          letter-spacing: .5px; }
     .game-container .left .ore-container-wrapper {
       -webkit-box-flex: 1;
       -ms-flex-positive: 1;
@@ -201,13 +204,16 @@
         flex-flow: row nowrap;
         -ms-flex-pack: distribute;
         justify-content: space-around;
-        background: black; }
+        -webkit-box-shadow: 0 0 40px #222 inset;
+        box-shadow: 0 0 40px #222 inset;
+        background-color: #4e3013;
+        text-shadow: 0 0 4px black; }
         .game-container .right-container .right .tabs-container .tab {
           font-family: 'Germania One';
           padding: 5px 0;
           font-size: 50px;
           color: white;
-          letter-spacing: 1px; }
+          letter-spacing: 3px; }
           .game-container .right-container .right .tabs-container .tab.blacksmith-tab {
             display: none; }
 
