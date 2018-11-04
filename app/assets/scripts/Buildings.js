@@ -1,0 +1,3 @@
+let Building = function() {
+    
+}
