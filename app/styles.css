@@ -172,7 +172,7 @@
             -webkit-animation: spin 1.5s linear infinite;
             animation: spin 1.5s linear infinite; }
     .game-container .left .quest-area-container {
-      height: 200px;
+      height: 150px;
       width: 100%;
       background: url("./assets/images/misc-mineshaft.png");
       background-size: auto 100%; }
@@ -216,6 +216,25 @@
       width: 300px;
       height: 100%;
       background: darkgray; }
+      .game-container .right-container .right .tabs-container {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-orient: horizontal;
+        -webkit-box-direction: normal;
+        -ms-flex-flow: row nowrap;
+        flex-flow: row nowrap;
+        -ms-flex-pack: distribute;
+        justify-content: space-around;
+        background: black; }
+        .game-container .right-container .right .tabs-container .tab {
+          font-family: 'Germania One';
+          padding: 5px 0;
+          font-size: 50px;
+          color: white;
+          letter-spacing: 1px; }
+          .game-container .right-container .right .tabs-container .tab.blacksmith-tab {
+            display: none; }
 
 @-webkit-keyframes flyingNumber {
   0% {

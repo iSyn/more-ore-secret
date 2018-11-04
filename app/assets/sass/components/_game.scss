@@ -78,6 +78,7 @@
           image-rendering: pixelated;
           transition: transform .1s;
           cursor: pointer;
+          // border: 2px solid black;
 
           &:hover {
             transform: scale( 1.03 );
@@ -91,6 +92,7 @@
         .ore-weak-spot-container {
           pointer-events: none;
           position: relative;
+          // background: rgba(255, 0, 0, 0.5);
 
           .ore-weak-spot {
             pointer-events: all;
@@ -115,7 +117,7 @@
     }
 
     .quest-area-container {
-      height: 200px;
+      height: 150px;
       width: 100%;
       background: url('./assets/images/misc-mineshaft.png');
       background-size: auto 100%;
@@ -156,6 +158,25 @@
       width: 300px;
       height: 100%;
       background: darkgray;
+
+      .tabs-container {
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: space-around;
+        background: black;
+        
+        .tab {
+          font-family: 'Germania One';
+          padding: 5px 0;
+          font-size: 50px;
+          color: white;
+          letter-spacing: 1px;
+
+          &.blacksmith-tab {
+            display: none;
+          }
+        }
+      }
     }
   }
 }

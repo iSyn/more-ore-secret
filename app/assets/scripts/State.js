@@ -25,7 +25,6 @@ let State = function( s = {} ) {
       sfx_volume: 1,
       bgm_volume: 1,
       show_rising_numbers: true,
-
     }
   }
   
