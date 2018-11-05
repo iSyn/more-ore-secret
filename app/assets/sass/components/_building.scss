@@ -1,0 +1,24 @@
+.building {
+    display: flex;
+    flex-flow: row nowrap;
+    padding: 5px;
+    align-items: center;
+    color: white;
+    letter-spacing: .6px;
+
+    * {
+        font-family: 'Germania One';
+    }
+
+    .left {
+        padding-right: 5px;
+    }
+
+    .middle {
+        flex-grow: 1;
+
+        p {
+            color: #222;
+        }
+    }
+}

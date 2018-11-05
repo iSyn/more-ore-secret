@@ -55,7 +55,7 @@
   flex-flow: row nowrap;
   height: 100%;
   width: 100%; }
-  .game-container .left {
+  .game-container > .left {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -74,7 +74,7 @@
     image-rendering: -moz-crisp-edges;
     image-rendering: -o-pixelated;
     image-rendering: pixelated; }
-    .game-container .left .topbar-inventory-container {
+    .game-container > .left .topbar-inventory-container {
       width: calc( 100% - 40px);
       margin: 0 20px;
       display: -webkit-box;
@@ -84,7 +84,7 @@
       -webkit-box-direction: normal;
       -ms-flex-flow: column nowrap;
       flex-flow: column nowrap; }
-      .game-container .left .topbar-inventory-container .inventory-hanger-container {
+      .game-container > .left .topbar-inventory-container .inventory-hanger-container {
         height: 20px;
         width: 100%;
         display: -webkit-box;
@@ -97,9 +97,9 @@
         -webkit-box-pack: justify;
         -ms-flex-pack: justify;
         justify-content: space-between; }
-        .game-container .left .topbar-inventory-container .inventory-hanger-container .vertical-separator {
+        .game-container > .left .topbar-inventory-container .inventory-hanger-container .vertical-separator {
           margin: 0 40px; }
-      .game-container .left .topbar-inventory-container .topbar-inventory {
+      .game-container > .left .topbar-inventory-container .topbar-inventory {
         background: #322011;
         padding: 25px 50px;
         width: 100%;
@@ -113,20 +113,23 @@
         -webkit-box-align: center;
         -ms-flex-align: center;
         align-items: center;
+        -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+        justify-content: space-between;
         border: 2px solid #251910;
         -webkit-box-shadow: 0 0 40px #222 inset;
         box-shadow: 0 0 40px #222 inset; }
-        .game-container .left .topbar-inventory-container .topbar-inventory p {
+        .game-container > .left .topbar-inventory-container .topbar-inventory p {
           font-size: 22px;
           color: white;
           background: #322011;
           letter-spacing: .5px; }
-    .game-container .left .ore-container-wrapper {
+    .game-container > .left .ore-container-wrapper {
       -webkit-box-flex: 1;
       -ms-flex-positive: 1;
       flex-grow: 1;
       position: relative; }
-      .game-container .left .ore-container-wrapper .ore-container {
+      .game-container > .left .ore-container-wrapper .ore-container {
         position: absolute;
         height: 300px;
         width: 300px;
@@ -134,7 +137,7 @@
         left: 50%;
         -webkit-transform: translate(-50%, -50%);
         transform: translate(-50%, -50%); }
-        .game-container .left .ore-container-wrapper .ore-container .ore-sprite {
+        .game-container > .left .ore-container-wrapper .ore-container .ore-sprite {
           width: 100%;
           height: auto;
           position: absolute;
@@ -149,16 +152,16 @@
           transition: transform .1s;
           transition: transform .1s, -webkit-transform .1s;
           cursor: pointer; }
-          .game-container .left .ore-container-wrapper .ore-container .ore-sprite:hover {
+          .game-container > .left .ore-container-wrapper .ore-container .ore-sprite:hover {
             -webkit-transform: scale(1.03);
             transform: scale(1.03); }
-          .game-container .left .ore-container-wrapper .ore-container .ore-sprite:active {
+          .game-container > .left .ore-container-wrapper .ore-container .ore-sprite:active {
             -webkit-transform: scale(0.97);
             transform: scale(0.97); }
-        .game-container .left .ore-container-wrapper .ore-container .ore-weak-spot-container {
+        .game-container > .left .ore-container-wrapper .ore-container .ore-weak-spot-container {
           pointer-events: none;
           position: relative; }
-          .game-container .left .ore-container-wrapper .ore-container .ore-weak-spot-container .ore-weak-spot {
+          .game-container > .left .ore-container-wrapper .ore-container .ore-weak-spot-container .ore-weak-spot {
             pointer-events: all;
             position: absolute;
             top: 0px;
@@ -174,10 +177,10 @@
             height: 20px;
             -webkit-animation: spin 1.5s linear infinite;
             animation: spin 1.5s linear infinite; }
-    .game-container .left .text-scroller-container .text-scroller {
+    .game-container > .left .text-scroller-container .text-scroller {
       height: 25px;
       background: rgba(0, 0, 0, 0.6); }
-    .game-container .left .quest-area-container {
+    .game-container > .left .quest-area-container {
       height: 150px;
       width: 100%;
       background: url("./assets/images/misc-mineshaft.png");
@@ -193,11 +196,18 @@
     flex-flow: row nowrap;
     -webkit-transition: margin-right .3s ease-in-out;
     transition: margin-right .3s ease-in-out; }
-    .game-container .right-container .right {
+    .game-container .right-container > .right {
       width: 300px;
       height: 100%;
-      background: darkgray; }
-      .game-container .right-container .right .tabs-container {
+      background: darkgray;
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-orient: vertical;
+      -webkit-box-direction: normal;
+      -ms-flex-flow: column nowrap;
+      flex-flow: column nowrap; }
+      .game-container .right-container > .right .tabs-container {
         display: -webkit-box;
         display: -ms-flexbox;
         display: flex;
@@ -211,14 +221,21 @@
         box-shadow: 0 0 40px #222 inset;
         background-color: #4e3013;
         text-shadow: 0 0 4px black; }
-        .game-container .right-container .right .tabs-container .tab {
+        .game-container .right-container > .right .tabs-container .tab {
           font-family: 'Germania One';
           padding: 5px 0;
           font-size: 50px;
           color: white;
           letter-spacing: 3px; }
-          .game-container .right-container .right .tabs-container .tab.blacksmith-tab {
+          .game-container .right-container > .right .tabs-container .tab.blacksmith-tab {
             display: none; }
+      .game-container .right-container > .right .tab-content-container {
+        -webkit-box-flex: 1;
+        -ms-flex-positive: 1;
+        flex-grow: 1;
+        background: green;
+        -ms-flex-negative: 0;
+        flex-shrink: 0; }
 
 @-webkit-keyframes flyingNumber {
   0% {
@@ -290,3 +307,28 @@
 .torch-left {
   -webkit-transform: scaleX(-1);
   transform: scaleX(-1); }
+
+.building {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -ms-flex-flow: row nowrap;
+  flex-flow: row nowrap;
+  padding: 5px;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  color: white;
+  letter-spacing: .6px; }
+  .building * {
+    font-family: 'Germania One'; }
+  .building .left {
+    padding-right: 5px; }
+  .building .middle {
+    -webkit-box-flex: 1;
+    -ms-flex-positive: 1;
+    flex-grow: 1; }
+    .building .middle p {
+      color: #222; }

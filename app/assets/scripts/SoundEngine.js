@@ -20,4 +20,14 @@ let SoundEngine = function() {
         volume: .5 * S.prefs.sfx_volume
     })
 
+    this.buy_sound = new Howl({
+        src: [ './assets/sounds/buy-sound.wav' ],
+        volume: .5 * S.prefs.sfx_volume
+    })
+
+    this.store_item_hover = new Howl({
+        src: [ './assets/sounds/store-item-hover.wav' ],
+        volume: .5 * S.prefs.sfx_volume
+    })
+
 }

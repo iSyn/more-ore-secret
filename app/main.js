@@ -8,6 +8,7 @@ const MIDDLE_VERTICAL_SEPARATOR = s( '.middle-vertical-separator' )
 const RIGHT_VERTICAL_SEPARATOR = s( '.right-vertical-separator' )
 const TORCH_LEFT = s('.torch-left')
 const TORCH_RIGHT = s('.torch-right')
+const TAB_CONTENT_CONTAINER = s('.tab-content-container')
 
 let S = new State().state
 let SFX = new SoundEngine()
@@ -22,6 +23,7 @@ let earn = ( amount ) => {
 
 let spend = ( amount ) => {
   S.ores -= amount
+  SFX.buy_sound.play()
 }
 
 let reposition_elements = () => {
@@ -34,6 +36,29 @@ let reposition_elements = () => {
   TORCH_LEFT.style.left = left_vertical_separator_coords.right + 'px'
   TORCH_RIGHT.style.left = middle_vertical_separator_coords.left - torch_coords.width + 'px'
 
+}
+
+let build_store = () => {
+  console.log('building store:', Buildings)
+  let str = ``
+  Buildings.forEach( building => {
+    str += `
+      <div class="building">
+        <div class="left">
+          <img src="${ building.img }" alt="building image"/>
+        </div>
+        <div class="middle">
+          <h1>${ building.name }</h1>
+          <p>Cost: ${ building.current_price } ores</p>
+        </div>
+        <div class="right">
+          <h1>${ building.owned }</h1>
+        </div>
+      </div>
+    `
+  })
+
+  TAB_CONTENT_CONTAINER.innerHTML = str
 }
 
 let calculate_opc = ( type ) => {
@@ -52,6 +77,7 @@ let init_game = () => {
   start_loop()
   generate_weak_spot()
   reposition_elements()
+  build_store()
   ORE_SPRITE.addEventListener( 'click', handle_click )
   ORE_WEAK_SPOT.addEventListener( 'click', ( e ) => {
     handle_click( e, 'weak-spot' )

@@ -13,7 +13,7 @@
   height: 100%;
   width: 100%;
 
-  .left {
+  > .left {
     display: flex;
     flex-flow: column nowrap;
     flex-grow: 1;
@@ -48,6 +48,7 @@
         display: flex;
         flex-flow: row nowrap;
         align-items: center;
+        justify-content: space-between;
         border: 2px solid #251910;
         box-shadow: 0 0 40px #222 inset;
 
@@ -140,10 +141,12 @@
     flex-flow: row nowrap;
     transition: margin-right .3s ease-in-out;
 
-    .right {
+    > .right {
       width: 300px;
       height: 100%;
       background: darkgray;
+      display: flex;
+      flex-flow: column nowrap;
 
       .tabs-container {
         display: flex;
@@ -164,6 +167,12 @@
             display: none;
           }
         }
+      }
+
+      .tab-content-container {
+        flex-grow: 1;
+        background: green;
+        flex-shrink: 0;
       }
     }
   }

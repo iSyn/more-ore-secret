@@ -9,3 +9,7 @@ let remove_el = ( el ) => {
 let get_random_num = ( min, max ) => {
   return Math.floor( Math.random() * ( max - min + 1 ) ) + min;
 }
+
+let format_number = ( num ) => {
+  
+}
