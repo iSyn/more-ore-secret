@@ -21,10 +21,12 @@
 
 @keyframes buildingFlyingNumber {
     from {
-        transform: translateY(0)
+        transform: translateY(0);
+        opacity: .4;
     }
     to {
-        transform: translateY(-100px)
+        transform: translateY(-150px);
+        opacity: .1;
     }
 }
 

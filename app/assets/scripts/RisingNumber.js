@@ -38,11 +38,10 @@ let RisingNumber = function() {
 
       case 'buildings':
         let ore_sprite_dimensions = ORE_SPRITE.getBoundingClientRect()
-        el.style.opacity = '.3'
-        el.style.animation = 'buildingFlyingNumber 1s ease-out'
+        el.style.animation = 'buildingFlyingNumber 1.2s ease-out'
         el.style.left = ( ore_sprite_dimensions.left + ore_sprite_dimensions.right ) / 2  + 'px'
-        el.style.top = ore_sprite_dimensions.top + 'px'
-        
+        el.style.top = ( ore_sprite_dimensions.top + ore_sprite_dimensions.bottom ) / 2 + 'px'
+        break;
 
       default:
         break;
