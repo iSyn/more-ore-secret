@@ -11,6 +11,7 @@ let Building = function( obj ) {
     this.price_scale = obj.price_scale
     this.owned = obj.owned || 0
     this.hidden = obj.hidden
+    this.buy_functions = obj.buy_functions
 
     this.buy = ( e ) => {
         if ( S.ores >= this.current_price ) {
@@ -23,23 +24,17 @@ let Building = function( obj ) {
 
             __update_hidden( this.code_name )
 
-            build_store()
-        }
-    }
+            if ( this.buy_functions ) {
+                if ( this.buy_functions.unlock_upgrades ) {
+                    this.buy_functions.unlock_upgrades.forEach( upgrade => {
+                        if ( this.owned >= upgrade[ 1 ] ) {
+                            unlock_upgrade( upgrade[ 0 ] )
+                        }
+                    })
+                }
+            }
 
-    let __update_hidden = ( code_name ) => {
-        let buying = select_from_arr( Buildings, code_name )
-    
-        if ( Buildings[ buying.index + 1 ] ) {
-            Buildings[ buying.index + 1 ].hidden = 0
-        }
-    
-        if ( Buildings[ buying.index + 2 ] ) {
-            Buildings[ buying.index + 2 ].hidden = 1
-        }
-    
-        if ( Buildings[ buying.index + 3 ] ) {
-            Buildings[ buying.index + 3 ].hidden = 1
+            build_store()
         }
     }
 
@@ -57,7 +52,12 @@ let buildings = [
         production: .3,
         base_price: 6,
         price_scale: 1.15,
-        hidden: 0
+        hidden: 0,
+        buy_functions: {
+            unlock_upgrades: [
+                ["composition_notebooks", 1]
+            ]
+        }
     }, {
         name: 'Farm',
         name_plural: 'Farms',
@@ -195,3 +195,18 @@ buildings.forEach( building => {
     new Building( building )
 })
 
+let __update_hidden = ( code_name ) => {
+    let buying = select_from_arr( Buildings, code_name )
+
+    if ( Buildings[ buying.index + 1 ] ) {
+        Buildings[ buying.index + 1 ].hidden = 0
+    }
+
+    if ( Buildings[ buying.index + 2 ] ) {
+        Buildings[ buying.index + 2 ].hidden = 1
+    }
+
+    if ( Buildings[ buying.index + 3 ] ) {
+        Buildings[ buying.index + 3 ].hidden = 1
+    }
+}

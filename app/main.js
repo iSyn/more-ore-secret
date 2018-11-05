@@ -41,7 +41,21 @@ let reposition_elements = () => {
 
 let build_store = () => {
   let str = ``
+
   let index = 0
+  Upgrades.forEach( upgrade => {
+    if ( upgrade.hidden == 0 && !upgrade.owned ) {
+      str += `
+        <div class='upgrade' onclick="Upgrades[ ${ index } ].buy( event )" onmouseover="SFX.store_item_hover.play()">
+
+        </div>
+      `
+    }
+    
+    index++
+  })
+
+  index = 0
   Buildings.forEach( building => {
 
     if ( building.hidden == 0 ) {
