@@ -57,7 +57,7 @@ let buildings = [
         production: 20,
         base_price: 2520,
         price_scale: 1.15,
-        hidden: 2
+        hidden: 1
     }, {
         name: 'Church',
         name_plural: 'Churches',

@@ -35,6 +35,7 @@
 .container {
   height: 100vh;
   width: 100vw;
+  min-width: 800px;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -325,9 +326,17 @@
   box-shadow: 0 0 20px #222 inset;
   height: 70px;
   cursor: pointer; }
-  .building:hover {
+  .building:not(.hidden):hover {
     -webkit-box-shadow: 0 0 5px #fff inset;
     box-shadow: 0 0 5px #fff inset; }
+  .building.hidden {
+    opacity: .7;
+    -webkit-filter: brightness(60%);
+    filter: brightness(60%);
+    cursor: not-allowed; }
+    .building.hidden img {
+      -webkit-filter: brightness(0%);
+      filter: brightness(0%); }
   .building * {
     font-family: 'Germania One';
     pointer-events: none; }

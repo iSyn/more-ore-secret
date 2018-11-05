@@ -42,20 +42,36 @@ let build_store = () => {
   let str = ``
   let index = 0
   Buildings.forEach( building => {
-    str += `
-      <div class="building" onclick="Buildings[${index}].buy()" onmouseover="SFX.store_item_hover.play()">
-        <div class="left">
-          <img src="${ building.img }" alt="building image"/>
+
+    if ( building.hidden == 0 ) {
+      str += `
+        <div class="building" onclick="Buildings[${index}].buy()" onmouseover="SFX.store_item_hover.play()">
+          <div class="left">
+            <img src="${ building.img }" alt="building image"/>
+          </div>
+          <div class="middle">
+            <h1>${ building.name }</h1>
+            <p>Cost: ${ beautify_number( building.current_price ) } ores</p>
+          </div>
+          <div class="right">
+            <h1>${ building.owned }</h1>
+          </div>
         </div>
-        <div class="middle">
-          <h1>${ building.name }</h1>
-          <p>Cost: ${ beautify_number( building.current_price ) } ores</p>
+      `
+    } else if ( building.hidden == 1 ) {
+      str += `
+        <div class="building hidden"">
+          <div class="left">
+            <img src="${ building.img }" alt="building image"/>
+          </div>
+          <div class="middle">
+            <h1>???</h1>
+            <p>Cost: ??? ores</p>
+          </div>
         </div>
-        <div class="right">
-          <h1>${ building.owned }</h1>
-        </div>
-      </div>
-    `
+      `
+    }
+
     index++
   })
 
@@ -93,10 +109,7 @@ let init_game = () => {
   reposition_elements()
   build_store()
   ORE_SPRITE.addEventListener( 'click', handle_click )
-  ORE_WEAK_SPOT.addEventListener( 'click', ( e ) => {
-    handle_click( e, 'weak-spot' )
-    generate_weak_spot()
-  })
+  ORE_WEAK_SPOT.addEventListener( 'click', ( e ) => { handle_click( e, 'weak-spot' ) })
 }
 
 let generate_weak_spot = () => {
@@ -128,6 +141,7 @@ let handle_click = ( e, type ) => {
     SFX.ore_weak_spot_hit_sfx.play()
     S.stats.total_weak_hit_clicks++
     RN.new( event, 'weak-hit-click', opc )
+    generate_weak_spot()
   } else {
     SFX.ore_hit_sfx.play()
     RN.new( event, 'click', opc )

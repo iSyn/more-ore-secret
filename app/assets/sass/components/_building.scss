@@ -12,8 +12,18 @@
     height: 70px;
     cursor: pointer;
 
-    &:hover {
+    &:not(.hidden):hover {
         box-shadow: 0 0 5px #fff inset;
+    }
+
+    &.hidden {
+        opacity: .7;
+        filter: brightness( 60% );
+        cursor: not-allowed;
+
+        img {
+            filter: brightness( 0% );
+        }
     }
 
     * {
