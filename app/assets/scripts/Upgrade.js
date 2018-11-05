@@ -9,7 +9,7 @@ let Upgrade = function( obj ) {
     this.owned = obj.owned || false
 
     this.buy = () => {
-        
+
     }
 
     Upgrades.push( this )
@@ -23,7 +23,21 @@ let upgrades = [
         desc: 'Doubles the production of Schools',
         flavor_text: 'College Ruled!',
         price: 80,
-        hidden: 1
+        hidden: 0
+    }, {
+        name: 'test',
+        img: 'https://via.placeholder.com/50',
+        desc: 'Doubles the production of Schools',
+        flavor_text: 'College Ruled!',
+        price: 80,
+        hidden: 0
+    }, {
+        name: 'test test',
+        img: 'https://via.placeholder.com/50',
+        desc: 'Doubles the production of Schools',
+        flavor_text: 'College Ruled!',
+        price: 80,
+        hidden: 0
     },
 ]
 

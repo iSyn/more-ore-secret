@@ -41,7 +41,15 @@ let reposition_elements = () => {
 
 let build_store = () => {
   let str = ``
+  index = 0
+  str += build_upgrades()
+  str += build_buildings()
 
+  TAB_CONTENT.innerHTML = str
+}
+
+let build_upgrades = () => {
+  let str = '<div class="upgrades-container">'
   let index = 0
   Upgrades.forEach( upgrade => {
     if ( upgrade.hidden == 0 && !upgrade.owned ) {
@@ -55,9 +63,15 @@ let build_store = () => {
     index++
   })
 
-  index = 0
-  Buildings.forEach( building => {
+  str += '</div>'
 
+  return str
+}
+
+let build_buildings = () => {
+  let str = ''
+  let index = 0
+  Buildings.forEach( building => {
     if ( building.hidden == 0 ) {
       str += `
         <div class="building" onclick="Buildings[ ${ index } ].buy( event )" onmouseover="SFX.store_item_hover.play()">
@@ -90,7 +104,7 @@ let build_store = () => {
     index++
   })
 
-  TAB_CONTENT.innerHTML = str
+  return str
 }
 
 let calculate_opc = ( type ) => {
@@ -113,9 +127,6 @@ let calculate_ops = () => {
   })
 
   S.ops = ops
-
-  console.log('ops', ops)
-
 }
 
 let init_game = () => {

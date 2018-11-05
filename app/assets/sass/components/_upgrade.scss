@@ -1,0 +1,20 @@
+.upgrades-container {
+  display: flex;
+  flex-flow: row nowrap;
+
+  .upgrade {
+    height: 50px;
+    width: 50px;
+    background: url("./assets/images/upgrade-upgrade_container.png");
+    background-size: 100%;
+    image-rendering: pixelated;
+    background-color: #b56535;
+    box-shadow: 0 0 30px #222 inset;
+    cursor: pointer;
+
+    &:hover {
+      box-shadow: 0 0 10px #fff inset, 0 0 30px #222 inset;
+    }
+  }
+}
+

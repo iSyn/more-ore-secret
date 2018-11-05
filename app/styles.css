@@ -379,3 +379,29 @@
   .building .right h1 {
     font-size: 35px;
     text-shadow: 0 0 3px black; }
+
+.upgrades-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -ms-flex-flow: row nowrap;
+  flex-flow: row nowrap; }
+  .upgrades-container .upgrade {
+    height: 50px;
+    width: 50px;
+    background: url("./assets/images/upgrade-upgrade_container.png");
+    background-size: 100%;
+    -ms-interpolation-mode: nearest-neighbor;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: -o-pixelated;
+    image-rendering: pixelated;
+    background-color: #b56535;
+    -webkit-box-shadow: 0 0 30px #222 inset;
+    box-shadow: 0 0 30px #222 inset;
+    cursor: pointer; }
+    .upgrades-container .upgrade:hover {
+      -webkit-box-shadow: 0 0 10px #fff inset, 0 0 30px #222 inset;
+      box-shadow: 0 0 10px #fff inset, 0 0 30px #222 inset; }
