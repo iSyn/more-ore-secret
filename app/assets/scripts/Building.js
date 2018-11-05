@@ -12,9 +12,11 @@ let Building = function( obj ) {
     this.owned = obj.owned || 0
     this.hidden = obj.hidden
 
-    this.buy = () => {
+    this.buy = ( e ) => {
         if ( S.ores >= this.current_price ) {
             spend( this.current_price )
+            RN.new( e, 'successful-buy')
+            SFX.buy_sound.play()
             this.owned++
             this.current_price = this.base_price * Math.pow( this.price_scale, this.owned )
             calculate_ops()

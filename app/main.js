@@ -44,7 +44,7 @@ let build_store = () => {
 
     if ( building.hidden == 0 ) {
       str += `
-        <div class="building" onclick="Buildings[${index}].buy()" onmouseover="SFX.store_item_hover.play()">
+        <div class="building" onclick="Buildings[ ${ index } ].buy( event )" onmouseover="SFX.store_item_hover.play()">
           <div class="left">
             <img src="${ building.img }" alt="building image"/>
           </div>

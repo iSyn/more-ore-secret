@@ -1,6 +1,6 @@
 let RisingNumber = function() {
 
-  this.new = ( e, type, amount ) => {
+  this.new = ( e, type, amount = null ) => {
 
     let el = document.createElement( 'div' )
 
@@ -20,6 +20,10 @@ let RisingNumber = function() {
       case 'weak-hit-click':
         el.style.fontSize = '28px'
         break;
+      case  'successful-buy':
+        el.innerHTML = '-$'
+        el.style.color = 'red'
+        el.style.fontSize = '30px'
       default:
         break;
     }
