@@ -1,0 +1,30 @@
+.tooltip {
+  // display: flex;
+  flex-flow: column nowrap;
+  position: absolute;
+  background: #222;
+  color: white;
+  padding: 10px;
+  width: 300px;
+  z-index: 1;
+
+  .top {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+
+    h1 {
+      font-family: 'Germania One';
+      padding-left: 10px;
+      flex-grow: 1;
+    }
+  }
+
+  .bottom {
+    padding-top: 10px;
+
+    ul {
+      list-style-type: none;
+    }
+  }
+}

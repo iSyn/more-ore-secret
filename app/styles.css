@@ -405,3 +405,36 @@
     .upgrades-container .upgrade:hover {
       -webkit-box-shadow: 0 0 10px #fff inset, 0 0 30px #222 inset;
       box-shadow: 0 0 10px #fff inset, 0 0 30px #222 inset; }
+
+.tooltip {
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-flow: column nowrap;
+  flex-flow: column nowrap;
+  position: absolute;
+  background: #222;
+  color: white;
+  padding: 10px;
+  width: 300px;
+  z-index: 1; }
+  .tooltip .top {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -ms-flex-flow: row nowrap;
+    flex-flow: row nowrap;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center; }
+    .tooltip .top h1 {
+      font-family: 'Germania One';
+      padding-left: 10px;
+      -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+      flex-grow: 1; }
+  .tooltip .bottom {
+    padding-top: 10px; }
+    .tooltip .bottom ul {
+      list-style-type: none; }

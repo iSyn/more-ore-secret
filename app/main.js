@@ -10,11 +10,13 @@ const TORCH_LEFT = s( '.torch-left' )
 const TORCH_RIGHT = s( '.torch-right' )
 const TAB_CONTENT = s( '.tab-content' )
 const TEXT_SCROLLER_CONTAINER = s( '.text-scroller-container' )
+const TOOLTIP = s( '.tooltip' )
 
 let S = new State().state
 let SFX = new SoundEngine()
 let RN = new RisingNumber()
 let TS = new TextScroller()
+let TT = new Tooltip()
 
 let earn = ( amount ) => {
   update_ore_hp( amount )
@@ -74,7 +76,7 @@ let build_buildings = () => {
   Buildings.forEach( building => {
     if ( building.hidden == 0 ) {
       str += `
-        <div class="building" onclick="Buildings[ ${ index } ].buy( event )" onmouseover="SFX.store_item_hover.play()">
+        <div class="building" onclick="Buildings[ ${ index } ].buy( event )" onmouseover="SFX.store_item_hover.play(); TT.show( event, { name: '${ building.code_name }', type: 'building' } )" onmouseout="TT.hide()">
           <div class="left">
             <img src="${ building.img }" alt="building image"/>
           </div>
