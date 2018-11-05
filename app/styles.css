@@ -10,25 +10,23 @@
   user-select: none;
   -webkit-user-drag: none; }
 
-.vertical-separator {
-  height: 100%;
-  width: 15px;
+.vertical-separator, .horizontal-separator {
   -ms-interpolation-mode: nearest-neighbor;
   image-rendering: -webkit-optimize-contrast;
   image-rendering: -moz-crisp-edges;
   image-rendering: -o-pixelated;
   image-rendering: pixelated;
+  z-index: 1; }
+
+.vertical-separator {
+  height: 100%;
+  width: 15px;
   background: url("./assets/images/misc-vertical_separator.png");
   background-size: 100% auto; }
 
 .horizontal-separator {
   height: 15px;
   width: 100%;
-  -ms-interpolation-mode: nearest-neighbor;
-  image-rendering: -webkit-optimize-contrast;
-  image-rendering: -moz-crisp-edges;
-  image-rendering: -o-pixelated;
-  image-rendering: pixelated;
   background: url("./assets/images/misc-horizontal_separator.png");
   background-size: auto 100%; }
 

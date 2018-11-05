@@ -1,9 +1,13 @@
 $separator-thickness: 15px;
 
+.vertical-separator, .horizontal-separator {
+  image-rendering: pixelated;
+  z-index: 1;
+}
+
 .vertical-separator {
   height: 100%;
   width: $separator-thickness;
-  image-rendering: pixelated;
   background: url('./assets/images/misc-vertical_separator.png');
   background-size: 100% auto;
 }
@@ -11,7 +15,6 @@ $separator-thickness: 15px;
 .horizontal-separator {
   height: $separator-thickness;
   width: 100%;
-  image-rendering: pixelated;
   background: url('./assets/images/misc-horizontal_separator.png');
   background-size: auto 100%;
 }
