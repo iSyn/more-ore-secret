@@ -165,7 +165,6 @@ let handle_text_scroller = () => {
   setTimeout( () => { handle_text_scroller() }, 1000 * animation_speed )
 
   if ( Math.random() <= .40 || TS.queue.length > 0 ) {
-    console.log('yerr')
     let text = TS.get()
     let text_scroller = document.createElement( 'div' )
     text_scroller.innerHTML = text
@@ -181,11 +180,7 @@ let handle_text_scroller = () => {
     text_scroller.style.transform = `translateX( -${ text_scroller_container_dimensions.width + text_scroller_dimensions.width + 100 }px )`
 
     text_scroller.addEventListener( 'transitionend', () => {  remove_el( text_scroller )  } )
-  } else {
-    console.log('no');
-    
   }
-
 }
 
 let start_loop = () => {
