@@ -162,9 +162,9 @@ let handle_text_scroller = () => {
 
   let animation_speed = 20
 
-  setTimeout( () => { handle_text_scroller() }, 1000 * animation_speed )
+  setTimeout( () => {  handle_text_scroller()  }, 1000 * animation_speed )
 
-  if ( Math.random() <= .40 || TS.queue.length > 0 ) {
+  if ( Math.random() <= .40 || TS.queue.length > 0 && !S.prefs.window_blurred ) {
     let text = TS.get()
     let text_scroller = document.createElement( 'div' )
     text_scroller.innerHTML = text
@@ -256,3 +256,5 @@ let update_topbar_inventory = () => {
 
 window.onload = () => { init_game() }
 window.onresize = () => { reposition_elements() }
+window.onblur = () => { S.prefs.window_blurred = true }
+window.onfocus = () => { S.prefs.window_blurred = false }
