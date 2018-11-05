@@ -27,7 +27,6 @@ let spend = ( amount ) => {
 }
 
 let reposition_elements = () => {
-  console.log('reposition firing')
   let left_vertical_separator_coords = LEFT_VERTICAL_SEPARATOR.getBoundingClientRect()
   let middle_vertical_separator_coords = MIDDLE_VERTICAL_SEPARATOR.getBoundingClientRect()
   let torch_coords = TORCH_LEFT.getBoundingClientRect()

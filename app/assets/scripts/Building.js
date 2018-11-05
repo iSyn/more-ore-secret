@@ -13,13 +13,31 @@ let Building = function( obj ) {
     this.hidden = obj.hidden
 
     this.buy = () => {
-        console.log('buying', this)
         if ( S.ores >= this.current_price ) {
             spend( this.current_price )
             this.owned++
             this.current_price = this.base_price * Math.pow( this.price_scale, this.owned )
             calculate_ops()
+
+            __update_hidden( this.code_name )
+
             build_store()
+        }
+    }
+
+    let __update_hidden = ( code_name ) => {
+        let buying = select_from_arr( Buildings, code_name )
+    
+        if ( Buildings[ buying.index + 1 ] ) {
+            Buildings[ buying.index + 1 ].hidden = 0
+        }
+    
+        if ( Buildings[ buying.index + 2 ] ) {
+            Buildings[ buying.index + 2 ].hidden = 1
+        }
+    
+        if ( Buildings[ buying.index + 3 ] ) {
+            Buildings[ buying.index + 3 ].hidden = 1
         }
     }
 
@@ -74,3 +92,4 @@ let buildings = [
 buildings.forEach( building => {
     new Building( building )
 })
+

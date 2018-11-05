@@ -80,3 +80,14 @@ let beautify_number = (number) => {
   // format number and add prefix as suffix
   return parseFloat(scaled.toFixed(2)) + " " + prefix;
 }
+
+let select_from_arr = ( arr, code_name ) => {
+  for ( let i in arr ) {
+    if ( arr[i].code_name === code_name ) {
+      return { 
+        item: arr[i], 
+        index: parseInt( i ) 
+      }
+    }
+  }
+}
