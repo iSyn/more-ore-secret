@@ -139,10 +139,14 @@ let handle_click = ( e, type ) => {
   if ( type ) {
     SFX.ore_weak_spot_hit_sfx.play()
     S.stats.total_weak_hit_clicks++
+    S.current_combo++
+    if ( S.current_combo > S.stats.highest_combo ) S.stats.highest_combo = S.current_combo
+    if ( S.current_combo % 5 == 0 ) RN.new( e, 'combo', S.current_combo )
     RN.new( event, 'weak-hit-click', opc )
     generate_weak_spot()
   } else {
     SFX.ore_hit_sfx.play()
+    S.current_combo = 0
     RN.new( event, 'click', opc )
   }
 

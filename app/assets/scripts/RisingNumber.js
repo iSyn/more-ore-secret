@@ -20,10 +20,17 @@ let RisingNumber = function() {
       case 'weak-hit-click':
         el.style.fontSize = '28px'
         break;
-      case  'successful-buy':
+
+      case 'successful-buy':
         el.innerHTML = '-$'
         el.style.color = 'red'
         el.style.fontSize = '30px'
+        break;
+
+      case 'combo':
+        el.innerHTML = `${ amount } hit combo`
+        break;
+
       default:
         break;
     }
