@@ -121,10 +121,15 @@
     }
 
     .text-scroller-container {
-      
+      background: rgba(0, 0, 0, 0.6);
+      position: relative;
+      height: 30px;
+
       .text-scroller {
-        height: 25px;
-        background: rgba(0, 0, 0, 0.6);
+        position: absolute;
+        color: white;
+        padding: 0 20px;
+        min-width: max-content;
       }
     }
 

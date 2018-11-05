@@ -11,7 +11,7 @@ let RisingNumber = function() {
     el.style.fontFamily = 'Germania One'
     el.style.left = e.clientX + get_random_num( -20, 20 ) + 'px'
     el.style.top = e.clientY + get_random_num( -5, 5 ) + 'px'
-    el.style.animation = 'flyingNumber 2s forwards';
+    el.style.animation = 'flyingNumber 2s forwards ease-out';
 
     el.innerHTML = `+${ amount }`
 
@@ -29,6 +29,9 @@ let RisingNumber = function() {
 
       case 'combo':
         el.innerHTML = `${ amount } hit combo`
+        el.style.color = get_random_color()
+        el.style.fontSize = '35px'
+        el.style.animationDuration = '3s'
         break;
 
       default:

@@ -91,3 +91,16 @@ let select_from_arr = ( arr, code_name ) => {
     }
   }
 }
+
+let select_random_from_arr = ( arr ) => {
+  return arr[ Math.floor( Math.random() * arr.length ) ]
+}
+
+let get_random_color = () => {
+  let letters = '0123456789ABCDEF';
+  let color = '#';
+  for (let i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
+}

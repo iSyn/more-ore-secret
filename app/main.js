@@ -6,13 +6,15 @@ const ORE_WEAK_SPOT = s( '.ore-weak-spot' )
 const LEFT_VERTICAL_SEPARATOR = s( '.left-vertical-separator' )
 const MIDDLE_VERTICAL_SEPARATOR = s( '.middle-vertical-separator' )
 const RIGHT_VERTICAL_SEPARATOR = s( '.right-vertical-separator' )
-const TORCH_LEFT = s('.torch-left')
-const TORCH_RIGHT = s('.torch-right')
-const TAB_CONTENT = s('.tab-content')
+const TORCH_LEFT = s( '.torch-left' )
+const TORCH_RIGHT = s( '.torch-right' )
+const TAB_CONTENT = s( '.tab-content' )
+const TEXT_SCROLLER_CONTAINER = s( '.text-scroller-container' )
 
 let S = new State().state
 let SFX = new SoundEngine()
 let RN = new RisingNumber()
+let TS = new TextScroller()
 
 let earn = ( amount ) => {
   update_ore_hp( amount )
@@ -107,6 +109,7 @@ let init_game = () => {
   generate_weak_spot()
   reposition_elements()
   build_store()
+  handle_text_scroller()
   ORE_SPRITE.addEventListener( 'click', handle_click )
   ORE_WEAK_SPOT.addEventListener( 'click', ( e ) => { handle_click( e, 'weak-spot' ) })
 }
@@ -153,6 +156,36 @@ let handle_click = ( e, type ) => {
   S.stats.total_clicks++
 
   earn( opc )
+}
+
+let handle_text_scroller = () => {
+
+  let animation_speed = 20
+
+  setTimeout( () => { handle_text_scroller() }, 1000 * animation_speed )
+
+  if ( Math.random() <= .40 || TS.queue.length > 0 ) {
+    console.log('yerr')
+    let text = TS.get()
+    let text_scroller = document.createElement( 'div' )
+    text_scroller.innerHTML = text
+    text_scroller.style.transition = `transform ${ animation_speed }s linear`
+    text_scroller.classList.add( 'text-scroller' )
+
+    TEXT_SCROLLER_CONTAINER.append( text_scroller )
+
+    let text_scroller_dimensions = text_scroller.getBoundingClientRect()
+    let text_scroller_container_dimensions = TEXT_SCROLLER_CONTAINER.getBoundingClientRect()
+
+    text_scroller.style.left = text_scroller_container_dimensions.right + 'px'
+    text_scroller.style.transform = `translateX( -${ text_scroller_container_dimensions.width + text_scroller_dimensions.width + 100 }px )`
+
+    text_scroller.addEventListener( 'transitionend', () => {  remove_el( text_scroller )  } )
+  } else {
+    console.log('no');
+    
+  }
+
 }
 
 let start_loop = () => {

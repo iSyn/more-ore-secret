@@ -178,9 +178,17 @@
             height: 20px;
             -webkit-animation: spin 1.5s linear infinite;
             animation: spin 1.5s linear infinite; }
-    .game-container > .left .text-scroller-container .text-scroller {
-      height: 25px;
-      background: rgba(0, 0, 0, 0.6); }
+    .game-container > .left .text-scroller-container {
+      background: rgba(0, 0, 0, 0.6);
+      position: relative;
+      height: 30px; }
+      .game-container > .left .text-scroller-container .text-scroller {
+        position: absolute;
+        color: white;
+        padding: 0 20px;
+        min-width: -webkit-max-content;
+        min-width: -moz-max-content;
+        min-width: max-content; }
     .game-container > .left .quest-area-container {
       height: 150px;
       width: 100%;
