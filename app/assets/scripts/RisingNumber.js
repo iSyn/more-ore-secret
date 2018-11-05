@@ -9,8 +9,10 @@ let RisingNumber = function() {
     el.style.color = 'white'
     el.style.fontSize = '20px'
     el.style.fontFamily = 'Germania One'
-    el.style.left = e.clientX + get_random_num( -20, 20 ) + 'px'
-    el.style.top = e.clientY + get_random_num( -5, 5 ) + 'px'
+    if ( e ) {
+      el.style.left = e.clientX + get_random_num( -20, 20 ) + 'px'
+      el.style.top = e.clientY + get_random_num( -5, 5 ) + 'px'
+    }
     el.style.animation = 'flyingNumber 2s forwards ease-out';
 
     el.innerHTML = `+${ amount }`
@@ -33,6 +35,14 @@ let RisingNumber = function() {
         el.style.fontSize = '35px'
         el.style.animationDuration = '3s'
         break;
+
+      case 'buildings':
+        let ore_sprite_dimensions = ORE_SPRITE.getBoundingClientRect()
+        el.style.opacity = '.3'
+        el.style.animation = 'buildingFlyingNumber 1s ease-out'
+        el.style.left = ( ore_sprite_dimensions.left + ore_sprite_dimensions.right ) / 2  + 'px'
+        el.style.top = ore_sprite_dimensions.top + 'px'
+        
 
       default:
         break;

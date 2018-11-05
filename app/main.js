@@ -184,11 +184,18 @@ let handle_text_scroller = () => {
 }
 
 let start_loop = () => {
+
   setInterval(() => {
     update_topbar_inventory()
     update_ore_sprite()
     earn( S.ops / S.prefs.game_speed )
   }, 1000 / S.prefs.game_speed)
+
+  setInterval(() => {
+    if ( S.ops > 0 && S.prefs.show_ops_rising_numbers ) {
+      RN.new( null, 'buildings', S.ops )
+    }
+  }, 1000)
 }
 
 let update_ore_hp = ( amount ) => {
