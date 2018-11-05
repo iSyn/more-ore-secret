@@ -23,8 +23,23 @@
   .bottom {
     padding-top: 10px;
 
+    .building-desc {
+      padding-bottom: 10px;
+    }
+
     ul {
       list-style-type: none;
+      padding-bottom: 10px;
+
+      li {
+        font-size: 14px;
+        opacity: .8;
+      }
+    }
+
+    .building-flavor-text {
+      text-align: right;
+      font-size: 12px;
     }
   }
 }

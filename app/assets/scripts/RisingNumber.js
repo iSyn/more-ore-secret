@@ -15,7 +15,7 @@ let RisingNumber = function() {
     }
     el.style.animation = 'flyingNumber 2s forwards ease-out';
 
-    el.innerHTML = `+${ amount }`
+    el.innerHTML = `+${ beautify_number( amount ) }`
 
     // TYPES
     switch ( type ) {
