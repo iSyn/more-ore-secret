@@ -20,6 +20,10 @@ let earn = ( amount ) => {
   S.ores += amount
 }
 
+let spend = ( amount ) => {
+  S.ores -= amount
+}
+
 let reposition_elements = () => {
   console.log('reposition firing')
   let left_vertical_separator_coords = LEFT_VERTICAL_SEPARATOR.getBoundingClientRect()

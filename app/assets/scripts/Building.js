@@ -7,8 +7,18 @@ let Building = function( obj ) {
     this.flavor_text = obj.flavor_test
     this.base_production = obj.base_production
     this.base_price = obj.base_price
+    this.current_price = obj.current_price || obj.base_price
     this.price_scale = obj.price_scale
+    this.owned = obj.owned || 0
     this.hidden = obj.hidden
+
+    this.buy = () => {
+        if ( S.ores >= this.current_price ) {
+            spend( this.current_price )
+            this.owned++
+            this.current_price = this.base_price * Math.pow( this.price_scale, this.owned )
+        }
+    }
 }
 
 let buildings = [
