@@ -170,9 +170,12 @@
       }
 
       .tab-content-container {
-        flex-grow: 1;
-        background: green;
-        flex-shrink: 0;
+        height: 100%;
+        overflow-y: auto;
+
+        .tab-content {
+
+        }
       }
     }
   }

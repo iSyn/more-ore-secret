@@ -8,7 +8,7 @@ const MIDDLE_VERTICAL_SEPARATOR = s( '.middle-vertical-separator' )
 const RIGHT_VERTICAL_SEPARATOR = s( '.right-vertical-separator' )
 const TORCH_LEFT = s('.torch-left')
 const TORCH_RIGHT = s('.torch-right')
-const TAB_CONTENT_CONTAINER = s('.tab-content-container')
+const TAB_CONTENT = s('.tab-content')
 
 let S = new State().state
 let SFX = new SoundEngine()
@@ -39,26 +39,27 @@ let reposition_elements = () => {
 }
 
 let build_store = () => {
-  console.log('building store:', Buildings)
   let str = ``
+  let index = 0
   Buildings.forEach( building => {
     str += `
-      <div class="building">
+      <div class="building" onclick="Buildings[${index}].buy()" onmouseover="SFX.store_item_hover.play()">
         <div class="left">
           <img src="${ building.img }" alt="building image"/>
         </div>
         <div class="middle">
           <h1>${ building.name }</h1>
-          <p>Cost: ${ building.current_price } ores</p>
+          <p>Cost: ${ beautify_number( building.current_price ) } ores</p>
         </div>
         <div class="right">
           <h1>${ building.owned }</h1>
         </div>
       </div>
     `
+    index++
   })
 
-  TAB_CONTENT_CONTAINER.innerHTML = str
+  TAB_CONTENT.innerHTML = str
 }
 
 let calculate_opc = ( type ) => {
@@ -71,6 +72,19 @@ let calculate_opc = ( type ) => {
   }
 
   return opc
+}
+
+let calculate_ops = () => {
+  let ops = 0
+
+  Buildings.forEach( building => {
+    ops += building.owned * building.production
+  })
+
+  S.ops = ops
+
+  console.log('ops', ops)
+
 }
 
 let init_game = () => {
@@ -128,6 +142,7 @@ let start_loop = () => {
   setInterval(() => {
     update_topbar_inventory()
     update_ore_sprite()
+    earn( S.ops / S.prefs.game_speed )
   }, 1000 / S.prefs.game_speed)
 }
 
@@ -174,10 +189,14 @@ let update_ore_sprite = () => {
 let update_topbar_inventory = () => {
   let str = `
     <div class='left'>
-      <p>Ores: ${ S.ores }</p>
-      `
+      <p>Ores: ${ beautify_number( S.ores ) }` 
+
+      if ( S.ops > 0 ) str += ` (${ beautify_number( S.ops )}/s)`
+      
+      str += `</p>`
+
       if ( S.stats.total_gems_earned > 0 ) {
-        str += `<p>Gems: ${ S.gems }</p>`
+        str += `<p>Gems: ${ beautify_number( S.gems ) }</p>`
       }
 
       str += `

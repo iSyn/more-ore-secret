@@ -230,12 +230,8 @@
           .game-container .right-container > .right .tabs-container .tab.blacksmith-tab {
             display: none; }
       .game-container .right-container > .right .tab-content-container {
-        -webkit-box-flex: 1;
-        -ms-flex-positive: 1;
-        flex-grow: 1;
-        background: green;
-        -ms-flex-negative: 0;
-        flex-shrink: 0; }
+        height: 100%;
+        overflow-y: auto; }
 
 @-webkit-keyframes flyingNumber {
   0% {
@@ -295,7 +291,7 @@
   position: absolute;
   height: 128px;
   width: 128px;
-  background: url("./assets/images/misc_torch.gif");
+  background: url("./assets/images/misc-torch.gif");
   background-size: 100% 100%;
   image-rendering: -moz-crisp-edges;
   -ms-interpolation-mode: nearest-neighbor;
@@ -316,19 +312,35 @@
   -webkit-box-direction: normal;
   -ms-flex-flow: row nowrap;
   flex-flow: row nowrap;
-  padding: 5px;
+  padding: 5px 20px 5px 0;
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
   color: white;
-  letter-spacing: .6px; }
+  letter-spacing: .6px;
+  background: url("./assets/images/misc-building_button.png");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  -webkit-box-shadow: 0 0 20px #222 inset;
+  box-shadow: 0 0 20px #222 inset;
+  height: 70px;
+  cursor: pointer; }
+  .building:hover {
+    -webkit-box-shadow: 0 0 5px #fff inset;
+    box-shadow: 0 0 5px #fff inset; }
   .building * {
-    font-family: 'Germania One'; }
+    font-family: 'Germania One';
+    pointer-events: none; }
   .building .left {
     padding-right: 5px; }
   .building .middle {
     -webkit-box-flex: 1;
     -ms-flex-positive: 1;
     flex-grow: 1; }
+    .building .middle h1 {
+      text-shadow: 0 0 1px black; }
     .building .middle p {
       color: #222; }
+  .building .right h1 {
+    font-size: 35px;
+    text-shadow: 0 0 3px black; }

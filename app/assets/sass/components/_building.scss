@@ -1,13 +1,24 @@
 .building {
     display: flex;
     flex-flow: row nowrap;
-    padding: 5px;
+    padding: 5px 20px 5px 0;
     align-items: center;
     color: white;
     letter-spacing: .6px;
+    background: url( './assets/images/misc-building_button.png' );
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    box-shadow: 0 0 20px #222 inset;
+    height: 70px;
+    cursor: pointer;
+
+    &:hover {
+        box-shadow: 0 0 5px #fff inset;
+    }
 
     * {
         font-family: 'Germania One';
+        pointer-events: none;
     }
 
     .left {
@@ -17,8 +28,20 @@
     .middle {
         flex-grow: 1;
 
+        h1 {
+            text-shadow: 0 0 1px black;
+        }
+
         p {
             color: #222;
+        }
+    }
+
+    .right {
+
+        h1 {
+            font-size: 35px;
+            text-shadow: 0 0 3px black;
         }
     }
 }
