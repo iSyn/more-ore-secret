@@ -2,16 +2,31 @@ let Tooltip = function() {
 
   this.show = ( e, obj ) => {
 
+    let str = ''
+    let tooltip_dimensions;
+
     TOOLTIP.style.display = 'flex'
 
     switch ( obj.type ) {
-      case 'building':
-        let building = select_from_arr( Buildings, obj.name ).item
-        let tooltip_dimensions = TOOLTIP.getBoundingClientRect()
+      case 'upgrade':
+        tooltip_dimensions = TOOLTIP.getBoundingClientRect()
+        let upgrade = select_from_arr( Upgrades, obj.name ).item
         TOOLTIP.style.left = ( MIDDLE_VERTICAL_SEPARATOR.getBoundingClientRect().left - tooltip_dimensions.width ) + 'px'
         TOOLTIP.style.top = e.target.getBoundingClientRect().top + 'px'
 
-        let str = `
+        str += `
+          <div>h1</div>
+        `
+        
+        break;
+
+      case 'building':
+        tooltip_dimensions = TOOLTIP.getBoundingClientRect()
+        let building = select_from_arr( Buildings, obj.name ).item
+        TOOLTIP.style.left = ( MIDDLE_VERTICAL_SEPARATOR.getBoundingClientRect().left - tooltip_dimensions.width ) + 'px'
+        TOOLTIP.style.top = e.target.getBoundingClientRect().top + 'px'
+
+        str = `
           <div class='top'>
             <img src='${ building.img }' alt='building image' />
             <h1>${ building.name }</h1>
@@ -30,13 +45,14 @@ let Tooltip = function() {
             <p class='building-flavor-text'>${ building.flavor_text }</p>
           </div>
         `
-        TOOLTIP.innerHTML = str
         break
 
       default:
         break
 
     }
+
+    TOOLTIP.innerHTML = str
 
     
   }

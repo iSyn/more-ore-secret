@@ -56,7 +56,7 @@ let build_upgrades = () => {
   Upgrades.forEach( upgrade => {
     if ( upgrade.hidden == 0 && !upgrade.owned ) {
       str += `
-        <div class='upgrade' onclick="Upgrades[ ${ index } ].buy( event )" onmouseover="SFX.store_item_hover.play()">
+        <div class='upgrade' onclick="Upgrades[ ${ index } ].buy( event )" onmouseover="SFX.store_item_hover.play(); TT.show( event, { name: '${ upgrade.code_name }', type: 'upgrade' } )" onmouseout="TT.hide()">
 
         </div>
       `
