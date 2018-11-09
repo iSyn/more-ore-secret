@@ -1,6 +1,6 @@
 .wrapper {
   height: 100vh;
-  width: 100vh;
+  width: 100vw;
   position: absolute;
   background: rgba( 0, 0, 0, 0.6 );
   z-index: 2;
@@ -13,6 +13,7 @@
     left: 50%;
     transform: translate( -50%, -50% );
     padding: 0 15px;
+    min-width: 300px;
 
     .fa-times {
       position: absolute;
@@ -23,6 +24,7 @@
     > h1 {
       text-align: center;
       padding-top: 5px;
+      letter-spacing: .5px;
     }
 
     > .fa-times {

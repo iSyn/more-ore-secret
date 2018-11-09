@@ -17,7 +17,7 @@ let Building = function( obj ) {
         if ( S.ores >= this.current_price ) {
             spend( this.current_price )
             RN.new( e, 'successful-buy')
-            SFX.buy_sound.play()
+            play_sound( 'buy_sound' )
             this.owned++
             this.current_price = this.base_price * Math.pow( this.price_scale, this.owned )
             calculate_ops()
@@ -27,8 +27,8 @@ let Building = function( obj ) {
             if ( this.buy_functions ) {
                 if ( this.buy_functions.unlock_upgrades ) {
                     this.buy_functions.unlock_upgrades.forEach( upgrade => {
-                        if ( this.owned >= upgrade[ 1 ] ) {
-                            unlock_upgrade( upgrade[ 0 ] )
+                        if ( this.owned >= upgrade.amount_needed ) {
+                            unlock_upgrade( upgrade.code_name )
                         }
                     })
                 }
@@ -55,7 +55,11 @@ let buildings = [
         hidden: 0,
         buy_functions: {
             unlock_upgrades: [
-                ["composition_notebooks", 1]
+                { code_name: 'composition_notebooks', amount_needed: 1 },
+                { code_name: 'no._2_pencil', amount_needed: 10 },
+                { code_name: '3_ring_binder', amount_needed: 20 },
+                { code_name: 'looseleaf', amount_needed: 50 },
+                { code_name: 'schoolbag', amount_needed: 100 }
             ]
         }
     }, {

@@ -8,7 +8,9 @@ let remove_el = ( el ) => {
 
 let remove_wrapper = () => {
   let wrappers = document.querySelectorAll( '.wrapper' )
-  remove_el( wrappers[ wrappers.length - 1 ] )
+  if ( wrappers.length > 0 ){
+    remove_el( wrappers[ wrappers.length - 1 ] )
+  }
 }
 
 let get_random_num = ( min, max ) => {
@@ -88,11 +90,9 @@ let beautify_number = (number) => {
 
 let select_from_arr = ( arr, code_name ) => {
   for ( let i in arr ) {
-    if ( arr[i].code_name === code_name ) {
-      return { 
-        item: arr[i], 
-        index: parseInt( i ) 
-      }
+    if ( arr[ i ].code_name === code_name ) {
+      arr[ i ].index = parseInt( i )
+      return arr[ i ]
     }
   }
 }

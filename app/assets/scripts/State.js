@@ -1,7 +1,7 @@
 let State = function( s = {} ) {
 
   this.state = {
-    ores: s.ores || 0,
+    ores: s.ores || 300000000000,
     gems: s.ores || 0,
     generation: s.generation || 1,
     ops: s.ops || 0,

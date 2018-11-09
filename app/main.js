@@ -1,3 +1,4 @@
+const CONTAINER = s( '.container' )
 const GAME_CONTAINER = s( '.game-container' )
 const ORE_SPRITE = s( '.ore-sprite' )
 const RIGHT_CONTAINER = s( '.right-container' )
@@ -307,13 +308,13 @@ let update_topbar_inventory = () => {
   INVENTORY_EL.innerHTML = str
 }
 
-let build_stats = () => {
+let build_achievements = () => {
   let wrapper = document.createElement( 'div' )
   wrapper.classList.add( 'wrapper' )
 
   let str = `
     <div class='stats-container'>
-      <h1>Stats</h1>
+      <h1>Achievements</h1>
       <i onclick='remove_wrapper()' class='fa fa-times fa-1x'></i>
     </div>
   `
@@ -344,10 +345,15 @@ let build_settings = () => {
   `
 
   wrapper.innerHTML = str
-  GAME_CONTAINER.append( wrapper )
+  CONTAINER.append( wrapper )
 }
 
 window.onload = () => { init_game() }
 window.onresize = () => { reposition_elements() }
 window.onblur = () => { S.prefs.window_blurred = true }
 window.onfocus = () => { S.prefs.window_blurred = false }
+document.onkeydown = ( e ) => {
+  if ( e.code == 'Escape' || e.key == 'Escape' ) {
+    remove_wrapper()
+  }
+};

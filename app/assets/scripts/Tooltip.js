@@ -10,7 +10,7 @@ let Tooltip = function() {
     switch ( obj.type ) {
       case 'upgrade':
         tooltip_dimensions = TOOLTIP.getBoundingClientRect()
-        let upgrade = select_from_arr( Upgrades, obj.name ).item
+        let upgrade = select_from_arr( Upgrades, obj.name )
         TOOLTIP.style.left = ( MIDDLE_VERTICAL_SEPARATOR.getBoundingClientRect().left - tooltip_dimensions.width ) + 'px'
         TOOLTIP.style.top = e.target.getBoundingClientRect().top + 'px'
 
@@ -31,7 +31,7 @@ let Tooltip = function() {
 
       case 'building':
         tooltip_dimensions = TOOLTIP.getBoundingClientRect()
-        let building = select_from_arr( Buildings, obj.name ).item
+        let building = select_from_arr( Buildings, obj.name )
         TOOLTIP.style.left = ( MIDDLE_VERTICAL_SEPARATOR.getBoundingClientRect().left - tooltip_dimensions.width ) + 'px'
         TOOLTIP.style.top = e.target.getBoundingClientRect().top + 'px'
 
@@ -49,7 +49,7 @@ let Tooltip = function() {
               `
               if ( building.owned > 0 ) {
                 str += `<li><strong>${ building.owned }</strong> ${ building.owned <= 1 ? building.name : building.name_plural } generating <strong>${ beautify_number( building.production * building.owned ) }</strong> OpS </li>`
-                str += `<li>Schools are currently generating ${ calculate_building_ops( building.owned, building.production ) }% of your total OpS</li>`
+                str += `<li>Schools are currently generating <strong>${ calculate_building_ops( building.owned, building.production ) }%</strong> of your total OpS</li>`
               }
               str += `
             </ul>
