@@ -184,7 +184,7 @@ let handle_click = ( e, type ) => {
     SFX.ore_hit_sfx.play()
     S.current_combo = 0
     RN.new( event, 'click', opc )
-    PE.generate_rock_particles()
+    // PE.generate_rock_particles( e )
   }
 
   S.stats.total_clicks++

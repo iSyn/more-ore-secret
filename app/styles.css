@@ -464,5 +464,25 @@
 
 .particle {
   position: absolute;
-  height: 1px;
-  width: 1px; }
+  height: 3px;
+  width: 3px;
+  border-radius: 50%;
+  background: lightgrey;
+  -webkit-transition: all .2s;
+  transition: all .2s;
+  -webkit-animation: particle_fall .5s forwards linear;
+  animation: particle_fall .5s forwards linear; }
+
+@-webkit-keyframes particle_fall {
+  0% {
+    transfrom: translateY(0); }
+  100% {
+    -webkit-transform: translateY(100px);
+    transform: translateY(100px); } }
+
+@keyframes particle_fall {
+  0% {
+    transfrom: translateY(0); }
+  100% {
+    -webkit-transform: translateY(100px);
+    transform: translateY(100px); } }

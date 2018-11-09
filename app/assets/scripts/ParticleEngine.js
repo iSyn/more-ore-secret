@@ -9,10 +9,14 @@ let ParticleEngine = function() {
       let particle = document.createElement( 'div' )
       particle.classList.add( 'particle' )
 
-      particle.style.position = 'absolute'
-      particle.style.height = '1px'
-      particle.style.width = '1px'
+      particle.style.left = event.clientX + 'px'
+      particle.style.top = event.clientY + 'px'
 
+      s( 'body' ).append( particle )
+
+      particle.addEventListener('animationend', () => {
+        remove_el( particle )
+      })
     }
 
 
