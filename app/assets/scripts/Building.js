@@ -200,17 +200,26 @@ buildings.forEach( building => {
 })
 
 let __update_hidden = ( code_name ) => {
-    let buying = select_from_arr( Buildings, code_name )
+    let building = select_from_arr( Buildings, code_name )
+    let item;
 
-    if ( Buildings[ buying.index + 1 ] ) {
-        Buildings[ buying.index + 1 ].hidden = 0
+    item = Buildings[ building.index + 1 ]
+    if ( item.hidden != 0 ) {
+        item.hidden = 0
     }
 
-    if ( Buildings[ buying.index + 2 ] ) {
-        Buildings[ buying.index + 2 ].hidden = 1
+    item = Buildings[ building.index + 2 ]
+    if ( item ) {
+        if ( item.hidden != 0 && item.hidden != 1 ) {
+            item.hidden = 1
+        }
     }
 
-    if ( Buildings[ buying.index + 3 ] ) {
-        Buildings[ buying.index + 3 ].hidden = 1
+    item = Buildings[ building.index + 3 ]
+    if ( item ) {
+        if ( item.hidden != 0 && item.hidden != 1 ) {
+            item.hidden = 1
+        }
     }
+
 }
