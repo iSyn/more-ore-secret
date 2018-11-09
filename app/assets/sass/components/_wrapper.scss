@@ -1,0 +1,48 @@
+.wrapper {
+  height: 100vh;
+  width: 100vh;
+  position: absolute;
+  background: rgba( 0, 0, 0, 0.6 );
+  z-index: 2;
+  color: white;
+
+  > div {
+    background: #222;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate( -50%, -50% );
+    padding: 0 15px;
+
+    .fa-times {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+    }
+
+    > h1 {
+      text-align: center;
+      padding-top: 5px;
+    }
+
+    > .fa-times {
+      cursor: pointer;
+    }
+
+    > hr {
+      border-color: rgba(255, 255, 255, 0.2);
+      margin: 5px 0;
+    }
+
+    > div {
+      display: flex;
+      flex-flow: row nowrap;
+      justify-content: space-between;
+      align-items: center;
+
+      p {
+        padding-right: 20px;
+      }
+    }
+  }
+}

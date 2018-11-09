@@ -1,3 +1,4 @@
+const GAME_CONTAINER = s( '.game-container' )
 const ORE_SPRITE = s( '.ore-sprite' )
 const RIGHT_CONTAINER = s( '.right-container' )
 const INVENTORY_EL = s( '.topbar-inventory' )
@@ -11,13 +12,19 @@ const TORCH_RIGHT = s( '.torch-right' )
 const TAB_CONTENT = s( '.tab-content' )
 const TEXT_SCROLLER_CONTAINER = s( '.text-scroller-container' )
 const TOOLTIP = s( '.tooltip' )
+const SETTINGS_CONTAINER = s( '.settings-container' )
 
 let S = new State().state
-let SFX = new SoundEngine()
 let RN = new RisingNumber()
 let TS = new TextScroller()
 let TT = new Tooltip()
 let PE = new ParticleEngine()
+
+let play_sound = ( sound, base_vol = 1 ) => {
+  let sfx = new Audio( `./assets/sounds/${ sound }.wav` )
+  sfx.volume = S.prefs.sfx_volume * base_vol
+  sfx.play()
+}
 
 let earn = ( amount ) => {
   update_ore_hp( amount )
@@ -28,18 +35,23 @@ let earn = ( amount ) => {
 
 let spend = ( amount ) => {
   S.ores -= amount
-  SFX.buy_sound.play()
+  play_sound( 'buy_sound' )
 }
 
 let reposition_elements = () => {
-  let left_vertical_separator_coords = LEFT_VERTICAL_SEPARATOR.getBoundingClientRect()
-  let middle_vertical_separator_coords = MIDDLE_VERTICAL_SEPARATOR.getBoundingClientRect()
-  let torch_coords = TORCH_LEFT.getBoundingClientRect()
+  let left_vertical_separator_dimensions = LEFT_VERTICAL_SEPARATOR.getBoundingClientRect()
+  let middle_vertical_separator_dimensions = MIDDLE_VERTICAL_SEPARATOR.getBoundingClientRect()
+  let torch_dimensions = TORCH_LEFT.getBoundingClientRect()
+  let settings_container_dimensions = SETTINGS_CONTAINER.getBoundingClientRect()
+  let text_scroller_container_dimensions = TEXT_SCROLLER_CONTAINER.getBoundingClientRect()
 
   // Position torches to the separators
-  TORCH_LEFT.style.left = left_vertical_separator_coords.right + 'px'
-  TORCH_RIGHT.style.left = middle_vertical_separator_coords.left - torch_coords.width + 'px'
+  TORCH_LEFT.style.left = left_vertical_separator_dimensions.right + 'px'
+  TORCH_RIGHT.style.left = middle_vertical_separator_dimensions.left - torch_dimensions.width + 'px'
 
+  // Position settings container
+  SETTINGS_CONTAINER.style.left = middle_vertical_separator_dimensions.left - settings_container_dimensions.width + 'px'
+  SETTINGS_CONTAINER.style.top = text_scroller_container_dimensions.top - settings_container_dimensions.height + 'px'
 }
 
 let build_store = () => {
@@ -57,7 +69,7 @@ let build_upgrades = () => {
   Upgrades.forEach( upgrade => {
     if ( upgrade.hidden == 0 && !upgrade.owned ) {
       str += `
-        <div class='upgrade' onclick="Upgrades[ ${ index } ].buy( event )" onmouseover="SFX.store_item_hover.play(); TT.show( event, { name: '${ upgrade.code_name }', type: 'upgrade' } )" onmouseout="TT.hide()">
+        <div class='upgrade' onclick="Upgrades[ ${ index } ].buy( event )" onmouseover="play_sound( 'store_item_hover' ); TT.show( event, { name: '${ upgrade.code_name }', type: 'upgrade' } )" onmouseout="TT.hide()">
 
         </div>
       `
@@ -77,7 +89,7 @@ let build_buildings = () => {
   Buildings.forEach( building => {
     if ( building.hidden == 0 ) {
       str += `
-        <div class="building" onclick="Buildings[ ${ index } ].buy( event )" onmouseover="SFX.store_item_hover.play(); TT.show( event, { name: '${ building.code_name }', type: 'building' } )" onmouseout="TT.hide()">
+        <div class="building" onclick="Buildings[ ${ index } ].buy( event )" onmouseover="play_sound( 'store_item_hover' ); TT.show( event, { name: '${ building.code_name }', type: 'building' } )" onmouseout="TT.hide()">
           <div class="left">
             <img src="${ building.img }" alt="building image"/>
           </div>
@@ -173,7 +185,7 @@ let handle_click = ( e, type ) => {
   let opc = calculate_opc( type )
 
   if ( type ) {
-    SFX.ore_weak_spot_hit_sfx.play()
+    play_sound( 'ore_weak_spot_hit' )
     S.stats.total_weak_hit_clicks++
     S.current_combo++
     if ( S.current_combo > S.stats.highest_combo ) S.stats.highest_combo = S.current_combo
@@ -181,7 +193,7 @@ let handle_click = ( e, type ) => {
     RN.new( event, 'weak-hit-click', opc )
     generate_weak_spot()
   } else {
-    SFX.ore_hit_sfx.play()
+    play_sound( 'ore_hit' )
     S.current_combo = 0
     RN.new( event, 'click', opc )
     // PE.generate_rock_particles( e )
@@ -234,7 +246,7 @@ let start_loop = () => {
 
 let update_ore_hp = ( amount ) => {
   if (S.current_ore_hp - amount <= 0 ) {
-    SFX.ore_destroyed_sfx.play()
+    play_sound( 'ore_destroyed' )
     S.stats.current_rocks_destroyed += 1
     S.stats.total_rocks_destroyed += 1
     S.current_ore_max_hp *= 1.5
@@ -253,19 +265,19 @@ let update_ore_sprite = () => {
     ORE_SPRITE.src = '/assets/images/ore1-1.png'
     current_sprite = 1
   } else if ( current_percentage <= 80 && current_percentage > 60 && current_sprite != 2 ) {
-    SFX.ore_percentage_lost_sfx.play()
+    play_sound( 'ore_percentage_lost' )
     ORE_SPRITE.src = '/assets/images/ore1-2.png'
     current_sprite = 2
   } else if ( current_percentage <= 60 && current_percentage > 40 && current_sprite != 3 ) {
-    SFX.ore_percentage_lost_sfx.play()
+    play_sound( 'ore_percentage_lost' )
     ORE_SPRITE.src = '/assets/images/ore1-3.png'
     current_sprite = 3
   } else if ( current_percentage <= 40 && current_percentage > 20 && current_sprite != 4 ) {
-    SFX.ore_percentage_lost_sfx.play()
+    play_sound( 'ore_percentage_lost' )
     ORE_SPRITE.src = '/assets/images/ore1-4.png'
     current_sprite = 4
   } else if ( current_percentage <= 20 && current_sprite != 5 ) {
-    SFX.ore_percentage_lost_sfx.play()
+    play_sound( 'ore_percentage_lost' )
     ORE_SPRITE.src = '/assets/images/ore1-5.png'
     current_sprite = 5
   }
@@ -293,6 +305,46 @@ let update_topbar_inventory = () => {
   `
 
   INVENTORY_EL.innerHTML = str
+}
+
+let build_stats = () => {
+  let wrapper = document.createElement( 'div' )
+  wrapper.classList.add( 'wrapper' )
+
+  let str = `
+    <div class='stats-container'>
+      <h1>Stats</h1>
+      <i onclick='remove_wrapper()' class='fa fa-times fa-1x'></i>
+    </div>
+  `
+
+  wrapper.innerHTML = str
+  GAME_CONTAINER.append( wrapper )
+}
+
+let build_settings = () => {
+  let wrapper = document.createElement( 'div' )
+  wrapper.classList.add( 'wrapper' )
+
+  let str = `
+    <div class='settings-container'>
+      <h1>Settings</h1>
+      <i onclick='remove_wrapper()' class='fa fa-times fa-1x'></i>
+      <hr />
+      <div>
+        <p>Disable Rock Flying Numbers</p>
+        <input type='checkbox'>
+      </div>
+      <div>
+        <p>Disable Rock Particles</p>
+        <input type='checkbox'>
+      </div>
+      
+    </div>
+  `
+
+  wrapper.innerHTML = str
+  GAME_CONTAINER.append( wrapper )
 }
 
 window.onload = () => { init_game() }

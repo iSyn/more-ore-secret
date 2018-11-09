@@ -6,6 +6,11 @@ let remove_el = ( el ) => {
   el.parentNode.removeChild( el )
 }
 
+let remove_wrapper = () => {
+  let wrappers = document.querySelectorAll( '.wrapper' )
+  remove_el( wrappers[ wrappers.length - 1 ] )
+}
+
 let get_random_num = ( min, max ) => {
   return Math.floor( Math.random() * ( max - min + 1 ) ) + min;
 }

@@ -120,6 +120,22 @@
       }
     }
 
+    .settings-container {
+      position: absolute;
+      padding: 5px;
+
+      i {
+        color: lightgrey;
+        opacity: .3;
+        padding-right: 5px;
+        cursor: pointer;
+
+        &:hover {
+          opacity: .5;
+        }
+      }
+    }
+
     .text-scroller-container {
       background: rgba(0, 0, 0, 0.6);
       position: relative;

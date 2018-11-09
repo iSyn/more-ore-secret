@@ -24,8 +24,8 @@ let State = function( s = {} ) {
 
     prefs: {
       game_speed: 30,
-      sfx_volume: 0,
-      bgm_volume: 0,
+      sfx_volume: 1,
+      bgm_volume: 1,
       show_rising_numbers: true,
       show_ops_rising_numbers: true,
       window_blurred: false

@@ -176,6 +176,16 @@
             height: 20px;
             -webkit-animation: spin 1.5s linear infinite;
             animation: spin 1.5s linear infinite; }
+    .game-container > .left .settings-container {
+      position: absolute;
+      padding: 5px; }
+      .game-container > .left .settings-container i {
+        color: lightgrey;
+        opacity: .3;
+        padding-right: 5px;
+        cursor: pointer; }
+        .game-container > .left .settings-container i:hover {
+          opacity: .5; }
     .game-container > .left .text-scroller-container {
       background: rgba(0, 0, 0, 0.6);
       position: relative;
@@ -486,3 +496,47 @@
   100% {
     -webkit-transform: translateY(100px);
     transform: translateY(100px); } }
+
+.wrapper {
+  height: 100vh;
+  width: 100vh;
+  position: absolute;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 2;
+  color: white; }
+  .wrapper > div {
+    background: #222;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    padding: 0 15px; }
+    .wrapper > div .fa-times {
+      position: absolute;
+      top: 5px;
+      right: 5px; }
+    .wrapper > div > h1 {
+      text-align: center;
+      padding-top: 5px; }
+    .wrapper > div > .fa-times {
+      cursor: pointer; }
+    .wrapper > div > hr {
+      border-color: rgba(255, 255, 255, 0.2);
+      margin: 5px 0; }
+    .wrapper > div > div {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-orient: horizontal;
+      -webkit-box-direction: normal;
+      -ms-flex-flow: row nowrap;
+      flex-flow: row nowrap;
+      -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+      justify-content: space-between;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      align-items: center; }
+      .wrapper > div > div p {
+        padding-right: 20px; }
