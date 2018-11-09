@@ -1,10 +1,18 @@
 .upgrades-container {
   display: flex;
-  flex-flow: row nowrap;
+  flex-flow: row wrap;
+  max-height: 50px;
+  transition: max-height .2s ease-in-out;
+  overflow: hidden;
+
+  &:hover {
+    max-height: 300px;
+  }
 
   .upgrade {
     height: 50px;
     width: 50px;
+    flex-shrink: 0;
     background: url("./assets/images/upgrade-upgrade_container.png");
     background-size: 100%;
     image-rendering: pixelated;

@@ -15,7 +15,16 @@ let Tooltip = function() {
         TOOLTIP.style.top = e.target.getBoundingClientRect().top + 'px'
 
         str += `
-          <div>h1</div>
+          <div class='top'>
+            <img src='${ upgrade.img }' alt='upgrade image' />
+            <h1>${ upgrade.name }</h1>
+            <p>${ beautify_number( upgrade.price ) } ores</p>
+          </div>
+          <hr />
+          <div class='bottom'>
+            <p class='desc'>${ upgrade.desc }</p>
+            <p class='flavor-text'>${ upgrade.flavor_text }</p>
+          </div>
         `
         
         break;
@@ -32,8 +41,9 @@ let Tooltip = function() {
             <h1>${ building.name }</h1>
             <p>${ beautify_number( building.current_price ) } Ores </p>
           </div>
+          <hr />
           <div class='bottom'>
-            <p class='building-desc'>${ building.desc }</p>
+            <p class='desc'>${ building.desc }</p>
             <ul>
               <li>Each ${ building.name } generates <strong>${ beautify_number( building.production ) }</strong> OpS</li>
               `
@@ -42,7 +52,7 @@ let Tooltip = function() {
               }
               str += `
             </ul>
-            <p class='building-flavor-text'>${ building.flavor_text }</p>
+            <p class='flavor-text'>${ building.flavor_text }</p>
           </div>
         `
         break

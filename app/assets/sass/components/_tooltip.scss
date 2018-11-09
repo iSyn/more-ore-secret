@@ -5,7 +5,7 @@
   background: #222;
   color: white;
   padding: 10px;
-  width: 300px;
+  min-width: 350px;
   z-index: 1;
 
   .top {
@@ -13,17 +13,29 @@
     flex-flow: row nowrap;
     align-items: center;
 
+    img {
+      height: 32px;
+      width: 32px;
+    }
+
     h1 {
       font-family: 'Germania One';
       padding-left: 10px;
       flex-grow: 1;
+      font-size: 22px;
+      padding-right: 10px;
     }
   }
 
-  .bottom {
-    padding-top: 10px;
+  hr {
+    margin: 10px 0;
+    border-color: rgba(255, 255, 255, 0.2);
+  }
 
-    .building-desc {
+  .bottom {
+    // padding-top: 10px;
+
+    .desc {
       padding-bottom: 10px;
     }
 
@@ -37,7 +49,7 @@
       }
     }
 
-    .building-flavor-text {
+    .flavor-text {
       text-align: right;
       font-size: 12px;
     }

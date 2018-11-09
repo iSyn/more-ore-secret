@@ -38,6 +38,90 @@ let upgrades = [
         flavor_text: 'College Ruled!',
         price: 80,
         hidden: 0
+    }, {
+        name: 'Composition Notebooks',
+        img: 'https://via.placeholder.com/50',
+        desc: 'Doubles the production of Schools',
+        flavor_text: 'College Ruled!',
+        price: 80,
+        hidden: 0
+    }, {
+        name: 'test',
+        img: 'https://via.placeholder.com/50',
+        desc: 'Doubles the production of Schools',
+        flavor_text: 'College Ruled!',
+        price: 80,
+        hidden: 0
+    }, {
+        name: 'test test',
+        img: 'https://via.placeholder.com/50',
+        desc: 'Doubles the production of Schools',
+        flavor_text: 'College Ruled!',
+        price: 80,
+        hidden: 0
+    }, {
+        name: 'Composition Notebooks',
+        img: 'https://via.placeholder.com/50',
+        desc: 'Doubles the production of Schools',
+        flavor_text: 'College Ruled!',
+        price: 80,
+        hidden: 0
+    }, {
+        name: 'test',
+        img: 'https://via.placeholder.com/50',
+        desc: 'Doubles the production of Schools',
+        flavor_text: 'College Ruled!',
+        price: 80,
+        hidden: 0
+    }, {
+        name: 'test test',
+        img: 'https://via.placeholder.com/50',
+        desc: 'Doubles the production of Schools',
+        flavor_text: 'College Ruled!',
+        price: 80,
+        hidden: 0
+    }, {
+        name: 'Composition Notebooks',
+        img: 'https://via.placeholder.com/50',
+        desc: 'Doubles the production of Schools',
+        flavor_text: 'College Ruled!',
+        price: 80,
+        hidden: 0
+    }, {
+        name: 'test',
+        img: 'https://via.placeholder.com/50',
+        desc: 'Doubles the production of Schools',
+        flavor_text: 'College Ruled!',
+        price: 80,
+        hidden: 0
+    }, {
+        name: 'test test',
+        img: 'https://via.placeholder.com/50',
+        desc: 'Doubles the production of Schools',
+        flavor_text: 'College Ruled!',
+        price: 80,
+        hidden: 0
+    }, {
+        name: 'Composition Notebooks',
+        img: 'https://via.placeholder.com/50',
+        desc: 'Doubles the production of Schools',
+        flavor_text: 'College Ruled!',
+        price: 80,
+        hidden: 0
+    }, {
+        name: 'test',
+        img: 'https://via.placeholder.com/50',
+        desc: 'Doubles the production of Schools',
+        flavor_text: 'College Ruled!',
+        price: 80,
+        hidden: 0
+    }, {
+        name: 'test test',
+        img: 'https://via.placeholder.com/50',
+        desc: 'Doubles the production of Schools',
+        flavor_text: 'College Ruled!',
+        price: 80,
+        hidden: 0
     },
 ]
 
