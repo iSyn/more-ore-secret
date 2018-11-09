@@ -393,7 +393,7 @@
   transition: max-height .2s ease-in-out;
   overflow: hidden; }
   .upgrades-container:hover {
-    max-height: 300px; }
+    max-height: 1000px; }
   .upgrades-container .upgrade {
     height: 50px;
     width: 50px;
@@ -461,3 +461,8 @@
   .tooltip .bottom .flavor-text {
     text-align: right;
     font-size: 12px; }
+
+.particle {
+  position: absolute;
+  height: 1px;
+  width: 1px; }

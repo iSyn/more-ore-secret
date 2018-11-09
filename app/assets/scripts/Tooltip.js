@@ -49,6 +49,7 @@ let Tooltip = function() {
               `
               if ( building.owned > 0 ) {
                 str += `<li><strong>${ building.owned }</strong> ${ building.owned <= 1 ? building.name : building.name_plural } generating <strong>${ beautify_number( building.production * building.owned ) }</strong> OpS </li>`
+                str += `<li>Schools are currently generating ${ calculate_building_ops( building.owned, building.production ) }% of your total OpS</li>`
               }
               str += `
             </ul>

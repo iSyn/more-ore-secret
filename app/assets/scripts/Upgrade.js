@@ -3,7 +3,7 @@ let Upgrade = function( obj ) {
     this.code_name = obj.name.replace( / /g, '_' ).toLowerCase()
     this.img = obj.img
     this.desc = obj.desc
-    this.flavor_text = obj.flavor_text
+    this.flavor_text = obj.flavor_text || ''
     this.price = obj.price
     this.hidden = obj.hidden 
     this.owned = obj.owned || false
@@ -24,105 +24,7 @@ let upgrades = [
         flavor_text: 'College Ruled!',
         price: 80,
         hidden: 0
-    }, {
-        name: 'test',
-        img: 'https://via.placeholder.com/50',
-        desc: 'Doubles the production of Schools',
-        flavor_text: 'College Ruled!',
-        price: 80,
-        hidden: 0
-    }, {
-        name: 'test test',
-        img: 'https://via.placeholder.com/50',
-        desc: 'Doubles the production of Schools',
-        flavor_text: 'College Ruled!',
-        price: 80,
-        hidden: 0
-    }, {
-        name: 'Composition Notebooks',
-        img: 'https://via.placeholder.com/50',
-        desc: 'Doubles the production of Schools',
-        flavor_text: 'College Ruled!',
-        price: 80,
-        hidden: 0
-    }, {
-        name: 'test',
-        img: 'https://via.placeholder.com/50',
-        desc: 'Doubles the production of Schools',
-        flavor_text: 'College Ruled!',
-        price: 80,
-        hidden: 0
-    }, {
-        name: 'test test',
-        img: 'https://via.placeholder.com/50',
-        desc: 'Doubles the production of Schools',
-        flavor_text: 'College Ruled!',
-        price: 80,
-        hidden: 0
-    }, {
-        name: 'Composition Notebooks',
-        img: 'https://via.placeholder.com/50',
-        desc: 'Doubles the production of Schools',
-        flavor_text: 'College Ruled!',
-        price: 80,
-        hidden: 0
-    }, {
-        name: 'test',
-        img: 'https://via.placeholder.com/50',
-        desc: 'Doubles the production of Schools',
-        flavor_text: 'College Ruled!',
-        price: 80,
-        hidden: 0
-    }, {
-        name: 'test test',
-        img: 'https://via.placeholder.com/50',
-        desc: 'Doubles the production of Schools',
-        flavor_text: 'College Ruled!',
-        price: 80,
-        hidden: 0
-    }, {
-        name: 'Composition Notebooks',
-        img: 'https://via.placeholder.com/50',
-        desc: 'Doubles the production of Schools',
-        flavor_text: 'College Ruled!',
-        price: 80,
-        hidden: 0
-    }, {
-        name: 'test',
-        img: 'https://via.placeholder.com/50',
-        desc: 'Doubles the production of Schools',
-        flavor_text: 'College Ruled!',
-        price: 80,
-        hidden: 0
-    }, {
-        name: 'test test',
-        img: 'https://via.placeholder.com/50',
-        desc: 'Doubles the production of Schools',
-        flavor_text: 'College Ruled!',
-        price: 80,
-        hidden: 0
-    }, {
-        name: 'Composition Notebooks',
-        img: 'https://via.placeholder.com/50',
-        desc: 'Doubles the production of Schools',
-        flavor_text: 'College Ruled!',
-        price: 80,
-        hidden: 0
-    }, {
-        name: 'test',
-        img: 'https://via.placeholder.com/50',
-        desc: 'Doubles the production of Schools',
-        flavor_text: 'College Ruled!',
-        price: 80,
-        hidden: 0
-    }, {
-        name: 'test test',
-        img: 'https://via.placeholder.com/50',
-        desc: 'Doubles the production of Schools',
-        flavor_text: 'College Ruled!',
-        price: 80,
-        hidden: 0
-    },
+    }
 ]
 
 upgrades.forEach( upgrade => new Upgrade( upgrade ) )

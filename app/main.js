@@ -17,6 +17,7 @@ let SFX = new SoundEngine()
 let RN = new RisingNumber()
 let TS = new TextScroller()
 let TT = new Tooltip()
+let PE = new ParticleEngine()
 
 let earn = ( amount ) => {
   update_ore_hp( amount )
@@ -131,6 +132,11 @@ let calculate_ops = () => {
   S.ops = ops
 }
 
+let calculate_building_ops = ( building_owned, building_production ) => {
+  let percentage = ( ( building_owned * building_production ) / S.ops ) * 100
+  return beautify_number( percentage )
+}
+
 let init_game = () => {
   start_loop()
   generate_weak_spot()
@@ -178,6 +184,7 @@ let handle_click = ( e, type ) => {
     SFX.ore_hit_sfx.play()
     S.current_combo = 0
     RN.new( event, 'click', opc )
+    PE.generate_rock_particles()
   }
 
   S.stats.total_clicks++
