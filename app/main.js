@@ -20,10 +20,10 @@ let TS = new TextScroller()
 let TT = new Tooltip()
 let PE = new ParticleEngine()
 
-let play_sound = ( sound, base_vol = 1 ) => {
-  let sfx = new Audio( `./assets/sounds/${ sound }.wav` )
-  sfx.volume = S.prefs.sfx_volume * base_vol
-  sfx.play()
+let play_sound = ( name, file_type = 'wav', base_vol = 1 ) => {
+  let sound = new Audio( `./assets/sounds/${ name }.${ file_type }` )
+  sound.volume = S.prefs.sfx_volume * base_vol
+  sound.play()
 }
 
 let earn = ( amount ) => {
