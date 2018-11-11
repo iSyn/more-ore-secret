@@ -672,3 +672,31 @@
     -webkit-box-direction: normal;
     -ms-flex-flow: column nowrap;
     flex-flow: column nowrap; }
+
+.automater-container {
+  position: absolute;
+  top: 30px;
+  left: 30px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -ms-flex-flow: row nowrap;
+  flex-flow: row nowrap;
+  background: #222;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  color: white; }
+  .automater-container header {
+    font-size: 14px;
+    padding: 20px 0;
+    -webkit-writing-mode: vertical-lr;
+    -ms-writing-mode: tb-lr;
+    writing-mode: vertical-lr;
+    text-orientation: mixed;
+    -webkit-transform: rotate(180deg);
+    transform: rotate(180deg);
+    letter-spacing: 5px;
+    line-height: 25px;
+    cursor: pointer; }

@@ -1,0 +1,23 @@
+.automater-container {
+    position: absolute;
+    top: 30px;
+    left: 30px;
+    display: flex;
+    flex-flow: row nowrap;
+    background: #222;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    color: white;
+
+
+    header {
+        font-size: 14px;
+        padding: 20px 0;
+        writing-mode: vertical-lr;
+        text-orientation: mixed;
+        transform: rotate( 180deg );
+        letter-spacing: 5px;
+        line-height: 25px;
+        cursor: pointer;
+    }
+}

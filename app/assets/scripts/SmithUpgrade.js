@@ -26,7 +26,7 @@ let smith_upgrades = [,
         img: 'https://via.placeholder.com/64',
         desc: 'Increases your pickaxe sharpness by 5%',
         flavor_text: 'Whetstone it 20 degrees each side',
-        duration: 5,
+        duration: 1,
         repeat: 1,
         price: 10,
         price_scale: 1.35,
@@ -39,6 +39,13 @@ let smith_upgrades = [,
         repeat: 1,
         price: 10,
         price_scale: 1.35,
+    }, {
+        name: 'A U T O M A T E R',
+        img: 'https://via.placeholder.com/75',
+        desc: 'Unlocks the A U T O M A T E R',
+        flavor_text: 'beep bop robot noise',
+        duration: 5 * 60,
+        price: 1
     }
 ]
 

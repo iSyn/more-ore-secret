@@ -72,6 +72,10 @@
 
 .smith-upgrade {
 
+  &:not(.repeatable) {
+    
+  }
+
   &.repeatable {
     padding: 10px 5px;
     display: flex;

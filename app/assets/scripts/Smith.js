@@ -1,5 +1,7 @@
 let Smith = function( obj = {} ) {
 
+    this.click_duration = 1000
+
     this.upgrade_in_progress = {}
     this.duration = obj.duration * 1000 || 0
     this.current_progress = obj.current_progress || 0
@@ -11,6 +13,13 @@ let Smith = function( obj = {} ) {
 
         this._update_progress()
 
+    }
+
+    this.progress_click = () => {
+        console.log('fire')
+        if ( !is_empty( this.upgrade_in_progress ) ) {
+            this.current_progress += this.click_duration
+        }
     }
 
     this._update_progress = () => {
@@ -39,10 +48,18 @@ let Smith = function( obj = {} ) {
 
     this._update_complete = () => {
 
+        console.log( this.upgrade_in_progress )
+
+        this.upgrade_in_progress.owned = 1
+        if ( this.upgrade_in_progress.repeat ) {
+            this.upgrade_in_progress.level++
+        }
+
         this.upgrade_in_progress = {}
         this.current_progress = 0
 
         build_pickaxe_update( true )
+        build_smith_upgrades( true )
     }
 
 }

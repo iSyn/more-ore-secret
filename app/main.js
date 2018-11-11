@@ -15,6 +15,8 @@ const TEXT_SCROLLER_CONTAINER = s( '.text-scroller-container' )
 const TOOLTIP = s( '.tooltip' )
 const SETTINGS_CONTAINER = s( '.settings-container' )
 const TABS_CONTAINER = s( '.tabs-container' )
+const AUTOMATER_CONTAINER = s( '.automater-container' )
+const AUTOMATER_HEADER = s( '.automater-container header' )
 
 let S = new State().state
 let RN = new RisingNumber()
@@ -55,6 +57,11 @@ let reposition_elements = () => {
   // Position settings container
   SETTINGS_CONTAINER.style.left = middle_vertical_separator_dimensions.left - settings_container_dimensions.width + 'px'
   SETTINGS_CONTAINER.style.top = text_scroller_container_dimensions.top - settings_container_dimensions.height + 'px'
+
+  // Position automater
+  let automater_header_dimensions = AUTOMATER_HEADER.getBoundingClientRect()
+  AUTOMATER_CONTAINER.style.left = middle_vertical_separator_dimensions.left - automater_header_dimensions.width + 'px'
+  AUTOMATER_CONTAINER.style.top = '30%'
 }
 
 let change_tab = ( code_name ) => {
@@ -166,7 +173,7 @@ let build_smith = () => {
 
   str += build_pickaxe_accordion()
 
-  str += '<div class="smith-progress-container">'
+  str += '<div class="smith-progress-container" onclick="SMITH.progress_click()">'
   str += build_pickaxe_update()
   str += '</div>'
   str += "<div class='horizontal-separator thin dark'></div>"
@@ -225,12 +232,12 @@ let build_pickaxe_update = ( direct = false ) => {
   return str
 }
 
-let build_smith_upgrades = ( drect = false ) => {
+let build_smith_upgrades = ( direct = false ) => {
   let str = ''
 
   Repeatable_Smith_Upgrades.forEach( upgrade => {
     str += `
-      <div onclick='start_smith_upgrade( "${ upgrade.code_name }" )' class="smith-upgrade repeatable">
+      <div onclick='start_smith_upgrade( Repeatable_Smith_Upgrades, "${ upgrade.code_name }" )' class="smith-upgrade repeatable">
         <img src="${ upgrade.img }" alt="upgrade image"/>
         <div>
           <small>lv. ${ upgrade.level }</small>
@@ -241,6 +248,21 @@ let build_smith_upgrades = ( drect = false ) => {
     `
   } )
 
+  Smith_Upgrades.forEach( upgrade => {
+    str += `
+    <div onclick='start_smith_upgrade( Smith_Upgrades, "${ upgrade.code_name }" )' class="smith-upgrade">
+      <img src="${ upgrade.img }" alt="upgrade image"/>
+    </div>
+    `
+  })
+
+  if ( direct ) {
+    if ( s( '.smith-upgrades' ) ) {
+      s( '.smith-upgrades' ).innerHTML = str
+    }
+    return
+  }
+
   return str
 }
 
@@ -248,8 +270,16 @@ let toggle_pickaxe_accordion = () => {
   s( '.pickaxe-accordion' ).classList.toggle( 'open' )
 }
 
-let start_smith_upgrade = ( code_name ) => {
-  let upgrade = select_from_arr( Repeatable_Smith_Upgrades, code_name )
+let build_automater = () => {
+  let automater_container_coords = AUTOMATER_CONTAINER.getBoundingClientRect()
+}
+
+let toggle_automater_accordion = () => {
+  
+}
+
+let start_smith_upgrade = ( arr, code_name  ) => {
+  let upgrade = select_from_arr( arr, code_name )
 
   if ( is_empty( SMITH.upgrade_in_progress ) ) {
     SMITH.start_upgrade( upgrade )

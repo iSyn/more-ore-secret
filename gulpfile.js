@@ -7,13 +7,13 @@ let browserSync = require( 'browser-sync' )
 gulp.task( 'browserSync', () => {
     browserSync.init( {
         server: {
-            baseDir: './app',
+            baseDir: './',
         }
     } )
 } )
 
 gulp.task( 'sass', () => {
-    return gulp.src( 'app/assets/sass/**/*.scss' )
+    return gulp.src( './app/assets/sass/**/*.scss' )
         .pipe( plumber() )
         .pipe( sass() )
         .pipe( autoprefixer( {
@@ -27,7 +27,7 @@ gulp.task( 'sass', () => {
 } )
 
 gulp.task( 'watch', [ 'sass', 'browserSync' ], () => {
-    gulp.watch( 'app/assets/sass/**/*.scss', [ 'sass' ] )
-    gulp.watch( 'app/*.html', browserSync.reload )
-    gulp.watch( 'app/js/**/*.js', browserSync.reload )
+    gulp.watch( './app/assets/sass/**/*.scss', [ 'sass' ] )
+    gulp.watch( './*.html', browserSync.reload )
+    gulp.watch( './app/js/**/*.js', browserSync.reload )
 })
