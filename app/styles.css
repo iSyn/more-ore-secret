@@ -17,18 +17,25 @@
   image-rendering: -o-pixelated;
   image-rendering: pixelated;
   z-index: 1; }
+  .vertical-separator.dark, .horizontal-separator.dark {
+    -webkit-filter: brightness(60%);
+    filter: brightness(60%); }
 
 .vertical-separator {
   height: 100%;
   width: 15px;
   background: url("./assets/images/misc-vertical_separator.png");
   background-size: 100% auto; }
+  .vertical-separator.thin {
+    width: 8px; }
 
 .horizontal-separator {
   height: 15px;
   width: 100%;
   background: url("./assets/images/misc-horizontal_separator.png");
   background-size: auto 100%; }
+  .horizontal-separator.thin {
+    height: 8px; }
 
 .container {
   height: 100vh;
@@ -234,21 +241,37 @@
         flex-flow: row nowrap;
         -ms-flex-pack: distribute;
         justify-content: space-around;
-        -webkit-box-shadow: 0 0 40px #222 inset;
-        box-shadow: 0 0 40px #222 inset;
-        background-color: #4e3013;
-        text-shadow: 0 0 4px black; }
+        text-shadow: 0 0 4px black;
+        background-color: #4e3013; }
         .game-container .right-container > .right .tabs-container .tab {
           font-family: 'Germania One';
-          padding: 5px 0;
-          font-size: 50px;
+          padding: 15px 0;
+          font-size: 40px;
           color: white;
-          letter-spacing: 3px; }
-          .game-container .right-container > .right .tabs-container .tab.blacksmith-tab {
-            display: none; }
+          background-color: #4e3013;
+          -webkit-box-shadow: 0 0 40px #222 inset;
+          box-shadow: 0 0 40px #222 inset;
+          letter-spacing: 3px;
+          width: 50%;
+          text-align: center;
+          cursor: pointer;
+          -webkit-transition: all .1s;
+          transition: all .1s;
+          -webkit-filter: blur(0.5px) brightness(60%);
+          filter: blur(0.5px) brightness(60%); }
+          .game-container .right-container > .right .tabs-container .tab:hover {
+            opacity: 1;
+            -webkit-filter: brightness(90%);
+            filter: brightness(90%); }
+          .game-container .right-container > .right .tabs-container .tab.selected {
+            opacity: 1;
+            -webkit-filter: brightness(100%);
+            filter: brightness(100%); }
       .game-container .right-container > .right .tab-content-container {
         height: 100%;
-        overflow-y: auto; }
+        overflow-y: auto;
+        background: -webkit-gradient(linear, left top, left bottom, from(lightgrey), to(#222));
+        background: linear-gradient(to bottom, lightgrey, #222); }
 
 @-webkit-keyframes flyingNumber {
   0% {
@@ -542,3 +565,110 @@
       align-items: center; }
       .wrapper > div > div p {
         padding-right: 20px; }
+
+.pickaxe-accordion {
+  max-height: 20px;
+  overflow: hidden;
+  background: #222;
+  color: white;
+  -webkit-transition: all .2s linear;
+  transition: all .2s linear;
+  font-size: 12px;
+  padding: 0 5px;
+  -webkit-box-shadow: 0 0 10px black inset;
+  box-shadow: 0 0 10px black inset; }
+  .pickaxe-accordion.open {
+    max-height: 100px; }
+    .pickaxe-accordion.open header i {
+      -webkit-transform: rotate(180deg);
+      transform: rotate(180deg); }
+  .pickaxe-accordion header {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -ms-flex-flow: row nowrap;
+    flex-flow: row nowrap;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    height: 20px;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    cursor: pointer; }
+    .pickaxe-accordion header > p {
+      letter-spacing: 1px; }
+    .pickaxe-accordion header i {
+      -webkit-transition: -webkit-transform .2s;
+      transition: -webkit-transform .2s;
+      transition: transform .2s;
+      transition: transform .2s, -webkit-transform .2s; }
+  .pickaxe-accordion > div {
+    padding: 10px 0;
+    letter-spacing: .5px; }
+
+.smith-progress-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -ms-flex-flow: row nowrap;
+  flex-flow: row nowrap;
+  padding: 10px;
+  -webkit-box-shadow: 0 0 40px #222 inset;
+  box-shadow: 0 0 40px #222 inset; }
+  .smith-progress-container > img {
+    border: 1px solid black; }
+  .smith-progress-container > div {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-flow: column nowrap;
+    flex-flow: column nowrap;
+    padding-left: 10px;
+    -webkit-box-flex: 1;
+    -ms-flex-positive: 1;
+    flex-grow: 1;
+    -webkit-box-pack: end;
+    -ms-flex-pack: end;
+    justify-content: flex-end; }
+    .smith-progress-container > div .progress-bar-container {
+      margin-top: 5px;
+      border: 1px solid #222;
+      height: 30px; }
+      .smith-progress-container > div .progress-bar-container .progress-bar {
+        width: 66%;
+        height: 100%;
+        background: #222; }
+
+.smith-upgrade.repeatable {
+  padding: 10px 5px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -ms-flex-flow: row nowrap;
+  flex-flow: row nowrap;
+  background: url("./assets/images/misc-building_button.png");
+  background-size: 100% 100%;
+  cursor: pointer;
+  -webkit-box-shadow: 0 0 20px #222 inset;
+  box-shadow: 0 0 20px #222 inset; }
+  .smith-upgrade.repeatable:hover {
+    -webkit-box-shadow: 0 0 5px #fff inset;
+    box-shadow: 0 0 5px #fff inset; }
+  .smith-upgrade.repeatable div {
+    padding-left: 5px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-flow: column nowrap;
+    flex-flow: column nowrap; }

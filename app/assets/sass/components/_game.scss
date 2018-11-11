@@ -174,19 +174,31 @@
         display: flex;
         flex-flow: row nowrap;
         justify-content: space-around;
-        box-shadow: 0 0 40px #222 inset;
-        background-color: #4e3013;
         text-shadow: 0 0 4px black;
+        background-color: #4e3013;
         
         .tab {
           font-family: 'Germania One';
-          padding: 5px 0;
-          font-size: 50px;
+          padding: 15px 0;
+          font-size: 40px;
           color: white;
+          background-color: #4e3013;
+          box-shadow: 0 0 40px #222 inset;
           letter-spacing: 3px;
+          width: 50%;
+          text-align: center;
+          cursor: pointer;
+          transition: all .1s;
+          filter: blur( .5px ) brightness( 60% );
 
-          &.blacksmith-tab {
-            display: none;
+          &:hover {
+            opacity: 1;
+            filter: brightness( 90% );
+          }
+
+          &.selected {
+            opacity: 1;
+            filter: brightness( 100% );
           }
         }
       }
@@ -194,6 +206,12 @@
       .tab-content-container {
         height: 100%;
         overflow-y: auto;
+        background: linear-gradient( to bottom, lightgrey, #222 );
+
+        .tab-content {
+
+
+        }
       }
     }
   }

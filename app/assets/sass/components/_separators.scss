@@ -1,8 +1,13 @@
 $separator-thickness: 15px;
+$separator-thin: 8px;
 
 .vertical-separator, .horizontal-separator {
   image-rendering: pixelated;
   z-index: 1;
+
+  &.dark {
+    filter: brightness( 60% );
+  }
 }
 
 .vertical-separator {
@@ -10,6 +15,10 @@ $separator-thickness: 15px;
   width: $separator-thickness;
   background: url('./assets/images/misc-vertical_separator.png');
   background-size: 100% auto;
+
+  &.thin {
+    width: $separator-thin;
+  }
 }
 
 .horizontal-separator {
@@ -17,4 +26,8 @@ $separator-thickness: 15px;
   width: 100%;
   background: url('./assets/images/misc-horizontal_separator.png');
   background-size: auto 100%;
+
+  &.thin {
+    height: $separator-thin;
+  }
 }

@@ -12,6 +12,18 @@ let State = function( s = {} ) {
     current_ore_hp: 50,
     current_ore_max_hp: 50,
 
+    tabs: [],
+
+    pickaxe: {
+      sharpness: 100,
+      hardness: 100
+    },
+
+    smith: {
+      upgrade_in_progress: false,
+
+    },
+
     stats: {
       current_rocks_destroyed: 0,
       total_rocks_destroyed: 0,

@@ -1,0 +1,96 @@
+.pickaxe-accordion {
+  max-height: 20px; // has to equal header height
+  overflow: hidden;
+  background: #222;
+  color: white;
+  transition: all .2s linear;
+  font-size: 12px;
+  padding: 0 5px;
+  box-shadow: 0 0 10px black inset;
+
+  &.open {
+    max-height: 100px;
+
+    header i {
+      transform: rotate( 180deg );
+    }
+  }
+
+  header {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    height: 20px;
+    align-items: center;
+    cursor: pointer;
+
+    > p {
+      letter-spacing: 1px;
+    }
+
+    i {
+      transition: transform .2s;
+    }
+  }
+
+  > div {
+    padding: 10px 0;
+    letter-spacing: .5px;
+  }
+}
+
+.smith-progress-container {
+  display: flex;
+  flex-flow: row nowrap;
+  padding: 10px;
+  box-shadow: 0 0 40px #222 inset;
+
+  > img {
+    border: 1px solid black;
+  }
+
+  > div {
+    display: flex;
+    flex-flow: column nowrap;
+    padding-left: 10px;
+    flex-grow: 1;
+    justify-content: flex-end;
+
+    .progress-bar-container {
+      margin-top: 5px;
+      border: 1px solid #222;
+      height: 30px;
+
+      .progress-bar {
+        width: 66%;
+        height: 100%;
+        background: #222;
+      }
+    }
+  }
+}
+
+.smith-upgrade {
+
+  &.repeatable {
+    padding: 10px 5px;
+    display: flex;
+    flex-flow: row nowrap;
+    background: url( './assets/images/misc-building_button.png' );
+    background-size: 100% 100%;
+    cursor: pointer;
+    box-shadow: 0 0 20px #222 inset;
+
+    &:hover {
+      box-shadow: 0 0 5px #fff inset;
+    }
+
+    div {
+      padding-left: 5px;
+      display: flex;
+      flex-flow: column nowrap;
+    }
+  }
+
+
+}

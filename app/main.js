@@ -14,6 +14,7 @@ const TAB_CONTENT = s( '.tab-content' )
 const TEXT_SCROLLER_CONTAINER = s( '.text-scroller-container' )
 const TOOLTIP = s( '.tooltip' )
 const SETTINGS_CONTAINER = s( '.settings-container' )
+const TABS_CONTAINER = s( '.tabs-container' )
 
 let S = new State().state
 let RN = new RisingNumber()
@@ -55,9 +56,45 @@ let reposition_elements = () => {
   SETTINGS_CONTAINER.style.top = text_scroller_container_dimensions.top - settings_container_dimensions.height + 'px'
 }
 
+let change_tab = ( code_name ) => {
+  let t = select_from_arr( S.tabs, code_name )
+
+  // if the clicked tab isn't currently selected
+  if ( t.selected != 1 ) {
+    // loop through all tabs
+    S.tabs.forEach( tab => {
+      // if the current looped tab is equal to the clicked tab
+      if ( tab.code_name == t.code_name ) {
+        // set that tab to selected
+        tab.selected = 1
+      } else {
+        tab.selected = 0
+      }
+    })
+    build_tabs()
+  }
+}
+
+let build_tabs = () => {
+
+  let str = ''
+
+  S.tabs.forEach( tab => {
+    if ( !tab.hidden ) {
+      str += `
+        <div 
+          class='tab ${ tab.name }-tab ${ tab.selected && "selected" }'
+          onclick='change_tab( "${ tab.code_name }" ); build_${ tab.code_name }()'
+        >${ tab.name }</div>
+      `
+    }
+  })
+
+  TABS_CONTAINER.innerHTML = str
+}
+
 let build_store = () => {
-  let str = ``
-  index = 0
+  let str = ''
   str += build_upgrades()
   str += build_buildings()
 
@@ -123,6 +160,94 @@ let build_buildings = () => {
   return str
 }
 
+let build_smith = () => {
+  let str = ''
+
+  str += build_pickaxe_accordion()
+
+  str += '<div class="smith-progress-container">'
+  str += build_pickaxe_update()
+  str += '</div>'
+  str += "<div class='horizontal-separator thin dark'></div>"
+
+  str += '<div class="smith-upgrades">'
+  str += build_smith_upgrades()
+  str += '</div>'
+
+  TAB_CONTENT.innerHTML = str
+}
+
+let build_pickaxe_accordion = () => {
+  let str = ''
+
+  str += `
+    <div class='pickaxe-accordion'>
+      <header onclick='toggle_pickaxe_accordion()'>
+        <p>Pickaxe</p>
+        <i class='fa fa-caret-down fa-1x'></i>
+      </header>
+      <div>
+        <p>Sharpness: ${ S.pickaxe.sharpness }%</p>
+        <p>Hardness: ${ S.pickaxe.hardness }%</p>
+      </div>
+    </div>
+    <div class='horizontal-separator thin dark'></div>
+  `
+
+  return str
+}
+
+let build_pickaxe_update = ( direct = false ) => {
+  let str = ''
+
+  !S.smith.upgrade_in_progress ? 
+    str += '<p style="text-align: center; width: 100%; opacity: 0.5">No upgrade in progress</p>' :
+      str += `
+        <img src="https://via.placeholder.com/64" alt="smith upgrade"/>
+        <div>
+          <p>Pickaxe Sharpness Up</p>
+          <div class="progress-bar-container">
+            <div class="progress-bar"></div>
+          </div>
+        </div>
+      `
+
+  if ( direct ) {
+    s( '.smith-progress-container' ).innerHTML = str
+    return
+  }
+
+  return str
+}
+
+let build_smith_upgrades = ( drect = false ) => {
+  let str = ''
+
+  Repeatable_Smith_Upgrades.forEach( upgrade => {
+    str += `
+      <div onclick='start_smith_upgrade( "${ upgrade.code_name }" )' class="smith-upgrade repeatable">
+        <img src="${ upgrade.img }" alt="upgrade image"/>
+        <div>
+          <small>lv. ${ upgrade.level }</small>
+          <h1>${ upgrade.name }</h1>
+          <p>${ upgrade.duration }s</p>
+        </div>
+      </div>
+    `
+  } )
+
+  return str
+}
+
+let toggle_pickaxe_accordion = () => {
+  s( '.pickaxe-accordion' ).classList.toggle( 'open' )
+}
+
+let start_smith_upgrade = ( code_name ) => {
+  let upgrade = select_from_arr( Repeatable_Smith_Upgrades, code_name )
+  console.log(upgrade)
+}
+
 let calculate_opc = ( type ) => {
   let opc = S.opc
 
@@ -154,6 +279,8 @@ let init_game = () => {
   start_loop()
   generate_weak_spot()
   reposition_elements()
+  S.tabs = Tabs
+  build_tabs()
   build_store()
   handle_text_scroller()
   ORE_SPRITE.addEventListener( 'click', handle_click )
