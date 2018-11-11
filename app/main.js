@@ -21,6 +21,7 @@ let RN = new RisingNumber()
 let TS = new TextScroller()
 let TT = new Tooltip()
 let PE = new ParticleEngine()
+let SMITH = new Smith()
 
 let play_sound = ( name, file_type = 'wav', base_vol = 1 ) => {
   let sound = new Audio( `./assets/sounds/${ name }.${ file_type }` )
@@ -200,12 +201,14 @@ let build_pickaxe_accordion = () => {
 let build_pickaxe_update = ( direct = false ) => {
   let str = ''
 
-  !S.smith.upgrade_in_progress ? 
+  console.log('build pickaxe update firing')
+
+  is_empty( SMITH.upgrade_in_progress ) ? 
     str += '<p style="text-align: center; width: 100%; opacity: 0.5">No upgrade in progress</p>' :
       str += `
-        <img src="https://via.placeholder.com/64" alt="smith upgrade"/>
+        <img src="${ SMITH.upgrade_in_progress.img }" alt="smith upgrade"/>
         <div>
-          <p>Pickaxe Sharpness Up</p>
+          <p>${ SMITH.upgrade_in_progress.name }</p>
           <div class="progress-bar-container">
             <div class="progress-bar"></div>
           </div>
@@ -245,13 +248,10 @@ let toggle_pickaxe_accordion = () => {
 
 let start_smith_upgrade = ( code_name ) => {
   let upgrade = select_from_arr( Repeatable_Smith_Upgrades, code_name )
-  
-  if ( !S.smith.upgrade_in_progress ) {
-    S.smith.upgrade_in_progress = upgrade
+
+  if ( is_empty( SMITH.upgrade_in_progress ) ) {
+    SMITH.start_upgrade( upgrade )
   }
-
-  build_pickaxe_update( true )
-
 }
 
 let calculate_opc = ( type ) => {

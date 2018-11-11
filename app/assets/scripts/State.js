@@ -19,10 +19,6 @@ let State = function( s = {} ) {
       hardness: 100
     },
 
-    smith: {
-      upgrade_in_progress: false
-    },
-
     stats: {
       current_rocks_destroyed: 0,
       total_rocks_destroyed: 0,

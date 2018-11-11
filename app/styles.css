@@ -642,7 +642,7 @@
       border: 1px solid #222;
       height: 30px; }
       .smith-progress-container > div .progress-bar-container .progress-bar {
-        width: 66%;
+        width: 0%;
         height: 100%;
         background: #222; }
 

@@ -109,3 +109,7 @@ let get_random_color = () => {
   }
   return color;
 }
+
+let is_empty = ( obj ) => {
+  return !obj || Object.keys( obj ).length === 0
+}
