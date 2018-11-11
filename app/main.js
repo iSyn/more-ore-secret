@@ -245,7 +245,13 @@ let toggle_pickaxe_accordion = () => {
 
 let start_smith_upgrade = ( code_name ) => {
   let upgrade = select_from_arr( Repeatable_Smith_Upgrades, code_name )
-  console.log(upgrade)
+  
+  if ( !S.smith.upgrade_in_progress ) {
+    S.smith.upgrade_in_progress = upgrade
+  }
+
+  build_pickaxe_update( true )
+
 }
 
 let calculate_opc = ( type ) => {

@@ -20,8 +20,7 @@ let State = function( s = {} ) {
     },
 
     smith: {
-      upgrade_in_progress: false,
-
+      upgrade_in_progress: false
     },
 
     stats: {
