@@ -1,0 +1,28 @@
+.upgrades-container {
+  display: flex;
+  flex-flow: row wrap;
+  max-height: 50px;
+  transition: max-height .2s ease-in-out;
+  overflow: hidden;
+
+  &:hover {
+    max-height: 1000px;
+  }
+
+  .upgrade {
+    height: 50px;
+    width: 50px;
+    flex-shrink: 0;
+    background: url("./assets/images/upgrade-upgrade_container.png");
+    background-size: 100%;
+    image-rendering: pixelated;
+    background-color: #b56535;
+    box-shadow: 0 0 30px #222 inset;
+    cursor: pointer;
+
+    &:hover {
+      box-shadow: 0 0 10px #fff inset, 0 0 30px #222 inset;
+    }
+  }
+}
+

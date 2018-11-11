@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  .ore-container {
+    height: 300px;
+    width: 300px;
+    border: 2px solid black;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  .sprite-container {
+    height: 300px;
+    width: 300px;
+    position: relative;
+  }
+  .ore-sprite {
+    height: auto;
+    width: 100%;
+    image-rendering: pixelated;
+    cursor: pointer;
+    position: absolute;
+    bottom: 0;
+  }
+  .ore-sprite:hover {
+    transform: scale(1.03);
+  }
+  .test:hover + .ore-sprite {
+    transform: scale(1.03);
+  }
+  .ore-sprite:active {
+    transform: scale(0.97);
+  }
+  .test:hover + .ore-sprite {
+    transform: scale(0.97);
+  }
+  .test {
+    height: 50px;
+    width: 50px;
+    position:absolute;
+    top: 0;
+    background: green;
+  }
+  .test:hover {
+    background: yellow;
+  }
+</style>
+
+<body>
+    <div class="ore-container">
+      <div class="sprite-container">
+        <div class="test"></div>
+        <img class='ore-sprite' src="./ore1-1.png" alt="">
+      </div>
+    </div>
+</body>
+
+<script>
+  let ore = document.querySelector('.ore-sprite')
+  let hp = 25
+  ore.addEventListener('click', () => {
+    hp -= 1
+    if ( hp <= 20 ) {
+      ore.src = './ore1-2.png'
+    }
+    if ( hp < 15 ) {
+      ore.src = './ore1-3.png'
+    }
+    if ( hp < 10 ) {
+      ore.src = './ore1-4.png'
+    }
+    if ( hp < 5 ) {
+      ore.src = './ore1-5.png'
+    }
+  })
+</script>
+
+</html>

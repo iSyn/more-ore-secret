@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+
+<html>
+
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- <title>More Ore - Idle Clicker Incremental RPG about ORES!</title> -->
+    <!-- <link rel="shortcut icon" href="assets/images/misc_tiny-rock.ico" /> -->
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css?family=Asap+Condensed:400,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Abel" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Germania+One" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <meta name="description" content="More Ore - A clicker, incremental, and idle game with RPG elements">
+    <meta name="keywords" content="game, clicker game, incremental game, idle game, more ore, isyn, incremental, idle, clicker, More Ore"/>
+    <meta name="author" content="Syn Studios"/>
+    <meta name="robots" content="follow"/>
+    <meta name="google-site-verification" content="Kcf483s9v0NmdgqhL4lOH6jXPisuMn_YtZqaeF05o7Q" />
+
+    <script src='./assets/scripts/State.js'></script>
+
+    <!-- Global Site Tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-105854273-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments)};
+      gtag('js', new Date());
+      gtag('config', 'UA-105854273-1');
+    </script>
+
+  </head>
+
+  <body>
+
+    <div class="container">
+
+      <div class="torch torch-left"></div>
+      <div class="torch torch-right"></div>
+      <div class="tooltip"></div>
+
+      <div class="horizontal-separator"></div>
+      <div class="game-container">
+        <div class="vertical-separator left-vertical-separator"></div>
+        <section class="left">
+
+          <div class="topbar-inventory-container">
+            <div class="inventory-hanger-container">
+              <div class="vertical-separator"></div>
+              <div class="vertical-separator"></div>
+            </div>
+            <div class="topbar-inventory"></div>
+          </div>
+
+          <div class="ore-container-wrapper">
+            <div class="ore-container">
+              <img class='ore-sprite' src="./assets/images/ore1-1.png" alt="ore sprite">
+              <div class="ore-weak-spot-container">
+                <div class="ore-weak-spot"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="settings-container">
+            <i onclick='build_achievements(); play_sound( "misc" )' class='fa fa-bar-chart fa-2x settings'></i>
+            <i onclick='build_settings(); play_sound( "misc" )' class='fa fa-cog fa-2x settings'></i>
+            <!-- <i class='fa fa-diamond fa-2x settings refined-store-btn'></i> -->
+          </div>
+
+          <div class="text-scroller-container">
+            <div class="horizontal-separator thin"></div>
+          </div>
+
+          <div class="horizontal-separator thin"></div>
+          <div class="quest-area-container"></div>
+        </section>
+
+        <section class="right-container">
+          <div class="vertical-separator middle-vertical-separator"></div>
+          <div class="right">
+            <div class="tabs-container"></div>
+            <div class="horizontal-separator thin dark"></div>
+            <div class="tab-content-container">
+              <div class="tab-content"></div>
+            </div>
+          </div>
+          <div class="vertical-separator right-vertical-separator"></div>
+        </section>
+      </div>
+      <div class="horizontal-separator"></div>
+    </div>
+
+    <script src='./assets/libs/howler.js'></script>
+
+    <script src='./assets/scripts/helper_functions.js'></script>
+    <script src='./assets/scripts/Building.js'></script>
+    <script src='./assets/scripts/Upgrade.js'></script>
+    <script src='./assets/scripts/Tabs.js'></script>
+    <script src='./assets/scripts/ParticleEngine.js'></script>
+    <script src='./assets/scripts/RisingNumber.js'></script>
+    <script src='./assets/scripts/TextScroller.js'></script>
+    <script src='./assets/scripts/Tooltip.js'></script>
+    <script src='./assets/scripts/SmithUpgrade.js'></script>
+    <script src='./assets/scripts/Smith.js'></script>
+
+    <script src='./main.js'></script>
+  </body>
+
+</html>

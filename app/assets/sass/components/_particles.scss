@@ -1,0 +1,22 @@
+.particle {
+
+  position: absolute;
+  height: 3px;
+  width: 3px;
+  border-radius: 50%;
+  background: lightgrey;
+  transition: all .2s;
+  animation: particle_fall .5s forwards linear;
+
+}
+
+
+
+@keyframes particle_fall {
+  0% {
+    transfrom: translateY(0)
+  }
+  100% {
+    transform: translateY(100px)
+  }
+}
