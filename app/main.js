@@ -216,7 +216,9 @@ let build_pickaxe_update = ( direct = false ) => {
       `
 
   if ( direct ) {
-    s( '.smith-progress-container' ).innerHTML = str
+    if ( s( '.smith-progress-container' ) ) {
+      s( '.smith-progress-container' ).innerHTML = str
+    }
     return
   }
 
