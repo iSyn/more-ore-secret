@@ -406,7 +406,7 @@ let update_ore_sprite = () => {
     current_sprite = 2
   } else if ( current_percentage <= 60 && current_percentage > 40 && current_sprite != 3 ) {
     play_sound( 'ore_percentage_lost' )
-    ORE_SPRITE.src = '/app/assets/images/ore1-3.png'
+    ORE_SPRITE.src = './app/assets/images/ore1-3.png'
     current_sprite = 3
   } else if ( current_percentage <= 40 && current_percentage > 20 && current_sprite != 4 ) {
     play_sound( 'ore_percentage_lost' )
