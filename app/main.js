@@ -16,7 +16,7 @@ const TOOLTIP = s( '.tooltip' )
 const SETTINGS_CONTAINER = s( '.settings-container' )
 const TABS_CONTAINER = s( '.tabs-container' )
 const AUTOMATER_CONTAINER = s( '.automater-container' )
-const AUTOMATER_HEADER = s( '.automater-container header' )
+const AUTOMATER_HEADER = s( '.automater-container > header' )
 
 let S = new State().state
 let RN = new RisingNumber()
@@ -275,7 +275,16 @@ let build_automater = () => {
 }
 
 let toggle_automater_accordion = () => {
-  
+  let automater_header_dimensions = AUTOMATER_HEADER.getBoundingClientRect()
+  let automater_container_dimensions = AUTOMATER_CONTAINER.getBoundingClientRect()
+  let middle_vertical_separator_dimensions = MIDDLE_VERTICAL_SEPARATOR.getBoundingClientRect()
+  if ( AUTOMATER_CONTAINER.classList.contains( 'open' ) ) {
+    AUTOMATER_CONTAINER.classList.remove( 'open' )
+    AUTOMATER_CONTAINER.style.left = middle_vertical_separator_dimensions.left - automater_header_dimensions.width + 'px'
+  } else {
+    AUTOMATER_CONTAINER.classList.add( 'open' )
+    AUTOMATER_CONTAINER.style.left = middle_vertical_separator_dimensions.left - automater_container_dimensions.width + 'px'
+  }
 }
 
 let start_smith_upgrade = ( arr, code_name  ) => {

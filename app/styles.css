@@ -684,10 +684,9 @@
   -webkit-box-direction: normal;
   -ms-flex-flow: row nowrap;
   flex-flow: row nowrap;
-  background: #222;
-  border-top-left-radius: 10px;
-  border-bottom-left-radius: 10px;
-  color: white; }
+  color: white;
+  -webkit-transition: all .3s;
+  transition: all .3s; }
   .automater-container header {
     font-size: 14px;
     padding: 20px 0;
@@ -699,4 +698,61 @@
     transform: rotate(180deg);
     letter-spacing: 5px;
     line-height: 25px;
-    cursor: pointer; }
+    cursor: pointer;
+    background: #222;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px; }
+  .automater-container > div {
+    padding: 0 20px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.7); }
+    .automater-container > div .automater {
+      height: 60px;
+      width: 60px;
+      border: 1px solid white;
+      background: rgba(255, 255, 255, 0.5);
+      position: relative; }
+      .automater-container > div .automater .top-bar {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-orient: horizontal;
+        -webkit-box-direction: normal;
+        -ms-flex-flow: row nowrap;
+        flex-flow: row nowrap;
+        -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+        justify-content: space-between;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        background: white; }
+        .automater-container > div .automater .top-bar i {
+          color: #222;
+          font-size: 15px; }
+      .automater-container > div .automater .owned {
+        position: absolute;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        justify-content: center;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        height: 20px;
+        width: 20px;
+        border-radius: 50%;
+        background: red;
+        color: white;
+        top: -10px;
+        right: -10px; }
