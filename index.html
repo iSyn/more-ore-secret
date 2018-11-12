@@ -75,15 +75,20 @@
           <div class="quest-area-container"></div>
         </section>
 
-        <div class="automater-container">
+        <div class="automater-wrapper">
           <header onclick='toggle_automater_accordion()'>AUTOMATER</header>
           <div>
-            <div class="automater">
-              <div class="top-bar">
-                <i class="fa fa-cog"></i>
-                <i class="fa fa-times"></i>
+            <div class="automater-container">
+              <div class="automater display">
+                <div class="owned">1</div>
+                <div class="top-bar">
+                  <i class="fa fa-cog"></i>
+                  <i class="fa fa-times"></i>
+                </div>
+                <div class="automater-target">
+                  <img src="./app/assets/images/misc-crosshair.png" alt="crosshair-img">
+                </div>
               </div>
-              <div class="owned">1</div>
             </div>
           </div>
         </div>
@@ -103,7 +108,8 @@
       <div class="horizontal-separator"></div>
     </div>
 
-    <script src='./app/assets/libs/howler.js'></script>
+    <!-- <script src='./app/assets/libs/howler.js'></script> -->
+    <script src='./app/assets/libs/dragndrop.js'></script>
 
     <script src='./app/assets/scripts/helper_functions.js'></script>
     <script src='./app/assets/scripts/Building.js'></script>
@@ -115,6 +121,7 @@
     <script src='./app/assets/scripts/Tooltip.js'></script>
     <script src='./app/assets/scripts/SmithUpgrade.js'></script>
     <script src='./app/assets/scripts/Smith.js'></script>
+    <script src='./app/assets/scripts/Automater.js'></script>
 
     <script src='./app/main.js'></script>
   </body>

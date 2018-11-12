@@ -48,11 +48,15 @@ let Smith = function( obj = {} ) {
 
     this._update_complete = () => {
 
-        console.log( this.upgrade_in_progress )
+        let upgrade = this.upgrade_in_progress
 
-        this.upgrade_in_progress.owned = 1
-        if ( this.upgrade_in_progress.repeat ) {
-            this.upgrade_in_progress.level++
+        upgrade.owned = 1
+        if ( upgrade.repeat ) upgrade.level++ 
+
+        if ( upgrade.code_name == 'a_u_t_o_m_a_t_e_r' ) {
+            new Automater()
+            S.automater.automater_accordion_hidden = false
+            reposition_elements()
         }
 
         this.upgrade_in_progress = {}

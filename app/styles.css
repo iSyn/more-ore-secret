@@ -219,7 +219,8 @@
     -ms-flex-flow: row nowrap;
     flex-flow: row nowrap;
     -webkit-transition: margin-right .3s ease-in-out;
-    transition: margin-right .3s ease-in-out; }
+    transition: margin-right .3s ease-in-out;
+    z-index: 2; }
     .game-container .right-container > .right {
       width: 300px;
       height: 100%;
@@ -673,21 +674,17 @@
     -ms-flex-flow: column nowrap;
     flex-flow: column nowrap; }
 
-.automater-container {
+.automater-wrapper {
   position: absolute;
-  top: 30px;
-  left: 30px;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
   -webkit-box-orient: horizontal;
   -webkit-box-direction: normal;
   -ms-flex-flow: row nowrap;
   flex-flow: row nowrap;
   color: white;
-  -webkit-transition: all .3s;
-  transition: all .3s; }
-  .automater-container header {
+  -webkit-transition: left .3s;
+  transition: left .3s;
+  display: none; }
+  .automater-wrapper header {
     font-size: 14px;
     padding: 20px 0;
     -webkit-writing-mode: vertical-lr;
@@ -702,7 +699,7 @@
     background: #222;
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px; }
-  .automater-container > div {
+  .automater-wrapper > div {
     padding: 0 20px;
     display: -webkit-box;
     display: -ms-flexbox;
@@ -714,45 +711,93 @@
     -ms-flex-align: center;
     align-items: center;
     background: rgba(0, 0, 0, 0.7); }
-    .automater-container > div .automater {
-      height: 60px;
-      width: 60px;
-      border: 1px solid white;
-      background: rgba(255, 255, 255, 0.5);
+    .automater-wrapper > div .automater-container {
       position: relative; }
-      .automater-container > div .automater .top-bar {
-        display: -webkit-box;
-        display: -ms-flexbox;
-        display: flex;
-        -webkit-box-orient: horizontal;
-        -webkit-box-direction: normal;
-        -ms-flex-flow: row nowrap;
-        flex-flow: row nowrap;
-        -webkit-box-pack: justify;
-        -ms-flex-pack: justify;
-        justify-content: space-between;
-        -webkit-box-align: center;
-        -ms-flex-align: center;
-        align-items: center;
-        background: white; }
-        .automater-container > div .automater .top-bar i {
-          color: #222;
-          font-size: 15px; }
-      .automater-container > div .automater .owned {
-        position: absolute;
-        display: -webkit-box;
-        display: -ms-flexbox;
-        display: flex;
-        -webkit-box-pack: center;
-        -ms-flex-pack: center;
-        justify-content: center;
-        -webkit-box-align: center;
-        -ms-flex-align: center;
-        align-items: center;
-        height: 20px;
-        width: 20px;
-        border-radius: 50%;
-        background: red;
-        color: white;
-        top: -10px;
-        right: -10px; }
+
+.automater {
+  height: 65px;
+  width: 65px;
+  border: 1px solid white;
+  background: rgba(255, 255, 255, 0.5);
+  position: absolute;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-flow: column nowrap;
+  flex-flow: column nowrap;
+  -webkit-transition: background .1s;
+  transition: background .1s;
+  cursor: default; }
+  .automater.display {
+    pointer-events: none;
+    position: relative; }
+  .automater.real {
+    opacity: 0;
+    pointer-events: all; }
+    .automater.real:active {
+      opacity: 1; }
+    .automater.real.set {
+      opacity: .8; }
+    .automater.real:hover .top-bar {
+      background: white; }
+    .automater.real .top-bar {
+      background: rgba(255, 255, 255, 0.6); }
+      .automater.real .top-bar i {
+        cursor: pointer; }
+        .automater.real .top-bar i:hover {
+          color: gray; }
+  .automater .top-bar {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -ms-flex-flow: row nowrap;
+    flex-flow: row nowrap;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    background: white;
+    padding: 1px 0; }
+    .automater .top-bar i {
+      color: #222;
+      font-size: 15px; }
+  .automater .automater-target {
+    -webkit-box-flex: 1;
+    -ms-flex-positive: 1;
+    flex-grow: 1;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center; }
+    .automater .automater-target img {
+      opacity: .3; }
+  .automater .owned {
+    position: absolute;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    background: red;
+    color: white;
+    top: -10px;
+    right: -10px;
+    z-index: 1; }

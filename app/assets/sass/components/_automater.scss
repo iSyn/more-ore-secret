@@ -1,13 +1,9 @@
-.automater-container {
+.automater-wrapper {
     position: absolute;
-    top: 30px;
-    left: 30px;
-    display: flex;
     flex-flow: row nowrap;
-    // border-top-left-radius: 10px;
-    // border-bottom-left-radius: 10px;
     color: white;
-    transition: all .3s;
+    transition: left .3s;
+    display: none;
 
 
     header {
@@ -31,39 +27,96 @@
         align-items: center;
         background: rgba(0, 0, 0, 0.7);
 
-        .automater {
-            height: 60px;
-            width: 60px;
-            border: 1px solid white;
-            background: rgba( 255, 255, 255, .5 );
+        .automater-container {
             position: relative;
+        }
+    }
+}
 
+.automater {
+    height: 65px;
+    width: 65px;
+    border: 1px solid white;
+    background: rgba( 255, 255, 255, .5 );
+    position: absolute;
+    display: flex;
+    flex-flow: column nowrap;
+    transition: background .1s;
+    cursor: default;
+
+    &.display {
+        pointer-events: none;
+        position: relative;
+    }
+
+    &.real {
+        opacity: 0;
+        pointer-events: all;
+
+        &:active {
+            opacity: 1;
+        }
+
+        &.set {
+            opacity: .8;
+        }
+
+        &:hover {
             .top-bar {
-                display: flex;
-                flex-flow: row nowrap;
-                justify-content: space-between;
-                align-items: center;
-                background: white;
-
-                i {
-                    color: #222;
-                    font-size: 15px;
-                }
-            }
-
-            .owned {
-                position: absolute;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                height: 20px;
-                width: 20px;
-                border-radius: 50%;
-                background: red;
-                color: white;
-                top: -10px;
-                right: -10px;
+                background: rgba( 255, 255, 255, 1)
             }
         }
+
+        .top-bar {
+            background: rgba(255, 255, 255, .6);
+            
+            i {
+                cursor: pointer;
+
+                &:hover {
+                    color: gray;
+                }
+            }
+        }
+    }
+
+    .top-bar {
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: space-between;
+        align-items: center;
+        background: white;
+        padding: 1px 0;
+
+        i {
+            color: #222;
+            font-size: 15px;
+        }
+    }
+
+    .automater-target {
+        flex-grow: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        img {
+            opacity: .3;
+        }
+    }
+
+    .owned {
+        position: absolute;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 20px;
+        width: 20px;
+        border-radius: 50%;
+        background: red;
+        color: white;
+        top: -10px;
+        right: -10px;
+        z-index: 1;
     }
 }

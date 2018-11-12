@@ -44,7 +44,8 @@ let smith_upgrades = [,
         img: 'https://via.placeholder.com/75',
         desc: 'Unlocks the A U T O M A T E R',
         flavor_text: 'beep bop robot noise',
-        duration: 5 * 60,
+        duration: 1,
+        // duration: 5 * 60,
         price: 1
     }
 ]

@@ -1,7 +1,7 @@
 let State = function( s = {} ) {
 
   this.state = {
-    ores: s.ores || 300000000000,
+    ores: s.ores || 100,
     gems: s.ores || 0,
     generation: s.generation || 1,
     ops: s.ops || 0,
@@ -17,6 +17,12 @@ let State = function( s = {} ) {
     pickaxe: {
       sharpness: 100,
       hardness: 100
+    },
+
+    automater: {
+      automater_accordion_hidden: true,
+      owned: 0,
+      available: 0
     },
 
     stats: {

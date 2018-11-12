@@ -162,6 +162,7 @@
     display: flex;
     flex-flow: row nowrap;
     transition: margin-right .3s ease-in-out;
+    z-index: 2;
 
     > .right {
       width: 300px;

@@ -15,8 +15,9 @@ const TEXT_SCROLLER_CONTAINER = s( '.text-scroller-container' )
 const TOOLTIP = s( '.tooltip' )
 const SETTINGS_CONTAINER = s( '.settings-container' )
 const TABS_CONTAINER = s( '.tabs-container' )
+const AUTOMATER_WRAPPER = s( '.automater-wrapper' )
 const AUTOMATER_CONTAINER = s( '.automater-container' )
-const AUTOMATER_HEADER = s( '.automater-container > header' )
+const AUTOMATER_HEADER = s( '.automater-wrapper > header' )
 
 let S = new State().state
 let RN = new RisingNumber()
@@ -59,9 +60,12 @@ let reposition_elements = () => {
   SETTINGS_CONTAINER.style.top = text_scroller_container_dimensions.top - settings_container_dimensions.height + 'px'
 
   // Position automater
-  let automater_header_dimensions = AUTOMATER_HEADER.getBoundingClientRect()
-  AUTOMATER_CONTAINER.style.left = middle_vertical_separator_dimensions.left - automater_header_dimensions.width + 'px'
-  AUTOMATER_CONTAINER.style.top = '30%'
+  if ( !S.automater.automater_accordion_hidden ) {
+    AUTOMATER_WRAPPER.style.display = 'flex'
+    let automater_header_dimensions = AUTOMATER_HEADER.getBoundingClientRect()
+    AUTOMATER_WRAPPER.style.left = middle_vertical_separator_dimensions.left - automater_header_dimensions.width + 'px'
+    AUTOMATER_WRAPPER.style.top = '30%'
+  }
 }
 
 let change_tab = ( code_name ) => {
@@ -270,22 +274,72 @@ let toggle_pickaxe_accordion = () => {
   s( '.pickaxe-accordion' ).classList.toggle( 'open' )
 }
 
-let build_automater = () => {
-  let automater_container_coords = AUTOMATER_CONTAINER.getBoundingClientRect()
+let build_automaters = () => {
+  console.log( 'build automaters firing' )
+  let dd = s( '.automater.display' ).getBoundingClientRect()
+  s('.automater .owned').innerHTML = S.automater.available
+  console.log( Automaters )
+
+  Automaters.forEach( ( automater, i ) => {
+    if ( !automater.active ) {
+      let el = document.createElement( 'div' )
+      el.classList.add( 'automater', 'real')
+      el.style.top = dd.top + 'px'
+      el.style.left = dd.left + 'px'
+      el.style.position = 'absolute'
+      el.id = `automater-${ i }`
+      el.innerHTML = `
+        <div class="top-bar">
+          <i onclick='Automaters[${ i }].open_settings("${ el.id }")' class="fa fa-cog"></i>
+          <i onclick='Automaters[${ i }].remove("${ el.id }")' class="fa fa-times"></i>
+        </div>
+        <div class="automater-target">
+          <img src="./app/assets/images/misc-crosshair.png" alt="crosshair-img">
+        </div>
+      `
+
+      GAME_CONTAINER.append( el )
+    }
+  })
+
+  document.querySelectorAll('.automater.real').forEach( el => {
+    dragNdrop({
+      element: el,
+      callback: () => {
+        let id = parseInt( el.id.slice( -1 ) )
+        el.classList.add( 'set' )
+        Automaters[ id ].set( el )
+      }
+    })
+  })
 }
 
 let toggle_automater_accordion = () => {
+  console.log('togglng')
   let automater_header_dimensions = AUTOMATER_HEADER.getBoundingClientRect()
-  let automater_container_dimensions = AUTOMATER_CONTAINER.getBoundingClientRect()
+  let AUTOMATER_WRAPPER_dimensions = AUTOMATER_WRAPPER.getBoundingClientRect()
   let middle_vertical_separator_dimensions = MIDDLE_VERTICAL_SEPARATOR.getBoundingClientRect()
-  if ( AUTOMATER_CONTAINER.classList.contains( 'open' ) ) {
-    AUTOMATER_CONTAINER.classList.remove( 'open' )
-    AUTOMATER_CONTAINER.style.left = middle_vertical_separator_dimensions.left - automater_header_dimensions.width + 'px'
+  if ( AUTOMATER_WRAPPER.classList.contains( 'open' ) ) {
+    AUTOMATER_WRAPPER.classList.remove( 'open' )
+    AUTOMATER_WRAPPER.style.left = middle_vertical_separator_dimensions.left - automater_header_dimensions.width + 'px'
   } else {
-    AUTOMATER_CONTAINER.classList.add( 'open' )
-    AUTOMATER_CONTAINER.style.left = middle_vertical_separator_dimensions.left - automater_container_dimensions.width + 'px'
+    AUTOMATER_WRAPPER.classList.add( 'open' )
+    AUTOMATER_WRAPPER.style.left = middle_vertical_separator_dimensions.left - AUTOMATER_WRAPPER_dimensions.width + 'px'
   }
 }
+
+AUTOMATER_WRAPPER.addEventListener( 'transitionend', () => {
+  console.log('transitioning')
+  if ( AUTOMATER_WRAPPER.classList.contains( 'open' ) ) {
+    build_automaters()
+  } else {
+    document.querySelectorAll( '.automater.real' ).forEach( el => {
+      if ( !el.classList.contains( 'set' ) ) {
+        remove_el( el )
+      }
+    })
+  }
+})
 
 let start_smith_upgrade = ( arr, code_name  ) => {
   let upgrade = select_from_arr( arr, code_name )
@@ -371,7 +425,6 @@ let handle_click = ( e, type ) => {
     play_sound( 'ore_hit' )
     S.current_combo = 0
     RN.new( event, 'click', opc )
-    // PE.generate_rock_particles( e )
   }
 
   S.stats.total_clicks++
