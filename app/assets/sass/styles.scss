@@ -1,0 +1,24 @@
+* { 
+  margin: 0; 
+  padding: 0; 
+  box-sizing: border-box; 
+  font-family: 'Asap Condensed';
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+@import './common/variables';
+
+@import './components/separators';
+@import './components/game';
+@import './components/animations';
+@import './components/torch';
+@import './components/building';
+@import './components/upgrade';
+@import './components/tooltip';
+@import './components/particles';
+@import './components/wrapper';
+@import './components/smith';
+@import './components/automater';
+
+

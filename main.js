@@ -3877,14 +3877,12 @@ Game.launch = () => {
     'All rock and no clay makes you a dull boy (or girl)',
     'Don\'t take life for granite',
     'What happens when you throw a blue rock in the red sea? ... It gets wet',
-    "I'd do more work, but I'll mine my own business - /u/Maxposure",
     "As you can tell, these are pretty lame... Submit your own to /u/name_is_Syn",
     'Rocks really rock!',
     'I can\'t believe I\'m googling rock puns right now',
     'There are a few gems amongst all these terrible rock puns',
     'These puns sure are all ore nothing',
     'Rock pun here'
-
   ]
 
   Game.showTextScroller = (text) => {

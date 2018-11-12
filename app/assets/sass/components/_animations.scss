@@ -1,0 +1,37 @@
+@keyframes flyingNumber {
+    
+    0% {
+        transform: translateY(0);
+        transform: scale(1);
+    }
+    5% {
+        transform: scale(1.8);
+    }
+    10% {
+        transform: scale(1);
+    }
+    50% {
+        opacity: 1
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-200px);
+    }
+}
+
+@keyframes buildingFlyingNumber {
+    from {
+        transform: translateY(0);
+        opacity: .4;
+    }
+    to {
+        transform: translateY(-150px);
+        opacity: .1;
+    }
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+  
