@@ -749,6 +749,8 @@
     pointer-events: none;
     position: relative; }
   .automater.real {
+    -webkit-transition: opacity .2s;
+    transition: opacity .2s;
     opacity: 0;
     pointer-events: all; }
     .automater.real:active {

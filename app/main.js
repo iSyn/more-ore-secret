@@ -407,6 +407,7 @@ let init_game = () => {
   handle_text_scroller()
   ORE_SPRITE.addEventListener( 'click', handle_click )
   ORE_WEAK_SPOT.addEventListener( 'click', ( e ) => { handle_click( e, 'weak-spot' ) })
+  build_automater_visibility_toggle_btn()
 }
 
 let generate_weak_spot = () => {
