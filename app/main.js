@@ -62,8 +62,13 @@ let reposition_elements = () => {
   // Position automater
   if ( !S.automater.automater_accordion_hidden ) {
     AUTOMATER_WRAPPER.style.display = 'flex'
-    let automater_header_dimensions = AUTOMATER_HEADER.getBoundingClientRect()
-    AUTOMATER_WRAPPER.style.left = middle_vertical_separator_dimensions.left - automater_header_dimensions.width + 'px'
+    if ( AUTOMATER_WRAPPER.classList.contains( 'open' ) ) {
+      let automater_wrapper_dimensions = AUTOMATER_WRAPPER.getBoundingClientRect()
+      AUTOMATER_WRAPPER.style.left = middle_vertical_separator_dimensions.left - automater_wrapper_dimensions.width + 'px'
+    } else {
+      let automater_header_dimensions = AUTOMATER_HEADER.getBoundingClientRect()
+      AUTOMATER_WRAPPER.style.left = middle_vertical_separator_dimensions.left - automater_header_dimensions.width + 'px'
+    }
     AUTOMATER_WRAPPER.style.top = '30%'
   }
 }
@@ -275,10 +280,8 @@ let toggle_pickaxe_accordion = () => {
 }
 
 let build_automaters = () => {
-  console.log( 'build automaters firing' )
   let dd = s( '.automater.display' ).getBoundingClientRect()
   s('.automater .owned').innerHTML = S.automater.available
-  console.log( Automaters )
 
   Automaters.forEach( ( automater, i ) => {
     if ( !automater.active ) {
@@ -314,6 +317,25 @@ let build_automaters = () => {
   })
 }
 
+let build_automater_visibility_toggle_btn = () => {
+  let el = document.querySelector( '.automater-toggle-visibility' )
+  el.innerHTML = `
+    <i class="fa fa-eye-slash fa-1x"></i>
+    <label class="switch">
+      <input onchange='toggle_automater_visibility()' type="checkbox">
+      <span class="slider round"></span>
+    </label>
+  `
+}
+
+let toggle_automater_visibility = () => {
+  S.automater.automater_visible = !S.automater.automater_visible
+  document.querySelectorAll( '.automater.real' ).forEach( el => {
+    console.log(' el', el)
+    el.classList.toggle( 'hidden' )
+  })
+}
+
 let toggle_automater_accordion = () => {
   console.log('togglng')
   let automater_header_dimensions = AUTOMATER_HEADER.getBoundingClientRect()
@@ -329,7 +351,6 @@ let toggle_automater_accordion = () => {
 }
 
 AUTOMATER_WRAPPER.addEventListener( 'transitionend', () => {
-  console.log('transitioning')
   if ( AUTOMATER_WRAPPER.classList.contains( 'open' ) ) {
     build_automaters()
   } else {

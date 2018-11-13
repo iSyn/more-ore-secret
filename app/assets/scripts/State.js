@@ -21,6 +21,7 @@ let State = function( s = {} ) {
 
     automater: {
       automater_accordion_hidden: true,
+      automater_visible: true,
       owned: 0,
       available: 0
     },

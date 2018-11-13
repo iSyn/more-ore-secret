@@ -33,6 +33,16 @@
     }
 }
 
+.automater-toggle-visibility {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+
+    i {
+        padding-right: 5px;
+    }
+}
+
 .automater {
     height: 65px;
     width: 65px;
@@ -45,8 +55,10 @@
     cursor: default;
 
     &.display {
+        margin-top: 15px;
         pointer-events: none;
         position: relative;
+        
     }
 
     &.real {
@@ -65,6 +77,11 @@
             .top-bar {
                 background: rgba( 255, 255, 255, 1)
             }
+        }
+
+        &.hidden {
+            opacity: 0;
+            pointer-events: none;
         }
 
         .top-bar {

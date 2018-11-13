@@ -9,6 +9,7 @@ let RisingNumber = function() {
     el.style.color = 'white'
     el.style.fontSize = '20px'
     el.style.fontFamily = 'Germania One'
+    el.style.zIndex = '2'
     el.style.textShadow = '0 0 1px rgba( 0, 0, 0, 0.5 )'
 
     if ( e ) {

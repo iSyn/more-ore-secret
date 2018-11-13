@@ -79,8 +79,15 @@
           <header onclick='toggle_automater_accordion()'>AUTOMATER</header>
           <div>
             <div class="automater-container">
+              <div class='automater-toggle-visibility'>
+                <i class="fa fa-eye-slash fa-1x"></i>
+                <label class="switch">
+                  <input onchange='toggle_automater_visibility()' type="checkbox">
+                  <span class="slider round"></span>
+                </label>
+              </div>
               <div class="automater display">
-                <div class="owned">1</div>
+                <div class="owned"></div>
                 <div class="top-bar">
                   <i class="fa fa-cog"></i>
                   <i class="fa fa-times"></i>

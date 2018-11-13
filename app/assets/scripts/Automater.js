@@ -35,19 +35,29 @@ let Automater = function() {
     setTimeout(() => {
       if ( this.active ) {
 
-        let el = document.elementsFromPoint( this.target_location.x, this.target_location.y )[ 3 ]
+        // automater_accordion_hidden
 
-        if ( el.className == 'ore-sprite') {
-          earn( S.opc )
-          let event = {
-            clientX: this.target_location.x,
-            clientY: this.target_location.y,
-          }
-          RN.new( event, null, S.opc )
-          play_sound( 'ore_hit' )
+        let elms = document.elementsFromPoint( this.target_location.x, this.target_location.y )
+
+        let el;
+
+        if ( S.automater.automater_visible ) {
+          console.log(' AUTOMATER IS VISIBLE' )
         } else {
-          el.click()
+          console.log( 'AUTOMATER ISNT VISIBLE' )
         }
+
+        el = S.automater.automater_visible ? elms[ 3 ] : elms[ 0 ]
+        console.log( 'selected element to click:', el)
+
+        console.log( document.elementsFromPoint( this.target_location.x, this.target_location.y ))
+
+        let event = new MouseEvent( 'click', {
+          clientX: this.target_location.x,
+          clientY: this.target_location.y
+        })
+
+        el.dispatchEvent( event )
 
         this.handle_clicks()
       }
