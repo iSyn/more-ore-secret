@@ -72,11 +72,13 @@ $achievement-height: 115px;
   10% {
     opacity: 1;
     transform: translateY( 0 );
+    margin-top: 0;
   }
 
   90% {
-    transform: translateY( 0 );
     opacity: 1;
+    transform: translateY( 0 );
+    margin-top: 0;
   }
 
   100% {

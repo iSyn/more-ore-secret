@@ -954,11 +954,13 @@ input:checked + .slider:before {
   10% {
     opacity: 1;
     -webkit-transform: translateY(0);
-    transform: translateY(0); }
+    transform: translateY(0);
+    margin-top: 0; }
   90% {
+    opacity: 1;
     -webkit-transform: translateY(0);
     transform: translateY(0);
-    opacity: 1; }
+    margin-top: 0; }
   100% {
     -webkit-transform: translateY(100%);
     transform: translateY(100%);
@@ -972,11 +974,13 @@ input:checked + .slider:before {
   10% {
     opacity: 1;
     -webkit-transform: translateY(0);
-    transform: translateY(0); }
+    transform: translateY(0);
+    margin-top: 0; }
   90% {
+    opacity: 1;
     -webkit-transform: translateY(0);
     transform: translateY(0);
-    opacity: 1; }
+    margin-top: 0; }
   100% {
     -webkit-transform: translateY(100%);
     transform: translateY(100%);
