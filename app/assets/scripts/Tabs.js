@@ -14,7 +14,8 @@ let tabs = [
     {
       name: 'Store',
       selected: 1
-    }, {
+    },
+    {
       name: 'Smith',
       selected: 0
     }

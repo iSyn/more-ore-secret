@@ -102,7 +102,7 @@ let build_tabs = () => {
       str += `
         <div 
           class='tab ${ tab.name }-tab ${ tab.selected && "selected" }'
-          onclick='change_tab( "${ tab.code_name }" ); build_${ tab.code_name }()'
+
         >${ tab.name }</div>
       `
     }
