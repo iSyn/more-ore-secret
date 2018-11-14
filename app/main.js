@@ -102,7 +102,7 @@ let build_tabs = () => {
       str += `
         <div 
           class='tab ${ tab.name }-tab ${ tab.selected && "selected" }'
-
+          onclick='change_tab( "${ tab.code_name }" ); build_${ tab.code_name }()'
         >${ tab.name }</div>
       `
     }
@@ -216,11 +216,11 @@ let build_pickaxe_accordion = () => {
 }
 
 let calculate_pickaxe_sharpness = () => {
-  return S.pickaxe.sharpness + S.pickaxe.permanent_bonuses.sharpness + S.pickaxe.temporary_bonuses.sharpness
+  return S.pickaxe.sharpness + S.pickaxe.temporary_bonuses.sharpness
 }
 
 let calculate_pickaxe_hardness = () => {
-  return S.pickaxe.hardness + S.pickaxe.permanent_bonuses.hardness + S.pickaxe.temporary_bonuses.hardness
+  return S.pickaxe.hardness + S.pickaxe.temporary_bonuses.hardness
 }
 
 let build_pickaxe_update = ( direct = false ) => {
@@ -384,8 +384,10 @@ let calculate_opc = ( type ) => {
   if ( type ) {
     if ( type == 'weak-spot' ) {
       opc *= S.weak_hit_multi
-    }
+    } 
   }
+
+  type ? opc *= calculate_pickaxe_sharpness()/100 : opc *= calculate_pickaxe_hardness()/100
 
   return opc
 }
@@ -449,7 +451,7 @@ let handle_click = ( e, type ) => {
     S.current_combo++
 
     if ( S.current_combo == 5 ) win_achievement( 'combo_pleb' )
-    if ( S.current_combo == 30 ) win_achievement( 'combo_squire' )
+    if ( S.current_combo == 20 ) win_achievement( 'combo_squire' )
     if ( S.current_combo == 100 ) win_achievement( 'combo_knight' )
     if ( S.current_combo == 200 ) win_achievement( 'combo_king' )
     if ( S.current_combo == 350 ) win_achievement( 'combo_king' )
@@ -521,6 +523,12 @@ let update_ore_hp = ( amount ) => {
     S.current_ore_max_hp *= 1.5
     S.current_ore_hp = S.current_ore_max_hp
     current_sprite = 0
+
+    if ( S.stats.total_rocks_destroyed == 1 ) win_achievement( 'newbie_miner' )
+    if ( S.stats.total_rocks_destroyed == 10 ) win_achievement( 'novice_miner' )
+    if ( S.stats.total_rocks_destroyed == 25 ) win_achievement( 'intermediate_miner' )
+    if ( S.stats.total_rocks_destroyed == 100 ) win_achievement( 'advanced_miner' )
+
   } else {
     S.current_ore_hp -= amount
   }
@@ -633,9 +641,16 @@ let win_achievement = ( achievement_code_name ) => {
       <p>${ achievement.desc }</p>
     `
 
-    if ( achievement.reward ) {
-      if ( achievement.reward.increase_weak_hit_multi ) {
+    let r = achievement.reward
+    if ( r ) {
+      if ( r.increase_weak_hit_multi ) {
         str += `<p class='achievement-reward'>Permanently increase <strong>weak-hit</strong> multiplier by <strong>${ achievement.reward.increase_weak_hit_multi }</strong></p>`
+      }
+      if ( r.increase_pickaxe_hardness ) {
+        str += `<p class='achievement-reward'>Permanently increase <strong>pickaxe hardness</strong> by <strong>${ r.increase_pickaxe_hardness }%</strong></p>`
+      }
+      if ( r.increase_pickaxe_sharpness ) {
+        str += `<p class='achievement-reward'>Permanently increase <strong>pickaxe sharpness</strong> by <strong>${ r.increase_pickaxe_sharpness }%</strong></p>`
       }
     }
 

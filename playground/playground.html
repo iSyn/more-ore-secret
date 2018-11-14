@@ -1,91 +1,94 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Page Title</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
+  <script src="main.js"></script>
 </head>
 
-<style>
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  .ore-container {
-    height: 300px;
-    width: 300px;
-    border: 2px solid black;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
-  .sprite-container {
-    height: 300px;
-    width: 300px;
-    position: relative;
-  }
-  .ore-sprite {
-    height: auto;
-    width: 100%;
-    image-rendering: pixelated;
-    cursor: pointer;
-    position: absolute;
-    bottom: 0;
-  }
-  .ore-sprite:hover {
-    transform: scale(1.03);
-  }
-  .test:hover + .ore-sprite {
-    transform: scale(1.03);
-  }
-  .ore-sprite:active {
-    transform: scale(0.97);
-  }
-  .test:hover + .ore-sprite {
-    transform: scale(0.97);
-  }
-  .test {
-    height: 50px;
-    width: 50px;
-    position:absolute;
-    top: 0;
-    background: green;
-  }
-  .test:hover {
-    background: yellow;
-  }
-</style>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      .container {
+        height: 300px;
+        width: 400px;
+        border: 1px solid black;
+        position: absolute;
+      }
+      .notifications-container {
+        position: absolute;
+        top: 0;
+        right: 0;
+        height: 100%;
+        width: 200px;
+        background: rgba( 0, 0, 0, 0.2 );
+        display: flex;
+        flex-flow: column nowrap;
+        justify-content: flex-end;
+        overflow: hidden;
+      }
+      .notif {
+        position: relative;
+        width: 100%;
+        padding: 10px;
+        border: 1px solid black;
+        animation: notifAnim 5s forwards;
+        transition: all .2s;
+        background: white;
+      }
+      button {
+        z-index: 100;
+        background: lightcoral;
+        color: white;
+        border: none;
+        padding: 10px;
+        font-size: 20px;
+        margin: 5px;
+      }
 
-<body>
-    <div class="ore-container">
-      <div class="sprite-container">
-        <div class="test"></div>
-        <img class='ore-sprite' src="./ore1-1.png" alt="">
+      @keyframes notifAnim {
+        0% { transform: translateY( 100% ) }
+        20% { transform: translateY( 0 ) }
+        80% { transform: translateY( 0 ) }
+        100% { transform: translateY( 100%) }
+      }
+    </style>
+
+    <body>
+      <div class="container">
+        <button>New Notification</button>  
+        <div class="notifications-container"></div>
       </div>
-    </div>
-</body>
+    </body>
 
-<script>
-  let ore = document.querySelector('.ore-sprite')
-  let hp = 25
-  ore.addEventListener('click', () => {
-    hp -= 1
-    if ( hp <= 20 ) {
-      ore.src = './ore1-2.png'
-    }
-    if ( hp < 15 ) {
-      ore.src = './ore1-3.png'
-    }
-    if ( hp < 10 ) {
-      ore.src = './ore1-4.png'
-    }
-    if ( hp < 5 ) {
-      ore.src = './ore1-5.png'
-    }
-  })
-</script>
+    <script>
+      let btn = document.querySelector('button')
+      let container = document.querySelector('.notifications-container')
+
+      let notif_contents = [
+        "<p>1</p><p>1</p><p>1</p><p>1</p>",
+        "<p>test</p>",
+        "<div><h1>testtesttest</h1><p>yoloalsdfasdf</p></div>"
+      ]
+      let current = 0
+      
+      btn.onclick = () => {
+
+        let notif = document.createElement('div')
+        notif.classList.add('notif')
+        notif.innerHTML = notif_contents[current]
+        notif.addEventListener('animationend', () => {
+          notif.parentElement.removeChild(notif)
+        })
+        current++
+
+        container.append(notif)
+      }
+
+    </script>
 
 </html>

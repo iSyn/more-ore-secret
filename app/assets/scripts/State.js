@@ -7,7 +7,7 @@ let State = function( s = {} ) {
     ops: s.ops || 0,
     opc: s.opc || 1,
     weak_hit_multi: s.weak_hit_multi || 5,
-    current_combo: 0,
+    current_combo: s.current_combo || 0,
 
     current_ore_hp: 50,
     current_ore_max_hp: 50,
@@ -17,12 +17,7 @@ let State = function( s = {} ) {
     pickaxe: {
       sharpness: 100,
       hardness: 100,
-
-      permanent_bonuses: {
-        sharpness: 0,
-        hardness: 0
-      },
-
+      
       temporary_bonuses: {
         sharpness: 0,
         hardness: 0
