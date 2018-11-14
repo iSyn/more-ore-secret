@@ -888,9 +888,9 @@ input:checked + .slider:before {
   top: 0;
   left: 0;
   height: 100%;
-  width: 300px;
-  background: rgba(0, 0, 0, 0.5);
-  overflow: hidden;
+  pointer-events: none;
+  overflow-y: hidden;
+  overflow-x: visible;
   z-index: 2;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -913,21 +913,49 @@ input:checked + .slider:before {
     -ms-flex-negative: 0;
     flex-shrink: 0;
     height: 0px;
-    width: 100%;
+    min-width: 160px;
     background: #222;
     border: 1px solid white;
     -webkit-animation: winAchievement 5s ease-in-out forwards;
     animation: winAchievement 5s ease-in-out forwards;
+    padding: 10px;
     overflow: hidden;
     color: white; }
+    .achievement-notification-container .achievement header {
+      padding-bottom: 10px;
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-orient: horizontal;
+      -webkit-box-direction: normal;
+      -ms-flex-flow: row nowrap;
+      flex-flow: row nowrap;
+      -webkit-box-align: end;
+      -ms-flex-align: end;
+      align-items: flex-end; }
+      .achievement-notification-container .achievement header img {
+        margin-right: 10px; }
+      .achievement-notification-container .achievement header h1 {
+        font-size: 25px; }
+        .achievement-notification-container .achievement header h1 small {
+          color: rgba(255, 255, 255, 0.5);
+          font-size: 13px; }
+    .achievement-notification-container .achievement p {
+      padding-bottom: 10px; }
+      .achievement-notification-container .achievement p:last-child {
+        padding-bottom: 0; }
+      .achievement-notification-container .achievement p.achievement-reward {
+        color: lightgreen; }
 
 @-webkit-keyframes winAchievement {
   0% {
+    opacity: 0;
     height: 0; }
   10% {
-    height: 130px; }
+    opacity: 1;
+    height: 115px; }
   90% {
-    height: 130px;
+    height: 115px;
     opacity: 1; }
   100% {
     height: 0;
@@ -935,11 +963,13 @@ input:checked + .slider:before {
 
 @keyframes winAchievement {
   0% {
+    opacity: 0;
     height: 0; }
   10% {
-    height: 130px; }
+    opacity: 1;
+    height: 115px; }
   90% {
-    height: 130px;
+    height: 115px;
     opacity: 1; }
   100% {
     height: 0;

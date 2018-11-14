@@ -447,6 +447,17 @@ let handle_click = ( e, type ) => {
     play_sound( 'ore_weak_spot_hit' )
     S.stats.total_weak_hit_clicks++
     S.current_combo++
+
+    if ( S.current_combo == 5 ) win_achievement( 'combo_pleb' )
+    if ( S.current_combo == 30 ) win_achievement( 'combo_squire' )
+    if ( S.current_combo == 100 ) win_achievement( 'combo_knight' )
+    if ( S.current_combo == 200 ) win_achievement( 'combo_king' )
+    if ( S.current_combo == 350 ) win_achievement( 'combo_king' )
+    if ( S.current_combo == 666 ) win_achievement( 'combo_devil' )
+    if ( S.current_combo == 777 ) win_achievement( 'combo_god' )
+    if ( S.current_combo == 1000 ) win_achievement( 'combo_saiyan' )
+    if ( S.current_combo == 10000 ) win_achievement( 'combo_saitama' )
+
     if ( S.current_combo > S.stats.highest_combo ) S.stats.highest_combo = S.current_combo
     if ( S.current_combo % 5 == 0 ) RN.new( e, 'combo', S.current_combo )
     RN.new( event, 'weak-hit-click', opc )
@@ -614,11 +625,21 @@ let win_achievement = ( achievement_code_name ) => {
 
     let achievement_el = document.createElement( 'div' )
     achievement_el.classList.add( 'achievement' )
-    achievement_el.innerHTML = `
-      <h1>${ achievement.name }</h1>
+    let str = `
+      <header>
+        <img src='${ achievement.img }' alt='achievement img' />
+        <h1>${ achievement.name } <small>[ ${ achievement.type } ]</small></h1>
+      </header>
       <p>${ achievement.desc }</p>
-      <p>${ achievement.flavor_text }</p>
     `
+
+    if ( achievement.reward ) {
+      if ( achievement.reward.increase_weak_hit_multi ) {
+        str += `<p class='achievement-reward'>Permanently increase <strong>weak-hit</strong> multiplier by <strong>${ achievement.reward.increase_weak_hit_multi }</strong></p>`
+      }
+    }
+
+    achievement_el.innerHTML = str
 
     ACHIEVEMENT_NOTIFICATION_CONTAINER.append( achievement_el )
 

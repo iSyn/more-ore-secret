@@ -1,13 +1,14 @@
-$achievement-height: 130px;
+$achievement-height: 115px;
 
 .achievement-notification-container {
   position: absolute;
   top: 0;
   left: 0;
   height: 100%;
-  width: 300px;
-  background: rgba(0, 0, 0, 0.5);
-  overflow: hidden;
+  // background: rgba(0, 0, 0, 0.5);
+  pointer-events: none;
+  overflow-y: hidden;
+  overflow-x: visible;
   z-index: 2;
 
   display: flex;
@@ -19,23 +20,58 @@ $achievement-height: 130px;
     flex-flow: column nowrap;
     flex-shrink: 0;
     height: 0px;
-    width: 100%;
+    min-width: 160px;
     background: #222;
     border: 1px solid white;
     animation: winAchievement 5s ease-in-out forwards;
+    padding: 10px;
     overflow: hidden;
 
     color: white;
+
+    header {
+      padding-bottom: 10px;
+      display: flex;
+      flex-flow: row nowrap;
+      align-items: flex-end;
+
+      img {
+        margin-right: 10px;
+      }
+
+      h1 {
+        font-size: 25px;
+
+        small {
+          color: rgba( 255, 255, 255, 0.5 );
+          font-size: 13px;
+        }
+      }
+    }
+
+    p {
+      padding-bottom: 10px;
+
+      &:last-child {
+        padding-bottom: 0;
+      }
+
+      &.achievement-reward {
+        color: lightgreen;
+      }
+    }
   }
 
 }
 
 @keyframes winAchievement {
   0% {
+    opacity: 0;
     height: 0;
   }
 
   10% {
+    opacity: 1;
     height: $achievement-height;
   }
 
