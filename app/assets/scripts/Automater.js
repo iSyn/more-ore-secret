@@ -48,7 +48,8 @@ let Automater = function() {
 
         let event = new MouseEvent( 'click', {
           clientX: this.target_location.x,
-          clientY: this.target_location.y
+          clientY: this.target_location.y,
+          source: 'Automater'
         })
 
         el.dispatchEvent( event )

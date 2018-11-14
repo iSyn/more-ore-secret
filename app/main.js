@@ -408,7 +408,7 @@ let calculate_building_ops = ( building_owned, building_production ) => {
 }
 
 let init_game = () => {
-  start_loop()
+  game_loop()
   generate_weak_spot()
   reposition_elements()
   S.tabs = Tabs
@@ -452,8 +452,8 @@ let handle_click = ( e, type ) => {
 
     if ( S.current_combo == 5 ) win_achievement( 'combo_baby' )
     if ( S.current_combo == 20 ) win_achievement( 'combo_pleb' )
-    if ( S.current_combo == 2 ) win_achievement( 'combo_squire' )
-    if ( S.current_combo == 1 ) win_achievement( 'combo_knight' )
+    if ( S.current_combo == 50 ) win_achievement( 'combo_squire' )
+    if ( S.current_combo == 100 ) win_achievement( 'combo_knight' )
     if ( S.current_combo == 200 ) win_achievement( 'combo_king' )
     if ( S.current_combo == 350 ) win_achievement( 'combo_king' )
     if ( S.current_combo == 666 ) win_achievement( 'combo_devil' )
@@ -501,7 +501,7 @@ let handle_text_scroller = () => {
   }
 }
 
-let start_loop = () => {
+let game_loop = () => {
 
   setInterval(() => {
     update_topbar_inventory()
