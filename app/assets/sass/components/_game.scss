@@ -15,6 +15,7 @@
   width: 100%;
 
   > .left {
+    position: relative;
     display: flex;
     flex-flow: column nowrap;
     flex-grow: 1;

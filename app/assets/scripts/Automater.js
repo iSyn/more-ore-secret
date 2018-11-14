@@ -41,13 +41,7 @@ let Automater = function() {
 
         let el;
 
-        if ( S.automater.automater_visible ) {
-          console.log(' AUTOMATER IS VISIBLE' )
-        } else {
-          console.log( 'AUTOMATER ISNT VISIBLE' )
-        }
-
-        el = S.automater.automater_visible ? elms[ 3 ] : elms[ 0 ]
+        el = S.automater.automater_visible ? elms[ 1 ] : elms[ 0 ]
         console.log( 'selected element to click:', el)
 
         console.log( document.elementsFromPoint( this.target_location.x, this.target_location.y ))

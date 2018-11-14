@@ -18,6 +18,7 @@ const TABS_CONTAINER = s( '.tabs-container' )
 const AUTOMATER_WRAPPER = s( '.automater-wrapper' )
 const AUTOMATER_CONTAINER = s( '.automater-container' )
 const AUTOMATER_HEADER = s( '.automater-wrapper > header' )
+const ACHIEVEMENT_NOTIFICATION_CONTAINER = s( '.achievement-notification-container' )
 
 let S = new State().state
 let RN = new RisingNumber()
@@ -204,14 +205,22 @@ let build_pickaxe_accordion = () => {
         <i class='fa fa-caret-down fa-1x'></i>
       </header>
       <div>
-        <p>Sharpness: ${ S.pickaxe.sharpness }%</p>
-        <p>Hardness: ${ S.pickaxe.hardness }%</p>
+        <p>Sharpness: ${ calculate_pickaxe_sharpness() }%</p>
+        <p>Hardness: ${ calculate_pickaxe_hardness() }%</p>
       </div>
     </div>
     <div class='horizontal-separator thin dark'></div>
   `
 
   return str
+}
+
+let calculate_pickaxe_sharpness = () => {
+  return S.pickaxe.sharpness + S.pickaxe.permanent_bonuses.sharpness + S.pickaxe.temporary_bonuses.sharpness
+}
+
+let calculate_pickaxe_hardness = () => {
+  return S.pickaxe.hardness + S.pickaxe.permanent_bonuses.hardness + S.pickaxe.temporary_bonuses.hardness
 }
 
 let build_pickaxe_update = ( direct = false ) => {
@@ -292,13 +301,12 @@ let build_automaters = () => {
       el.style.position = 'absolute'
       el.id = `automater-${ i }`
       el.innerHTML = `
-        <div class="top-bar">
-          <i onclick='Automaters[${ i }].open_settings("${ el.id }")' class="fa fa-cog"></i>
-          <i onclick='Automaters[${ i }].remove("${ el.id }")' class="fa fa-times"></i>
-        </div>
-        <div class="automater-target">
-          <img src="./app/assets/images/misc-crosshair.png" alt="crosshair-img">
-        </div>
+          <div class="top-bar">
+            <i onclick='Automaters[${ i }].remove("${ el.id }")' class="fa fa-times"></i>
+          </div>
+          <div class="automater-target">
+            <img src="./app/assets/images/misc-crosshair.png" alt="crosshair-img">
+          </div>
       `
 
       GAME_CONTAINER.append( el )
@@ -595,6 +603,33 @@ let build_settings = () => {
 
   wrapper.innerHTML = str
   CONTAINER.append( wrapper )
+}
+
+let win_achievement = ( achievement_code_name ) => {
+
+  let achievement = select_from_arr( Achievements, achievement_code_name )
+
+  if ( achievement.won == 0 ) {
+    achievement.win()
+
+    let achievement_el = document.createElement( 'div' )
+    achievement_el.classList.add( 'achievement' )
+    achievement_el.innerHTML = `
+      <h1>${ achievement.name }</h1>
+      <p>${ achievement.desc }</p>
+      <p>${ achievement.flavor_text }</p>
+    `
+
+    ACHIEVEMENT_NOTIFICATION_CONTAINER.append( achievement_el )
+
+    achievement_el.addEventListener( 'animationend', () => {
+      remove_el( achievement_el )
+    })
+  }
+
+  
+
+
 }
 
 window.onload = () => { init_game() }

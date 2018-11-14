@@ -1,0 +1,51 @@
+$achievement-height: 130px;
+
+.achievement-notification-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 300px;
+  background: rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+  z-index: 2;
+
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: flex-end;
+
+  .achievement {
+    display: flex;
+    flex-flow: column nowrap;
+    flex-shrink: 0;
+    height: 0px;
+    width: 100%;
+    background: #222;
+    border: 1px solid white;
+    animation: winAchievement 5s ease-in-out forwards;
+    overflow: hidden;
+
+    color: white;
+  }
+
+}
+
+@keyframes winAchievement {
+  0% {
+    height: 0;
+  }
+
+  10% {
+    height: $achievement-height;
+  }
+
+  90% {
+    height: $achievement-height;
+    opacity: 1;
+  }
+
+  100% {
+    height: 0;
+    opacity: 0;
+  }
+}

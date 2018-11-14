@@ -5,6 +5,7 @@
   font-family: 'Asap Condensed';
   user-select: none;
   -webkit-user-drag: none;
+  cursor: default;
 }
 
 @import './common/variables';
@@ -21,5 +22,6 @@
 @import './components/smith';
 @import './components/automater';
 @import './components/slider';
+@import './components/achievement';
 
 

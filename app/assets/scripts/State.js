@@ -16,7 +16,17 @@ let State = function( s = {} ) {
 
     pickaxe: {
       sharpness: 100,
-      hardness: 100
+      hardness: 100,
+
+      permanent_bonuses: {
+        sharpness: 0,
+        hardness: 0
+      },
+
+      temporary_bonuses: {
+        sharpness: 0,
+        hardness: 0
+      }
     },
 
     automater: {

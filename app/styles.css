@@ -8,7 +8,8 @@
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  -webkit-user-drag: none; }
+  -webkit-user-drag: none;
+  cursor: default; }
 
 .vertical-separator, .horizontal-separator {
   -ms-interpolation-mode: nearest-neighbor;
@@ -62,6 +63,7 @@
   height: 100%;
   width: 100%; }
   .game-container > .left {
+    position: relative;
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -752,7 +754,8 @@
     -webkit-transition: opacity .2s;
     transition: opacity .2s;
     opacity: 0;
-    pointer-events: all; }
+    pointer-events: all;
+    cursor: move; }
     .automater.real:active {
       opacity: 1; }
     .automater.real.set {
@@ -765,6 +768,7 @@
     .automater.real .top-bar {
       background: rgba(255, 255, 255, 0.6); }
       .automater.real .top-bar i {
+        pointer-events: all;
         cursor: pointer; }
         .automater.real .top-bar i:hover {
           color: gray; }
@@ -776,17 +780,18 @@
     -webkit-box-direction: normal;
     -ms-flex-flow: row nowrap;
     flex-flow: row nowrap;
-    -webkit-box-pack: justify;
-    -ms-flex-pack: justify;
-    justify-content: space-between;
+    -webkit-box-pack: end;
+    -ms-flex-pack: end;
+    justify-content: flex-end;
     -webkit-box-align: center;
     -ms-flex-align: center;
     align-items: center;
     background: white;
-    padding: 1px 0; }
+    padding: 2px 0;
+    pointer-events: none; }
     .automater .top-bar i {
       color: #222;
-      font-size: 15px; }
+      font-size: 12px; }
   .automater .automater-target {
     -webkit-box-flex: 1;
     -ms-flex-positive: 1;
@@ -799,9 +804,11 @@
     justify-content: center;
     -webkit-box-align: center;
     -ms-flex-align: center;
-    align-items: center; }
+    align-items: center;
+    pointer-events: none; }
     .automater .automater-target img {
-      opacity: .3; }
+      opacity: .3;
+      pointer-events: none; }
   .automater .owned {
     position: absolute;
     display: -webkit-box;
@@ -875,3 +882,65 @@ input:checked + .slider:before {
 
 .slider.round:before {
   border-radius: 50%; }
+
+.achievement-notification-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 300px;
+  background: rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+  z-index: 2;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-flow: column nowrap;
+  flex-flow: column nowrap;
+  -webkit-box-pack: end;
+  -ms-flex-pack: end;
+  justify-content: flex-end; }
+  .achievement-notification-container .achievement {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-flow: column nowrap;
+    flex-flow: column nowrap;
+    -ms-flex-negative: 0;
+    flex-shrink: 0;
+    height: 0px;
+    width: 100%;
+    background: #222;
+    border: 1px solid white;
+    -webkit-animation: winAchievement 5s ease-in-out forwards;
+    animation: winAchievement 5s ease-in-out forwards;
+    overflow: hidden;
+    color: white; }
+
+@-webkit-keyframes winAchievement {
+  0% {
+    height: 0; }
+  10% {
+    height: 130px; }
+  90% {
+    height: 130px;
+    opacity: 1; }
+  100% {
+    height: 0;
+    opacity: 0; } }
+
+@keyframes winAchievement {
+  0% {
+    height: 0; }
+  10% {
+    height: 130px; }
+  90% {
+    height: 130px;
+    opacity: 1; }
+  100% {
+    height: 0;
+    opacity: 0; } }

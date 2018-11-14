@@ -65,6 +65,7 @@
         transition: opacity .2s;
         opacity: 0;
         pointer-events: all;
+        cursor: move;
 
         &:active {
             opacity: 1;
@@ -89,6 +90,7 @@
             background: rgba(255, 255, 255, .6);
             
             i {
+                pointer-events: all;
                 cursor: pointer;
 
                 &:hover {
@@ -101,14 +103,15 @@
     .top-bar {
         display: flex;
         flex-flow: row nowrap;
-        justify-content: space-between;
+        justify-content: flex-end;
         align-items: center;
         background: white;
-        padding: 1px 0;
+        padding: 2px 0;
+        pointer-events: none;
 
         i {
             color: #222;
-            font-size: 15px;
+            font-size: 12px;
         }
     }
 
@@ -117,9 +120,11 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        pointer-events: none;
 
         img {
             opacity: .3;
+            pointer-events: none;
         }
     }
 
