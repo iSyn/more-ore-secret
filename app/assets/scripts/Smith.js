@@ -54,11 +54,20 @@ let Smith = function( obj = {} ) {
 
         let upgrade = this.upgrade_in_progress
 
-        if ( upgrade.unlock_function ) {
-            let fn = upgrade.unlock_function
+        if ( upgrade.unlock_functions ) {
+            let fn = upgrade.unlock_functions
+
             if ( fn.unlock_fragility_spectacles ) {
                 S.locked.fragility_spectacles = 0
                 generate_weak_spot()
+            }
+
+            if ( fn.increase_pickaxe_sharpness ) {
+                S.pickaxe.sharpness += fn.increase_pickaxe_sharpness
+            }
+
+            if ( fn.increase_pickaxe_hardness ) {
+                S.pickaxe.hardness += fn.increase_pickaxe_hardness
             }
         }
 

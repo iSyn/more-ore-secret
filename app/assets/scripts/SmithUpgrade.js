@@ -10,6 +10,7 @@ let SmithUpgrade = function( obj ) {
     this.price = obj.price
     this.owned = obj.owned || 0
     this.locked = obj.locked || 0
+    this.unlock_functions = obj.unlock_functions
 
     Smith_Upgrades.push( this )
 }
@@ -22,7 +23,7 @@ let smith_upgrades = [
         desc: 'Allows you to spot "weak spots" within the ore',
         duration: 10,
         price: 1,
-        unlock_function: {
+        unlock_functions: {
             unlock_fragility_spectacles: 1
         }
     }, {
@@ -31,7 +32,7 @@ let smith_upgrades = [
         desc: 'Increases your pickaxe sharpness by 10%',
         duration: 1,
         price: 10,
-        unlock_function: {
+        unlock_functions: {
             increase_pickaxe_sharpness: 10
         }
     }, {
@@ -40,7 +41,7 @@ let smith_upgrades = [
         desc: 'Increases your pickaxe hardness by 10%',
         duration: 5,
         price: 10,
-        unlock_function: {
+        unlock_functions: {
             increase_pickaxe_hardness: 10
         }
     }, {
