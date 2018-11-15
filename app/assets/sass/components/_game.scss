@@ -6,215 +6,257 @@
   flex-flow: column nowrap;
   position: relative;
   overflow: hidden;
-}
 
-.game-container {
-  display: flex;
-  flex-flow: row nowrap;
-  height: 100%;
-  width: 100%;
-
-  > .left {
-    position: relative;
+  .game-container {
     display: flex;
-    flex-flow: column nowrap;
-    flex-grow: 1;
-    background-color: #60695d;
-    background-image: url('./assets/images/bg-main_bg.png');
-    background-size: cover;
-    image-rendering: pixelated;
-
-    .topbar-inventory-container {
-      width: calc( 100% - 40px );
-      margin: 0 20px;
+    flex-flow: row nowrap;
+    height: 100%;
+    width: 100%;
+  
+    > .left {
+      position: relative;
       display: flex;
       flex-flow: column nowrap;
-
-      .inventory-hanger-container {
-        height: 20px;
-        width: 100%;
-        display: flex;
-        flex-flow: row nowrap;
-        justify-content: space-between;
-
-        .vertical-separator {
-          margin: 0 40px;
-        }
-      }
-
-      $topbar-bg-color: #322011;
-      .topbar-inventory {
-        background: $topbar-bg-color;
-        padding: 25px 50px;
-        width: 100%;
-        display: flex;
-        flex-flow: row nowrap;
-        align-items: center;
-        justify-content: space-between;
-        border: 2px solid #251910;
-        box-shadow: 0 0 40px #222 inset;
-
-        p {
-          font-size: 22px;
-          color: white;
-          background: $topbar-bg-color;
-          letter-spacing: .5px;
-        }
-      }
-    }
-
-    .ore-container-wrapper {
       flex-grow: 1;
-      position: relative;
-
-      .ore-container {
-        position: absolute;
-        height: 300px;
-        width: 300px;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        
-        .ore-sprite {
+      background-color: #60695d;
+      background-image: url('./assets/images/bg-main_bg.png');
+      background-size: cover;
+      image-rendering: pixelated;
+  
+      .topbar-inventory-container {
+        width: calc( 100% - 40px );
+        margin: 0 20px;
+        display: flex;
+        flex-flow: column nowrap;
+  
+        .inventory-hanger-container {
+          height: 20px;
           width: 100%;
-          height: auto;
+          display: flex;
+          flex-flow: row nowrap;
+          justify-content: space-between;
+  
+          .vertical-separator {
+            margin: 0 40px;
+          }
+        }
+  
+        $topbar-bg-color: #322011;
+        .topbar-inventory {
+          background: $topbar-bg-color;
+          padding: 25px 50px;
+          width: 100%;
+          display: flex;
+          flex-flow: row nowrap;
+          align-items: center;
+          justify-content: space-between;
+          border: 2px solid #251910;
+          box-shadow: 0 0 40px #222 inset;
+  
+          p {
+            font-size: 22px;
+            color: white;
+            background: $topbar-bg-color;
+            letter-spacing: .5px;
+          }
+        }
+      }
+  
+      .ore-container-wrapper {
+        flex-grow: 1;
+        position: relative;
+  
+        .ore-container {
           position: absolute;
-          bottom: 0;
-          image-rendering: pixelated;
-          transition: transform .1s;
-          cursor: pointer;
-          // border: 2px solid black;
-
-          &:hover {
-            transform: scale( 1.03 );
-          }
-
-          &:active {
-            transform: scale( 0.97 );
-          }
-        }
-        
-        .ore-weak-spot-container {
-          pointer-events: none;
-          position: relative;
-          // background: rgba(255, 0, 0, 0.5);
-
-          .ore-weak-spot {
-            pointer-events: all;
-            position: absolute;
-            top: 0px;
-            left: 0px;
-            opacity: .8;
-            cursor: pointer;
+          height: 300px;
+          width: 300px;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
           
-            border: 3px solid #f3f3f3;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            border-top: 3px solid grey;
-            border-bottom: 3px solid grey;
-            width: 20px;
-            height: 20px;
-            -webkit-animation: spin 1.5s linear infinite;
-            animation: spin 1.5s linear infinite;
+          .ore-sprite {
+            width: 100%;
+            height: auto;
+            position: absolute;
+            bottom: 0;
+            image-rendering: pixelated;
+            transition: transform .1s;
+            cursor: pointer;
+            // border: 2px solid black;
+  
+            &:hover {
+              transform: scale( 1.03 );
+            }
+  
+            &:active {
+              transform: scale( 0.97 );
+            }
+          }
+          
+          .ore-weak-spot-container {
+            pointer-events: none;
+            position: relative;
+            // background: rgba(255, 0, 0, 0.5);
+  
+            .ore-weak-spot {
+              display: none;
+              pointer-events: all;
+              position: absolute;
+              top: 0px;
+              left: 0px;
+              opacity: .8;
+              cursor: pointer;
+            
+              border: 3px solid #f3f3f3;
+              background: rgba(255, 255, 255, 0.2);
+              border-radius: 50%;
+              border-top: 3px solid grey;
+              border-bottom: 3px solid grey;
+              width: 20px;
+              height: 20px;
+              -webkit-animation: spin 1.5s linear infinite;
+              animation: spin 1.5s linear infinite;
+            }
           }
         }
       }
-    }
-
-    .settings-container {
-      position: fixed;
-      padding: 5px;
-
-      i {
-        color: lightgrey;
-        opacity: .3;
-        padding-right: 5px;
-        cursor: pointer;
-
-        &:hover {
-          opacity: .5;
+  
+      .settings-container {
+        position: fixed;
+        padding: 5px;
+  
+        i {
+          color: lightgrey;
+          opacity: .3;
+          padding-right: 5px;
+          cursor: pointer;
+  
+          &:hover {
+            opacity: .5;
+          }
         }
       }
-    }
-
-    .text-scroller-container {
-      background: rgba(0, 0, 0, 0.6);
-      position: relative;
-      height: 30px;
-
-      .text-scroller {
-        position: absolute;
-        color: white;
-        padding: 0 20px;
-        min-width: max-content;
+  
+      .text-scroller-container {
+        background: rgba(0, 0, 0, 0.6);
+        position: relative;
+        height: 30px;
+  
+        .text-scroller {
+          position: absolute;
+          color: white;
+          padding: 0 20px;
+          min-width: max-content;
+        }
+      }
+  
+      .quest-area-container {
+        height: 150px;
+        width: 100%;
+        background: url('./assets/images/misc-mineshaft.png');
+        background-size: auto 100%;
       }
     }
+  
+    .right-container {
+      position: relative;
+      display: flex;
+      flex-flow: row nowrap;
+      transition: margin-right .3s ease-in-out;
+      z-index: 2;
+  
+      > .right {
+        width: 300px;
+        height: 100%;
+        background: darkgray;
+        display: flex;
+        flex-flow: column nowrap;
+  
+        .tabs-container {
+          display: flex;
+          flex-flow: row nowrap;
+          justify-content: space-around;
+          text-shadow: 0 0 4px black;
+          background-color: #4e3013;
+          
+          .tab {
+            font-family: 'Germania One';
+            padding: 15px 0;
+            font-size: 40px;
+            color: white;
+            background-color: #4e3013;
+            box-shadow: 0 0 40px #222 inset;
+            letter-spacing: 3px;
+            width: 50%;
+            text-align: center;
+            cursor: pointer;
+            transition: all .1s;
+            filter: blur( .5px ) brightness( 60% );
+  
+            &:hover {
+              opacity: 1;
+              filter: brightness( 90% );
+            }
+  
+            &.selected {
+              opacity: 1;
+              filter: brightness( 100% );
+            }
+          }
+        }
+  
+        .tab-content-container {
+          height: 100%;
+          overflow-y: auto;
+          background: linear-gradient( to bottom, lightgrey, #222 );
+  
+          .tab-content {
+            height: 100%;
 
-    .quest-area-container {
-      height: 150px;
-      width: 100%;
-      background: url('./assets/images/misc-mineshaft.png');
-      background-size: auto 100%;
+            &.store {
+              background: linear-gradient(to bottom, #b78f6d, #331f0b);
+              box-shadow: 0 0 10px #331f0b inset;
+            }
+  
+            &.smith {
+              background: linear-gradient(to bottom, #525252, #222);
+              box-shadow: 0 0 10px #222 inset;
+            }
+          }
+        }
+      }
     }
   }
 
-  .right-container {
-    position: relative;
-    display: flex;
-    flex-flow: row nowrap;
-    transition: margin-right .3s ease-in-out;
-    z-index: 2;
+  footer {
+    height: 20px;
+    line-height: 20px;
+    width: 100%;
+    font-size: 14px;
+    overflow: hidden;
+    background: #222;
+    color: rgba( 255, 255, 255, .5 );
+    text-align: center;
+    transition: color .2s;
+  
+    &:hover {
+      color: rgba( 255, 255, 255, .7 );
+    }
 
-    > .right {
-      width: 300px;
-      height: 100%;
-      background: darkgray;
-      display: flex;
-      flex-flow: column nowrap;
-
-      .tabs-container {
-        display: flex;
-        flex-flow: row nowrap;
-        justify-content: space-around;
-        text-shadow: 0 0 4px black;
-        background-color: #4e3013;
-        
-        .tab {
-          font-family: 'Germania One';
-          padding: 15px 0;
-          font-size: 40px;
-          color: white;
-          background-color: #4e3013;
-          box-shadow: 0 0 40px #222 inset;
-          letter-spacing: 3px;
-          width: 50%;
-          text-align: center;
-          cursor: pointer;
-          transition: all .1s;
-          filter: blur( .5px ) brightness( 60% );
-
-          &:hover {
-            opacity: 1;
-            filter: brightness( 90% );
-          }
-
-          &.selected {
-            opacity: 1;
-            filter: brightness( 100% );
-          }
-        }
+    a, span {
+      cursor: pointer;
+      
+      &:hover {
+        color: rgba( 255, 255, 255, .9 )
       }
-
-      .tab-content-container {
-        height: 100%;
-        overflow-y: auto;
-        background: linear-gradient( to bottom, lightgrey, #222 );
-
-        .tab-content {
-
-
-        }
-      }
+    }
+  
+    a {
+      color: inherit;
+    }
+  
+    span {
+      text-decoration: underline;
     }
   }
 }

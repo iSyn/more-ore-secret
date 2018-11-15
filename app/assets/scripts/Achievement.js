@@ -50,6 +50,9 @@ let achievements = [
   { name: 'Intermediate Miner', desc: 'Break 25 rocks', reward: { increase_pickaxe_hardness: 10, increase_pickaxe_sharpness: 10} },
   { name: 'Advanced Miner', desc: 'Break 100 rocks', reward: { increase_pickaxe_hardness: 10, increase_pickaxe_sharpness: 10 } },
 
+  // SECRET ACHIEVEMENTS
+  { name: 'Who am I?', desc: 'Figure out the developers name', type: 'secret' }
+
 ]
 
 achievements.forEach( achievement => {

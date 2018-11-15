@@ -2,6 +2,7 @@ let State = function( s = {} ) {
 
   this.state = {
     ores: s.ores || 100,
+    refined: s.refined || 100,
     gems: s.ores || 0,
     generation: s.generation || 1,
     ops: s.ops || 0,
@@ -31,6 +32,10 @@ let State = function( s = {} ) {
       available: 0
     },
 
+    locked: {
+      fragility_spectacles: 1
+    },
+
     stats: {
       current_rocks_destroyed: 0,
       total_rocks_destroyed: 0,
@@ -38,7 +43,8 @@ let State = function( s = {} ) {
       total_gems_earned: 0,
       total_clicks: 0,
       total_weak_hit_clicks: 0,
-      highest_combo: 0
+      highest_combo: 0,
+      seconds_played: 0
     },
 
     prefs: {
@@ -47,8 +53,8 @@ let State = function( s = {} ) {
       bgm_volume: 1,
       show_rising_numbers: true,
       show_ops_rising_numbers: true,
-      window_blurred: false
     }
+
   }
   
 }

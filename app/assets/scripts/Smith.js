@@ -8,10 +8,14 @@ let Smith = function( obj = {} ) {
 
     this.start_upgrade = ( upgrade ) => {
 
-        this.upgrade_in_progress = upgrade
-        this.duration = upgrade.duration * 1000
+        if ( S.refined >= upgrade.price ) {
+            S.refined -= upgrade.price
 
-        this._update_progress()
+            this.upgrade_in_progress = upgrade
+            this.duration = upgrade.duration * 1000
+
+            this._update_progress()
+        }
 
     }
 
@@ -50,13 +54,21 @@ let Smith = function( obj = {} ) {
 
         let upgrade = this.upgrade_in_progress
 
+        if ( upgrade.unlock_function ) {
+            let fn = upgrade.unlock_function
+            if ( fn.unlock_fragility_spectacles ) {
+                S.locked.fragility_spectacles = 0
+                generate_weak_spot()
+            }
+        }
+
         upgrade.owned = 1
         if ( upgrade.repeat ) upgrade.level++ 
 
         if ( upgrade.code_name == 'a_u_t_o_m_a_t_e_r' ) {
             new Automater()
             S.automater.automater_accordion_hidden = false
-            reposition_elements()
+            O.reposition_elements = 1
         }
 
         this.upgrade_in_progress = {}

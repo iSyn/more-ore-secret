@@ -44,6 +44,7 @@
   flex-flow: row nowrap;
   padding: 10px;
   box-shadow: 0 0 40px #222 inset;
+  background: #989898;
 
   > img {
     border: 1px solid black;
@@ -70,31 +71,33 @@
   }
 }
 
-.smith-upgrade {
+.smith-upgrades {
+  display: flex;
+  flex-flow: row wrap;
+  width: 100%;
+  padding: 0 22px;
 
-  &:not(.repeatable) {
-    
+  > p {
+    width: 100%;
+    color: white;
+    padding: 11px 0;
   }
 
-  &.repeatable {
-    padding: 10px 5px;
-    display: flex;
-    flex-flow: row nowrap;
-    background: url( './assets/images/misc-building_button.png' );
-    background-size: 100% 100%;
+  .smith-upgrade {
+    height: 64px;
+    width: 64px;
+    // background: url("./assets/images/upgrade-upgrade_container.png");
+    background-size: 100%;
+    image-rendering: pixelated;
+    box-shadow: 0 0 30px #222 inset;
     cursor: pointer;
-    box-shadow: 0 0 20px #222 inset;
 
     &:hover {
-      box-shadow: 0 0 5px #fff inset;
+      box-shadow: 0 0 10px #fff inset, 0 0 30px #222 inset;
     }
 
-    div {
-      padding-left: 5px;
-      display: flex;
-      flex-flow: column nowrap;
+    img {
+      pointer-events: none;
     }
   }
-
-
 }

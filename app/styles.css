@@ -51,168 +51,7 @@
   flex-flow: column nowrap;
   position: relative;
   overflow: hidden; }
-
-.game-container {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
-  -ms-flex-flow: row nowrap;
-  flex-flow: row nowrap;
-  height: 100%;
-  width: 100%; }
-  .game-container > .left {
-    position: relative;
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-    -ms-flex-flow: column nowrap;
-    flex-flow: column nowrap;
-    -webkit-box-flex: 1;
-    -ms-flex-positive: 1;
-    flex-grow: 1;
-    background-color: #60695d;
-    background-image: url("./assets/images/bg-main_bg.png");
-    background-size: cover;
-    -ms-interpolation-mode: nearest-neighbor;
-    image-rendering: -webkit-optimize-contrast;
-    image-rendering: -moz-crisp-edges;
-    image-rendering: -o-pixelated;
-    image-rendering: pixelated; }
-    .game-container > .left .topbar-inventory-container {
-      width: calc( 100% - 40px);
-      margin: 0 20px;
-      display: -webkit-box;
-      display: -ms-flexbox;
-      display: flex;
-      -webkit-box-orient: vertical;
-      -webkit-box-direction: normal;
-      -ms-flex-flow: column nowrap;
-      flex-flow: column nowrap; }
-      .game-container > .left .topbar-inventory-container .inventory-hanger-container {
-        height: 20px;
-        width: 100%;
-        display: -webkit-box;
-        display: -ms-flexbox;
-        display: flex;
-        -webkit-box-orient: horizontal;
-        -webkit-box-direction: normal;
-        -ms-flex-flow: row nowrap;
-        flex-flow: row nowrap;
-        -webkit-box-pack: justify;
-        -ms-flex-pack: justify;
-        justify-content: space-between; }
-        .game-container > .left .topbar-inventory-container .inventory-hanger-container .vertical-separator {
-          margin: 0 40px; }
-      .game-container > .left .topbar-inventory-container .topbar-inventory {
-        background: #322011;
-        padding: 25px 50px;
-        width: 100%;
-        display: -webkit-box;
-        display: -ms-flexbox;
-        display: flex;
-        -webkit-box-orient: horizontal;
-        -webkit-box-direction: normal;
-        -ms-flex-flow: row nowrap;
-        flex-flow: row nowrap;
-        -webkit-box-align: center;
-        -ms-flex-align: center;
-        align-items: center;
-        -webkit-box-pack: justify;
-        -ms-flex-pack: justify;
-        justify-content: space-between;
-        border: 2px solid #251910;
-        -webkit-box-shadow: 0 0 40px #222 inset;
-        box-shadow: 0 0 40px #222 inset; }
-        .game-container > .left .topbar-inventory-container .topbar-inventory p {
-          font-size: 22px;
-          color: white;
-          background: #322011;
-          letter-spacing: .5px; }
-    .game-container > .left .ore-container-wrapper {
-      -webkit-box-flex: 1;
-      -ms-flex-positive: 1;
-      flex-grow: 1;
-      position: relative; }
-      .game-container > .left .ore-container-wrapper .ore-container {
-        position: absolute;
-        height: 300px;
-        width: 300px;
-        top: 50%;
-        left: 50%;
-        -webkit-transform: translate(-50%, -50%);
-        transform: translate(-50%, -50%); }
-        .game-container > .left .ore-container-wrapper .ore-container .ore-sprite {
-          width: 100%;
-          height: auto;
-          position: absolute;
-          bottom: 0;
-          -ms-interpolation-mode: nearest-neighbor;
-          image-rendering: -webkit-optimize-contrast;
-          image-rendering: -moz-crisp-edges;
-          image-rendering: -o-pixelated;
-          image-rendering: pixelated;
-          -webkit-transition: -webkit-transform .1s;
-          transition: -webkit-transform .1s;
-          transition: transform .1s;
-          transition: transform .1s, -webkit-transform .1s;
-          cursor: pointer; }
-          .game-container > .left .ore-container-wrapper .ore-container .ore-sprite:hover {
-            -webkit-transform: scale(1.03);
-            transform: scale(1.03); }
-          .game-container > .left .ore-container-wrapper .ore-container .ore-sprite:active {
-            -webkit-transform: scale(0.97);
-            transform: scale(0.97); }
-        .game-container > .left .ore-container-wrapper .ore-container .ore-weak-spot-container {
-          pointer-events: none;
-          position: relative; }
-          .game-container > .left .ore-container-wrapper .ore-container .ore-weak-spot-container .ore-weak-spot {
-            pointer-events: all;
-            position: absolute;
-            top: 0px;
-            left: 0px;
-            opacity: .8;
-            cursor: pointer;
-            border: 3px solid #f3f3f3;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            border-top: 3px solid grey;
-            border-bottom: 3px solid grey;
-            width: 20px;
-            height: 20px;
-            -webkit-animation: spin 1.5s linear infinite;
-            animation: spin 1.5s linear infinite; }
-    .game-container > .left .settings-container {
-      position: fixed;
-      padding: 5px; }
-      .game-container > .left .settings-container i {
-        color: lightgrey;
-        opacity: .3;
-        padding-right: 5px;
-        cursor: pointer; }
-        .game-container > .left .settings-container i:hover {
-          opacity: .5; }
-    .game-container > .left .text-scroller-container {
-      background: rgba(0, 0, 0, 0.6);
-      position: relative;
-      height: 30px; }
-      .game-container > .left .text-scroller-container .text-scroller {
-        position: absolute;
-        color: white;
-        padding: 0 20px;
-        min-width: -webkit-max-content;
-        min-width: -moz-max-content;
-        min-width: max-content; }
-    .game-container > .left .quest-area-container {
-      height: 150px;
-      width: 100%;
-      background: url("./assets/images/misc-mineshaft.png");
-      background-size: auto 100%; }
-  .game-container .right-container {
-    position: relative;
+  .container .game-container {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -220,61 +59,255 @@
     -webkit-box-direction: normal;
     -ms-flex-flow: row nowrap;
     flex-flow: row nowrap;
-    -webkit-transition: margin-right .3s ease-in-out;
-    transition: margin-right .3s ease-in-out;
-    z-index: 2; }
-    .game-container .right-container > .right {
-      width: 300px;
-      height: 100%;
-      background: darkgray;
+    height: 100%;
+    width: 100%; }
+    .container .game-container > .left {
+      position: relative;
       display: -webkit-box;
       display: -ms-flexbox;
       display: flex;
       -webkit-box-orient: vertical;
       -webkit-box-direction: normal;
       -ms-flex-flow: column nowrap;
-      flex-flow: column nowrap; }
-      .game-container .right-container > .right .tabs-container {
+      flex-flow: column nowrap;
+      -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+      flex-grow: 1;
+      background-color: #60695d;
+      background-image: url("./assets/images/bg-main_bg.png");
+      background-size: cover;
+      -ms-interpolation-mode: nearest-neighbor;
+      image-rendering: -webkit-optimize-contrast;
+      image-rendering: -moz-crisp-edges;
+      image-rendering: -o-pixelated;
+      image-rendering: pixelated; }
+      .container .game-container > .left .topbar-inventory-container {
+        width: calc( 100% - 40px);
+        margin: 0 20px;
         display: -webkit-box;
         display: -ms-flexbox;
         display: flex;
-        -webkit-box-orient: horizontal;
+        -webkit-box-orient: vertical;
         -webkit-box-direction: normal;
-        -ms-flex-flow: row nowrap;
-        flex-flow: row nowrap;
-        -ms-flex-pack: distribute;
-        justify-content: space-around;
-        text-shadow: 0 0 4px black;
-        background-color: #4e3013; }
-        .game-container .right-container > .right .tabs-container .tab {
-          font-family: 'Germania One';
-          padding: 15px 0;
-          font-size: 40px;
-          color: white;
-          background-color: #4e3013;
+        -ms-flex-flow: column nowrap;
+        flex-flow: column nowrap; }
+        .container .game-container > .left .topbar-inventory-container .inventory-hanger-container {
+          height: 20px;
+          width: 100%;
+          display: -webkit-box;
+          display: -ms-flexbox;
+          display: flex;
+          -webkit-box-orient: horizontal;
+          -webkit-box-direction: normal;
+          -ms-flex-flow: row nowrap;
+          flex-flow: row nowrap;
+          -webkit-box-pack: justify;
+          -ms-flex-pack: justify;
+          justify-content: space-between; }
+          .container .game-container > .left .topbar-inventory-container .inventory-hanger-container .vertical-separator {
+            margin: 0 40px; }
+        .container .game-container > .left .topbar-inventory-container .topbar-inventory {
+          background: #322011;
+          padding: 25px 50px;
+          width: 100%;
+          display: -webkit-box;
+          display: -ms-flexbox;
+          display: flex;
+          -webkit-box-orient: horizontal;
+          -webkit-box-direction: normal;
+          -ms-flex-flow: row nowrap;
+          flex-flow: row nowrap;
+          -webkit-box-align: center;
+          -ms-flex-align: center;
+          align-items: center;
+          -webkit-box-pack: justify;
+          -ms-flex-pack: justify;
+          justify-content: space-between;
+          border: 2px solid #251910;
           -webkit-box-shadow: 0 0 40px #222 inset;
-          box-shadow: 0 0 40px #222 inset;
-          letter-spacing: 3px;
-          width: 50%;
-          text-align: center;
-          cursor: pointer;
-          -webkit-transition: all .1s;
-          transition: all .1s;
-          -webkit-filter: blur(0.5px) brightness(60%);
-          filter: blur(0.5px) brightness(60%); }
-          .game-container .right-container > .right .tabs-container .tab:hover {
-            opacity: 1;
-            -webkit-filter: brightness(90%);
-            filter: brightness(90%); }
-          .game-container .right-container > .right .tabs-container .tab.selected {
-            opacity: 1;
-            -webkit-filter: brightness(100%);
-            filter: brightness(100%); }
-      .game-container .right-container > .right .tab-content-container {
+          box-shadow: 0 0 40px #222 inset; }
+          .container .game-container > .left .topbar-inventory-container .topbar-inventory p {
+            font-size: 22px;
+            color: white;
+            background: #322011;
+            letter-spacing: .5px; }
+      .container .game-container > .left .ore-container-wrapper {
+        -webkit-box-flex: 1;
+        -ms-flex-positive: 1;
+        flex-grow: 1;
+        position: relative; }
+        .container .game-container > .left .ore-container-wrapper .ore-container {
+          position: absolute;
+          height: 300px;
+          width: 300px;
+          top: 50%;
+          left: 50%;
+          -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%); }
+          .container .game-container > .left .ore-container-wrapper .ore-container .ore-sprite {
+            width: 100%;
+            height: auto;
+            position: absolute;
+            bottom: 0;
+            -ms-interpolation-mode: nearest-neighbor;
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: -o-pixelated;
+            image-rendering: pixelated;
+            -webkit-transition: -webkit-transform .1s;
+            transition: -webkit-transform .1s;
+            transition: transform .1s;
+            transition: transform .1s, -webkit-transform .1s;
+            cursor: pointer; }
+            .container .game-container > .left .ore-container-wrapper .ore-container .ore-sprite:hover {
+              -webkit-transform: scale(1.03);
+              transform: scale(1.03); }
+            .container .game-container > .left .ore-container-wrapper .ore-container .ore-sprite:active {
+              -webkit-transform: scale(0.97);
+              transform: scale(0.97); }
+          .container .game-container > .left .ore-container-wrapper .ore-container .ore-weak-spot-container {
+            pointer-events: none;
+            position: relative; }
+            .container .game-container > .left .ore-container-wrapper .ore-container .ore-weak-spot-container .ore-weak-spot {
+              display: none;
+              pointer-events: all;
+              position: absolute;
+              top: 0px;
+              left: 0px;
+              opacity: .8;
+              cursor: pointer;
+              border: 3px solid #f3f3f3;
+              background: rgba(255, 255, 255, 0.2);
+              border-radius: 50%;
+              border-top: 3px solid grey;
+              border-bottom: 3px solid grey;
+              width: 20px;
+              height: 20px;
+              -webkit-animation: spin 1.5s linear infinite;
+              animation: spin 1.5s linear infinite; }
+      .container .game-container > .left .settings-container {
+        position: fixed;
+        padding: 5px; }
+        .container .game-container > .left .settings-container i {
+          color: lightgrey;
+          opacity: .3;
+          padding-right: 5px;
+          cursor: pointer; }
+          .container .game-container > .left .settings-container i:hover {
+            opacity: .5; }
+      .container .game-container > .left .text-scroller-container {
+        background: rgba(0, 0, 0, 0.6);
+        position: relative;
+        height: 30px; }
+        .container .game-container > .left .text-scroller-container .text-scroller {
+          position: absolute;
+          color: white;
+          padding: 0 20px;
+          min-width: -webkit-max-content;
+          min-width: -moz-max-content;
+          min-width: max-content; }
+      .container .game-container > .left .quest-area-container {
+        height: 150px;
+        width: 100%;
+        background: url("./assets/images/misc-mineshaft.png");
+        background-size: auto 100%; }
+    .container .game-container .right-container {
+      position: relative;
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-orient: horizontal;
+      -webkit-box-direction: normal;
+      -ms-flex-flow: row nowrap;
+      flex-flow: row nowrap;
+      -webkit-transition: margin-right .3s ease-in-out;
+      transition: margin-right .3s ease-in-out;
+      z-index: 2; }
+      .container .game-container .right-container > .right {
+        width: 300px;
         height: 100%;
-        overflow-y: auto;
-        background: -webkit-gradient(linear, left top, left bottom, from(lightgrey), to(#222));
-        background: linear-gradient(to bottom, lightgrey, #222); }
+        background: darkgray;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        -ms-flex-flow: column nowrap;
+        flex-flow: column nowrap; }
+        .container .game-container .right-container > .right .tabs-container {
+          display: -webkit-box;
+          display: -ms-flexbox;
+          display: flex;
+          -webkit-box-orient: horizontal;
+          -webkit-box-direction: normal;
+          -ms-flex-flow: row nowrap;
+          flex-flow: row nowrap;
+          -ms-flex-pack: distribute;
+          justify-content: space-around;
+          text-shadow: 0 0 4px black;
+          background-color: #4e3013; }
+          .container .game-container .right-container > .right .tabs-container .tab {
+            font-family: 'Germania One';
+            padding: 15px 0;
+            font-size: 40px;
+            color: white;
+            background-color: #4e3013;
+            -webkit-box-shadow: 0 0 40px #222 inset;
+            box-shadow: 0 0 40px #222 inset;
+            letter-spacing: 3px;
+            width: 50%;
+            text-align: center;
+            cursor: pointer;
+            -webkit-transition: all .1s;
+            transition: all .1s;
+            -webkit-filter: blur(0.5px) brightness(60%);
+            filter: blur(0.5px) brightness(60%); }
+            .container .game-container .right-container > .right .tabs-container .tab:hover {
+              opacity: 1;
+              -webkit-filter: brightness(90%);
+              filter: brightness(90%); }
+            .container .game-container .right-container > .right .tabs-container .tab.selected {
+              opacity: 1;
+              -webkit-filter: brightness(100%);
+              filter: brightness(100%); }
+        .container .game-container .right-container > .right .tab-content-container {
+          height: 100%;
+          overflow-y: auto;
+          background: -webkit-gradient(linear, left top, left bottom, from(lightgrey), to(#222));
+          background: linear-gradient(to bottom, lightgrey, #222); }
+          .container .game-container .right-container > .right .tab-content-container .tab-content {
+            height: 100%; }
+            .container .game-container .right-container > .right .tab-content-container .tab-content.store {
+              background: -webkit-gradient(linear, left top, left bottom, from(#b78f6d), to(#331f0b));
+              background: linear-gradient(to bottom, #b78f6d, #331f0b);
+              -webkit-box-shadow: 0 0 10px #331f0b inset;
+              box-shadow: 0 0 10px #331f0b inset; }
+            .container .game-container .right-container > .right .tab-content-container .tab-content.smith {
+              background: -webkit-gradient(linear, left top, left bottom, from(#525252), to(#222));
+              background: linear-gradient(to bottom, #525252, #222);
+              -webkit-box-shadow: 0 0 10px #222 inset;
+              box-shadow: 0 0 10px #222 inset; }
+  .container footer {
+    height: 20px;
+    line-height: 20px;
+    width: 100%;
+    font-size: 14px;
+    overflow: hidden;
+    background: #222;
+    color: rgba(255, 255, 255, 0.5);
+    text-align: center;
+    -webkit-transition: color .2s;
+    transition: color .2s; }
+    .container footer:hover {
+      color: rgba(255, 255, 255, 0.7); }
+    .container footer a, .container footer span {
+      cursor: pointer; }
+      .container footer a:hover, .container footer span:hover {
+        color: rgba(255, 255, 255, 0.9); }
+    .container footer a {
+      color: inherit; }
+    .container footer span {
+      text-decoration: underline; }
 
 @-webkit-keyframes flyingNumber {
   0% {
@@ -351,6 +384,7 @@
     transform: rotate(360deg); } }
 
 .torch {
+  z-index: 1;
   position: absolute;
   height: 128px;
   width: 128px;
@@ -361,7 +395,8 @@
   image-rendering: -webkit-optimize-contrast;
   image-rendering: -o-pixelated;
   image-rendering: pixelated;
-  top: 30%; }
+  top: 30%;
+  pointer-events: none; }
 
 .torch-left {
   -webkit-transform: scaleX(-1);
@@ -622,7 +657,8 @@
   flex-flow: row nowrap;
   padding: 10px;
   -webkit-box-shadow: 0 0 40px #222 inset;
-  box-shadow: 0 0 40px #222 inset; }
+  box-shadow: 0 0 40px #222 inset;
+  background: #989898; }
   .smith-progress-container > img {
     border: 1px solid black; }
   .smith-progress-container > div {
@@ -649,32 +685,37 @@
         height: 100%;
         background: #222; }
 
-.smith-upgrade.repeatable {
-  padding: 10px 5px;
+.smith-upgrades {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-orient: horizontal;
   -webkit-box-direction: normal;
-  -ms-flex-flow: row nowrap;
-  flex-flow: row nowrap;
-  background: url("./assets/images/misc-building_button.png");
-  background-size: 100% 100%;
-  cursor: pointer;
-  -webkit-box-shadow: 0 0 20px #222 inset;
-  box-shadow: 0 0 20px #222 inset; }
-  .smith-upgrade.repeatable:hover {
-    -webkit-box-shadow: 0 0 5px #fff inset;
-    box-shadow: 0 0 5px #fff inset; }
-  .smith-upgrade.repeatable div {
-    padding-left: 5px;
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-    -ms-flex-flow: column nowrap;
-    flex-flow: column nowrap; }
+  -ms-flex-flow: row wrap;
+  flex-flow: row wrap;
+  width: 100%;
+  padding: 0 22px; }
+  .smith-upgrades > p {
+    width: 100%;
+    color: white;
+    padding: 11px 0; }
+  .smith-upgrades .smith-upgrade {
+    height: 64px;
+    width: 64px;
+    background-size: 100%;
+    -ms-interpolation-mode: nearest-neighbor;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: -o-pixelated;
+    image-rendering: pixelated;
+    -webkit-box-shadow: 0 0 30px #222 inset;
+    box-shadow: 0 0 30px #222 inset;
+    cursor: pointer; }
+    .smith-upgrades .smith-upgrade:hover {
+      -webkit-box-shadow: 0 0 10px #fff inset, 0 0 30px #222 inset;
+      box-shadow: 0 0 10px #fff inset, 0 0 30px #222 inset; }
+    .smith-upgrades .smith-upgrade img {
+      pointer-events: none; }
 
 .automater-wrapper {
   position: absolute;
@@ -685,7 +726,8 @@
   color: white;
   -webkit-transition: left .3s;
   transition: left .3s;
-  display: none; }
+  display: none;
+  z-index: 2; }
   .automater-wrapper header {
     font-size: 14px;
     padding: 20px 0;

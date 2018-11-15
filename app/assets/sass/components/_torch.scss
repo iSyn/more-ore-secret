@@ -1,4 +1,5 @@
 .torch {
+    z-index: 1;
     position: absolute;
     height: 128px;
     width: 128px;
@@ -7,6 +8,7 @@
     image-rendering: -moz-crisp-edges;
     image-rendering: pixelated;
     top: 30%;
+    pointer-events: none;
   }
   
 .torch-left {

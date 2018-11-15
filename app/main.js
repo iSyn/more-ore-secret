@@ -1,3 +1,5 @@
+const VERSION = 0.01
+
 const CONTAINER = s( '.container' )
 const GAME_CONTAINER = s( '.game-container' )
 const ORE_SPRITE = s( '.ore-sprite' )
@@ -19,6 +21,7 @@ const AUTOMATER_WRAPPER = s( '.automater-wrapper' )
 const AUTOMATER_CONTAINER = s( '.automater-container' )
 const AUTOMATER_HEADER = s( '.automater-wrapper > header' )
 const ACHIEVEMENT_NOTIFICATION_CONTAINER = s( '.achievement-notification-container' )
+const FOOTER = s( 'footer' )
 
 let S = new State().state
 let RN = new RisingNumber()
@@ -27,6 +30,78 @@ let TT = new Tooltip()
 let PE = new ParticleEngine()
 let SMITH = new Smith()
 
+let O = {
+  reposition_elements: 1,
+  rebuild_store: 1,
+  recalculate_ops: 1,
+  recalculate_opc: 1,
+  
+  window_blurred: false,
+  counter: 0
+}
+
+let init_game = () => {
+  if ( localStorage.getItem( 'state' ) ) load_game() 
+  game_loop()
+  S.tabs = Tabs
+  build_tabs()
+  build_store()
+
+  if ( !S.locked.fragility_spectacles ) generate_weak_spot()
+
+  handle_text_scroller()
+  ORE_SPRITE.addEventListener( 'click', handle_click )
+  ORE_WEAK_SPOT.addEventListener( 'click', ( e ) => { handle_click( e, 'weak-spot' ) })
+  build_automater_visibility_toggle_btn()
+  build_footer()
+}
+
+let save_game = () => {
+
+  localStorage.setItem( 'state', JSON.stringify( S ) )
+  localStorage.setItem( 'buildings', JSON.stringify( Buildings ) )
+  localStorage.setItem( 'upgrades', JSON.stringify( Upgrades ) )
+  localStorage.setItem( 'achievements', JSON.stringify( Achievements ) )
+  localStorage.setItem( 'text_scroller', JSON.stringify( TS.texts ) )
+  // localStorage.setItem( 'smith_upgrades', JSON.stringify( smith_upgrades ) )
+}
+
+let load_game = () => {
+  S = JSON.parse( localStorage.getItem( 'state' ) )
+
+  Buildings = []
+  let buildings = JSON.parse( localStorage.getItem( 'buildings' ) )
+  buildings.forEach( building => new Building( building ) )
+
+  Upgrades = []
+  let upgrades = JSON.parse( localStorage.getItem( 'upgrades' ) )
+  upgrades.forEach( upgrade => new Upgrade( upgrade ) )
+
+  Achievements = []
+  let achievements = JSON.parse( localStorage.getItem( 'achievements' ) )
+  achievements.forEach( achievement => new Achievement( achievement ) )
+
+  let text_scroller = JSON.parse( localStorage.getItem( 'text_scroller' ) )
+  TS = new TextScroller( text_scroller )
+
+  // for smith upgrades, figure out a good way to save and load
+  // Smith_Upgrades = []
+  // Repeatable_Smith_Upgrades = []
+  // let smith_upgrades = JSON.parse( localStorage.getItem( 'smith_upgrades' ) )
+  // smith_upgrades.forEach( upgrade => new SmithUpgrade( upgrade ) )
+}
+
+let wipe_save = () => {
+  localStorage.clear()
+  location.reload()
+}
+
+let build_footer = () => {
+  FOOTER.innerHTML = `
+    <p><strong>More Ore</strong> v.${VERSION} created by <strong><a href='https://synclairwang.com'>Syn Studios</a></strong> | <span onclick='save_game()'>Save Game</span> | <span onclick='wipe_save()'>Wipe Save</span> | <a href='https://discord.gg/NU99mMQ' target='_blank'>Join the Discord!</a> </p>
+  `
+}
+
 let play_sound = ( name, file_type = 'wav', base_vol = 1 ) => {
   let sound = new Audio( `./app/assets/sounds/${ name }.${ file_type }` )
   sound.volume = S.prefs.sfx_volume * base_vol
@@ -34,6 +109,7 @@ let play_sound = ( name, file_type = 'wav', base_vol = 1 ) => {
 }
 
 let earn = ( amount ) => {
+
   update_ore_hp( amount )
 
   S.stats.total_ores_earned += amount
@@ -45,7 +121,10 @@ let spend = ( amount ) => {
   play_sound( 'buy_sound' )
 }
 
-let reposition_elements = () => {
+let position_elements = () => {
+
+  O.reposition_elements = 0
+
   let left_vertical_separator_dimensions = LEFT_VERTICAL_SEPARATOR.getBoundingClientRect()
   let middle_vertical_separator_dimensions = MIDDLE_VERTICAL_SEPARATOR.getBoundingClientRect()
   let torch_dimensions = TORCH_LEFT.getBoundingClientRect()
@@ -117,6 +196,8 @@ let build_store = () => {
   str += build_buildings()
 
   TAB_CONTENT.innerHTML = str
+  TAB_CONTENT.classList.remove('smith')
+  TAB_CONTENT.classList.add('store')
 }
 
 let build_upgrades = () => {
@@ -193,6 +274,8 @@ let build_smith = () => {
   str += '</div>'
 
   TAB_CONTENT.innerHTML = str
+  TAB_CONTENT.classList.add('smith')
+  TAB_CONTENT.classList.remove('store')
 }
 
 let build_pickaxe_accordion = () => {
@@ -251,28 +334,49 @@ let build_pickaxe_update = ( direct = false ) => {
 }
 
 let build_smith_upgrades = ( direct = false ) => {
+  let locked_upgrades = []
+  let owned_upgrades = []
+
   let str = ''
 
-  Repeatable_Smith_Upgrades.forEach( upgrade => {
-    str += `
-      <div onclick='start_smith_upgrade( Repeatable_Smith_Upgrades, "${ upgrade.code_name }" )' class="smith-upgrade repeatable">
-        <img src="${ upgrade.img }" alt="upgrade image"/>
-        <div>
-          <small>lv. ${ upgrade.level }</small>
-          <h1>${ upgrade.name }</h1>
-          <p>${ upgrade.duration }s</p>
-        </div>
-      </div>
-    `
-  } )
+  str += '<p>Available Upgrades</p>'
 
   Smith_Upgrades.forEach( upgrade => {
-    str += `
-    <div onclick='start_smith_upgrade( Smith_Upgrades, "${ upgrade.code_name }" )' class="smith-upgrade">
-      <img src="${ upgrade.img }" alt="upgrade image"/>
-    </div>
-    `
+    if ( !upgrade.owned && !upgrade.locked ) {
+      str += `
+        <div onclick='start_smith_upgrade( Smith_Upgrades, "${ upgrade.code_name }" )' class="smith-upgrade">
+          <img src="${ upgrade.img }" alt="upgrade image"/>
+        </div>
+      `
+    } else {
+      if ( upgrade.owned ) owned_upgrades.push( upgrade )
+      if ( upgrade.locked ) locked_upgrades.push( upgrade )
+    }
   })
+
+  if ( locked_upgrades.length > 0 ) {
+    str += '<p>Locked Upgrades</p>'
+
+    locked_upgrades.forEach( upgrade => {
+      str += `
+        <div class="smith-upgrade">
+          <img src="${ upgrade.img }" alt="upgrade image"/>
+        </div>
+      `
+    })
+  }
+
+  if ( owned_upgrades.length > 0 ) {
+    str += '<p>Owned Upgrades</p>'
+
+    owned_upgrades.forEach( upgrade => {
+      str += `
+        <div class="smith-upgrade">
+          <img src="${ upgrade.img }" alt="upgrade image"/>
+        </div>
+      `
+    })
+  }
 
   if ( direct ) {
     if ( s( '.smith-upgrades' ) ) {
@@ -379,6 +483,9 @@ let start_smith_upgrade = ( arr, code_name  ) => {
 }
 
 let calculate_opc = ( type ) => {
+
+  O.recalculate_opc = 0
+  
   let opc = S.opc
 
   if ( type ) {
@@ -393,6 +500,9 @@ let calculate_opc = ( type ) => {
 }
 
 let calculate_ops = () => {
+
+  O.recalculate_ops = 0
+
   let ops = 0
 
   Buildings.forEach( building => {
@@ -407,38 +517,27 @@ let calculate_building_ops = ( building_owned, building_production ) => {
   return beautify_number( percentage )
 }
 
-let init_game = () => {
-  game_loop()
-  generate_weak_spot()
-  reposition_elements()
-  S.tabs = Tabs
-  build_tabs()
-  build_store()
-  handle_text_scroller()
-  ORE_SPRITE.addEventListener( 'click', handle_click )
-  ORE_WEAK_SPOT.addEventListener( 'click', ( e ) => { handle_click( e, 'weak-spot' ) })
-  build_automater_visibility_toggle_btn()
-}
-
 let generate_weak_spot = () => {
 
-  let ore_sprite_coords = ORE_SPRITE.getBoundingClientRect()
+  if ( !S.locked.fragility_spectacles ) {
+    ORE_WEAK_SPOT.style.display = 'block'
+    let ore_sprite_coords = ORE_SPRITE.getBoundingClientRect()
 
-  // POSITION CONTAINER AROUND ORE SPRITE
-  ORE_WEAK_SPOT_CONTAINER.style.position = 'absolute'
-  ORE_WEAK_SPOT_CONTAINER.style.width = ore_sprite_coords.width + 'px'
-  ORE_WEAK_SPOT_CONTAINER.style.height = ore_sprite_coords.height + 'px'
-  ORE_WEAK_SPOT_CONTAINER.style.bottom = 0
+    // POSITION CONTAINER AROUND ORE SPRITE
+    ORE_WEAK_SPOT_CONTAINER.style.position = 'absolute'
+    ORE_WEAK_SPOT_CONTAINER.style.width = ore_sprite_coords.width + 'px'
+    ORE_WEAK_SPOT_CONTAINER.style.height = ore_sprite_coords.height + 'px'
+    ORE_WEAK_SPOT_CONTAINER.style.bottom = 0
 
-  // PICK RANDOM COORDS FOR WEAK SPOT
-  let ore_weak_spot_container_coords = ORE_WEAK_SPOT_CONTAINER.getBoundingClientRect()
+    // PICK RANDOM COORDS FOR WEAK SPOT
+    let ore_weak_spot_container_coords = ORE_WEAK_SPOT_CONTAINER.getBoundingClientRect()
 
-  let x = get_random_num( 0, ( ore_weak_spot_container_coords.right - ore_weak_spot_container_coords.left ) )
-  let y = get_random_num( 0, ( ore_weak_spot_container_coords.bottom - ore_weak_spot_container_coords.top ) )
+    let x = get_random_num( 0, ( ore_weak_spot_container_coords.right - ore_weak_spot_container_coords.left ) )
+    let y = get_random_num( 0, ( ore_weak_spot_container_coords.bottom - ore_weak_spot_container_coords.top ) )
 
-  ORE_WEAK_SPOT.style.left = x + 'px'
-  ORE_WEAK_SPOT.style.top = y + 'px'
-
+    ORE_WEAK_SPOT.style.left = x + 'px'
+    ORE_WEAK_SPOT.style.top = y + 'px'
+  }
 }
 
 let handle_click = ( e, type ) => {
@@ -480,40 +579,57 @@ let handle_text_scroller = () => {
 
   let animation_speed = 20
 
-  setTimeout( () => {  handle_text_scroller()  }, 1000 * animation_speed )
-
-  if ( Math.random() <= .40 || TS.queue.length > 0 && !S.prefs.window_blurred ) {
-    let text = TS.get()
-    let text_scroller = document.createElement( 'div' )
-    text_scroller.innerHTML = text
-    text_scroller.style.transition = `transform ${ animation_speed }s linear`
-    text_scroller.classList.add( 'text-scroller' )
-
-    TEXT_SCROLLER_CONTAINER.append( text_scroller )
-
-    let text_scroller_dimensions = text_scroller.getBoundingClientRect()
-    let text_scroller_container_dimensions = TEXT_SCROLLER_CONTAINER.getBoundingClientRect()
-
-    text_scroller.style.left = text_scroller_container_dimensions.right + 'px'
-    text_scroller.style.transform = `translateX( -${ text_scroller_container_dimensions.width + text_scroller_dimensions.width + 100 }px )`
-
-    text_scroller.addEventListener( 'transitionend', () => {  remove_el( text_scroller )  } )
+  if ( !O.window_blurred ) {
+    if ( Math.random() <= .40 || TS.queue.length > 0 ) {
+      let text = TS.get()
+      let text_scroller = document.createElement( 'div' )
+      text_scroller.innerHTML = text
+      text_scroller.style.transition = `transform ${ animation_speed }s linear`
+      text_scroller.classList.add( 'text-scroller' )
+  
+      TEXT_SCROLLER_CONTAINER.append( text_scroller )
+  
+      let text_scroller_dimensions = text_scroller.getBoundingClientRect()
+      let text_scroller_container_dimensions = TEXT_SCROLLER_CONTAINER.getBoundingClientRect()
+  
+      text_scroller.style.left = text_scroller_container_dimensions.right + 'px'
+      text_scroller.style.transform = `translateX( -${ text_scroller_container_dimensions.width + text_scroller_dimensions.width + 100 }px )`
+  
+      text_scroller.addEventListener( 'transitionend', () => {  remove_el( text_scroller )  } )
+    }
   }
+
+  setTimeout( handle_text_scroller, 1000 * animation_speed )
 }
 
 let game_loop = () => {
 
-  setInterval(() => {
-    update_topbar_inventory()
-    update_ore_sprite()
-    earn( S.ops / S.prefs.game_speed )
-  }, 1000 / S.prefs.game_speed)
+  if ( !O.window_blurred ) {
 
-  setInterval(() => {
-    if ( S.ops > 0 && S.prefs.show_ops_rising_numbers ) {
-      RN.new( null, 'buildings', S.ops )
+    update_ore_sprite()
+
+    build_topbar_inventory()
+    if ( O.recalculate_ops ) calculate_ops()
+    if ( O.recalculate_opc ) calculate_opc()
+    if ( O.reposition_elements ) position_elements()
+
+    earn( S.ops / S.prefs.game_speed )
+
+    O.counter++
+    if ( O.counter % 30 == 0 ) {
+      O.counter = 0 
+      S.stats.seconds_played++
+      if ( S.ops > 0 && S.prefs.show_ops_rising_numbers ) {
+        RN.new( null, 'buildings', S.ops )
+      }
     }
-  }, 1000)
+  }
+
+  setTimeout( game_loop, 1000 / S.prefs.game_speed )
+}
+
+let refocus = () => {
+  console.log('firing')
 }
 
 let update_ore_hp = ( amount ) => {
@@ -562,7 +678,8 @@ let update_ore_sprite = () => {
 
 }
 
-let update_topbar_inventory = () => {
+let build_topbar_inventory = () => {
+
   let str = `
     <div class='left'>
       <p>Ores: ${ beautify_number( S.ores ) }` 
@@ -671,11 +788,25 @@ let win_achievement = ( achievement_code_name ) => {
 }
 
 window.onload = () => { init_game() }
-window.onresize = () => { reposition_elements() }
-window.onblur = () => { S.prefs.window_blurred = true }
-window.onfocus = () => { S.prefs.window_blurred = false }
+window.onresize = () => { O.reposition_elements = 1 }
+window.onblur = () => { O.window_blurred = true }
+window.onfocus = () => { O.window_blurred = false; refocus() }
 document.onkeydown = ( e ) => {
   if ( e.code == 'Escape' || e.key == 'Escape' ) {
     remove_wrapper()
   }
 };
+
+let pressed = []
+let secretCode = 'synclair'
+window.addEventListener('keyup', (e) => {
+  if ( e.key != 'Shift' ) {
+    pressed.push(e.key.toLowerCase())
+    pressed.splice(-secretCode.length - 1, pressed.length - secretCode.length)
+    if (pressed.join('').includes( secretCode ) ) {
+      win_achievement( 'who_am_i?' )
+    }
+  }
+})
+
+setInterval( save_game, 1000 * 60 * 5 )
