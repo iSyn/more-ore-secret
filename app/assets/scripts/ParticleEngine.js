@@ -18,8 +18,7 @@ let ParticleEngine = function() {
         remove_el( particle )
       })
     }
-
-
+    
   }
 
 }

@@ -35,6 +35,10 @@ let O = {
   rebuild_store: 1,
   recalculate_ops: 1,
   recalculate_opc: 1,
+
+  current_tab: 'store',
+
+  pickaxe_accordion_is_open: 0,
   
   window_blurred: false,
   counter: 0
@@ -63,26 +67,44 @@ let save_game = () => {
   localStorage.setItem( 'upgrades', JSON.stringify( Upgrades ) )
   localStorage.setItem( 'achievements', JSON.stringify( Achievements ) )
   localStorage.setItem( 'text_scroller', JSON.stringify( TS.texts ) )
-  // localStorage.setItem( 'smith_upgrades', JSON.stringify( smith_upgrades ) )
+  localStorage.setItem( 'smith_upgrades', JSON.stringify( Smith_Upgrades ) )
+
+  let div = document.createElement( 'div' )
+  div.innerHTML = 'Saved Game'
+  div.style.position = 'absolute'
+  div.style.padding = '10px 15px'
+  div.style.zIndex = 2
+  div.style.border = '1px solid white'
+  div.style.borderBottom = 'none'
+  div.style.background = '#222'
+  div.style.color = 'white'
+  div.style.bottom = '0'
+  div.style.right = '0'
+  div.style.animation = 'upDown 2s'
+  div.addEventListener( 'animationend', () => { remove_el( div ) } )
+
+  CONTAINER.append( div )
 }
 
 let load_game = () => {
   S = JSON.parse( localStorage.getItem( 'state' ) )
 
   Buildings = []
-  let buildings = JSON.parse( localStorage.getItem( 'buildings' ) )
-  buildings.forEach( building => new Building( building ) )
+  JSON.parse( localStorage.getItem( 'buildings' ) ).forEach( building => new Building( building ) )
 
   Upgrades = []
-  let upgrades = JSON.parse( localStorage.getItem( 'upgrades' ) )
-  upgrades.forEach( upgrade => new Upgrade( upgrade ) )
+  JSON.parse( localStorage.getItem( 'upgrades' ) ).forEach( upgrade => new Upgrade( upgrade ) )
 
   Achievements = []
-  let achievements = JSON.parse( localStorage.getItem( 'achievements' ) )
-  achievements.forEach( achievement => new Achievement( achievement ) )
+  JSON.parse( localStorage.getItem( 'achievements' ) ).forEach( achievement => new Achievement( achievement ) )
 
+  
   let text_scroller = JSON.parse( localStorage.getItem( 'text_scroller' ) )
   TS = new TextScroller( text_scroller )
+
+  Smith_Upgrades = []
+  JSON.parse( localStorage.getItem( 'smith_upgrades' ) ).forEach( upgrade => new SmithUpgrade( upgrade ) )
+
 
   // for smith upgrades, figure out a good way to save and load
   // Smith_Upgrades = []
@@ -164,6 +186,7 @@ let change_tab = ( code_name ) => {
       if ( tab.code_name == t.code_name ) {
         // set that tab to selected
         tab.selected = 1
+        O.current_tab = t.code_name
       } else {
         tab.selected = 0
       }
@@ -226,7 +249,12 @@ let build_buildings = () => {
   Buildings.forEach( building => {
     if ( building.hidden == 0 ) {
       str += `
-        <div class="building" onclick="Buildings[ ${ index } ].buy( event )" onmouseover="play_sound( 'store_item_hover' ); TT.show( event, { name: '${ building.code_name }', type: 'building' } )" onmouseout="TT.hide()">
+        <div 
+          class="building" 
+          onclick="Buildings[ ${ index } ].buy( event )" 
+          onmouseover="play_sound( 'store_item_hover' ); TT.show( event, { name: '${ building.code_name }', type: 'building' } )" 
+          onmouseout="TT.hide()"
+          >
           <div class="left">
             <img src="${ building.img }" alt="building image"/>
           </div>
@@ -278,11 +306,11 @@ let build_smith = () => {
   TAB_CONTENT.classList.remove('store')
 }
 
-let build_pickaxe_accordion = () => {
+let build_pickaxe_accordion = ( direct = false ) => {
   let str = ''
 
   str += `
-    <div class='pickaxe-accordion'>
+    <div class='pickaxe-accordion ${ O.pickaxe_accordion_is_open && 'open' }'>
       <header onclick='toggle_pickaxe_accordion()'>
         <p>Pickaxe</p>
         <i class='fa fa-caret-down fa-1x'></i>
@@ -294,6 +322,11 @@ let build_pickaxe_accordion = () => {
     </div>
     <div class='horizontal-separator thin dark'></div>
   `
+
+  if ( direct ) {
+    s( '.pickaxe-accordion' ).innerHTML = str
+    return
+  }
 
   return str
 }
@@ -342,9 +375,15 @@ let build_smith_upgrades = ( direct = false ) => {
   str += '<p>Available Upgrades</p>'
 
   Smith_Upgrades.forEach( upgrade => {
+    upgrade.type = 'smith_ugprade'
     if ( !upgrade.owned && !upgrade.locked ) {
       str += `
-        <div onclick='start_smith_upgrade( Smith_Upgrades, "${ upgrade.code_name }" )' class="smith-upgrade">
+        <div 
+          class="smith-upgrade"
+          onmouseover='TT.show( event, { name: "${ upgrade.code_name }", type: "smith_upgrade" })'
+          onmouseout='TT.hide()'
+          onclick='start_smith_upgrade( Smith_Upgrades, "${ upgrade.code_name }")'
+          >
           <img src="${ upgrade.img }" alt="upgrade image"/>
         </div>
       `
@@ -390,6 +429,7 @@ let build_smith_upgrades = ( direct = false ) => {
 
 let toggle_pickaxe_accordion = () => {
   s( '.pickaxe-accordion' ).classList.toggle( 'open' )
+  O.pickaxe_accordion_is_open = !O.pickaxe_accordion_is_open
 }
 
 let build_automaters = () => {
@@ -754,7 +794,7 @@ let win_achievement = ( achievement_code_name ) => {
     let str = `
       <header>
         <img src='${ achievement.img }' alt='achievement img' />
-        <h1>${ achievement.name } <small>[ ${ achievement.type } ]</small></h1>
+        <h1>${ achievement.name } <small>[ ${ achievement.type } achievement ]</small></h1>
       </header>
       <p>${ achievement.desc }</p>
     `

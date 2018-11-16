@@ -6,7 +6,6 @@ let Tab = function( tab ) {
     this.selected = tab.selected || 0
 
     Tabs.push( this )
-
 }
 
 let Tabs = []

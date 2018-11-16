@@ -69,6 +69,10 @@ let Smith = function( obj = {} ) {
             if ( fn.increase_pickaxe_hardness ) {
                 S.pickaxe.hardness += fn.increase_pickaxe_hardness
             }
+
+            if ( fn.unlock_smith_upgrade ) {
+                let target_upgrade = select_from_arr( Smith_Upgrades, fn.unlock_smith_upgrade )
+            }
         }
 
         upgrade.owned = 1
@@ -83,8 +87,7 @@ let Smith = function( obj = {} ) {
         this.upgrade_in_progress = {}
         this.current_progress = 0
 
-        build_pickaxe_update( true )
-        build_smith_upgrades( true )
+        if ( O.current_tab == 'smith' ) build_smith()
     }
 
 }

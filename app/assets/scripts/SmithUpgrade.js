@@ -13,6 +13,14 @@ let SmithUpgrade = function( obj ) {
     this.unlock_functions = obj.unlock_functions
 
     Smith_Upgrades.push( this )
+
+    if ( this.unlock_functions ) {
+        if ( this.unlock_functions.unlock_smith_upgrade ) {
+            this.unlock_functions.unlock_smith_upgrades.forEach( upgrade => {
+                let required_upgrade = select_from_arr( Smith_Upgrades, upgrade )
+            })
+        }
+    }
 }
 
 let Smith_Upgrades = []
@@ -33,7 +41,18 @@ let smith_upgrades = [
         duration: 1,
         price: 10,
         unlock_functions: {
-            increase_pickaxe_sharpness: 10
+            increase_pickaxe_sharpness: 10,
+            unlock_smith_upgrades: [ 'sharpen_pickaxe_ii' ]
+        }
+    }, {
+        name: 'Sharpen Pickaxe II',
+        img: 'https://via.placeholder.com/64',
+        desc: 'Increases your pickaxe sharpness by 10%',
+        duration: 1,
+        price: 10,
+        locked: 1,
+        unlock_functions: {
+            increase_pickaxe_sharpness: 10,
         }
     }, {
         name: 'Reinforce Pickaxe I',
