@@ -298,6 +298,8 @@
     text-align: center;
     -webkit-transition: color .2s;
     transition: color .2s; }
+    .container footer * {
+      font-weight: 300; }
     .container footer:hover {
       color: rgba(255, 255, 255, 0.7); }
     .container footer a, .container footer span {

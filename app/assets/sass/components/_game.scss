@@ -238,6 +238,10 @@
     color: rgba( 255, 255, 255, .5 );
     text-align: center;
     transition: color .2s;
+
+    * {
+      font-weight: 300;
+    }
   
     &:hover {
       color: rgba( 255, 255, 255, .7 );
