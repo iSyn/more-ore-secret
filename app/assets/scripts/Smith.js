@@ -70,7 +70,7 @@ let Smith = function( obj = {} ) {
                 S.pickaxe.hardness += fn.increase_pickaxe_hardness
             }
 
-            if ( fn.unlock_smith_upgrade ) {
+            if ( fn.unlock_smith_upgrades ) {
                 let target_upgrade = select_from_arr( Smith_Upgrades, fn.unlock_smith_upgrade )
             }
         }
