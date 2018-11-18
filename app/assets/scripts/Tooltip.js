@@ -8,13 +8,11 @@ let Tooltip = function() {
 
     TOOLTIP.style.display = 'flex'
 
+    // build content
     switch ( obj.type ) {
 
       case 'smith_upgrade':
-        tooltip_dimensions = TOOLTIP.getBoundingClientRect()
         item = select_from_arr( Smith_Upgrades, obj.name )
-        TOOLTIP.style.left = ( MIDDLE_VERTICAL_SEPARATOR.getBoundingClientRect().left - tooltip_dimensions.width ) + 'px'
-        TOOLTIP.style.top = e.target.getBoundingClientRect().top + 'px'
 
         if ( item.locked ) {
 
@@ -39,8 +37,8 @@ let Tooltip = function() {
             </div>
             <div class="bottom" style='display: flex; flex-flow: row nowrap; justify-content: center;'>
               <div class="left" style='width: 20%; text-align: right; padding-right: 10px; border-right: 1px solid white; opacity: .5'>
-                <p>${ item.price } &nbsp; <i class="fa fa-diamond fa-1x" style='color: #1bacc8'></i></p>
-                <p>${ item.duration } &nbsp; <i class="fa fa-clock-o fa-1x"></i></p>
+                <p style='padding-bottom: 2px;'>${ item.price } &nbsp; <i class="fa fa-diamond fa-1x" style='color: #1bacc8'></i></p>
+                <p style='padding-bottom: 2px;'>${ beautify_ms( item.duration * 1000 ) } &nbsp; <i class="fa fa-clock-o fa-1x"></i></p>
               </div>
               <div class="right" style='width: 80%; padding-left: 10px'>
                 <p>${ item.desc }</p>
@@ -56,10 +54,7 @@ let Tooltip = function() {
         break;
       
       case 'upgrade':
-        tooltip_dimensions = TOOLTIP.getBoundingClientRect()
         item = select_from_arr( Upgrades, obj.name )
-        TOOLTIP.style.left = ( MIDDLE_VERTICAL_SEPARATOR.getBoundingClientRect().left - tooltip_dimensions.width ) + 'px'
-        TOOLTIP.style.top = e.target.getBoundingClientRect().top + 'px'
 
         str += `
           <div class='top'>
@@ -77,10 +72,7 @@ let Tooltip = function() {
         break;
 
       case 'building':
-        tooltip_dimensions = TOOLTIP.getBoundingClientRect()
         item = select_from_arr( Buildings, obj.name )
-        TOOLTIP.style.left = ( MIDDLE_VERTICAL_SEPARATOR.getBoundingClientRect().left - tooltip_dimensions.width ) + 'px'
-        TOOLTIP.style.top = e.target.getBoundingClientRect().top + 'px'
 
         str = `
           <div class='top'>
@@ -111,6 +103,24 @@ let Tooltip = function() {
     }
 
     TOOLTIP.innerHTML = str
+
+    // position tooltip
+    switch ( obj.type ) {
+
+      case 'smith_upgrade':
+      case 'upgrade':
+      case 'building':
+        tooltip_dimensions = TOOLTIP.getBoundingClientRect()
+        TOOLTIP.style.left = ( MIDDLE_VERTICAL_SEPARATOR.getBoundingClientRect().left - tooltip_dimensions.width ) + 'px'
+        TOOLTIP.style.top = e.target.getBoundingClientRect().top + 'px'
+        
+        break;
+
+      default:
+        break
+
+    }
+
 
     
   }

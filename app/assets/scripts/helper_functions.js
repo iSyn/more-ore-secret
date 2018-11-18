@@ -88,6 +88,27 @@ let beautify_number = (number) => {
   return parseFloat(scaled.toFixed(2)) + " " + prefix;
 }
 
+let beautify_ms = ( ms ) => {
+
+  var seconds = ( ms / 1000 ).toFixed( 0 );
+
+  var minutes = ( ms / ( 1000 * 60 ) ).toFixed( 0 );
+
+  var hours = ( ms / ( 1000 * 60 * 60 ) ).toFixed( 0 );
+
+  var days = ( ms / ( 1000 * 60 * 60 * 24 ) ).toFixed( 0 );
+
+  if ( seconds < 60 ) {
+      return seconds + "s";
+  } else if ( minutes < 60 ) {
+      return minutes + "m";
+  } else if ( hours < 24 ) {
+      return hours + "hr";
+  } else {
+      return days + " days"
+  }
+}
+
 let select_from_arr = ( arr, code_name ) => {
   for ( let i in arr ) {
     if ( arr[ i ].code_name === code_name ) {

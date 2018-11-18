@@ -373,6 +373,7 @@ let build_pickaxe_update = ( direct = false ) => {
 }
 
 let build_smith_upgrades = ( direct = false ) => {
+
   let locked_upgrades = []
   let owned_upgrades = []
 
@@ -380,24 +381,25 @@ let build_smith_upgrades = ( direct = false ) => {
 
   str += '<p>Available Upgrades</p>'
 
-  Smith_Upgrades.forEach( upgrade => {
-    upgrade.type = 'smith_ugprade'
-    if ( !upgrade.owned && !upgrade.locked ) {
-      str += `
-        <div 
-          class="smith-upgrade"
-          onmouseover='TT.show( event, { name: "${ upgrade.code_name }", type: "smith_upgrade" })'
-          onmouseout='TT.hide()'
-          onclick='start_smith_upgrade( Smith_Upgrades, "${ upgrade.code_name }")'
-          >
-          <img src="${ upgrade.img }" alt="upgrade image"/>
-        </div>
-      `
-    } else {
-      if ( upgrade.owned ) owned_upgrades.push( upgrade )
-      if ( upgrade.locked ) locked_upgrades.push( upgrade )
-    }
-  })
+  Smith_Upgrades.sort( ( a, b ) => a.price - b.price )
+    .forEach( upgrade => {
+      upgrade.type = 'smith_ugprade'
+      if ( !upgrade.owned && !upgrade.locked ) {
+        str += `
+          <div 
+            class="smith-upgrade"
+            style='background: url("${ upgrade.img }")'
+            onmouseover='TT.show( event, { name: "${ upgrade.code_name }", type: "smith_upgrade" })'
+            onmouseout='TT.hide()'
+            onclick='start_smith_upgrade( Smith_Upgrades, "${ upgrade.code_name }")'
+            >
+          </div>
+        `
+      } else {
+        if ( upgrade.owned ) owned_upgrades.push( upgrade )
+        if ( upgrade.locked ) locked_upgrades.push( upgrade )
+      }
+    })
 
   if ( locked_upgrades.length > 0 ) {
     str += '<p>Locked Upgrades</p>'
@@ -406,10 +408,10 @@ let build_smith_upgrades = ( direct = false ) => {
       str += `
         <div 
           class="smith-upgrade"
+          style='background: url("${ upgrade.img }"); cursor: not-allowed; opacity: 0.6'
           onmouseover='TT.show( event, { name: "${ upgrade.code_name }", type: "smith_upgrade"})'
           onmouseout='TT.hide()'
           >
-          <img src="${ upgrade.img }" alt="upgrade image"/>
         </div>
       `
     })
@@ -420,8 +422,12 @@ let build_smith_upgrades = ( direct = false ) => {
 
     owned_upgrades.forEach( upgrade => {
       str += `
-        <div class="smith-upgrade">
-          <img src="${ upgrade.img }" alt="upgrade image"/>
+        <div 
+          class="smith-upgrade"
+          style='background: url("${ upgrade.img }"); opacity: 0.4'
+          onmouseover='TT.show( event, { name: "${ upgrade.code_name }", type: "smith_upgrade" })'
+          onmouseout='TT.hide()'
+          >
         </div>
       `
     })

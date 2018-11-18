@@ -44,23 +44,32 @@ let smith_upgrades = [
         desc: 'Allows you to spot "weak spots" within the ore',
         flavor_text: 'I can see... I can FIGHT!',
         duration: 10,
-        price: 1,
+        price: 0,
         unlock_functions: {
             unlock_fragility_spectacles: 1
         }
+    },  {
+        name: 'A U T O M A T E R',
+        img: 'https://via.placeholder.com/64',
+        desc: 'Unlocks the A U T O M A T E R',
+        flavor_text: 'Check out my other game Automate the World!',
+        duration: 5 * 60,
+        price: 100
     }, {
         name: 'Sharpen Pickaxe I',
         img: 'https://via.placeholder.com/64',
         desc: 'Increases your pickaxe sharpness by 10%',
-        duration: 1,
-        price: 10,
+        duration: 10,
+        price: 5,
         unlock_functions: {
             increase_pickaxe_sharpness: 10,
             unlock_smith_upgrades: [ 'sharpen_pickaxe_ii', 'test_skill' ]
         }
     }, {
-        name: 'Sharpen Pickaxe II', img: 'https://via.placeholder.com/64', desc: 'Increases your pickaxe sharpness by 10%',
-        duration: 1,
+        name: 'Sharpen Pickaxe II',
+        img: 'https://via.placeholder.com/64', 
+        desc: 'Increases your pickaxe sharpness by 10%',
+        duration: 15,
         price: 10,
         locked: 1,
         requires: [ 'sharpen_pickaxe_i' ],
@@ -71,7 +80,7 @@ let smith_upgrades = [
     }, {
         name: 'Sharpen Pickaxe III', img: 'https://via.placeholder.com/64', desc: 'Increases your pickaxe sharpness by 10%',
         duration: 1,
-        price: 10,
+        price: 20,
         locked: 1,
         requires: [ 'sharpen_pickaxe_ii' ],
         unlock_functions: {
@@ -81,7 +90,7 @@ let smith_upgrades = [
     }, {
         name: 'Sharpen Pickaxe IV', img: 'https://via.placeholder.com/64', desc: 'Increases your pickaxe sharpness by 10%',
         duration: 1,
-        price: 10,
+        price: 25,
         locked: 1,
         requires: [ 'sharpen_pickaxe_iii' ],
         unlock_functions: {
@@ -91,7 +100,7 @@ let smith_upgrades = [
     }, {
         name: 'Sharpen Pickaxe V', img: 'https://via.placeholder.com/64', desc: 'Increases your pickaxe sharpness by 10%',
         duration: 1,
-        price: 10,
+        price: 30,
         locked: 1,
         requires: [ 'sharpen_pickaxe_iv' ],
         unlock_functions: {
@@ -101,7 +110,7 @@ let smith_upgrades = [
         name: 'Reinforce Pickaxe I',
         img: 'https://via.placeholder.com/64',
         desc: 'Increases your pickaxe hardness by 10%',
-        duration: 5,
+        duration: 10,
         price: 10,
         unlock_functions: {
             increase_pickaxe_hardness: 10,
@@ -112,7 +121,7 @@ let smith_upgrades = [
         img: 'https://via.placeholder.com/64',
         desc: 'Increases your pickaxe hardness by 10%',
         duration: 5,
-        price: 10,
+        price: 15,
         locked: 1,
         requires: [ 'reinforce_pickaxe_i' ],
         unlock_functions: {
@@ -124,7 +133,7 @@ let smith_upgrades = [
         img: 'https://via.placeholder.com/64',
         desc: 'Increases your pickaxe hardness by 10%',
         duration: 5,
-        price: 10,
+        price: 20,
         locked: 1,
         requires: [ 'reinforce_pickaxe_ii' ],
         unlock_functions: {
@@ -136,7 +145,7 @@ let smith_upgrades = [
         img: 'https://via.placeholder.com/64',
         desc: 'Increases your pickaxe hardness by 10%',
         duration: 5,
-        price: 10,
+        price: 25,
         locked: 1,
         requires: [ 'reinforce_pickaxe_iii' ],
         unlock_functions: {
@@ -148,7 +157,7 @@ let smith_upgrades = [
         img: 'https://via.placeholder.com/64',
         desc: 'Increases your pickaxe hardness by 10%',
         duration: 5,
-        price: 10,
+        price: 30,
         locked: 1,
         requires: [ 'reinforce_pickaxe_iv' ],
         unlock_functions: {
@@ -162,14 +171,6 @@ let smith_upgrades = [
         price: 10,
         locked: 1,
         requires: [ 'reinforce_pickaxe_i', 'sharpen_pickaxe_i' ]
-    }, {
-        name: 'A U T O M A T E R',
-        img: 'https://via.placeholder.com/64',
-        desc: 'Unlocks the A U T O M A T E R',
-        flavor_text: 'Check out my other game Automate the World!',
-        duration: 1,
-        // duration: 5 * 60,
-        price: 1
     }
 ]
 
