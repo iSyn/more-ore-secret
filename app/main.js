@@ -92,8 +92,10 @@ let load_game = () => {
   Buildings = []
   JSON.parse( localStorage.getItem( 'buildings' ) ).forEach( building => new Building( building ) )
 
-  Upgrades = []
-  JSON.parse( localStorage.getItem( 'upgrades' ) ).forEach( upgrade => new Upgrade( upgrade ) )
+  // Upgrades = []
+  // JSON.parse( localStorage.getItem( 'upgrades' ) ).forEach( upgrade => {
+  //   new Upgrade( upgrade )
+  //  } )
 
   Achievements = []
   JSON.parse( localStorage.getItem( 'achievements' ) ).forEach( achievement => new Achievement( achievement ) )
@@ -105,12 +107,13 @@ let load_game = () => {
   Smith_Upgrades = []
   JSON.parse( localStorage.getItem( 'smith_upgrades' ) ).forEach( upgrade => new SmithUpgrade( upgrade ) )
 
-
   // for smith upgrades, figure out a good way to save and load
   // Smith_Upgrades = []
   // Repeatable_Smith_Upgrades = []
   // let smith_upgrades = JSON.parse( localStorage.getItem( 'smith_upgrades' ) )
   // smith_upgrades.forEach( upgrade => new SmithUpgrade( upgrade ) )
+
+  // O.rebuild_store = 1
 }
 
 let wipe_save = () => {
@@ -214,6 +217,7 @@ let build_tabs = () => {
 }
 
 let build_store = () => {
+
   let str = ''
   str += build_upgrades()
   str += build_buildings()
@@ -221,13 +225,15 @@ let build_store = () => {
   TAB_CONTENT.innerHTML = str
   TAB_CONTENT.classList.remove('smith')
   TAB_CONTENT.classList.add('store')
+
+  O.rebuild_store = 0
 }
 
 let build_upgrades = () => {
   let str = '<div class="upgrades-container">'
   let index = 0
   Upgrades.forEach( upgrade => {
-    if ( upgrade.hidden == 0 && !upgrade.owned ) {
+    if ( !upgrade.hidden && !upgrade.owned ) {
       str += `
         <div class='upgrade' onclick="Upgrades[ ${ index } ].buy( event )" onmouseover="play_sound( 'store_item_hover' ); TT.show( event, { name: '${ upgrade.code_name }', type: 'upgrade' } )" onmouseout="TT.hide()">
 
@@ -398,7 +404,11 @@ let build_smith_upgrades = ( direct = false ) => {
 
     locked_upgrades.forEach( upgrade => {
       str += `
-        <div class="smith-upgrade">
+        <div 
+          class="smith-upgrade"
+          onmouseover='TT.show( event, { name: "${ upgrade.code_name }", type: "smith_upgrade"})'
+          onmouseout='TT.hide()'
+          >
           <img src="${ upgrade.img }" alt="upgrade image"/>
         </div>
       `
@@ -651,6 +661,7 @@ let game_loop = () => {
     build_topbar_inventory()
     if ( O.recalculate_ops ) calculate_ops()
     if ( O.recalculate_opc ) calculate_opc()
+    if ( O.rebuild_store ) build_store()
     if ( O.reposition_elements ) position_elements()
 
     earn( S.ops / S.prefs.game_speed )

@@ -3,7 +3,9 @@
   flex-flow: column nowrap;
   position: absolute;
   background: #222;
-  border-radius: 5px;
+  // border-radius: 5px;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
   color: white;
   padding: 10px;
   box-shadow: 0 2px 10px rgba( 0, 0, 0, 0.3 );
@@ -24,8 +26,9 @@
       font-family: 'Germania One';
       padding-left: 10px;
       flex-grow: 1;
-      font-size: 22px;
+      font-size: 30px;
       padding-right: 10px;
+      letter-spacing: .8px;
     }
   }
 
@@ -51,10 +54,11 @@
 
       }
     }
+  }
 
-    .flavor-text {
-      text-align: right;
-      font-size: 12px;
-    }
+  .flavor-text {
+    text-align: right;
+    font-size: 12px;
+    font-style: italic;
   }
 }

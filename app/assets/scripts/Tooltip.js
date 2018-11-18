@@ -16,16 +16,43 @@ let Tooltip = function() {
         TOOLTIP.style.left = ( MIDDLE_VERTICAL_SEPARATOR.getBoundingClientRect().left - tooltip_dimensions.width ) + 'px'
         TOOLTIP.style.top = e.target.getBoundingClientRect().top + 'px'
 
-        console.log( item )
+        if ( item.locked ) {
 
-        str += `
-          <div>
-            <h1>${ item.name }</h1>
-            <p>${ item.desc }</p>
-            <p>Duration: ${ item.duration } seconds</p>
-            <p>Price: ${ item.price } gems</p>
-          </div>
-        `
+          str += `
+            <div>
+              <h1>???</h1>
+              `
+
+              item.requires.forEach( requirement => {
+                str += requirement.owned ? `<p style='color: green'>Requires ${ requirement.name }</p>` : `<p style='color: red'>Requires ${ requirement.name }</p>`
+
+              })
+
+              str += `
+            </div>
+          `
+        } else {
+          str += `
+            <div class="top" style='padding-bottom: 10px;'>
+              <img src="${ item.img }" alt="smith upgrade image"/>
+              <h1>${ item.name }</h1>
+            </div>
+            <div class="bottom" style='display: flex; flex-flow: row nowrap; justify-content: center;'>
+              <div class="left" style='width: 20%; text-align: right; padding-right: 10px; border-right: 1px solid white; opacity: .5'>
+                <p>${ item.price } &nbsp; <i class="fa fa-diamond fa-1x" style='color: #1bacc8'></i></p>
+                <p>${ item.duration } &nbsp; <i class="fa fa-clock-o fa-1x"></i></p>
+              </div>
+              <div class="right" style='width: 80%; padding-left: 10px'>
+                <p>${ item.desc }</p>
+              </div>
+            </div>
+          `
+
+          if ( item.flavor_text ) {
+            str += `<p class='flavor-text'>${ item.flavor_text }</p>`
+          }
+        }
+        
         break;
       
       case 'upgrade':

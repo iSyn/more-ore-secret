@@ -108,7 +108,7 @@
             margin: 0 40px; }
         .container .game-container > .left .topbar-inventory-container .topbar-inventory {
           background: #322011;
-          padding: 25px 50px;
+          padding: 20px 50px;
           width: 100%;
           display: -webkit-box;
           display: -ms-flexbox;
@@ -510,7 +510,7 @@
     image-rendering: -moz-crisp-edges;
     image-rendering: -o-pixelated;
     image-rendering: pixelated;
-    background-color: #b56535;
+    background-color: #a0a0a0;
     -webkit-box-shadow: 0 0 30px #222 inset;
     box-shadow: 0 0 30px #222 inset;
     cursor: pointer; }
@@ -525,7 +525,8 @@
   flex-flow: column nowrap;
   position: absolute;
   background: #222;
-  border-radius: 5px;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
   color: white;
   padding: 10px;
   -webkit-box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
@@ -552,8 +553,9 @@
       -webkit-box-flex: 1;
       -ms-flex-positive: 1;
       flex-grow: 1;
-      font-size: 22px;
-      padding-right: 10px; }
+      font-size: 30px;
+      padding-right: 10px;
+      letter-spacing: .8px; }
   .tooltip hr {
     margin: 10px 0;
     border-color: rgba(255, 255, 255, 0.2); }
@@ -565,9 +567,10 @@
     .tooltip .bottom ul li {
       font-size: 14px;
       opacity: .7; }
-  .tooltip .bottom .flavor-text {
+  .tooltip .flavor-text {
     text-align: right;
-    font-size: 12px; }
+    font-size: 12px;
+    font-style: italic; }
 
 .particle {
   position: absolute;

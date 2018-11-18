@@ -71,7 +71,21 @@ let Smith = function( obj = {} ) {
             }
 
             if ( fn.unlock_smith_upgrades ) {
-                let target_upgrade = select_from_arr( Smith_Upgrades, fn.unlock_smith_upgrade )
+                console.log( 'target:', fn.unlock_smith_upgrades )
+                fn.unlock_smith_upgrades.forEach( code_name => {
+                    let target_upgrade = select_from_arr( Smith_Upgrades, code_name )
+                    select_from_arr( target_upgrade.requires, upgrade.code_name ).owned = 1
+
+                    let locked = 0
+                    target_upgrade.requires.forEach( requirement => {
+                        if ( !requirement.owned ) {
+                            locked = 1
+                        }
+                    })
+
+                    target_upgrade.locked = locked
+
+                })
             }
         }
 

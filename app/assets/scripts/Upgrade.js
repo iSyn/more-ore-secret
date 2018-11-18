@@ -1,11 +1,12 @@
 let Upgrade = function( obj ) {
+
     this.name = obj.name
     this.code_name = obj.name.replace( / /g, '_' ).toLowerCase()
     this.img = obj.img
     this.desc = obj.desc
     this.flavor_text = obj.flavor_text || ''
     this.price = obj.price
-    this.hidden = obj.hidden || 1
+    this.hidden = obj.hasOwnProperty( 'hidden' ) ? obj.hidden : 1
     this.owned = obj.owned || false
     this.buy_functions = obj.buy_functions
 
@@ -13,7 +14,7 @@ let Upgrade = function( obj ) {
         if ( S.ores >= this.price ) {
             S.ores -= this.price
             play_sound( 'buy_sound' )
-            this.owned = true
+            this.owned = 1
 
             if ( this.buy_functions ) {
                 if ( this.buy_functions.increase_building_production ) {
@@ -22,7 +23,7 @@ let Upgrade = function( obj ) {
                 }
             }
 
-            build_store()
+            O.rebuild_store = 1
             O.recalculate_opc = 1
             O.recalculate_ops = 1
 
@@ -33,7 +34,7 @@ let Upgrade = function( obj ) {
 }
 
 let Upgrades = []
-let upgrades = [
+let upgrades = JSON.parse( localStorage.getItem( 'upgrades' ) ) || [
     {
         name: 'Composition Notebooks',
         img: 'https://via.placeholder.com/50',
@@ -82,10 +83,13 @@ let upgrades = [
     }
 ]
 
-upgrades.forEach( upgrade => new Upgrade( upgrade ) )
+
+upgrades.forEach( upgrade => {
+    new Upgrade( upgrade ) 
+})
 
 let unlock_upgrade = ( code_name ) => {
     let upgrade = select_from_arr( Upgrades, code_name )
-    upgrade.hidden = 0
-    build_store()
+    upgrade.hidden = false
+    O.rebuild_store = 1
 }
