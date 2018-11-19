@@ -147,7 +147,16 @@ let buildings = [
         production: 67200,
         base_price: 7862400,
         price_scale: 1.15,
-        hidden: 2
+        hidden: 2,
+        buy_functions: {
+            unlock_upgrades: [
+                { code_name: 'metal_sarcophagus', amount_needed: 1},
+                { code_name: 'scarecrow', amount_needed: 10},
+                { code_name: 'polished_shovel', amount_needed: 20},
+                { code_name: 'fresh_bandages', amount_needed: 50},
+                { code_name: 'oil_lanterns', amount_needed: 100},
+            ]
+        }
     }, {
         name: 'Hospital',
         name_plural: 'Hospitals',
@@ -157,7 +166,16 @@ let buildings = [
         production: 1344000,
         base_price: 196560000,
         price_scale: 1.15,
-        hidden: 2
+        hidden: 2,
+        buy_functions: {
+            unlock_upgrades: [
+                { code_name: 'immunization_shot', amount_needed: 1 },
+                { code_name: 'blood_test', amount_needed: 10 },
+                { code_name: 'blood_transfusion', amount_needed: 20 ,
+                { code_name: 'cat_scan', amount_needed: 50 },
+                { code_name: 'enhancement_surgery', amount_needed: 100 },
+            ]
+        }
     }, {
         name: 'Citadel', 
         name_plural: 'Citadels', 
@@ -168,6 +186,11 @@ let buildings = [
         base_price: 2751840000, 
         price_scale: 1.15,
         hidden: 2,
+        buy_functions: {
+            unlock_upgrades: [
+                { code_name: 'council_of_rocks', amount_needed: 1 },
+            ]
+        }
     }, {
         name: 'Xeno Spaceship', 
         name_plural: 'Xeno Spaceships', 
@@ -178,6 +201,11 @@ let buildings = [
         base_price: 49533120000, 
         price_scale: 1.15,
         hidden: 2,
+        buy_functions: {
+            unlock_upgrades: [
+                { code_name: 'jet_fuel', amount_needed: 1 },
+            ]
+        }
     }, {
         name: 'Sky Castle', 
         name_plural: 'Sky Castles', 
@@ -188,6 +216,11 @@ let buildings = [
         base_price: 1238328000000, 
         price_scale: 1.15,
         hidden: 2,
+        buy_functions: {
+            unlock_upgrades: [
+                { code_name: 'golden_eggs', amount_needed: 1 },
+            ]
+        }
     }, {
         name: 'Eon Portal', 
         name_plural: 'Eon Portals', 
@@ -198,6 +231,11 @@ let buildings = [
         base_price: 18574920000000, 
         price_scale: 1.15,
         hidden: 2,
+        buy_functions: {
+            unlock_upgrades: [
+                { code_name: 'green_goop', amount_needed: 1 },
+            ]
+        }
     }, {
         name: 'Sacred Mine', 
         name_plural: 'Sacred Mines', 
@@ -208,6 +246,11 @@ let buildings = [
         base_price: 297198720000000, 
         price_scale: 1.15,
         hidden: 2,
+        buy_functions: {
+            unlock_upgrades: [
+                { code_name: 'sacred_mine_upgrade_i', amount_needed: 1 },
+            ]
+        }
     }, {
         name: 'O.A.R.D.I.S.', 
         name_plural: 'O.A.R.D.I.S.s', 
@@ -218,6 +261,11 @@ let buildings = [
         base_price: 8915961600000000, 
         price_scale: 1.15,
         hidden: 2,
+        buy_functions: {
+            unlock_upgrades: [
+                { code_name: 'o.a.r.d.i.s._upgrade_i', amount_needed: 1 },
+            ]
+        }
     }, {
         name: 'Final Destination', 
         name_plural: 'Final Destinations', 
