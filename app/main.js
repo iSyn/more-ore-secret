@@ -88,30 +88,32 @@ let save_game = () => {
 }
 
 let load_game = () => {
-  S = JSON.parse( localStorage.getItem( 'state' ) )
 
-  Buildings = []
-  JSON.parse( localStorage.getItem( 'buildings' ) ).forEach( building => new Building( building ) )
+  if ( localStorage.getItem( 'state' ) ) {
 
-  // upgrades are loaded inside upgrades file
+    S = JSON.parse( localStorage.getItem( 'state' ) )
 
-  Achievements = []
-  JSON.parse( localStorage.getItem( 'achievements' ) ).forEach( achievement => new Achievement( achievement ) )
+    Buildings = []
+    JSON.parse( localStorage.getItem( 'buildings' ) ).forEach( building => new Building( building ) )
 
-  
-  let text_scroller = JSON.parse( localStorage.getItem( 'text_scroller' ) )
-  TS = new TextScroller( text_scroller )
+    // upgrades are loaded inside upgrades file
 
-  Smith_Upgrades = []
-  JSON.parse( localStorage.getItem( 'smith_upgrades' ) ).forEach( upgrade => new SmithUpgrade( upgrade ) )
+    Achievements = []
+    JSON.parse( localStorage.getItem( 'achievements' ) ).forEach( achievement => new Achievement( achievement ) )
 
-  // SMITH = new Smith( JSON.parse( localStorage.getItem( 'smith' ) ) )
-  if ( localStorage.getItem( 'smith' ) ) {
-    SMITH = new Smith( JSON.parse( localStorage.getItem( 'smith' ) ) )
-    SMITH._update_progress()
+    
+    let text_scroller = JSON.parse( localStorage.getItem( 'text_scroller' ) )
+    TS = new TextScroller( text_scroller )
+
+    Smith_Upgrades = []
+    JSON.parse( localStorage.getItem( 'smith_upgrades' ) ).forEach( upgrade => new SmithUpgrade( upgrade ) )
+
+    // SMITH = new Smith( JSON.parse( localStorage.getItem( 'smith' ) ) )
+    if ( localStorage.getItem( 'smith' ) ) {
+      SMITH = new Smith( JSON.parse( localStorage.getItem( 'smith' ) ) )
+      SMITH._update_progress()
+    }
   }
-
-  // O.rebuild_store = 1
 }
 
 let wipe_save = () => {

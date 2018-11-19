@@ -71,7 +71,16 @@ let buildings = [
         production: 1,
         base_price: 210,
         price_scale: 1.15,
-        hidden: 1
+        hidden: 1,
+        buy_functions: {
+            unlock_upgrades: [
+                { code_name: 'manure_spreader', amount_needed: 1 },
+                { code_name: 'pitchfork', amount_needed: 10 },
+                { code_name: 'tractor', amount_needed: 20},
+                { code_name: 'rotary_cutter', amount_needed: 50 },
+                { code_name: 'hoe', amount_needed: 100 }
+            ]
+        }
     }, {
         name: 'Quarry',
         name_plural: 'Quarries',
@@ -81,7 +90,16 @@ let buildings = [
         production: 20,
         base_price: 2520,
         price_scale: 1.15,
-        hidden: 1
+        hidden: 1,
+        buy_functions: {
+            unlock_upgrades: [
+                { code_name: 'floodlights', amount_needed: 1 },
+                { code_name: 'twill_rope', amount_needed: 10 },
+                { code_name: 'wooden_compass', amount_needed: 20 },
+                { code_name: 'ore_filter', amount_needed: 50 },
+                { code_name: 'waterproof_tape', amount_needed: 100 }
+            ]
+        }
     }, {
         name: 'Church',
         name_plural: 'Churches',
@@ -91,7 +109,16 @@ let buildings = [
         production: 320,
         base_price: 37800,
         price_scale: 1.15,
-        hidden: 2
+        hidden: 2,
+        buy_functions: {
+            unlock_upgrades: [
+                { code_name: 'scripture_reading', amount_needed: 1 },
+                { code_name: 'communion', amount_needed: 10 },
+                { code_name: 'worship_session', amount_needed: 20 },
+                { code_name: '7th_day', amount_needed: 50 },
+                { code_name: 'judgement_day', amount_needed: 100 }
+            ]
+        }
     }, {
         name: 'Factory',
         name_plural: 'Factories',
@@ -101,7 +128,16 @@ let buildings = [
         production: 4480,
         base_price: 491400,
         price_scale: 1.15,
-        hidden: 2
+        hidden: 2,
+        buy_functions: {
+            unlock_upgrades: [
+                { code_name: 'rubber_conveyor_belt', amount_needed: 1 },
+                { code_name: 'floppy_squiggle_tubes', amount_needed: 10 },
+                { code_name: 'clicky_squish_buttons', amount_needed: 20 },
+                { code_name: 'metallic_magnetic_panels', amount_needed: 50 },
+                { code_name: 'hydroponic_auxilleration', amount_needed: 100 },
+            ]
+        }
     }, {
         name: 'Crypt',
         name_plural: 'Crypts',
