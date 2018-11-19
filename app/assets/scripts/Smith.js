@@ -2,17 +2,17 @@ let Smith = function( obj = {} ) {
 
     this.click_duration = 1000
 
-    this.upgrade_in_progress = {}
-    this.duration = obj.duration * 1000 || 0
+    this.upgrade_in_progress = obj.upgrade_in_progress || {}
+    this.duration = obj.duration || 0
     this.current_progress = obj.current_progress || 0
 
     this.start_upgrade = ( upgrade ) => {
 
-        if ( S.refined >= upgrade.price ) {
-            S.refined -= upgrade.price
+        if ( S.gems >= upgrade.price ) {
+            S.gems -= upgrade.price
 
             this.upgrade_in_progress = upgrade
-            this.duration = upgrade.duration * 1000
+            this.duration = upgrade.duration
 
             this._update_progress()
         }
@@ -52,7 +52,9 @@ let Smith = function( obj = {} ) {
 
     this._update_complete = () => {
 
-        let upgrade = this.upgrade_in_progress
+        let upgrade = select_from_arr( Smith_Upgrades, this.upgrade_in_progress.code_name )
+
+        console.log( 'upgrade completed:', upgrade )
 
         if ( upgrade.unlock_functions ) {
             let fn = upgrade.unlock_functions

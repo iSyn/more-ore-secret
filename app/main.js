@@ -68,6 +68,7 @@ let save_game = () => {
   localStorage.setItem( 'achievements', JSON.stringify( Achievements ) )
   localStorage.setItem( 'text_scroller', JSON.stringify( TS.texts ) )
   localStorage.setItem( 'smith_upgrades', JSON.stringify( Smith_Upgrades ) )
+  localStorage.setItem( 'smith', JSON.stringify( SMITH ))
 
   let div = document.createElement( 'div' )
   div.innerHTML = 'Saved Game'
@@ -92,10 +93,7 @@ let load_game = () => {
   Buildings = []
   JSON.parse( localStorage.getItem( 'buildings' ) ).forEach( building => new Building( building ) )
 
-  // Upgrades = []
-  // JSON.parse( localStorage.getItem( 'upgrades' ) ).forEach( upgrade => {
-  //   new Upgrade( upgrade )
-  //  } )
+  // upgrades are loaded inside upgrades file
 
   Achievements = []
   JSON.parse( localStorage.getItem( 'achievements' ) ).forEach( achievement => new Achievement( achievement ) )
@@ -107,11 +105,11 @@ let load_game = () => {
   Smith_Upgrades = []
   JSON.parse( localStorage.getItem( 'smith_upgrades' ) ).forEach( upgrade => new SmithUpgrade( upgrade ) )
 
-  // for smith upgrades, figure out a good way to save and load
-  // Smith_Upgrades = []
-  // Repeatable_Smith_Upgrades = []
-  // let smith_upgrades = JSON.parse( localStorage.getItem( 'smith_upgrades' ) )
-  // smith_upgrades.forEach( upgrade => new SmithUpgrade( upgrade ) )
+  // SMITH = new Smith( JSON.parse( localStorage.getItem( 'smith' ) ) )
+  if ( localStorage.getItem( 'smith' ) ) {
+    SMITH = new Smith( JSON.parse( localStorage.getItem( 'smith' ) ) )
+    SMITH._update_progress()
+  }
 
   // O.rebuild_store = 1
 }
@@ -133,12 +131,15 @@ let play_sound = ( name, file_type = 'wav', base_vol = 1 ) => {
   sound.play()
 }
 
-let earn = ( amount ) => {
-
-  update_ore_hp( amount )
-
-  S.stats.total_ores_earned += amount
-  S.ores += amount
+let earn = ( amount, gems = false ) => {
+  if ( gems ) {
+    S.gems += amount
+    S.stats.total_gems_earned += amount
+  } else {
+    update_ore_hp( amount )
+    S.stats.total_ores_earned += amount
+    S.ores += amount
+  }
 }
 
 let spend = ( amount ) => {

@@ -35,6 +35,7 @@ let Upgrade = function( obj ) {
 
 let Upgrades = []
 let upgrades = JSON.parse( localStorage.getItem( 'upgrades' ) ) || [
+    // SCHOOL RELATED UPGRADES
     {
         name: 'Composition Notebooks',
         img: 'https://via.placeholder.com/50',
@@ -79,6 +80,17 @@ let upgrades = JSON.parse( localStorage.getItem( 'upgrades' ) ) || [
         price: 5500000,
         buy_functions: {
             increase_building_production: { building: 'school', multi: 5 }
+        }
+    },
+    //FARM RELATED UPGRADES
+    {
+        name: 'Manure Spreader',
+        img: 'https://via.placeholder.com/50',
+        desc: 'Doubles the production of Farms',
+        flavor_text: 'The poop helps the ore mature',
+        price: 950,
+        buy_functions: {
+            increase_building_production: { building: 'farm', multi: 2 }
         }
     }
 ]

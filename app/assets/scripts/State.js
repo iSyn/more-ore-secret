@@ -2,8 +2,7 @@ let State = function( s = {} ) {
 
   this.state = {
     ores: s.ores || 100,
-    refined: s.refined || 100,
-    gems: s.ores || 0,
+    gems: s.ores || 100,
     generation: s.generation || 1,
     ops: s.ops || 0,
     opc: s.opc || 1,
@@ -40,7 +39,7 @@ let State = function( s = {} ) {
       current_rocks_destroyed: 0,
       total_rocks_destroyed: 0,
       total_ores_earned: 0,
-      total_gems_earned: 0,
+      total_gems_earned: 100, ///////////////////////
       total_clicks: 0,
       total_weak_hit_clicks: 0,
       highest_combo: 0,
