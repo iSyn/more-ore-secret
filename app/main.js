@@ -542,8 +542,6 @@ let start_smith_upgrade = ( arr, code_name  ) => {
 }
 
 let calculate_opc = ( type ) => {
-
-  O.recalculate_opc = 0
   
   let opc = S.opc
 
@@ -553,8 +551,13 @@ let calculate_opc = ( type ) => {
     } 
   }
 
-  type ? opc *= calculate_pickaxe_sharpness()/100 : opc *= calculate_pickaxe_hardness()/100
+  type ? opc *= calculate_pickaxe_sharpness() / 100 : opc *= calculate_pickaxe_hardness() / 100
 
+  if ( select_from_arr( Upgrades, 'flashlight').owned ) {
+    opc += S.ops * .03
+  }
+
+  O.recalculate_opc = 0
   return opc
 }
 
@@ -569,6 +572,9 @@ let calculate_ops = () => {
   })
 
   S.ops = ops
+
+  if ( S.ops > 100 ) unlock_upgrade( 'flashlight' )
+
 }
 
 let calculate_building_ops = ( building_owned, building_production ) => {

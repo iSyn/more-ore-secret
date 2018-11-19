@@ -4,8 +4,13 @@ let State = function( s = {} ) {
     ores: s.ores || 100,
     gems: s.ores || 100,
     generation: s.generation || 1,
+
     ops: s.ops || 0,
+    ops_multiplier: 0,
+
     opc: s.opc || 1,
+    opc_multiplier: 0,
+
     weak_hit_multi: s.weak_hit_multi || 5,
     current_combo: s.current_combo || 0,
 

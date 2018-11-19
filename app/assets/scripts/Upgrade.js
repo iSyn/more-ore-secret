@@ -17,9 +17,13 @@ let Upgrade = function( obj ) {
             this.owned = 1
 
             if ( this.buy_functions ) {
-                if ( this.buy_functions.increase_building_production ) {
-                    let building = select_from_arr( Buildings, this.buy_functions.increase_building_production.building )
-                    building.production *= this.buy_functions.increase_building_production.multi
+                let fn = this.buy_functions
+                if ( fn.increase_building_production ) {
+                    let building = select_from_arr( Buildings, fn.increase_building_production.building )
+                    building.production *= fn.increase_building_production.multi
+                }
+                if ( fn.gain_opc_from_ops ) {
+                    
                 }
             }
 
@@ -35,6 +39,19 @@ let Upgrade = function( obj ) {
 
 let Upgrades = []
 let upgrades = JSON.parse( localStorage.getItem( 'upgrades' ) ) || [
+
+    // OPS RELATED UPGRADES
+    {
+        name: 'Flashlight',
+        img: 'https://via.placeholder.com/50',
+        desc: 'Gain 3% of your OpS as OpC',
+        flavor_text: 'Or a torch if you\'re so inclined.',
+        price: 1000000,
+        // DETECTS WITHIN MAIN.JS IF THIS IS OWNED SO NO BUY FUNCTION
+    },
+
+    // -----------------------------------------------------------------------------------
+
     // SCHOOL RELATED UPGRADES
     {
         name: 'Composition Notebooks',

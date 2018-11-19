@@ -171,7 +171,7 @@ let buildings = [
             unlock_upgrades: [
                 { code_name: 'immunization_shot', amount_needed: 1 },
                 { code_name: 'blood_test', amount_needed: 10 },
-                { code_name: 'blood_transfusion', amount_needed: 20 ,
+                { code_name: 'blood_transfusion', amount_needed: 20 },
                 { code_name: 'cat_scan', amount_needed: 50 },
                 { code_name: 'enhancement_surgery', amount_needed: 100 },
             ]
