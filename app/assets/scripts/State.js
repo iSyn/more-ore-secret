@@ -39,7 +39,8 @@ let State = function( s = {} ) {
     },
 
     locked: {
-      fragility_spectacles: 1
+      fragility_spectacles: 1,
+      quest_board: 1
     },
 
     last_login: null,

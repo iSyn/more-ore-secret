@@ -38,6 +38,7 @@ let SmithUpgrade = function( obj ) {
 
 let Smith_Upgrades = []
 let smith_upgrades = [
+    // SPECIAL UPGRADES
     {
         name: 'Fragility Spectacles',
         img: 'https://via.placeholder.com/64',
@@ -47,6 +48,16 @@ let smith_upgrades = [
         price: 0,
         unlock_functions: {
             unlock_fragility_spectacles: 1
+        }
+    }, {
+        name: 'Quest Board',
+        img:'https://via.placeholder.com/64',
+        desc: 'Allows you to deploy Miners on quests for ancient artifacts!',
+        flavor_text: 'Fetch quests are the greatest',
+        duration: 30 * SECOND,
+        price: 5,
+        unlock_functions: {
+            unlock_quest_board: 1
         }
     },  {
         name: 'A U T O M A T E R',

@@ -64,6 +64,12 @@ let Smith = function( obj = {} ) {
                 generate_weak_spot()
             }
 
+            if ( fn.unlock_quest_board ) {
+                S.locked.quest_board = 0
+
+                build_bottom_tabs()
+            }
+
             if ( fn.increase_pickaxe_sharpness ) {
                 S.pickaxe.sharpness += fn.increase_pickaxe_sharpness
             }

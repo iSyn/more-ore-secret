@@ -20,6 +20,7 @@ const AUTOMATER_CONTAINER = s( '.automater-container' )
 const AUTOMATER_HEADER = s( '.automater-wrapper > header' )
 const ACHIEVEMENT_NOTIFICATION_CONTAINER = s( '.achievement-notification-container' )
 const FOOTER = s( 'footer' )
+const BOTTOM_AREA_TABS = s( '.bottom-area-tabs' )
 
 let S = new State().state
 let RN = new RisingNumber()
@@ -56,12 +57,12 @@ let init_game = () => {
   ORE_WEAK_SPOT.addEventListener( 'click', ( e ) => { handle_click( e, 'weak-spot' ) })
   build_automater_visibility_toggle_btn()
   build_footer()
-  earn_offline_gain()
+  earn_offline_resources()
 }
 
 let save_game = () => {
 
-  S.last_login = new Date.getTime()
+  S.last_login = new Date().getTime()
   
   localStorage.setItem( 'state', JSON.stringify( S ) )
   localStorage.setItem( 'buildings', JSON.stringify( Buildings ) )
@@ -137,10 +138,10 @@ let on_blur = () => {
 
 let on_focus = () => {
   O.window_blurred = false
-  earn_offline_gain( S.last_login )
+  earn_offline_resources( S.last_login )
 }
 
-let earn_offline_gain = () => {
+let earn_offline_resources = () => {
 
   let last_time = S.last_login
   let current_time = new Date().getTime()
@@ -151,7 +152,9 @@ let earn_offline_gain = () => {
     let amount_to_gain_raw = amount_of_time_passed_seconds * S.ops
     let amount_to_gain = amount_to_gain_raw > S.max_ore_away_gain ? S.max_ore_away_gain : amount_to_gain_raw
 
-    if ( amount_of_time_passed_seconds > 1 && amount_to_gain > 1 ) {
+    SMITH.current_progress += amount_of_time_passed_ms
+
+    if ( amount_of_time_passed_seconds > 30 && amount_to_gain > 1 ) {
 
       if ( !s( '.offline-gain-popup' ) ) {
         let wrapper = document.createElement( 'div' )
@@ -160,8 +163,10 @@ let earn_offline_gain = () => {
           <div class='offline-gain-popup'>
             <i onclick='remove_wrapper()' class='fa fa-times fa-1x'></i>
             <h1>Ore Warehouse</h1>
+            <hr />
             <small>- while away for <strong>${ beautify_ms( amount_of_time_passed_ms ) }</strong> -</small>
             <p>You earned <strong>${ beautify_number( amount_to_gain ) }</strong> ores!</p>
+            <button onclick='remove_wrapper()'>ok</button>
           </div>
         `
 
@@ -225,6 +230,11 @@ let position_elements = () => {
     }
     AUTOMATER_WRAPPER.style.top = '30%'
   }
+
+  // Position bottom area tab
+  let bottom_area_tabs_dimensions = BOTTOM_AREA_TABS.getBoundingClientRect()
+  BOTTOM_AREA_TABS.style.top = text_scroller_container_dimensions.top - bottom_area_tabs_dimensions.height + 'px'
+
 }
 
 let change_tab = ( code_name ) => {
@@ -812,6 +822,10 @@ let build_topbar_inventory = () => {
   `
 
   INVENTORY_EL.innerHTML = str
+}
+
+let build_bottom_tabs = () => {
+  // BUILD THIS OUT
 }
 
 let build_achievements = () => {
