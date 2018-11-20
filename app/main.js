@@ -61,6 +61,8 @@ let init_game = () => {
 
 let save_game = () => {
 
+  S.last_login = new Date.getTime()
+  
   localStorage.setItem( 'state', JSON.stringify( S ) )
   localStorage.setItem( 'buildings', JSON.stringify( Buildings ) )
   localStorage.setItem( 'upgrades', JSON.stringify( Upgrades ) )

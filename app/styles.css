@@ -123,7 +123,7 @@
           -webkit-box-pack: justify;
           -ms-flex-pack: justify;
           justify-content: space-between;
-          border: 2px solid #251910;
+          border: 6px ridge #42250f;
           -webkit-box-shadow: 0 0 40px #222 inset;
           box-shadow: 0 0 40px #222 inset; }
           .container .game-container > .left .topbar-inventory-container .topbar-inventory p {
@@ -574,7 +574,8 @@
   -webkit-box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
   min-width: 350px;
-  z-index: 3; }
+  z-index: 3;
+  border: 5px ridge #353535; }
   .tooltip .top {
     display: -webkit-box;
     display: -ms-flexbox;
@@ -659,7 +660,8 @@
     -webkit-animation: slide_up_in .3s;
     animation: slide_up_in .3s;
     -webkit-box-shadow: 0 2px 10px black;
-    box-shadow: 0 2px 10px black; }
+    box-shadow: 0 2px 10px black;
+    border: 5px ridge #353535; }
     .wrapper > div .fa-times {
       position: absolute;
       top: 5px;
@@ -806,7 +808,8 @@
     image-rendering: pixelated;
     -webkit-box-shadow: 0 0 30px #222 inset;
     box-shadow: 0 0 30px #222 inset;
-    cursor: pointer; }
+    cursor: pointer;
+    border: 5px ridge #dfdfdf; }
     .smith-upgrades .smith-upgrade:hover {
       -webkit-box-shadow: 0 0 10px #fff inset, 0 0 30px #222 inset;
       box-shadow: 0 0 10px #fff inset, 0 0 30px #222 inset; }
