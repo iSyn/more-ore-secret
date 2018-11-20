@@ -19,6 +19,8 @@ let State = function( s = {} ) {
 
     tabs: [],
 
+    max_ore_away_gain: 1 * MILLION, 
+
     pickaxe: {
       sharpness: 100,
       hardness: 100,
@@ -39,6 +41,8 @@ let State = function( s = {} ) {
     locked: {
       fragility_spectacles: 1
     },
+
+    last_login: null,
 
     stats: {
       current_rocks_destroyed: 0,

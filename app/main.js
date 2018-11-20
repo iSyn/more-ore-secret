@@ -1,5 +1,3 @@
-const VERSION = 0.01
-
 const CONTAINER = s( '.container' )
 const GAME_CONTAINER = s( '.game-container' )
 const ORE_SPRITE = s( '.ore-sprite' )
@@ -58,6 +56,7 @@ let init_game = () => {
   ORE_WEAK_SPOT.addEventListener( 'click', ( e ) => { handle_click( e, 'weak-spot' ) })
   build_automater_visibility_toggle_btn()
   build_footer()
+  earn_offline_gain()
 }
 
 let save_game = () => {
@@ -111,7 +110,9 @@ let load_game = () => {
     // SMITH = new Smith( JSON.parse( localStorage.getItem( 'smith' ) ) )
     if ( localStorage.getItem( 'smith' ) ) {
       SMITH = new Smith( JSON.parse( localStorage.getItem( 'smith' ) ) )
-      SMITH._update_progress()
+      if ( !is_empty( SMITH.upgrade_in_progress ) ) {
+        SMITH._update_progress()
+      }
     }
   }
 }
@@ -125,6 +126,49 @@ let build_footer = () => {
   FOOTER.innerHTML = `
     <p><strong>More Ore</strong> v.${VERSION} created by <strong><a href='https://synclairwang.com'>Syn Studios</a></strong> | <span onclick='save_game()'>Save Game</span> | <span onclick='wipe_save()'>Wipe Save</span> | <a href='https://discord.gg/NU99mMQ' target='_blank'>Join the Discord!</a> </p>
   `
+}
+
+let on_blur = () => {
+  O.window_blurred = true
+  S.last_login = new Date().getTime()
+}
+
+let on_focus = () => {
+  O.window_blurred = false
+  earn_offline_gain( S.last_login )
+}
+
+let earn_offline_gain = () => {
+
+  let last_time = S.last_login
+  let current_time = new Date().getTime()
+
+  if ( last_time ) {
+    let amount_of_time_passed_ms = current_time - last_time
+    let amount_of_time_passed_seconds = amount_of_time_passed_ms / 1000
+    let amount_to_gain_raw = amount_of_time_passed_seconds * S.ops
+    let amount_to_gain = amount_to_gain_raw > S.max_ore_away_gain ? S.max_ore_away_gain : amount_to_gain_raw
+
+    if ( amount_of_time_passed_seconds > 1 && amount_to_gain > 1 ) {
+
+      if ( !s( '.offline-gain-popup' ) ) {
+        let wrapper = document.createElement( 'div' )
+        wrapper.classList.add( 'wrapper' )
+        wrapper.innerHTML = `
+          <div class='offline-gain-popup'>
+            <i onclick='remove_wrapper()' class='fa fa-times fa-1x'></i>
+            <h1>Ore Warehouse</h1>
+            <small>- while away for <strong>${ beautify_ms( amount_of_time_passed_ms ) }</strong> -</small>
+            <p>You earned <strong>${ beautify_number( amount_to_gain ) }</strong> ores!</p>
+          </div>
+        `
+
+        CONTAINER.append( wrapper )
+      }
+    }
+
+    earn( amount_to_gain )
+  }
 }
 
 let play_sound = ( name, file_type = 'wav', base_vol = 1 ) => {
@@ -780,7 +824,7 @@ let build_achievements = () => {
   `
 
   wrapper.innerHTML = str
-  GAME_CONTAINER.append( wrapper )
+  CONTAINER.append( wrapper )
 }
 
 let build_settings = () => {
@@ -855,8 +899,8 @@ let win_achievement = ( achievement_code_name ) => {
 
 window.onload = () => { init_game() }
 window.onresize = () => { O.reposition_elements = 1 }
-window.onblur = () => { O.window_blurred = true }
-window.onfocus = () => { O.window_blurred = false; refocus() }
+window.onblur = on_blur
+window.onfocus = on_focus
 document.onkeydown = ( e ) => {
   if ( e.code == 'Escape' || e.key == 'Escape' ) {
     remove_wrapper()

@@ -223,7 +223,9 @@
             }
   
             &.smith {
-              background: linear-gradient(to bottom, #525252, #222);
+              background-image: url( './assets/images/bg-smith_bg.png' );
+              background-repeat: repeat;
+              background-color: linear-gradient(to bottom, #525252, #222);
               box-shadow: 0 0 10px #222 inset;
             }
           }

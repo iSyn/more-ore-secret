@@ -285,8 +285,9 @@
               -webkit-box-shadow: 0 0 10px #331f0b inset;
               box-shadow: 0 0 10px #331f0b inset; }
             .container .game-container .right-container > .right .tab-content-container .tab-content.smith {
-              background: -webkit-gradient(linear, left top, left bottom, from(#525252), to(#222));
-              background: linear-gradient(to bottom, #525252, #222);
+              background-image: url("./assets/images/bg-smith_bg.png");
+              background-repeat: repeat;
+              background-color: linear-gradient(to bottom, #525252, #222);
               -webkit-box-shadow: 0 0 10px #222 inset;
               box-shadow: 0 0 10px #222 inset; }
   .container footer {
@@ -415,6 +416,46 @@
   100% {
     -webkit-transform: translateY(100%);
     transform: translateY(100%); } }
+
+@-webkit-keyframes slide_up_in {
+  0% {
+    top: 70%;
+    opacity: 0; }
+  100% {
+    top: 50%;
+    opacity: 1; } }
+
+@keyframes slide_up_in {
+  0% {
+    top: 70%;
+    opacity: 0; }
+  100% {
+    top: 50%;
+    opacity: 1; } }
+
+@-webkit-keyframes slide_down_out {
+  0% {
+    top: 50%; }
+  100% {
+    top: 70%; } }
+
+@keyframes slide_down_out {
+  0% {
+    top: 50%; }
+  100% {
+    top: 70%; } }
+
+@-webkit-keyframes fade_out {
+  from {
+    opacity: 1; }
+  to {
+    opacity: 0; } }
+
+@keyframes fade_out {
+  from {
+    opacity: 1; }
+  to {
+    opacity: 0; } }
 
 .torch {
   z-index: 1;
@@ -614,7 +655,11 @@
     -webkit-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
     padding: 0 15px;
-    min-width: 300px; }
+    min-width: 300px;
+    -webkit-animation: slide_up_in .3s;
+    animation: slide_up_in .3s;
+    -webkit-box-shadow: 0 2px 10px black;
+    box-shadow: 0 2px 10px black; }
     .wrapper > div .fa-times {
       position: absolute;
       top: 5px;
@@ -644,6 +689,16 @@
       align-items: center; }
       .wrapper > div > div p {
         padding-right: 20px; }
+    .wrapper > div.offline-gain-popup {
+      text-align: center;
+      padding-bottom: 5px; }
+      .wrapper > div.offline-gain-popup h1 {
+        font-family: 'Germania One'; }
+      .wrapper > div.offline-gain-popup small {
+        opacity: .7;
+        font-style: italic; }
+      .wrapper > div.offline-gain-popup p {
+        font-size: 20px; }
 
 .pickaxe-accordion {
   max-height: 20px;

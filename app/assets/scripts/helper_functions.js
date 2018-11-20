@@ -9,7 +9,13 @@ let remove_el = ( el ) => {
 let remove_wrapper = () => {
   let wrappers = document.querySelectorAll( '.wrapper' )
   if ( wrappers.length > 0 ){
-    remove_el( wrappers[ wrappers.length - 1 ] )
+    let wrapper = wrappers[ wrappers.length - 1 ]
+    let child_el = wrapper.firstElementChild
+    child_el.addEventListener( 'animationend', () => {
+      remove_el( wrapper )
+    })
+    wrapper.style.animation = 'fade_out .15s'
+    child_el.style.animation = 'slide_down_out .15s'
   }
 }
 

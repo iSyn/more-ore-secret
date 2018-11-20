@@ -38,7 +38,7 @@ let Tooltip = function() {
             <div class="bottom" style='display: flex; flex-flow: row nowrap; justify-content: center;'>
               <div class="left" style='width: 20%; text-align: right; padding-right: 10px; border-right: 1px solid white; opacity: .5'>
                 <p style='padding-bottom: 2px;'>${ item.price } &nbsp; <i class="fa fa-diamond fa-1x" style='color: #1bacc8'></i></p>
-                <p style='padding-bottom: 2px;'>${ beautify_ms( item.duration * 1000 ) } &nbsp; <i class="fa fa-clock-o fa-1x"></i></p>
+                <p style='padding-bottom: 2px;'>${ beautify_ms( item.duration ) } &nbsp; <i class="fa fa-clock-o fa-1x"></i></p>
               </div>
               <div class="right" style='width: 80%; padding-left: 10px'>
                 <p>${ item.desc }</p>

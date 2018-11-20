@@ -89,6 +89,10 @@ let Smith = function( obj = {} ) {
 
                 })
             }
+
+            if ( fn.increase_maximum_ore_away_gain ) {
+                S.max_ore_away_gain *= fn.increase_maximum_ore_away_gain
+            }
         }
 
         upgrade.owned = 1
