@@ -124,29 +124,24 @@
 
       .bottom-area-tabs {
         display: flex;
-        flex-flow: row-reverse nowrap;
+        flex-flow: row nowrap;
         color: white;
         position: fixed;
-        transform: translateX( -20px );
 
         .tab {
           border-top-left-radius: 10px;
           border-top-right-radius: 10px;
           background: #222;
-          border: 1px solid black;
+          // border: 1px solid black;
+          color: rgba( 255, 255, 255, 0.6 );
+          box-shadow: 0 0px 5px rgba( 0, 0, 0, 0.3 );
           border-bottom: none;
           padding: 8px 35px;
+          margin-left: 10px;
+          cursor: pointer;
 
           &:hover {
-            z-index: 2;
-          }
-
-          &:nth-child( 2 ) {
-            transform: translateX( 10px );
-          }
-
-          &:nth-child( 3 ) {
-            transform: translateX( 20px );
+            color: rgba( 255, 255, 255, 0.9 );
           }
         }
       }

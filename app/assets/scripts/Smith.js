@@ -8,6 +8,10 @@ let Smith = function( obj = {} ) {
 
     this.start_upgrade = ( upgrade ) => {
 
+        this.current_progress = 0
+
+        console.log( 'STARTING UPGRADE', upgrade )
+
         if ( S.gems >= upgrade.price ) {
             S.gems -= upgrade.price
 
@@ -29,32 +33,24 @@ let Smith = function( obj = {} ) {
     this._update_progress = () => {
 
         build_pickaxe_update( true )
-        
-        let update_progress = setInterval(() => {
+    
+        let bar = s( '.progress-bar' )
 
-            let bar = s( '.progress-bar' )
+        this.current_progress += ( 1000 / S.prefs.game_speed )
 
-            this.current_progress += ( 1000 / S.prefs.game_speed )
+        if ( bar ) {
+            let percentage = ( this.current_progress / this.duration ) * 100
+            bar.style.width = percentage + '%'
+        }
 
-            if ( bar ) {
-                let percentage = ( this.current_progress / this.duration ) * 100
-                bar.style.width = percentage + '%'
-            }
-
-            if ( this.current_progress >= this.duration ) {
-                this._update_complete()
-                clearInterval( update_progress )
-            }
-
-
-        }, 1000 / S.prefs.game_speed )
+        if ( this.current_progress >= this.duration ) {
+            this._update_complete()
+        }
     }
 
     this._update_complete = () => {
 
         let upgrade = select_from_arr( Smith_Upgrades, this.upgrade_in_progress.code_name )
-
-        console.log( 'upgrade completed:', upgrade )
 
         if ( upgrade.unlock_functions ) {
             let fn = upgrade.unlock_functions
@@ -66,8 +62,7 @@ let Smith = function( obj = {} ) {
 
             if ( fn.unlock_quest_board ) {
                 S.locked.quest_board = 0
-
-                build_bottom_tabs()
+                // BUILD THIS OUT
             }
 
             if ( fn.increase_pickaxe_sharpness ) {
@@ -79,13 +74,15 @@ let Smith = function( obj = {} ) {
             }
 
             if ( fn.unlock_smith_upgrades ) {
-                console.log( 'target:', fn.unlock_smith_upgrades )
+                
                 fn.unlock_smith_upgrades.forEach( code_name => {
                     let target_upgrade = select_from_arr( Smith_Upgrades, code_name )
                     select_from_arr( target_upgrade.requires, upgrade.code_name ).owned = 1
 
                     let locked = 0
+                    console.log( target_upgrade.requires )
                     target_upgrade.requires.forEach( requirement => {
+                        console.log( 'requirement', requirement )
                         if ( !requirement.owned ) {
                             locked = 1
                         }
@@ -99,19 +96,19 @@ let Smith = function( obj = {} ) {
             if ( fn.increase_maximum_ore_away_gain ) {
                 S.max_ore_away_gain *= fn.increase_maximum_ore_away_gain
             }
+
+            if ( fn.unlock_automater ) {
+                new Automater()
+                S.automater.automater_accordion_hidden = false
+                O.re
+            }
         }
 
         upgrade.owned = 1
-        if ( upgrade.repeat ) upgrade.level++ 
-
-        if ( upgrade.code_name == 'a_u_t_o_m_a_t_e_r' ) {
-            new Automater()
-            S.automater.automater_accordion_hidden = false
-            O.reposition_elements = 1
-        }
 
         this.upgrade_in_progress = {}
         this.current_progress = 0
+        O.reposition_elements = 1
 
         if ( O.current_tab == 'smith' ) build_smith()
     }

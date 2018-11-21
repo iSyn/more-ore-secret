@@ -97,6 +97,12 @@
       box-shadow: 0 0 10px #fff inset, 0 0 30px #222 inset;
     }
 
+    &.locked {
+      cursor: not-allowed; 
+      opacity: 0.2;
+      filter: brightness( 70% );
+    }
+
     img {
       pointer-events: none;
     }

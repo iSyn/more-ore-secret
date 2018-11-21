@@ -65,7 +65,10 @@ let smith_upgrades = [
         desc: 'Unlocks the A U T O M A T E R',
         flavor_text: 'Check out my other game Automate the World!',
         duration: 5 * MINUTE,
-        price: 100
+        price: 100,
+        unlock_functions: {
+            unlock_automater: 1
+        }
     }, {
         name: 'Sharpen Pickaxe I',
         img: 'https://via.placeholder.com/64',
@@ -74,7 +77,7 @@ let smith_upgrades = [
         price: 5,
         unlock_functions: {
             increase_pickaxe_sharpness: 10,
-            unlock_smith_upgrades: [ 'sharpen_pickaxe_ii', 'test_skill' ]
+            unlock_smith_upgrades: [ 'sharpen_pickaxe_ii' ]
         }
     }, {
         name: 'Sharpen Pickaxe II',

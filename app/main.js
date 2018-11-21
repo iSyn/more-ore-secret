@@ -407,8 +407,6 @@ let calculate_pickaxe_hardness = () => {
 let build_pickaxe_update = ( direct = false ) => {
   let str = ''
 
-  console.log('build pickaxe update firing')
-
   is_empty( SMITH.upgrade_in_progress ) ? 
     str += '<p style="text-align: center; width: 100%; opacity: 0.5">No upgrade in progress</p>' :
       str += `
@@ -466,8 +464,8 @@ let build_smith_upgrades = ( direct = false ) => {
     locked_upgrades.forEach( upgrade => {
       str += `
         <div 
-          class="smith-upgrade"
-          style='background: url("${ upgrade.img }"); cursor: not-allowed; opacity: 0.6'
+          class="smith-upgrade locked"
+          style='background: url("${ upgrade.img }");'
           onmouseover='TT.show( event, { name: "${ upgrade.code_name }", type: "smith_upgrade"})'
           onmouseout='TT.hide()'
           >
@@ -735,6 +733,8 @@ let game_loop = () => {
     if ( O.rebuild_store ) build_store()
     if ( O.reposition_elements ) position_elements()
 
+    if ( !is_empty( SMITH.upgrade_in_progress ) ) SMITH._update_progress()
+  
     earn( S.ops / S.prefs.game_speed )
 
     O.counter++
