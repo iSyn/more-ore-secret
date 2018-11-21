@@ -59,7 +59,7 @@ let smith_upgrades = [
         unlock_functions: {
             unlock_quest_board: 1
         }
-    },  {
+    }, {
         name: 'A U T O M A T E R',
         img: 'https://via.placeholder.com/64',
         desc: 'Unlocks the A U T O M A T E R',
@@ -69,7 +69,10 @@ let smith_upgrades = [
         unlock_functions: {
             unlock_automater: 1
         }
-    }, {
+    },
+
+    // SHARPEN PICKAXE UPGRADES
+    {
         name: 'Sharpen Pickaxe I',
         img: 'https://via.placeholder.com/64',
         desc: 'Increases your pickaxe sharpness by 10%',
@@ -120,7 +123,10 @@ let smith_upgrades = [
         unlock_functions: {
             increase_pickaxe_sharpness: 10
         }
-    }, {
+    },
+
+    // REINFORCE PICKAXE UPGRADES
+    {
         name: 'Reinforce Pickaxe I',
         img: 'https://via.placeholder.com/64',
         desc: 'Increases your pickaxe hardness by 10%',
@@ -213,7 +219,80 @@ let smith_upgrades = [
         unlock_functions: {
             increase_maximum_ore_away_gain: 10
         }
-    }
+    },
+
+    // INCREASE GOLD NUGGET FREQUENCY
+    {
+        name: 'Gold Nuggies Frequency I',
+        img: 'https://via.placeholder.com/64',
+        desc: 'Increase the spawn rate of gold nuggets',
+        duration: 10 * SECOND,
+        price: 15,
+        locked: 1,
+        unlock_functions: {
+            increase_gold_nugget_spawn_rate: 10
+        }
+    }, {
+        name: 'Gold Nuggies Frequency II',
+        img: 'https://via.placeholder.com/64',
+        desc: 'Increase the spawn rate of gold nuggets',
+        duration: 10 * SECOND,
+        price: 25,
+        locked: 1,
+        unlock_functions: {
+            increase_gold_nugget_spawn_rate: 10
+        }
+    }, {
+        name: 'Gold Nuggies Frequency III',
+        img: 'https://via.placeholder.com/64',
+        desc: 'Increase the spawn rate of gold nuggets',
+        duration: 10 * SECOND,
+        price: 35,
+        locked: 1,
+        unlock_functions: {
+            increase_gold_nugget_spawn_rate: 10
+        }
+    },
+
+    // INCREASE GOLD NUGGET SPAWN RATE
+    {
+        name: 'Gold Nuggies Chance Up I',
+        img: 'https://via.placeholder.com/64',
+        desc: 'Increases the chance of a gold nugget spawning',
+        duration: 10 * SECOND,
+        price: 15,
+        locked: 1,
+        unlock_functions: {
+            increase_gold_nugget_chance_of_spawn: 10
+        }
+    }, {
+        name: 'Gold Nuggies Chance Up II',
+        img: 'https://via.placeholder.com/64',
+        desc: 'Increases the chance of a gold nugget spawning',
+        duration: 10 * SECOND,
+        price: 25,
+        locked: 1,
+        unlock_functions: {
+            increase_gold_nugget_chance_of_spawn: 10
+        }
+    }, {
+        name: 'Gold Nuggies Chance Up III',
+        img: 'https://via.placeholder.com/64',
+        desc: 'Increases the chance of a gold nugget spawning',
+        duration: 10 * SECOND,
+        price: 35,
+        locked: 1,
+        unlock_functions: {
+            increase_gold_nugget_chance_of_spawn: 10
+        }
+    }, 
 ]
+
+let unlock_smith_upgrade = ( code_name ) => {
+    let upgrade = select_from_arr( Smith_Upgrades, code_name )
+    upgrade.locked = 0
+
+    build_smith_upgrades( true )
+}
 
 smith_upgrades.forEach( upgrade => new SmithUpgrade( upgrade ) )

@@ -745,17 +745,13 @@ let game_loop = () => {
       if ( S.ops > 0 && S.prefs.show_ops_rising_numbers ) RN.new( null, 'buildings', S.ops )
     }
 
-    // THIS RUNS EVERY --------------------- ↓ seconds
-    if ( O.counter % ( S.prefs.game_speed * 60 ) == 0 ) {
+    // THIS RUNS EVERY --------------------------------- ↓ seconds
+    if ( O.counter % ( S.prefs.game_speed * S.gold_nugget_spawn_rate ) == 0 ) {
       spawn_gold_nugget()
     }
   }
 
   setTimeout( game_loop, 1000 / S.prefs.game_speed )
-}
-
-let refocus = () => {
-  console.log('firing')
 }
 
 let update_ore_hp = ( amount ) => {
@@ -920,7 +916,7 @@ let win_achievement = ( achievement_code_name ) => {
 // =======================================================================================
 
 let spawn_gold_nugget = () => {
-  if ( Math.random() <= .3 || S.stats.total_nuggets_clicked == 0 ) {
+  if ( Math.random() <= ( S.gold_nugget_chance_to_spawn * .01 ) || S.stats.total_nuggets_clicked == 0 ) {
     S.stats.total_nuggets_spawned++
     let nugget = document.createElement( 'div' )
     nugget.onclick = handle_gold_nugget_click
@@ -946,6 +942,11 @@ let spawn_gold_nugget = () => {
 
 let handle_gold_nugget_click = ( event ) => {
   S.stats.total_nuggets_clicked++
+
+  if ( S.stats.total_nuggets_clicked == 1 ) { unlock_smith_upgrade( 'gold_nuggies_frequency_i' ); unlock_smith_upgrade( 'gold_nuggies_chance_up_i') }
+  if ( S.stats.total_nuggets_clicked == 10 ) { unlock_smith_upgrade( 'gold_nuggies_frequency_ii' ); unlock_smith_upgrade( 'gold_nuggies_chance_up_ii') }
+  if ( S.stats.total_nuggets_clicked == 30 ) { unlock_smith_upgrade( 'gold_nuggies_frequency_iii' ); unlock_smith_upgrade( 'gold_nuggies_chance_up_iii') }
+
   play_sound( 'gold_nugget_click' )
   remove_el( event.target )
 

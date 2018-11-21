@@ -21,6 +21,9 @@ let State = function( s = {} ) {
 
     max_ore_away_gain: 1 * MILLION, 
 
+    gold_nugget_spawn_rate: 60, // 
+    gold_nugget_chance_to_spawn: 30, // 30% chance to spawn
+
     pickaxe: {
       sharpness: 100,
       hardness: 100,

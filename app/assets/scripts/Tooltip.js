@@ -17,16 +17,12 @@ let Tooltip = function() {
         if ( item.locked ) {
 
           str += `
-            <div>
+            <div class='top'>
+              <img style='filter: brightness( 0% )' src='${ item.img }'/>
               <h1>???</h1>
-              `
-
-              item.requires.forEach( requirement => {
-                str += requirement.owned ? `<p style='color: green'>Requires ${ requirement.name }</p>` : `<p style='color: red'>Requires ${ requirement.name }</p>`
-
-              })
-
-              str += `
+            </div>
+            <div class='bottom'>
+              <p style='color: red'>-LOCKED-</p>
             </div>
           `
         } else {

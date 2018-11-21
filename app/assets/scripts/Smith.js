@@ -102,6 +102,14 @@ let Smith = function( obj = {} ) {
                 S.automater.automater_accordion_hidden = false
                 O.re
             }
+
+            if ( fn.increase_gold_nugget_spawn_rate ) {
+                S.gold_nugget_spawn_rate -= fn.increase_gold_nugget_spawn_rate
+            }
+
+            if ( fn.increase_gold_nugget_chance_of_spawn ) {
+                S.gold_nugget_chance_to_spawn += fn.increase_gold_nugget_chance_of_spawn
+            }
         }
 
         upgrade.owned = 1
