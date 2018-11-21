@@ -1,5 +1,6 @@
 let RisingNumber = function() {
 
+
   this.new = ( e, type, amount = null ) => {
 
     if ( !O.window_blurred ) {
@@ -23,6 +24,12 @@ let RisingNumber = function() {
 
       // TYPES
       switch ( type ) {
+        case 'gold-nugget-click':
+          el.style.color = 'gold'
+          el.style.fontSize = '40px'
+          el.style.animationDuration = '3s'
+          break;
+
         case 'weak-hit-click':
           el.style.fontSize = '28px'
           break;

@@ -185,12 +185,12 @@ let play_sound = ( name, file_type = 'wav', base_vol = 1 ) => {
   sound.play()
 }
 
-let earn = ( amount, gems = false ) => {
+let earn = ( amount, gems = false, alter_hp = true ) => {
   if ( gems ) {
     S.gems += amount
     S.stats.total_gems_earned += amount
   } else {
-    update_ore_hp( amount )
+    if ( alter_hp ) update_ore_hp( amount )
     S.stats.total_ores_earned += amount
     S.ores += amount
   }
@@ -946,7 +946,12 @@ let spawn_gold_nugget = () => {
 
 let handle_gold_nugget_click = ( event ) => {
   S.stats.total_nuggets_clicked++
+  play_sound( 'gold_nugget_click' )
   remove_el( event.target )
+
+  let amount = ( S.ops * 13 + S.opc * 13 )
+  earn( amount, false, false )
+  RN.new( event, 'gold-nugget-click', amount )
 }
 
 // =======================================================================================
