@@ -723,6 +723,8 @@ let handle_text_scroller = () => {
 
 let game_loop = () => {
 
+  O.counter++
+
   if ( !O.window_blurred ) {
 
     update_ore_sprite()
@@ -737,13 +739,14 @@ let game_loop = () => {
   
     earn( S.ops / S.prefs.game_speed )
 
-    O.counter++
-    if ( O.counter % 30 == 0 ) {
-      O.counter = 0 
+    if ( O.counter % S.prefs.game_speed == 0 ) {
       S.stats.seconds_played++
-      if ( S.ops > 0 && S.prefs.show_ops_rising_numbers ) {
-        RN.new( null, 'buildings', S.ops )
-      }
+      if ( S.ops > 0 && S.prefs.show_ops_rising_numbers ) RN.new( null, 'buildings', S.ops )
+    }
+
+    // THIS RUNS EVERY --------------------- ↓ seconds
+    if ( O.counter % ( S.prefs.game_speed * 60 ) == 0 ) {
+      spawn_gold_nugget()
     }
   }
 
@@ -912,6 +915,22 @@ let win_achievement = ( achievement_code_name ) => {
 
 
 }
+
+// =======================================================================================
+
+let spawn_gold_nugget = () => {
+  if ( Math.random() <= .3 || S.stats.total_nuggets_clicked == 0 ) {
+    S.stats.total_nuggets_spawned++
+    let nugget = document.createElement( 'div' )
+    nugget.classList.add( 'gold-nugget' )
+  }
+}
+
+let handle_gold_nugget_click = () => {
+  S.stats.total_nuggets_clicked++
+}
+
+// =======================================================================================
 
 window.onload = () => { init_game() }
 window.onresize = () => { O.reposition_elements = 1 }

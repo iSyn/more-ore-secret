@@ -50,6 +50,9 @@ let State = function( s = {} ) {
       total_rocks_destroyed: 0,
       total_ores_earned: 0,
       total_gems_earned: 100, ///////////////////////
+      total_nuggets_spawned: 0,
+      total_nuggets_missed: 0,
+      total_nuggets_clicked: 0,
       total_clicks: 0,
       total_weak_hit_clicks: 0,
       highest_combo: 0,
