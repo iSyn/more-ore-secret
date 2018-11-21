@@ -1,3 +1,9 @@
 .gold-nugget {
-  
+  z-index: 3;
+  position: absolute;
+  height: 30px;
+  width: 26px;
+  cursor: pointer;
+  image-rendering: pixelated;
+  background: url( './assets/images/misc-gold_nugget.png');
 }

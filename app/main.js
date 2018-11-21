@@ -1,3 +1,4 @@
+const BODY = s( 'body' )
 const CONTAINER = s( '.container' )
 const GAME_CONTAINER = s( '.game-container' )
 const ORE_SPRITE = s( '.ore-sprite' )
@@ -922,12 +923,30 @@ let spawn_gold_nugget = () => {
   if ( Math.random() <= .3 || S.stats.total_nuggets_clicked == 0 ) {
     S.stats.total_nuggets_spawned++
     let nugget = document.createElement( 'div' )
+    nugget.onclick = handle_gold_nugget_click
+
+    let pos = {
+      x: Math.random() * window.innerWidth,
+      y: Math.random() * window.innerHeight
+    }
+
     nugget.classList.add( 'gold-nugget' )
+    nugget.style.left = pos.x + 'px'
+    nugget.style.top = pos.y + 'px'
+    nugget.style.animation = 'rotate 5s infinite linear, fade_in_out 10s linear forwards'
+
+    nugget.addEventListener( 'animationend', () => { 
+      remove_el( nugget )
+      S.stats.total_nuggets_missed++
+    } )
+
+    BODY.append( nugget )
   }
 }
 
-let handle_gold_nugget_click = () => {
+let handle_gold_nugget_click = ( event ) => {
   S.stats.total_nuggets_clicked++
+  remove_el( event.target )
 }
 
 // =======================================================================================
