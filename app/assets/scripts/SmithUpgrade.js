@@ -38,55 +38,38 @@ let SmithUpgrade = function( obj ) {
 
 let Smith_Upgrades = []
 let smith_upgrades = [
-    // SPECIAL UPGRADES
     {
         name: 'Fragility Spectacles',
         img: 'https://via.placeholder.com/64',
         desc: 'Allows you to spot "weak spots" within the ore',
         flavor_text: 'I can see... I can FIGHT!',
-        duration: 10 * SECOND,
+        duration: 10,
         price: 0,
         unlock_functions: {
             unlock_fragility_spectacles: 1
         }
-    }, {
-        name: 'Quest Board',
-        img:'https://via.placeholder.com/64',
-        desc: 'Allows you to deploy Miners on quests for ancient artifacts!',
-        flavor_text: 'Fetch quests are the greatest',
-        duration: 30 * SECOND,
-        price: 5,
-        unlock_functions: {
-            unlock_quest_board: 1
-        }
-    }, {
+    },  {
         name: 'A U T O M A T E R',
         img: 'https://via.placeholder.com/64',
         desc: 'Unlocks the A U T O M A T E R',
         flavor_text: 'Check out my other game Automate the World!',
-        duration: 5 * MINUTE,
-        price: 100,
-        unlock_functions: {
-            unlock_automater: 1
-        }
-    },
-
-    // SHARPEN PICKAXE UPGRADES
-    {
+        duration: 5 * 60,
+        price: 100
+    }, {
         name: 'Sharpen Pickaxe I',
         img: 'https://via.placeholder.com/64',
         desc: 'Increases your pickaxe sharpness by 10%',
-        duration: 10 * SECOND,
+        duration: 10,
         price: 5,
         unlock_functions: {
             increase_pickaxe_sharpness: 10,
-            unlock_smith_upgrades: [ 'sharpen_pickaxe_ii' ]
+            unlock_smith_upgrades: [ 'sharpen_pickaxe_ii', 'test_skill' ]
         }
     }, {
         name: 'Sharpen Pickaxe II',
         img: 'https://via.placeholder.com/64', 
         desc: 'Increases your pickaxe sharpness by 10%',
-        duration: 15 * SECOND,
+        duration: 15,
         price: 10,
         locked: 1,
         requires: [ 'sharpen_pickaxe_i' ],
@@ -96,7 +79,7 @@ let smith_upgrades = [
         }
     }, {
         name: 'Sharpen Pickaxe III', img: 'https://via.placeholder.com/64', desc: 'Increases your pickaxe sharpness by 10%',
-        duration: 1 * SECOND,
+        duration: 1,
         price: 20,
         locked: 1,
         requires: [ 'sharpen_pickaxe_ii' ],
@@ -106,7 +89,7 @@ let smith_upgrades = [
         }
     }, {
         name: 'Sharpen Pickaxe IV', img: 'https://via.placeholder.com/64', desc: 'Increases your pickaxe sharpness by 10%',
-        duration: 1 * SECOND,
+        duration: 1,
         price: 25,
         locked: 1,
         requires: [ 'sharpen_pickaxe_iii' ],
@@ -116,21 +99,18 @@ let smith_upgrades = [
         }
     }, {
         name: 'Sharpen Pickaxe V', img: 'https://via.placeholder.com/64', desc: 'Increases your pickaxe sharpness by 10%',
-        duration: 1 * SECOND,
+        duration: 1,
         price: 30,
         locked: 1,
         requires: [ 'sharpen_pickaxe_iv' ],
         unlock_functions: {
             increase_pickaxe_sharpness: 10
         }
-    },
-
-    // REINFORCE PICKAXE UPGRADES
-    {
+    }, {
         name: 'Reinforce Pickaxe I',
         img: 'https://via.placeholder.com/64',
         desc: 'Increases your pickaxe hardness by 10%',
-        duration: 10 * SECOND,
+        duration: 10,
         price: 10,
         unlock_functions: {
             increase_pickaxe_hardness: 10,
@@ -140,7 +120,7 @@ let smith_upgrades = [
         name: 'Reinforce Pickaxe II',
         img: 'https://via.placeholder.com/64',
         desc: 'Increases your pickaxe hardness by 10%',
-        duration: 5 * SECOND,
+        duration: 5,
         price: 15,
         locked: 1,
         requires: [ 'reinforce_pickaxe_i' ],
@@ -152,7 +132,7 @@ let smith_upgrades = [
         name: 'Reinforce Pickaxe III',
         img: 'https://via.placeholder.com/64',
         desc: 'Increases your pickaxe hardness by 10%',
-        duration: 5 * SECOND,
+        duration: 5,
         price: 20,
         locked: 1,
         requires: [ 'reinforce_pickaxe_ii' ],
@@ -164,7 +144,7 @@ let smith_upgrades = [
         name: 'Reinforce Pickaxe IV',
         img: 'https://via.placeholder.com/64',
         desc: 'Increases your pickaxe hardness by 10%',
-        duration: 5 * SECOND,
+        duration: 5,
         price: 25,
         locked: 1,
         requires: [ 'reinforce_pickaxe_iii' ],
@@ -176,123 +156,22 @@ let smith_upgrades = [
         name: 'Reinforce Pickaxe V',
         img: 'https://via.placeholder.com/64',
         desc: 'Increases your pickaxe hardness by 10%',
-        duration: 5 * SECOND,
+        duration: 5,
         price: 30,
         locked: 1,
         requires: [ 'reinforce_pickaxe_iv' ],
         unlock_functions: {
             increase_pickaxe_hardness: 10
         }
-    },
-
-    // INCREASE MAXIMUM ORE GAINED WHILE AWAY UPGRADES
-    {
-        name: 'Ore Warehouse I',
+    }, {
+        name: 'TEST SKILL',
         img: 'https://via.placeholder.com/64',
-        desc: 'Increases maximum ore gain when away by x10',
-        duration: 10 * SECOND,
+        desc: 'TEST',
+        duration: 5,
         price: 10,
-        unlock_functions: {
-            increase_maximum_ore_away_gain: 10,
-            unlock_smith_upgrades: [ 'ore_warehouse_ii' ]
-        }
-    }, {
-        name: 'Ore Warehouse II',
-        img: 'https://via.placeholder.com/64',
-        desc: 'Increases maximum ore gain when away by x10',
-        duration: 15 * SECOND,
-        price: 20,
         locked: 1,
-        requires: [ 'ore_warehouse_i' ],
-        unlock_functions: {
-            increase_maximum_ore_away_gain: 10,
-            unlock_smith_upgrades: [ 'ore_warehouse_iii' ]
-        }
-    }, {
-        name: 'Ore Warehouse III',
-        img: 'https://via.placeholder.com/64',
-        desc: 'Increases maximum ore gain when away by x10',
-        duration: 20 * SECOND,
-        price: 30,
-        locked: 1,
-        requires: [ 'ore_warehouse_ii' ],
-        unlock_functions: {
-            increase_maximum_ore_away_gain: 10
-        }
-    },
-
-    // INCREASE GOLD NUGGET FREQUENCY
-    {
-        name: 'Gold Nuggies Frequency I',
-        img: 'https://via.placeholder.com/64',
-        desc: 'Increase the spawn rate of gold nuggets',
-        duration: 10 * SECOND,
-        price: 15,
-        locked: 1,
-        unlock_functions: {
-            increase_gold_nugget_spawn_rate: 10
-        }
-    }, {
-        name: 'Gold Nuggies Frequency II',
-        img: 'https://via.placeholder.com/64',
-        desc: 'Increase the spawn rate of gold nuggets',
-        duration: 10 * SECOND,
-        price: 25,
-        locked: 1,
-        unlock_functions: {
-            increase_gold_nugget_spawn_rate: 10
-        }
-    }, {
-        name: 'Gold Nuggies Frequency III',
-        img: 'https://via.placeholder.com/64',
-        desc: 'Increase the spawn rate of gold nuggets',
-        duration: 10 * SECOND,
-        price: 35,
-        locked: 1,
-        unlock_functions: {
-            increase_gold_nugget_spawn_rate: 10
-        }
-    },
-
-    // INCREASE GOLD NUGGET SPAWN RATE
-    {
-        name: 'Gold Nuggies Chance Up I',
-        img: 'https://via.placeholder.com/64',
-        desc: 'Increases the chance of a gold nugget spawning',
-        duration: 10 * SECOND,
-        price: 15,
-        locked: 1,
-        unlock_functions: {
-            increase_gold_nugget_chance_of_spawn: 10
-        }
-    }, {
-        name: 'Gold Nuggies Chance Up II',
-        img: 'https://via.placeholder.com/64',
-        desc: 'Increases the chance of a gold nugget spawning',
-        duration: 10 * SECOND,
-        price: 25,
-        locked: 1,
-        unlock_functions: {
-            increase_gold_nugget_chance_of_spawn: 10
-        }
-    }, {
-        name: 'Gold Nuggies Chance Up III',
-        img: 'https://via.placeholder.com/64',
-        desc: 'Increases the chance of a gold nugget spawning',
-        duration: 10 * SECOND,
-        price: 35,
-        locked: 1,
-        unlock_functions: {
-            increase_gold_nugget_chance_of_spawn: 10
-        }
-    }, 
+        requires: [ 'reinforce_pickaxe_i', 'sharpen_pickaxe_i' ]
+    }
 ]
-
-let unlock_smith_upgrade = ( code_name ) => {
-    let upgrade = select_from_arr( Smith_Upgrades, code_name )
-    upgrade.locked = 0
-
-    build_smith_upgrades( true )
-}
 
 smith_upgrades.forEach( upgrade => new SmithUpgrade( upgrade ) )

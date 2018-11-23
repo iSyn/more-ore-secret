@@ -757,6 +757,31 @@
       align-items: center; }
       .wrapper > div > div p {
         padding-right: 20px; }
+    .wrapper > div.stats-container {
+      width: 424px; }
+      .wrapper > div.stats-container ul {
+        list-style-type: none;
+        font-size: 14px; }
+      .wrapper > div.stats-container hr {
+        width: 20%;
+        margin: 10px 0; }
+      .wrapper > div.stats-container .achievement-container {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-orient: horizontal;
+        -webkit-box-direction: normal;
+        -ms-flex-flow: row wrap;
+        flex-flow: row wrap;
+        -webkit-box-pack: start;
+        -ms-flex-pack: start;
+        justify-content: flex-start; }
+        .wrapper > div.stats-container .achievement-container h1 {
+          width: 100%; }
+        .wrapper > div.stats-container .achievement-container .achievement-square {
+          height: 64px;
+          width: 64px;
+          border: 5px ridge #222; }
     .wrapper > div.offline-gain-popup {
       text-align: center;
       padding-bottom: 5px; }

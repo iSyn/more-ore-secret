@@ -51,6 +51,41 @@
       }
     }
 
+    &.stats-container {
+      width: 424px;
+
+      ul {
+        list-style-type: none;
+        font-size: 14px;
+      }
+
+      hr {
+        width: 20%;
+        margin: 10px 0;
+      }
+
+      .achievement-container {
+        display: flex;
+        flex-flow: row wrap;
+        justify-content: flex-start;
+
+        h1 {
+          width: 100%;
+        }
+
+        .achievement-square {
+          height: 64px;
+          width: 64px;
+          border: 5px ridge #222;
+
+          &.locked {
+
+          }
+        }
+
+      }
+    }
+
     &.offline-gain-popup {
       text-align: center;
       padding-bottom: 5px;

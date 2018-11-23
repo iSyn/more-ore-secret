@@ -682,6 +682,7 @@ let handle_click = ( e, type ) => {
 
     if ( S.current_combo > S.stats.highest_combo ) S.stats.highest_combo = S.current_combo
     if ( S.current_combo % 5 == 0 ) RN.new( e, 'combo', S.current_combo )
+
     RN.new( event, 'weak-hit-click', opc )
     generate_weak_spot()
   } else {
@@ -691,6 +692,7 @@ let handle_click = ( e, type ) => {
   }
 
   S.stats.total_clicks++
+  S.stats.total_ores_manually_mined += opc
 
   earn( opc )
 }
@@ -835,6 +837,49 @@ let build_achievements = () => {
   let str = `
     <div class='stats-container'>
       <h1>Achievements</h1>
+      <hr/>
+      <ul>
+        <li>Highest Combo: ${ S.stats.highest_combo }</li>
+        <li>Total Clicks: ${ S.stats.total_clicks }</li>
+        <li>Total Weak Spot Clicks: ${ S.stats.total_weak_hit_clicks }</li>
+        <li>Seconds Played: ${ S.stats.seconds_played }</li>
+        <li>Current Rocks Destroyed: ${ S.stats.current_rocks_destroyed }</li>
+        <li>Total Rocks Destroyed: ${ S.stats.total_rocks_destroyed }</li>
+        <li>Total Ores Earned: ${ beautify( S.stats.total_ores_earned ) }</li>
+        <li>Total Ores Mined: ${beautify( S.stats.total_ores_manually_mined ) }</li>
+        <li>Total Gems Earned: ${ S.stats.total_gems_earned }</li>
+        <li>Total Gold Nuggets Spawned: ${ S.stats.total_nuggets_spawned }</li>
+        <li>Total Gold Nuggets Clicked: ${ S.stats.total_nuggets_clicked } </li>
+        <li>Total Gold Nuggets Missed: ${ S.stats.total_nuggets_missed }</li>
+      </ul>
+      <hr/>
+      <div class='achievement-container'>
+        <h1>Won:</h1>
+        `
+        let locked_achievements = []
+        Achievements.forEach( achievement => {
+          if ( achievement.won == 1 ) {
+            str += `
+              <div class="achievement-square">
+
+              </div>
+            `
+          } else {
+            locked_achievements.push( achievement )
+          }
+        })
+
+        str += '<h1>Locked:</h1>'
+        locked_achievements.forEach( achievement => {
+          str += `
+            <div class="achievement-square locked">
+
+            </div>
+          `
+        })
+          
+        str += `
+      </div>
       <i onclick='remove_wrapper()' class='fa fa-times fa-1x'></i>
     </div>
   `
