@@ -31,8 +31,9 @@ let PE = new ParticleEngine()
 let SMITH = new Smith()
 
 let O = {
-  reposition_elements: 1,
+  rebuild_bottom_tabs: 1,
   rebuild_store: 1,
+  reposition_elements: 1,
   recalculate_ops: 1,
   recalculate_opc: 1,
 
@@ -737,6 +738,7 @@ let game_loop = () => {
     if ( O.recalculate_opc ) calculate_opc()
     if ( O.rebuild_store ) build_store()
     if ( O.reposition_elements ) position_elements()
+    if ( O.rebuild_bottom_tabs ) build_bottom_tabs()
 
     if ( !is_empty( SMITH.upgrade_in_progress ) ) SMITH._update_progress()
   
@@ -827,7 +829,26 @@ let build_topbar_inventory = () => {
 }
 
 let build_bottom_tabs = () => {
-  // BUILD THIS OUT
+
+  let str = ''
+
+  Bottom_Tabs.forEach( tab => {
+
+    if ( tab.hidden ) {
+      str += `
+        <div class="tab">???</div>
+      `
+    } else {
+      str += `
+        <div class="tab">${ tab.name }</div>
+      `
+    }
+  })
+
+  BOTTOM_AREA_TABS.innerHTML = str
+
+  O.rebuild_bottom_tabs = 0
+  O.reposition_elements = 1
 }
 
 let build_achievements = () => {
@@ -845,8 +866,8 @@ let build_achievements = () => {
         <li>Seconds Played: ${ S.stats.seconds_played }</li>
         <li>Current Rocks Destroyed: ${ S.stats.current_rocks_destroyed }</li>
         <li>Total Rocks Destroyed: ${ S.stats.total_rocks_destroyed }</li>
-        <li>Total Ores Earned: ${ beautify( S.stats.total_ores_earned ) }</li>
-        <li>Total Ores Mined: ${beautify( S.stats.total_ores_manually_mined ) }</li>
+        <li>Total Ores Earned: ${ beautify_number( S.stats.total_ores_earned ) }</li>
+        <li>Total Ores Mined: ${ beautify_number( S.stats.total_ores_manually_mined ) }</li>
         <li>Total Gems Earned: ${ S.stats.total_gems_earned }</li>
         <li>Total Gold Nuggets Spawned: ${ S.stats.total_nuggets_spawned }</li>
         <li>Total Gold Nuggets Clicked: ${ S.stats.total_nuggets_clicked } </li>
@@ -860,8 +881,12 @@ let build_achievements = () => {
         Achievements.forEach( achievement => {
           if ( achievement.won == 1 ) {
             str += `
-              <div class="achievement-square">
-
+              <div 
+                class="achievement-square"
+                onmouseover="TT.show( event, { name: '${ achievement.code_name }', type: 'achievement-square' } )"
+                onmouseout='TT.hide()'
+                style='background-image: url( ${ achievement.img } )'
+                >
               </div>
             `
           } else {
@@ -872,8 +897,10 @@ let build_achievements = () => {
         str += '<h1>Locked:</h1>'
         locked_achievements.forEach( achievement => {
           str += `
-            <div class="achievement-square locked">
-
+            <div 
+              class="achievement-square locked"
+              style='background-image: url( ${ achievement.img } )'
+              >
             </div>
           `
         })

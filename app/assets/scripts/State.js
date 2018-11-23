@@ -8,7 +8,7 @@ let State = function( s = {} ) {
     ops: s.ops || 0,
     ops_multiplier: 0,
 
-    opc: s.opc || 1,
+    opc: s.opc || 30,
     opc_multiplier: 0,
 
     weak_hit_multi: s.weak_hit_multi || 5,

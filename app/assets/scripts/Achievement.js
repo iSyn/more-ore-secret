@@ -6,7 +6,7 @@ let Achievement = function( obj ) {
   this.type = obj.type || ''
   this.desc = obj.desc
   this.reward = obj.reward || null
-  this.won = 0
+  this.won = obj.won || 0
 
   this.win = () => {
     this.won = 1

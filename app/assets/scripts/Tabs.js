@@ -13,8 +13,7 @@ let tabs = [
     {
       name: 'Store',
       selected: 1
-    },
-    {
+    }, {
       name: 'Smith',
       selected: 0
     }
@@ -22,4 +21,34 @@ let tabs = [
 
 tabs.forEach( tab => {
     new Tab( tab )
+})
+
+// ---------------------------------------------------------------
+
+let Bottom_Tab = function( tab ) {
+
+  this.name = tab.name
+  this.code_name = tab.name.replace( / /g, '_' ).toLowerCase()
+  this.hidden = tab.hidden || 0
+  this.selected = tab.selected || 0
+
+  Bottom_Tabs.push( this )
+
+}
+
+let Bottom_Tabs = []
+let bottom_tabs = [
+  {
+    name: 'Quest Board',
+    selected: 1,
+    hidden: 1
+  }, {
+    name: 'Ore Garden',
+    hidden: 1,
+    selected: 0
+  }
+]
+
+bottom_tabs.forEach( tab => {
+  new Bottom_Tab( tab )
 })

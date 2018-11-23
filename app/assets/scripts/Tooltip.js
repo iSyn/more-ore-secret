@@ -2,6 +2,8 @@ let Tooltip = function() {
 
   this.show = ( e, obj ) => {
 
+    console.log( 'firing')
+
     let str = ''
     let item;
     let tooltip_dimensions;
@@ -10,6 +12,21 @@ let Tooltip = function() {
 
     // build content
     switch ( obj.type ) {
+
+      case 'achievement-square':
+        item = select_from_arr( Achievements, obj.name )
+
+        str += `
+          <div class="top">
+            <img src="${ item.img }" alt="achievement-img">
+            <h1>${ item.name }</h1>
+          </div>
+          <div class="bottom">
+            <p>${ item.desc }</p>
+          </div>
+        `
+
+        break
 
       case 'smith_upgrade':
         item = select_from_arr( Smith_Upgrades, obj.name )
@@ -47,7 +64,7 @@ let Tooltip = function() {
           }
         }
         
-        break;
+        break
       
       case 'upgrade':
         item = select_from_arr( Upgrades, obj.name )
@@ -65,7 +82,7 @@ let Tooltip = function() {
           </div>
         `
         
-        break;
+        break
 
       case 'building':
         item = select_from_arr( Buildings, obj.name )
@@ -103,16 +120,20 @@ let Tooltip = function() {
     // position tooltip
     switch ( obj.type ) {
 
+      case 'achievement-square':
+        tooltip_dimensions = TOOLTIP.getBoundingClientRect()
+        TOOLTIP.style.left = e.target.getBoundingClientRect().left + 'px'
+        TOOLTIP.style.top = e.target.getBoundingClientRect().top - tooltip_dimensions.height + 'px'
+        break
+
       case 'smith_upgrade':
       case 'upgrade':
       case 'building':
+      default:
         tooltip_dimensions = TOOLTIP.getBoundingClientRect()
         TOOLTIP.style.left = ( MIDDLE_VERTICAL_SEPARATOR.getBoundingClientRect().left - tooltip_dimensions.width ) + 'px'
         TOOLTIP.style.top = e.target.getBoundingClientRect().top + 'px'
         
-        break;
-
-      default:
         break
 
     }

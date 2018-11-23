@@ -139,9 +139,12 @@
           padding: 8px 35px;
           margin-left: 10px;
           cursor: pointer;
+          transition: all .15s;
 
           &:hover {
             color: rgba( 255, 255, 255, 0.9 );
+            padding-bottom: 20px;
+            transform: translateY( -10px );
           }
         }
       }
