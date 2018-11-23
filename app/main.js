@@ -379,12 +379,18 @@ let build_pickaxe_accordion = ( direct = false ) => {
   str += `
     <div class='pickaxe-accordion ${ O.pickaxe_accordion_is_open && 'open' }'>
       <header onclick='toggle_pickaxe_accordion()'>
-        <p>Pickaxe</p>
+        <p>${ S.pickaxe.name }</p>
         <i class='fa fa-caret-down fa-1x'></i>
       </header>
       <div>
-        <p>Sharpness: ${ calculate_pickaxe_sharpness() }%</p>
-        <p>Hardness: ${ calculate_pickaxe_hardness() }%</p>
+        <p>Damage: ${ S.pickaxe.damage }</p>
+        <p
+          onmouseover='TT.show( event, { name: null, type: "sharpness-info" } )'
+          onmouseout='TT.hide()'
+          >Sharpness: ${ calculate_pickaxe_sharpness() }%</p>
+        <p
+          onmouseover='TT.show( event, { name: null, type: "hardness-info" } )'
+          >Hardness: ${ calculate_pickaxe_hardness() }%</p>
       </div>
     </div>
     <div class='horizontal-separator thin dark'></div>
@@ -599,7 +605,7 @@ let start_smith_upgrade = ( arr, code_name  ) => {
 
 let calculate_opc = ( type ) => {
   
-  let opc = S.opc
+  let opc = S.pickaxe.damage
 
   if ( type ) {
     if ( type == 'weak-spot' ) {
@@ -614,6 +620,7 @@ let calculate_opc = ( type ) => {
   }
 
   O.recalculate_opc = 0
+  S.opc = opc
   return opc
 }
 
@@ -834,7 +841,7 @@ let build_bottom_tabs = () => {
 
   Bottom_Tabs.forEach( tab => {
 
-    if ( tab.hidden ) {
+    if ( tab.locked ) {
       str += `
         <div class="tab">???</div>
       `
@@ -860,18 +867,18 @@ let build_achievements = () => {
       <h1>Achievements</h1>
       <hr/>
       <ul>
-        <li>Highest Combo: ${ S.stats.highest_combo }</li>
-        <li>Total Clicks: ${ S.stats.total_clicks }</li>
-        <li>Total Weak Spot Clicks: ${ S.stats.total_weak_hit_clicks }</li>
-        <li>Seconds Played: ${ S.stats.seconds_played }</li>
-        <li>Current Rocks Destroyed: ${ S.stats.current_rocks_destroyed }</li>
-        <li>Total Rocks Destroyed: ${ S.stats.total_rocks_destroyed }</li>
-        <li>Total Ores Earned: ${ beautify_number( S.stats.total_ores_earned ) }</li>
-        <li>Total Ores Mined: ${ beautify_number( S.stats.total_ores_manually_mined ) }</li>
-        <li>Total Gems Earned: ${ S.stats.total_gems_earned }</li>
-        <li>Total Gold Nuggets Spawned: ${ S.stats.total_nuggets_spawned }</li>
-        <li>Total Gold Nuggets Clicked: ${ S.stats.total_nuggets_clicked } </li>
-        <li>Total Gold Nuggets Missed: ${ S.stats.total_nuggets_missed }</li>
+        <li><span>Highest Combo:</span> ${ S.stats.highest_combo }</li>
+        <li><span>Total Clicks:</span> ${ S.stats.total_clicks }</li>
+        <li><span>Total Weak Spot Clicks:</span> ${ S.stats.total_weak_hit_clicks }</li>
+        <li><span>Seconds Played:</span> ${ S.stats.seconds_played }</li>
+        <li><span>Current Rocks Destroyed:</span> ${ S.stats.current_rocks_destroyed }</li>
+        <li><span>Total Rocks Destroyed:</span> ${ S.stats.total_rocks_destroyed }</li>
+        <li><span>Total Ores Earned:</span> ${ beautify_number( S.stats.total_ores_earned ) }</li>
+        <li><span>Total Ores Mined:</span> ${ beautify_number( S.stats.total_ores_manually_mined ) }</li>
+        <li><span>Total Gems Earned:</span> ${ S.stats.total_gems_earned }</li>
+        <li><span>Total Gold Nuggets Spawned:</span> ${ S.stats.total_nuggets_spawned }</li>
+        <li><span>Total Gold Nuggets Clicked:</span> ${ S.stats.total_nuggets_clicked } </li>
+        <li><span>Total Gold Nuggets Missed:</span> ${ S.stats.total_nuggets_missed }</li>
       </ul>
       <hr/>
       <div class='achievement-container'>

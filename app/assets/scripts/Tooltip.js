@@ -2,8 +2,6 @@ let Tooltip = function() {
 
   this.show = ( e, obj ) => {
 
-    console.log( 'firing')
-
     let str = ''
     let item;
     let tooltip_dimensions;
@@ -12,6 +10,24 @@ let Tooltip = function() {
 
     // build content
     switch ( obj.type ) {
+
+      case 'sharpness-info':
+        str += `
+          <h1><i class='fa fa-info-circle fa-1x'></i> Sharpness</h1>
+          <hr />
+          <p><strong>Weak hits</strong> on the ore are affected by <strong>sharpness</strong>.</p>
+          <p>The sharper your pickaxe, the more damage you inflict on weak hits.</p>
+        `
+        break
+
+      case 'hardness-info':
+        str += `
+          <h1><i class='fa fa-info-circle fa-1x'></i> Hardness</h1>
+          <hr />
+          <p><strong>Regular hits</strong> on the ore are affected by <strong>hardness</strong>.</p>
+          <p>The harder your pickaxe is, the more damage you inflict on regular hits.</p>
+        `
+        break
 
       case 'achievement-square':
         item = select_from_arr( Achievements, obj.name )

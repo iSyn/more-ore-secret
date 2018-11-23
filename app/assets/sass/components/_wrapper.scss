@@ -57,6 +57,16 @@
       ul {
         list-style-type: none;
         font-size: 14px;
+
+        li {
+          letter-spacing: .5px;
+          padding: 1px 0;
+
+          span {
+            opacity: .6;
+            padding-right: 3px;
+          }
+        }
       }
 
       hr {

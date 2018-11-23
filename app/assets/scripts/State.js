@@ -8,7 +8,7 @@ let State = function( s = {} ) {
     ops: s.ops || 0,
     ops_multiplier: 0,
 
-    opc: s.opc || 30,
+    opc: s.opc || 0,
     opc_multiplier: 0,
 
     weak_hit_multi: s.weak_hit_multi || 5,
@@ -25,8 +25,10 @@ let State = function( s = {} ) {
     gold_nugget_chance_to_spawn: 30, // 30% chance to spawn
 
     pickaxe: {
-      sharpness: 100,
-      hardness: 100,
+      name: 'Rusty Pickaxe',
+      damage: 2,
+      sharpness: 50,
+      hardness: 50,
       
       temporary_bonuses: {
         sharpness: 0,

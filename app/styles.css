@@ -767,6 +767,12 @@
       .wrapper > div.stats-container ul {
         list-style-type: none;
         font-size: 14px; }
+        .wrapper > div.stats-container ul li {
+          letter-spacing: .5px;
+          padding: 1px 0; }
+          .wrapper > div.stats-container ul li span {
+            opacity: .6;
+            padding-right: 3px; }
       .wrapper > div.stats-container hr {
         width: 20%;
         margin: 10px 0; }

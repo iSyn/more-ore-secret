@@ -57,12 +57,14 @@ let Smith = function( obj = {} ) {
 
             if ( fn.unlock_fragility_spectacles ) {
                 S.locked.fragility_spectacles = 0
+                TS.add_to_queue( 'Do these glasses make my eyes look fat' )
                 generate_weak_spot()
             }
 
             if ( fn.unlock_quest_board ) {
                 S.locked.quest_board = 0
-                // BUILD THIS OUT
+                select_from_arr( Bottom_Tabs, 'quest_board' ).locked = 0
+                O.rebuild_bottom_tabs = 1
             }
 
             if ( fn.increase_pickaxe_sharpness ) {
@@ -100,7 +102,7 @@ let Smith = function( obj = {} ) {
             if ( fn.unlock_automater ) {
                 new Automater()
                 S.automater.automater_accordion_hidden = false
-                O.re
+                TS.add_to_queue( '- A U T O M A T E R  O N L I N E -' )
             }
 
             if ( fn.increase_gold_nugget_spawn_rate ) {
