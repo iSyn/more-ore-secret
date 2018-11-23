@@ -583,6 +583,7 @@ let toggle_automater_accordion = () => {
   }
 }
 
+
 AUTOMATER_WRAPPER.addEventListener( 'transitionend', () => {
   if ( AUTOMATER_WRAPPER.classList.contains( 'open' ) ) {
     build_automaters()
@@ -732,6 +733,14 @@ let handle_text_scroller = () => {
   setTimeout( handle_text_scroller, 1000 * animation_speed )
 }
 
+let generate_pickaxe = () => {
+
+  let pickaxe = new Pickaxe()
+
+  console.log( 'generating pickaxe', pickaxe )
+
+}
+
 let game_loop = () => {
 
   O.counter++
@@ -768,10 +777,16 @@ let game_loop = () => {
 let update_ore_hp = ( amount ) => {
   if (S.current_ore_hp - amount <= 0 ) {
     play_sound( 'ore_destroyed' )
+
     S.stats.current_rocks_destroyed += 1
     S.stats.total_rocks_destroyed += 1
     S.current_ore_max_hp *= 1.5
     S.current_ore_hp = S.current_ore_max_hp
+
+    if ( Math.random < .4 || S.stats.total_rocks_destroyed == 1 ) {
+      generate_pickaxe()
+    }
+
     current_sprite = 0
 
     if ( S.stats.total_rocks_destroyed == 1 ) win_achievement( 'newbie_miner' )
