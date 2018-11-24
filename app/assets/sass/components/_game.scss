@@ -29,7 +29,7 @@
         display: flex;
         flex-flow: column nowrap;
         transform: translateY( -100% );
-        animation: fall_down_in .3s ease-in-out forwards 1s;
+        animation: fall_down_in .3s ease-in-out forwards .5s;
   
         .inventory-hanger-container {
           height: 20px;
@@ -119,6 +119,16 @@
               height: 20px;
               -webkit-animation: spin 1.5s linear infinite;
               animation: spin 1.5s linear infinite;
+              transition: border .3s;
+
+              &:hover {
+                animation-duration: .3s;
+                animation-direction: reverse;
+                border-color: grey;
+                border-top: 3px solid #f3f3f3;
+                border-bottom: 3px solid #f3f3f3;
+                // background: rgba(255, 255, 255, 0.1);
+              }
             }
           }
         }

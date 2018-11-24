@@ -93,8 +93,8 @@
         flex-flow: column nowrap;
         -webkit-transform: translateY(-100%);
         transform: translateY(-100%);
-        -webkit-animation: fall_down_in .3s ease-in-out forwards 1s;
-        animation: fall_down_in .3s ease-in-out forwards 1s; }
+        -webkit-animation: fall_down_in .3s ease-in-out forwards .5s;
+        animation: fall_down_in .3s ease-in-out forwards .5s; }
         .container .game-container > .left .topbar-inventory-container .inventory-hanger-container {
           height: 20px;
           width: 100%;
@@ -187,7 +187,16 @@
               width: 20px;
               height: 20px;
               -webkit-animation: spin 1.5s linear infinite;
-              animation: spin 1.5s linear infinite; }
+              animation: spin 1.5s linear infinite;
+              -webkit-transition: border .3s;
+              transition: border .3s; }
+              .container .game-container > .left .ore-container-wrapper .ore-container .ore-weak-spot-container .ore-weak-spot:hover {
+                -webkit-animation-duration: .3s;
+                animation-duration: .3s;
+                animation-direction: reverse;
+                border-color: grey;
+                border-top: 3px solid #f3f3f3;
+                border-bottom: 3px solid #f3f3f3; }
       .container .game-container > .left .bottom-area-tabs {
         display: -webkit-box;
         display: -ms-flexbox;
