@@ -90,7 +90,11 @@
         -webkit-box-orient: vertical;
         -webkit-box-direction: normal;
         -ms-flex-flow: column nowrap;
-        flex-flow: column nowrap; }
+        flex-flow: column nowrap;
+        -webkit-transform: translateY(-100%);
+        transform: translateY(-100%);
+        -webkit-animation: fall_down_in .3s ease-in-out forwards 1s;
+        animation: fall_down_in .3s ease-in-out forwards 1s; }
         .container .game-container > .left .topbar-inventory-container .inventory-hanger-container {
           height: 20px;
           width: 100%;
@@ -525,6 +529,22 @@
   100% {
     -webkit-transform: rotate(360deg);
     transform: rotate(360deg); } }
+
+@-webkit-keyframes fall_down_in {
+  0% {
+    -webkit-transform: translateY(-100%);
+    transform: translateY(-100%); }
+  100% {
+    -webkit-transform: translateY(0%);
+    transform: translateY(0%); } }
+
+@keyframes fall_down_in {
+  0% {
+    -webkit-transform: translateY(-100%);
+    transform: translateY(-100%); }
+  100% {
+    -webkit-transform: translateY(0%);
+    transform: translateY(0%); } }
 
 .torch {
   z-index: 1;

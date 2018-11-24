@@ -28,6 +28,8 @@
         margin: 0 20px;
         display: flex;
         flex-flow: column nowrap;
+        transform: translateY( -100% );
+        animation: fall_down_in .3s ease-in-out forwards 1s;
   
         .inventory-hanger-container {
           height: 20px;
