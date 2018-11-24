@@ -716,7 +716,7 @@
   width: 100vw;
   position: absolute;
   background: rgba(0, 0, 0, 0.6);
-  z-index: 3;
+  z-index: 4;
   color: white; }
   .wrapper > div {
     background: black;
@@ -1267,3 +1267,11 @@ input:checked + .slider:before {
   image-rendering: -o-pixelated;
   image-rendering: pixelated;
   background: url("./assets/images/misc-gold_nugget.png"); }
+
+.item {
+  height: 64px;
+  width: 64px;
+  background: black;
+  z-index: 4;
+  position: fixed;
+  cursor: pointer; }

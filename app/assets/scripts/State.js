@@ -26,7 +26,7 @@ let State = function( s = {} ) {
 
     pickaxe: {
       name: 'Beginners Wooden Pickaxe',
-      damage: 2,
+      damage: 1000,
       sharpness: 100,
       hardness: 100,
       

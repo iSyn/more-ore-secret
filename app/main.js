@@ -4,6 +4,7 @@ const GAME_CONTAINER = s( '.game-container' )
 const ORE_SPRITE = s( '.ore-sprite' )
 const RIGHT_CONTAINER = s( '.right-container' )
 const INVENTORY_EL = s( '.topbar-inventory' )
+const ORE_CONTAINER = s( '.ore-container' )
 const ORE_WEAK_SPOT_CONTAINER = s( '.ore-weak-spot-container' )
 const ORE_WEAK_SPOT = s( '.ore-weak-spot' )
 const LEFT_VERTICAL_SEPARATOR = s( '.left-vertical-separator' )
@@ -583,7 +584,6 @@ let toggle_automater_accordion = () => {
   }
 }
 
-
 AUTOMATER_WRAPPER.addEventListener( 'transitionend', () => {
   if ( AUTOMATER_WRAPPER.classList.contains( 'open' ) ) {
     build_automaters()
@@ -733,11 +733,58 @@ let handle_text_scroller = () => {
   setTimeout( handle_text_scroller, 1000 * animation_speed )
 }
 
-let generate_pickaxe = () => {
+let handle_item_drop_click = ( item_uuid ) => {
+  let item = s( `#item_drop_${ item_uuid }` )
 
   let pickaxe = new Pickaxe()
 
-  console.log( 'generating pickaxe', pickaxe )
+  let wrapper = document.createElement( 'div' )
+  wrapper.classList.add( 'wrapper' )
+
+  wrapper.innerHTML = `
+    <div>
+    </div>
+  `
+
+  CONTAINER.append( wrapper )
+
+  remove_el( item )
+}
+
+let generate_item_drop = () => {
+
+  let item_uuid = Math.round( Math.random() * 10000000 )
+
+  let item = document.createElement( 'div' )
+  item.classList.add( 'item' )
+  item.id = `item_drop_${ item_uuid }`
+  item.addEventListener( 'click', () => { handle_item_drop_click( item_uuid ) } )
+
+  let ore_dimensions = ORE_CONTAINER.getBoundingClientRect()
+
+  let origin = {
+    x: ( ore_dimensions.left + ore_dimensions.right ) / 2,
+    y: ( ore_dimensions.top + ore_dimensions.bottom ) / 2
+  }
+
+  let target = {
+    x: get_random_num( ore_dimensions.left, ore_dimensions.right ) + get_random_num( -10, 10 ),
+    y: ore_dimensions.bottom + get_random_num( -10, 10 )
+  }
+
+  item.style.left = origin.x + 'px'
+  item.style.top = origin.y + 'px'
+
+  CONTAINER.append( item )
+
+  let transform_x = origin.x - target.x
+  let transform_y = target.y - origin.y
+
+  item.style.transition = 'all .4s ease-in'
+  
+  setTimeout(() => {
+    item.style.transform = `translate( ${ transform_x }px, ${ transform_y }px )`
+  }, 10)
 
 }
 
@@ -783,8 +830,8 @@ let update_ore_hp = ( amount ) => {
     S.current_ore_max_hp *= 1.5
     S.current_ore_hp = S.current_ore_max_hp
 
-    if ( Math.random < .4 || S.stats.total_rocks_destroyed == 1 ) {
-      generate_pickaxe()
+    if ( Math.random() <= .3 || S.stats.total_rocks_destroyed == 1 ) {
+      generate_item_drop()
     }
 
     current_sprite = 0
