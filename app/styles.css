@@ -1268,14 +1268,39 @@ input:checked + .slider:before {
   image-rendering: pixelated;
   background: url("./assets/images/misc-gold_nugget.png"); }
 
-.item {
+.item-container {
+  position: fixed;
+  z-index: 4;
   height: 64px;
   width: 64px;
-  background: black;
-  border: 6px double white;
-  z-index: 4;
-  position: fixed;
-  cursor: pointer; }
+  cursor: pointer;
+  -webkit-transition: -webkit-transform .3s;
+  transition: -webkit-transform .3s;
+  transition: transform .3s;
+  transition: transform .3s, -webkit-transform .3s; }
+  .item-container:hover .item {
+    -webkit-transform: scale(1.05);
+    transform: scale(1.05); }
+  .item-container .item {
+    pointer-events: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: darkgray;
+    border: 4px double black; }
+  .item-container .item-shine {
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    background: url("./assets/images/misc-shine.png");
+    opacity: 0.1;
+    -webkit-animation: rotate 10s linear infinite;
+    animation: rotate 10s linear infinite;
+    pointer-events: none; }
+    .item-container .item-shine:nth-child(2) {
+      animation: rotate 10s reverse infinite; }
 
 .wrapper > .item-drop-popup {
   width: 360px; }
@@ -1310,7 +1335,7 @@ input:checked + .slider:before {
     text-align: center; }
     .wrapper > .item-drop-popup p small {
       width: 100%;
-      opacity: .6; }
+      opacity: .3; }
     .wrapper > .item-drop-popup p.Uncommon {
       color: #5151ff; }
     .wrapper > .item-drop-popup p.Rare {

@@ -733,9 +733,61 @@ let handle_text_scroller = () => {
   setTimeout( handle_text_scroller, 1000 * animation_speed )
 }
 
+// =======================================================================================
+
+let generate_item_drop = () => {
+  
+  let item_uuid = Math.round( Math.random() * 10000000 )
+
+  let item = document.createElement( 'div' )
+  item.classList.add( 'item-container' )
+
+  item.innerHTML = `
+    <img class='item-shine' src="./app/assets/images/misc-shine.png" alt="shine">
+    <img class='item-shine' src="./app/assets/images/misc-shine.png" alt="shine">
+    <div id='item_drop_${ item_uuid }' class="item"></div>
+  `
+
+  item.style.pointerEvents = 'none'
+  item.addEventListener( 'click', ( event ) => { 
+    remove_el( event.target )
+    handle_item_drop_click( item_uuid ) } 
+  )
+
+  item.addEventListener( 'transitionend', () => { item.style.pointerEvents = 'all' } )
+
+  let ore_dimensions = ORE_CONTAINER.getBoundingClientRect()
+
+  let origin = {
+    x: ( ore_dimensions.left + ore_dimensions.right ) / 2,
+    y: ( ore_dimensions.top + ore_dimensions.bottom ) / 2
+  }
+
+  let target = {
+    x: get_random_num( ore_dimensions.left, ore_dimensions.right ) + get_random_num( -10, 10 ),
+    y: ore_dimensions.bottom + get_random_num( -10, 10 )
+  }
+
+  item.style.left = origin.x + 'px'
+  item.style.top = origin.y + 'px'
+
+  CONTAINER.append( item )
+
+  let transform_x = origin.x - target.x
+  let transform_y = target.y - origin.y
+
+  item.style.transition = 'all .4s ease-in'
+  
+  setTimeout(() => {
+    item.style.transform = `translate( ${ transform_x }px, ${ transform_y }px )`
+  }, 10)
+
+}
+
 let handle_item_drop_click = ( item_uuid ) => {
 
   O.pickaxe = new Pickaxe( S.generation )
+
   let item = s( `#item_drop_${ item_uuid }` )
 
   let wrapper = document.createElement( 'div' )
@@ -743,6 +795,7 @@ let handle_item_drop_click = ( item_uuid ) => {
 
   let str = `
     <div class='item-drop-popup ${ O.pickaxe.rarity.name }'>
+    <p style='font-size: 10px; letter-spacing: 0.5px; opacity: 0.6;'>- New Pickaxe -</p>
     <h1 class='${ O.pickaxe.rarity.name }'>${ O.pickaxe.name }</h1>
     <i onclick='remove_wrapper()' class="fa fa-times fa-1x"></i>`
 
@@ -774,8 +827,6 @@ let handle_item_drop_click = ( item_uuid ) => {
   wrapper.innerHTML = str
 
   CONTAINER.append( wrapper )
-
-  remove_el( item )
 }
 
 let equip_pickaxe = () => {
@@ -801,42 +852,7 @@ let build_pickaxe_sprite = ( pickaxe ) => {
   return str
 }
 
-let generate_item_drop = () => {
-
-  let item_uuid = Math.round( Math.random() * 10000000 )
-
-  let item = document.createElement( 'div' )
-  item.classList.add( 'item' )
-  item.id = `item_drop_${ item_uuid }`
-  item.addEventListener( 'click', () => { handle_item_drop_click( item_uuid ) } )
-
-  let ore_dimensions = ORE_CONTAINER.getBoundingClientRect()
-
-  let origin = {
-    x: ( ore_dimensions.left + ore_dimensions.right ) / 2,
-    y: ( ore_dimensions.top + ore_dimensions.bottom ) / 2
-  }
-
-  let target = {
-    x: get_random_num( ore_dimensions.left, ore_dimensions.right ) + get_random_num( -10, 10 ),
-    y: ore_dimensions.bottom + get_random_num( -10, 10 )
-  }
-
-  item.style.left = origin.x + 'px'
-  item.style.top = origin.y + 'px'
-
-  CONTAINER.append( item )
-
-  let transform_x = origin.x - target.x
-  let transform_y = target.y - origin.y
-
-  item.style.transition = 'all .4s ease-in'
-  
-  setTimeout(() => {
-    item.style.transform = `translate( ${ transform_x }px, ${ transform_y }px )`
-  }, 10)
-
-}
+// =======================================================================================
 
 let game_loop = () => {
 

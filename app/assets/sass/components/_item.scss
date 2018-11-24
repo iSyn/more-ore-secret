@@ -1,9 +1,40 @@
-.item {
+.item-container {
+    position: fixed;
+    z-index: 4;
     height: 64px;
     width: 64px;
-    background: black;
-    border: 6px double white;
-    z-index: 4;
-    position: fixed;
     cursor: pointer;
+    transition: transform .3s;
+
+    &:hover {
+
+        .item {
+            transform: scale( 1.05 );
+        }
+    }
+
+    .item {
+        pointer-events: none;
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        background: darkgray;
+        border: 4px double black;
+    }
+
+    .item-shine {
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        background: url( './assets/images/misc-shine.png');
+        opacity: 0.1;
+        animation: rotate 10s linear infinite;
+        pointer-events: none;
+
+        &:nth-child( 2 ) {
+            animation: rotate 10s reverse infinite;
+        }
+    }
 }

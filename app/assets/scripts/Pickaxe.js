@@ -44,7 +44,7 @@ _get_rarity = () => {
 
 _get_level = ( lvl ) => {
 
-    let level = lvl + ( get_random_num( -lvl, lvl ))
+    let level = Math.round( lvl + get_random_num( 0, lvl ) + get_random_num( 0, S.stats.current_rocks_destroyed ) / 2 )
     if ( level <= 0 ) level = 1
 
     return level
