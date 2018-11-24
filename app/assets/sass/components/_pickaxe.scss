@@ -1,0 +1,122 @@
+.wrapper > .item-drop-popup {
+    
+    width: 360px;
+
+    &.Uncommon {
+      box-shadow: 0 2px 10px black, 0 0 40px #5151ff;
+    }
+
+    &.Rare {
+      box-shadow: 0 2px 10px black, 0 0 40px #5dff51;
+    }
+
+    &.Magic {
+      box-shadow: 0 2px 10px black, 0 0 40px #ae51ff;
+    }
+
+    &.Legendary {
+      box-shadow: 0 2px 10px black, 0 0 40px #ff7e51;
+    }
+
+    &.Mythic {
+      box-shadow: 0 2px 10px black, 0 0 40px #c60000;
+    }
+
+    h1 {
+      font-family: 'Germania One';
+
+      &.Uncommon {
+        color: #5151ff;
+      }
+
+      &.Rare {
+        color: #5dff51;
+      }
+
+      &.Magic {
+        color: #ae51ff;
+      }
+
+      &.Legendary {
+        color: #ff7e51
+      }
+
+      &.Mythic {
+        color: #c60000;
+      }
+
+    }
+
+    p {
+      text-align: center;
+
+      small {
+        width: 100%;
+        opacity: .6;
+      }
+
+      &.Uncommon {
+        color: #5151ff;
+      }
+
+      &.Rare {
+        color: #5dff51;
+      }
+
+      &.Magic {
+        color: #ae51ff;
+      }
+
+      &.Legendary {
+        color: #ff7e51
+      }
+
+      &.Mythic {
+        color: #c60000;
+      }
+    }
+
+    > .pickaxe-sprite-container {
+        height: 320px;
+        width: 320px;
+        margin: 15px auto 7.5px auto;
+        border: 5px ridge #c4c4c4;
+    }
+
+    ul {
+        list-style-type: none;
+        text-align: center;
+        padding-bottom: 15px;
+
+        li {
+            color: rgba( 255, 255, 255, 0.7 );
+
+            strong {
+                color: rgba( 255, 255, 255, 0.8);
+                letter-spacing: .8px;
+            }
+        }
+    }
+
+    button {
+        width: 49.66%;
+        padding: 10px 0;
+        font-size: 30px;
+        letter-spacing: 3px;
+        cursor: pointer;
+        color: white;
+        border: 6px ridge #6a6059;
+        background: #49453f;
+        box-shadow: 0 0 10px #222 inset;
+        cursor: pointer;
+        transition: all .1s;
+
+        &:hover {
+            transform: translateY( -6px );
+            box-shadow: 0 0 10px #222 inset, 0 4px 4px rgba( 0, 0, 0, 0.3 );
+        }
+    }
+
+
+    
+}

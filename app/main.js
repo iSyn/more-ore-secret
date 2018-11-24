@@ -734,21 +734,71 @@ let handle_text_scroller = () => {
 }
 
 let handle_item_drop_click = ( item_uuid ) => {
-  let item = s( `#item_drop_${ item_uuid }` )
 
-  let pickaxe = new Pickaxe()
+  O.pickaxe = new Pickaxe( S.generation )
+  let item = s( `#item_drop_${ item_uuid }` )
 
   let wrapper = document.createElement( 'div' )
   wrapper.classList.add( 'wrapper' )
 
-  wrapper.innerHTML = `
-    <div>
-    </div>
+  let str = `
+    <div class='item-drop-popup ${ O.pickaxe.rarity.name }'>
+    <h1 class='${ O.pickaxe.rarity.name }'>${ O.pickaxe.name }</h1>
+    <i onclick='remove_wrapper()' class="fa fa-times fa-1x"></i>`
+
+      str += build_pickaxe_sprite( O.pickaxe )
+
+    str += `
+      <p style='padding-bottom: 7.5px; opacity: .7;' class='${ O.pickaxe.rarity.name }'>
+        <strong>${ O.pickaxe.rarity.name }</strong>
+      </p>
+      <p><small><i>[ level: <strong>${ O.pickaxe.level }</strong> ]</i></small></p>
+      <ul>
+        <li>Damage: <strong>${ O.pickaxe.damage }</strong></li>
+        <li>Sharpness: <strong>${ beautify_number( O.pickaxe.sharpness ) }%</strong></li>
+        <li>Hardness: <strong>${ beautify_number( O.pickaxe.hardness ) }%</strong></li>
+      </ul>
+      <button 
+        class='equip-btn'
+        onclick='equip_pickaxe()'
+        >EQUIP <i class="fa fa-hand-paper-o fa-1x"></i>
+      </button>
+      <button 
+        class='trash-btn'
+        onclick='remove_wrapper()'
+        >TRASH <i class="fa fa-trash-o fa-1x"></i>
+      </button>
+  </div>
   `
+
+  wrapper.innerHTML = str
 
   CONTAINER.append( wrapper )
 
   remove_el( item )
+}
+
+let equip_pickaxe = () => {
+
+  let pickaxe = O.pickaxe
+
+  pickaxe.temporary_bonuses = S.pickaxe.temporary_bonuses
+
+  S.pickaxe = pickaxe
+
+  remove_wrapper()
+}
+
+let build_pickaxe_sprite = ( pickaxe ) => {
+  let str = `
+    <div 
+      class="pickaxe-sprite-container ${ pickaxe.rarity.name }"
+      style='background: url( "https://via.placeholder.com/320" ); background-size: 100%; background-repeat: no-repeat;'
+      >
+    </div>
+  `
+
+  return str
 }
 
 let generate_item_drop = () => {

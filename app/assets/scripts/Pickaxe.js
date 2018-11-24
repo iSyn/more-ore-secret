@@ -1,6 +1,6 @@
-let Pickaxe = function() {
+let Pickaxe = function( level ) {
 
-    this.level = _get_level()
+    this.level = _get_level( level )
     this.rarity = _get_rarity()
     this.material = _get_material()
     this.prefix = _get_prefix()
@@ -42,9 +42,9 @@ _get_rarity = () => {
     return rarity
 }
 
-_get_level = () => {
+_get_level = ( lvl ) => {
 
-    let level = S.generation + ( get_random_num( -S.generation, S.generation ))
+    let level = lvl + ( get_random_num( -lvl, lvl ))
     if ( level <= 0 ) level = 1
 
     return level
