@@ -391,6 +391,7 @@ let build_pickaxe_accordion = ( direct = false ) => {
           >Sharpness: ${ calculate_pickaxe_sharpness() }%</p>
         <p
           onmouseover='TT.show( event, { name: null, type: "hardness-info" } )'
+          onmouseout='TT.hide()'
           >Hardness: ${ calculate_pickaxe_hardness() }%</p>
       </div>
     </div>

@@ -28,7 +28,7 @@ let State = function( s = {} ) {
       damage: 1000,
       hardness: 100,
       sharpness: 100,
-      name: "Fine Bone Pickaxe",
+      name: "Wooden Starter Pickaxe",
       
       temporary_bonuses: {
         sharpness: 0,
