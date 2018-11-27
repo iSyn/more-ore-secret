@@ -388,11 +388,11 @@ let build_pickaxe_accordion = ( direct = false ) => {
         <p
           onmouseover='TT.show( event, { name: null, type: "sharpness-info" } )'
           onmouseout='TT.hide()'
-          >Sharpness: ${ calculate_pickaxe_sharpness() }%</p>
+          >Sharpness: ${ beautify_number( calculate_pickaxe_sharpness() ) }%</p>
         <p
           onmouseover='TT.show( event, { name: null, type: "hardness-info" } )'
           onmouseout='TT.hide()'
-          >Hardness: ${ calculate_pickaxe_hardness() }%</p>
+          >Hardness: ${ beautify_number( calculate_pickaxe_hardness() ) }%</p>
       </div>
     </div>
     <div class='horizontal-separator thin dark'></div>
@@ -897,6 +897,8 @@ let update_ore_hp = ( amount ) => {
     S.current_ore_max_hp *= 1.5
     S.current_ore_hp = S.current_ore_max_hp
 
+    S.misc.current_ore_sprite = get_random_num( 1, S.misc.ore_sprite_amount )
+
     if ( Math.random() <= .3 || S.stats.total_rocks_destroyed == 1 ) {
       generate_item_drop()
     }
@@ -918,23 +920,23 @@ let update_ore_sprite = () => {
   let current_percentage = S.current_ore_hp / S.current_ore_max_hp * 100
 
   if ( current_percentage <= 100 && current_percentage > 80 && current_sprite != 1 ) {
-    ORE_SPRITE.src = './app/assets/images/ore1-1.png'
+    ORE_SPRITE.src = `./app/assets/images/ore${ S.misc.current_ore_sprite }-1.png`
     current_sprite = 1
   } else if ( current_percentage <= 80 && current_percentage > 60 && current_sprite != 2 ) {
     play_sound( 'ore_percentage_lost' )
-    ORE_SPRITE.src = './app/assets/images/ore1-2.png'
+    ORE_SPRITE.src = `./app/assets/images/ore${ S.misc.current_ore_sprite }-2.png`
     current_sprite = 2
   } else if ( current_percentage <= 60 && current_percentage > 40 && current_sprite != 3 ) {
     play_sound( 'ore_percentage_lost' )
-    ORE_SPRITE.src = './app/assets/images/ore1-3.png'
+    ORE_SPRITE.src = `./app/assets/images/ore${ S.misc.current_ore_sprite }-3.png`
     current_sprite = 3
   } else if ( current_percentage <= 40 && current_percentage > 20 && current_sprite != 4 ) {
     play_sound( 'ore_percentage_lost' )
-    ORE_SPRITE.src = './app/assets/images/ore1-4.png'
+    ORE_SPRITE.src = `./app/assets/images/ore${ S.misc.current_ore_sprite }-4.png`
     current_sprite = 4
   } else if ( current_percentage <= 20 && current_sprite != 5 ) {
     play_sound( 'ore_percentage_lost' )
-    ORE_SPRITE.src = './app/assets/images/ore1-5.png'
+    ORE_SPRITE.src = `./app/assets/images/ore${ S.misc.current_ore_sprite }-5.png`
     current_sprite = 5
   }
 

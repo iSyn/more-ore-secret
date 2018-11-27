@@ -1404,7 +1404,7 @@ input:checked + .slider:before {
     -webkit-transition: all .1s;
     transition: all .1s; }
     .wrapper > .item-drop-popup button:hover {
-      -webkit-transform: translateY(-6px);
-      transform: translateY(-6px);
+      -webkit-transform: translateY(-5px);
+      transform: translateY(-5px);
       -webkit-box-shadow: 0 0 10px #222 inset, 0 4px 4px rgba(0, 0, 0, 0.3);
       box-shadow: 0 0 10px #222 inset, 0 4px 4px rgba(0, 0, 0, 0.3); }

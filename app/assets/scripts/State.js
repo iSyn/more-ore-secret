@@ -62,7 +62,7 @@ let State = function( s = {} ) {
       total_nuggets_spawned: 0,
       total_nuggets_missed: 0,
       total_nuggets_clicked: 0,
-      seconds_played: 0
+      seconds_played: 0,
     },
 
     prefs: {
@@ -71,6 +71,11 @@ let State = function( s = {} ) {
       bgm_volume: 1,
       show_rising_numbers: true,
       show_ops_rising_numbers: true,
+    },
+
+    misc: {
+      current_ore_sprite: 1,
+      ore_sprite_amount: 2
     }
 
   }
