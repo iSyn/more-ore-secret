@@ -243,7 +243,7 @@ let items = [
         {name: 'Golden Eggs', amountNeeded: 1}
       ],
       addTextScroller: [
-        {text: '[Breaking News] Magic beanstalk accident kills 7 today in what has been called the largest beanstalk related accident in history', amountNeeded: 5}
+        {text: '[Breaking News] Unique beanstalk accident kills 7 today in what has been called the largest beanstalk related accident in history', amountNeeded: 5}
       ],
       achievements: [
         {name: 'Sky Castle Achievement I', amountNeeded: 10},

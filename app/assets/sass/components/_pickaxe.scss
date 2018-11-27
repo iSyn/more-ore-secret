@@ -1,48 +1,63 @@
+$uncommon-color: #5184ff;
+$rare-color: #5dff51;
+$unique-color: #faff51;
+$epic-color: #7751ff;
+$legendary-color: #ff7e51;
+$mythic-color: #c60000;
+
 .wrapper > .item-drop-popup {
     
     width: 360px;
 
     &.Uncommon {
-      box-shadow: 0 2px 10px black, 0 0 40px #5151ff;
+      box-shadow: 0 2px 10px black, 0 0 40px $uncommon-color;
     }
 
     &.Rare {
-      box-shadow: 0 2px 10px black, 0 0 40px #5dff51;
+      box-shadow: 0 2px 10px black, 0 0 40px $rare-color;
     }
 
-    &.Magic {
-      box-shadow: 0 2px 10px black, 0 0 40px #ae51ff;
+    &.Unique {
+      box-shadow: 0 2px 10px black, 0 0 40px $unique-color;
+    }
+
+    &.Epic {
+      box-shadow: 0 2px 10px black, 0 0 40px $epic-color;
     }
 
     &.Legendary {
-      box-shadow: 0 2px 10px black, 0 0 40px #ff7e51;
+      box-shadow: 0 2px 10px black, 0 0 40px $legendary-color;
     }
 
     &.Mythic {
-      box-shadow: 0 2px 10px black, 0 0 40px #c60000;
+      box-shadow: 0 2px 10px black, 0 0 40px $mythic-color;
     }
 
     h1 {
       font-family: 'Germania One';
 
       &.Uncommon {
-        color: #5151ff;
+        color: $uncommon-color;
       }
 
       &.Rare {
-        color: #5dff51;
+        color: $rare-color;
       }
 
-      &.Magic {
-        color: #ae51ff;
+      &.Unique {
+        color: $unique-color;
+      }
+
+      &.Epic {
+        color: $epic-color;
       }
 
       &.Legendary {
-        color: #ff7e51
+        color: $legendary-color;
       }
 
       &.Mythic {
-        color: #c60000;
+        color: $mythic-color;
       }
 
     }
@@ -56,23 +71,27 @@
       }
 
       &.Uncommon {
-        color: #5151ff;
+        color: $uncommon-color;
       }
 
       &.Rare {
-        color: #5dff51;
+        color: $rare-color;
       }
 
-      &.Magic {
-        color: #ae51ff;
+      &.Unique {
+        color: $unique-color;
+      }
+
+      &.Epic {
+        color: $epic-color;
       }
 
       &.Legendary {
-        color: #ff7e51
+        color: $legendary-color;
       }
 
       &.Mythic {
-        color: #c60000;
+        color: $mythic-color;
       }
     }
 

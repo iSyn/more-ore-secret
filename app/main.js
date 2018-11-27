@@ -787,7 +787,7 @@ let generate_item_drop = () => {
 
 let handle_item_drop_click = ( item_uuid ) => {
 
-  O.pickaxe = new Pickaxe( S.generation )
+  O.pickaxe = new Pickaxe()
 
   let item = s( `#item_drop_${ item_uuid }` )
 
@@ -894,7 +894,7 @@ let update_ore_hp = ( amount ) => {
 
     S.stats.current_rocks_destroyed += 1
     S.stats.total_rocks_destroyed += 1
-    S.current_ore_max_hp *= 1.5
+    S.current_ore_max_hp = Math.pow( S.current_ore_max_hp, 1.09 )
     S.current_ore_hp = S.current_ore_max_hp
 
     S.misc.current_ore_sprite = get_random_num( 1, S.misc.ore_sprite_amount )

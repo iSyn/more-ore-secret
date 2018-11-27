@@ -1,9 +1,11 @@
-let Pickaxe = function( level ) {
+let Pickaxe = function() {
 
-    this.level = _get_level( level )
+    this.level = _get_level()
     this.rarity = _get_rarity()
+    this.sockets = _get_sockets( this )
     this.material = _get_material()
     this.prefix = _get_prefix()
+    this.suffix = _get_suffix( this )
 
     this.multiplier = _get_multiplier( this )
 
@@ -16,18 +18,47 @@ let Pickaxe = function( level ) {
     return this
 }
 
+_get_level = () => {
+
+    let level = S.generation
+
+    level += get_random_num( 0, S.generation )
+
+    level += get_random_num( 0, S.stats.current_rocks_destroyed / 1.5 )
+
+    if ( level <= 0 ) level = 1
+
+    return level
+
+}
+
 _get_rarity = () => {
 
     let chance = Math.random()
 
     let rarities = [
-        { name: 'Common',       multiplier: 0 },
-        { name: 'Uncommon',     multiplier: .05 },
-        { name: 'Rare',         multiplier: .3 },
-        { name: 'Magic',        multiplier: .6 },
-        { name: 'Unique',       multiplier: 1 },
-        { name: 'Legendary',    multiplier: 2 },
-        { name: 'Mythic',       multiplier: 4 },
+        { 
+            name: 'Common',
+            multiplier: 0 
+        }, { 
+            name: 'Uncommon',
+            multiplier: .02
+        }, { 
+            name: 'Rare',
+            multiplier: .05
+        }, { 
+            name: 'Unique',
+            multiplier: .1
+        }, { 
+            name: 'Epic',
+            multiplier: .3
+        }, { 
+            name: 'Legendary',
+            multiplier: .5
+        }, { 
+            name: 'Mythic',
+            multiplier: 1
+        }
     ]
 
     let rarity = rarities[ 0 ]
@@ -42,13 +73,42 @@ _get_rarity = () => {
     return rarity
 }
 
-_get_level = ( lvl ) => {
+_get_sockets = ( p ) => {
 
-    let level = Math.round( lvl + get_random_num( 0, lvl ) + get_random_num( 0, S.stats.current_rocks_destroyed ) / 2 )
-    if ( level <= 0 ) level = 1
+    let sockets = 0
 
-    return level
+    switch ( p.rarity.name ) {
 
+        case 'Common':
+            sockets = select_random_from_arr( [ 0, 0, 0, 1 ] )
+            break
+
+        case 'Uncommon':
+            sockets = select_random_from_arr( [ 0, 1, 1, 1, 2 ] )
+            break
+
+        case 'Rare':
+            sockets = select_random_from_arr( [ 1, 1, 1, 2 ] )
+            break
+
+        case 'Unique':
+            sockets = select_random_from_arr( [ 1, 2, 2, 2, 3 ] )
+            break
+
+        case 'Epic':
+            sockets = select_random_from_arr( [ 2, 3, 3, 3, 4 ] )
+            break
+
+        case 'Legendary':
+            sockets = select_random_from_arr( [ 3, 4, 4, 5 ] )
+            break
+        
+        case 'Mythic':
+            sockets = select_random_from_arr( [ 3, 4, 4, 4, 4, 5, 5, 5, 6 ] )
+            break
+    }
+
+    return sockets
 }
 
 _get_material = () => {
@@ -58,19 +118,19 @@ _get_material = () => {
     let materials = [
         {
             names: [ 'Wood', 'Plastic', 'Cardboard', 'Glass', 'Tin' ],
-            multiplier: 0
+            multiplier: -.03
         }, {
             names: [ 'Stone', 'Bronze', 'Copper', 'Bone', 'Lead' ],
-            multiplier: .05
+            multiplier: .01
         }, {
             names: [ 'Iron', 'Silver', 'Gold' ],
-            multiplier: .1
+            multiplier: .05
         }, {
             names: [ 'Steel', 'Platinum' ],
-            multiplier: .5
+            multiplier: .1
         }, {
             names: [ 'Diamond', 'Adamantite', 'Titanium', 'Alien' ],
-            multiplier: 2
+            multiplier: .3
         }
     ]
 
@@ -93,74 +153,161 @@ _get_material = () => {
 _get_prefix = () => {
 
     let prefixes = [
-
-        // GOOD PREFIXES
+        // NOT STRAIGHT UP BAD PREFIXES
         [
             {
-                stat: 'sharpness',
-                multiplier: .2,
-                names: [ 'Pointy', 'Sharp', 'Razor', 'Acute', 'Fine' ]
+                name: select_random_from_arr( [ 'Superior', 'Greater', 'Refined', 'Gigantic', 'Polished' ] ),
+                modifier: [
+                    {
+                        stat: 'sharpness',
+                        amount: .05
+                    }, {
+                        stat: 'hardness',
+                        amount: .05
+                    }
+                ]
             }, {
-                stat: 'hardness',
-                multiplier: .2,
-                names: [ 'Durable', 'Hefty', 'Hard', 'Reliable', 'Strong' ]
+                name: select_random_from_arr( [ 'Pointy', 'Sharp', 'Razor', 'Acute', 'Fine' ] ),
+                modifier: [
+                    {
+                        stat: 'sharpness',
+                        amount: .05
+                    }
+                ]
             }, {
-                stat: 'both',
-                multiplier: .2,
-                names: [ 'Refined', 'Gigantic', 'Polished' ]
+                name: select_random_from_arr( [ 'Durable', 'Hefty', 'Hard', 'Reliable', 'Strong' ] ),
+                modifier: [
+                    {
+                        stat: 'hardness',
+                        amount: .05
+                    }
+                ]
+            }, {
+                name: 'Sharp but Flimsy',
+                modifier: [
+                    {
+                        stat: 'sharpness',
+                        amount: .1
+                    }, {
+                        stat: 'hardness',
+                        amount: -.25
+                    }
+                ]
+            }, {
+                name: 'Hard but Dull',
+                modifier: [
+                    {
+                        stat: 'sharpness',
+                        amount: -.25
+                    }, {
+                        stat: 'hardness',
+                        amount: .1
+                    }
+                ]
             }
         ],
-
-        // BAD PREFIXES
+        // STRAIGHT UP BAD PREFIXES
         [
             {
-                stat: 'sharpness',
-                multiplier: -.3,
-                names: [ 'Dull', 'Blunt' ]
+                name: select_random_from_arr( [ 'Tiny', 'Awkward', 'Shoddy', 'Broken', 'Busted', 'Cracked', 'Chipped', 'Damaged', 'Defective' ] ),
+                modifier: [
+                    {
+                        stat: 'sharpness',
+                        amount: -.05
+                    }, {
+                        stat: 'hardness',
+                        amount: -.05
+                    }
+                ]
             }, {
-                stat: 'hardness',
-                multiplier: -.3,
-                names: [ 'Soft', 'Squishy', 'Thin' ]
+                name: select_random_from_arr( [ 'Dull', 'Blunt' ] ),
+                modifier: [
+                    {
+                        stat: 'sharpness',
+                        amount: -.05
+                    }
+                ]
             }, {
-                stat: 'both',
-                multiplier: -.3,
-                names: [ 'Tiny', 'Awkward', 'Shoddy', 'Broken', 'Busted', 'Cracked', 'Chipped', 'Damaged', 'Defective' ]
+                name: select_random_from_arr( [ 'Soft', 'Squishy', 'Thin' ] ),
+                modifier: [
+                    {
+                        stat: 'hardness',
+                        amount: -.05
+                    }
+                ]
             }
         ]
-
     ]
 
-    if ( Math.random() <= .5 ) {
-
+    // spawn a prefix at a 60% chance
+    if ( Math.random() <= .6 ) {
         let prefix = {}
 
-        let chance = Math.random()
-
-        if ( chance < .7 ) {
+        if ( Math.random() <= .8 ) {
+            // 80% chance for a good prefix
             prefix = select_random_from_arr( prefixes[ 0 ] )
         } else {
+            // 20% chance for a bad prefix
             prefix = select_random_from_arr( prefixes[ 1 ] )
         }
 
-        prefix.name = select_random_from_arr( prefix.names )
-
-        return {
-            name: prefix.name,
-            multiplier: prefix.multiplier
-        }
-
+        return prefix
     }
+}
 
+_get_suffix = ( p ) => {
+
+    let suffixes = [
+        {
+            name: 'of the Giant',
+            modifier: [
+                {
+                    stat: 'sharpness',
+                    amount: .5
+                }, {
+                    stat: 'hardness',
+                    amount: .5
+                }
+            ]
+        }, {
+            name: 'of Keen Eyes',
+            modifier: [
+                {
+                    stat: 'sharpness',
+                    amount: 1
+                }, {
+                    stat: 'hardness',
+                    amount: -1
+                }
+            ]
+        }
+    ]
+
+    if ( p.rarity.name == 'Mythic' ) {
+        return select_random_from_arr( suffixes )
+    }
 }
 
 _get_multiplier = ( p ) => {
 
-    let multiplier = 0
+    let multiplier = {
+        sharpness: 0,
+        hardness: 0
+    }
 
-    multiplier += p.rarity.multiplier
-    multiplier += p.material.multiplier
+    multiplier.sharpness += p.rarity.multiplier
+    multiplier.hardness += p.rarity.multiplier
 
-    if ( p.prefix ) multiplier += p.prefix.multiplier
+    multiplier.sharpness += p.material.multiplier
+    multiplier.hardness += p.material.multiplier
+    
+    if ( p.prefix ) {
+
+        p.prefix.modifier.forEach( modification => {
+            multiplier[ modification.stat ] += modification.amount
+        } )
+
+    }
 
     return multiplier
 
@@ -168,9 +315,11 @@ _get_multiplier = ( p ) => {
 
 _get_damage = () => {
 
-    let damage = S.generation + ( get_random_num( -S.generation, S.generation ))
+    // let damage = S.generation + ( get_random_num( -S.generation, S.generation ))
 
-    if ( damage <= 0 ) damage = 1
+    // if ( damage <= 0 ) damage = 1
+
+    let damage = 1
 
     return damage
 
@@ -178,18 +327,22 @@ _get_damage = () => {
 
 _get_sharpness = ( p ) => {
 
-    let sharpness = get_random_num( 50, 100 )
+    let level = Math.floor( p.level / 10 )
 
-    sharpness += p.multiplier * sharpness
+    let sharpness = get_random_num( 80 + level * 5, 100 + level * 5 )
+
+    sharpness += sharpness * p.multiplier.sharpness
 
     return sharpness
-}   
+}
 
 _get_hardness = ( p ) => {
 
-    let hardness = get_random_num( 50, 100 )
+    let level = Math.floor( p.level / 10 )
 
-    hardness += p.multiplier * hardness
+    let hardness = get_random_num( 80 + level * 5, 100 + level * 5 )
+
+    hardness += hardness * p.multiplier.hardness
 
     return hardness
 }
@@ -204,7 +357,9 @@ _get_name = ( p ) => {
 
     name += `${ p.material.name } Pickaxe`
 
-
+    if ( p.suffix ) {
+        name += ` ${ p.suffix.name }`
+    }
 
     return name
 
