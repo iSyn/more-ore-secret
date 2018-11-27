@@ -1,6 +1,6 @@
-let Pickaxe = function() {
+let Pickaxe = function( item_level ) {
 
-    this.level = _get_level()
+    this.level = _get_level( item_level )
     this.rarity = _get_rarity()
     this.sockets = _get_sockets( this )
     this.material = _get_material()
@@ -9,7 +9,7 @@ let Pickaxe = function() {
 
     this.multiplier = _get_multiplier( this )
 
-    this.damage = _get_damage()
+    this.damage = _get_damage( this )
     this.sharpness = _get_sharpness( this )
     this.hardness = _get_hardness( this )
 
@@ -18,17 +18,15 @@ let Pickaxe = function() {
     return this
 }
 
-_get_level = () => {
+_get_level = ( item_level ) => {
 
     let level = S.generation
 
-    level += get_random_num( 0, S.generation )
+    level += get_random_num( -item_level/2, item_level )
 
-    level += get_random_num( 0, S.stats.current_rocks_destroyed / 1.5 )
+    if ( level <= 1 ) level = 1
 
-    if ( level <= 0 ) level = 1
-
-    return level
+    return Math.floor( level )
 
 }
 
@@ -313,13 +311,17 @@ _get_multiplier = ( p ) => {
 
 }
 
-_get_damage = () => {
+_get_damage = ( p ) => {
 
-    // let damage = S.generation + ( get_random_num( -S.generation, S.generation ))
+    let damage = S.generation + ( get_random_num( -S.generation, S.generation ))
 
-    // if ( damage <= 0 ) damage = 1
+    if ( damage <= 0 ) damage = 1
 
-    let damage = 1
+    if ( p.multiplier.sharpness > p.multiplier.hardness ) {
+        damage += damage * p.multiplier.sharpness
+    } else {
+        damage += damage * p.multiplier.hardness
+    }
 
     return damage
 

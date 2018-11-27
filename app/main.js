@@ -746,14 +746,14 @@ let generate_item_drop = () => {
   item.innerHTML = `
     <img class='item-shine' src="./app/assets/images/misc-shine.png" alt="shine">
     <img class='item-shine' src="./app/assets/images/misc-shine.png" alt="shine">
-    <div id='item_drop_${ item_uuid }' class="item"></div>
+    <div id='item_drop_${ item_uuid }' data-item_level="${ S.stats.current_rocks_destroyed }" class="item"></div>
   `
 
   item.style.pointerEvents = 'none'
   item.addEventListener( 'click', ( event ) => { 
+    handle_item_drop_click( item_uuid ) 
     remove_el( event.target )
-    handle_item_drop_click( item_uuid ) } 
-  )
+  } )
 
   item.addEventListener( 'transitionend', () => { item.style.pointerEvents = 'all' } )
 
@@ -787,9 +787,9 @@ let generate_item_drop = () => {
 
 let handle_item_drop_click = ( item_uuid ) => {
 
-  O.pickaxe = new Pickaxe()
-
   let item = s( `#item_drop_${ item_uuid }` )
+  O.pickaxe = new Pickaxe( item.dataset.item_level )
+
 
   let wrapper = document.createElement( 'div' )
   wrapper.classList.add( 'wrapper' )
