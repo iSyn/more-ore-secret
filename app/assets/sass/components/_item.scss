@@ -9,7 +9,7 @@
     &:hover {
 
         .item {
-            transform: scale( 1.05 );
+            animation: wiggle .3s ease-in-out infinite alternate-reverse;
         }
     }
 
@@ -20,8 +20,11 @@
         left: 0;
         height: 100%;
         width: 100%;
-        background: darkgray;
-        border: 4px double black;
+        // background: darkgray;
+        // border: 4px double black;
+        background: url( './assets/images/misc-item_pouch.png' );
+        background-size: 100%;
+        image-rendering: pixelated;
     }
 
     .item-shine {
@@ -36,5 +39,14 @@
         &:nth-child( 2 ) {
             animation: rotate 10s reverse infinite;
         }
+    }
+}
+
+@keyframes wiggle {
+    from {
+        transform: rotate( -10deg ) scale( 1.09 );
+    }
+    to {
+        transform: rotate( 10deg ) scale( 1.09 );
     }
 }

@@ -73,7 +73,7 @@ let save_game = () => {
   localStorage.setItem( 'achievements', JSON.stringify( Achievements ) )
   localStorage.setItem( 'text_scroller', JSON.stringify( TS.texts ) )
   localStorage.setItem( 'smith_upgrades', JSON.stringify( Smith_Upgrades ) )
-  localStorage.setItem( 'smith', JSON.stringify( SMITH ))
+  localStorage.setItem( 'smith', JSON.stringify( SMITH ) )
 
   let div = document.createElement( 'div' )
   div.innerHTML = 'Saved Game'
@@ -96,7 +96,7 @@ let load_game = () => {
 
   if ( localStorage.getItem( 'state' ) ) {
 
-    S = JSON.parse( localStorage.getItem( 'state' ) )
+    S = new State( JSON.parse( localStorage.getItem( 'state' ) ) ).state
 
     Buildings = []
     JSON.parse( localStorage.getItem( 'buildings' ) ).forEach( building => new Building( building ) )
@@ -796,33 +796,33 @@ let handle_item_drop_click = ( item_uuid ) => {
 
   let str = `
     <div class='item-drop-popup ${ O.pickaxe.rarity.name }'>
-    <p style='font-size: 10px; letter-spacing: 0.5px; opacity: 0.6;'>- New Pickaxe -</p>
-    <h1 class='${ O.pickaxe.rarity.name }'>${ O.pickaxe.name }</h1>
-    <i onclick='remove_wrapper()' class="fa fa-times fa-1x"></i>`
+      <p style='font-size: 10px; letter-spacing: 0.5px; opacity: 0.6;'>- New Pickaxe -</p>
+      <h1 class='${ O.pickaxe.rarity.name }'>${ O.pickaxe.name }</h1>
+      <i onclick='remove_wrapper()' class="fa fa-times fa-1x"></i>`
 
-      str += build_pickaxe_sprite( O.pickaxe )
+        str += build_pickaxe_sprite( O.pickaxe )
 
-    str += `
-      <p style='padding-bottom: 7.5px; opacity: .7;' class='${ O.pickaxe.rarity.name }'>
-        <strong>${ O.pickaxe.rarity.name }</strong>
-      </p>
-      <p><small><i>[ level: <strong>${ O.pickaxe.level }</strong> ]</i></small></p>
-      <ul>
-        <li>Damage: <strong>${ O.pickaxe.damage }</strong></li>
-        <li>Sharpness: <strong>${ beautify_number( O.pickaxe.sharpness ) }%</strong></li>
-        <li>Hardness: <strong>${ beautify_number( O.pickaxe.hardness ) }%</strong></li>
-      </ul>
-      <button 
-        class='equip-btn'
-        onclick='equip_pickaxe()'
-        >EQUIP <i class="fa fa-hand-paper-o fa-1x"></i>
-      </button>
-      <button 
-        class='trash-btn'
-        onclick='remove_wrapper()'
-        >TRASH <i class="fa fa-trash-o fa-1x"></i>
-      </button>
-  </div>
+      str += `
+        <p style='padding-bottom: 7.5px; opacity: .7;' class='${ O.pickaxe.rarity.name }'>
+          <strong>${ O.pickaxe.rarity.name }</strong>
+        </p>
+        <p><small><i>[ level: <strong>${ O.pickaxe.level }</strong> ]</i></small></p>
+        <ul>
+          <li>Damage: <strong>${ O.pickaxe.damage }</strong></li>
+          <li>Sharpness: <strong>${ beautify_number( O.pickaxe.sharpness ) }%</strong></li>
+          <li>Hardness: <strong>${ beautify_number( O.pickaxe.hardness ) }%</strong></li>
+        </ul>
+        <button 
+          class='equip-btn'
+          onclick='equip_pickaxe()'
+          >EQUIP <i class="fa fa-hand-paper-o fa-1x"></i>
+        </button>
+        <button 
+          class='trash-btn'
+          onclick='remove_wrapper()'
+          >TRASH <i class="fa fa-trash-o fa-1x"></i>
+        </button>
+    </div>
   `
 
   wrapper.innerHTML = str

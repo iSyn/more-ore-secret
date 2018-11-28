@@ -38,34 +38,20 @@ let get_time_difference = ( time ) => {
   } else {
 
     if ( time_difference_min < 60 ) {
-      str += `${ time_difference_min } minutes ago`
+      str += `${ Math.floor( time_difference_min ) } minutes ago`
     } else {
 
       if ( time_difference_hour < 24 ) {
-        str += `${ time_difference_hour } hours ago`
+        str += `${ Math.floor( time_difference_hour ) } hours ago`
       } else {
 
-        str += `${ time_difference_day } days ago`
+        str += `${ Math.floor( time_difference_day ) } days ago`
       }
     } 
   }
 
   return str
 
-}
-
-let get_current_date_time = () => {
-
-  let date_time = new Date()
-  let str =
-    date_time.getUTCFullYear() + "/" +
-    ("0" + (date_time.getUTCMonth()+1)).slice(-2) + "/" +
-    ("0" + date_time.getUTCDate()).slice(-2) + " " +
-    ("0" + date_time.getUTCHours()).slice(-2) + ":" +
-    ("0" + date_time.getUTCMinutes()).slice(-2) + ":" +
-    ("0" + date_time.getUTCSeconds()).slice(-2);
-
-  return str
 }
 
 let beautify_number = (number) => {

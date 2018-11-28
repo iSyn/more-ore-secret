@@ -1,5 +1,7 @@
 let State = function( s = {} ) {
 
+  console.log( 'STATE', s)
+
   this.state = {
     ores: s.ores || 100,
     gems: s.ores || 100,
