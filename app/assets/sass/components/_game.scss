@@ -164,8 +164,11 @@
       .settings-container {
         position: fixed;
         padding: 5px;
+        display: flex;
+        flex-flow: row nowrap;
+        align-items: flex-end;
   
-        i {
+        i, img {
           color: lightgrey;
           opacity: .3;
           padding-right: 5px;
@@ -174,6 +177,10 @@
           &:hover {
             opacity: .5;
           }
+        }
+
+        img {
+          height: 50px;
         }
       }
   

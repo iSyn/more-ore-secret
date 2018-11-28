@@ -227,14 +227,26 @@
             transform: translateY(-10px); }
       .container .game-container > .left .settings-container {
         position: fixed;
-        padding: 5px; }
-        .container .game-container > .left .settings-container i {
+        padding: 5px;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-orient: horizontal;
+        -webkit-box-direction: normal;
+        -ms-flex-flow: row nowrap;
+        flex-flow: row nowrap;
+        -webkit-box-align: end;
+        -ms-flex-align: end;
+        align-items: flex-end; }
+        .container .game-container > .left .settings-container i, .container .game-container > .left .settings-container img {
           color: lightgrey;
           opacity: .3;
           padding-right: 5px;
           cursor: pointer; }
-          .container .game-container > .left .settings-container i:hover {
+          .container .game-container > .left .settings-container i:hover, .container .game-container > .left .settings-container img:hover {
             opacity: .5; }
+        .container .game-container > .left .settings-container img {
+          height: 50px; }
       .container .game-container > .left .text-scroller-container {
         background: rgba(0, 0, 0, 0.6);
         position: relative;
@@ -771,7 +783,9 @@
       right: 5px; }
     .wrapper > div:not(.item-drop-popup-container) > h1 {
       text-align: center;
-      letter-spacing: .5px; }
+      letter-spacing: 1px;
+      font-family: 'Germania One';
+      text-shadow: 0 0 5px gold, 0 0 4px red; }
     .wrapper > div:not(.item-drop-popup-container) > .fa-times {
       cursor: pointer; }
     .wrapper > div:not(.item-drop-popup-container) > hr {
@@ -1533,3 +1547,9 @@ input:checked + .slider:before {
     opacity: 1;
     -webkit-transform: translateY(0%);
     transform: translateY(0%); } }
+
+.confirm-refine .gain {
+  color: lightgreen; }
+
+.confirm-refine .lose {
+  color: #c36d6d; }

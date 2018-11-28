@@ -30,7 +30,9 @@
 
     > h1 {
       text-align: center;
-      letter-spacing: .5px;
+      letter-spacing: 1px;
+      font-family: 'Germania One';
+      text-shadow: 0 0 5px gold, 0 0 4px red;
     }
 
     > .fa-times {

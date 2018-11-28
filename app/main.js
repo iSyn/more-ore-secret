@@ -201,6 +201,8 @@ let earn = ( amount, gems = false, alter_hp = true ) => {
     if ( alter_hp ) update_ore_hp( amount )
     S.stats.total_ores_earned += amount
     S.ores += amount
+
+    if ( S.locked.refine_btn && S.stats.total_ores_earned >= 1000000 ) unlock_refine_btn()
   }
 }
 
@@ -216,7 +218,6 @@ let position_elements = () => {
   let left_vertical_separator_dimensions = LEFT_VERTICAL_SEPARATOR.getBoundingClientRect()
   let middle_vertical_separator_dimensions = MIDDLE_VERTICAL_SEPARATOR.getBoundingClientRect()
   let torch_dimensions = TORCH_LEFT.getBoundingClientRect()
-  let settings_container_dimensions = SETTINGS_CONTAINER.getBoundingClientRect()
   let text_scroller_container_dimensions = TEXT_SCROLLER_CONTAINER.getBoundingClientRect()
 
   // Position torches to the separators
@@ -224,8 +225,10 @@ let position_elements = () => {
   TORCH_RIGHT.style.left = middle_vertical_separator_dimensions.left - torch_dimensions.width + 'px'
 
   // Position settings container
-  SETTINGS_CONTAINER.style.left = middle_vertical_separator_dimensions.left - settings_container_dimensions.width + 'px'
+  if ( S.stats.total_ores_earned ) s( '.refine-btn' ).style.display = 'block'
+  let settings_container_dimensions = SETTINGS_CONTAINER.getBoundingClientRect()
   SETTINGS_CONTAINER.style.top = text_scroller_container_dimensions.top - settings_container_dimensions.height + 'px'
+  SETTINGS_CONTAINER.style.left = middle_vertical_separator_dimensions.left - settings_container_dimensions.width + 'px'
 
   // Position automater
   if ( !S.automater.automater_accordion_hidden ) {
@@ -740,7 +743,47 @@ let handle_text_scroller = () => {
   setTimeout( handle_text_scroller, 1000 * animation_speed )
 }
 
-// =======================================================================================
+// ==== REFINE SHIT ======================================================================
+
+let unlock_refine_btn = () => {
+
+  S.locked.refine_btn = 0
+
+  O.reposition_elements = 1
+
+}
+
+let confirm_refine = () => {
+
+  let wrapper = document.createElement( 'div' )
+  wrapper.classList.add( 'wrapper' )
+
+  let str = `
+    <div class='confirm-refine'>
+      <h1>Refine</h1>
+      <i onclick='remove_wrapper()' class='fa fa-times fa-1x'></i>
+      <p class='gain'>+ You will gain <strong>5</strong> diamonds</p>
+      <p class='gain'>+ You will gain <strong>124</strong> generation XP</p>
+      <p class='gain'>+ You will keep <strong>all</strong> blacksmith upgrades</p>
+      <p class='gain'>+ You will keep your <strong>${ S.pickaxe.name }</strong> </p>
+      <p class='lose'>- You will lose <strong>all</strong> ores</p>
+      <p class='lose'>- You will lose <strong>all</strong> owned buildings and upgrades</p>
+
+      <p>Are you sure you want to refine?</p>
+
+      <button>ya</button>
+      <button>na</button>
+
+    </div>
+  `
+
+  wrapper.innerHTML = str
+
+  CONTAINER.append( wrapper )
+
+}
+
+// ==== ITEM DROP SHIT ===================================================================
 
 let generate_item_drop = () => {
   
@@ -1185,7 +1228,7 @@ let win_achievement = ( achievement_code_name ) => {
 
 }
 
-// =======================================================================================
+// ==== GOLD NUGGET SHIT =================================================================
 
 let spawn_gold_nugget = () => {
   if ( Math.random() <= ( S.gold_nugget_chance_to_spawn * .01 ) || S.stats.total_nuggets_clicked == 0 ) {

@@ -28,7 +28,7 @@ let State = function( s = {} ) {
 
     pickaxe: {
       level: 1,
-      damage: 1000,
+      damage: 1000000,
       hardness: 100,
       sharpness: 100,
       name: "Wooden Starter Pickaxe",
@@ -50,7 +50,8 @@ let State = function( s = {} ) {
 
     locked: {
       fragility_spectacles: 1,
-      quest_board: 1
+      quest_board: 1,
+      refine_btn: 1
     },
 
     last_login: null,
