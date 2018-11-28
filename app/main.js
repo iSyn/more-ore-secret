@@ -834,7 +834,7 @@ let trash_pickaxe = () => {
 let build_new_pickaxe_popup = () => {
   str = `
     <div class='item-drop-popup ${ O.pickaxe.rarity.name }'>
-      <p style='font-size: 10px; letter-spacing: 0.5px; opacity: 0.6;'>- New Pickaxe -</p>
+      <p style='font-size: 14px; letter-spacing: 0.5px; opacity: 0.6;'>- New Pickaxe -</p>
       <h1 class='${ O.pickaxe.rarity.name }'>${ O.pickaxe.name }</h1>
       <i onclick='remove_wrapper()' class="fa fa-times fa-1x"></i>
   `
@@ -874,7 +874,7 @@ let build_equipped_pickaxe_popup = () => {
 
   str = `
     <div class='currently-equipped-popup ${ p.rarity.name }'>
-      <p style='font-size: 10px; letter-spacing: 0.5px; opacity: 0.6'>- Currently Equipped -</p>
+      <p style='font-size: 14px; letter-spacing: 0.5px; opacity: 0.6'>- Currently Equipped -</p>
       <h1 class='${ p.rarity.name }'>${ p.name }</h1>
   `
 
