@@ -6,7 +6,7 @@
   z-index: 4;
   color: white;
 
-  > div {
+  > div:not( .item-drop-popup-container ) {
     background: black;
     position: absolute;
     top: 50%;

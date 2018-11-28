@@ -36,6 +36,8 @@ let Achievement = function( obj ) {
 let Achievements = []
 let achievements = [
 
+  // { name: 'Schoolboy', desc: 'Have 10 Schools' },
+
   { name: 'Trasher', desc: 'Trash 5 pickaxes', flavor_text: 'Screw the environment, amirite!?' },
   { name: 'Polluter', desc: 'Trash 10 pickaxes' },
   { name: 'Scrapper', desc: 'Trash 20 pickaxes' },
@@ -55,9 +57,9 @@ let achievements = [
 
   // MINING RELATED ACHIEVEMENTS
   { name: 'Newbie Miner', desc: 'Break your first rock', reward: { increase_pickaxe_hardness: 5, increase_pickaxe_sharpness: 5 } },
-  { name: 'Novice Miner', desc: 'Break 10 rocks', reward: { increase_pickaxe_hardness: 10, increase_pickaxe_sharpness: 10 } },
-  { name: 'Intermediate Miner', desc: 'Break 25 rocks', reward: { increase_pickaxe_hardness: 10, increase_pickaxe_sharpness: 10} },
-  { name: 'Advanced Miner', desc: 'Break 100 rocks', reward: { increase_pickaxe_hardness: 10, increase_pickaxe_sharpness: 10 } },
+  { name: 'Novice Miner', desc: 'Break 10 rocks' },
+  { name: 'Intermediate Miner', desc: 'Break 25 rocks', reward: { increase_pickaxe_hardness: 15, increase_pickaxe_sharpness: 15 } },
+  { name: 'Advanced Miner', desc: 'Break 100 rocks', reward: { increase_pickaxe_hardness: 30, increase_pickaxe_sharpness: 30 } },
 
   // SECRET ACHIEVEMENTS
   { name: 'Who am I?', desc: 'Figure out the developers name', type: 'secret' },

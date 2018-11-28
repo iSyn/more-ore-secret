@@ -75,8 +75,13 @@ let save_game = () => {
   localStorage.setItem( 'smith_upgrades', JSON.stringify( Smith_Upgrades ) )
   localStorage.setItem( 'smith', JSON.stringify( SMITH ) )
 
+  notify( 'Saved Game' )
+}
+
+let notify = ( text ) => {
+
   let div = document.createElement( 'div' )
-  div.innerHTML = 'Saved Game'
+  div.innerHTML = text
   div.style.position = 'absolute'
   div.style.padding = '10px 15px'
   div.style.zIndex = 2
@@ -90,6 +95,7 @@ let save_game = () => {
   div.addEventListener( 'animationend', () => { remove_el( div ) } )
 
   CONTAINER.append( div )
+
 }
 
 let load_game = () => {
@@ -794,36 +800,10 @@ let handle_item_drop_click = ( item_uuid ) => {
   let wrapper = document.createElement( 'div' )
   wrapper.classList.add( 'wrapper' )
 
-  let str = `
-    <div class='item-drop-popup ${ O.pickaxe.rarity.name }'>
-      <p style='font-size: 10px; letter-spacing: 0.5px; opacity: 0.6;'>- New Pickaxe -</p>
-      <h1 class='${ O.pickaxe.rarity.name }'>${ O.pickaxe.name }</h1>
-      <i onclick='remove_wrapper()' class="fa fa-times fa-1x"></i>`
-
-        str += build_pickaxe_sprite( O.pickaxe )
-
-      str += `
-        <p style='padding-bottom: 7.5px; opacity: .7;' class='${ O.pickaxe.rarity.name }'>
-          <strong>${ O.pickaxe.rarity.name }</strong>
-        </p>
-        <p><small><i>[ level: <strong>${ O.pickaxe.level }</strong> ]</i></small></p>
-        <ul>
-          <li>Damage: <strong>${ O.pickaxe.damage }</strong></li>
-          <li>Sharpness: <strong>${ beautify_number( O.pickaxe.sharpness ) }%</strong></li>
-          <li>Hardness: <strong>${ beautify_number( O.pickaxe.hardness ) }%</strong></li>
-        </ul>
-        <button 
-          class='equip-btn'
-          onclick='equip_pickaxe()'
-          >EQUIP <i class="fa fa-hand-paper-o fa-1x"></i>
-        </button>
-        <button 
-          class='trash-btn'
-          onclick='remove_wrapper()'
-          >TRASH <i class="fa fa-trash-o fa-1x"></i>
-        </button>
-    </div>
-  `
+  let str = `<div class='item-drop-popup-container'>`
+  str += build_new_pickaxe_popup()
+  str += build_equipped_pickaxe_popup()
+  str += '</div>'
 
   wrapper.innerHTML = str
 
@@ -851,7 +831,75 @@ let trash_pickaxe = () => {
 
 }
 
+let build_new_pickaxe_popup = () => {
+  str = `
+    <div class='item-drop-popup ${ O.pickaxe.rarity.name }'>
+      <p style='font-size: 10px; letter-spacing: 0.5px; opacity: 0.6;'>- New Pickaxe -</p>
+      <h1 class='${ O.pickaxe.rarity.name }'>${ O.pickaxe.name }</h1>
+      <i onclick='remove_wrapper()' class="fa fa-times fa-1x"></i>
+  `
+
+  str += build_pickaxe_sprite( O.pickaxe )
+
+  str += `
+    <p style='padding-bottom: 7.5px; opacity: .7;' class='${ O.pickaxe.rarity.name }'>
+      <strong>${ O.pickaxe.rarity.name }</strong>
+    </p>
+    <p><small><i>[ level: <strong>${ O.pickaxe.level }</strong> ]</i></small></p>
+    <ul>
+      <li>Damage: <strong>${ O.pickaxe.damage }</strong></li>
+      <li>Sharpness: <strong>${ beautify_number( O.pickaxe.sharpness ) }%</strong></li>
+      <li>Hardness: <strong>${ beautify_number( O.pickaxe.hardness ) }%</strong></li>
+    </ul>
+    <button 
+      class='equip-btn'
+      onclick='equip_pickaxe()'
+      >EQUIP <i class="fa fa-hand-paper-o fa-1x"></i>
+    </button>
+    <button 
+      class='trash-btn'
+      onclick='remove_wrapper()'
+      >TRASH <i class="fa fa-trash-o fa-1x"></i>
+    </button>
+  `
+
+  str += '</div>'
+
+  return str
+}
+
+let build_equipped_pickaxe_popup = () => {
+
+  let p = S.pickaxe
+
+  str = `
+    <div class='currently-equipped-popup ${ p.rarity.name }'>
+      <p style='font-size: 10px; letter-spacing: 0.5px; opacity: 0.6'>- Currently Equipped -</p>
+      <h1 class='${ p.rarity.name }'>${ p.name }</h1>
+  `
+
+  str += build_pickaxe_sprite( p )
+
+  str += `
+    <p style='padding-bottom: 7.5px; opacity: .7;' class='${ p.rarity.name }'>
+      <strong>${ p.rarity.name }</strong>
+    </p>
+    <p><small><i>[ level: <strong>${ p.level }</strong> ]</i></small></p>
+    <ul>
+      <li>Damage: <strong>${ p.damage }</strong></li>
+      <li>Sharpness: <strong>${ beautify_number( p.sharpness ) }%</strong></li>
+      <li>Hardness: <strong>${ beautify_number( p.hardness ) }%</strong></li>
+    </ul>
+  `
+
+  str += '</div>'
+
+  return str
+
+}
+
 let build_pickaxe_sprite = ( pickaxe ) => {
+
   let str = `
     <div class="pickaxe-sprite-container">
       <img class='pickaxe-stick' src='./app/assets/images/pickaxe-bottom.png' />
@@ -860,6 +908,7 @@ let build_pickaxe_sprite = ( pickaxe ) => {
   `
 
   return str
+
 }
 
 // =======================================================================================

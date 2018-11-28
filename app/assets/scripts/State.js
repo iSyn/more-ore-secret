@@ -27,10 +27,13 @@ let State = function( s = {} ) {
     gold_nugget_chance_to_spawn: 30, // 30% chance to spawn
 
     pickaxe: {
+      level: 1,
       damage: 1000,
       hardness: 100,
       sharpness: 100,
       name: "Wooden Starter Pickaxe",
+      material: { name: 'Wood' },
+      rarity: { name: 'Common' },
       
       temporary_bonuses: {
         sharpness: 0,
