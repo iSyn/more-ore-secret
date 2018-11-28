@@ -11,9 +11,8 @@ let remove_wrapper = () => {
   if ( wrappers.length > 0 ){
     let wrapper = wrappers[ wrappers.length - 1 ]
     let child_el = wrapper.firstElementChild
-    child_el.addEventListener( 'animationend', () => {
-      remove_el( wrapper )
-    })
+    if ( child_el.classList.contains( 'item-drop-popup' ) ) trash_pickaxe()
+    child_el.addEventListener( 'animationend', () => { remove_el( wrapper ) } )
     wrapper.style.animation = 'fade_out .15s'
     child_el.style.animation = 'slide_down_out .15s'
   }
@@ -21,6 +20,52 @@ let remove_wrapper = () => {
 
 let get_random_num = ( min, max ) => {
   return Math.floor( Math.random() * ( max - min + 1 ) ) + min;
+}
+
+let get_time_difference = ( time ) => {
+
+  let now = new Date().getTime()
+  let str = ''
+
+  let time_difference_ms = now - time
+  let time_difference_sec = time_difference_ms / 1000
+  let time_difference_min = time_difference_sec / 60
+  let time_difference_hour = time_difference_min / 60
+  let time_difference_day = time_difference_hour / 24
+
+  if ( time_difference_sec < 60 ) { 
+    str = 'a couple seconds ago' 
+  } else {
+
+    if ( time_difference_min < 60 ) {
+      str += `${ time_difference_min } minutes ago`
+    } else {
+
+      if ( time_difference_hour < 24 ) {
+        str += `${ time_difference_hour } hours ago`
+      } else {
+
+        str += `${ time_difference_day } days ago`
+      }
+    } 
+  }
+
+  return str
+
+}
+
+let get_current_date_time = () => {
+
+  let date_time = new Date()
+  let str =
+    date_time.getUTCFullYear() + "/" +
+    ("0" + (date_time.getUTCMonth()+1)).slice(-2) + "/" +
+    ("0" + date_time.getUTCDate()).slice(-2) + " " +
+    ("0" + date_time.getUTCHours()).slice(-2) + ":" +
+    ("0" + date_time.getUTCMinutes()).slice(-2) + ":" +
+    ("0" + date_time.getUTCSeconds()).slice(-2);
+
+  return str
 }
 
 let beautify_number = (number) => {

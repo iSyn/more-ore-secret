@@ -1,7 +1,7 @@
-$uncommon-color: #5184ff;
-$rare-color: #5dff51;
-$unique-color: #faff51;
-$epic-color: #7751ff;
+$uncommon-color: #5dff51;
+$rare-color: #1f41ff;
+$unique-color: #7751ff;
+$epic-color: #faff51;
 $legendary-color: #ff7e51;
 $mythic-color: #c60000;
 
@@ -98,8 +98,17 @@ $mythic-color: #c60000;
     > .pickaxe-sprite-container {
         height: 320px;
         width: 320px;
-        margin: 15px auto 7.5px auto;
-        border: 5px ridge #c4c4c4;
+        // margin: 15px auto 7.5px auto;
+        margin: 15px auto;
+        position: relative;
+
+        > img {
+          position: absolute;
+          height: 100%;
+          width: 100%;
+          image-rendering: pixelated;
+          pointer-events: none;
+        }
     }
 
     ul {

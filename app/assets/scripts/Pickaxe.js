@@ -14,7 +14,7 @@ let Pickaxe = function( item_level ) {
     this.hardness = _get_hardness( this )
 
     this.name = _get_name( this )
-
+    
     return this
 }
 

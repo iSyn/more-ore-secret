@@ -19,9 +19,9 @@ $achievement-height: 115px;
     display: flex;
     flex-flow: column nowrap;
     flex-shrink: 0;
-    min-width: 160px;
+    min-width: 350px;
     background: #222;
-    border: 1px solid white;
+    border: 5px ridge #c7c7c7;
     animation: winAchievement 5s ease-in-out forwards;
     padding: 10px;
     overflow: hidden;
@@ -58,6 +58,12 @@ $achievement-height: 115px;
       &:last-child {
         padding-bottom: 10px;
       }
+    }
+
+    small {
+      font-style: italic;
+      opacity: 0.5;
+      text-align: right;
     }
   }
 

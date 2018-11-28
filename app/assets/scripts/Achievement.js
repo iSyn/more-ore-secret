@@ -7,9 +7,12 @@ let Achievement = function( obj ) {
   this.desc = obj.desc
   this.reward = obj.reward || null
   this.won = obj.won || 0
+  this.time_won = obj.time_won || null
+  if ( obj.flavor_text ) this.flavor_text = obj.flavor_text
 
   this.win = () => {
     this.won = 1
+    this.time_won = new Date().getTime()
 
     let r = this.reward
     if ( r ) {
@@ -32,6 +35,12 @@ let Achievement = function( obj ) {
 
 let Achievements = []
 let achievements = [
+
+  { name: 'Trasher', desc: 'Trash 5 pickaxes', flavor_text: 'Screw the environment, amirite!?' },
+  { name: 'Polluter', desc: 'Trash 10 pickaxes' },
+  { name: 'Scrapper', desc: 'Trash 20 pickaxes' },
+  { name: 'Scrap Master', desc: 'Trash 40 pickaxes' },
+
   // COMBO RELATED ACHIEVEMENTS
   { name: 'Combo Baby', desc: 'Reach a 5 hit combo', type: 'combo' },
   { name: 'Combo Pleb', desc: 'Reach a 20 hit combo', type: 'combo' },
@@ -51,7 +60,7 @@ let achievements = [
   { name: 'Advanced Miner', desc: 'Break 100 rocks', reward: { increase_pickaxe_hardness: 10, increase_pickaxe_sharpness: 10 } },
 
   // SECRET ACHIEVEMENTS
-  { name: 'Who am I?', desc: 'Figure out the developers name', type: 'secret' }
+  { name: 'Who am I?', desc: 'Figure out the developers name', type: 'secret' },
 
 ]
 

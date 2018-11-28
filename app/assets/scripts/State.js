@@ -62,7 +62,10 @@ let State = function( s = {} ) {
       total_nuggets_spawned: 0,
       total_nuggets_missed: 0,
       total_nuggets_clicked: 0,
+      total_pickaxes_trashed: 0,
       seconds_played: 0,
+      first_day: s.stats ? s.stats.first_day ? s.stats.first_day : new Date().getTime() : new Date().getTime()
+      // first_day: s.stats.first_day ? || new Date().getTime()
     },
 
     prefs: {

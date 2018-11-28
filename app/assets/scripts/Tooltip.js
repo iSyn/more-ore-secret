@@ -35,10 +35,32 @@ let Tooltip = function() {
         str += `
           <div class="top">
             <img src="${ item.img }" alt="achievement-img">
-            <h1>${ item.name }</h1>
+            <h1>${ item.name } <small style='color: rgba( 255, 255, 255, 0.5 ); font-size: 13px;'>[ ${ item.type } achievement ]</small></h1>
           </div>
           <div class="bottom">
-            <p>${ item.desc }</p>
+            <p style='padding: 10px 0'>${ item.desc }</p>
+            `
+
+            let r = item.reward
+            if ( r ) {
+              if ( r.increase_weak_hit_multi ) {
+                str += `<p style='color: lightgreen;' class='achievement-reward'>+ Permanently increase <strong>weak-hit</strong> multiplier by <strong>${ achievement.reward.increase_weak_hit_multi }</strong></p>`
+              }
+              if ( r.increase_pickaxe_hardness ) {
+                str += `<p style='color: lightgreen;' class='achievement-reward'>+ Permanently increase <strong>pickaxe hardness</strong> by <strong>${ r.increase_pickaxe_hardness }%</strong></p>`
+              }
+              if ( r.increase_pickaxe_sharpness ) {
+                str += `<p style='color: lightgreen;' class='achievement-reward'>+ Permanently increase <strong>pickaxe sharpness</strong> by <strong>${ r.increase_pickaxe_sharpness }%</strong></p>`
+              }
+            }
+
+            str += `<p style='color: rgba( 255, 255, 255, 0.5 ); padding-top: 10px;'> <i class='fa fa-calendar fa-1x'></i> &nbsp; Unlocked: ${ get_time_difference( item.time_won ) } </p>`
+
+            if ( item.flavor_text ) {
+              str += `<p style='font-size: 13px; padding-top: 10px; color: rgba( 255, 255, 255, 0.5 ); font-style: italic; text-align: right;'>${ item.flavor_text }</p>`
+            }
+
+            str += `
           </div>
         `
 

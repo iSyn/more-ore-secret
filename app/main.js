@@ -781,7 +781,7 @@ let generate_item_drop = () => {
   
   setTimeout(() => {
     item.style.transform = `translate( ${ transform_x }px, ${ transform_y }px )`
-  }, 10)
+  }, 50)
 
 }
 
@@ -841,12 +841,21 @@ let equip_pickaxe = () => {
   remove_wrapper()
 }
 
+let trash_pickaxe = () => {
+  S.stats.total_pickaxes_trashed++
+
+  if ( S.stats.total_pickaxes_trashed == 5 ) win_achievement( 'trasher' )
+  if ( S.stats.total_pickaxes_trashed == 10 ) win_achievement( 'polluter' )
+  if ( S.stats.total_pickaxes_trashed == 20 ) win_achievement( 'scrapper' )
+  if ( S.stats.total_pickaxes_trashed == 40 ) win_achievement( 'scrap master' )
+
+}
+
 let build_pickaxe_sprite = ( pickaxe ) => {
   let str = `
-    <div 
-      class="pickaxe-sprite-container ${ pickaxe.rarity.name }"
-      style='background: url( "https://via.placeholder.com/320" ); background-size: 100%; background-repeat: no-repeat;'
-      >
+    <div class="pickaxe-sprite-container">
+      <img class='pickaxe-stick' src='./app/assets/images/pickaxe-bottom.png' />
+      <img class='pickaxe-top' src='./app/assets/images/pickaxe-top-${ pickaxe.material.name.toLowerCase() }.png' />
     </div>
   `
 
@@ -1098,14 +1107,18 @@ let win_achievement = ( achievement_code_name ) => {
     let r = achievement.reward
     if ( r ) {
       if ( r.increase_weak_hit_multi ) {
-        str += `<p class='achievement-reward'>Permanently increase <strong>weak-hit</strong> multiplier by <strong>${ achievement.reward.increase_weak_hit_multi }</strong></p>`
+        str += `<p class='achievement-reward'>+ Permanently increase <strong>weak-hit</strong> multiplier by <strong>${ achievement.reward.increase_weak_hit_multi }</strong></p>`
       }
       if ( r.increase_pickaxe_hardness ) {
-        str += `<p class='achievement-reward'>Permanently increase <strong>pickaxe hardness</strong> by <strong>${ r.increase_pickaxe_hardness }%</strong></p>`
+        str += `<p class='achievement-reward'>+ Permanently increase <strong>pickaxe hardness</strong> by <strong>${ r.increase_pickaxe_hardness }%</strong></p>`
       }
       if ( r.increase_pickaxe_sharpness ) {
-        str += `<p class='achievement-reward'>Permanently increase <strong>pickaxe sharpness</strong> by <strong>${ r.increase_pickaxe_sharpness }%</strong></p>`
+        str += `<p class='achievement-reward'>+ Permanently increase <strong>pickaxe sharpness</strong> by <strong>${ r.increase_pickaxe_sharpness }%</strong></p>`
       }
+    }
+
+    if ( achievement.flavor_text ) {
+      str += `<small>${ achievement.flavor_text }</small>`
     }
 
     achievement_el.innerHTML = str
