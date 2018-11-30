@@ -1,7 +1,5 @@
 let State = function( s = {} ) {
 
-  console.log( 'STATE', s)
-
   this.state = {
     ores: s.ores || 0,
     gems: s.ores || 0,
@@ -16,17 +14,17 @@ let State = function( s = {} ) {
     weak_hit_multi: s.weak_hit_multi || 5,
     current_combo: s.current_combo || 0,
 
-    current_ore_hp: 50,
-    current_ore_max_hp: 50,
+    current_ore_hp: s.current_ore_hp || 50,
+    current_ore_max_hp: s.current_ore_max_hp || 50,
 
     tabs: [],
 
-    max_ore_away_gain: 1 * MILLION, 
+    max_ore_away_gain: s.max_ore_away_gain || 1 * MILLION, 
 
-    gold_nugget_spawn_rate: 60, // 
-    gold_nugget_chance_to_spawn: 30, // 30% chance to spawn
+    gold_nugget_spawn_rate: s.gold_nugget_spawn_rate || 60, // 
+    gold_nugget_chance_to_spawn: s.gold_nugget_chance_to_spawn || 30, // 30% chance to spawn
 
-    pickaxe: {
+    pickaxe: s.pickaxe || {
       level: 1,
       damage: 1000000,
       hardness: 100,
@@ -48,7 +46,7 @@ let State = function( s = {} ) {
       available: 0
     },
 
-    locked: {
+    locked: s.locked || {
       fragility_spectacles: 1,
       quest_board: 1,
       refine_btn: 1
@@ -56,7 +54,7 @@ let State = function( s = {} ) {
 
     last_login: null,
 
-    stats: {
+    stats: s.stats || {
       highest_combo: 0,
       total_clicks: 0,
       total_weak_hit_clicks: 0,
@@ -72,11 +70,10 @@ let State = function( s = {} ) {
       total_nuggets_clicked: 0,
       total_pickaxes_trashed: 0,
       seconds_played: 0,
-      first_day: s.stats ? s.stats.first_day ? s.stats.first_day : new Date().getTime() : new Date().getTime()
-      // first_day: s.stats.first_day ? || new Date().getTime()
+      first_day: new Date().getTime()
     },
 
-    prefs: {
+    prefs: s.prefs || {
       game_speed: 30,
       sfx_volume: .1,
       bgm_volume: 1,
@@ -84,11 +81,9 @@ let State = function( s = {} ) {
       show_ops_rising_numbers: true,
     },
 
-    misc: {
+    misc: s.misc || {
       current_ore_sprite: 1,
       ore_sprite_amount: 2
     }
-
   }
-  
 }

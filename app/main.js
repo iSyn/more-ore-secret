@@ -226,7 +226,7 @@ let position_elements = () => {
   TORCH_RIGHT.style.left = middle_vertical_separator_dimensions.left - torch_dimensions.width + 'px'
 
   // Position settings container
-  if ( S.stats.total_ores_earned ) s( '.refine-btn' ).style.display = 'block'
+  if ( !S.locked.refine_btn  ) s( '.refine-btn' ).style.display = 'block'
   let settings_container_dimensions = SETTINGS_CONTAINER.getBoundingClientRect()
   SETTINGS_CONTAINER.style.top = text_scroller_container_dimensions.top - settings_container_dimensions.height + 'px'
   SETTINGS_CONTAINER.style.left = middle_vertical_separator_dimensions.left - settings_container_dimensions.width + 'px'
@@ -778,7 +778,7 @@ let confirm_refine = () => {
       <br />
       <p class='confirmation-text'><span>Are you sure you want to refine?</span></p>
       <div class='button-container'>
-        <button onclick='refine()'>YES</button>
+        <button onclick='refine(); remove_wrapper()'>YES</button>
         <button onclick='remove_wrapper()'>NO</button>
       </div>
 
@@ -803,6 +803,37 @@ let calculate_refine_rewards = () => {
 }
 
 let refine = () => {
+
+  let refine_animation = document.createElement( 'div' )
+  refine_animation.classList.add( 'refine-animation' )
+  refine_animation.innerHTML = `
+    <div class='left'></div>
+    <div class='right'></div>
+  `
+
+  s( 'body' ).append( refine_animation )
+  refine_animation.children[0].addEventListener( 'animationend', () => { remove_el( refine_animation ) } )
+
+  let rewards = calculate_refine_rewards()
+
+
+  reset_state_and_buildings()
+
+}
+
+let reset_state_and_buildings = () => {
+
+  S.ores = 0
+  S.stats.current_rocks_destroyed = 0
+  S.stats.current_ores_earned = 0
+  S.stats.current_ores_mined = 0
+
+  Buildings = []
+  buildings.forEach( building => new Building( building ) )
+
+  O.recalculate_opc = 1
+  O.recalculate_ops = 1
+  O.rebuild_store = 1
 
 }
 
