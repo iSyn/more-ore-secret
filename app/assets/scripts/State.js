@@ -2,7 +2,7 @@ let State = function( s = {} ) {
 
   this.state = {
     ores: s.ores || 0,
-    gems: s.ores || 0,
+    gems: s.gems || 0,
     generation: s.generation || 1,
 
     ops: s.ops || 0,
@@ -13,6 +13,11 @@ let State = function( s = {} ) {
 
     weak_hit_multi: s.weak_hit_multi || 5,
     current_combo: s.current_combo || 0,
+
+    combo_shield: s.combo_shield || {
+      owned: 1,
+      available: 1
+    },
 
     current_ore_hp: s.current_ore_hp || 50,
     current_ore_max_hp: s.current_ore_max_hp || 50,
@@ -26,7 +31,7 @@ let State = function( s = {} ) {
 
     pickaxe: s.pickaxe || {
       level: 1,
-      damage: 1000000,
+      damage: 1,
       hardness: 100,
       sharpness: 100,
       name: "Wooden Starter Pickaxe",
@@ -49,7 +54,8 @@ let State = function( s = {} ) {
     locked: s.locked || {
       fragility_spectacles: 1,
       quest_board: 1,
-      refine_btn: 1
+      refine_btn: 1,
+      combo_sign: 1
     },
 
     last_login: null,
@@ -58,9 +64,11 @@ let State = function( s = {} ) {
       highest_combo: 0,
       total_clicks: 0,
       total_weak_hit_clicks: 0,
+      times_refined: 0,
+      last_refine_time: null,
       current_rocks_destroyed: 0,
       current_ores_earned: 0,
-      current_ores_mined: 0,
+      current_ores_manually_mined: 0,
       total_rocks_destroyed: 0,
       total_ores_manually_mined: 0,
       total_ores_earned: 0,

@@ -11,6 +11,9 @@
   -webkit-user-drag: none;
   cursor: default; }
 
+.fa.fa-times {
+  cursor: pointer; }
+
 .vertical-separator, .horizontal-separator {
   -ms-interpolation-mode: nearest-neighbor;
   image-rendering: -webkit-optimize-contrast;
@@ -94,7 +97,8 @@
         -webkit-transform: translateY(-100%);
         transform: translateY(-100%);
         -webkit-animation: fall_down_in .3s ease-in-out forwards .5s;
-        animation: fall_down_in .3s ease-in-out forwards .5s; }
+        animation: fall_down_in .3s ease-in-out forwards .5s;
+        z-index: 2; }
         .container .game-container > .left .topbar-inventory-container .inventory-hanger-container {
           height: 20px;
           width: 100%;
@@ -332,8 +336,8 @@
           .container .game-container .right-container > .right .tab-content-container .tab-content {
             height: 100%; }
             .container .game-container .right-container > .right .tab-content-container .tab-content.store {
-              background: -webkit-gradient(linear, left top, left bottom, from(#b78f6d), to(#331f0b));
-              background: linear-gradient(to bottom, #b78f6d, #331f0b);
+              background: -webkit-gradient(linear, left top, left bottom, from(lightgrey), to(#190800));
+              background: linear-gradient(lightgrey, #190800);
               -webkit-box-shadow: 0 0 10px #331f0b inset;
               box-shadow: 0 0 10px #331f0b inset; }
             .container .game-container .right-container > .right .tab-content-container .tab-content.smith {
@@ -1616,11 +1620,81 @@ input:checked + .slider:before {
     -webkit-transform: translateY(0%);
     transform: translateY(0%); } }
 
-.confirm-refine .gain {
-  color: lightgreen; }
-
-.confirm-refine .lose {
-  color: #c36d6d; }
+.wrapper > .confirm-refine {
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content; }
+  .wrapper > .confirm-refine header {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -ms-flex-flow: row nowrap;
+    flex-flow: row nowrap;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    position: relative; }
+    .wrapper > .confirm-refine header .gem {
+      -ms-interpolation-mode: nearest-neighbor;
+      image-rendering: -webkit-optimize-contrast;
+      image-rendering: -moz-crisp-edges;
+      image-rendering: -o-pixelated;
+      image-rendering: pixelated;
+      height: 40px; }
+    .wrapper > .confirm-refine header h1 {
+      letter-spacing: 1px;
+      font-family: 'Germania One';
+      text-shadow: 0 0 5px gold, 0 0 4px red; }
+  .wrapper > .confirm-refine .gain {
+    color: lightgreen; }
+  .wrapper > .confirm-refine .lose {
+    color: #c36d6d; }
+  .wrapper > .confirm-refine .confirmation-text {
+    text-align: center;
+    font-weight: bold;
+    opacity: .7; }
+    .wrapper > .confirm-refine .confirmation-text span {
+      display: inline-block;
+      position: relative; }
+      .wrapper > .confirm-refine .confirmation-text span:before, .wrapper > .confirm-refine .confirmation-text span:after {
+        content: '';
+        position: absolute;
+        border-bottom: 1px solid white;
+        border-top: 1px solid white;
+        top: 8px;
+        width: 40px; }
+      .wrapper > .confirm-refine .confirmation-text span:before {
+        right: 100%;
+        margin-right: 10px; }
+      .wrapper > .confirm-refine .confirmation-text span:after {
+        left: 100%;
+        margin-left: 10px; }
+  .wrapper > .confirm-refine .button-container {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -ms-flex-flow: row nowrap;
+    flex-flow: row nowrap;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    padding-top: 10px; }
+    .wrapper > .confirm-refine .button-container button {
+      padding: 3px 6px;
+      background: transparent;
+      color: white;
+      margin: 0 5px;
+      cursor: pointer;
+      opacity: .8; }
+      .wrapper > .confirm-refine .button-container button:hover {
+        opacity: 1; }
 
 .refine-animation {
   z-index: 10;
@@ -1731,3 +1805,105 @@ input:checked + .slider:before {
     -webkit-transform: translateX(100%);
     transform: translateX(100%);
     background: white; } }
+
+.combo-sign-container {
+  position: absolute;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-flow: column nowrap;
+  flex-flow: column nowrap;
+  z-index: 1; }
+  .combo-sign-container .top {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -ms-flex-flow: row nowrap;
+    flex-flow: row nowrap;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between; }
+    .combo-sign-container .top > div {
+      height: 10px;
+      margin: 0 10px; }
+  .combo-sign-container .combo-sign {
+    background: #383838;
+    border: 6px ridge #3e3e3e;
+    -webkit-box-shadow: 0 0 40px #222 inset;
+    box-shadow: 0 0 40px #222 inset;
+    color: white;
+    padding: 5px 10px;
+    text-align: center; }
+    .combo-sign-container .combo-sign > p {
+      opacity: .5; }
+    .combo-sign-container .combo-sign .combo-sign-number {
+      padding: 5px 0;
+      font-family: 'Germania One';
+      text-shadow: 0 0 5px gold;
+      color: white; }
+    .combo-sign-container .combo-sign .combo-shield-container {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-orient: horizontal;
+      -webkit-box-direction: normal;
+      -ms-flex-flow: row nowrap;
+      flex-flow: row nowrap; }
+      .combo-sign-container .combo-sign .combo-shield-container p {
+        padding-right: 5px;
+        opacity: .7; }
+      .combo-sign-container .combo-sign .combo-shield-container div {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-orient: horizontal;
+        -webkit-box-direction: normal;
+        -ms-flex-flow: row nowrap;
+        flex-flow: row nowrap; }
+        .combo-sign-container .combo-sign .combo-shield-container div i {
+          padding-right: 4px;
+          opacity: .2; }
+          .combo-sign-container .combo-sign .combo-shield-container div i.active {
+            opacity: 1; }
+
+@-webkit-keyframes slide_down_in {
+  0% {
+    -webkit-transform: translateY(-80px);
+    transform: translateY(-80px); }
+  100% {
+    -webkit-transform: translateY(0);
+    transform: translateY(0); } }
+
+@keyframes slide_down_in {
+  0% {
+    -webkit-transform: translateY(-80px);
+    transform: translateY(-80px); }
+  100% {
+    -webkit-transform: translateY(0);
+    transform: translateY(0); } }
+
+@-webkit-keyframes pulse {
+  0% {
+    -webkit-transform: scale(1);
+    transform: scale(1); }
+  50% {
+    -webkit-transform: scale(1.1);
+    transform: scale(1.1); }
+  100% {
+    -webkit-transform: scale(1);
+    transform: scale(1); } }
+
+@keyframes pulse {
+  0% {
+    -webkit-transform: scale(1);
+    transform: scale(1); }
+  50% {
+    -webkit-transform: scale(1.1);
+    transform: scale(1.1); }
+  100% {
+    -webkit-transform: scale(1);
+    transform: scale(1); } }

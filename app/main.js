@@ -1,9 +1,12 @@
+const VERSION = 0.01
+
 const BODY = s( 'body' )
 const CONTAINER = s( '.container' )
 const GAME_CONTAINER = s( '.game-container' )
 const ORE_SPRITE = s( '.ore-sprite' )
 const RIGHT_CONTAINER = s( '.right-container' )
-const INVENTORY_EL = s( '.topbar-inventory' )
+const TOPBAR_INVENTORY_CONTAINER = s( '.topbar-inventory-container' )
+const TOPBAR_INVENTORY = s( '.topbar-inventory' )
 const ORE_CONTAINER = s( '.ore-container' )
 const ORE_WEAK_SPOT_CONTAINER = s( '.ore-weak-spot-container' )
 const ORE_WEAK_SPOT = s( '.ore-weak-spot' )
@@ -23,6 +26,7 @@ const AUTOMATER_HEADER = s( '.automater-wrapper > header' )
 const ACHIEVEMENT_NOTIFICATION_CONTAINER = s( '.achievement-notification-container' )
 const FOOTER = s( 'footer' )
 const BOTTOM_AREA_TABS = s( '.bottom-area-tabs' )
+const COMBO_SIGN_CONTAINER = s( '.combo-sign-container' )
 
 let S = new State().state
 let RN = new RisingNumber()
@@ -136,7 +140,7 @@ let wipe_save = () => {
 
 let build_footer = () => {
   FOOTER.innerHTML = `
-    <p><strong>More Ore</strong> v.${VERSION} created by <strong><a href='https://synclairwang.com'>Syn Studios</a></strong> | <span onclick='save_game()'>Save Game</span> | <span onclick='wipe_save()'>Wipe Save</span> | <a href='https://discord.gg/NU99mMQ' target='_blank'>Join the Discord!</a> </p>
+    <p><strong>More Ore</strong> v.${ VERSION } created by <strong><a href='https://synclairwang.com'>Syn Studios</a></strong> | <span onclick='save_game()'>Save Game</span> | <span onclick='wipe_save()'>Wipe Save</span> | <a href='https://discord.gg/NU99mMQ' target='_blank'>Join the Discord!</a> </p>
   `
 }
 
@@ -193,18 +197,21 @@ let play_sound = ( name, file_type = 'wav', base_vol = 1 ) => {
   sound.play()
 }
 
-let earn = ( amount, gems = false, alter_hp = true ) => {
-  if ( gems ) {
-    S.gems += amount
-    S.stats.total_gems_earned += amount
-  } else {
-    if ( alter_hp ) update_ore_hp( amount )
-    S.stats.total_ores_earned += amount
-    S.stats.current_ores_earned += amount
-    S.ores += amount
+let earn = ( amount, alter_hp = true ) => {
 
-    if ( S.locked.refine_btn && S.stats.total_ores_earned >= 1000000 ) unlock_refine_btn()
-  }
+  if ( alter_hp ) update_ore_hp( amount )
+
+  S.stats.total_ores_earned += amount
+  S.stats.current_ores_earned += amount
+  S.ores += amount
+
+  if ( S.locked.refine_btn && S.stats.total_ores_earned >= 1000000 ) unlock_refine_btn()
+
+}
+
+let earn_gems = ( amount ) => {
+  S.gems += amount
+  S.stats.total_gems_earned += amount
 }
 
 let spend = ( amount ) => {
@@ -247,6 +254,17 @@ let position_elements = () => {
   // Position bottom area tab
   let bottom_area_tabs_dimensions = BOTTOM_AREA_TABS.getBoundingClientRect()
   BOTTOM_AREA_TABS.style.top = text_scroller_container_dimensions.top - bottom_area_tabs_dimensions.height + 'px'
+
+  // Position combo sign
+  if ( !S.locked.combo_sign )  {
+    setTimeout(() => {
+      let topbar_inventory_container_dimensions = TOPBAR_INVENTORY_CONTAINER.getBoundingClientRect()
+      build_combo_sign()
+      COMBO_SIGN_CONTAINER.style.top = topbar_inventory_container_dimensions.bottom + 'px'
+      COMBO_SIGN_CONTAINER.style.left = topbar_inventory_container_dimensions.left + 'px'
+      COMBO_SIGN_CONTAINER.style.animation = 'slide_down_in .5s forwards'
+    }, 1000)
+  }
 
 }
 
@@ -705,16 +723,27 @@ let handle_click = ( e, type ) => {
 
     RN.new( event, 'weak-hit-click', opc )
     generate_weak_spot()
+
+    if ( S.locked.combo_sign && S.current_combo >= 5 ) {
+      S.locked.combo_sign = 0
+      O.reposition_elements = 1
+    }
+
   } else {
+
     play_sound( 'ore_hit' )
     S.current_combo = 0
     RN.new( event, 'click', opc )
+    
   }
 
   S.stats.total_clicks++
   S.stats.total_ores_manually_mined += opc
+  S.stats.current_ores_manually_mined += opc
 
   earn( opc )
+
+  if ( !S.locked.combo_sign ) update_combo_sign_number()
 }
 
 let handle_text_scroller = () => {
@@ -742,6 +771,62 @@ let handle_text_scroller = () => {
   }
 
   setTimeout( handle_text_scroller, 1000 * animation_speed )
+}
+
+// ==== COMBO SHIT =======================================================================
+
+let build_combo_sign = () => {
+
+  let str = `
+    <div class='top'>
+      <div class='vertical-separator thin'></div>
+      <div class='vertical-separator thin'></div>
+    </div>
+    <div class='combo-sign'>
+      <p>Current Combo</p>
+      <h1 class='combo-sign-number'>${ S.current_combo }</h1>
+      <div class='combo-shield-container'>
+        <p>Combo Shield: </p>
+        <div>
+        `
+
+        str += build_combo_shields()
+
+        str += `
+        </div>
+      </div>
+    </div>
+  `
+
+  COMBO_SIGN_CONTAINER.innerHTML = str
+
+}
+
+let build_combo_shields = () => {
+
+  let str = ''
+
+  if ( S.combo_shield.owned == 0 ) {
+    str += `
+      <i class='fa fa-shield fa-1x'></i>
+      <i class='fa fa-shield fa-1x'></i>
+      <i class='fa fa-shield fa-1x'></i>
+    `
+  }
+
+  for ( let i = 0; i < 3; i++ ) {
+
+    str += `<i class='fa fa-shield fa-1x ${ S.combo_shield.available > i && "active" }'></i>`
+
+  }
+
+  return str
+
+}
+
+let update_combo_sign_number = () => {
+  let combo_sign_number = s( '.combo-sign-number' )
+   combo_sign_number.innerHTML = S.current_combo
 }
 
 // ==== REFINE SHIT ======================================================================
@@ -802,23 +887,54 @@ let calculate_refine_rewards = () => {
 
 }
 
-let refine = () => {
+let refine = async () => {
 
-  let refine_animation = document.createElement( 'div' )
-  refine_animation.classList.add( 'refine-animation' )
-  refine_animation.innerHTML = `
-    <div class='left'></div>
-    <div class='right'></div>
-  `
-
-  s( 'body' ).append( refine_animation )
-  refine_animation.children[0].addEventListener( 'animationend', () => { remove_el( refine_animation ) } )
-
-  let rewards = calculate_refine_rewards()
-
+  play_sound( 'refine' )
+  S.stats.times_refined++
 
   reset_state_and_buildings()
 
+  let rewards = calculate_refine_rewards()
+  earn_gems( rewards.gems )
+
+  await refine_animation()
+
+  if ( S.stats.last_refine_time ) {
+    let diff = get_time_difference_value( S.stats.last_refine_time, 'minutes' )
+    if ( diff <= 10 ) win_achievement( 'quick_refiner' )
+    if ( diff <= 5 ) win_achievement( 'swift_refiner')
+    if ( diff <= 1 ) win_achievement( 'speedy_refiner' )
+    if ( diff <= .166667 ) win_achievement( 'flash_refiner') 
+  }
+
+  S.stats.last_refine_time = new Date().getTime()
+
+  if ( S.stats.times_refined == 1 ) win_achievement( 'babies_first_refine' )
+
+}
+
+let refine_animation = () => {
+
+  return new Promise( resolve => {
+
+    let refine_animation = document.createElement( 'div' )
+    refine_animation.classList.add( 'refine-animation' )
+    refine_animation.innerHTML = `
+      <div class='left'></div>
+      <div class='right'></div>
+    `
+
+    s( 'body' ).append( refine_animation )
+
+    refine_animation.children[ 0 ].addEventListener( 'animationend', () => {
+
+      remove_el( refine_animation )
+
+      resolve()
+
+    } )
+
+  } )
 }
 
 let reset_state_and_buildings = () => {
@@ -834,6 +950,8 @@ let reset_state_and_buildings = () => {
   O.recalculate_opc = 1
   O.recalculate_ops = 1
   O.rebuild_store = 1
+
+  save_game()
 
 }
 
@@ -1118,7 +1236,7 @@ let build_topbar_inventory = () => {
     </div>
   `
 
-  INVENTORY_EL.innerHTML = str
+  TOPBAR_INVENTORY.innerHTML = str
 }
 
 let build_bottom_tabs = () => {
@@ -1320,7 +1438,7 @@ let handle_gold_nugget_click = ( event ) => {
   remove_el( event.target )
 
   let amount = ( S.ops * 13 + S.opc * 13 )
-  earn( amount, false, false )
+  earn( amount, false )
   RN.new( event, 'gold-nugget-click', amount )
 }
 

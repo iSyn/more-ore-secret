@@ -30,6 +30,7 @@
         flex-flow: column nowrap;
         transform: translateY( -100% );
         animation: fall_down_in .3s ease-in-out forwards .5s;
+        z-index: 2;
   
         .inventory-hanger-container {
           height: 20px;
@@ -265,7 +266,8 @@
             height: 100%;
 
             &.store {
-              background: linear-gradient(to bottom, #b78f6d, #331f0b);
+              // background: linear-gradient(to bottom, #b78f6d, #331f0b);
+              background: linear-gradient(lightgrey, rgb(25, 8, 0));
               box-shadow: 0 0 10px #331f0b inset;
             }
   

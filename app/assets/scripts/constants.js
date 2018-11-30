@@ -1,5 +1,3 @@
-const VERSION = 0.01
-
 const SECOND = 1000
 const MINUTE = 60 * 1000
 

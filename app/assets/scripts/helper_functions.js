@@ -54,6 +54,30 @@ let get_time_difference = ( time ) => {
 
 }
 
+let get_time_difference_value = ( time, type = 'ms' ) => {
+
+  let now = new Date().getTime()
+
+  let diff = now - time
+
+  switch ( type ) {
+
+    case 'hours':
+      return diff / 1000 / 60 / 60
+
+    case 'minutes':
+      return diff / 1000 / 60
+
+    case 'seconds':
+      return diff / 1000
+
+    case 'ms':
+    default:
+      return diff
+      
+  }
+}
+
 let beautify_number = (number) => {
 
   var SI_PREFIXES = [

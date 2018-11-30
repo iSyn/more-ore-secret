@@ -8,6 +8,10 @@
   cursor: default;
 }
 
+.fa.fa-times {
+  cursor: pointer;
+}
+
 @import './common/variables';
 
 @import './components/separators';
@@ -27,5 +31,6 @@
 @import './components/item';
 @import './components/pickaxe';
 @import './components/refine';
+@import './components/combo_sign';
 
 

@@ -38,6 +38,14 @@ let achievements = [
 
   // { name: 'Schoolboy', desc: 'Have 10 Schools' },
 
+  // REFINE RELATED ACHIEVEMENTS
+  { name: 'Babies First Refine', desc: 'Refine for your first time' },
+  { name: 'Quick Refiner', desc: 'Refine within 10 minutes of your last refine' },
+  { name: 'Swift Refiner', desc: 'Refine within 5 minutes of your last refine' },
+  { name: 'Speedy Refiner', desc: 'Refine within 1 minutes of your last refine' },
+  { name: 'Flash Refiner', desc: 'Refine within 10 seconds of your last refine' },
+
+  // TRASH PICKAXE RELATED ACHIEVEMENTS
   { name: 'Trasher', desc: 'Trash 5 pickaxes', flavor_text: 'Screw the environment, amirite!?' },
   { name: 'Polluter', desc: 'Trash 10 pickaxes' },
   { name: 'Scrapper', desc: 'Trash 20 pickaxes' },
