@@ -200,6 +200,7 @@ let earn = ( amount, gems = false, alter_hp = true ) => {
   } else {
     if ( alter_hp ) update_ore_hp( amount )
     S.stats.total_ores_earned += amount
+    S.stats.current_ores_earned += amount
     S.ores += amount
 
     if ( S.locked.refine_btn && S.stats.total_ores_earned >= 1000000 ) unlock_refine_btn()
@@ -758,21 +759,28 @@ let confirm_refine = () => {
   let wrapper = document.createElement( 'div' )
   wrapper.classList.add( 'wrapper' )
 
+  let rewards = calculate_refine_rewards()
+
   let str = `
     <div class='confirm-refine'>
-      <h1>Refine</h1>
+      <header>
+        <h1>Refine</h1>
+        <img class='gem' src='./app/assets/images/gem-diamond.png' />
+      </header>
       <i onclick='remove_wrapper()' class='fa fa-times fa-1x'></i>
-      <p class='gain'>+ You will gain <strong>5</strong> diamonds</p>
-      <p class='gain'>+ You will gain <strong>124</strong> generation XP</p>
+      <p class='gain'>+ You will gain <strong>${ rewards.gems }</strong> gems</p>
+      <p class='gain'>+ You will gain <strong>${ rewards.xp }</strong> generation XP</p>
       <p class='gain'>+ You will keep <strong>all</strong> blacksmith upgrades</p>
       <p class='gain'>+ You will keep your <strong>${ S.pickaxe.name }</strong> </p>
+      <br />
       <p class='lose'>- You will lose <strong>all</strong> ores</p>
       <p class='lose'>- You will lose <strong>all</strong> owned buildings and upgrades</p>
-
-      <p>Are you sure you want to refine?</p>
-
-      <button>ya</button>
-      <button>na</button>
+      <br />
+      <p class='confirmation-text'><span>Are you sure you want to refine?</span></p>
+      <div class='button-container'>
+        <button onclick='refine()'>YES</button>
+        <button onclick='remove_wrapper()'>NO</button>
+      </div>
 
     </div>
   `
@@ -780,6 +788,21 @@ let confirm_refine = () => {
   wrapper.innerHTML = str
 
   CONTAINER.append( wrapper )
+
+}
+
+let calculate_refine_rewards = () => {
+
+  let rewards = {}
+
+  rewards.gems = Math.floor( Math.sqrt( S.stats.current_ores_earned / 1000000 ) )
+  rewards.xp = 100
+
+  return rewards
+
+}
+
+let refine = () => {
 
 }
 

@@ -869,6 +869,74 @@
         transition: opacity .1s; }
         .wrapper > div:not(.item-drop-popup-container).offline-gain-popup button:hover {
           opacity: 1; }
+    .wrapper > div:not(.item-drop-popup-container).confirm-refine {
+      width: -webkit-fit-content;
+      width: -moz-fit-content;
+      width: fit-content; }
+      .wrapper > div:not(.item-drop-popup-container).confirm-refine header {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-orient: horizontal;
+        -webkit-box-direction: normal;
+        -ms-flex-flow: row nowrap;
+        flex-flow: row nowrap;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        justify-content: center;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        position: relative; }
+        .wrapper > div:not(.item-drop-popup-container).confirm-refine header .gem {
+          -ms-interpolation-mode: nearest-neighbor;
+          image-rendering: -webkit-optimize-contrast;
+          image-rendering: -moz-crisp-edges;
+          image-rendering: -o-pixelated;
+          image-rendering: pixelated;
+          height: 40px; }
+        .wrapper > div:not(.item-drop-popup-container).confirm-refine header h1 {
+          letter-spacing: 1px;
+          font-family: 'Germania One';
+          text-shadow: 0 0 5px gold, 0 0 4px red; }
+      .wrapper > div:not(.item-drop-popup-container).confirm-refine .confirmation-text {
+        text-align: center;
+        font-weight: bold;
+        opacity: .7; }
+        .wrapper > div:not(.item-drop-popup-container).confirm-refine .confirmation-text span {
+          display: inline-block;
+          position: relative; }
+          .wrapper > div:not(.item-drop-popup-container).confirm-refine .confirmation-text span:before, .wrapper > div:not(.item-drop-popup-container).confirm-refine .confirmation-text span:after {
+            content: '';
+            position: absolute;
+            border-bottom: 1px solid white;
+            border-top: 1px solid white;
+            top: 8px;
+            width: 40px; }
+          .wrapper > div:not(.item-drop-popup-container).confirm-refine .confirmation-text span:before {
+            right: 100%;
+            margin-right: 10px; }
+          .wrapper > div:not(.item-drop-popup-container).confirm-refine .confirmation-text span:after {
+            left: 100%;
+            margin-left: 10px; }
+      .wrapper > div:not(.item-drop-popup-container).confirm-refine .button-container {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-orient: horizontal;
+        -webkit-box-direction: normal;
+        -ms-flex-flow: row nowrap;
+        flex-flow: row nowrap;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        justify-content: center;
+        padding-top: 10px; }
+        .wrapper > div:not(.item-drop-popup-container).confirm-refine .button-container button {
+          padding: 3px 6px;
+          background: transparent;
+          color: white;
+          margin: 0 5px;
+          cursor: pointer; }
 
 .pickaxe-accordion {
   max-height: 20px;

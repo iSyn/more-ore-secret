@@ -61,6 +61,8 @@ let State = function( s = {} ) {
       total_clicks: 0,
       total_weak_hit_clicks: 0,
       current_rocks_destroyed: 0,
+      current_ores_earned: 0,
+      current_ores_mined: 0,
       total_rocks_destroyed: 0,
       total_ores_manually_mined: 0,
       total_ores_earned: 0,

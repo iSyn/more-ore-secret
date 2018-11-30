@@ -2,3 +2,6 @@
 .vscode/
 assets/.DS_Store
 node_modules/
+
+old-items.js
+old-main.js
