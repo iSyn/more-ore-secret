@@ -5,3 +5,4 @@ node_modules/
 playground/
 old-items.js
 old-main.js
+.gitignore
