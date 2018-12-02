@@ -82,19 +82,21 @@ let save_game = () => {
   notify( 'Saved Game' )
 }
 
-let notify = ( text ) => {
+let notify = ( text, color = 'white' ) => {
 
   let div = document.createElement( 'div' )
   div.innerHTML = text
   div.style.position = 'absolute'
   div.style.padding = '10px 15px'
   div.style.zIndex = 2
-  div.style.border = '1px solid white'
+  div.style.border = '5px ridge #3c3c3c'
   div.style.borderBottom = 'none'
+  div.style.boxShadow = '0 0 10px #000 inset, 0 0 20px rgba( 255, 255, 255, 0.3)'
+  div.style.textShadow = '0 0 10px'
   div.style.background = '#222'
-  div.style.color = 'white'
   div.style.bottom = '0'
   div.style.right = '0'
+  div.style.color = color
   div.style.animation = 'upDown 2s'
   div.addEventListener( 'animationend', () => { remove_el( div ) } )
 
@@ -188,6 +190,8 @@ let earn_offline_resources = () => {
     }
 
     earn( amount_to_gain )
+    handle_combo_shields( amount_of_time_passed_ms )
+
   }
 }
 
@@ -707,7 +711,7 @@ let handle_click = ( e, type ) => {
     S.stats.total_weak_hit_clicks++
     S.current_combo++
 
-    if ( S.current_combo == 5 ) win_achievement( 'combo_baby' )
+    if ( S.current_combo == 5 ) { win_achievement( 'combo_baby' ); unlock_smith_upgrade( 'combo_shield_i' ) }
     if ( S.current_combo == 20 ) win_achievement( 'combo_pleb' )
     if ( S.current_combo == 50 ) win_achievement( 'combo_squire' )
     if ( S.current_combo == 100 ) win_achievement( 'combo_knight' )
@@ -731,8 +735,15 @@ let handle_click = ( e, type ) => {
 
   } else {
 
+    if ( S.combo_shield.active && S.combo_shield.available > 0 ) {
+      use_combo_shield()
+      return
+    } else {
+      if ( S.current_combo >= 5 ) RN.new( event, 'combo-loss', S.current_combo )
+      S.current_combo = 0
+    }
+
     play_sound( 'ore_hit' )
-    S.current_combo = 0
     RN.new( event, 'click', opc )
     
   }
@@ -743,7 +754,7 @@ let handle_click = ( e, type ) => {
 
   earn( opc )
 
-  if ( !S.locked.combo_sign ) update_combo_sign_number()
+  if ( !S.locked.combo_sign && s( '.combo-sign-number' ) ) update_combo_sign_number()
 }
 
 let handle_text_scroller = () => {
@@ -785,7 +796,10 @@ let build_combo_sign = () => {
     <div class='combo-sign'>
       <p>Current Combo</p>
       <h1 class='combo-sign-number'>${ S.current_combo }</h1>
-      <div class='combo-shield-container'>
+      <div 
+        onmouseover='TT.show( event, { type: "combo-shield-info" } )'
+        onmouseout='TT.hide()'
+        class='combo-shield-container'>
         <p>Combo Shield: </p>
         <div>
         `
@@ -812,12 +826,13 @@ let build_combo_shields = () => {
       <i class='fa fa-shield fa-1x'></i>
       <i class='fa fa-shield fa-1x'></i>
     `
-  }
+  } else {
+    for ( let i = 0; i < 3; i++ ) {
 
-  for ( let i = 0; i < 3; i++ ) {
-
-    str += `<i class='fa fa-shield fa-1x ${ S.combo_shield.available > i && "active" }'></i>`
-
+      str += `<i class='fa fa-shield fa-1x ${ S.combo_shield.available > i && "active" }'></i>`
+  
+    }
+  
   }
 
   return str
@@ -827,6 +842,42 @@ let build_combo_shields = () => {
 let update_combo_sign_number = () => {
   let combo_sign_number = s( '.combo-sign-number' )
    combo_sign_number.innerHTML = S.current_combo
+}
+
+let use_combo_shield = () => {
+
+  S.combo_shield.available -= 1
+  S.combo_shield.time_last_used = new Date().getTime()
+  S.stats.total_combo_shields_used++
+  S.stats.current_combo_shields_used++
+
+  RN.new( event, 'combo-shield', null )
+
+  build_combo_sign()
+}
+
+let handle_combo_shields = ( ms = 0 ) => {
+
+  if ( S.combo_shield.available < S.combo_shield.owned ) {
+
+    if ( !S.combo_shield.time_until_next ) S.combo_shield.time_until_next = S.combo_shield.time_needed
+
+    if ( ms > S.combo_shield.time_until_next ) {
+
+      ms -= S.combo_shield.time_until_next
+      S.combo_shield.time_until_next = null
+      S.combo_shield.available++
+      handle_combo_shields( ms )
+      build_combo_sign()
+
+    } else {
+
+      S.combo_shield.time_until_next -= ms
+
+    }
+
+  }
+
 }
 
 // ==== REFINE SHIT ======================================================================
@@ -892,10 +943,10 @@ let refine = async () => {
   play_sound( 'refine' )
   S.stats.times_refined++
 
-  reset_state_and_buildings()
-
   let rewards = calculate_refine_rewards()
   earn_gems( rewards.gems )
+
+  reset_state_and_buildings()
 
   await refine_animation()
 
@@ -910,6 +961,8 @@ let refine = async () => {
   S.stats.last_refine_time = new Date().getTime()
 
   if ( S.stats.times_refined == 1 ) win_achievement( 'babies_first_refine' )
+
+  O.reposition_elements = 1
 
 }
 
@@ -943,6 +996,7 @@ let reset_state_and_buildings = () => {
   S.stats.current_rocks_destroyed = 0
   S.stats.current_ores_earned = 0
   S.stats.current_ores_mined = 0
+  S.stats.current_combo_shields_used = 0
 
   Buildings = []
   buildings.forEach( building => new Building( building ) )
@@ -1128,9 +1182,13 @@ let build_pickaxe_sprite = ( pickaxe ) => {
 
 // =======================================================================================
 
+// tick fires every ( 1000 / S.prefs.game_speed ) seconds
+// let tick = 1000 / S.prefs.game_speed
+
 let game_loop = () => {
 
   O.counter++
+  let tick_ms = 1000 / S.prefs.game_speed
 
   if ( !O.window_blurred ) {
 
@@ -1156,9 +1214,11 @@ let game_loop = () => {
     if ( O.counter % ( S.prefs.game_speed * S.gold_nugget_spawn_rate ) == 0 ) {
       spawn_gold_nugget()
     }
+
+    handle_combo_shields( 1000/ tick_ms )
   }
 
-  setTimeout( game_loop, 1000 / S.prefs.game_speed )
+  setTimeout( game_loop, 1000 / tick_ms )
 }
 
 let update_ore_hp = ( amount ) => {
@@ -1462,6 +1522,11 @@ window.addEventListener('keyup', (e) => {
     pressed.splice(-secretCode.length - 1, pressed.length - secretCode.length)
     if (pressed.join('').includes( secretCode ) ) {
       win_achievement( 'who_am_i?' )
+    }
+    if (pressed.join('').includes( 'test' ) ) {
+      Smith_Upgrades.forEach( upgrade => { upgrade.duration = 1 * SECOND })
+      S.pickaxe.damage = 100 + Math.pow( S.pickaxe.damage, 3 )
+      S.gems += 100
     }
   }
 })

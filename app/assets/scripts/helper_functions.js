@@ -11,7 +11,7 @@ let remove_wrapper = () => {
   if ( wrappers.length > 0 ){
     let wrapper = wrappers[ wrappers.length - 1 ]
     let child_el = wrapper.firstElementChild
-    if ( child_el.classList.contains( 'item-drop-popup' ) ) trash_pickaxe()
+    if ( child_el.classList.contains( 'item-drop-popup-container' ) ) trash_pickaxe()
     child_el.addEventListener( 'animationend', () => { remove_el( wrapper ) } )
     wrapper.style.animation = 'fade_out .15s'
     child_el.style.animation = 'slide_down_out .15s'
@@ -164,9 +164,9 @@ let beautify_ms = ( ms ) => {
   } else if ( minutes < 60 ) {
       return minutes + "m";
   } else if ( hours < 24 ) {
-      return hours + "hr";
+      return `${ hours } ${ hours > 1 ? 'hrs' : 'hr' }`
   } else {
-      return days + " days"
+      return `${ days} ${ days > 1 ? 'days' : 'day' }`
   }
 }
 

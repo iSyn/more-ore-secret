@@ -73,6 +73,80 @@ let smith_upgrades = [
         }
     },
 
+    // COMBO SHIELD UPGRADES
+    {
+        name: 'Combo Shield I',
+        img: 'https://via.placeholder.com/64',
+        desc: 'Unlocks a combo shield that protects your combo from a misclick',
+        flavor_text: 'clink clink',
+        duration: 30 * SECOND,
+        price: 5,
+        locked: 1,
+        unlock_functions: {
+            unlock_combo_shield: 1,
+            unlock_smith_upgrades: [ 'combo_shield_ii', 'combo_shield_speed_up_i' ]
+        }
+
+    }, {
+        name: 'Combo Shield II',
+        img: 'https://via.placeholder.com/64',
+        desc: 'Unlocks a combo shield that protects your combo from a misclick',
+        duration: 30 * SECOND,
+        price: 30,
+        locked: 1,
+        requires: [ 'combo_shield_i' ],
+        unlock_functions: {
+            unlock_combo_shield: 1,
+            unlock_smith_upgrades: [ 'combo_shield_iii' ]
+        }
+    }, {
+        name: 'Combo Shield III',
+        img: 'https://via.placeholder.com/64',
+        desc: 'Unlocks a combo shield that protects your combo from a misclick',
+        duration: 30 * SECOND,
+        price: 50,
+        locked: 1,
+        requires: [ 'combo_shield_ii'],
+        unlock_functions: {
+            unlock_combo_shield: 1
+        }
+    }, {
+        name: 'Combo Shield Speed Up I',
+        img: 'https://via.placeholder.com/64',
+        desc: 'Decrease the time needed for another combo shield by 1 hour',
+        duration: 30 * SECOND,
+        price: 50,
+        locked: 1,
+        requires: [ 'combo_shield_i'],
+        unlock_functions: {
+            combo_shield_speed_up: 1 * HOUR,
+            unlock_smith_upgrades: [ 'combo_shield_speed_up_ii']
+        }
+    }, {
+        name: 'Combo Shield Speed Up II',
+        img: 'https://via.placeholder.com/64',
+        desc: 'Decrease the time needed for another combo shield by 1 hour',
+        duration: 30 * SECOND,
+        price: 100,
+        locked: 1,
+        requires: [ 'combo_shield_speed_up_i'],
+        unlock_functions: {
+            combo_shield_speed_up: 1 * HOUR,
+            unlock_smith_upgrades: [ 'combo_shield_speed_up_iii']
+        }
+    }, {
+        name: 'Combo Shield Speed Up III',
+        img: 'https://via.placeholder.com/64',
+        desc: 'Decrease the time needed for another combo shield by 1 hour',
+        duration: 30 * SECOND,
+        price: 150,
+        locked: 1,
+        requires: [ 'combo_shield_speed_up_ii'],
+        unlock_functions: {
+            combo_shield_speed_up: 1 * HOUR
+        }
+    },
+
     // SHARPEN PICKAXE UPGRADES
     {
         name: 'Sharpen Pickaxe I',

@@ -15,8 +15,12 @@ let State = function( s = {} ) {
     current_combo: s.current_combo || 0,
 
     combo_shield: s.combo_shield || {
-      owned: 1,
-      available: 1
+      active: 1,
+      owned: 0,
+      available: 0,
+      time_until_next: null,
+      time_last_used: null,
+      time_needed: 4 * HOUR
     },
 
     current_ore_hp: s.current_ore_hp || 50,
@@ -77,6 +81,8 @@ let State = function( s = {} ) {
       total_nuggets_missed: 0,
       total_nuggets_clicked: 0,
       total_pickaxes_trashed: 0,
+      total_combo_shields_used: 0,
+      current_combo_shields_used: 0,
       seconds_played: 0,
       first_day: new Date().getTime()
     },

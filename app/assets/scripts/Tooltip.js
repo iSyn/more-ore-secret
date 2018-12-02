@@ -11,6 +11,21 @@ let Tooltip = function() {
     // build content
     switch ( obj.type ) {
 
+      case 'combo-shield-info':
+        str += `
+          <h3>Combo Shield</h3>
+          <p>Combo Shields protect your current combo from a mis-strike</p>
+          <hr>
+          <p>Combo Shields Owned: ${ S.combo_shield.owned }</p>
+          <p>Combo Shields Available: ${ S.combo_shield.available }</p>
+          `
+          if ( S.combo_shield.time_until_next ) {
+            str += `
+              <p>Time until next combo shield: ${ beautify_ms( S.combo_shield.time_until_next ) }</p>
+            `
+          }
+        break
+
       case 'sharpness-info':
         str += `
           <h1><i class='fa fa-info-circle fa-1x'></i> Sharpness</h1>
@@ -158,9 +173,15 @@ let Tooltip = function() {
     // position tooltip
     switch ( obj.type ) {
 
+      case 'combo-shield-info':
+        TOOLTIP.style.left = e.clientX + 'px'
+        TOOLTIP.style.top = e.clientY + 'px'
+        break
+
       case 'achievement-square':
         tooltip_dimensions = TOOLTIP.getBoundingClientRect()
-        TOOLTIP.style.left = e.target.getBoundingClientRect().left + 'px'
+        let target_el_dimensions = e.target.getBoundingClientRect()
+        TOOLTIP.style.left = ( target_el_dimensions.left + target_el_dimensions.right ) / 2 - tooltip_dimensions.width / 2 + 'px'
         TOOLTIP.style.top = e.target.getBoundingClientRect().top - tooltip_dimensions.height + 'px'
         break
 

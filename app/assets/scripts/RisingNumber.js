@@ -24,6 +24,21 @@ let RisingNumber = function() {
 
       // TYPES
       switch ( type ) {
+
+        case 'combo-shield':
+          el.style.color = '#00e7ff'
+          el.style.fontSize = '30px'
+          el.style.animationDuration = '3s'
+          el.innerHTML = 'Hit Prevented'
+          break;
+
+        case 'combo-loss':
+          el.style.color = 'maroon'
+          el.style.fontSize = '20px'
+          el.style.animation = 'combo_loss 1s linear forwards'
+          el.innerHTML = 'Combo Loss'
+          break;
+
         case 'gold-nugget-click':
           el.style.color = 'gold'
           el.style.fontSize = '40px'

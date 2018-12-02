@@ -10,15 +10,17 @@ let Smith = function( obj = {} ) {
 
         this.current_progress = 0
 
-        console.log( 'STARTING UPGRADE', upgrade )
-
         if ( S.gems >= upgrade.price ) {
             S.gems -= upgrade.price
+            play_sound( 'smith_upgrade_start' )
 
             this.upgrade_in_progress = upgrade
             this.duration = upgrade.duration
 
             this._update_progress()
+        } else {
+            notify( 'Not Enough Gems', 'red' )
+            play_sound( 'not_enough')
         }
 
     }
@@ -75,16 +77,22 @@ let Smith = function( obj = {} ) {
                 S.pickaxe.hardness += fn.increase_pickaxe_hardness
             }
 
+            if ( fn.unlock_combo_shield ) {
+                S.combo_shield.owned++
+                S.combo_shield.available++
+                build_combo_sign()
+            }
+
             if ( fn.unlock_smith_upgrades ) {
                 
                 fn.unlock_smith_upgrades.forEach( code_name => {
+                    console.log( fn.unlock_smith_upgrades )
                     let target_upgrade = select_from_arr( Smith_Upgrades, code_name )
+                    console.log( 'target_upgrade:', target_upgrade )
                     select_from_arr( target_upgrade.requires, upgrade.code_name ).owned = 1
 
                     let locked = 0
-                    console.log( target_upgrade.requires )
                     target_upgrade.requires.forEach( requirement => {
-                        console.log( 'requirement', requirement )
                         if ( !requirement.owned ) {
                             locked = 1
                         }
@@ -111,6 +119,10 @@ let Smith = function( obj = {} ) {
 
             if ( fn.increase_gold_nugget_chance_of_spawn ) {
                 S.gold_nugget_chance_to_spawn += fn.increase_gold_nugget_chance_of_spawn
+            }
+
+            if ( fn.combo_shield_speed_up ) {
+                S.combo_shield.time_needed -= fn.combo_shield_speed_up
             }
         }
 
