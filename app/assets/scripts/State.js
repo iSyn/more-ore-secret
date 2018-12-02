@@ -34,15 +34,23 @@ let State = function( s = {} ) {
     gold_nugget_chance_to_spawn: s.gold_nugget_chance_to_spawn || 30, // 30% chance to spawn
 
     pickaxe: s.pickaxe || {
-      level: 1,
-      damage: 1,
-      hardness: 100,
-      sharpness: 100,
-      name: "Wooden Starter Pickaxe",
-      material: { name: 'Wood' },
-      rarity: { name: 'Common' },
+
+      item: {
+        level: 1,
+        damage: 1,
+        hardness: 100,
+        sharpness: 100,
+        name: "Wooden Starter Pickaxe",
+        material: { name: 'Wood' },
+        rarity: { name: 'Common' },
+      },
       
       temporary_bonuses: {
+        sharpness: 0,
+        hardness: 0
+      },
+
+      permanent_bonuses: {
         sharpness: 0,
         hardness: 0
       }
@@ -80,6 +88,7 @@ let State = function( s = {} ) {
       total_nuggets_spawned: 0,
       total_nuggets_missed: 0,
       total_nuggets_clicked: 0,
+      total_items_found: 0,
       total_pickaxes_trashed: 0,
       total_combo_shields_used: 0,
       current_combo_shields_used: 0,

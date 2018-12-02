@@ -45,6 +45,18 @@ $mythic-color: #c60000;
           color: rgba( 255, 255, 255, 0.8);
           letter-spacing: .8px;
         }
+
+        i {
+          font-weight: 900;
+
+          &.fa-angle-up {
+            color: lime;
+          }
+
+          &.fa-angle-down {
+            color: red;
+          }
+        }
       }
     }
 

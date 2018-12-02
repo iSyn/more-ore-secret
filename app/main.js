@@ -65,6 +65,8 @@ let init_game = () => {
   build_automater_visibility_toggle_btn()
   build_footer()
   earn_offline_resources()
+
+  if ( S.stats.total_clicks == 0 ) tutorial_click_the_rock()
 }
 
 let save_game = () => {
@@ -412,19 +414,19 @@ let build_pickaxe_accordion = ( direct = false ) => {
   str += `
     <div class='pickaxe-accordion ${ O.pickaxe_accordion_is_open && 'open' }'>
       <header onclick='toggle_pickaxe_accordion()'>
-        <p>${ S.pickaxe.name }</p>
+        <p>${ S.pickaxe.item.name }</p>
         <i class='fa fa-caret-down fa-1x'></i>
       </header>
       <div>
-        <p>Damage: ${ S.pickaxe.damage }</p>
+        <p>Damage: ${ beautify_number( S.pickaxe.item.damage ) }</p>
         <p
           onmouseover='TT.show( event, { name: null, type: "sharpness-info" } )'
           onmouseout='TT.hide()'
-          >Sharpness: ${ beautify_number( calculate_pickaxe_sharpness() ) }%</p>
+          >Sharpness: ${ S.pickaxe.item.sharpness } <span style='opacity: .5'>( ${ beautify_number( calculate_pickaxe_sharpness() ) } )</span> %</p>
         <p
           onmouseover='TT.show( event, { name: null, type: "hardness-info" } )'
           onmouseout='TT.hide()'
-          >Hardness: ${ beautify_number( calculate_pickaxe_hardness() ) }%</p>
+          >Hardness: ${ S.pickaxe.item.hardness } <span style='opacity: .5'>( ${ beautify_number( calculate_pickaxe_hardness() ) } )</span> %</p>
       </div>
     </div>
     <div class='horizontal-separator thin dark'></div>
@@ -439,11 +441,11 @@ let build_pickaxe_accordion = ( direct = false ) => {
 }
 
 let calculate_pickaxe_sharpness = () => {
-  return S.pickaxe.sharpness + S.pickaxe.temporary_bonuses.sharpness
+  return S.pickaxe.item.sharpness + S.pickaxe.temporary_bonuses.sharpness + S.pickaxe.permanent_bonuses.sharpness
 }
 
 let calculate_pickaxe_hardness = () => {
-  return S.pickaxe.hardness + S.pickaxe.temporary_bonuses.hardness
+  return S.pickaxe.item.hardness + S.pickaxe.temporary_bonuses.hardness + S.pickaxe.permanent_bonuses.hardness
 }
 
 let build_pickaxe_update = ( direct = false ) => {
@@ -478,22 +480,25 @@ let build_smith_upgrades = ( direct = false ) => {
 
   let str = ''
 
-  str += '<p>Available Upgrades</p>'
+  str += '<p class="available-upgrade-text">Available Upgrades</p>'
 
   Smith_Upgrades.sort( ( a, b ) => a.price - b.price )
     .forEach( upgrade => {
-      upgrade.type = 'smith_ugprade'
+      upgrade.type = 'smith_upgrade'
       if ( !upgrade.owned && !upgrade.locked ) {
         str += `
           <div 
             class="smith-upgrade"
             style='background: url("${ upgrade.img }")'
-            onmouseover='TT.show( event, { name: "${ upgrade.code_name }", type: "smith_upgrade" })'
+            onmouseover='TT.show( event, { name: "${ upgrade.code_name }", type: "smith_upgrade" }); handle_smith_upgrade_hover( "${ upgrade.code_name }" )'
             onmouseout='TT.hide()'
             onclick='start_smith_upgrade( Smith_Upgrades, "${ upgrade.code_name }")'
             >
-          </div>
-        `
+            `
+
+            if ( upgrade.new ) str += '<div class="new">New!</div>'
+            
+            str += `</div>`
       } else {
         if ( upgrade.owned ) owned_upgrades.push( upgrade )
         if ( upgrade.locked ) locked_upgrades.push( upgrade )
@@ -501,7 +506,7 @@ let build_smith_upgrades = ( direct = false ) => {
     })
 
   if ( locked_upgrades.length > 0 ) {
-    str += '<p>Locked Upgrades</p>'
+    str += '<p class="locked-upgrade-text">Locked Upgrades</p>'
 
     locked_upgrades.forEach( upgrade => {
       str += `
@@ -540,6 +545,17 @@ let build_smith_upgrades = ( direct = false ) => {
   }
 
   return str
+}
+
+let handle_smith_upgrade_hover = ( code_name ) => {
+
+  let upgrade = select_from_arr( Smith_Upgrades, code_name )
+
+  if ( upgrade.new ) {
+    upgrade.new = false
+    build_smith_upgrades( true )
+  }
+
 }
 
 let toggle_pickaxe_accordion = () => {
@@ -639,7 +655,7 @@ let start_smith_upgrade = ( arr, code_name  ) => {
 
 let calculate_opc = ( type ) => {
   
-  let opc = S.pickaxe.damage
+  let opc = S.pickaxe.item.damage
 
   if ( type ) {
     if ( type == 'weak-spot' ) {
@@ -784,6 +800,56 @@ let handle_text_scroller = () => {
   setTimeout( handle_text_scroller, 1000 * animation_speed )
 }
 
+// ==== TUTORIAL SHIT ====================================================================
+
+let tutorial_click_the_rock = () => {
+
+  let tutorial = document.createElement( 'div' )
+
+  tutorial.classList.add( 'tutorial-container' )
+  tutorial.id = 'tutorial-click-the-rock'
+  tutorial.innerHTML = `
+    <div class='arrow left'></div>
+    <div class="tutorial-content">
+      <p>Break the rock!</p>
+    </div>
+  `
+
+  let ore_container_dimensions = ORE_CONTAINER.getBoundingClientRect()
+
+  CONTAINER.append( tutorial )
+
+  tutorial.style.left = ore_container_dimensions.right + 'px'
+  tutorial.style.top = ( ore_container_dimensions.top + ore_container_dimensions.bottom ) / 2 + 'px'
+
+}
+
+let tutorial_pickaxe_description = () => {
+
+  let tutorial = document.createElement( 'div' )
+
+  tutorial.classList.add( 'tutorial-window-container' )
+  tutorial.id = 'tutorial-pickaxe-description'
+  tutorial.innerHTML = `
+    <h1>Your First Pickaxe!</h1>
+    <hr>
+    <p class='desc'>For some reason... in this magical world, when you crack open an ore, a pickaxe comes out!</p>
+    <ul>
+      <li><strong>Sharpness</strong> affects how much damage you deal on <i>weak spot</i> hits</li>
+      <li><strong>Hardness</strong> affects how much damage you deal on <i>regular</i> hits</li>
+    </ul>
+  `
+
+  CONTAINER.append( tutorial )
+    
+  let target = document.querySelector( '.item-drop-popup' ).getBoundingClientRect()
+  let tutorial_dimensions = tutorial.getBoundingClientRect()
+
+  tutorial.style.left = target.left - tutorial_dimensions.width / 1.5 + 'px'
+  tutorial.style.top = target.top + 50 + 'px'
+
+}
+
 // ==== COMBO SHIT =======================================================================
 
 let build_combo_sign = () => {
@@ -907,7 +973,7 @@ let confirm_refine = () => {
       <p class='gain'>+ You will gain <strong>${ rewards.gems }</strong> gems</p>
       <p class='gain'>+ You will gain <strong>${ rewards.xp }</strong> generation XP</p>
       <p class='gain'>+ You will keep <strong>all</strong> blacksmith upgrades</p>
-      <p class='gain'>+ You will keep your <strong>${ S.pickaxe.name }</strong> </p>
+      <p class='gain'>+ You will keep your <strong>${ S.pickaxe.item.name }</strong> </p>
       <br />
       <p class='lose'>- You will lose <strong>all</strong> ores</p>
       <p class='lose'>- You will lose <strong>all</strong> owned buildings and upgrades</p>
@@ -1062,9 +1128,10 @@ let generate_item_drop = () => {
 
 let handle_item_drop_click = ( item_uuid ) => {
 
+  S.stats.total_items_found++
+
   let item = s( `#item_drop_${ item_uuid }` )
   O.pickaxe = new Pickaxe( item.dataset.item_level )
-
 
   let wrapper = document.createElement( 'div' )
   wrapper.classList.add( 'wrapper' )
@@ -1077,15 +1144,18 @@ let handle_item_drop_click = ( item_uuid ) => {
   wrapper.innerHTML = str
 
   CONTAINER.append( wrapper )
+
+  if ( S.stats.total_items_found == 1 ) tutorial_pickaxe_description()
+
 }
 
 let equip_pickaxe = () => {
 
+  if ( s( '#tutorial-pickaxe-description' ) ) remove_el( s( '#tutorial-pickaxe-description' ) )
+
   let pickaxe = O.pickaxe
 
-  pickaxe.temporary_bonuses = S.pickaxe.temporary_bonuses
-
-  S.pickaxe = pickaxe
+  S.pickaxe.item = pickaxe
 
   remove_wrapper()
 }
@@ -1097,6 +1167,8 @@ let trash_pickaxe = () => {
   if ( S.stats.total_pickaxes_trashed == 10 ) win_achievement( 'polluter' )
   if ( S.stats.total_pickaxes_trashed == 20 ) win_achievement( 'scrapper' )
   if ( S.stats.total_pickaxes_trashed == 40 ) win_achievement( 'scrap master' )
+
+  if ( s( '#tutorial-pickaxe-description' ) ) remove_el( s( '#tutorial-pickaxe-description' ) )
 
 }
 
@@ -1116,9 +1188,9 @@ let build_new_pickaxe_popup = () => {
     </p>
     <p><small><i>[ level: <strong>${ O.pickaxe.level }</strong> ]</i></small></p>
     <ul>
-      <li>Damage: <strong>${ O.pickaxe.damage }</strong></li>
-      <li>Sharpness: <strong>${ beautify_number( O.pickaxe.sharpness ) }%</strong></li>
-      <li>Hardness: <strong>${ beautify_number( O.pickaxe.hardness ) }%</strong></li>
+      <li>Damage: <strong>${ O.pickaxe.damage }</strong> ${ O.pickaxe.damage > S.pickaxe.item.damage ? '<i class="fa fa-angle-up fa-1x"></i>' : '<i class="fa fa-angle-down fa-1x"></i>' }</li>
+      <li>Sharpness: <strong>${ beautify_number( O.pickaxe.sharpness ) }%</strong> ${ O.pickaxe.sharpness > S.pickaxe.item.sharpness ? '<i class="fa fa-angle-up fa-1x"></i>' : '<i class="fa fa-angle-down fa-1x"></i>' }</li>
+      <li>Hardness: <strong>${ beautify_number( O.pickaxe.hardness ) }%</strong> ${ O.pickaxe.hardness > S.pickaxe.item.hardness ? '<i class="fa fa-angle-up fa-1x"></i>' : '<i class="fa fa-angle-down fa-1x"></i>' }</li>
     </ul>
     <button 
       class='equip-btn'
@@ -1127,7 +1199,7 @@ let build_new_pickaxe_popup = () => {
     </button>
     <button 
       class='trash-btn'
-      onclick='remove_wrapper()'
+      onclick='remove_wrapper();'
       >TRASH <i class="fa fa-trash-o fa-1x"></i>
     </button>
   `
@@ -1139,7 +1211,7 @@ let build_new_pickaxe_popup = () => {
 
 let build_equipped_pickaxe_popup = () => {
 
-  let p = S.pickaxe
+  let p = S.pickaxe.item
 
   str = `
     <div class='currently-equipped-popup ${ p.rarity.name }'>
@@ -1155,9 +1227,9 @@ let build_equipped_pickaxe_popup = () => {
     </p>
     <p><small><i>[ level: <strong>${ p.level }</strong> ]</i></small></p>
     <ul>
-      <li>Damage: <strong>${ p.damage }</strong></li>
-      <li>Sharpness: <strong>${ beautify_number( p.sharpness ) }%</strong></li>
-      <li>Hardness: <strong>${ beautify_number( p.hardness ) }%</strong></li>
+      <li>Damage: ${ beautify_number( p.damage ) }</li>
+      <li>Sharpness: ${ beautify_number( p.sharpness ) }%</li>
+      <li>Hardness: ${ beautify_number( p.hardness ) }%</li>
     </ul>
   `
 
@@ -1224,6 +1296,8 @@ let game_loop = () => {
 let update_ore_hp = ( amount ) => {
   if (S.current_ore_hp - amount <= 0 ) {
     play_sound( 'ore_destroyed' )
+
+    if ( s( '#tutorial-click-the-rock' ) ) remove_el( s( '#tutorial-click-the-rock' ) )
 
     S.stats.current_rocks_destroyed += 1
     S.stats.total_rocks_destroyed += 1
@@ -1331,7 +1405,7 @@ let build_achievements = () => {
       <h1>Achievements</h1>
       <hr/>
       <ul>
-        <li><span>Highest Combo:</span> ${ S.stats.highest_combo }</li>
+        <li><span>Highest Combo: ${ S.stats.highest_combo }</li>
         <li><span>Total Clicks:</span> ${ S.stats.total_clicks }</li>
         <li><span>Total Weak Spot Clicks:</span> ${ S.stats.total_weak_hit_clicks }</li>
         <li><span>Seconds Played:</span> ${ S.stats.seconds_played }</li>
@@ -1525,7 +1599,7 @@ window.addEventListener('keyup', (e) => {
     }
     if (pressed.join('').includes( 'test' ) ) {
       Smith_Upgrades.forEach( upgrade => { upgrade.duration = 1 * SECOND })
-      S.pickaxe.damage = 100 + Math.pow( S.pickaxe.damage, 3 )
+      S.pickaxe.item.damage = 100 + Math.pow( S.pickaxe.item.damage, 3 )
       S.gems += 100
     }
   }

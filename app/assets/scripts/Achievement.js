@@ -25,8 +25,8 @@ let Achievement = function( obj ) {
         S.weak_hit_multi += r.increase_weak_hit_multi
       }
 
-      if ( r.increase_pickaxe_hardness ) S.pickaxe.hardness += r.increase_pickaxe_hardness
-      if ( r.increase_pickaxe_sharpness ) S.pickaxe.sharpness += r.increase_pickaxe_sharpness
+      if ( r.increase_pickaxe_hardness ) S.pickaxe.permanent_bonuses.hardness += r.increase_pickaxe_hardness
+      if ( r.increase_pickaxe_sharpness ) S.pickaxe.permanent_bonuses.sharpness += r.increase_pickaxe_sharpness
     }
   }
 

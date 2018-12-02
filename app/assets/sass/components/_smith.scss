@@ -81,6 +81,18 @@
     width: 100%;
     color: white;
     padding: 11px 0;
+    font-family: 'Germania One';
+    letter-spacing: 1px;
+    text-shadow: 0 0 5px black;
+
+    &.available-upgrade-text {
+      text-shadow: 0 0 5px black, 0 0 10px gold;
+      font-size: 24px;
+    }
+
+    &.locked-upgrade-text {
+      opacity: .6;
+    }
   }
 
   .smith-upgrade {
@@ -92,6 +104,7 @@
     box-shadow: 0 0 30px #222 inset;
     cursor: pointer;
     border: 5px ridge #443D52;
+    position: relative;
 
     &:hover {
       box-shadow: 0 0 10px #fff inset, 0 0 30px #222 inset;
@@ -103,8 +116,29 @@
       filter: brightness( 70% );
     }
 
+    .new {
+      position: absolute;
+      font-family: 'Germania One';
+      color: red;
+      top: -5px;
+      right: -15px;
+      z-index: 1;
+      transform: rotate( 45deg );
+      text-shadow: 0 0 15px #222, 0 0 3px white;
+      animation: new_sign .5s infinite alternate-reverse linear;
+    }
+
     img {
       pointer-events: none;
     }
+  }
+}
+
+@keyframes new_sign {
+  0% {
+    transform: rotate( 40deg )
+  }
+  100% {
+    transform: rotate( 50deg )
   }
 }

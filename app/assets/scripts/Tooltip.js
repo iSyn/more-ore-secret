@@ -16,8 +16,8 @@ let Tooltip = function() {
           <h3>Combo Shield</h3>
           <p>Combo Shields protect your current combo from a mis-strike</p>
           <hr>
-          <p>Combo Shields Owned: ${ S.combo_shield.owned }</p>
-          <p>Combo Shields Available: ${ S.combo_shield.available }</p>
+          <p style='letter-spacing: .5px; font-size: 14px;'><span style='opacity: .6'>Combo Shields Owned:</span> <strong>${ S.combo_shield.owned }</strong></p>
+          <p style='letter-spacing: .5px; font-size: 14px;'><span style='opacity: .6'>Combo Shields Available:</span> <strong>${ S.combo_shield.available }</strong></p>
           `
           if ( S.combo_shield.time_until_next ) {
             str += `

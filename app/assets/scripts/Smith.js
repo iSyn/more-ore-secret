@@ -70,11 +70,11 @@ let Smith = function( obj = {} ) {
             }
 
             if ( fn.increase_pickaxe_sharpness ) {
-                S.pickaxe.sharpness += fn.increase_pickaxe_sharpness
+                S.pickaxe.permanent_bonuses.sharpness += fn.increase_pickaxe_sharpness
             }
 
             if ( fn.increase_pickaxe_hardness ) {
-                S.pickaxe.hardness += fn.increase_pickaxe_hardness
+                S.pickaxe.permanent_bonuses.hardness += fn.increase_pickaxe_hardness
             }
 
             if ( fn.unlock_combo_shield ) {
