@@ -78,6 +78,30 @@ let get_time_difference_value = ( time, type = 'ms' ) => {
   }
 }
 
+let get_geometric_sequence_price = ( base_price, price_scale, owned, current_price = null ) => {
+
+  let price = 0
+  let amount = S.buy_amount
+
+  if ( S.buy_amount == 'max' ) {
+
+    price = current_price
+    amount = 0
+
+    while ( S.ores >= price ) {
+      amount++
+      price += base_price * Math.pow( price_scale, owned + amount )
+    }
+
+
+  } else {
+    price = ( base_price * ( Math.pow( price_scale, owned + S.buy_amount ) - Math.pow( price_scale, owned ) ) ) / .15
+  }
+
+
+  return { price, amount }
+}
+
 let beautify_number = (number) => {
 
   var SI_PREFIXES = [

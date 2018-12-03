@@ -7,3 +7,29 @@
   image-rendering: pixelated;
   background: url( './assets/images/misc-gold_nugget.png');
 }
+
+.gold-rush-container {
+  position: absolute;
+  pointer-events: none;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  background: rgba(255,215,0, 0.1);
+  box-shadow: 0 0 40px gold inset;
+  z-index: 2;
+
+  .gold-nugget {
+    pointer-events: all;
+    transition: top 5s;
+  }
+}
+
+@keyframes fall_down {
+  from {
+    transform: translateY(-10px )
+  }
+  to {
+    transform: translateY( 100vh )
+  }
+}

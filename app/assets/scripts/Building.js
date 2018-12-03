@@ -14,11 +14,14 @@ let Building = function( obj ) {
     this.buy_functions = obj.buy_functions
 
     this.buy = ( e ) => {
-        if ( S.ores >= this.current_price ) {
-            spend( this.current_price )
+
+        let buy_info = get_geometric_sequence_price( this.base_price, this.price_scale, this.owned, this.current_price )
+
+        if ( S.ores >= buy_info.price ) {
+            spend( buy_info.price )
             RN.new( e, 'successful-buy')
             play_sound( 'buy_sound' )
-            this.owned++
+            this.owned += buy_info.amount
             this.current_price = this.base_price * Math.pow( this.price_scale, this.owned )
             calculate_ops()
 

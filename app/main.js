@@ -320,6 +320,7 @@ let build_store = () => {
 
   let str = ''
   str += build_upgrades()
+  str += build_buy_amount()
   str += build_buildings()
 
   TAB_CONTENT.innerHTML = str
@@ -349,6 +350,44 @@ let build_upgrades = () => {
   return str
 }
 
+let build_buy_amount = () => {
+  let str = ''
+
+  str += `
+  
+    <div class='buy-amount-container'>
+      <p>Buy Amount:</p>
+      <div>
+        <p
+          onclick='change_buy_amount(1)'
+          ${ S.buy_amount == 1 && 'class="selected"' }>
+          1
+        </p>
+        <p
+          onclick='change_buy_amount(10)'
+          ${ S.buy_amount == 10 && 'class="selected"' }>
+          10
+        </p>
+        <p
+          onclick='change_buy_amount(100)'
+          ${ S.buy_amount == 100 && 'class="selected"' }>
+          100
+        </p>
+      </div>
+    </div>
+  
+  `
+
+  return str
+}
+
+let change_buy_amount = ( amount ) => {
+
+  O.rebuild_store = 1
+  S.buy_amount = amount
+
+}
+
 let build_buildings = () => {
   let str = ''
   let index = 0
@@ -365,8 +404,8 @@ let build_buildings = () => {
             <img src="${ building.img }" alt="building image"/>
           </div>
           <div class="middle">
-            <h1>${ building.name }</h1>
-            <p>Cost: ${ beautify_number( building.current_price ) } ores</p>
+            <h1>${ building.name } ${ S.buy_amount != 1 ? "x" + S.buy_amount : "" }</h1>
+            <p>Cost: ${ beautify_number( get_geometric_sequence_price( building.base_price, building.price_scale, building.owned, building.current_price ).price ) } ores</p>
           </div>
           <div class="right">
             <h1>${ building.owned }</h1>
@@ -1309,10 +1348,16 @@ let open_quest_board = () => {
   quest_board.classList.add( 'wrapper' )
 
   let str = `
-    <div class='quest-board'>
-      
-    </div>
+    <div id='quest-board'>
+      <header>
+        <i onclick='remove_wrapper()' class='fa fa-times fa-1x'></i>
+        <h1>Quest Board</h1>
+      </header>
   `
+
+  str += build_quests()
+
+  str += `</div>`
 
   quest_board.innerHTML = str
 
@@ -1320,11 +1365,40 @@ let open_quest_board = () => {
 
 }
 
+let build_quests = () => {
+  
+  let str = ``
+
+  str += `<div class='quest-board-quests'>`
+
+  Quests.forEach( quest => {
+
+    str += `
+      <div 
+        onclick='start_quest( "${ quest.code_name }" )'
+        class='quest ${ quest.locked && "locked" }'
+      >
+        <div class='pin'></div>
+        <h3 class='quest-name'>${ quest.name }</h3>
+      </div>
+    `
+
+  } )
+
+  str += `</div>`
+
+  return str
+
+}
+
+let start_quest = ( code_name ) => {
+
+  let quest = select_from_arr( Quests, code_name )
+  console.log( 'starting quest:', quest )
+
+}
+
 // =======================================================================================
-
-
-// tick fires every ( 1000 / S.prefs.game_speed ) seconds
-// let tick = 1000 / S.prefs.game_speed
 
 let game_loop = () => {
 
@@ -1356,7 +1430,7 @@ let game_loop = () => {
       spawn_gold_nugget()
     }
 
-    handle_combo_shields( 1000/ tick_ms )
+    handle_combo_shields( 1000 / tick_ms )
   }
 
   setTimeout( game_loop, 1000 / tick_ms )
@@ -1608,6 +1682,7 @@ let spawn_gold_nugget = () => {
 }
 
 let handle_gold_nugget_click = ( event ) => {
+
   S.stats.total_nuggets_clicked++
 
   if ( S.stats.total_nuggets_clicked == 1 ) { unlock_smith_upgrade( 'gold_nuggies_frequency_i' ); unlock_smith_upgrade( 'gold_nuggies_chance_up_i') }
@@ -1617,9 +1692,58 @@ let handle_gold_nugget_click = ( event ) => {
   play_sound( 'gold_nugget_click' )
   remove_el( event.target )
 
-  let amount = ( S.ops * 13 + S.opc * 13 )
-  earn( amount, false )
-  RN.new( event, 'gold-nugget-click', amount )
+  let chance = Math.random()
+
+  if ( chance < .5 ) {
+
+    let amount = ( S.ops * 13 + S.opc * 13 )
+    earn( amount, false )
+    RN.new( event, 'gold-nugget-click', amount )
+
+  } else {
+
+    start_gold_rush()
+
+  }
+
+}
+
+let start_gold_rush = () => {
+
+  let duration = 30 * SECOND
+
+  let gold_rush_container = document.createElement( 'div' )
+  gold_rush_container.classList.add( 'gold-rush-container' )
+
+  CONTAINER.append( gold_rush_container )
+
+  let counter = 0
+  let spawner = setInterval(() => {
+
+    counter += 500
+
+    if ( counter >= duration ) clearInterval( spawner )
+
+    let nugget = document.createElement( 'div' )
+    nugget.classList.add( 'gold-nugget' )
+
+    s( '.gold-rush-container' ).append( nugget )
+
+    let random_x = Math.random() * window.innerWidth
+
+    nugget.style.left = random_x + 'px'
+
+    setTimeout(() => {
+      nugget.style.top = '100%'
+    }, 50)
+
+  }, 500 )
+
+  setTimeout(() => { remove_el( gold_rush_container ) }, duration )
+}
+
+let handle_gold_rush_nugget_click = () => {
+
 }
 
 // =======================================================================================
@@ -1648,13 +1772,15 @@ window.addEventListener('keyup', (e) => {
       S.pickaxe.item.damage = Math.pow( S.pickaxe.item.damage + 100, 3 )
       S.gems += 100
     }
-    if ( pressed.join( '' ).includes( 'work' ) ) {
+    if ( pressed.join( '' ).includes( 'qwer' ) ) {
       s( '.ore-container' ).style.visibility = 'hidden'
       s( '.torch-left' ).style.visibility = 'hidden'
       s( '.torch-right' ).style.visibility = 'hidden'
       s( '.combo-sign-container' ).style.visibility = 'hidden'
+      s( '.left' ).style.background = 'white'
+      TOPBAR_INVENTORY_CONTAINER.style.visibility = 'hidden'
+
       s( '.smith-upgrades' ).style.visibility = 'hidden'
-      // s( '.left' ).style.visibility = 'hidden'
     }
   }
 })

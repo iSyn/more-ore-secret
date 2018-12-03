@@ -1,6 +1,7 @@
 let State = function( s = {} ) {
 
   this.state = {
+
     ores: s.ores || 0,
     gems: s.gems || 0,
     generation: s.generation || 1,
@@ -13,6 +14,8 @@ let State = function( s = {} ) {
 
     weak_hit_multi: s.weak_hit_multi || 5,
     current_combo: s.current_combo || 0,
+
+    buy_amount: 1,
 
     combo_shield: s.combo_shield || {
       active: 1,
@@ -35,6 +38,10 @@ let State = function( s = {} ) {
 
     bottom_area: {
       selected_tab: 'quest_board'
+    },
+
+    quest: {
+      in_progress: null
     },
 
     pickaxe: s.pickaxe || {

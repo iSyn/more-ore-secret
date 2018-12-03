@@ -1,0 +1,66 @@
+.wrapper > #quest-board {
+  height: 700px;
+  width: 500px;
+  background-color: #553817;
+  border: 10px double #362108;
+  box-shadow: 0 0 10px 5px black, 0 0 20px black inset;
+  border-radius: 5px;
+  padding: 0;
+
+  header {
+    text-align: center;
+    padding: 10px 0;
+
+    h1 {
+      font-family: 'Germania One';
+      font-size: 55px;
+      text-shadow: 0 0 10px #222, 0 0 5px gold;
+    }
+  }
+
+  .quest-board-quests {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-evenly;
+
+    .quest {
+      height: 300px;
+      width: 200px;
+      background-color: #fffae0;
+      background-image: url("https://www.transparenttextures.com/patterns/beige-paper.png");
+      padding: 10px;
+      transition: all .2s;
+      color: black;
+      cursor: pointer;
+      text-align: center;
+
+      * {
+        pointer-events: none;
+      }
+
+      &.locked {
+        pointer-events: none;
+        // opacity: 0.6;
+        filter: brightness( 50% );
+      }
+
+      &:hover {
+        transform: translateY( -6px );
+        box-shadow: 0 6px 10px rgba( 0, 0, 0, 0.3 );
+      }
+
+      .pin {
+        height: 7px;
+        width: 7px;
+        border-radius: 50%;
+        margin: 0 auto;
+        background: black;
+        box-shadow: 0 2px 5px #222;
+        margin-bottom: 10px;
+      }
+
+      .quest-name {
+      }
+    }
+  }
+}

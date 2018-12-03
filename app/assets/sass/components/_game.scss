@@ -181,6 +181,10 @@
         }
 
         img {
+          opacity: .2
+        }
+
+        img {
           height: 50px;
         }
       }
@@ -276,6 +280,37 @@
               background-repeat: repeat;
               background-color: linear-gradient(to bottom, #525252, #222);
               box-shadow: 0 0 10px #222 inset;
+            }
+
+            .buy-amount-container {
+              display: flex;
+              flex-flow: row nowrap;
+              justify-content: space-between;
+              padding: 0 5px;
+              background: url('./assets/images/misc-horizontal_separator.png');
+              background-size: auto 100%;
+              image-rendering: pixelated;
+              color: white;
+
+              p {
+                font-family: 'Germania One';
+                opacity: .7;
+              }
+
+              div {
+                display: flex;
+                flex-flow: row nowrap;
+
+                > p {
+                  padding-left: 8px;
+                  cursor: pointer;
+                  opacity: .5;
+
+                  &.selected {
+                    opacity: 1;
+                  }
+                }
+              }
             }
           }
         }

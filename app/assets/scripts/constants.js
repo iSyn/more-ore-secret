@@ -4,3 +4,4 @@ const HOUR = 60 * 60 * 1000
 
 const THOUSAND = 1000
 const MILLION = 1000000
+const BILLION = 1000000000

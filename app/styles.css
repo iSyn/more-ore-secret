@@ -250,6 +250,8 @@
           .container .game-container > .left .settings-container i:hover, .container .game-container > .left .settings-container img:hover {
             opacity: .5; }
         .container .game-container > .left .settings-container img {
+          opacity: .2; }
+        .container .game-container > .left .settings-container img {
           height: 50px; }
       .container .game-container > .left .text-scroller-container {
         background: rgba(0, 0, 0, 0.6);
@@ -346,6 +348,43 @@
               background-color: linear-gradient(to bottom, #525252, #222);
               -webkit-box-shadow: 0 0 10px #222 inset;
               box-shadow: 0 0 10px #222 inset; }
+            .container .game-container .right-container > .right .tab-content-container .tab-content .buy-amount-container {
+              display: -webkit-box;
+              display: -ms-flexbox;
+              display: flex;
+              -webkit-box-orient: horizontal;
+              -webkit-box-direction: normal;
+              -ms-flex-flow: row nowrap;
+              flex-flow: row nowrap;
+              -webkit-box-pack: justify;
+              -ms-flex-pack: justify;
+              justify-content: space-between;
+              padding: 0 5px;
+              background: url("./assets/images/misc-horizontal_separator.png");
+              background-size: auto 100%;
+              -ms-interpolation-mode: nearest-neighbor;
+              image-rendering: -webkit-optimize-contrast;
+              image-rendering: -moz-crisp-edges;
+              image-rendering: -o-pixelated;
+              image-rendering: pixelated;
+              color: white; }
+              .container .game-container .right-container > .right .tab-content-container .tab-content .buy-amount-container p {
+                font-family: 'Germania One';
+                opacity: .7; }
+              .container .game-container .right-container > .right .tab-content-container .tab-content .buy-amount-container div {
+                display: -webkit-box;
+                display: -ms-flexbox;
+                display: flex;
+                -webkit-box-orient: horizontal;
+                -webkit-box-direction: normal;
+                -ms-flex-flow: row nowrap;
+                flex-flow: row nowrap; }
+                .container .game-container .right-container > .right .tab-content-container .tab-content .buy-amount-container div > p {
+                  padding-left: 8px;
+                  cursor: pointer;
+                  opacity: .5; }
+                  .container .game-container .right-container > .right .tab-content-container .tab-content .buy-amount-container div > p.selected {
+                    opacity: 1; }
   .container footer {
     height: 20px;
     line-height: 20px;
@@ -1481,6 +1520,38 @@ input:checked + .slider:before {
   image-rendering: pixelated;
   background: url("./assets/images/misc-gold_nugget.png"); }
 
+.gold-rush-container {
+  position: absolute;
+  pointer-events: none;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  background: rgba(255, 215, 0, 0.1);
+  -webkit-box-shadow: 0 0 40px gold inset;
+  box-shadow: 0 0 40px gold inset;
+  z-index: 2; }
+  .gold-rush-container .gold-nugget {
+    pointer-events: all;
+    -webkit-transition: top 5s;
+    transition: top 5s; }
+
+@-webkit-keyframes fall_down {
+  from {
+    -webkit-transform: translateY(-10px);
+    transform: translateY(-10px); }
+  to {
+    -webkit-transform: translateY(100vh);
+    transform: translateY(100vh); } }
+
+@keyframes fall_down {
+  from {
+    -webkit-transform: translateY(-10px);
+    transform: translateY(-10px); }
+  to {
+    -webkit-transform: translateY(100vh);
+    transform: translateY(100vh); } }
+
 .item-container {
   position: fixed;
   z-index: 4;
@@ -2095,3 +2166,62 @@ input:checked + .slider:before {
       .tutorial-window-container#tutorial-pickaxe-description ul li strong {
         letter-spacing: .5px;
         text-decoration: underline; }
+
+.wrapper > #quest-board {
+  height: 700px;
+  width: 500px;
+  background-color: #553817;
+  border: 10px double #362108;
+  -webkit-box-shadow: 0 0 10px 5px black, 0 0 20px black inset;
+  box-shadow: 0 0 10px 5px black, 0 0 20px black inset;
+  border-radius: 5px;
+  padding: 0; }
+  .wrapper > #quest-board header {
+    text-align: center;
+    padding: 10px 0; }
+    .wrapper > #quest-board header h1 {
+      font-family: 'Germania One';
+      font-size: 55px;
+      text-shadow: 0 0 10px #222, 0 0 5px gold; }
+  .wrapper > #quest-board .quest-board-quests {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -ms-flex-flow: row wrap;
+    flex-flow: row wrap;
+    -webkit-box-pack: space-evenly;
+    -ms-flex-pack: space-evenly;
+    justify-content: space-evenly; }
+    .wrapper > #quest-board .quest-board-quests .quest {
+      height: 300px;
+      width: 200px;
+      background-color: #fffae0;
+      background-image: url("https://www.transparenttextures.com/patterns/beige-paper.png");
+      padding: 10px;
+      -webkit-transition: all .2s;
+      transition: all .2s;
+      color: black;
+      cursor: pointer;
+      text-align: center; }
+      .wrapper > #quest-board .quest-board-quests .quest * {
+        pointer-events: none; }
+      .wrapper > #quest-board .quest-board-quests .quest.locked {
+        pointer-events: none;
+        -webkit-filter: brightness(50%);
+        filter: brightness(50%); }
+      .wrapper > #quest-board .quest-board-quests .quest:hover {
+        -webkit-transform: translateY(-6px);
+        transform: translateY(-6px);
+        -webkit-box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3); }
+      .wrapper > #quest-board .quest-board-quests .quest .pin {
+        height: 7px;
+        width: 7px;
+        border-radius: 50%;
+        margin: 0 auto;
+        background: black;
+        -webkit-box-shadow: 0 2px 5px #222;
+        box-shadow: 0 2px 5px #222;
+        margin-bottom: 10px; }
