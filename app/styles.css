@@ -768,6 +768,24 @@
     font-size: 12px;
     font-style: italic;
     opacity: .8; }
+  .tooltip .sharpness-info h2, .tooltip .hardness-info h2 {
+    font-family: 'Germania One';
+    letter-spacing: .7px; }
+  .tooltip .sharpness-info > p, .tooltip .hardness-info > p {
+    opacity: 0.7; }
+  .tooltip .sharpness-info ul, .tooltip .hardness-info ul {
+    list-style-type: none; }
+    .tooltip .sharpness-info ul li, .tooltip .hardness-info ul li {
+      color: rgba(255, 255, 255, 0.5);
+      font-size: 16px; }
+      .tooltip .sharpness-info ul li strong, .tooltip .hardness-info ul li strong {
+        color: white;
+        opacity: 1; }
+      .tooltip .sharpness-info ul li:first-of-type, .tooltip .hardness-info ul li:first-of-type {
+        font-size: 18px;
+        color: rgba(255, 255, 255, 0.8); }
+    .tooltip .sharpness-info ul hr, .tooltip .hardness-info ul hr {
+      margin: 0; }
 
 .particle {
   position: absolute;

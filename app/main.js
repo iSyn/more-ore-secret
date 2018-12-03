@@ -80,30 +80,9 @@ let save_game = () => {
   localStorage.setItem( 'text_scroller', JSON.stringify( TS.texts ) )
   localStorage.setItem( 'smith_upgrades', JSON.stringify( Smith_Upgrades ) )
   localStorage.setItem( 'smith', JSON.stringify( SMITH ) )
+  localStorage.setItem( 'bottom_tabs', JSON.stringify( Bottom_Tabs ) )
 
   notify( 'Saved Game' )
-}
-
-let notify = ( text, color = 'white' ) => {
-
-  let div = document.createElement( 'div' )
-  div.innerHTML = text
-  div.style.position = 'absolute'
-  div.style.padding = '10px 15px'
-  div.style.zIndex = 2
-  div.style.border = '5px ridge #3c3c3c'
-  div.style.borderBottom = 'none'
-  div.style.boxShadow = '0 0 10px #000 inset, 0 0 20px rgba( 255, 255, 255, 0.3)'
-  div.style.textShadow = '0 0 10px'
-  div.style.background = '#222'
-  div.style.bottom = '0'
-  div.style.right = '0'
-  div.style.color = color
-  div.style.animation = 'upDown 2s'
-  div.addEventListener( 'animationend', () => { remove_el( div ) } )
-
-  CONTAINER.append( div )
-
 }
 
 let load_game = () => {
@@ -134,7 +113,32 @@ let load_game = () => {
         SMITH._update_progress()
       }
     }
+
+    Bottom_Tabs = []
+    JSON.parse( localStorage.getItem( 'bottom_tabs' ) ).forEach( tab => new Bottom_Tab( tab ) )
   }
+}
+
+let notify = ( text, color = 'white' ) => {
+
+  let div = document.createElement( 'div' )
+  div.innerHTML = text
+  div.style.position = 'absolute'
+  div.style.padding = '10px 15px'
+  div.style.zIndex = 2
+  div.style.border = '5px ridge #3c3c3c'
+  div.style.borderBottom = 'none'
+  div.style.boxShadow = '0 0 10px #000 inset, 0 0 20px rgba( 255, 255, 255, 0.3)'
+  div.style.textShadow = '0 0 10px'
+  div.style.background = '#222'
+  div.style.bottom = '0'
+  div.style.right = '0'
+  div.style.color = color
+  div.style.animation = 'upDown 2s'
+  div.addEventListener( 'animationend', () => { remove_el( div ) } )
+
+  CONTAINER.append( div )
+
 }
 
 let wipe_save = () => {
@@ -1026,7 +1030,10 @@ let refine = async () => {
 
   S.stats.last_refine_time = new Date().getTime()
 
-  if ( S.stats.times_refined == 1 ) win_achievement( 'babies_first_refine' )
+  if ( S.stats.times_refined == 1 ) {
+    win_achievement( 'babies_first_refine' )
+    unlock_smith_upgrade( 'quest_board' )
+  }
 
   O.reposition_elements = 1
 
@@ -1252,7 +1259,69 @@ let build_pickaxe_sprite = ( pickaxe ) => {
 
 }
 
+// ==== BOTTOM TAB SHIT ==================================================================
+
+let build_bottom_tabs = () => {
+
+  let str = ''
+
+  Bottom_Tabs.forEach( tab => {
+
+    if ( tab.locked ) {
+      str += `
+        <div class="tab">???</div>
+      `
+    } else {
+      str += `
+        <div 
+          onclick="handle_bottom_tab_click( '${ tab.code_name }' )" 
+          id="bottom-tab-${ tab.code_name }"
+          class="tab">
+          ${ tab.name }
+        </div>
+      `
+    }
+  })
+
+  BOTTOM_AREA_TABS.innerHTML = str
+
+  O.rebuild_bottom_tabs = 0
+  O.reposition_elements = 1
+}
+
+let handle_bottom_tab_click = ( code_name ) => {
+
+  if ( S.bottom_area.selected_tab == code_name ) {
+    
+    if ( code_name == 'quest_board' ) open_quest_board()
+
+  } else {
+    // switch tab
+    S.bottom_area.selected_tab = code_name
+  }
+}
+
+// ==== QUEST SHIT =======================================================================
+
+let open_quest_board = () => {
+  
+  let quest_board = document.createElement( 'div' )
+  quest_board.classList.add( 'wrapper' )
+
+  let str = `
+    <div class='quest-board'>
+      
+    </div>
+  `
+
+  quest_board.innerHTML = str
+
+  CONTAINER.append( quest_board )
+
+}
+
 // =======================================================================================
+
 
 // tick fires every ( 1000 / S.prefs.game_speed ) seconds
 // let tick = 1000 / S.prefs.game_speed
@@ -1371,29 +1440,6 @@ let build_topbar_inventory = () => {
   `
 
   TOPBAR_INVENTORY.innerHTML = str
-}
-
-let build_bottom_tabs = () => {
-
-  let str = ''
-
-  Bottom_Tabs.forEach( tab => {
-
-    if ( tab.locked ) {
-      str += `
-        <div class="tab">???</div>
-      `
-    } else {
-      str += `
-        <div class="tab">${ tab.name }</div>
-      `
-    }
-  })
-
-  BOTTOM_AREA_TABS.innerHTML = str
-
-  O.rebuild_bottom_tabs = 0
-  O.reposition_elements = 1
 }
 
 let build_achievements = () => {
@@ -1597,10 +1643,18 @@ window.addEventListener('keyup', (e) => {
     if (pressed.join('').includes( secretCode ) ) {
       win_achievement( 'who_am_i?' )
     }
-    if (pressed.join('').includes( 'test' ) ) {
+    if ( pressed.join( '' ).includes( 'test' ) ) {
       Smith_Upgrades.forEach( upgrade => { upgrade.duration = 1 * SECOND })
-      S.pickaxe.item.damage = 100 + Math.pow( S.pickaxe.item.damage, 3 )
+      S.pickaxe.item.damage = Math.pow( S.pickaxe.item.damage + 100, 3 )
       S.gems += 100
+    }
+    if ( pressed.join( '' ).includes( 'work' ) ) {
+      s( '.ore-container' ).style.visibility = 'hidden'
+      s( '.torch-left' ).style.visibility = 'hidden'
+      s( '.torch-right' ).style.visibility = 'hidden'
+      s( '.combo-sign-container' ).style.visibility = 'hidden'
+      s( '.smith-upgrades' ).style.visibility = 'hidden'
+      // s( '.left' ).style.visibility = 'hidden'
     }
   }
 })

@@ -28,19 +28,37 @@ let Tooltip = function() {
 
       case 'sharpness-info':
         str += `
-          <h1><i class='fa fa-info-circle fa-1x'></i> Sharpness</h1>
-          <hr />
-          <p><strong>Weak hits</strong> on the ore are affected by <strong>sharpness</strong>.</p>
-          <p>The sharper your pickaxe, the more damage you inflict on weak hits.</p>
+          <div class='sharpness-info'>
+            <h2>Sharpness</h2>
+            <br/>
+            <p><strong>Weak hits</strong> on the ore are affected by <strong>sharpness</strong>.</p>
+            <p>The sharper your pickaxe, the more damage you inflict on weak hits.</p>
+            <br/>
+            <ul>
+              <li>Total Sharpness: <strong>${ calculate_pickaxe_sharpness() }%</strong></li>
+              <hr/>
+              <li>Pickaxe Sharpness: <strong>${ S.pickaxe.item.sharpness }%</strong></li>
+              <li>Bonus Sharpness: <strong>${ ( S.pickaxe.temporary_bonuses.sharpness + S.pickaxe.permanent_bonuses.sharpness ) }%</strong></li>
+            </ul>
+        </div>
         `
         break
 
       case 'hardness-info':
         str += `
-          <h1><i class='fa fa-info-circle fa-1x'></i> Hardness</h1>
-          <hr />
-          <p><strong>Regular hits</strong> on the ore are affected by <strong>hardness</strong>.</p>
-          <p>The harder your pickaxe is, the more damage you inflict on regular hits.</p>
+          <div class='hardness-info'>
+            <h2>Hardness</h2>
+            <br/>
+            <p><strong>Regular hits</strong> on the ore are affected by <strong>hardness</strong>.</p>
+            <p>The harder your pickaxe is, the more damage you inflict on regular hits.</p>
+            <br/>
+            <ul>
+              <li>Total Hardness: <strong>${ calculate_pickaxe_hardness() }%</strong></li>
+              <hr/>
+              <li>Pickaxe Hardness: <strong>${ S.pickaxe.item.hardness }%</strong></li>
+              <li>Bonus Hardness: <strong>${ ( S.pickaxe.temporary_bonuses.hardness + S.pickaxe.permanent_bonuses.hardness ) }%</strong></li>
+            </ul>
+          </div>
         `
         break
 
