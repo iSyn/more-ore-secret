@@ -1733,10 +1733,6 @@ let start_gold_rush = () => {
 
     nugget.style.left = random_x + 'px'
 
-    setTimeout(() => {
-      nugget.style.top = '100%'
-    }, 50)
-
   }, 500 )
 
   setTimeout(() => { remove_el( gold_rush_container ) }, duration )
