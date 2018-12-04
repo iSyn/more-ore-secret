@@ -42,6 +42,9 @@ let O = {
   recalculate_ops: 1,
   recalculate_opc: 1,
 
+  ore_madness_active: 0,
+
+
   current_tab: 'store',
 
   pickaxe_accordion_is_open: 0,
@@ -699,6 +702,8 @@ let start_smith_upgrade = ( arr, code_name  ) => {
 let calculate_opc = ( type ) => {
   
   let opc = S.pickaxe.item.damage
+  
+  if ( O.ore_madness_active ) opc *= 666
 
   if ( type ) {
     if ( type == 'weak-spot' ) {
@@ -1681,7 +1686,7 @@ let spawn_gold_nugget = () => {
   }
 }
 
-let handle_gold_nugget_click = ( event, is_gold_rush = false ) => {
+let handle_gold_nugget_click = ( event, is_event = null ) => {
 
   S.stats.total_nuggets_clicked++
 
@@ -1694,17 +1699,19 @@ let handle_gold_nugget_click = ( event, is_gold_rush = false ) => {
 
   let chance = Math.random()
 
-
-  if ( is_gold_rush || chance < .7 ) {
-
+  if ( is_event == 'gold rush' || chance <= .7 ) {
+    
     let amount = ( S.ops * 13 + S.opc * 13 )
+    
     earn( amount, false )
     RN.new( event, 'gold-nugget-click', amount )
-
-  } else {
-
+    
+  } else if ( chance >= .7 && chabce <= .9 ) {
+    RN.new( event, 'gold-rush', null )
     start_gold_rush()
-
+  } else {
+    RN.new( event, 'ore-madness', null )
+    start_ore_madness()
   }
 
 }
@@ -1729,7 +1736,7 @@ let start_gold_rush = () => {
 
     let nugget = document.createElement( 'div' )
     nugget.classList.add( 'gold-nugget' )
-    nugget.onclick = ( e ) => handle_gold_nugget_click( e, true )
+    nugget.onclick = ( e ) => handle_gold_nugget_click( e, 'gold rush' )
     nugget.addEventListener( 'animationend', () => remove_el( nugget ) )
 
     s( '.gold-rush-container' ).append( nugget )
@@ -1741,6 +1748,31 @@ let start_gold_rush = () => {
   }, 1000 )
 
   setTimeout( () => { remove_el( gold_rush_container ) }, duration )
+}
+
+let start_ore_madness = () => {
+
+  let duration = 5
+
+  let cover = document.createElement( 'div' )
+  cover.classList.add( 'ore-madness-cover')
+  BODY.classList.add( 'ore-madness' )
+
+  O.ore_madness_active = 1
+  O.recalculate_opc = 1
+
+
+  setTimeout( () => { 
+    BODY.classList.remove( 'ore-madness' ) 
+    remove_el( cover )
+
+    O.ore_madness_active = 0
+    O.recalculate_opc = 1
+
+  }, duration * SECOND )
+
+  BODY.append( cover )
+
 }
 
 // =======================================================================================

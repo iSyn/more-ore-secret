@@ -12,6 +12,7 @@ let RisingNumber = function() {
       el.style.fontSize = '20px'
       el.style.fontFamily = 'Germania One'
       el.style.zIndex = '2'
+      el.style.textAlign = 'left'
       el.style.textShadow = '0 0 1px rgba( 0, 0, 0, 0.5 )'
 
       if ( e ) {
@@ -24,6 +25,24 @@ let RisingNumber = function() {
 
       // TYPES
       switch ( type ) {
+
+        case 'ore-madness':
+          el.style.color = 'crimson'
+          el.style.textShadow = '0 0 4px black, 0 2px 6px purple, 0 -2px 5px orange'
+          el.style.textAlign = 'center'
+          el.innerHTML = `
+            <h1>ORE MADNESS</h1> 
+            <p>666x MULTIPLIER ON ALL CLICKS</p>
+          `
+          break;
+
+        case 'gold-rush':
+          el.style.color = 'gold'
+          el.style.textShadow = '0 0 8px white'
+          el.innerHTML = `
+            <h1>GOLD RUSH</h1>
+          `
+          break
 
         case 'combo-shield':
           el.style.color = '#00e7ff'
