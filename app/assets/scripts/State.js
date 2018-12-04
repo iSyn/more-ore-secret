@@ -35,7 +35,7 @@ let State = function( s = {} ) {
 
     gold_nugget_spawn_rate: s.gold_nugget_spawn_rate || 60, // 
     gold_nugget_chance_to_spawn: s.gold_nugget_chance_to_spawn || 30, // 30% chance to spawn
-
+    
     bottom_area: {
       selected_tab: 'quest_board'
     },

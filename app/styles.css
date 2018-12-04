@@ -1510,15 +1510,15 @@ input:checked + .slider:before {
 .gold-nugget {
   z-index: 3;
   position: absolute;
-  height: 30px;
-  width: 26px;
+  height: 38px;
+  width: 36px;
   cursor: pointer;
   -ms-interpolation-mode: nearest-neighbor;
   image-rendering: -webkit-optimize-contrast;
   image-rendering: -moz-crisp-edges;
   image-rendering: -o-pixelated;
   image-rendering: pixelated;
-  background: url("./assets/images/misc-gold_nugget.png"); }
+  background: url("./assets/images/misc-gold_nugget.png") no-repeat center; }
 
 .gold-rush-container {
   position: absolute;
@@ -1538,19 +1538,15 @@ input:checked + .slider:before {
 
 @-webkit-keyframes fall_down {
   from {
-    -webkit-transform: translateY(-10px);
-    transform: translateY(-10px); }
+    top: 0; }
   to {
-    -webkit-transform: translateY(100vh);
-    transform: translateY(100vh); } }
+    top: 100%; } }
 
 @keyframes fall_down {
   from {
-    -webkit-transform: translateY(-10px);
-    transform: translateY(-10px); }
+    top: 0; }
   to {
-    -webkit-transform: translateY(100vh);
-    transform: translateY(100vh); } }
+    top: 100%; } }
 
 .item-container {
   position: fixed;

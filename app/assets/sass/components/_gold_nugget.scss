@@ -1,11 +1,12 @@
 .gold-nugget {
   z-index: 3;
   position: absolute;
-  height: 30px;
-  width: 26px;
+  height: 38px;
+  width: 36px;
+  // border: 1px solid black;
   cursor: pointer;
   image-rendering: pixelated;
-  background: url( './assets/images/misc-gold_nugget.png');
+  background: url( './assets/images/misc-gold_nugget.png') no-repeat center;
 }
 
 .gold-rush-container {
@@ -27,9 +28,9 @@
 
 @keyframes fall_down {
   from {
-    transform: translateY(-10px )
+    top: 0;
   }
   to {
-    transform: translateY( 100vh )
+    top: 100%;
   }
 }

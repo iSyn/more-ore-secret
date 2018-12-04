@@ -1681,7 +1681,7 @@ let spawn_gold_nugget = () => {
   }
 }
 
-let handle_gold_nugget_click = ( event ) => {
+let handle_gold_nugget_click = ( event, is_gold_rush = false ) => {
 
   S.stats.total_nuggets_clicked++
 
@@ -1694,7 +1694,8 @@ let handle_gold_nugget_click = ( event ) => {
 
   let chance = Math.random()
 
-  if ( chance < .5 ) {
+
+  if ( is_gold_rush || chance < .7 ) {
 
     let amount = ( S.ops * 13 + S.opc * 13 )
     earn( amount, false )
@@ -1710,36 +1711,36 @@ let handle_gold_nugget_click = ( event ) => {
 
 let start_gold_rush = () => {
 
-  let duration = 30 * SECOND
+  let nuggets_to_spawn = 10
+  let fall_speed = 5 // seconds
+
+  let duration = ( nuggets_to_spawn + fall_speed ) * SECOND
 
   let gold_rush_container = document.createElement( 'div' )
   gold_rush_container.classList.add( 'gold-rush-container' )
 
   CONTAINER.append( gold_rush_container )
 
-  let counter = 0
   let spawner = setInterval(() => {
 
-    counter += 500
+    nuggets_to_spawn--
 
-    if ( counter >= duration ) clearInterval( spawner )
+    if ( nuggets_to_spawn <= 0 ) clearInterval( spawner )
 
     let nugget = document.createElement( 'div' )
     nugget.classList.add( 'gold-nugget' )
+    nugget.onclick = ( e ) => handle_gold_nugget_click( e, true )
+    nugget.addEventListener( 'animationend', () => remove_el( nugget ) )
 
     s( '.gold-rush-container' ).append( nugget )
 
     let random_x = Math.random() * window.innerWidth
-
     nugget.style.left = random_x + 'px'
+    nugget.style.animation = `fall_down ${ fall_speed }s linear forwards, spin 2s infinite linear`
 
-  }, 500 )
+  }, 1000 )
 
-  setTimeout(() => { remove_el( gold_rush_container ) }, duration )
-}
-
-let handle_gold_rush_nugget_click = () => {
-
+  setTimeout( () => { remove_el( gold_rush_container ) }, duration )
 }
 
 // =======================================================================================
