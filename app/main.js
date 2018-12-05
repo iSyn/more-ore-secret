@@ -281,6 +281,8 @@ let position_elements = () => {
 
 }
 
+// ==== RIGHT SIDE SHIT  =================================================================
+
 let change_tab = ( code_name ) => {
   let t = select_from_arr( S.tabs, code_name )
 
@@ -450,8 +452,18 @@ let build_smith = () => {
   str += '</div>'
 
   TAB_CONTENT.innerHTML = str
-  TAB_CONTENT.classList.add('smith')
-  TAB_CONTENT.classList.remove('store')
+  TAB_CONTENT.classList.add( 'smith' )
+  TAB_CONTENT.classList.remove( 'store' )
+}
+
+let build_skills = () => {
+
+  let str = ''
+
+  TAB_CONTENT.innerHTML = str
+  TAB_CONTENT.classlist.remove( 'store', 'smith' )
+  TAB_CONTENT.classList.add( 'skills' )
+  
 }
 
 let build_pickaxe_accordion = ( direct = false ) => {
@@ -484,14 +496,6 @@ let build_pickaxe_accordion = ( direct = false ) => {
   }
 
   return str
-}
-
-let calculate_pickaxe_sharpness = () => {
-  return S.pickaxe.item.sharpness + S.pickaxe.temporary_bonuses.sharpness + S.pickaxe.permanent_bonuses.sharpness
-}
-
-let calculate_pickaxe_hardness = () => {
-  return S.pickaxe.item.hardness + S.pickaxe.temporary_bonuses.hardness + S.pickaxe.permanent_bonuses.hardness
 }
 
 let build_pickaxe_update = ( direct = false ) => {
@@ -607,6 +611,16 @@ let handle_smith_upgrade_hover = ( code_name ) => {
 let toggle_pickaxe_accordion = () => {
   s( '.pickaxe-accordion' ).classList.toggle( 'open' )
   O.pickaxe_accordion_is_open = !O.pickaxe_accordion_is_open
+}
+
+// ========================================================================================
+
+let calculate_pickaxe_sharpness = () => {
+  return S.pickaxe.item.sharpness + S.pickaxe.temporary_bonuses.sharpness + S.pickaxe.permanent_bonuses.sharpness
+}
+
+let calculate_pickaxe_hardness = () => {
+  return S.pickaxe.item.hardness + S.pickaxe.temporary_bonuses.hardness + S.pickaxe.permanent_bonuses.hardness
 }
 
 let build_automaters = () => {
@@ -1752,7 +1766,7 @@ let start_gold_rush = () => {
 
 let start_ore_madness = () => {
 
-  let duration = 5
+  let duration = 10
 
   let cover = document.createElement( 'div' )
   cover.classList.add( 'ore-madness-cover')

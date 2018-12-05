@@ -12,7 +12,7 @@ let remove_wrapper = () => {
     let wrapper = wrappers[ wrappers.length - 1 ]
     let child_el = wrapper.firstElementChild
     if ( child_el.classList.contains( 'item-drop-popup-container' ) ) trash_pickaxe()
-    child_el.addEventListener( 'animationend', () => { remove_el( wrapper ) } )
+    child_el.addEventListener( 'animationend', () => { remove_el( wrapper ); TT.hide() } )
     wrapper.style.animation = 'fade_out .15s'
     child_el.style.animation = 'slide_down_out .15s'
   }

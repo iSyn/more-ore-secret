@@ -77,7 +77,7 @@ let Tooltip = function() {
             let r = item.reward
             if ( r ) {
               if ( r.increase_weak_hit_multi ) {
-                str += `<p style='color: lightgreen;' class='achievement-reward'>+ Permanently increase <strong>weak-hit</strong> multiplier by <strong>${ achievement.reward.increase_weak_hit_multi }</strong></p>`
+                str += `<p style='color: lightgreen;' class='achievement-reward'>+ Permanently increase <strong>weak-hit</strong> multiplier by <strong>${ r.increase_weak_hit_multi }</strong></p>`
               }
               if ( r.increase_pickaxe_hardness ) {
                 str += `<p style='color: lightgreen;' class='achievement-reward'>+ Permanently increase <strong>pickaxe hardness</strong> by <strong>${ r.increase_pickaxe_hardness }%</strong></p>`

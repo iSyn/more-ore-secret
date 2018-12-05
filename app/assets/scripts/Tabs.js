@@ -1,7 +1,7 @@
 let Tab = function( tab ) {
 
     this.name = tab.name
-    this.code_name = tab.name.replace(/ /g, '_').toLowerCase()
+    this.code_name = tab.code_name || tab.name.replace(/ /g, '_').toLowerCase()
     this.hidden = tab.hidden || 0
     this.selected = tab.selected || 0
 
@@ -11,10 +11,16 @@ let Tab = function( tab ) {
 let Tabs = []
 let tabs = [
     {
-      name: 'Store',
+      name: '<i class="fa fa-usd"></i>',
+      code_name: 'store',
       selected: 1
     }, {
-      name: 'Smith',
+      name: '<i class="fa fa-gavel"></i>',
+      code_name: 'smith',
+      selected: 0
+    }, {
+      name: '<i class="fa fa-superpowers"></i>',
+      code_name: 'skills',
       selected: 0
     }
 ]
