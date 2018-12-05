@@ -1706,7 +1706,7 @@ let handle_gold_nugget_click = ( event, is_event = null ) => {
     earn( amount, false )
     RN.new( event, 'gold-nugget-click', amount )
     
-  } else if ( chance >= .7 && chabce <= .9 ) {
+  } else if ( chance >= .7 && chance <= .9 ) {
     RN.new( event, 'gold-rush', null )
     start_gold_rush()
   } else {
