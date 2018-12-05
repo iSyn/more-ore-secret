@@ -103,33 +103,33 @@
             // background: rgba(255, 0, 0, 0.5);
   
             .ore-weak-spot {
-              display: none;
-              pointer-events: all;
-              position: absolute;
-              top: 0px;
-              left: 0px;
-              opacity: .8;
-              cursor: pointer;
+              // display: none;
+              // pointer-events: all;
+              // position: absolute;
+              // top: 0px;
+              // left: 0px;
+              // opacity: .8;
+              // cursor: pointer;
             
-              border: 3px solid #f3f3f3;
-              background: rgba(255, 255, 255, 0.2);
-              border-radius: 50%;
-              border-top: 3px solid grey;
-              border-bottom: 3px solid grey;
-              width: 20px;
-              height: 20px;
-              -webkit-animation: spin 1.5s linear infinite;
-              animation: spin 1.5s linear infinite;
-              transition: border .3s;
+              // border: 3px solid #f3f3f3;
+              // background: rgba(255, 255, 255, 0.2);
+              // border-radius: 50%;
+              // border-top: 3px solid grey;
+              // border-bottom: 3px solid grey;
+              // width: 20px;
+              // height: 20px;
+              // -webkit-animation: spin 1.5s linear infinite;
+              // animation: spin 1.5s linear infinite;
+              // transition: border .3s;
 
-              &:hover {
-                animation-duration: .3s;
-                animation-direction: reverse;
-                border-color: grey;
-                border-top: 3px solid #f3f3f3;
-                border-bottom: 3px solid #f3f3f3;
-                // background: rgba(255, 255, 255, 0.1);
-              }
+              // &:hover {
+              //   animation-duration: .3s;
+              //   animation-direction: reverse;
+              //   border-color: grey;
+              //   border-top: 3px solid #f3f3f3;
+              //   border-bottom: 3px solid #f3f3f3;
+              //   // background: rgba(255, 255, 255, 0.1);
+              // }
             }
           }
         }

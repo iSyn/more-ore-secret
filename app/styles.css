@@ -175,32 +175,6 @@
           .container .game-container > .left .ore-container-wrapper .ore-container .ore-weak-spot-container {
             pointer-events: none;
             position: relative; }
-            .container .game-container > .left .ore-container-wrapper .ore-container .ore-weak-spot-container .ore-weak-spot {
-              display: none;
-              pointer-events: all;
-              position: absolute;
-              top: 0px;
-              left: 0px;
-              opacity: .8;
-              cursor: pointer;
-              border: 3px solid #f3f3f3;
-              background: rgba(255, 255, 255, 0.2);
-              border-radius: 50%;
-              border-top: 3px solid grey;
-              border-bottom: 3px solid grey;
-              width: 20px;
-              height: 20px;
-              -webkit-animation: spin 1.5s linear infinite;
-              animation: spin 1.5s linear infinite;
-              -webkit-transition: border .3s;
-              transition: border .3s; }
-              .container .game-container > .left .ore-container-wrapper .ore-container .ore-weak-spot-container .ore-weak-spot:hover {
-                -webkit-animation-duration: .3s;
-                animation-duration: .3s;
-                animation-direction: reverse;
-                border-color: grey;
-                border-top: 3px solid #f3f3f3;
-                border-bottom: 3px solid #f3f3f3; }
       .container .game-container > .left .bottom-area-tabs {
         display: -webkit-box;
         display: -ms-flexbox;
@@ -2300,3 +2274,64 @@ input:checked + .slider:before {
         -webkit-box-shadow: 0 2px 5px #222;
         box-shadow: 0 2px 5px #222;
         margin-bottom: 10px; }
+
+.ore-weak-spot {
+  display: none;
+  pointer-events: all;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  cursor: pointer;
+  height: 22px;
+  width: 22px; }
+  .ore-weak-spot * {
+    pointer-events: none;
+    border-radius: 50%;
+    -webkit-transition: all .1s;
+    transition: all .1s; }
+  .ore-weak-spot .ore-weak-spot-outer {
+    height: 100%;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.2);
+    border: 3px solid #f3f3f3;
+    border-top-color: darkgrey;
+    border-bottom-color: darkgrey;
+    -webkit-animation: spin 1s linear infinite;
+    animation: spin 1s linear infinite; }
+  .ore-weak-spot .ore-weak-spot-inner {
+    position: absolute;
+    height: 10px;
+    width: 10px;
+    top: 6px;
+    left: 6px;
+    border: 3px solid #a29a97;
+    border-left-color: transparent;
+    border-right-color: transparent;
+    -webkit-animation: spin_counterclockwise .5s linear infinite;
+    animation: spin_counterclockwise .5s linear infinite; }
+  .ore-weak-spot:hover .ore-weak-spot-outer {
+    -webkit-animation-duration: .5s;
+    animation-duration: .5s;
+    border-left-color: gold;
+    border-right-color: gold; }
+  .ore-weak-spot:hover .ore-weak-spot-inner {
+    border-top-color: cyan;
+    border-bottom-color: cyan;
+    -webkit-animation-duration: .3s;
+    animation-duration: .3s; }
+
+@-webkit-keyframes spin_counterclockwise {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg); }
+  100% {
+    -webkit-transform: rotate(-360deg);
+    transform: rotate(-360deg); } }
+
+@keyframes spin_counterclockwise {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg); }
+  100% {
+    -webkit-transform: rotate(-360deg);
+    transform: rotate(-360deg); } }
