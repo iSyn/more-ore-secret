@@ -1300,6 +1300,8 @@ let refine = async () => {
       unlock_smith_upgrade( 'quest_board' )
     }
 
+    if ( Tabs[ 2 ].hidden == 1 ) { Tabs[ 2 ].hidden = 0; build_tabs() }
+
     O.reposition_elements = 1
 
   } else {

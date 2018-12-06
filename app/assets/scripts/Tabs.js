@@ -21,7 +21,8 @@ let tabs = [
     }, {
       name: '<i class="fa fa-superpowers"></i>',
       code_name: 'skills',
-      selected: 0
+      selected: 0,
+      hidden: 1
     }
 ]
 
