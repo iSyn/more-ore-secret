@@ -1235,8 +1235,8 @@ let confirm_refine = () => {
         <img class='gem' src='./app/assets/images/gem-diamond.png' />
       </header>
       <i onclick='remove_wrapper()' class='fa fa-times fa-1x'></i>
-      <p class='gain'>+ You will gain <strong>${ rewards.gems }</strong> gems</p>
-      <p class='gain'>+ You will gain <strong>${ rewards.xp }</strong> generation XP</p>
+      <p class='gain'>+ You will gain <strong>${ beautify_number( rewards.gems ) }</strong> gems</p>
+      <p class='gain'>+ You will gain <strong>${ beautify_number( rewards.xp ) }</strong> generation XP</p>
       <p class='gain'>+ You will keep <strong>all</strong> blacksmith upgrades</p>
       <p class='gain'>+ You will keep your <strong>${ S.pickaxe.item.name }</strong> </p>
       <br />
@@ -1264,7 +1264,7 @@ let calculate_refine_rewards = () => {
 
   rewards.gems = Math.floor( Math.sqrt( S.stats.current_ores_earned / 1000000 ) )
 
-  rewards.xp = beautify_number( S.generation.xp_on_refine + Math.cbrt( S.stats.current_ores_earned ) / 2 )
+  rewards.xp = S.generation.xp_on_refine + Math.cbrt( S.stats.current_ores_earned ) / 2
 
   return rewards
 
@@ -1378,7 +1378,7 @@ let earn_generation_xp = ( xp ) => {
 
 let gain_generation_level = () => {
 
-  let xp_needed_scaling = 1.3
+  let xp_needed_scaling = 1.05
 
   S.generation.level++
   S.generation.knowledge_points++
