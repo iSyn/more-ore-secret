@@ -37,7 +37,7 @@ let Building = function( obj ) {
                 }
             }
 
-            build_store()
+            O.rebuild_store_tab = 1
         }
     }
 

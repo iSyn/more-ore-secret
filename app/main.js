@@ -37,13 +37,16 @@ let SMITH = new Smith()
 
 let O = {
   rebuild_bottom_tabs: 1,
-  rebuild_store: 1,
+
+  rebuild_store_tab: 1,
+  rebuild_smith_tab: 0,
+  rebuild_skill_tab: 0,
+
   reposition_elements: 1,
   recalculate_ops: 1,
   recalculate_opc: 1,
 
   ore_madness_active: 0,
-
 
   current_tab: 'store',
 
@@ -58,7 +61,7 @@ let init_game = () => {
   game_loop()
   S.tabs = Tabs
   build_tabs()
-  build_store()
+  build_store_tab()
 
   if ( !S.locked.fragility_spectacles ) generate_weak_spot()
 
@@ -122,7 +125,7 @@ let load_game = () => {
   }
 }
 
-let notify = ( text, color = 'white' ) => {
+let notify = ( text, color = 'white', type = null ) => {
 
   let div = document.createElement( 'div' )
   div.innerHTML = text
@@ -141,6 +144,8 @@ let notify = ( text, color = 'white' ) => {
   div.addEventListener( 'animationend', () => { remove_el( div ) } )
 
   CONTAINER.append( div )
+
+  if ( type == 'error' ) play_sound( 'not_enough' )
 
 }
 
@@ -312,7 +317,7 @@ let build_tabs = () => {
       str += `
         <div 
           class='tab ${ tab.name }-tab ${ tab.selected && "selected" }'
-          onclick='change_tab( "${ tab.code_name }" ); build_${ tab.code_name }()'
+          onclick='change_tab( "${ tab.code_name }" ); build_${ tab.code_name }_tab()'
         >${ tab.name }</div>
       `
     }
@@ -321,7 +326,7 @@ let build_tabs = () => {
   TABS_CONTAINER.innerHTML = str
 }
 
-let build_store = () => {
+let build_store_tab = () => {
 
   let str = ''
   str += build_upgrades()
@@ -329,10 +334,10 @@ let build_store = () => {
   str += build_buildings()
 
   TAB_CONTENT.innerHTML = str
-  TAB_CONTENT.classList.remove('smith')
+  TAB_CONTENT.classList.remove('smith', 'skills')
   TAB_CONTENT.classList.add('store')
 
-  O.rebuild_store = 0
+  O.rebuild_store_tab = 0
 }
 
 let build_upgrades = () => {
@@ -388,7 +393,7 @@ let build_buy_amount = () => {
 
 let change_buy_amount = ( amount ) => {
 
-  O.rebuild_store = 1
+  O.rebuild_store_tab = 1
   S.buy_amount = amount
 
 }
@@ -437,7 +442,7 @@ let build_buildings = () => {
   return str
 }
 
-let build_smith = () => {
+let build_smith_tab = () => {
   let str = ''
 
   str += build_pickaxe_accordion()
@@ -453,17 +458,7 @@ let build_smith = () => {
 
   TAB_CONTENT.innerHTML = str
   TAB_CONTENT.classList.add( 'smith' )
-  TAB_CONTENT.classList.remove( 'store' )
-}
-
-let build_skills = () => {
-
-  let str = ''
-
-  TAB_CONTENT.innerHTML = str
-  TAB_CONTENT.classlist.remove( 'store', 'smith' )
-  TAB_CONTENT.classList.add( 'skills' )
-  
+  TAB_CONTENT.classList.remove( 'store', 'superpowers' )
 }
 
 let build_pickaxe_accordion = ( direct = false ) => {
@@ -613,6 +608,209 @@ let toggle_pickaxe_accordion = () => {
   O.pickaxe_accordion_is_open = !O.pickaxe_accordion_is_open
 }
 
+let build_skills_tab = async () => {
+
+  let str = ''
+
+  str += `
+    <header>
+      <h1>Generation: ${ S.generation.level }</h1>
+      <p>Available Knowledge Points: <strong>${ S.generation.knowledge_points }</strong></p>
+    </header>
+  `
+
+  str += await build_skills()
+
+  TAB_CONTENT.innerHTML = str
+  TAB_CONTENT.classList.remove( 'store', 'smith' )
+  TAB_CONTENT.classList.add( 'skills' )
+
+  s( '.skills-container' ).addEventListener( 'scroll', () => draw_skill_lines() )
+  
+  position_skill_lines_canvas()
+
+}
+
+let build_skills = () => {
+
+  return new Promise( resolve => {
+
+    let skill_height = 40
+    let skill_width = 40
+    let column_spacing = 10
+    let row_spacing = 60
+
+    let middle = TAB_CONTENT.getBoundingClientRect().width / 2
+
+    let str = ''
+
+    str += '<div class="skills-container">'
+    str += '<canvas class="skill-lines-container"></canvas>'
+    
+    Skills.forEach( ( s, i ) => {
+
+      let column_pos = ( middle - skill_width / 2 ) + ( s.position.column * ( skill_height + column_spacing ) )
+      let row_pos = ( s.position.row * ( skill_height + row_spacing ) )
+
+      str += `
+        <div 
+          class='skill'
+          id='skill-${ s.code_name }'
+          onclick='Skills[ ${ i } ].level_up( event )'
+          style='
+            left: ${ column_pos }px; 
+            top: ${ row_pos }px;
+            height: ${ skill_height }px;
+            width: ${ skill_width }px;
+            background-image: url( "${ s.img }" );
+          '
+        ></div>
+      `
+
+    } )
+
+    str += '</div>'
+
+    resolve( str)
+
+  } )
+}
+
+let position_skill_lines_canvas = () => {
+
+  let canvas = document.querySelector( '.skill-lines-container' )
+  let skills_container = document.querySelector( '.skills-container' )
+  let skills_container_dimensions = skills_container.getBoundingClientRect()
+
+  canvas.width = skills_container_dimensions.width
+  canvas.height = skills_container_dimensions.height
+
+  console.log( )
+
+  canvas.style.position = 'fixed'
+  canvas.style.top = skills_container_dimensions.top + 'px'
+  canvas.style.left = skills_container_dimensions.left + 'px'
+  canvas.style.pointerEvents = 'none'
+
+  draw_skill_lines()
+
+}
+
+let draw_skill_lines = () => {
+
+  console.log( 'firing ')
+
+  let canvas = document.querySelector( 'canvas' )
+  let ctx = canvas.getContext( '2d' )
+  let scroll_offset = document.querySelector( '.skills-container' ).scrollTop
+
+  ctx.clearRect( 0, 0, canvas.width, canvas.height )
+
+  ctx.lineWidth = 3
+  ctx.strokeStyle="#FFF";
+
+  Skills.forEach( skill => {
+
+    if ( skill.skill_requirements ) {
+
+      skill.skill_requirements.forEach( requirement => {
+
+        let target_skill = s( `#skill-${ requirement.code_name }` )
+        let base_skill = s( `#skill-${ skill.code_name }`)
+
+        let p = get_skill_line_positions( requirement.draw_lines, target_skill, base_skill )
+
+        ctx.beginPath()
+        ctx.moveTo( p.base_position.x, p.base_position.y - scroll_offset )
+
+        if ( requirement.draw_lines.from != 'left' && requirement.draw_lines.from != 'right' ) {
+          if ( requirement.draw_lines.from == 'top' ) {
+            ctx.lineTo( p.base_position.x, p.base_position.y - 20 - scroll_offset )
+            ctx.lineTo( p.target_position.x, p.target_position.y + 20 - scroll_offset )
+            ctx.lineTo( p.target_position.x, p.target_position.y - scroll_offset )
+          } else {
+            ctx.lineTo( p.base_position.x, p.base_position.y + 20 - scroll_offset )
+            ctx.lineTo( p.target_position.x, p.target_position.y - 20 - scroll_offset )
+            ctx.lineTo( p.target_position.x, p.target_position.y - scroll_offset )
+          }
+        } else {
+          ctx.lineTo( p.target_position.x, p.target_position.y - scroll_offset)
+        }
+
+        ctx.stroke()
+        ctx.closePath()
+        
+      } )
+    }
+  } )
+}
+
+let get_skill_line_positions = ( type, target_skill_el, base_skill_el ) => {
+
+  let positions = {}
+
+  switch ( type.from ) {
+
+    case 'top':
+      positions = {
+        base_position: {
+          x: base_skill_el.offsetLeft + 20,
+          y: base_skill_el.offsetTop
+        },
+        target_position: {
+          x: target_skill_el.offsetLeft + 20,
+          y: target_skill_el.offsetTop + target_skill_el.offsetHeight
+        }
+      }
+      break
+
+    case 'bottom':
+      positions = {
+        base_position: {
+          x: base_skill_el.offsetLeft + 20,
+          y: base_skill_el.offsetTop + base_skill_el.offsetHeight
+        },
+        target_position: {
+          x: target_skill_el.offsetLeft + 20,
+          y: target_skill_el.offsetTop
+        }
+      }
+      break
+
+    case 'left':
+      console.log( target_skill_el, base_skill_el )
+      positions = {
+        base_position: {
+          x: base_skill_el.offsetLeft,
+          y: base_skill_el.offsetTop + 20
+        },
+        target_position: {
+          x: target_skill_el.offsetLeft + target_skill_el.offsetWidth,
+          y: target_skill_el.offsetTop + 20
+        }
+      }
+      console.log( 'position', positions )
+      break
+
+    case 'right':
+      positions = {
+        base_position: {
+          x: base_skill_el.offsetLeft + target_skill_el.offsetWidth,
+          y: base_skill_el.offsetHeight - 20
+        },
+        target_position: {
+          x: target_skill_el.offsetLeft,
+          y: target_skill_el.offsetHeight - 20
+        }
+      }
+      break
+
+  }
+
+  return positions
+
+}
+
 // ========================================================================================
 
 let calculate_pickaxe_sharpness = () => {
@@ -731,6 +929,8 @@ let calculate_opc = ( type ) => {
     opc += S.ops * .03
   }
 
+  opc += opc * S.opc_multiplier
+
   O.recalculate_opc = 0
   S.opc = opc
   return opc
@@ -745,6 +945,8 @@ let calculate_ops = () => {
   Buildings.forEach( building => {
     ops += building.owned * building.production
   })
+
+  ops += ops * S.ops_multiplier
 
   S.ops = ops
 
@@ -788,6 +990,7 @@ let handle_click = ( e, type ) => {
     play_sound( 'ore_weak_spot_hit' )
     S.stats.total_weak_hit_clicks++
     S.current_combo++
+    S.generation.xp_on_refine += .5
 
     if ( S.current_combo == 5 ) { win_achievement( 'combo_baby' ); unlock_smith_upgrade( 'combo_shield_i' ) }
     if ( S.current_combo == 20 ) win_achievement( 'combo_pleb' )
@@ -1060,7 +1263,8 @@ let calculate_refine_rewards = () => {
   let rewards = {}
 
   rewards.gems = Math.floor( Math.sqrt( S.stats.current_ores_earned / 1000000 ) )
-  rewards.xp = 100
+
+  rewards.xp = beautify_number( S.generation.xp_on_refine + Math.cbrt( S.stats.current_ores_earned ) / 2 )
 
   return rewards
 
@@ -1068,32 +1272,43 @@ let calculate_refine_rewards = () => {
 
 let refine = async () => {
 
-  play_sound( 'refine' )
-  S.stats.times_refined++
+  if ( S.stats.current_ores_earned >= 1000000 ) {
+    play_sound( 'refine' )
+    S.stats.times_refined++
 
-  let rewards = calculate_refine_rewards()
-  earn_gems( rewards.gems )
+    let rewards = calculate_refine_rewards()
 
-  reset_state_and_buildings()
+    earn_gems( rewards.gems )
+    earn_generation_xp( rewards.xp )
 
-  await refine_animation()
+    reset_state_and_buildings()
 
-  if ( S.stats.last_refine_time ) {
-    let diff = get_time_difference_value( S.stats.last_refine_time, 'minutes' )
-    if ( diff <= 10 ) win_achievement( 'quick_refiner' )
-    if ( diff <= 5 ) win_achievement( 'swift_refiner')
-    if ( diff <= 1 ) win_achievement( 'speedy_refiner' )
-    if ( diff <= .166667 ) win_achievement( 'flash_refiner') 
+    await refine_animation()
+
+    if ( S.stats.last_refine_time ) {
+      let diff = get_time_difference_value( S.stats.last_refine_time, 'minutes' )
+      if ( diff <= 10 ) win_achievement( 'quick_refiner' )
+      if ( diff <= 5 ) win_achievement( 'swift_refiner')
+      if ( diff <= 1 ) win_achievement( 'speedy_refiner' )
+      if ( diff <= .166667 ) win_achievement( 'flash_refiner') 
+    }
+
+    S.stats.last_refine_time = new Date().getTime()
+
+    if ( S.stats.times_refined == 1 ) {
+      win_achievement( 'babies_first_refine' )
+      unlock_smith_upgrade( 'quest_board' )
+    }
+
+    O.reposition_elements = 1
+
+  } else {
+    
+    notify( 'Requires at least 1,000,000 ores earned', 'red', 'error' )
+
   }
 
-  S.stats.last_refine_time = new Date().getTime()
-
-  if ( S.stats.times_refined == 1 ) {
-    win_achievement( 'babies_first_refine' )
-    unlock_smith_upgrade( 'quest_board' )
-  }
-
-  O.reposition_elements = 1
+  
 
 }
 
@@ -1134,9 +1349,39 @@ let reset_state_and_buildings = () => {
 
   O.recalculate_opc = 1
   O.recalculate_ops = 1
-  O.rebuild_store = 1
+  O.rebuild_store_tab = 1
 
   save_game()
+
+}
+
+let earn_generation_xp = ( xp ) => {
+
+  while ( xp > 0 ) {
+
+    let amount_of_xp_needed_for_level = S.generation.needed_xp - S.generation.current_xp
+
+    if ( xp >= amount_of_xp_needed_for_level ) {
+      xp -= amount_of_xp_needed_for_level
+      gain_generation_level()
+    } else {
+      S.generation.current_xp += xp
+      xp = 0
+    }
+  }
+
+  S.generation.xp_on_refine = 0
+
+}
+
+let gain_generation_level = () => {
+
+  let xp_needed_scaling = 1.3
+
+  S.generation.level++
+  S.generation.knowledge_points++
+  S.generation.current_xp = 0
+  S.generation.needed_xp = S.generation.needed_xp * Math.pow( xp_needed_scaling, S.generation.level )
 
 }
 
@@ -1431,7 +1676,8 @@ let game_loop = () => {
     build_topbar_inventory()
     if ( O.recalculate_ops ) calculate_ops()
     if ( O.recalculate_opc ) calculate_opc()
-    if ( O.rebuild_store ) build_store()
+    if ( O.rebuild_store_tab ) build_store_tab()
+    if ( O.rebuild_smith_tab ) build_smith_tab()
     if ( O.reposition_elements ) position_elements()
     if ( O.rebuild_bottom_tabs ) build_bottom_tabs()
 
@@ -1528,7 +1774,7 @@ let build_topbar_inventory = () => {
       str += `
     </div>
     <div class='right'>
-      <p>Generation: ${ S.generation }</p>
+      <p>Generation: ${ S.generation.level }</p>
     </div>
   `
 
@@ -1812,7 +2058,7 @@ window.addEventListener('keyup', (e) => {
     }
     if ( pressed.join( '' ).includes( 'test' ) ) {
       Smith_Upgrades.forEach( upgrade => { upgrade.duration = 1 * SECOND })
-      S.pickaxe.item.damage = Math.pow( S.pickaxe.item.damage + 100, 3 )
+      S.pickaxe.item.damage *= 1000
       S.gems += 100
     }
     if ( pressed.join( '' ).includes( 'qwer' ) ) {

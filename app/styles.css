@@ -2335,3 +2335,35 @@ input:checked + .slider:before {
   100% {
     -webkit-transform: rotate(-360deg);
     transform: rotate(-360deg); } }
+
+.tab-content.skills {
+  background-color: black;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-flow: column nowrap;
+  flex-flow: column nowrap; }
+  .tab-content.skills header {
+    color: white;
+    -webkit-box-shadow: 0 4px 20px #222;
+    box-shadow: 0 4px 20px #222;
+    text-align: center;
+    padding: 30px 0 25px 0; }
+    .tab-content.skills header h1 {
+      font-family: 'Germania One';
+      letter-spacing: 1px;
+      font-size: 35px;
+      text-shadow: 0 0 10px gold; }
+    .tab-content.skills header p {
+      opacity: .6; }
+  .tab-content.skills .skills-container {
+    height: 100%;
+    position: relative;
+    overflow-y: auto; }
+    .tab-content.skills .skills-container .skill {
+      position: absolute;
+      background: black; }
+      .tab-content.skills .skills-container .skill:hover {
+        cursor: pointer; }

@@ -20,7 +20,7 @@ let Pickaxe = function( item_level ) {
 
 _get_level = ( item_level ) => {
 
-    let level = S.generation
+    let level = S.generation.level
 
     level += get_random_num( -item_level/2, item_level )
 
@@ -313,7 +313,7 @@ _get_multiplier = ( p ) => {
 
 _get_damage = ( p ) => {
 
-    let damage = S.generation + ( get_random_num( -S.generation, S.generation ))
+    let damage = S.generation.level + ( get_random_num( -S.generation.level, S.generation.level ))
 
     if ( damage <= 0 ) damage = 1
 

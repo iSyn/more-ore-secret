@@ -27,7 +27,7 @@ let Upgrade = function( obj ) {
                 }
             }
 
-            O.rebuild_store = 1
+            O.rebuild_store_tab = 1
             O.recalculate_opc = 1
             O.recalculate_ops = 1
 
@@ -457,5 +457,5 @@ upgrades.forEach( upgrade => {
 let unlock_upgrade = ( code_name ) => {
     let upgrade = select_from_arr( Upgrades, code_name )
     upgrade.hidden = false
-    O.rebuild_store = 1
+    O.rebuild_store_tab = 1
 }

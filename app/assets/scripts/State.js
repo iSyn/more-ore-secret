@@ -4,7 +4,14 @@ let State = function( s = {} ) {
 
     ores: s.ores || 0,
     gems: s.gems || 0,
-    generation: s.generation || 1,
+
+    generation: s.generation || {
+      level: 0,
+      current_xp: 0,
+      needed_xp: 100,
+      xp_on_refine: 0,
+      knowledge_points: 0
+    },
 
     ops: s.ops || 0,
     ops_multiplier: 0,

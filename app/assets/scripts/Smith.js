@@ -19,8 +19,7 @@ let Smith = function( obj = {} ) {
 
             this._update_progress()
         } else {
-            notify( 'Not Enough Gems', 'red' )
-            play_sound( 'not_enough')
+            notify( 'Not Enough Gems', 'red', 'error' )
         }
 
     }
@@ -132,7 +131,7 @@ let Smith = function( obj = {} ) {
         this.current_progress = 0
         O.reposition_elements = 1
 
-        if ( O.current_tab == 'smith' ) build_smith()
+        if ( O.current_tab == 'smith' ) O.rebuild_smith_tab = 1
     }
 
 }
