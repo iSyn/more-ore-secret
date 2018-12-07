@@ -30,8 +30,9 @@ let SmithUpgrade = function( obj ) {
     this.owned = obj.owned || 0
     this.locked = obj.locked || 0
     this.unlock_functions = obj.unlock_functions
-    this.new = obj.new || true
+    // this.new = obj.new || true
 
+    obj.new == false ? this.new = false : this.new = true
 
     Smith_Upgrades.push( this )
 

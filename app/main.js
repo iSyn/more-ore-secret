@@ -87,6 +87,7 @@ let save_game = () => {
   localStorage.setItem( 'smith_upgrades', JSON.stringify( Smith_Upgrades ) )
   localStorage.setItem( 'smith', JSON.stringify( SMITH ) )
   localStorage.setItem( 'bottom_tabs', JSON.stringify( Bottom_Tabs ) )
+  localStorage.setItem( 'tabs', JSON.stringify( Tabs ) )
 
   notify( 'Saved Game' )
 }
@@ -122,6 +123,9 @@ let load_game = () => {
 
     Bottom_Tabs = []
     JSON.parse( localStorage.getItem( 'bottom_tabs' ) ).forEach( tab => new Bottom_Tab( tab ) )
+
+    Tabs = []
+    JSON.parse( localStorage.getItem( 'tabs') ).forEach( tab => new Tab( tab ) )
   }
 }
 
@@ -458,7 +462,7 @@ let build_smith_tab = () => {
 
   TAB_CONTENT.innerHTML = str
   TAB_CONTENT.classList.add( 'smith' )
-  TAB_CONTENT.classList.remove( 'store', 'superpowers' )
+  TAB_CONTENT.classList.remove( 'store', 'skills' )
 }
 
 let build_pickaxe_accordion = ( direct = false ) => {
