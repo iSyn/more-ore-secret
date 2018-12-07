@@ -150,4 +150,22 @@
 
     }
   }
+
+  &.generation {
+    min-width: fit-content;
+
+    .generation-tooltip {
+      text-align: center;
+
+      p {
+        font-size: 14px;
+        opacity: .6;
+      }
+      
+      h1 {
+        font-family: 'Germania One';
+      }
+    }
+  }
+  
 }

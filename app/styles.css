@@ -294,6 +294,8 @@
             transition: all .1s;
             -webkit-filter: blur(0.5px) brightness(60%);
             filter: blur(0.5px) brightness(60%); }
+            .container .game-container .right-container > .right .tabs-container .tab * {
+              pointer-events: none; }
             .container .game-container .right-container > .right .tabs-container .tab:hover {
               opacity: 1;
               -webkit-filter: brightness(90%);
@@ -830,6 +832,17 @@
         padding: 5px 0;
         font-style: italic;
         opacity: .7; }
+  .tooltip.generation {
+    min-width: -webkit-fit-content;
+    min-width: -moz-fit-content;
+    min-width: fit-content; }
+    .tooltip.generation .generation-tooltip {
+      text-align: center; }
+      .tooltip.generation .generation-tooltip p {
+        font-size: 14px;
+        opacity: .6; }
+      .tooltip.generation .generation-tooltip h1 {
+        font-family: 'Germania One'; }
 
 .particle {
   position: absolute;

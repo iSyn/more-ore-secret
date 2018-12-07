@@ -9,11 +9,25 @@ let Tooltip = function() {
     let str = ''
     let item;
     let tooltip_dimensions;
+    let target_el_dimensions;
 
     TOOLTIP.style.display = 'flex'
+    TOOLTIP.classList.remove( 'generation' )
 
     // build content
     switch ( obj.type ) {
+
+      case 'generation':
+        TOOLTIP.classList.add( 'generation' )
+        str += `
+          <div class='generation-tooltip'>
+            <h1>Generation: ${ S.generation.level }</h1>
+            <p>[ ${ beautify_number( S.generation.current_xp ) }/${ beautify_number( S.generation.needed_xp ) } ]</p>
+            <p>XP gained on refine: ${ beautify_number( calculate_refine_rewards().xp ) }</p>
+          </div>
+        `
+
+        break
 
       case 'skill':
 
@@ -237,6 +251,14 @@ let Tooltip = function() {
     // position tooltip
     switch ( obj.type ) {
 
+      case 'generation':
+        tooltip_dimensions = TOOLTIP.getBoundingClientRect()
+        target_el_dimensions = e.target.getBoundingClientRect()
+
+        TOOLTIP.style.left = ( target_el_dimensions.left + target_el_dimensions.right ) / 2 - tooltip_dimensions.width / 2 + 'px'
+        TOOLTIP.style.top = TOPBAR_INVENTORY.getBoundingClientRect().bottom + 'px'
+        break
+
       case 'combo-shield-info':
         TOOLTIP.style.left = e.clientX + 'px'
         TOOLTIP.style.top = e.clientY + 'px'
@@ -244,7 +266,7 @@ let Tooltip = function() {
 
       case 'achievement-square':
         tooltip_dimensions = TOOLTIP.getBoundingClientRect()
-        let target_el_dimensions = e.target.getBoundingClientRect()
+        target_el_dimensions = e.target.getBoundingClientRect()
         TOOLTIP.style.left = ( target_el_dimensions.left + target_el_dimensions.right ) / 2 - tooltip_dimensions.width / 2 + 'px'
         TOOLTIP.style.top = e.target.getBoundingClientRect().top - tooltip_dimensions.height + 'px'
         break

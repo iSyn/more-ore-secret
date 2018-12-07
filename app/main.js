@@ -616,6 +616,8 @@ let toggle_pickaxe_accordion = () => {
   O.pickaxe_accordion_is_open = !O.pickaxe_accordion_is_open
 }
 
+// ==== SKILL SHIT ========================================================================
+
 let build_skills_tab = async () => {
 
   let str = ''
@@ -737,7 +739,7 @@ let draw_skill_lines = () => {
 
   ctx.clearRect( 0, 0, canvas.width, canvas.height )
 
-  ctx.lineWidth = 3
+  ctx.lineWidth = 1
 
   Skills.forEach( skill => {
 
@@ -1818,7 +1820,10 @@ let build_topbar_inventory = () => {
       str += `
     </div>
     <div class='right'>
-      <p>Generation: ${ S.generation.level }</p>
+      <p
+        onmouseover='TT.show( event, { name: null, type: "generation" } )'
+        onmouseout='TT.hide()'
+      >Generation: ${ S.generation.level }</p>
     </div>
   `
 

@@ -213,6 +213,10 @@
             cursor: pointer;
             transition: all .1s;
             filter: blur( .5px ) brightness( 60% );
+            
+            & * {
+              pointer-events: none;
+            }
   
             &:hover {
               opacity: 1;
