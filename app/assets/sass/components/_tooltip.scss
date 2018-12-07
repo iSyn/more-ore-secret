@@ -115,21 +115,27 @@
     .info {
       padding-left: 10px;
 
+      h1 {
+        font-family: 'Germania One';
+        font-size: 25px;
+      }
+
       .requirements {
-        color: red;
         padding-top: 5px;
+        color: #de0000;
 
         ul {
           list-style-type: none;
 
           li {
 
-            .owned {
-              color: green;
+            &.owned {
+              color: white;
+              opacity: .6;
             }
 
-            .not-owned {
-              color: red;
+            &.not-owned {
+              color: #de0000;
             }
 
           }
@@ -138,6 +144,8 @@
 
       .skill-flavor_text {
         padding: 5px 0;
+        font-style: italic;
+        opacity: .7;
       }
 
     }

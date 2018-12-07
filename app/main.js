@@ -1340,7 +1340,11 @@ let refine = async () => {
       unlock_smith_upgrade( 'quest_board' )
     }
 
-    if ( Tabs[ 2 ].hidden == 1 ) { Tabs[ 2 ].hidden = 0; build_tabs() }
+    if ( Tabs[ 2 ].hidden == 1 ) { 
+      Tabs[ 2 ].hidden = 0; build_tabs() 
+    }
+
+    save_game()
 
     O.reposition_elements = 1
 
@@ -1392,8 +1396,6 @@ let reset_state_and_buildings = () => {
   O.recalculate_opc = 1
   O.recalculate_ops = 1
   O.rebuild_store_tab = 1
-
-  save_game()
 
 }
 

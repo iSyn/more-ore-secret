@@ -1,5 +1,9 @@
 let Tooltip = function() {
 
+  this.hide = () => {
+    TOOLTIP.style.display = 'none'
+  }
+
   this.show = ( e, obj ) => {
 
     let str = ''
@@ -18,7 +22,7 @@ let Tooltip = function() {
           <div class='skill-tooltip'>
             <img src='${ item.img }' />
             <div class='info'>
-              <h3>${ item.name }</h3>
+              <h1>${ item.name }</h1>
               `
 
               if ( item.locked ) {
@@ -259,10 +263,6 @@ let Tooltip = function() {
 
 
     
-  }
-
-  this.hide = () => {
-    TOOLTIP.style.display = 'none'
   }
 
 }

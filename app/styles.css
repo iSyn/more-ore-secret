@@ -813,17 +813,23 @@
       width: 40px; }
     .tooltip .skill-tooltip .info {
       padding-left: 10px; }
+      .tooltip .skill-tooltip .info h1 {
+        font-family: 'Germania One';
+        font-size: 25px; }
       .tooltip .skill-tooltip .info .requirements {
-        color: red;
-        padding-top: 5px; }
+        padding-top: 5px;
+        color: #de0000; }
         .tooltip .skill-tooltip .info .requirements ul {
           list-style-type: none; }
-          .tooltip .skill-tooltip .info .requirements ul li .owned {
-            color: green; }
-          .tooltip .skill-tooltip .info .requirements ul li .not-owned {
-            color: red; }
+          .tooltip .skill-tooltip .info .requirements ul li.owned {
+            color: white;
+            opacity: .6; }
+          .tooltip .skill-tooltip .info .requirements ul li.not-owned {
+            color: #de0000; }
       .tooltip .skill-tooltip .info .skill-flavor_text {
-        padding: 5px 0; }
+        padding: 5px 0;
+        font-style: italic;
+        opacity: .7; }
 
 .particle {
   position: absolute;
@@ -2389,7 +2395,9 @@ input:checked + .slider:before {
     overflow-y: auto; }
     .tab-content.skills .skills-container .skill {
       position: absolute;
-      background: black; }
+      background: black;
+      -webkit-box-shadow: 0 0 15px gold;
+      box-shadow: 0 0 15px gold; }
       .tab-content.skills .skills-container .skill.small {
         border-radius: 50%; }
       .tab-content.skills .skills-container .skill:hover {

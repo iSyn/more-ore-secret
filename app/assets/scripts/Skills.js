@@ -26,6 +26,7 @@ let Skill = function( obj ) {
           build_skills_header( true )
 
           this.owned = 1
+          play_sound( 'skill_level_up' )
 
           if ( this.unlock_function ) {
 
