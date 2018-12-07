@@ -100,4 +100,46 @@
       }
     }
   }
+
+  .skill-tooltip {
+    display: flex;
+    flex-flow: row nowrap;
+
+    max-width: 300px;
+
+    img {
+      height: 40px;
+      width: 40px;
+    }
+
+    .info {
+      padding-left: 10px;
+
+      .requirements {
+        color: red;
+        padding-top: 5px;
+
+        ul {
+          list-style-type: none;
+
+          li {
+
+            .owned {
+              color: green;
+            }
+
+            .not-owned {
+              color: red;
+            }
+
+          }
+        }
+      }
+
+      .skill-flavor_text {
+        padding: 5px 0;
+      }
+
+    }
+  }
 }

@@ -88,6 +88,7 @@ let save_game = () => {
   localStorage.setItem( 'smith', JSON.stringify( SMITH ) )
   localStorage.setItem( 'bottom_tabs', JSON.stringify( Bottom_Tabs ) )
   localStorage.setItem( 'tabs', JSON.stringify( Tabs ) )
+  localStorage.setItem( 'skills', JSON.stringify( Skills ) )
 
   notify( 'Saved Game' )
 }
@@ -126,6 +127,9 @@ let load_game = () => {
 
     Tabs = []
     JSON.parse( localStorage.getItem( 'tabs') ).forEach( tab => new Tab( tab ) )
+
+    Skills = []
+    JSON.parse( localStorage.getItem( 'skills' ) ).forEach( skill => new Skill( skill ) )
   }
 }
 
@@ -616,12 +620,7 @@ let build_skills_tab = async () => {
 
   let str = ''
 
-  str += `
-    <header>
-      <h1>Generation: ${ S.generation.level }</h1>
-      <p>Available Knowledge Points: <strong>${ S.generation.knowledge_points }</strong></p>
-    </header>
-  `
+  str += build_skills_header()
 
   str += await build_skills()
 
@@ -635,14 +634,28 @@ let build_skills_tab = async () => {
 
 }
 
+let build_skills_header = ( direct = false ) => {
+  let str = `
+    <header class='skills-header'>
+      <h1>Generation: ${ S.generation.level }</h1>
+      <p>Available Knowledge Points: <strong>${ S.generation.knowledge_points }</strong></p>
+    </header>
+  `
+
+  if ( direct ) {
+    s( '.skills-header' ).innerHTML = `
+      <h1>Generation: ${ S.generation.level }</h1>
+      <p>Available Knowledge Points: <strong>${ S.generation.knowledge_points }</strong></p>
+    `
+    return
+  }
+
+  return str
+}
+
 let build_skills = () => {
 
   return new Promise( resolve => {
-
-    let skill_height = 40
-    let skill_width = 40
-    let column_spacing = 10
-    let row_spacing = 60
 
     let middle = TAB_CONTENT.getBoundingClientRect().width / 2
 
@@ -653,19 +666,35 @@ let build_skills = () => {
     
     Skills.forEach( ( s, i ) => {
 
+      let skill_height = 40
+      let skill_width = 40
+      let column_spacing = 10
+      let row_spacing = 60
+
       let column_pos = ( middle - skill_width / 2 ) + ( s.position.column * ( skill_height + column_spacing ) )
-      let row_pos = ( s.position.row * ( skill_height + row_spacing ) )
+      let row_pos = ( s.position.row * ( skill_height + row_spacing ) - 50 )
+
+      if ( s.skill_classes.includes( 'small' ) ) {
+        column_pos += 8
+        row_pos += 8
+        skill_height = 25
+        skill_width = 25
+      }
+
+      console.log( `building ${ s.name }. Locked status: ${ s.locked }`)
 
       str += `
         <div 
-          class='skill'
+          class='skill ${ s.skill_classes } ${ s.locked ? "locked" : "" }'
           id='skill-${ s.code_name }'
           onclick='Skills[ ${ i } ].level_up( event )'
+          onmouseover='TT.show( event, { name: "${ s.code_name }", type: "skill" } ) '
+          onmouseout='TT.hide()'
           style='
             left: ${ column_pos }px; 
             top: ${ row_pos }px;
             height: ${ skill_height }px;
-            width: ${ skill_width }px;
+            width: ${ skill_height}px;
             background-image: url( "${ s.img }" );
           '
         ></div>
@@ -702,8 +731,6 @@ let position_skill_lines_canvas = () => {
 
 let draw_skill_lines = () => {
 
-  console.log( 'firing ')
-
   let canvas = document.querySelector( 'canvas' )
   let ctx = canvas.getContext( '2d' )
   let scroll_offset = document.querySelector( '.skills-container' ).scrollTop
@@ -711,13 +738,18 @@ let draw_skill_lines = () => {
   ctx.clearRect( 0, 0, canvas.width, canvas.height )
 
   ctx.lineWidth = 3
-  ctx.strokeStyle="#FFF";
 
   Skills.forEach( skill => {
 
     if ( skill.skill_requirements ) {
 
       skill.skill_requirements.forEach( requirement => {
+
+        if ( requirement.owned == 1 ) ctx.strokeStyle = '#fff'
+        if ( requirement.owned == 0 ) ctx.strokeStyle = '#505050'
+
+        // ctx.strokeStyle="#FFF";
+        // if ( skill.locked ) ctx.strokeStyle = '#505050'
 
         let target_skill = s( `#skill-${ requirement.code_name }` )
         let base_skill = s( `#skill-${ skill.code_name }`)
@@ -753,16 +785,22 @@ let get_skill_line_positions = ( type, target_skill_el, base_skill_el ) => {
 
   let positions = {}
 
+  let horizontal_middle_of_base_skill = base_skill_el.offsetLeft + base_skill_el.offsetWidth / 2
+  let horizontal_middle_of_target_skill = target_skill_el.offsetLeft + target_skill_el.offsetWidth / 2
+
+  let vertical_middle_of_base_skill = base_skill_el.offsetTop + base_skill_el.offsetHeight / 2
+  let vertical_middle_of_target_skill = target_skill_el.offsetTop + target_skill_el.offsetHeight / 2
+ 
   switch ( type.from ) {
 
     case 'top':
       positions = {
         base_position: {
-          x: base_skill_el.offsetLeft + 20,
+          x: horizontal_middle_of_base_skill,
           y: base_skill_el.offsetTop
         },
         target_position: {
-          x: target_skill_el.offsetLeft + 20,
+          x: horizontal_middle_of_target_skill,
           y: target_skill_el.offsetTop + target_skill_el.offsetHeight
         }
       }
@@ -771,40 +809,38 @@ let get_skill_line_positions = ( type, target_skill_el, base_skill_el ) => {
     case 'bottom':
       positions = {
         base_position: {
-          x: base_skill_el.offsetLeft + 20,
+          x: horizontal_middle_of_base_skill,
           y: base_skill_el.offsetTop + base_skill_el.offsetHeight
         },
         target_position: {
-          x: target_skill_el.offsetLeft + 20,
+          x: horizontal_middle_of_target_skill,
           y: target_skill_el.offsetTop
         }
       }
       break
 
     case 'left':
-      console.log( target_skill_el, base_skill_el )
       positions = {
         base_position: {
           x: base_skill_el.offsetLeft,
-          y: base_skill_el.offsetTop + 20
+          y: vertical_middle_of_base_skill
         },
         target_position: {
           x: target_skill_el.offsetLeft + target_skill_el.offsetWidth,
-          y: target_skill_el.offsetTop + 20
+          y: vertical_middle_of_target_skill
         }
       }
-      console.log( 'position', positions )
       break
 
     case 'right':
       positions = {
         base_position: {
-          x: base_skill_el.offsetLeft + target_skill_el.offsetWidth,
-          y: base_skill_el.offsetHeight - 20
+          x: base_skill_el.offsetLeft + base_skill_el.offsetWidth,
+          y: vertical_middle_of_base_skill
         },
         target_position: {
           x: target_skill_el.offsetLeft,
-          y: target_skill_el.offsetHeight - 20
+          y: vertical_middle_of_target_skill
         }
       }
       break

@@ -11,6 +11,48 @@ let Tooltip = function() {
     // build content
     switch ( obj.type ) {
 
+      case 'skill':
+
+        item = select_from_arr( Skills, obj.name )
+        str += `
+          <div class='skill-tooltip'>
+            <img src='${ item.img }' />
+            <div class='info'>
+              <h3>${ item.name }</h3>
+              `
+
+              if ( item.locked ) {
+                str += `
+                  <div class='requirements'>
+                    <p>Requires</p>
+                    <ul>
+                    `
+
+                    item.skill_requirements.forEach( requirement => {
+
+                      let skill = select_from_arr( Skills, requirement.code_name )
+
+                      str += `<li class='${ skill.owned ? 'owned' : 'not-owned' }'>${ skill.name }</li>`
+
+                    })
+
+
+                    str += `
+                    </ul>
+                  </div>
+                `
+              }
+
+              str += `
+              <p class='skill-flavor_text'>${ item.flavor_text }</p>
+              <p>${ item.desc }</p>
+            </div>
+          </div>
+        `
+
+
+        break
+
       case 'combo-shield-info':
         str += `
           <h3>Combo Shield</h3>

@@ -799,6 +799,31 @@
         color: rgba(255, 255, 255, 0.8); }
     .tooltip .sharpness-info ul hr, .tooltip .hardness-info ul hr {
       margin: 0; }
+  .tooltip .skill-tooltip {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -ms-flex-flow: row nowrap;
+    flex-flow: row nowrap;
+    max-width: 300px; }
+    .tooltip .skill-tooltip img {
+      height: 40px;
+      width: 40px; }
+    .tooltip .skill-tooltip .info {
+      padding-left: 10px; }
+      .tooltip .skill-tooltip .info .requirements {
+        color: red;
+        padding-top: 5px; }
+        .tooltip .skill-tooltip .info .requirements ul {
+          list-style-type: none; }
+          .tooltip .skill-tooltip .info .requirements ul li .owned {
+            color: green; }
+          .tooltip .skill-tooltip .info .requirements ul li .not-owned {
+            color: red; }
+      .tooltip .skill-tooltip .info .skill-flavor_text {
+        padding: 5px 0; }
 
 .particle {
   position: absolute;
@@ -2365,5 +2390,9 @@ input:checked + .slider:before {
     .tab-content.skills .skills-container .skill {
       position: absolute;
       background: black; }
+      .tab-content.skills .skills-container .skill.small {
+        border-radius: 50%; }
       .tab-content.skills .skills-container .skill:hover {
         cursor: pointer; }
+      .tab-content.skills .skills-container .skill.locked {
+        opacity: .5; }

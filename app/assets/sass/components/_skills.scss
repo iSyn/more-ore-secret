@@ -34,8 +34,16 @@
       position: absolute;
       background: black;
 
+      &.small {
+        border-radius: 50%;
+      }
+
       &:hover {
         cursor: pointer;
+      }
+
+      &.locked {
+        opacity: .5;
       }
     }
   }
