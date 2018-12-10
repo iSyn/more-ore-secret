@@ -20,64 +20,67 @@ let Skill = function( obj ) {
   this.level_up = ( e ) => {
     if ( this.locked == 0 ) {
       if ( this.owned == 0 ) {
-        if ( S.generation.knowledge_points > 0 ) {
+        if ( S.generation.level > this.generation_requirement ) {
+          if ( S.generation.knowledge_points > 0 ) {
           
-          S.generation.knowledge_points--
-          build_skills_header( true )
-
-          this.owned = 1
-          play_sound( 'skill_level_up' )
-
-          if ( this.unlock_function ) {
-
-            let fn = this.unlock_function
-
-            if ( fn.unlock_skills ) {
-
-              fn.unlock_skills.forEach( skill_code_name => {
-
-                let skill_to_unlock = select_from_arr( Skills, skill_code_name )
-
-                let unlocked = true
-
-                skill_to_unlock.skill_requirements.forEach( requirement => {
-                  if ( requirement.code_name == this.code_name ) {
-                    requirement.owned = 1
+            S.generation.knowledge_points--
+            build_skills_header( true )
+  
+            this.owned = 1
+            play_sound( 'skill_level_up' )
+  
+            if ( this.unlock_function ) {
+  
+              let fn = this.unlock_function
+  
+              if ( fn.unlock_skills ) {
+  
+                fn.unlock_skills.forEach( skill_code_name => {
+  
+                  let skill_to_unlock = select_from_arr( Skills, skill_code_name )
+  
+                  let unlocked = true
+  
+                  skill_to_unlock.skill_requirements.forEach( requirement => {
+                    if ( requirement.code_name == this.code_name ) {
+                      requirement.owned = 1
+                    }
+  
+                    if( requirement.owned == 0 ) unlocked = false
+                  })
+  
+                  if ( unlocked ) {
+                    skill_to_unlock.locked = 0
+                    let skill_el = document.querySelector( `#skill-${ skill_code_name }`)
+                    skill_el.classList.remove( 'locked' )
                   }
-
-                  if( requirement.owned == 0 ) unlocked = false
+                  
+                  draw_skill_lines()
                 })
-
-                if ( unlocked ) {
-                  skill_to_unlock.locked = 0
-                  let skill_el = document.querySelector( `#skill-${ skill_code_name }`)
-                  skill_el.classList.remove( 'locked' )
-                }
-                
-                draw_skill_lines()
-              })
+              }
+  
+              if ( fn.increase_opc ) S.opc_multiplier += fn.increase_opc
+              if ( fn.increase_ops ) S.ops_multiplier += fn.increase_ops
+  
+              if ( fn.increase_pickaxe_sharpness ) S.pickaxe.permanent_bonuses.sharpness += fn.increase_pickaxe_sharpness
+              if ( fn.increase_pickaxe_hardness ) S.pickaxe.permanent_bonuses.hardness += fn.increase_pickaxe_hardness
+  
+              O.recalculate_opc = 1
+              O.recalculate_ops = 1
+  
             }
-
-            if ( fn.increase_opc ) S.opc_multiplier += fn.increase_opc
-            if ( fn.increase_ops ) S.ops_multiplier += fn.increase_ops
-
-            if ( fn.increase_pickaxe_sharpness ) S.pickaxe.permanent_bonuses.sharpness += fn.increase_pickaxe_sharpness
-            if ( fn.increase_pickaxe_hardness ) S.pickaxe.permanent_bonuses.hardness += fn.increase_pickaxe_hardness
-
-            O.recalculate_opc = 1
-            O.recalculate_ops = 1
-
+  
+          } else {
+            notify( 'Not enough knowledge points', 'red', 'error' )
           }
-
         } else {
-          notify( 'Not enough knowledge points', 'red', 'error' )
+          notify ( `This skill requires Gen. ${ this.generation_requirement }`)
         }
       }
     } else {
       notify( 'This skill is locked', 'red', 'error' )
     }
   }
-
 }
 
 let Skills = []

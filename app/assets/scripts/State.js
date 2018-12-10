@@ -116,10 +116,12 @@ let State = function( s = {} ) {
 
     prefs: s.prefs || {
       game_speed: 30,
-      sfx_volume: .1,
-      bgm_volume: 1,
+      sfx_muted: false,
+      sfx_volume: .5,
+      bgm_muted: false,
+      bgm_volume: .5,
       show_rising_numbers: true,
-      show_ops_rising_numbers: true,
+      show_rock_particles: true,
     },
 
     misc: s.misc || {

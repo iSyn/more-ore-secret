@@ -1,7 +1,7 @@
 let Tooltip = function() {
 
   this.hide = () => {
-    TOOLTIP.style.display = 'none'
+TOOLTIP.style.display = 'none'
   }
 
   this.show = ( e, obj ) => {
@@ -222,7 +222,7 @@ let Tooltip = function() {
           <div class='top'>
             <img src='${ item.img }' alt='building image' />
             <h1>${ item.name }</h1>
-            <p>${ beautify_number( item.current_price ) } Ores </p>
+            <p>Cost: ${ beautify_number( item.current_price ) } ores</p>
           </div>
           <hr />
           <div class='bottom'>

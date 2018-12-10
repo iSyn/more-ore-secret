@@ -13,6 +13,7 @@
     box-shadow: 0 0 20px #222 inset;
     height: 70px;
     cursor: pointer;
+    position: relative;
 
     &:not(.hidden):hover {
         box-shadow: 0 0 5px #fff inset;
@@ -45,14 +46,32 @@
         }
 
         p {
+            display: flex;
+            flex-flow: row nowrap;
+            align-items: center;
+
+            img {
+                height: 16px;
+                width: 16px;
+                image-rendering: pixelated;
+                margin-right: 3px;
+            }
+
             color: #222;
+
+            &.not-enough {
+                color: #c70000;
+            }
         }
     }
 
     .right {
+        position: absolute;
+        right: 15px;
+        opacity: .4;
 
         h1 {
-            font-size: 35px;
+            font-size: 40px;
             text-shadow: 0 0 3px black;
         }
     }

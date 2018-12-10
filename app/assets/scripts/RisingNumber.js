@@ -1,7 +1,8 @@
 let RisingNumber = function() {
 
-
   this.new = ( e, type, amount = null ) => {
+
+    if ( !S.prefs.show_rising_numbers ) return
 
     if ( !O.window_blurred ) {
       let el = document.createElement( 'div' )

@@ -56,7 +56,7 @@
     }
 
     &.stats-container {
-      width: 424px;
+      width: 488px;
 
       ul {
         list-style-type: none;
@@ -103,6 +103,34 @@
           }
         }
 
+      }
+    }
+
+    &.settings-container {
+
+      h2 {
+        font-family: 'Germania One';
+        letter-spacing: .7px;
+      }
+
+      .range-slider {
+        display: flex;
+        flex-flow: row nowrap;
+        padding-bottom: 5px;
+
+        input {
+          margin-left: 10px;
+          flex-grow: 1;
+        }
+      }
+
+      .select-container {
+        display: flex;
+        flex-flow: row nowrap;
+
+        select {
+          flex-grow: 1;
+        }
       }
     }
 
@@ -209,5 +237,6 @@
         }
       }
     }
+
   }
 }

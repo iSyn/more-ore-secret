@@ -27,6 +27,9 @@ const ACHIEVEMENT_NOTIFICATION_CONTAINER = s( '.achievement-notification-contain
 const FOOTER = s( 'footer' )
 const BOTTOM_AREA_TABS = s( '.bottom-area-tabs' )
 const COMBO_SIGN_CONTAINER = s( '.combo-sign-container' )
+const ORES_AMOUNT = s( '#ores-amount' )
+const GEMS_AMOUNT = s( '#gems-amount' )
+const GENERATION_LVL = s( '#generation-lvl' )
 
 let S = new State().state
 let RN = new RisingNumber()
@@ -218,6 +221,9 @@ let earn_offline_resources = () => {
 }
 
 let play_sound = ( name, file_type = 'wav', base_vol = 1 ) => {
+
+  if ( S.prefs.sfx_muted ) return
+
   let sound = new Audio( `./app/assets/sounds/${ name }.${ file_type }` )
   sound.volume = S.prefs.sfx_volume * base_vol
   sound.play()
@@ -423,7 +429,7 @@ let build_buildings = () => {
           </div>
           <div class="middle">
             <h1>${ building.name } ${ S.buy_amount != 1 ? "x" + S.buy_amount : "" }</h1>
-            <p>Cost: ${ beautify_number( get_geometric_sequence_price( building.base_price, building.price_scale, building.owned, building.current_price ).price ) } ores</p>
+            <p class='${ S.ores < building.current_price ? "not-enough" : ""  }'><img class='ore-small' src='./app/assets/images/ore.png' /> ${ beautify_number( get_geometric_sequence_price( building.base_price, building.price_scale, building.owned, building.current_price ).price ) } </p>
           </div>
           <div class="right">
             <h1>${ building.owned }</h1>
@@ -438,7 +444,7 @@ let build_buildings = () => {
           </div>
           <div class="middle">
             <h1>???</h1>
-            <p>Cost: ??? ores</p>
+            <p> &nbsp; </p>
           </div>
         </div>
       `
@@ -1049,6 +1055,7 @@ let handle_click = ( e, type ) => {
     if ( S.current_combo % 5 == 0 ) RN.new( e, 'combo', S.current_combo )
 
     RN.new( event, 'weak-hit-click', opc )
+
     generate_weak_spot()
 
     if ( S.locked.combo_sign && S.current_combo >= 5 ) {
@@ -1067,6 +1074,7 @@ let handle_click = ( e, type ) => {
     }
 
     play_sound( 'ore_hit' )
+
     RN.new( event, 'click', opc )
     
   }
@@ -1395,6 +1403,9 @@ let reset_state_and_buildings = () => {
   Buildings = []
   buildings.forEach( building => new Building( building ) )
 
+  Upgrades = []
+  upgrades.forEach( upgrade => new Upgrade( upgrade ) )
+
   O.recalculate_opc = 1
   O.recalculate_ops = 1
   O.rebuild_store_tab = 1
@@ -1544,7 +1555,7 @@ let build_new_pickaxe_popup = () => {
     </p>
     <p><small><i>[ level: <strong>${ O.pickaxe.level }</strong> ]</i></small></p>
     <ul>
-      <li>Damage: <strong>${ O.pickaxe.damage }</strong> ${ O.pickaxe.damage > S.pickaxe.item.damage ? '<i class="fa fa-angle-up fa-1x"></i>' : '<i class="fa fa-angle-down fa-1x"></i>' }</li>
+      <li>Damage: <strong>${ beautify_number( O.pickaxe.damage ) }</strong> ${ O.pickaxe.damage > S.pickaxe.item.damage ? '<i class="fa fa-angle-up fa-1x"></i>' : '<i class="fa fa-angle-down fa-1x"></i>' }</li>
       <li>Sharpness: <strong>${ beautify_number( O.pickaxe.sharpness ) }%</strong> ${ O.pickaxe.sharpness > S.pickaxe.item.sharpness ? '<i class="fa fa-angle-up fa-1x"></i>' : '<i class="fa fa-angle-down fa-1x"></i>' }</li>
       <li>Hardness: <strong>${ beautify_number( O.pickaxe.hardness ) }%</strong> ${ O.pickaxe.hardness > S.pickaxe.item.hardness ? '<i class="fa fa-angle-up fa-1x"></i>' : '<i class="fa fa-angle-down fa-1x"></i>' }</li>
     </ul>
@@ -1711,7 +1722,7 @@ let start_quest = ( code_name ) => {
 // =======================================================================================
 
 let game_loop = () => {
-
+  
   O.counter++
   let tick_ms = 1000 / S.prefs.game_speed
 
@@ -1719,7 +1730,11 @@ let game_loop = () => {
 
     update_ore_sprite()
 
-    build_topbar_inventory()
+    // build_topbar_inventory()
+    build_topbar_inventory_ores()
+    build_topbar_inventory_gems()
+    build_topbar_inventory_generation()
+
     if ( O.recalculate_ops ) calculate_ops()
     if ( O.recalculate_opc ) calculate_opc()
     if ( O.rebuild_store_tab ) build_store_tab()
@@ -1731,9 +1746,11 @@ let game_loop = () => {
   
     earn( S.ops / S.prefs.game_speed )
 
+    // RUNS EVERY SECOND
     if ( O.counter % S.prefs.game_speed == 0 ) {
       S.stats.seconds_played++
       if ( S.ops > 0 && S.prefs.show_ops_rising_numbers ) RN.new( null, 'buildings', S.ops )
+      if ( O.current_tab == 'store' ) build_store_tab()
     }
 
     // THIS RUNS EVERY --------------------------------- ↓ seconds
@@ -1744,7 +1761,7 @@ let game_loop = () => {
     handle_combo_shields( 1000 / tick_ms )
   }
 
-  setTimeout( game_loop, 1000 / tick_ms )
+  setTimeout( game_loop, tick_ms )
 }
 
 let update_ore_hp = ( amount ) => {
@@ -1803,31 +1820,27 @@ let update_ore_sprite = () => {
 
 }
 
-let build_topbar_inventory = () => {
+let build_topbar_inventory_ores = () => {
 
-  let str = `
-    <div class='left'>
-      <p>Ores: ${ beautify_number( S.ores ) }` 
+  let str = ''
 
-      if ( S.ops > 0 ) str += ` (${ beautify_number( S.ops )}/s)`
-      
-      str += `</p>`
+  str += `Ores: ${ beautify_number( S.ores ) }`
 
-      if ( S.stats.total_gems_earned > 0 ) {
-        str += `<p>Gems: ${ beautify_number( S.gems ) }</p>`
-      }
+  if ( S.ops > 0 ) str += ` (${ beautify_number( S.ops ) }/s)`
 
-      str += `
-    </div>
-    <div class='right'>
-      <p
-        onmouseover='TT.show( event, { name: null, type: "generation" } )'
-        onmouseout='TT.hide()'
-      >Generation: ${ S.generation.level }</p>
-    </div>
-  `
+  ORES_AMOUNT.innerHTML = str
+}
 
-  TOPBAR_INVENTORY.innerHTML = str
+let build_topbar_inventory_gems = () => {
+
+  if ( S.stats.total_gems_earned > 0 ) {
+    GEMS_AMOUNT.innerHTML = `Gems: ${ beautify_number( S.gems ) }`
+  }
+
+}
+
+let build_topbar_inventory_generation = () => {
+  GENERATION_LVL.innerHTML = `Generation: ${ S.generation.level }`
 }
 
 let build_achievements = () => {
@@ -1894,31 +1907,6 @@ let build_achievements = () => {
   CONTAINER.append( wrapper )
 }
 
-let build_settings = () => {
-  let wrapper = document.createElement( 'div' )
-  wrapper.classList.add( 'wrapper' )
-
-  let str = `
-    <div class='settings-container'>
-      <h1>Settings</h1>
-      <i onclick='remove_wrapper()' class='fa fa-times fa-1x'></i>
-      <hr />
-      <div>
-        <p>Disable Rock Flying Numbers</p>
-        <input type='checkbox'>
-      </div>
-      <div>
-        <p>Disable Rock Particles</p>
-        <input type='checkbox'>
-      </div>
-      
-    </div>
-  `
-
-  wrapper.innerHTML = str
-  CONTAINER.append( wrapper )
-}
-
 let win_achievement = ( achievement_code_name ) => {
 
   let achievement = select_from_arr( Achievements, achievement_code_name )
@@ -1966,6 +1954,117 @@ let win_achievement = ( achievement_code_name ) => {
   
 
 
+}
+
+// ==== SETTINGS SHIT ====================================================================
+
+let build_settings = () => {
+  let wrapper = document.createElement( 'div' )
+  wrapper.classList.add( 'wrapper' )
+
+  let str = `
+    <div class='settings-container'>
+      <h1>Settings</h1>
+      <i onclick='remove_wrapper()' class='fa fa-times fa-1x'></i>
+      <hr />
+      <h2>Volume</h2>
+      <div>
+        <p>Mute BGM</p>
+        <input id='checkbox-bgm' type='checkbox' onchange='toggle_bgm_mute()' ${ S.prefs.bgm_muted ? 'checked' : '' }/>
+      </div>
+      <p class='range-slider'>BGM <input id='range-bgm_volume' type='range' min='0' max='1' step='.1' value='${ S.prefs.bgm_volume }' onchange='change_bgm_volume()'/></p>
+      <div>
+        <p>Mute SFXs</p>
+        <input id='checkbox-sfx' type='checkbox' onchange='toggle_sfx_mute()' ${ S.prefs.sfx_muted ? 'checked' : '' }/>
+      </div>
+      <p class='range-slider'>SFX <input id='range-sfx_volume' type='range' min='0' max='1' step='.1' value='${ S.prefs.sfx_volume }' onchange='change_sfx_volume()'/></p>
+      <br/>
+      <h2>Performance</h2>
+      <div class='select-container'>
+        <p>My computer is: </p>
+        <select id='select-tick_rate' onchange='change_tick_rate()'>
+          <option value=1 ${ S.prefs.game_speed == 1 ? "selected" : "" }>is powered by a hamster</option>
+          <option value=5 ${ S.prefs.game_speed == 5 ? "selected" : "" }>runs windows 95</option>
+          <option value=10 ${ S.prefs.game_speed == 10 ? "selected" : "" }>sucks</option>
+          <option value=15 ${ S.prefs.game_speed == 15 ? "selected" : "" }>okay</option>
+          <option value=30 ${ S.prefs.game_speed == 30 ? "selected" : "" }>decent</option>
+          <option value=45 ${ S.prefs.game_speed == 45 ? "selected" : "" }>godly</option>
+        </select>
+      </div>
+      <div>
+        <p>Disable Rising Numbers/Texts</p>
+        <input id='checkbox-rising_numbers' type='checkbox' onchange='toggle_rising_numbers()' ${ S.prefs.show_rising_numbers ? '' : 'checked' }>
+      </div>
+      <div>
+        <p>Disable Rock Particles</p>
+        <input id='checkbox-rock_particles' type='checkbox' onchange='toggle_rock_particles()' ${ S.prefs.show_rock_particles ? '' : 'checked' }>
+      </div>
+      
+    </div>
+  `
+
+  wrapper.innerHTML = str
+  CONTAINER.append( wrapper )
+}
+
+let toggle_rising_numbers = () => {
+
+  let checkbox = s( '#checkbox-rising_numbers' )
+
+  if ( checkbox.checked ) {
+    S.prefs.show_rising_numbers = false
+  } else {
+    S.prefs.show_rising_numbers = true
+  }
+
+}
+
+let toggle_rock_particles = () => {
+  let checkbox = s( '#checkbox-rock_particles' )
+  
+  if ( checkbox.checked ) {
+    S.prefs.show_rock_particles = false
+  } else {
+    S.prefs.show_rock_particles = true
+  }
+
+}
+
+let toggle_bgm_mute = () => {
+  let checkbox = s( '#checkbox-bgm' )
+  
+  if ( checkbox.checked ) {
+    S.prefs.bgm_muted = true
+  } else {
+    S.prefs.bgm_muted = false
+  }
+}
+
+let toggle_sfx_mute = () => {
+  let checkbox = s( '#checkbox-sfx' )
+  
+  if ( checkbox.checked ) {
+    S.prefs.sfx_muted = true
+  } else {
+    S.prefs.sfx_muted = false
+  }
+}
+
+let change_bgm_volume = () => {
+  let slider = s( '#range-bgm_volume' )
+  S.prefs.bgm_volume = slider.value
+  console.log( S.prefs.bgm_volume )
+}
+
+let change_sfx_volume = () => {
+  let slider = s( '#range-sfx_volume' )
+  S.prefs.sfx_volume = slider.value
+}
+
+let change_tick_rate = () => {
+  let select = s( '#select-tick_rate' )
+  console.log( 'value:', select.value )
+  S.prefs.game_speed = select.value
 }
 
 // ==== GOLD NUGGET SHIT =================================================================

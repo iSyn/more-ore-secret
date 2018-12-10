@@ -55,7 +55,18 @@
               <div class="vertical-separator"></div>
               <div class="vertical-separator"></div>
             </div>
-            <div class="topbar-inventory"></div>
+            <div class="topbar-inventory">
+              <div class="left">
+                <p id='ores-amount'></p>
+                <p id='gems-amount'></p>
+              </div>
+              <div class="right">
+                <p 
+                  onmouseover='TT.show( event, { name: null, type: "generation" } )'
+                  onmouseout='TT.hide()'
+                  id='generation-lvl'></p>
+              </div>
+            </div>
           </div>
 
           <div class="ore-container-wrapper">

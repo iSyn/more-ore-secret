@@ -1,6 +1,7 @@
 let Pickaxe = function( item_level ) {
 
     this.level = _get_level( item_level )
+
     this.rarity = _get_rarity()
     this.sockets = _get_sockets( this )
     this.material = _get_material()
@@ -22,7 +23,7 @@ _get_level = ( item_level ) => {
 
     let level = S.generation.level
 
-    level += get_random_num( -item_level/2, item_level )
+    level += get_random_num( 0, item_level )
 
     if ( level <= 1 ) level = 1
 
@@ -313,7 +314,7 @@ _get_multiplier = ( p ) => {
 
 _get_damage = ( p ) => {
 
-    let damage = S.generation.level + ( get_random_num( -S.generation.level, S.generation.level ))
+    let damage = p.level + ( get_random_num( -p.level, p.level ))
 
     if ( damage <= 0 ) damage = 1
 
