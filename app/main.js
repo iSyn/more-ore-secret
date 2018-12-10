@@ -1981,7 +1981,7 @@ let build_settings = () => {
       <br/>
       <h2>Performance</h2>
       <div class='select-container'>
-        <p>My computer is: </p>
+        <p>My computer... </p>
         <select id='select-tick_rate' onchange='change_tick_rate()'>
           <option value=1 ${ S.prefs.game_speed == 1 ? "selected" : "" }>is powered by a hamster</option>
           <option value=5 ${ S.prefs.game_speed == 5 ? "selected" : "" }>runs windows 95</option>
