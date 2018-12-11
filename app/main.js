@@ -686,16 +686,23 @@ let build_skills = () => {
       
       let skill_height = 40
       let skill_width = 40
-      let column_spacing = 50
-      let row_spacing = 20
+      let column_spacing = 60
+      let row_spacing = 30
 
       let column_position = s.position.col * ( skill_width + column_spacing ) - 50
       let row_position = ( middle - skill_height / 2 ) + s.position.row * ( skill_height + row_spacing )
 
+      if ( s.skill_classes.includes( 'small' ) ) {
+        skill_height = 30
+        skill_width = 30
+        column_position += 5
+        row_position += 5
+      }
+
       str += `
         <div
           id='skill-${ s.id }'
-          class='skill'
+          class='skill ${ s.locked ? "locked" : "" } ${ s.skill_classes ? s.skill_classes : "" }'
           style='
             left: ${ column_position }px;
             top: ${ row_position }px;
@@ -774,58 +781,6 @@ let position_skill_lines_canvas = () => {
 
 }
 
-let draw_skill_lines_old = () => {
-
-  let canvas = document.querySelector( 'canvas' )
-  let ctx = canvas.getContext( '2d' )
-  let scroll_offset = document.querySelector( '.skills-container' ).scrollTop
-
-  ctx.clearRect( 0, 0, canvas.width, canvas.height )
-
-  ctx.lineWidth = 1
-
-  Skills.forEach( skill => {
-
-    if ( skill.skill_requirements ) {
-
-      skill.skill_requirements.forEach( requirement => {
-
-        if ( requirement.owned == 1 ) ctx.strokeStyle = '#fff'
-        if ( requirement.owned == 0 ) ctx.strokeStyle = '#505050'
-
-        // ctx.strokeStyle="#FFF";
-        // if ( skill.locked ) ctx.strokeStyle = '#505050'
-
-        let target_skill = s( `#skill-${ requirement.code_name }` )
-        let base_skill = s( `#skill-${ skill.code_name }`)
-
-        let p = get_skill_line_positions( requirement.draw_lines, target_skill, base_skill )
-
-        ctx.beginPath()
-        ctx.moveTo( p.base_position.x, p.base_position.y - scroll_offset )
-
-        if ( requirement.draw_lines.from != 'left' && requirement.draw_lines.from != 'right' ) {
-          if ( requirement.draw_lines.from == 'top' ) {
-            ctx.lineTo( p.base_position.x, p.base_position.y - 20 - scroll_offset )
-            ctx.lineTo( p.target_position.x, p.target_position.y + 20 - scroll_offset )
-            ctx.lineTo( p.target_position.x, p.target_position.y - scroll_offset )
-          } else {
-            ctx.lineTo( p.base_position.x, p.base_position.y + 20 - scroll_offset )
-            ctx.lineTo( p.target_position.x, p.target_position.y - 20 - scroll_offset )
-            ctx.lineTo( p.target_position.x, p.target_position.y - scroll_offset )
-          }
-        } else {
-          ctx.lineTo( p.target_position.x, p.target_position.y - scroll_offset)
-        }
-
-        ctx.stroke()
-        ctx.closePath()
-        
-      } )
-    }
-  } )
-}
-
 let draw_skill_lines = () => {
 
   let c = s( 'canvas' )
@@ -848,6 +803,8 @@ let draw_skill_lines = () => {
       let target_skill = select_from_arr( Skills, requirement[ 0 ] )
       let target_skill_el = s( `#skill-${ target_skill.id }` )
       let base_skill_el = s( `#skill-${ skill.id }` )
+
+      if ( target_skill.owned == 0 ) ctx.strokeStyle = 'grey'
 
       let p = get_skill_line_positions( requirement[ 1 ], requirement[ 2 ], skill, target_skill, base_skill_el, target_skill_el, scroll_offset )
 
@@ -880,94 +837,54 @@ let get_skill_line_positions = ( from, to, base_skill, target_skill, base_skill_
 
   let horizontal_middle = ( el ) => el.offsetLeft + el.offsetWidth / 2
   let vertical_middle = ( el ) => el.offsetTop + el.offsetHeight / 2
+  let get_right_side = ( el ) => el.offsetLeft + el.offsetWidth
+  let get_bottom_side = ( el ) => el.offsetTop + el.offsetHeight
 
-  if ( from == 'right' && to == 'left' ) {
-    positions = {
-      base_position: {
-        x: base_skill_el.offsetLeft + base_skill_el.offsetWidth - scroll_offset,
-        y: vertical_middle( base_skill_el )
-      },
-      target_position: {
-        x: target_skill_el.offsetLeft - scroll_offset,
-        y: vertical_middle( target_skill_el )
-      }
+  if ( from == 'right' ) {
+    positions.base_position = {
+      x: get_right_side( base_skill_el ) - scroll_offset,
+      y: vertical_middle( base_skill_el )
+    }
+  }
+
+  if ( from == 'top' ) {
+    positions.base_position = {
+      x: horizontal_middle( base_skill_el ) - scroll_offset,
+      y: base_skill_el.offsetTop
+    }
+  }
+
+  if ( from == 'bottom' ) {
+    positions.base_position = {
+      x: horizontal_middle( base_skill_el ) - scroll_offset,
+      y: get_bottom_side( base_skill_el )
+    }
+  }
+
+  if ( to == 'left' ) {
+    positions.target_position = {
+      x: target_skill_el.offsetLeft - scroll_offset,
+      y: vertical_middle( target_skill_el )
+    }
+  }
+
+  if ( to == 'top' ) {
+    positions.target_position = {
+      x: horizontal_middle( target_skill_el ) - scroll_offset,
+      y: target_skill_el.offsetTop
+    }
+  }
+
+  if ( to == 'bottom' ) {
+    positions.target_position = {
+      x: horizontal_middle( target_skill_el ) - scroll_offset,
+      y: get_bottom_side( target_skill_el )
     }
   }
 
   return positions
 
 }
-
-let get_skill_line_positions_old = ( type, target_skill_el, base_skill_el ) => {
-
-  let positions = {}
-
-  let horizontal_middle_of_base_skill = base_skill_el.offsetLeft + base_skill_el.offsetWidth / 2
-  let horizontal_middle_of_target_skill = target_skill_el.offsetLeft + target_skill_el.offsetWidth / 2
-
-  let vertical_middle_of_base_skill = base_skill_el.offsetTop + base_skill_el.offsetHeight / 2
-  let vertical_middle_of_target_skill = target_skill_el.offsetTop + target_skill_el.offsetHeight / 2
- 
-  switch ( type.from ) {
-
-    case 'top':
-      positions = {
-        base_position: {
-          x: horizontal_middle_of_base_skill,
-          y: base_skill_el.offsetTop
-        },
-        target_position: {
-          x: horizontal_middle_of_target_skill,
-          y: target_skill_el.offsetTop + target_skill_el.offsetHeight
-        }
-      }
-      break
-
-    case 'bottom':
-      positions = {
-        base_position: {
-          x: horizontal_middle_of_base_skill,
-          y: base_skill_el.offsetTop + base_skill_el.offsetHeight
-        },
-        target_position: {
-          x: horizontal_middle_of_target_skill,
-          y: target_skill_el.offsetTop
-        }
-      }
-      break
-
-    case 'left':
-      positions = {
-        base_position: {
-          x: base_skill_el.offsetLeft,
-          y: vertical_middle_of_base_skill
-        },
-        target_position: {
-          x: target_skill_el.offsetLeft + target_skill_el.offsetWidth,
-          y: vertical_middle_of_target_skill
-        }
-      }
-      break
-
-    case 'right':
-      positions = {
-        base_position: {
-          x: base_skill_el.offsetLeft + base_skill_el.offsetWidth,
-          y: vertical_middle_of_base_skill
-        },
-        target_position: {
-          x: target_skill_el.offsetLeft,
-          y: vertical_middle_of_target_skill
-        }
-      }
-      break
-
-  }
-
-  return positions
-
-}
-
 
 // ========================================================================================
 

@@ -1,8 +1,9 @@
+let skill_id = 0
 let Skill = function( obj, index ) {
 
   this.name = obj.name
   this.code_name = obj.name.replace( / /g, '_').toLowerCase()
-  this.id = obj.id
+  this.id = skill_id
   this.img = obj.img
   this.desc = obj.desc
   this.skill_classes = obj.skill_classes || ''
@@ -13,8 +14,10 @@ let Skill = function( obj, index ) {
 
   this.position = obj.position
   this.unlock_function = obj.unlock_function
-  this.locked = obj.locked == 1 ? 1 : 0
+  this.locked = obj.locked == 0 ? 0 : 1
   this.owned = obj.owned == 1 ? 1 : 0
+
+  skill_id++
 
   Skills.push( this )
 
@@ -91,289 +94,101 @@ let skills = [
   {
     name: 'The Beginning',
     img: 'https://via.placeholder.com/40',
-    desc: 'Increase Ores per Click and Ores per Second by 30%',
-    skill_classes: 'main',
-    flavor_text: 'In the beginning, there was nothing. God said, "Let there be ores!"',
-    skill_requirements: [],
-    position: {
-      row: 1,
-      column: 0
-    },
-    locked: 0,
-    unlock_function: {
-      increase_opc: .3,
-      increase_ops: .3,
-      unlock_skills: [ 'pickaxe_proficiency_i', 'managerial_proficiency_i' ]
-    }
-  }, {
-    name: 'Pickaxe Proficiency I',
-    img: 'https://via.placeholder.com/40',
-    desc: 'Sharpness and Hardness up 5%',
-    skill_classes: 'small',
-    flavor_text: 'Increases your skills with handling pickaxes',
-    position: {
-      row: 2,
-      column: -2
-    },
-    skill_requirements: [
-      {
-        code_name: 'the_beginning',
-        owned: 0,
-        draw_lines: {
-          from: 'top',
-          to: 'bottom'
-        }
-      }
-    ],
-    locked: 1,
-    unlock_function: {
-      increase_pickaxe_sharpness: 5,
-      increase_pickaxe_hardness: 5,
-      unlock_skills: [ 'pickaxe_proficiency_ii' ]
-    }
-  }, {
-    name: 'Pickaxe Proficiency II',
-    img: 'https://via.placeholder.com/40',
-    desc: 'Sharpness and Hardness up 5%',
-    skill_classes: 'small',
-    flavor_text: 'Increases your skills with handling pickaxes',
-    position: {
-      row: 3,
-      column: -2
-    },
-    skill_requirements: [
-      {
-        code_name: 'pickaxe_proficiency_i',
-        owned: 0,
-        draw_lines: {
-          from: 'top',
-          to: 'bottom'
-        }
-      }
-    ],
-    locked: 1,
-    unlock_function: {
-      increase_pickaxe_sharpness: 5,
-      increase_pickaxe_hardness: 5,
-      unlock_skills: [ 'pickaxe_proficiency_iii' ]
-    }
-  }, {
-    name: 'Pickaxe Proficiency III',
-    img: 'https://via.placeholder.com/40',
-    desc: 'Sharpness and Hardness up 5%',
-    skill_classes: 'small',
-    flavor_text: 'Increases your skills with handling pickaxes',
-    position: {
-      row: 4,
-      column: -2
-    },
-    skill_requirements: [
-      {
-        code_name: 'pickaxe_proficiency_ii',
-        owned: 0,
-        draw_lines: {
-          from: 'top',
-          to: 'bottom'
-        }
-      }
-    ],
-    locked: 1,
-    unlock_function: {
-      increase_pickaxe_sharpness: 5,
-      increase_pickaxe_hardness: 5,
-      unlock_skills: [ 'pickaxe_handler' ]
-    }
-  }, {
-    name: 'Pickaxe Handler',
-    img: 'https://via.placeholder.com/40',
-    desc: 'Sharpness and Hardness up 30%',
-    skill_classes: 'main',
-    flavor_text: 'test flavor text 2',
-    position: {
-      row: 5,
-      column: -2
-    },
-    skill_requirements: [
-      {
-        code_name: 'pickaxe_proficiency_iii',
-        owned: 0,
-        draw_lines: {
-          from: 'top',
-          to: 'bottom'
-        }
-      }
-    ],
-    locked: 1,
-    unlock_function: {
-      increase_pickaxe_sharpness: 30,
-      increase_pickaxe_hardness: 30
-    }
-  }, {
-    name: 'Managerial Proficiency I',
-    img: 'https://via.placeholder.com/40',
-    desc: 'Increase all building production by 2%',
-    skill_classes: 'small',
-    flavor_text: '',
-    position: {
-      row: 2,
-      column: 2
-    },
-    skill_requirements: [
-      {
-        code_name: 'the_beginning',
-        owned: 0,
-        draw_lines: {
-          from: 'top',
-          to: 'bottom'
-        }
-      }
-    ],
-    locked: 1,
-    unlock_function: {
-      unlock_skills: [ 'managerial_proficiency_ii' ],
-      increase_ops: .02
-    }
-  }, {
-    name: 'Managerial Proficiency II',
-    img: 'https://via.placeholder.com/40',
-    desc: 'Increase all building production by 2%',
-    skill_classes: 'small',
-    flavor_text: '',
-    position: {
-      row: 3,
-      column: 2
-    },
-    skill_requirements: [
-      {
-        code_name: 'managerial_proficiency_i',
-        owned: 0,
-        draw_lines: {
-          from: 'top',
-          to: 'bottom'
-        }
-      }
-    ],
-    locked: 1,
-    unlock_function: {
-      unlock_skills: [ 'managerial_proficiency_iii', 'one_for_all' ],
-      increase_ops: .02
-    }
-  }, {
-    name: 'Managerial Proficiency III',
-    img: 'https://via.placeholder.com/40',
-    desc: 'Increase all building production by 2%',
-    skill_classes: 'small',
-    flavor_text: '',
-    position: {
-      row: 4,
-      column: 2
-    },
-    skill_requirements: [
-      {
-        code_name: 'managerial_proficiency_ii',
-        owned: 0,
-        draw_lines: {
-          from: 'top',
-          to: 'bottom'
-        }
-      }
-    ],
-    locked: 1,
-    unlock_function: {
-      unlock_skills: [ 'assistant_to_the_regional_manager' ],
-      increase_ops: .02
-    }
-  }, {
-    name: 'Assistant to the Regional Manager',
-    img: 'https://via.placeholder.com/40',
-    desc: 'Increase all building production by 10%',
-    skill_classes: 'main',
-    flavor_text: '',
-    position: {
-      row: 5,
-      column: 2
-    },
-    skill_requirements: [
-      {
-        code_name: 'managerial_proficiency_iii',
-        owned: 0,
-        draw_lines: {
-          from: 'top',
-          to: 'bottom'
-        }
-      }
-    ],
-    locked: 1,
-    unlock_function: {
-      increase_ops: .1
-    }
-  }
-]
-
-skills = [
-  {
-    name: 'The Beginning',
-    id: 1,
-    img: 'https://via.placeholder.com/40',
     desc: 'Increase all building production and ores per click by 10%',
     flavor_text: 'flavor test',
     position: { col: 1, row: 0 },
     locked: 0,
     unlock_function: {
       unlock_skills: [
-        [ 'pickaxe_proficiency', 'right', 'left' ]
+        [ 'pickaxe_proficiency_i', 'right', 'left' ],
+        [ 'managerial_proficiency_i', 'right', 'left' ]
       ],
       increase_all_building_production: .1,
       increase_opc: .1
     }
   }, {
-    name: 'Pickaxe Proficiency',
-    id: 2,
+    name: 'Pickaxe Proficiency I',
+    skill_classes: 'circle small',
     img: 'https://via.placeholder.com/40',
     desc: 'Increase all pickaxe sharpness + hardness by 5%',
     flavor_text: 'flavor text',
     position: { col: 2, row: -1 },
     skill_requirements: [ 'the_beginning' ],
     unlock_function: {
-      unlock_skills: [],
+      unlock_skills: [
+        [ 'pickaxe_proficiency_ii', 'right', 'left' ]
+      ],
     }
   }, {
-    name: 'Test skill 1',
-    id: 3,
+    name: 'Pickaxe Proficiency II',
+    skill_classes: 'circle small',
     img: 'https://via.placeholder.com/40',
     desc: 'Increase all pickaxe sharpness + hardness by 5%',
     flavor_text: 'flavor text',
-    position: { col: 2, row: -4 },
+    position: { col: 3, row: -1 },
+    skill_requirements: [ 'pickaxe_proficiency_i' ],
+    unlock_function: {
+      unlock_skills: [
+        [ 'pickaxe_proficiency_iii', 'right', 'left']
+      ],
+    }
+  }, {
+    name: 'Pickaxe Proficiency III',
+    skill_classes: 'circle small',
+    img: 'https://via.placeholder.com/40',
+    desc: 'Increase all pickaxe sharpness + hardness by 5%',
+    flavor_text: 'flavor text',
+    position: { col: 4, row: -1 },
+    skill_requirements: [ 'pickaxe_proficiency_ii' ],
+    unlock_function: {
+      unlock_skills: [
+        [ 'miners_knowledge', 'right', 'left']
+      ],
+    }
+  }, {
+    name: 'Miners Knowledge',
+    img: 'https://via.placeholder.com/40',
+    desc: 'Increase all pickaxe sharpness + hardness by 30%',
+    flavor_text: 'flavor text',
+    position: { col: 5, row: -1 },
+    skill_requirements: [ 'pickaxe_proficiency_iii' ],
     unlock_function: {
       unlock_skills: [],
     }
   }, {
-    name: 'Test skill 1',
-    id: 4,
+    name: 'Managerial Proficiency I',
+    skill_classes: 'circle small',
     img: 'https://via.placeholder.com/40',
-    desc: 'Increase all pickaxe sharpness + hardness by 5%',
+    desc: 'Increase all building production by 3%',
     flavor_text: 'flavor text',
-    position: { col: 2, row: -2 },
+    position: { col: 2, row: 1 }, 
+    skill_requirements: [ 'the_beginning' ],
     unlock_function: {
-      unlock_skills: [],
+      unlock_skills: [
+        [ 'managerial_proficiency_ii', 'right', 'left' ]
+      ],
     }
   }, {
-    name: 'testtest',
-    id: 5,
+    name: 'Managerial Proficiency II',
+    skill_classes: 'circle small',
     img: 'https://via.placeholder.com/40',
-    desc: 'Increase all pickaxe sharpness + hardness by 5%',
+    desc: 'Increase all building production by 3%',
     flavor_text: 'flavor text',
-    position: { col: 2, row: 4 },
+    position: { col: 3, row: 1 }, 
+    skill_requirements: [ 'managerial_proficiency_ii' ],
     unlock_function: {
-      unlock_skills: [],
+      unlock_skills: [
+        [ 'managerial_proficiency_iii', 'right', 'left' ]
+      ],
     }
   }, {
-    name: 'testeste2',
-    id: 6,
+    name: 'Managerial Proficiency III',
+    skill_classes: 'circle small',
     img: 'https://via.placeholder.com/40',
-    desc: 'Increase all pickaxe sharpness + hardness by 5%',
+    desc: 'Increase all building production by 3%',
     flavor_text: 'flavor text',
-    position: { col: 6, row: -1 },
+    position: { col: 4, row: 1 }, 
+    skill_requirements: [ 'managerial_proficiency_ii' ],
     unlock_function: {
       unlock_skills: [],
     }
