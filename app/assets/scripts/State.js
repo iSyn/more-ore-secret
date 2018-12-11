@@ -125,7 +125,7 @@ let State = function( s = {} ) {
     },
 
     misc: s.misc || {
-      current_ore_sprite: 5,
+      current_ore_sprite: 1,
       ore_sprite_amount: 5
     }
   }

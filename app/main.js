@@ -25,11 +25,14 @@ const AUTOMATER_CONTAINER = s( '.automater-container' )
 const AUTOMATER_HEADER = s( '.automater-wrapper > header' )
 const ACHIEVEMENT_NOTIFICATION_CONTAINER = s( '.achievement-notification-container' )
 const FOOTER = s( 'footer' )
+const FOOTER_VERSION = s( '.version-number' )
 const BOTTOM_AREA_TABS = s( '.bottom-area-tabs' )
 const COMBO_SIGN_CONTAINER = s( '.combo-sign-container' )
 const ORES_AMOUNT = s( '#ores-amount' )
 const GEMS_AMOUNT = s( '#gems-amount' )
 const GENERATION_LVL = s( '#generation-lvl' )
+const LOADING_SCREEN = s( '.loading-screen' )
+const LOADING_TEXT = s( '.loading-text' )
 
 let S = new State().state
 let RN = new RisingNumber()
@@ -60,7 +63,7 @@ let O = {
 }
 
 let init_game = () => {
-  if ( localStorage.getItem( 'state' ) ) load_game() 
+  load_game() 
   game_loop()
   S.tabs = Tabs
   build_tabs()
@@ -134,6 +137,10 @@ let load_game = () => {
     Skills = []
     JSON.parse( localStorage.getItem( 'skills' ) ).forEach( skill => new Skill( skill ) )
   }
+
+  LOADING_SCREEN.addEventListener( 'transitionend', () => remove_el( LOADING_SCREEN ) )
+  LOADING_SCREEN.classList.add( 'finished-loading' )
+  
 }
 
 let notify = ( text, color = 'white', type = null ) => {
@@ -166,9 +173,9 @@ let wipe_save = () => {
 }
 
 let build_footer = () => {
-  FOOTER.innerHTML = `
-    <p><strong>More Ore</strong> v.${ VERSION } created by <strong><a href='https://synclairwang.com'>Syn Studios</a></strong> | <span onclick='save_game()'>Save Game</span> | <span onclick='wipe_save()'>Wipe Save</span> | <a href='https://discord.gg/NU99mMQ' target='_blank'>Join the Discord!</a> </p>
-  `
+
+  FOOTER_VERSION.innerHTML = VERSION
+
 }
 
 let on_blur = () => {

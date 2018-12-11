@@ -30,4 +30,8 @@ $separator-thin: 8px;
   &.thin {
     height: $separator-thin;
   }
+
+  &.footer {
+    height: 20px;
+  }
 }

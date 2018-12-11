@@ -34,6 +34,14 @@
 
   <body>
 
+    <div class="loading-screen">
+      <div class="loading-screen-container">
+        <img src="./app/assets/images/misc-logo.png" alt="logo">
+        <p class='loading-text'>Loading...</p>
+      </div>
+      <p>If the game doesn't load, your save file may be corrupted. You can contact me on <a href='https://discord.gg/NU99mMQ' target='_blank'>Discord</a>!</p>
+    </div>
+
     <div class="container">
 
       <div class="torch torch-left"></div>
@@ -133,8 +141,12 @@
           <div class="vertical-separator right-vertical-separator"></div>
         </section>
       </div>
-      <div class="horizontal-separator"></div>
-      <footer></footer>
+      <div class="horizontal-separator footer">
+        <footer>
+            <p><img src="./app/assets/images/misc-logo.png" alt="logo"> v.<span class='version-number'></span> created by <a href='https://synclairwang.com'>Syn Studios</a></p>
+            <p><a href='https://discord.gg/NU99mMQ' target='_blank'>Join the Discord!</a> | <span onclick='save_game()'>Save Game</span> | <span onclick='wipe_save()'>Wipe Save</span></p>
+          </footer>
+      </div>
     </div>
 
     <!-- <script src='./app/assets/libs/howler.js'></script> -->
