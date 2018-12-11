@@ -337,7 +337,7 @@ let build_tabs = () => {
     if ( !tab.hidden ) {
       str += `
         <div 
-          class='tab ${ tab.name }-tab ${ tab.selected && "selected" }'
+          class='tab ${ tab.name }-tab ${ O.current_tab == tab.code_name && "selected" }'
           onclick='change_tab( "${ tab.code_name }" ); build_${ tab.code_name }_tab()'
         >${ tab.name }</div>
       `
@@ -643,7 +643,8 @@ let build_skills_tab = async () => {
   TAB_CONTENT.classList.remove( 'store', 'smith' )
   TAB_CONTENT.classList.add( 'skills' )
 
-  s( '.skills-container' ).addEventListener( 'scroll', () => draw_skill_lines() )
+  let skills_container = s( '.skills-container' )
+  skills_container.addEventListener( 'scroll', () => draw_skill_lines() )
   
   position_skill_lines_canvas()
 
@@ -672,54 +673,83 @@ let build_skills = () => {
 
   return new Promise( resolve => {
 
-    let middle = TAB_CONTENT.getBoundingClientRect().width / 2
+    let middle = ( TAB_CONTENT.offsetHeight - 100 ) / 2
+
+    console.log( middle )
 
     let str = ''
 
     str += '<div class="skills-container">'
     str += '<canvas class="skill-lines-container"></canvas>'
-    
-    Skills.forEach( ( s, i ) => {
 
+    Skills.forEach( s => {
+      
       let skill_height = 40
       let skill_width = 40
-      let column_spacing = 10
-      let row_spacing = 60
+      let column_spacing = 50
+      let row_spacing = 20
 
-      let column_pos = ( middle - skill_width / 2 ) + ( s.position.column * ( skill_height + column_spacing ) )
-      let row_pos = ( s.position.row * ( skill_height + row_spacing ) - 50 )
-
-      if ( s.skill_classes.includes( 'small' ) ) {
-        column_pos += 8
-        row_pos += 8
-        skill_height = 25
-        skill_width = 25
-      }
-
-      console.log( `building ${ s.name }. Locked status: ${ s.locked }`)
+      let column_position = s.position.col * ( skill_width + column_spacing ) - 50
+      let row_position = ( middle - skill_height / 2 ) + s.position.row * ( skill_height + row_spacing )
 
       str += `
-        <div 
-          class='skill ${ s.skill_classes } ${ s.locked ? "locked" : "" }'
-          id='skill-${ s.code_name }'
-          onclick='Skills[ ${ i } ].level_up( event )'
-          onmouseover='TT.show( event, { name: "${ s.code_name }", type: "skill" } ) '
-          onmouseout='TT.hide()'
+        <div
+          id='skill-${ s.id }'
+          class='skill'
           style='
-            left: ${ column_pos }px; 
-            top: ${ row_pos }px;
+            left: ${ column_position }px;
+            top: ${ row_position }px;
             height: ${ skill_height }px;
-            width: ${ skill_height}px;
+            width: ${ skill_width }px;
             background-image: url( "${ s.img }" );
           '
-        ></div>
+        >
+        </div>
       `
 
-    } )
+    })
+    
+    // Skills.forEach( ( s, i ) => {
+
+    //   let skill_height = 40
+    //   let skill_width = 40
+    //   let column_spacing = 10
+    //   let row_spacing = 60
+
+    //   let column_pos = ( middle - skill_width / 2 ) + ( s.position.column * ( skill_height + column_spacing ) )
+    //   let row_pos = ( s.position.row * ( skill_height + row_spacing ) - 50 )
+
+    //   if ( s.skill_classes.includes( 'small' ) ) {
+    //     column_pos += 8
+    //     row_pos += 8
+    //     skill_height = 25
+    //     skill_width = 25
+    //   }
+
+    //   console.log( `building ${ s.name }. Locked status: ${ s.locked }`)
+
+    //   str += `
+    //     <div 
+    //       class='skill ${ s.skill_classes } ${ s.locked ? "locked" : "" }'
+    //       id='skill-${ s.code_name }'
+    //       onclick='Skills[ ${ i } ].level_up( event )'
+    //       onmouseover='TT.show( event, { name: "${ s.code_name }", type: "skill" } ) '
+    //       onmouseout='TT.hide()'
+    //       style='
+    //         left: ${ column_pos }px; 
+    //         top: ${ row_pos }px;
+    //         height: ${ skill_height }px;
+    //         width: ${ skill_height}px;
+    //         background-image: url( "${ s.img }" );
+    //       '
+    //     ></div>
+    //   `
+
+    // } )
 
     str += '</div>'
 
-    resolve( str)
+    resolve( str )
 
   } )
 }
@@ -744,7 +774,7 @@ let position_skill_lines_canvas = () => {
 
 }
 
-let draw_skill_lines = () => {
+let draw_skill_lines_old = () => {
 
   let canvas = document.querySelector( 'canvas' )
   let ctx = canvas.getContext( '2d' )
@@ -796,7 +826,79 @@ let draw_skill_lines = () => {
   } )
 }
 
-let get_skill_line_positions = ( type, target_skill_el, base_skill_el ) => {
+let draw_skill_lines = () => {
+
+  let c = s( 'canvas' )
+  let ctx = c.getContext( '2d' )
+
+  ctx.clearRect( 0, 0, c.width, c.height )
+
+  ctx.lineWidth = 2
+  ctx.strokeStyle = '#fff'
+
+  let scroll_offset = s( '.skills-container' ).scrollLeft
+  let line_break = 20
+
+  Skills.forEach( skill => {
+
+    let reqs = skill.unlock_function.unlock_skills
+
+    reqs.forEach( requirement => {
+
+      let target_skill = select_from_arr( Skills, requirement[ 0 ] )
+      let target_skill_el = s( `#skill-${ target_skill.id }` )
+      let base_skill_el = s( `#skill-${ skill.id }` )
+
+      let p = get_skill_line_positions( requirement[ 1 ], requirement[ 2 ], skill, target_skill, base_skill_el, target_skill_el, scroll_offset )
+
+      ctx.beginPath()
+      ctx.moveTo( p.base_position.x, p.base_position.y )
+
+      if ( skill.position.row != target_skill.position.row ) {
+
+        let middle_distance = ( target_skill_el.offsetLeft - ( base_skill_el.offsetLeft + base_skill_el.offsetWidth ) ) / 2
+
+        ctx.lineTo( p.base_position.x + middle_distance, p.base_position.y )
+        ctx.lineTo( p.base_position.x + middle_distance, p.target_position.y )
+        ctx.lineTo( p.target_position.x, p.target_position.y )
+
+      } else {
+        ctx.lineTo( p.target_position.x, p.target_position.y )
+      }
+
+      ctx.stroke()
+      ctx.closePath()
+
+    } )
+  } )
+
+}
+
+let get_skill_line_positions = ( from, to, base_skill, target_skill, base_skill_el, target_skill_el, scroll_offset ) => {
+
+  let positions = {}
+
+  let horizontal_middle = ( el ) => el.offsetLeft + el.offsetWidth / 2
+  let vertical_middle = ( el ) => el.offsetTop + el.offsetHeight / 2
+
+  if ( from == 'right' && to == 'left' ) {
+    positions = {
+      base_position: {
+        x: base_skill_el.offsetLeft + base_skill_el.offsetWidth - scroll_offset,
+        y: vertical_middle( base_skill_el )
+      },
+      target_position: {
+        x: target_skill_el.offsetLeft - scroll_offset,
+        y: vertical_middle( target_skill_el )
+      }
+    }
+  }
+
+  return positions
+
+}
+
+let get_skill_line_positions_old = ( type, target_skill_el, base_skill_el ) => {
 
   let positions = {}
 
@@ -865,6 +967,7 @@ let get_skill_line_positions = ( type, target_skill_el, base_skill_el ) => {
   return positions
 
 }
+
 
 // ========================================================================================
 

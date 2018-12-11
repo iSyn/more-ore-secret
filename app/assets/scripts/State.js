@@ -70,8 +70,11 @@ let State = function( s = {} ) {
 
       permanent_bonuses: {
         sharpness: 0,
-        hardness: 0
-      }
+        hardness: 0,
+      },
+
+      item_multiplier: 0,
+      bonus_drop_rate: 0
     },
 
     automater: {

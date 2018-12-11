@@ -1,12 +1,13 @@
-let Skill = function( obj ) {
+let Skill = function( obj, index ) {
 
   this.name = obj.name
   this.code_name = obj.name.replace( / /g, '_').toLowerCase()
+  this.id = obj.id
   this.img = obj.img
   this.desc = obj.desc
   this.skill_classes = obj.skill_classes || ''
   this.flavor_text = obj.flavor_text || ''
-  this.generation_requirement = obj.generation_requirement || obj.position.row
+  this.generation_requirement = obj.generation_requirement || obj.position.col
 
   this.skill_requirements = obj.skill_requirements
 
@@ -58,6 +59,8 @@ let Skill = function( obj ) {
                   draw_skill_lines()
                 })
               }
+
+              if ( fn.increase_all_building_production ) Buildings.forEach( b => b.production += b.production * fn.increase_all_building_production )
   
               if ( fn.increase_opc ) S.opc_multiplier += fn.increase_opc
               if ( fn.increase_ops ) S.ops_multiplier += fn.increase_ops
@@ -152,7 +155,7 @@ let skills = [
     unlock_function: {
       increase_pickaxe_sharpness: 5,
       increase_pickaxe_hardness: 5,
-      unlock_skills: [ 'pickaxe_proficiency_iii', 'one_for_all' ]
+      unlock_skills: [ 'pickaxe_proficiency_iii' ]
     }
   }, {
     name: 'Pickaxe Proficiency III',
@@ -304,40 +307,77 @@ let skills = [
     unlock_function: {
       increase_ops: .1
     }
-  }, {
-    name: 'One for All',
+  }
+]
+
+skills = [
+  {
+    name: 'The Beginning',
+    id: 1,
     img: 'https://via.placeholder.com/40',
-    desc: 'Increase all building production, pickaxe sharpness, and pickaxe hardness by 5%',
-    skill_classes: 'main',
-    flavor_text: '',
-    position: {
-      row: 3,
-      column: 0
-    },
-    skill_requirements: [
-      {
-        code_name: 'pickaxe_proficiency_ii',
-        owned: 0,
-        draw_lines: {
-          from: 'left',
-          to: 'right'
-        }
-      }, {
-        code_name: 'managerial_proficiency_ii',
-        owned: 0,
-        draw_lines: {
-          from: 'right',
-          to: 'left'
-        }
-      }
-    ],
-    locked: 1,
+    desc: 'Increase all building production and ores per click by 10%',
+    flavor_text: 'flavor test',
+    position: { col: 1, row: 0 },
+    locked: 0,
     unlock_function: {
-      increase_ops: .05,
-      increase_pickaxe_hardness: 5,
-      increase_pickaxe_hardness: 5
+      unlock_skills: [
+        [ 'pickaxe_proficiency', 'right', 'left' ]
+      ],
+      increase_all_building_production: .1,
+      increase_opc: .1
     }
-  }, 
+  }, {
+    name: 'Pickaxe Proficiency',
+    id: 2,
+    img: 'https://via.placeholder.com/40',
+    desc: 'Increase all pickaxe sharpness + hardness by 5%',
+    flavor_text: 'flavor text',
+    position: { col: 2, row: -1 },
+    skill_requirements: [ 'the_beginning' ],
+    unlock_function: {
+      unlock_skills: [],
+    }
+  }, {
+    name: 'Test skill 1',
+    id: 3,
+    img: 'https://via.placeholder.com/40',
+    desc: 'Increase all pickaxe sharpness + hardness by 5%',
+    flavor_text: 'flavor text',
+    position: { col: 2, row: -4 },
+    unlock_function: {
+      unlock_skills: [],
+    }
+  }, {
+    name: 'Test skill 1',
+    id: 4,
+    img: 'https://via.placeholder.com/40',
+    desc: 'Increase all pickaxe sharpness + hardness by 5%',
+    flavor_text: 'flavor text',
+    position: { col: 2, row: -2 },
+    unlock_function: {
+      unlock_skills: [],
+    }
+  }, {
+    name: 'testtest',
+    id: 5,
+    img: 'https://via.placeholder.com/40',
+    desc: 'Increase all pickaxe sharpness + hardness by 5%',
+    flavor_text: 'flavor text',
+    position: { col: 2, row: 4 },
+    unlock_function: {
+      unlock_skills: [],
+    }
+  }, {
+    name: 'testeste2',
+    id: 6,
+    img: 'https://via.placeholder.com/40',
+    desc: 'Increase all pickaxe sharpness + hardness by 5%',
+    flavor_text: 'flavor text',
+    position: { col: 6, row: -1 },
+    unlock_function: {
+      unlock_skills: [],
+    }
+  }
 ]
 
 skills.forEach( skill => new Skill( skill ) )
