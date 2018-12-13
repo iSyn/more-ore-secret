@@ -54,13 +54,33 @@
         width: 7px;
         border-radius: 50%;
         margin: 0 auto;
-        background: black;
+        background: red;
         box-shadow: 0 2px 5px #222;
         margin-bottom: 10px;
       }
 
       .quest-name {
       }
+    }
+  }
+}
+
+.wrapper > #quest-sheet {
+  height: 600px;
+  width: 400px;
+  background-color: #fffae0;
+  background-image: url("https://www.transparenttextures.com/patterns/beige-paper.png");
+
+  header {
+
+    h1 {
+      color: #222;
+      text-align: center;
+    }
+
+    i {
+      color: black;
+      cursor: pointer;
     }
   }
 }

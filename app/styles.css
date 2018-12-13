@@ -2455,10 +2455,22 @@ input:checked + .slider:before {
         width: 7px;
         border-radius: 50%;
         margin: 0 auto;
-        background: black;
+        background: red;
         -webkit-box-shadow: 0 2px 5px #222;
         box-shadow: 0 2px 5px #222;
         margin-bottom: 10px; }
+
+.wrapper > #quest-sheet {
+  height: 600px;
+  width: 400px;
+  background-color: #fffae0;
+  background-image: url("https://www.transparenttextures.com/patterns/beige-paper.png"); }
+  .wrapper > #quest-sheet header h1 {
+    color: #222;
+    text-align: center; }
+  .wrapper > #quest-sheet header i {
+    color: black;
+    cursor: pointer; }
 
 .ore-weak-spot {
   display: none;

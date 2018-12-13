@@ -212,7 +212,7 @@ let smith_upgrades = [
         price: 10,
         unlock_functions: {
             increase_pickaxe_hardness: 10,
-            unlock_smith_upgrades: [ 'reinforce_pickaxe_ii', 'test_skill' ]
+            unlock_smith_upgrades: [ 'reinforce_pickaxe_ii' ]
         }
     }, {
         name: 'Reinforce Pickaxe II',

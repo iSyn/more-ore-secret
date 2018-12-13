@@ -1717,7 +1717,7 @@ let build_quests = () => {
 
     str += `
       <div 
-        onclick='start_quest( "${ quest.code_name }" )'
+        onclick='view_quest( "${ quest.code_name }" )'
         class='quest ${ quest.locked && "locked" }'
       >
         <div class='pin'></div>
@@ -1733,10 +1733,45 @@ let build_quests = () => {
 
 }
 
-let start_quest = ( code_name ) => {
+let view_quest = ( code_name ) => {
 
   let quest = select_from_arr( Quests, code_name )
-  console.log( 'starting quest:', quest )
+
+  let quest_sheet = document.createElement( 'div' )
+  quest_sheet.classList.add( 'wrapper' )
+
+  let str = `
+    <div id='quest-sheet'>
+      <header>
+        <i onclick='remove_wrapper()' class='fa fa-times fa-1x'></i>
+        <h1>${ quest.name }</h1>
+      </header>
+      <button onclick='start_quest( "${ quest.code_name }" )'>START QUEST</button>
+    </div>
+  `
+
+  quest_sheet.innerHTML = str
+  CONTAINER.append( quest_sheet )
+
+
+}
+
+let start_quest = ( code_name ) => {
+
+  let quest_board_el = s( '#quest-board' )
+  let quest_board_el_parent = quest_board_el.parentElement
+  remove_wrapper()
+  remove_el( quest_board_el_parent )
+
+  if ( S.quest.in_progress ) {
+    notify( 'A quest is already in progress', 'red', 'error' )
+    remove_wrapper()
+    return
+  }
+
+  let quest = select_from_arr( Quests, code_name )
+  S.quest.in_progress = quest
+  S.quest.current_progress = 0
 
 }
 
@@ -1870,7 +1905,7 @@ let build_achievements = () => {
 
   let str = `
     <div class='stats-container'>
-      <h1>Achievements</h1>
+      <h1>Statistics</h1>
       <hr/>
       <ul>
         <li><span>Highest Combo: ${ S.stats.highest_combo }</li>
