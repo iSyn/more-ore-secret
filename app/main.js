@@ -464,6 +464,9 @@ let build_buildings = () => {
 }
 
 let build_smith_tab = () => {
+
+  O.rebuild_smith_tab = 0
+
   let str = ''
 
   str += build_pickaxe_accordion()
@@ -632,6 +635,8 @@ let toggle_pickaxe_accordion = () => {
 // ==== SKILL SHIT ========================================================================
 
 let build_skills_tab = async () => {
+
+  O.rebuild_skill_tab = 0
 
   let str = ''
 
@@ -1766,7 +1771,7 @@ let game_loop = () => {
     if ( O.counter % S.prefs.game_speed == 0 ) {
       S.stats.seconds_played++
       if ( S.ops > 0 && S.prefs.show_ops_rising_numbers ) RN.new( null, 'buildings', S.ops )
-      if ( O.current_tab == 'store' ) build_store_tab()
+      // if ( O.current_tab == 'store' ) build_store_tab()
     }
 
     // THIS RUNS EVERY --------------------------------- ↓ seconds

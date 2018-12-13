@@ -1788,7 +1788,7 @@ input:checked + .slider:before {
 
 .item-container {
   position: fixed;
-  z-index: 4;
+  z-index: 3;
   height: 64px;
   width: 64px;
   cursor: pointer;
