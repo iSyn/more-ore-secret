@@ -436,7 +436,7 @@ let build_buildings = () => {
           </div>
           <div class="middle">
             <h1>${ building.name } ${ S.buy_amount != 1 ? "x" + S.buy_amount : "" }</h1>
-            <p class='${ S.ores < building.current_price ? "not-enough" : ""  }'><img class='ore-small' src='./app/assets/images/ore.png' /> ${ beautify_number( get_geometric_sequence_price( building.base_price, building.price_scale, building.owned, building.current_price ).price ) } </p>
+            <p class='${ S.ores < get_geometric_sequence_price( building.base_price, building.price_scale, building.owned, building.current_price ).price ? "not-enough" : ""  }'><img class='ore-small' src='./app/assets/images/ore.png' /> ${ beautify_number( get_geometric_sequence_price( building.base_price, building.price_scale, building.owned, building.current_price ).price ) } </p>
           </div>
           <div class="right">
             <h1>${ building.owned }</h1>
@@ -675,8 +675,6 @@ let build_skills = () => {
 
     let middle = ( TAB_CONTENT.offsetHeight - 100 ) / 2
 
-    console.log( middle )
-
     let str = ''
 
     str += '<div class="skills-container">'
@@ -802,6 +800,9 @@ let draw_skill_lines = () => {
         ctx.lineTo( p.base_position.x + middle_distance, p.target_position.y )
         ctx.lineTo( p.target_position.x, p.target_position.y )
 
+      } else if ( skill.position.row != target_skill.position.row && ( line[ 1 ] == 'top' && line[ 2 ] == 'left' ) ) {
+        ctx.lineTo( p.base_position.x, p.target_position.y )
+        ctx.lineTo( p.target_position.x, p.target_position.y )
       } else {
         ctx.lineTo( p.target_position.x, p.target_position.y )
       }
@@ -1000,7 +1001,13 @@ let calculate_ops = () => {
   let ops = 0
 
   Buildings.forEach( building => {
+  
+    let production_bonus = S.bonus_building_production[ building.code_name ] + S.bonus_building_production.all
+
+    building.production = building.base_production + ( building.base_production * production_bonus )
+
     ops += building.owned * building.production
+
   })
 
   ops += ops * S.ops_multiplier

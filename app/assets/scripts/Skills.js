@@ -97,15 +97,11 @@ let Skill = function( obj, index ) {
       })
     }
 
-    if ( fn.increase_all_building_production ) {
-      Buildings.forEach( b => b.production += b.production * fn.increase_all_building_production )
-    }
-
+    if ( fn.increase_all_building_production ) S.bonus_building_production.all += fn.increase_all_building_production
     if ( fn.increase_opc ) S.opc_multiplier += S.opc_multiplier * fn.increase_opc
 
-
     O.recalculate_opc = 1
-    O.recalculate_opc = 1
+    O.recalculate_ops = 1
 
   }
 }
@@ -116,7 +112,7 @@ let skills = [
     name: 'The Beginning',
     id: 1,
     img: 'https://via.placeholder.com/40',
-    desc: 'Increase all building production and ores per click by 10%',
+    desc: 'Increase all building production and ores per click by 50%',
     flavor_text: 'flavor test',
     position: { col: 1, row: 0 },
     locked: 0,
@@ -125,8 +121,8 @@ let skills = [
         [ 'pickaxe_proficiency_i', 'right', 'left' ],
         [ 'managerial_proficiency_i', 'right', 'left' ]
       ],
-      increase_all_building_production: .1,
-      increase_opc: .1
+      increase_all_building_production: .5,
+      increase_opc: .5
     }
   }, {
     name: 'Pickaxe Proficiency I',
@@ -154,7 +150,6 @@ let skills = [
     unlock_function: {
       unlock_skills: [
         [ 'pickaxe_proficiency_iii', 'right', 'left' ],
-        [ 'test_skill', 'bottom', 'top' ]
       ],
     }
   }, {
@@ -187,7 +182,7 @@ let skills = [
     skill_classes: 'circle small',
     id: 6,
     img: 'https://via.placeholder.com/40',
-    desc: 'Increase all building production by 3%',
+    desc: 'Increase all building production by 5%',
     flavor_text: 'flavor text',
     position: { col: 2, row: 1 }, 
     skill_requirement_names: [ 'the_beginning' ],
@@ -195,45 +190,36 @@ let skills = [
       unlock_skills: [
         [ 'managerial_proficiency_ii', 'right', 'left' ]
       ],
+      increase_all_building_production: .05,
     }
   }, {
     name: 'Managerial Proficiency II',
     id: 7,
     skill_classes: 'circle small',
     img: 'https://via.placeholder.com/40',
-    desc: 'Increase all building production by 3%',
+    desc: 'Increase all building production by 5%',
     flavor_text: 'flavor text',
     position: { col: 3, row: 1 }, 
     skill_requirement_names: [ 'managerial_proficiency_i' ],
     unlock_function: {
       unlock_skills: [
-        [ 'managerial_proficiency_iii', 'right', 'left' ],
-        [ 'test_skill', 'top', 'bottom']
+        [ 'managerial_proficiency_iii', 'right', 'left' ]
       ],
+      increase_all_building_production: .05,
     }
   }, {
     name: 'Managerial Proficiency III',
     id: 8,
     skill_classes: 'circle small',
     img: 'https://via.placeholder.com/40',
-    desc: 'Increase all building production by 3%',
+    desc: 'Increase all building production by 5%',
     flavor_text: 'flavor text',
     position: { col: 4, row: 1 }, 
     skill_requirement_names: [ 'managerial_proficiency_ii' ],
     unlock_function: {
       unlock_skills: [],
-    }
-  }, {
-    name: 'test skill',
-    id: 9,
-    img: 'https://via.placeholder.com/40',
-    desc: 'Increase all building production by 3%',
-    flavor_text: 'flavor text',
-    position: { col: 3, row: 0 }, 
-    skill_requirement_names: [ 'managerial_proficiency_ii', 'pickaxe_proficiency_ii' ],
-    unlock_function: {
-      unlock_skills: [],
-    }
+    },
+    increase_all_building_production: .05,
   }
 ]
 

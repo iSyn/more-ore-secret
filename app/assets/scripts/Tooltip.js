@@ -251,6 +251,12 @@ TOOLTIP.style.display = 'none'
     // position tooltip
     switch ( obj.type ) {
 
+      case 'skill':
+        tooltip_dimensions = TOOLTIP.getBoundingClientRect()
+        TOOLTIP.style.left = ( MIDDLE_VERTICAL_SEPARATOR.getBoundingClientRect().left - tooltip_dimensions.width ) + 'px'
+        TOOLTIP.style.top = '20%'
+        break
+
       case 'generation':
         tooltip_dimensions = TOOLTIP.getBoundingClientRect()
         target_el_dimensions = e.target.getBoundingClientRect()

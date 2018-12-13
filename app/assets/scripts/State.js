@@ -43,8 +43,26 @@ let State = function( s = {} ) {
     gold_nugget_spawn_rate: s.gold_nugget_spawn_rate || 60, // 
     gold_nugget_chance_to_spawn: s.gold_nugget_chance_to_spawn || 30, // 30% chance to spawn
     
-    bottom_area: {
+    bottom_area: s.bottom_area || {
       selected_tab: 'quest_board'
+    },
+
+    bonus_building_production: s.bonus_building_production || {
+      all: 0,
+      school: 0,
+      farm: 0,
+      quarry: 0,
+      church: 0,
+      factory: 0,
+      crypt: 0,
+      hospital: 0,
+      citadel: 0,
+      xeno_spaceship: 0,
+      sky_castle: 0,
+      eon_portal: 0,
+      sacred_mine: 0,
+      'o.a.r.d.i.s.': 0,
+      final_destination: 0
     },
 
     quest: {
