@@ -9,8 +9,32 @@ let Skill = function( obj, index ) {
   this.skill_classes = obj.skill_classes || ''
   this.flavor_text = obj.flavor_text || ''
   this.generation_requirement = obj.generation_requirement || obj.position.col
+  this.skill_requirement_names = obj.skill_requirement_names
 
-  this.skill_requirements = obj.skill_requirements
+  this.__get_skill_requirements = () => {
+
+    console.log( 'get skill requirements firing' )
+
+    let skill_requirements = []
+    if ( obj.skill_requirement_names ) {
+      obj.skill_requirement_names.forEach( skill_code_name => {
+        
+        let requirement = {}
+
+        let target_skill = select_from_arr( Skills, skill_code_name )
+
+        requirement.code_name = skill_code_name
+        requirement.owned = target_skill.owned ? true : false
+
+        skill_requirements.push( requirement )
+
+      } )
+    }
+
+    return skill_requirements
+  }
+
+  this.skill_requirements = this.__get_skill_requirements() 
 
   this.position = obj.position
   this.unlock_function = obj.unlock_function
@@ -87,6 +111,63 @@ let Skill = function( obj, index ) {
       notify( 'This skill is locked', 'red', 'error' )
     }
   }
+
+  this.level_up = ( e ) => {
+    
+    if ( this.locked == 0 ) {
+      if ( S.generation.knowledge_points > 0 ) {
+        if ( this.owned == 0 ) {
+          if ( S.generation.level >= this.generation_requirement ) {
+            
+            S.generation.knowledge_points--
+            this.owned = 1
+
+            build_skills_header( true )
+            play_sound( 'skill_level_up' )
+
+            if ( this.unlock_function ) this.__handle_unlock_function( this.unlock_function )
+
+          } else {
+            notify( 'You do not meet the generation requirement', 'red', 'error' )
+          }
+        } else {
+          notify( 'You already have this skill', 'red', 'error' )
+        }
+      } else {
+        notify( 'Not enough knowledge points', 'red', 'error' )
+      }
+    } else {
+      notify( 'This skill is locked', 'red', 'error' )
+    }
+  }
+
+  this.__handle_unlock_function = ( fn ) => {
+    
+    if ( fn.unlock_skills ) {
+      fn.unlock_skills.forEach( target_skill => {
+
+        let skill_to_unlock = select_from_arr( Skills, target_skill[ 0 ])
+        let unlocked = true
+
+        skill_to_unlock.skill_requirements.forEach( req => {
+          if ( this.code_name == req.code_name ) {
+            req.owned = 1
+          }
+          if ( req.owned == 0 ) unlocked = false
+
+          if ( unlocked ) {
+            skill_to_unlock.locked = 0
+            let skill_el = s( `#skill-${ skill_to_unlock.id }` )
+            skill_el.classList.remove( 'locked' )
+
+            draw_skill_lines()
+          }
+        } )
+
+      })
+    }
+
+  }
 }
 
 let Skills = []
@@ -113,7 +194,7 @@ let skills = [
     desc: 'Increase all pickaxe sharpness + hardness by 5%',
     flavor_text: 'flavor text',
     position: { col: 2, row: -1 },
-    skill_requirements: [ 'the_beginning' ],
+    skill_requirement_names: [ 'the_beginning' ],
     unlock_function: {
       unlock_skills: [
         [ 'pickaxe_proficiency_ii', 'right', 'left' ]
@@ -126,7 +207,7 @@ let skills = [
     desc: 'Increase all pickaxe sharpness + hardness by 5%',
     flavor_text: 'flavor text',
     position: { col: 3, row: -1 },
-    skill_requirements: [ 'pickaxe_proficiency_i' ],
+    skill_requirement_names: [ 'pickaxe_proficiency_i' ],
     unlock_function: {
       unlock_skills: [
         [ 'pickaxe_proficiency_iii', 'right', 'left']
@@ -139,7 +220,7 @@ let skills = [
     desc: 'Increase all pickaxe sharpness + hardness by 5%',
     flavor_text: 'flavor text',
     position: { col: 4, row: -1 },
-    skill_requirements: [ 'pickaxe_proficiency_ii' ],
+    skill_requirement_names: [ 'pickaxe_proficiency_ii' ],
     unlock_function: {
       unlock_skills: [
         [ 'miners_knowledge', 'right', 'left']
@@ -151,7 +232,7 @@ let skills = [
     desc: 'Increase all pickaxe sharpness + hardness by 30%',
     flavor_text: 'flavor text',
     position: { col: 5, row: -1 },
-    skill_requirements: [ 'pickaxe_proficiency_iii' ],
+    skill_requirement_names: [ 'pickaxe_proficiency_iii' ],
     unlock_function: {
       unlock_skills: [],
     }
@@ -162,7 +243,7 @@ let skills = [
     desc: 'Increase all building production by 3%',
     flavor_text: 'flavor text',
     position: { col: 2, row: 1 }, 
-    skill_requirements: [ 'the_beginning' ],
+    skill_requirement_names: [ 'the_beginning' ],
     unlock_function: {
       unlock_skills: [
         [ 'managerial_proficiency_ii', 'right', 'left' ]
@@ -175,7 +256,7 @@ let skills = [
     desc: 'Increase all building production by 3%',
     flavor_text: 'flavor text',
     position: { col: 3, row: 1 }, 
-    skill_requirements: [ 'managerial_proficiency_ii' ],
+    skill_requirement_names: [ 'managerial_proficiency_i' ],
     unlock_function: {
       unlock_skills: [
         [ 'managerial_proficiency_iii', 'right', 'left' ]
@@ -188,7 +269,7 @@ let skills = [
     desc: 'Increase all building production by 3%',
     flavor_text: 'flavor text',
     position: { col: 4, row: 1 }, 
-    skill_requirements: [ 'managerial_proficiency_ii' ],
+    skill_requirement_names: [ 'managerial_proficiency_ii' ],
     unlock_function: {
       unlock_skills: [],
     }

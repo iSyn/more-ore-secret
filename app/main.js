@@ -682,7 +682,7 @@ let build_skills = () => {
     str += '<div class="skills-container">'
     str += '<canvas class="skill-lines-container"></canvas>'
 
-    Skills.forEach( s => {
+    Skills.forEach( ( s, i ) => {
       
       let skill_height = 40
       let skill_width = 40
@@ -703,6 +703,7 @@ let build_skills = () => {
         <div
           id='skill-${ s.id }'
           class='skill ${ s.locked ? "locked" : "" } ${ s.skill_classes ? s.skill_classes : "" }'
+          onclick='Skills[ ${ i } ].level_up( event )'
           style='
             left: ${ column_position }px;
             top: ${ row_position }px;
