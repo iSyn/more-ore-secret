@@ -1,9 +1,8 @@
-let skill_id = 0
 let Skill = function( obj, index ) {
 
   this.name = obj.name
   this.code_name = obj.name.replace( / /g, '_').toLowerCase()
-  this.id = skill_id
+  this.id = obj.id
   this.img = obj.img
   this.desc = obj.desc
   this.skill_classes = obj.skill_classes || ''
@@ -16,8 +15,8 @@ let Skill = function( obj, index ) {
     console.log( 'get skill requirements firing' )
 
     let skill_requirements = []
-    if ( obj.skill_requirement_names ) {
-      obj.skill_requirement_names.forEach( skill_code_name => {
+    if ( this.skill_requirement_names ) {
+      this.skill_requirement_names.forEach( skill_code_name => {
         
         let requirement = {}
 
@@ -41,76 +40,7 @@ let Skill = function( obj, index ) {
   this.locked = obj.locked == 0 ? 0 : 1
   this.owned = obj.owned == 1 ? 1 : 0
 
-  skill_id++
-
   Skills.push( this )
-
-  this.level_up = ( e ) => {
-    if ( this.locked == 0 ) {
-      if ( this.owned == 0 ) {
-        if ( S.generation.level > this.generation_requirement ) {
-          if ( S.generation.knowledge_points > 0 ) {
-          
-            S.generation.knowledge_points--
-            build_skills_header( true )
-  
-            this.owned = 1
-            play_sound( 'skill_level_up' )
-  
-            if ( this.unlock_function ) {
-  
-              let fn = this.unlock_function
-  
-              if ( fn.unlock_skills ) {
-  
-                fn.unlock_skills.forEach( skill_code_name => {
-  
-                  let skill_to_unlock = select_from_arr( Skills, skill_code_name )
-  
-                  let unlocked = true
-  
-                  skill_to_unlock.skill_requirements.forEach( requirement => {
-                    if ( requirement.code_name == this.code_name ) {
-                      requirement.owned = 1
-                    }
-  
-                    if( requirement.owned == 0 ) unlocked = false
-                  })
-  
-                  if ( unlocked ) {
-                    skill_to_unlock.locked = 0
-                    let skill_el = document.querySelector( `#skill-${ skill_code_name }`)
-                    skill_el.classList.remove( 'locked' )
-                  }
-                  
-                  draw_skill_lines()
-                })
-              }
-
-              if ( fn.increase_all_building_production ) Buildings.forEach( b => b.production += b.production * fn.increase_all_building_production )
-  
-              if ( fn.increase_opc ) S.opc_multiplier += fn.increase_opc
-              if ( fn.increase_ops ) S.ops_multiplier += fn.increase_ops
-  
-              if ( fn.increase_pickaxe_sharpness ) S.pickaxe.permanent_bonuses.sharpness += fn.increase_pickaxe_sharpness
-              if ( fn.increase_pickaxe_hardness ) S.pickaxe.permanent_bonuses.hardness += fn.increase_pickaxe_hardness
-  
-              O.recalculate_opc = 1
-              O.recalculate_ops = 1
-  
-            }
-  
-          } else {
-            notify( 'Not enough knowledge points', 'red', 'error' )
-          }
-        } else {
-          notify ( `This skill requires Gen. ${ this.generation_requirement }`)
-        }
-      }
-    } else {
-      notify( 'This skill is locked', 'red', 'error' )
-    }
-  }
 
   this.level_up = ( e ) => {
     
@@ -167,6 +97,16 @@ let Skill = function( obj, index ) {
       })
     }
 
+    if ( fn.increase_all_building_production ) {
+      Buildings.forEach( b => b.production += b.production * fn.increase_all_building_production )
+    }
+
+    if ( fn.increase_opc ) S.opc_multiplier += S.opc_multiplier * fn.increase_opc
+
+
+    O.recalculate_opc = 1
+    O.recalculate_opc = 1
+
   }
 }
 
@@ -174,6 +114,7 @@ let Skills = []
 let skills = [
   {
     name: 'The Beginning',
+    id: 1,
     img: 'https://via.placeholder.com/40',
     desc: 'Increase all building production and ores per click by 10%',
     flavor_text: 'flavor test',
@@ -189,6 +130,7 @@ let skills = [
     }
   }, {
     name: 'Pickaxe Proficiency I',
+    id: 2,
     skill_classes: 'circle small',
     img: 'https://via.placeholder.com/40',
     desc: 'Increase all pickaxe sharpness + hardness by 5%',
@@ -202,6 +144,7 @@ let skills = [
     }
   }, {
     name: 'Pickaxe Proficiency II',
+    id: 3,
     skill_classes: 'circle small',
     img: 'https://via.placeholder.com/40',
     desc: 'Increase all pickaxe sharpness + hardness by 5%',
@@ -210,11 +153,13 @@ let skills = [
     skill_requirement_names: [ 'pickaxe_proficiency_i' ],
     unlock_function: {
       unlock_skills: [
-        [ 'pickaxe_proficiency_iii', 'right', 'left']
+        [ 'pickaxe_proficiency_iii', 'right', 'left' ],
+        [ 'test_skill', 'bottom', 'top' ]
       ],
     }
   }, {
     name: 'Pickaxe Proficiency III',
+    id: 4,
     skill_classes: 'circle small',
     img: 'https://via.placeholder.com/40',
     desc: 'Increase all pickaxe sharpness + hardness by 5%',
@@ -228,6 +173,7 @@ let skills = [
     }
   }, {
     name: 'Miners Knowledge',
+    id: 5,
     img: 'https://via.placeholder.com/40',
     desc: 'Increase all pickaxe sharpness + hardness by 30%',
     flavor_text: 'flavor text',
@@ -239,6 +185,7 @@ let skills = [
   }, {
     name: 'Managerial Proficiency I',
     skill_classes: 'circle small',
+    id: 6,
     img: 'https://via.placeholder.com/40',
     desc: 'Increase all building production by 3%',
     flavor_text: 'flavor text',
@@ -251,6 +198,7 @@ let skills = [
     }
   }, {
     name: 'Managerial Proficiency II',
+    id: 7,
     skill_classes: 'circle small',
     img: 'https://via.placeholder.com/40',
     desc: 'Increase all building production by 3%',
@@ -259,11 +207,13 @@ let skills = [
     skill_requirement_names: [ 'managerial_proficiency_i' ],
     unlock_function: {
       unlock_skills: [
-        [ 'managerial_proficiency_iii', 'right', 'left' ]
+        [ 'managerial_proficiency_iii', 'right', 'left' ],
+        [ 'test_skill', 'top', 'bottom']
       ],
     }
   }, {
     name: 'Managerial Proficiency III',
+    id: 8,
     skill_classes: 'circle small',
     img: 'https://via.placeholder.com/40',
     desc: 'Increase all building production by 3%',
@@ -273,7 +223,20 @@ let skills = [
     unlock_function: {
       unlock_skills: [],
     }
+  }, {
+    name: 'test skill',
+    id: 9,
+    img: 'https://via.placeholder.com/40',
+    desc: 'Increase all building production by 3%',
+    flavor_text: 'flavor text',
+    position: { col: 3, row: 0 }, 
+    skill_requirement_names: [ 'managerial_proficiency_ii', 'pickaxe_proficiency_ii' ],
+    unlock_function: {
+      unlock_skills: [],
+    }
   }
 ]
+
+
 
 skills.forEach( skill => new Skill( skill ) )

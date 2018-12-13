@@ -271,14 +271,10 @@ TOOLTIP.style.display = 'none'
         TOOLTIP.style.top = e.target.getBoundingClientRect().top - tooltip_dimensions.height + 'px'
         break
 
-      case 'smith_upgrade':
-      case 'upgrade':
-      case 'building':
       default:
         tooltip_dimensions = TOOLTIP.getBoundingClientRect()
         TOOLTIP.style.left = ( MIDDLE_VERTICAL_SEPARATOR.getBoundingClientRect().left - tooltip_dimensions.width ) + 'px'
         TOOLTIP.style.top = e.target.getBoundingClientRect().top + 'px'
-        
         break
 
     }

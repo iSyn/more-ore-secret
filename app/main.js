@@ -682,17 +682,17 @@ let build_skills = () => {
     str += '<div class="skills-container">'
     str += '<canvas class="skill-lines-container"></canvas>'
 
-    Skills.forEach( ( s, i ) => {
+    Skills.forEach( ( skill, i ) => {
       
       let skill_height = 40
       let skill_width = 40
       let column_spacing = 60
       let row_spacing = 30
 
-      let column_position = s.position.col * ( skill_width + column_spacing ) - 50
-      let row_position = ( middle - skill_height / 2 ) + s.position.row * ( skill_height + row_spacing )
+      let column_position = skill.position.col * ( skill_width + column_spacing ) - 50
+      let row_position = ( middle - skill_height / 2 ) + skill.position.row * ( skill_height + row_spacing )
 
-      if ( s.skill_classes.includes( 'small' ) ) {
+      if ( skill.skill_classes.includes( 'small' ) ) {
         skill_height = 30
         skill_width = 30
         column_position += 5
@@ -701,40 +701,24 @@ let build_skills = () => {
 
       str += `
         <div
-          id='skill-${ s.id }'
-          class='skill ${ s.locked ? "locked" : "" } ${ s.skill_classes ? s.skill_classes : "" }'
+          id='skill-${ skill.id }'
+          class='skill ${ skill.locked ? "locked" : "" } ${ skill.skill_classes ? skill.skill_classes : "" }'
           onclick='Skills[ ${ i } ].level_up( event )'
+          onmouseover='TT.show( event, { name: "${ skill.code_name }", type: "skill" } )'
+          onmouseout='TT.hide()'
           style='
             left: ${ column_position }px;
             top: ${ row_position }px;
             height: ${ skill_height }px;
             width: ${ skill_width }px;
-            background-image: url( "${ s.img }" );
+            background-image: url( "${ skill.img }" );
           '
         >
         </div>
       `
 
     })
-    
-    // Skills.forEach( ( s, i ) => {
 
-    //   let skill_height = 40
-    //   let skill_width = 40
-    //   let column_spacing = 10
-    //   let row_spacing = 60
-
-    //   let column_pos = ( middle - skill_width / 2 ) + ( s.position.column * ( skill_height + column_spacing ) )
-    //   let row_pos = ( s.position.row * ( skill_height + row_spacing ) - 50 )
-
-    //   if ( s.skill_classes.includes( 'small' ) ) {
-    //     column_pos += 8
-    //     row_pos += 8
-    //     skill_height = 25
-    //     skill_width = 25
-    //   }
-
-    //   console.log( `building ${ s.name }. Locked status: ${ s.locked }`)
 
     //   str += `
     //     <div 
@@ -789,30 +773,28 @@ let draw_skill_lines = () => {
 
   ctx.clearRect( 0, 0, c.width, c.height )
 
-  ctx.lineWidth = 2
-  ctx.strokeStyle = '#fff'
-
   let scroll_offset = s( '.skills-container' ).scrollLeft
   let line_break = 20
 
   Skills.forEach( skill => {
 
-    let reqs = skill.unlock_function.unlock_skills
+    let lines = skill.unlock_function.unlock_skills
 
-    reqs.forEach( requirement => {
+    lines.forEach( line => {
 
-      let target_skill = select_from_arr( Skills, requirement[ 0 ] )
+      let target_skill = select_from_arr( Skills, line[ 0 ] )
       let target_skill_el = s( `#skill-${ target_skill.id }` )
       let base_skill_el = s( `#skill-${ skill.id }` )
 
-      if ( target_skill.owned == 0 ) ctx.strokeStyle = 'grey'
+      ctx.strokeStyle = skill.owned ? '#fff' : '#555'
+      ctx.lineWidth = skill.owned ? 3 : 1
 
-      let p = get_skill_line_positions( requirement[ 1 ], requirement[ 2 ], skill, target_skill, base_skill_el, target_skill_el, scroll_offset )
+      let p = get_skill_line_positions( line[ 1 ], line[ 2 ], skill, target_skill, base_skill_el, target_skill_el, scroll_offset )
 
       ctx.beginPath()
       ctx.moveTo( p.base_position.x, p.base_position.y )
 
-      if ( skill.position.row != target_skill.position.row ) {
+      if ( skill.position.row != target_skill.position.row && ( line[ 1 ] == 'right' || line[ 1 ] == 'left' ) ) {
 
         let middle_distance = ( target_skill_el.offsetLeft - ( base_skill_el.offsetLeft + base_skill_el.offsetWidth ) ) / 2
 
@@ -829,7 +811,6 @@ let draw_skill_lines = () => {
 
     } )
   } )
-
 }
 
 let get_skill_line_positions = ( from, to, base_skill, target_skill, base_skill_el, target_skill_el, scroll_offset ) => {
@@ -2232,7 +2213,7 @@ window.addEventListener('keyup', (e) => {
     if (pressed.join('').includes( secretCode ) ) {
       win_achievement( 'who_am_i?' )
     }
-    if ( pressed.join( '' ).includes( 'test' ) ) {
+    if ( pressed.join( '' ).includes( 'qq' ) ) {
       Smith_Upgrades.forEach( upgrade => { upgrade.duration = 1 * SECOND })
       S.pickaxe.item.damage *= 1000
       S.gems += 100
