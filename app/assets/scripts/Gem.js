@@ -11,23 +11,23 @@ let _get_type = () => {
 
     /*
         Possible Gems:
-        - Increase pickaxe damage by flat amount
-        - Increase pickaxe damage by percentage
-        - Increase pickaxe sharpness by flat amount
-        - Increase pickaxe sharpness by percentage
-        - Increase pickaxe hardness by flat amount
-        - Increase pickaxe hardness by percentage
-        - Increase pickaxe sharpness and hardness by flat amount
-        - Increase pickaxe sharpness and hardness by percentage
-        - Increase specific building production by flat amount
-        - Increase specific building production by percentage
-        - Increase all building production by flat amount
-        - Increase all building production by percentage
+        --------------
+        - Ruby:         Increase pickaxe damage by flat amount
+        - Citrine:      Increase pickaxe damage by percentage
+        - Sapphire:     Increase pickaxe sharpness by flat amount
+        - Alexandrite:  Increase pickaxe sharpness by percentage
+        - Turquoise:    Increase pickaxe hardness by flat amount
+        - Amethyst:     Increase pickaxe hardness by percentage
+        - Moonstone:    Increase pickaxe sharpness and hardness by flat amount
+        - Diamond:      Increase pickaxe sharpness and hardness by percentage
+        - Jade:         Increase specific building production by flat amount
+        - Morganite:    Increase specific building production by percentage
+        - Emerald:      Increase all building production by flat amount
+        - Topaz:        Increase all building production by percentage
+        - Onyx:         Increase quest completion percentage by a flat amount
+        - Tanzanite:    Increase quest completion percentage by a percentage
     */
 
-    'Ruby', // Increase damage by flat amount
-    'Topaz', // Increase production of a specific building
-    ''
   ]
 
 }

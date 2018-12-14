@@ -1,7 +1,7 @@
 let Tooltip = function() {
 
   this.hide = () => {
-TOOLTIP.style.display = 'none'
+    TOOLTIP.style.display = 'none'
   }
 
   this.show = ( e, obj ) => {
@@ -180,8 +180,13 @@ TOOLTIP.style.display = 'none'
               <h1>${ item.name }</h1>
             </div>
             <div class="bottom" style='display: flex; flex-flow: row nowrap; justify-content: center;'>
-              <div class="left" style='width: 20%; text-align: right; padding-right: 10px; border-right: 1px solid white; opacity: .5'>
-                <p style='padding-bottom: 2px;'>${ item.price } &nbsp; <i class="fa fa-diamond fa-1x" style='color: #1bacc8'></i></p>
+              <div class="left" style='width: 20%; text-align: right; padding-right: 10px; border-right: 1px solid white;'>
+                <p style='
+                  padding-bottom: 2px;
+                  display: flex;
+                  flex-flow: row nowrap;
+                  justify-content: flex-end;
+                  align-items: center;'>${ item.price } &nbsp; <img style='height: 15px;' src='./app/assets/images/refined-ore.png' /></p>
                 <p style='padding-bottom: 2px;'>${ beautify_ms( item.duration ) } &nbsp; <i class="fa fa-clock-o fa-1x"></i></p>
               </div>
               <div class="right" style='width: 80%; padding-left: 10px'>

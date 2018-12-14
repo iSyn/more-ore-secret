@@ -33,6 +33,9 @@ const REFINED_ORES_AMOUNT = s( '#refined-ores-amount' )
 const GENERATION_LVL = s( '#generation-lvl' )
 const LOADING_SCREEN = s( '.loading-screen' )
 const LOADING_TEXT = s( '.loading-text' )
+const QUEST_AREA_CONTAINER = s( '.quest-area-container' )
+const HERO = s( '.hero' )
+const BOOST_NOTIFIER = s( '.boost-notifier' )
 
 let S = new State().state
 let RN = new RisingNumber()
@@ -56,6 +59,9 @@ let O = {
 
   current_tab: 'store',
 
+  quest_initialized: false,
+  can_boost: true,
+
   pickaxe_accordion_is_open: 0,
   
   window_blurred: false,
@@ -74,6 +80,7 @@ let init_game = () => {
   handle_text_scroller()
   ORE_SPRITE.addEventListener( 'click', handle_click )
   ORE_WEAK_SPOT.addEventListener( 'click', ( e ) => { handle_click( e, 'weak-spot' ) })
+  BOOST_NOTIFIER.addEventListener( 'animationend', () => BOOST_NOTIFIER.classList.remove( 'clicked' ) )
   build_automater_visibility_toggle_btn()
   build_footer()
   earn_offline_resources()
@@ -95,6 +102,7 @@ let save_game = () => {
   localStorage.setItem( 'bottom_tabs', JSON.stringify( Bottom_Tabs ) )
   localStorage.setItem( 'tabs', JSON.stringify( Tabs ) )
   localStorage.setItem( 'skills', JSON.stringify( Skills ) )
+  localStorage.setItem( 'quests', JSON.stringify( Quests ) )
 
   notify( 'Saved Game' )
 }
@@ -136,6 +144,9 @@ let load_game = () => {
 
     Skills = []
     JSON.parse( localStorage.getItem( 'skills' ) ).forEach( skill => new Skill( skill ) )
+
+    Quests = []
+    JSON.parse( localStorage.getItem( 'quests' ) ).forEach( quest => new Quest( quest ) )
   }
 
   LOADING_SCREEN.addEventListener( 'transitionend', () => remove_el( LOADING_SCREEN ) )
@@ -200,6 +211,7 @@ let earn_offline_resources = () => {
     let amount_to_gain = amount_to_gain_raw > S.max_ore_away_gain ? S.max_ore_away_gain : amount_to_gain_raw
 
     SMITH.current_progress += amount_of_time_passed_ms
+    if ( S.quest.state == 'in progress' ) S.quest.current_quest_progress += amount_of_time_passed_ms
 
     if ( amount_of_time_passed_seconds > 30 && amount_to_gain > 1 ) {
 
@@ -1303,10 +1315,9 @@ let confirm_refine = () => {
     <div class='confirm-refine'>
       <header>
         <h1>Refine</h1>
-        <img class='gem' src='./app/assets/images/gem-diamond.png' />
       </header>
       <i onclick='remove_wrapper()' class='fa fa-times fa-1x'></i>
-      <p class='gain'>+ You will gain <strong>${ beautify_number( rewards.refined_ores ) }</strong> Refined Ores</p>
+      <p class='gain'>+ You will gain  <strong>${ beautify_number( rewards.refined_ores ) }</strong> Refined Ores</p>
       <p class='gain'>+ You will gain <strong>${ beautify_number( rewards.xp ) }</strong> generation XP</p>
       <p class='gain'>+ You will keep <strong>all</strong> blacksmith upgrades</p>
       <p class='gain'>+ You will keep your <strong>${ S.pickaxe.item.name }</strong> </p>
@@ -1724,21 +1735,11 @@ let build_quests = () => {
         <h3 class='quest-name'>${ quest.name }</h3>
         `
 
-        if ( quest.completed ) {
-
-          let top = get_random_num( 20, 55 )
-          let left = get_random_num( 45, 55 )
-          let rotate = get_random_num( -15, -25 )
-
-          str += 
-            `<p 
-              class='completed'
-              style='
-                top: ${ top }%;
-                left: ${ left }%;
-                transform: translateX( -50% ) rotate( ${ rotate }deg );
-              '>COMPLETED</p>`
+        if ( S.quest.current_quest ) {
+          if ( S.quest.current_quest.code_name == quest.code_name ) str += `<p class='in-progress'>IN PROGRESS</p>`
         }
+
+        if ( quest.completed ) str += `<p class='completed''>COMPLETED</p>`
 
         str += `
       </div>
@@ -1782,35 +1783,88 @@ let start_quest = ( code_name ) => {
   remove_wrapper()
   remove_el( quest_board_el_parent )
 
-  if ( S.quest.in_progress ) {
+  if ( S.quest.state == 'in progress' ) {
     notify( 'A quest is already in progress', 'red', 'error' )
     remove_wrapper()
     return
   }
 
   let quest = select_from_arr( Quests, code_name )
-  S.quest.in_progress = quest
-  S.quest.current_progress = 0
+  S.quest.state = 'in progress'
+  S.quest.current_quest = quest
+  S.quest.current_quest_progress = 0
+
+  quest_initialization()
 
 }
 
-let handle_quest_progress = ( duration ) => {
-  S.quest.current_progress += duration
+let quest_initialization = () => {
 
-  let percentage_completed = ( S.quest.current_progress / S.quest.in_progress.duration ) * 100
+  O.quest_initialized = true
+  BOOST_NOTIFIER.classList.add( 'active' )
+  HERO.classList.add( 'active', 'moving' )
 
-  if ( S.quest.current_progress >= S.quest.in_progress.duration ) {
-    complete_quest()
+}
+
+let handle_quest_progress = ( duration = 0 ) => {
+
+  S.quest.current_quest_progress += duration
+
+  let percentage_completed = ( S.quest.current_quest_progress / S.quest.current_quest.duration ) * 100
+  HERO.style.left = percentage_completed + '%'
+
+  if ( S.quest.current_quest_progress >= S.quest.current_quest.duration ) {
+
+    S.quest.state = 'completed'
+
+    HERO.classList.remove( 'moving' )
+    HERO.classList.add( 'jumping' )
+    
+  }
+
+}
+
+let handle_quest_area_click = () => {
+
+  switch ( S.quest.state ) {
+
+    case 'in progress':
+      if ( !BOOST_NOTIFIER.classList.contains( 'clicked' ) ) {
+        BOOST_NOTIFIER.classList.add( 'clicked' )
+
+        if ( S.quest.current_quest_progress + S.quest.boost_amount > S.quest.current_quest.duration ) {
+          S.quest.current_quest_progress = S.quest.current_quest.duration
+          handle_quest_progress()
+        } else {
+          S.quest.current_quest_progress += S.quest.boost_amount
+        }
+      }
+      break 
+
+    case 'completed':
+      complete_quest()
+      break
   }
 
 }
 
 let complete_quest = () => {
-  
-  let completed_quest = select_from_arr( Quests, S.quest.in_progress.code_name )
-  completed_quest.completed = true
 
-  S.quest.in_progress = null
+  BOOST_NOTIFIER.classList.remove( 'active' )
+  
+  S.stats.total_quests_completed++
+  let quest = select_from_arr( Quests, S.quest.current_quest.code_name )
+  quest.complete()
+
+  reset_quest_state()
+}
+
+let reset_quest_state = () => {
+  S.quest.state = null
+  S.quest.current_quest = null
+  S.quest.current_quest_progress = null
+
+  HERO.classList.remove( 'active', 'moving', 'jumping' )
 }
 
 // =======================================================================================
@@ -1836,7 +1890,11 @@ let game_loop = () => {
     if ( O.rebuild_bottom_tabs ) build_bottom_tabs()
 
     if ( !is_empty( SMITH.upgrade_in_progress ) ) SMITH._update_progress()
-    if ( !is_empty( S.quest.in_progress ) ) handle_quest_progress( tick_ms )
+
+    if ( S.quest.state == 'in progress' ) {
+      if ( !O.quest_initialized ) quest_initialization()
+      handle_quest_progress( tick_ms )
+    }
   
     earn( S.ops / S.prefs.game_speed )
 
@@ -1844,13 +1902,10 @@ let game_loop = () => {
     if ( O.counter % S.prefs.game_speed == 0 ) {
       S.stats.seconds_played++
       if ( S.ops > 0 && S.prefs.show_ops_rising_numbers ) RN.new( null, 'buildings', S.ops )
-      // if ( O.current_tab == 'store' ) build_store_tab()
     }
 
     // THIS RUNS EVERY --------------------------------- ↓ seconds
-    if ( O.counter % ( S.prefs.game_speed * S.gold_nugget_spawn_rate ) == 0 ) {
-      spawn_gold_nugget()
-    }
+    if ( O.counter % ( S.prefs.game_speed * S.gold_nugget_spawn_rate ) == 0 ) spawn_gold_nugget()
 
     handle_combo_shields( 1000 / tick_ms )
   }

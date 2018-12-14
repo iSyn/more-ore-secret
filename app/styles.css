@@ -2440,17 +2440,23 @@ input:checked + .slider:before {
       cursor: pointer;
       text-align: center;
       position: relative; }
-      .wrapper > #quest-board .quest-board-quests .quest .completed {
+      .wrapper > #quest-board .quest-board-quests .quest .completed, .wrapper > #quest-board .quest-board-quests .quest .in-progress {
         font-weight: bold;
         color: red;
         position: absolute;
-        top: 30%;
+        top: 70%;
         left: 50%;
         -webkit-transform: translateX(-50%) rotate(-20deg);
         transform: translateX(-50%) rotate(-20deg);
         border: 4px solid red;
         padding: 5px;
         font-size: 30px; }
+      .wrapper > #quest-board .quest-board-quests .quest .in-progress {
+        top: 30%;
+        color: black;
+        border-color: black;
+        -webkit-transform: translateX(-50%) rotate(20deg);
+        transform: translateX(-50%) rotate(20deg); }
       .wrapper > #quest-board .quest-board-quests .quest * {
         pointer-events: none; }
       .wrapper > #quest-board .quest-board-quests .quest.locked {
@@ -2483,6 +2489,123 @@ input:checked + .slider:before {
   .wrapper > #quest-sheet header i {
     color: black;
     cursor: pointer; }
+
+.quest-area-container {
+  position: relative;
+  cursor: pointer; }
+  .quest-area-container * {
+    pointer-events: none; }
+  .quest-area-container .boost-notifier {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 1px;
+    height: 0;
+    background: white;
+    opacity: 0; }
+    .quest-area-container .boost-notifier.clicked {
+      -webkit-animation: boost 1s linear forwards;
+      animation: boost 1s linear forwards; }
+    .quest-area-container .boost-notifier.active {
+      opacity: 1; }
+  .quest-area-container .hero-container {
+    width: calc( 100% - 28px);
+    height: 100%;
+    position: relative; }
+    .quest-area-container .hero-container .hero {
+      position: absolute;
+      bottom: 30px;
+      color: #aaa;
+      font-size: 40px;
+      opacity: 0; }
+      .quest-area-container .hero-container .hero.active {
+        opacity: 1; }
+      .quest-area-container .hero-container .hero.moving {
+        -webkit-animation: moving 1s infinite linear;
+        animation: moving 1s infinite linear; }
+      .quest-area-container .hero-container .hero.jumping {
+        -webkit-animation: jumping 1s infinite linear;
+        animation: jumping 1s infinite linear; }
+
+@-webkit-keyframes boost {
+  0% {
+    height: 0; }
+  100% {
+    height: 100%; } }
+
+@keyframes boost {
+  0% {
+    height: 0; }
+  100% {
+    height: 100%; } }
+
+@-webkit-keyframes moving {
+  0% {
+    -webkit-transform: rotate(-5deg);
+    transform: rotate(-5deg); }
+  45% {
+    -webkit-transform: rotate(-5deg);
+    transform: rotate(-5deg); }
+  50% {
+    -webkit-transform: rotate(5deg);
+    transform: rotate(5deg); }
+  95% {
+    -webkit-transform: rotate(5deg);
+    transform: rotate(5deg); }
+  100% {
+    -webkit-transform: rotate(-5deg);
+    transform: rotate(-5deg); } }
+
+@keyframes moving {
+  0% {
+    -webkit-transform: rotate(-5deg);
+    transform: rotate(-5deg); }
+  45% {
+    -webkit-transform: rotate(-5deg);
+    transform: rotate(-5deg); }
+  50% {
+    -webkit-transform: rotate(5deg);
+    transform: rotate(5deg); }
+  95% {
+    -webkit-transform: rotate(5deg);
+    transform: rotate(5deg); }
+  100% {
+    -webkit-transform: rotate(-5deg);
+    transform: rotate(-5deg); } }
+
+@-webkit-keyframes jumping {
+  0% {
+    -webkit-transform: translateY(0);
+    transform: translateY(0); }
+  30% {
+    -webkit-transform: translateY(0);
+    transform: translateY(0); }
+  50% {
+    -webkit-transform: translateY(-30px);
+    transform: translateY(-30px); }
+  80% {
+    -webkit-transform: translateY(-30px);
+    transform: translateY(-30px); }
+  100% {
+    -webkit-transform: translateY(0);
+    transform: translateY(0); } }
+
+@keyframes jumping {
+  0% {
+    -webkit-transform: translateY(0);
+    transform: translateY(0); }
+  30% {
+    -webkit-transform: translateY(0);
+    transform: translateY(0); }
+  50% {
+    -webkit-transform: translateY(-30px);
+    transform: translateY(-30px); }
+  80% {
+    -webkit-transform: translateY(-30px);
+    transform: translateY(-30px); }
+  100% {
+    -webkit-transform: translateY(0);
+    transform: translateY(0); } }
 
 .ore-weak-spot {
   display: none;

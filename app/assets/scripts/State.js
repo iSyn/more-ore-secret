@@ -65,8 +65,11 @@ let State = function( s = {} ) {
       final_destination: 0
     },
 
-    quest: {
-      in_progress: null
+    quest: s.quest ||  {
+      state: null,
+      current_quest: null,
+      current_quest_progress: null,
+      boost_amount: 1 * SECOND
     },
 
     pickaxe: s.pickaxe || {
@@ -130,6 +133,7 @@ let State = function( s = {} ) {
       total_items_found: 0,
       total_pickaxes_trashed: 0,
       total_combo_shields_used: 0,
+      total_quests_completed: 0,
       current_combo_shields_used: 0,
       seconds_played: 0,
       first_day: new Date().getTime()
