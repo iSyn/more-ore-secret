@@ -69,6 +69,10 @@ let achievements = [
   { name: 'Intermediate Miner', desc: 'Break 25 rocks', reward: { increase_pickaxe_hardness: 15, increase_pickaxe_sharpness: 15 } },
   { name: 'Advanced Miner', desc: 'Break 100 rocks', reward: { increase_pickaxe_hardness: 30, increase_pickaxe_sharpness: 30 } },
 
+  // QUEST RELATED ACHEIVEMENTS
+  { name: 'Novice Quester', desc: 'Complete the first quest', type: 'quest' },
+  { name: 'Adventurer', desc: 'Complete the first 5 quests', type: 'quest' },
+
   // SECRET ACHIEVEMENTS
   { name: 'Who am I?', desc: 'Figure out the developers name', type: 'secret' },
 

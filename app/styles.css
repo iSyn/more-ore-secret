@@ -2490,6 +2490,9 @@ input:checked + .slider:before {
     color: black;
     cursor: pointer; }
 
+.wrapper > #quest-rewards-popup ul {
+  list-style-type: none; }
+
 .quest-area-container {
   position: relative;
   cursor: pointer; }

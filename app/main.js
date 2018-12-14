@@ -1800,9 +1800,12 @@ let start_quest = ( code_name ) => {
 
 let quest_initialization = () => {
 
-  O.quest_initialized = true
-  BOOST_NOTIFIER.classList.add( 'active' )
-  HERO.classList.add( 'active', 'moving' )
+  if ( S.quest.state == 'in progress' || S.quest.state == 'completed' ) {
+    O.quest_initialized = true
+    BOOST_NOTIFIER.classList.add( 'active' )
+    HERO.classList.add( 'active', 'moving' )
+    handle_quest_progress()
+  }
 
 }
 
@@ -1852,11 +1855,56 @@ let complete_quest = () => {
 
   BOOST_NOTIFIER.classList.remove( 'active' )
   
-  S.stats.total_quests_completed++
   let quest = select_from_arr( Quests, S.quest.current_quest.code_name )
-  quest.complete()
+
+  quest.completed = 1
+  quest.times_completed++
+  S.stats.total_quests_completed++
+
+  if ( quest.times_completed == 1 ) S.stats.total_unique_quests_completed++
+
+  if ( S.stats.total_quests_completed == 1 ) win_achievement( 'novice_quester' )
+  if ( S.stats.total_unique_quests_completed == 5 ) win_achievement( 'adventurer' )
+
+  let next_quest = Quests[ quest.id + 1 ]
+  if ( next_quest ) {
+    console.log( 'next', next_quest )
+    if ( next_quest.locked ) next_quest.locked = 0
+  }
+
+  gain_quest_rewards( quest )
 
   reset_quest_state()
+
+}
+
+let gain_quest_rewards = ( quest ) => {
+
+  let popup = document.createElement( 'div' )
+  popup.classList.add( 'wrapper' )
+
+  let str = `
+    <div id='quest-rewards-popup'>
+      <header>
+        <h1>Quest Complete</h1>
+        <i onclick='remove_wrapper()' class='fa fa-times fa-1x'></i>
+      </header>
+      <p>You Earned:</p>
+      <ul>
+        <li>Generation XP +${ quest.rewards.xp }</li>
+        <li>Refined Ores +${ quest.rewards.refined_ores }</li>
+      </ul>
+      <button onclick='remove_wrapper()'>OK</buttom>
+    </div>
+  `
+
+  earn_generation_xp( quest.rewards.xp )
+  earn_refined_ores( quest.rewards.refined_ores )
+
+  popup.innerHTML = str
+
+  CONTAINER.append( popup )
+
 }
 
 let reset_quest_state = () => {
@@ -1891,8 +1939,8 @@ let game_loop = () => {
 
     if ( !is_empty( SMITH.upgrade_in_progress ) ) SMITH._update_progress()
 
+    if ( !O.quest_initialized ) quest_initialization()
     if ( S.quest.state == 'in progress' ) {
-      if ( !O.quest_initialized ) quest_initialization()
       handle_quest_progress( tick_ms )
     }
   

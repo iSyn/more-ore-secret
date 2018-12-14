@@ -134,6 +134,7 @@ let State = function( s = {} ) {
       total_pickaxes_trashed: 0,
       total_combo_shields_used: 0,
       total_quests_completed: 0,
+      total_unique_quests_completed: 0,
       current_combo_shields_used: 0,
       seconds_played: 0,
       first_day: new Date().getTime()
