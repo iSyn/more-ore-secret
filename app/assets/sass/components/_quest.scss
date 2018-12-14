@@ -33,6 +33,19 @@
       color: black;
       cursor: pointer;
       text-align: center;
+      position: relative;
+
+      .completed {
+        font-weight: bold;
+        color: red;
+        position: absolute;
+        top: 30%;
+        left: 50%;
+        transform: translateX( -50% ) rotate( -20deg );
+        border: 4px solid red;
+        padding: 5px;
+        font-size: 30px;
+      }
 
       * {
         pointer-events: none;

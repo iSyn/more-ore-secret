@@ -2438,7 +2438,19 @@ input:checked + .slider:before {
       transition: all .2s;
       color: black;
       cursor: pointer;
-      text-align: center; }
+      text-align: center;
+      position: relative; }
+      .wrapper > #quest-board .quest-board-quests .quest .completed {
+        font-weight: bold;
+        color: red;
+        position: absolute;
+        top: 30%;
+        left: 50%;
+        -webkit-transform: translateX(-50%) rotate(-20deg);
+        transform: translateX(-50%) rotate(-20deg);
+        border: 4px solid red;
+        padding: 5px;
+        font-size: 30px; }
       .wrapper > #quest-board .quest-board-quests .quest * {
         pointer-events: none; }
       .wrapper > #quest-board .quest-board-quests .quest.locked {

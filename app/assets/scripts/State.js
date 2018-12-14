@@ -3,7 +3,7 @@ let State = function( s = {} ) {
   this.state = {
 
     ores: s.ores || 0,
-    gems: s.gems || 0,
+    refined_ores: s.refined_ores || 0,
 
     generation: s.generation || {
       level: 0,
@@ -123,7 +123,7 @@ let State = function( s = {} ) {
       total_rocks_destroyed: 0,
       total_ores_manually_mined: 0,
       total_ores_earned: 0,
-      total_gems_earned: 0, ///////////////////////
+      total_refined_ores_earned: 0,
       total_nuggets_spawned: 0,
       total_nuggets_missed: 0,
       total_nuggets_clicked: 0,

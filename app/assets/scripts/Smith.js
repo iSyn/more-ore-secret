@@ -10,8 +10,8 @@ let Smith = function( obj = {} ) {
 
         this.current_progress = 0
 
-        if ( S.gems >= upgrade.price ) {
-            S.gems -= upgrade.price
+        if ( S.refined_ores >= upgrade.price ) {
+            S.refined_ores -= upgrade.price
             play_sound( 'smith_upgrade_start' )
 
             this.upgrade_in_progress = upgrade
@@ -19,7 +19,7 @@ let Smith = function( obj = {} ) {
 
             this._update_progress()
         } else {
-            notify( 'Not Enough Gems', 'red', 'error' )
+            notify( 'Not Enough Refined Ores', 'red', 'error' )
         }
 
     }

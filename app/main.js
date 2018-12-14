@@ -29,7 +29,7 @@ const FOOTER_VERSION = s( '.version-number' )
 const BOTTOM_AREA_TABS = s( '.bottom-area-tabs' )
 const COMBO_SIGN_CONTAINER = s( '.combo-sign-container' )
 const ORES_AMOUNT = s( '#ores-amount' )
-const GEMS_AMOUNT = s( '#gems-amount' )
+const REFINED_ORES_AMOUNT = s( '#refined-ores-amount' )
 const GENERATION_LVL = s( '#generation-lvl' )
 const LOADING_SCREEN = s( '.loading-screen' )
 const LOADING_TEXT = s( '.loading-text' )
@@ -248,9 +248,9 @@ let earn = ( amount, alter_hp = true ) => {
 
 }
 
-let earn_gems = ( amount ) => {
-  S.gems += amount
-  S.stats.total_gems_earned += amount
+let earn_refined_ores = ( amount ) => {
+  S.refined_ores += amount
+  S.stats.total_refined_ores_earned += amount
 }
 
 let spend = ( amount ) => {
@@ -1306,7 +1306,7 @@ let confirm_refine = () => {
         <img class='gem' src='./app/assets/images/gem-diamond.png' />
       </header>
       <i onclick='remove_wrapper()' class='fa fa-times fa-1x'></i>
-      <p class='gain'>+ You will gain <strong>${ beautify_number( rewards.gems ) }</strong> gems</p>
+      <p class='gain'>+ You will gain <strong>${ beautify_number( rewards.refined_ores ) }</strong> Refined Ores</p>
       <p class='gain'>+ You will gain <strong>${ beautify_number( rewards.xp ) }</strong> generation XP</p>
       <p class='gain'>+ You will keep <strong>all</strong> blacksmith upgrades</p>
       <p class='gain'>+ You will keep your <strong>${ S.pickaxe.item.name }</strong> </p>
@@ -1333,7 +1333,7 @@ let calculate_refine_rewards = () => {
 
   let rewards = {}
 
-  rewards.gems = Math.floor( Math.sqrt( S.stats.current_ores_earned / 1000000 ) )
+  rewards.refined_ores = Math.floor( Math.sqrt( S.stats.current_ores_earned / 1000000 ) )
 
   rewards.xp = S.generation.xp_on_refine + Math.cbrt( S.stats.current_ores_earned ) / 2
 
@@ -1349,7 +1349,7 @@ let refine = async () => {
 
     let rewards = calculate_refine_rewards()
 
-    earn_gems( rewards.gems )
+    earn_refined_ores( rewards.refined_ores )
     earn_generation_xp( rewards.xp )
 
     reset_state_and_buildings()
@@ -1722,6 +1722,25 @@ let build_quests = () => {
       >
         <div class='pin'></div>
         <h3 class='quest-name'>${ quest.name }</h3>
+        `
+
+        if ( quest.completed ) {
+
+          let top = get_random_num( 20, 55 )
+          let left = get_random_num( 45, 55 )
+          let rotate = get_random_num( -15, -25 )
+
+          str += 
+            `<p 
+              class='completed'
+              style='
+                top: ${ top }%;
+                left: ${ left }%;
+                transform: translateX( -50% ) rotate( ${ rotate }deg );
+              '>COMPLETED</p>`
+        }
+
+        str += `
       </div>
     `
 
@@ -1775,6 +1794,25 @@ let start_quest = ( code_name ) => {
 
 }
 
+let handle_quest_progress = ( duration ) => {
+  S.quest.current_progress += duration
+
+  let percentage_completed = ( S.quest.current_progress / S.quest.in_progress.duration ) * 100
+
+  if ( S.quest.current_progress >= S.quest.in_progress.duration ) {
+    complete_quest()
+  }
+
+}
+
+let complete_quest = () => {
+  
+  let completed_quest = select_from_arr( Quests, S.quest.in_progress.code_name )
+  completed_quest.completed = true
+
+  S.quest.in_progress = null
+}
+
 // =======================================================================================
 
 let game_loop = () => {
@@ -1786,9 +1824,8 @@ let game_loop = () => {
 
     update_ore_sprite()
 
-    // build_topbar_inventory()
     build_topbar_inventory_ores()
-    build_topbar_inventory_gems()
+    build_topbar_inventory_refined_ores()
     build_topbar_inventory_generation()
 
     if ( O.recalculate_ops ) calculate_ops()
@@ -1799,6 +1836,7 @@ let game_loop = () => {
     if ( O.rebuild_bottom_tabs ) build_bottom_tabs()
 
     if ( !is_empty( SMITH.upgrade_in_progress ) ) SMITH._update_progress()
+    if ( !is_empty( S.quest.in_progress ) ) handle_quest_progress( tick_ms )
   
     earn( S.ops / S.prefs.game_speed )
 
@@ -1887,10 +1925,10 @@ let build_topbar_inventory_ores = () => {
   ORES_AMOUNT.innerHTML = str
 }
 
-let build_topbar_inventory_gems = () => {
+let build_topbar_inventory_refined_ores = () => {
 
-  if ( S.stats.total_gems_earned > 0 ) {
-    GEMS_AMOUNT.innerHTML = `Gems: ${ beautify_number( S.gems ) }`
+  if ( S.stats.total_refined_ores_earned > 0 ) {
+    REFINED_ORES_AMOUNT.innerHTML = `Refined Ores: ${ beautify_number( S.refined_ores ) }`
   }
 
 }
@@ -1916,7 +1954,7 @@ let build_achievements = () => {
         <li><span>Total Rocks Destroyed:</span> ${ S.stats.total_rocks_destroyed }</li>
         <li><span>Total Ores Earned:</span> ${ beautify_number( S.stats.total_ores_earned ) }</li>
         <li><span>Total Ores Mined:</span> ${ beautify_number( S.stats.total_ores_manually_mined ) }</li>
-        <li><span>Total Gems Earned:</span> ${ S.stats.total_gems_earned }</li>
+        <li><span>Total Refined Ores Earned:</span> ${ S.stats.total_refined_ores_earned }</li>
         <li><span>Total Gold Nuggets Spawned:</span> ${ S.stats.total_nuggets_spawned }</li>
         <li><span>Total Gold Nuggets Clicked:</span> ${ S.stats.total_nuggets_clicked } </li>
         <li><span>Total Gold Nuggets Missed:</span> ${ S.stats.total_nuggets_missed }</li>
@@ -2263,7 +2301,7 @@ window.addEventListener('keyup', (e) => {
     if ( pressed.join( '' ).includes( 'qq' ) ) {
       Smith_Upgrades.forEach( upgrade => { upgrade.duration = 1 * SECOND })
       S.pickaxe.item.damage *= 1000
-      S.gems += 100
+      S.refined_ores += 100
     }
     if ( pressed.join( '' ).includes( 'qwer' ) ) {
       s( '.ore-container' ).style.visibility = 'hidden'
