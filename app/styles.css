@@ -2479,16 +2479,93 @@ input:checked + .slider:before {
         margin-bottom: 10px; }
 
 .wrapper > #quest-sheet {
-  height: 600px;
   width: 400px;
   background-color: #fffae0;
-  background-image: url("https://www.transparenttextures.com/patterns/beige-paper.png"); }
+  background-image: url("https://www.transparenttextures.com/patterns/beige-paper.png");
+  text-align: center;
+  padding: 10px 25px;
+  border: none;
+  color: black;
+  border-radius: 0;
+  position: relative;
+  overflow: visible; }
+  .wrapper > #quest-sheet .pin {
+    height: 10px;
+    width: 10px;
+    border-radius: 50%;
+    margin: 0 auto;
+    background: red;
+    -webkit-box-shadow: 0 2px 5px #222;
+    box-shadow: 0 2px 5px #222;
+    margin-bottom: 5px; }
   .wrapper > #quest-sheet header h1 {
     color: #222;
-    text-align: center; }
+    text-align: center;
+    font-family: 'Germania One';
+    font-size: 45px; }
   .wrapper > #quest-sheet header i {
     color: black;
     cursor: pointer; }
+  .wrapper > #quest-sheet .quest-img {
+    height: 200px;
+    width: 350px;
+    margin: 5px 0 10px 0; }
+  .wrapper > #quest-sheet .info-container {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -ms-flex-flow: row nowrap;
+    flex-flow: row nowrap;
+    -webkit-box-align: start;
+    -ms-flex-align: start;
+    align-items: flex-start;
+    text-align: left;
+    padding-bottom: 70px;
+    color: #333; }
+    .wrapper > #quest-sheet .info-container .left {
+      border-right: 1px solid #b1b1b1; }
+      .wrapper > #quest-sheet .info-container .left p, .wrapper > #quest-sheet .info-container .left i {
+        padding-right: 10px; }
+      .wrapper > #quest-sheet .info-container .left i {
+        opacity: .6;
+        font-size: 14px; }
+    .wrapper > #quest-sheet .info-container .right {
+      -ms-flex-negative: 0;
+      flex-shrink: 0;
+      list-style-type: none;
+      padding-left: 15px;
+      font-size: 14px; }
+      .wrapper > #quest-sheet .info-container .right hr {
+        height: 1px;
+        margin: 5px 0;
+        border-color: #b1b1b1;
+        opacity: .4; }
+  .wrapper > #quest-sheet button {
+    height: 65px;
+    width: 85%;
+    background: #ca8300;
+    color: white;
+    text-shadow: 0 0 5px gold;
+    font-family: 'Germania One';
+    font-size: 30px;
+    letter-spacing: 1.4px;
+    border: none;
+    position: absolute;
+    bottom: calc( -65px / 2);
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+    -webkit-box-shadow: 0 4px 10px black;
+    box-shadow: 0 4px 10px black;
+    cursor: pointer;
+    -webkit-transition: all .1s;
+    transition: all .1s; }
+    .wrapper > #quest-sheet button:hover {
+      background: #df9205;
+      -webkit-transform: translate(-50%, -5px);
+      transform: translate(-50%, -5px); }
 
 .wrapper > #quest-rewards-popup ul {
   list-style-type: none; }

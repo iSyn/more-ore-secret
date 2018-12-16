@@ -86,16 +86,35 @@
 }
 
 .wrapper > #quest-sheet {
-  height: 600px;
+  // height: 600px;
   width: 400px;
   background-color: #fffae0;
   background-image: url("https://www.transparenttextures.com/patterns/beige-paper.png");
+  text-align: center;
+  padding: 10px 25px;
+  border: none;
+  color: black;
+  border-radius: 0;
+  position: relative;
+  overflow: visible;
+  
+  .pin {
+    height: 10px;
+    width: 10px;
+    border-radius: 50%;
+    margin: 0 auto;
+    background: red;
+    box-shadow: 0 2px 5px #222;
+    margin-bottom: 5px;
+  }
 
   header {
 
     h1 {
       color: #222;
       text-align: center;
+      font-family: 'Germania One';
+      font-size: 45px;
     }
 
     i {
@@ -103,6 +122,74 @@
       cursor: pointer;
     }
   }
+
+  .quest-img {
+    height: 200px;
+    width: 350px;
+    margin: 5px 0 10px 0;
+  }
+
+  .info-container {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: flex-start;
+    text-align: left;
+    padding-bottom: 70px;
+    color: #333;
+
+    .left {
+      border-right: 1px solid #b1b1b1;
+
+      p, i {
+        padding-right: 10px;
+      }
+
+      i {
+        opacity: .6;
+        font-size: 14px;
+      }
+    }
+
+    .right {
+      flex-shrink: 0;
+      list-style-type: none;
+      padding-left: 15px;
+      font-size: 14px;
+
+
+      hr {
+        height: 1px;
+        margin: 5px 0 ;
+        border-color: #b1b1b1;
+        opacity: .4;
+      }
+    }
+  }
+
+  button {
+    height: 65px;
+    width: 85%;
+    background: #ca8300;
+    color: white;
+    text-shadow: 0 0 5px gold;
+    font-family: 'Germania One';
+    font-size: 30px;
+    letter-spacing: 1.4px;
+    border: none;
+    position: absolute;
+    bottom: calc( -65px / 2 );
+    left: 50%;
+    transform: translateX( -50% );
+    box-shadow: 0 4px 10px black;
+    cursor: pointer;
+    transition: all .1s;
+
+    &:hover {
+      background: #df9205;
+      transform: translate( -50%, -5px );
+    }
+  }
+
 }
 
 .wrapper > #quest-rewards-popup {

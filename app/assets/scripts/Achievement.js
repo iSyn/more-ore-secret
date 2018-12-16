@@ -76,6 +76,7 @@ let achievements = [
   { name: 'Adventurer', desc: 'Complete the first 5 quests', type: 'quest' },
   { name: 'Boosted!', desc: 'Boost a single time', type: 'quest' },
   { name: 'Rocket Boost', desc: 'Boost 100 times', reward: { increase_boost_amount: 2 }, type: 'quest' },
+  { name: 'Not That Dark!', desc: 'Complete the Dark Forest 5 times', type: 'quest' },
 
   // SECRET ACHIEVEMENTS
   { name: 'Who am I?', desc: 'Figure out the developers name', type: 'secret' },

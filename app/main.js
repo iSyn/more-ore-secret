@@ -1782,11 +1782,39 @@ let view_quest = ( code_name ) => {
 
   let str = `
     <div id='quest-sheet'>
+      <div class="pin"></div>
       <header>
         <i onclick='remove_wrapper()' class='fa fa-times fa-1x'></i>
         <h1>${ quest.name }</h1>
       </header>
-      <button onclick='start_quest( "${ quest.code_name }" )'>START QUEST</button>
+      <img class='quest-img' src="https://via.placeholder.com/200x360?text=quest-image-placeholder" alt="">
+      <div class="info-container">
+        <div class='left'>
+          <p>${ quest.desc }</p>
+          <br/>
+          <i>${ quest.flavor_text }</i>
+        </div>
+        <ul class='right'>
+          <li><i class="fa fa-clock-o fa-1x"></i> ${ beautify_ms( quest.duration ) }</li>
+          <li>XP: ${ quest.completed ? quest.rewards.xp : '??' }</li>
+          `
+
+          if ( quest.completed ) {
+            str += `
+              <hr size='1'> 
+              <li>Times Completed</li>
+              <li>${ quest.times_completed }</li>
+              <li>Total XP Gained</li>
+              <li>${ quest.total_xp_gained }</li>
+            `
+          }
+          
+          str += `
+        </ul>
+
+      </div>
+
+      <button onclick='start_quest( "${ quest.code_name }" )'>ACCEPT QUEST</button>
     </div>
   `
 
@@ -1864,6 +1892,7 @@ let handle_quest_area_click = () => {
 
         S.stats.total_times_quest_boosted++
         if ( S.stats.total_times_quest_boosted == 1 ) win_achievement( 'boosted!' )
+        if ( S.stats.total_times_quest_boosted == 100 ) win_achievement( 'rocket_boost' )
 
       }
       break 
@@ -1883,6 +1912,9 @@ let complete_quest = () => {
 
   quest.completed = 1
   quest.times_completed++
+  if ( quest.times_completed == 5 ) win_achievement( quest.achievement_name )
+
+  quest.total_xp_gained += quest.rewards.xp
   S.stats.total_quests_completed++
 
   if ( quest.times_completed == 1 ) S.stats.total_unique_quests_completed++
