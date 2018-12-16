@@ -155,9 +155,8 @@ let beautify_number = (number) => {
 
   if (!number) return 0;
   if (number < 10){
-      if (Math.round(number) === number) 
-      return number;
-      // return number.toFixed(1);
+      if (Math.round(number) === number) return number;
+      return number.toFixed(1);
   }
   // what tier? (determines SI prefix)
   var tier = Math.log10(number) / 3 | 0;

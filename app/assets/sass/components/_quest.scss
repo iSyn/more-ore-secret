@@ -126,7 +126,7 @@
   .quest-img {
     height: 200px;
     width: 350px;
-    margin: 5px 0 10px 0;
+    margin: 5px 0 20px 0;
   }
 
   .info-container {
@@ -194,8 +194,35 @@
 
 .wrapper > #quest-rewards-popup {
 
+  background-color: #362108;
+  border-color: #362108;
+  text-align: center;
+
+  header {
+
+    h1 {
+      font-family: 'Germania One';
+      letter-spacing: 1px;
+      text-shadow: 0 0 10px gold;
+    }
+  }
+
+  p {
+    opacity: .6;
+    padding: 5px 0;
+  }
+
   ul {
     list-style-type: none;
+    padding: 5px 0 15px 0;
+  }
+
+  button {
+    background: transparent;
+    border: 1px solid white;
+    color: white;
+    padding: 3px;
+    cursor: pointer;
   }
 }
 

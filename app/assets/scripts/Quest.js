@@ -29,10 +29,11 @@ let quests = [
     img: 'https://via.placeholder.com/64',
     desc: 'The Dark Forest is a mysterious place devoid of life. The ones who are enter are forever lost wandering.',
     flavor_text: 'Note: Not the forest Logan Paul went to.',
-    duration: 5 * SECOND,
+    duration: 5 * MINUTE,
     locked: 0,
     rewards: {
       xp: 50,
+      ores: 1000,
       refined_ores: 1,
       gem: {
         chance: 60,

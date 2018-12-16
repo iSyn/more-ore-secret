@@ -1795,8 +1795,9 @@ let view_quest = ( code_name ) => {
           <i>${ quest.flavor_text }</i>
         </div>
         <ul class='right'>
-          <li><i class="fa fa-clock-o fa-1x"></i> ${ beautify_ms( quest.duration ) }</li>
-          <li>XP: ${ quest.completed ? quest.rewards.xp : '??' }</li>
+          <li><i class="fa fa-clock-o fa-1x"></i> &nbsp; ${ beautify_ms( quest.duration ) }</li>
+          <li>Ores &nbsp; ${ quest.completed ? quest.rewards.ores : '??' }</li>
+          <li>XP &nbsp; ${ quest.completed ? quest.rewards.xp : '??' }</li>
           `
 
           if ( quest.completed ) {
@@ -1924,7 +1925,6 @@ let complete_quest = () => {
 
   let next_quest = Quests[ quest.id + 1 ]
   if ( next_quest ) {
-    console.log( 'next', next_quest )
     if ( next_quest.locked ) next_quest.locked = 0
   }
 
@@ -1947,13 +1947,15 @@ let gain_quest_rewards = ( quest ) => {
       </header>
       <p>You Earned:</p>
       <ul>
-        <li>Generation XP +${ quest.rewards.xp }</li>
+        <li>XP +${ quest.rewards.xp }</li>
+        <li>Ores +${ quest.rewards.ores }</li>
         <li>Refined Ores +${ quest.rewards.refined_ores }</li>
       </ul>
       <button onclick='remove_wrapper()'>OK</buttom>
     </div>
   `
 
+  earn( quest.rewards.ores, false )
   earn_generation_xp( quest.rewards.xp )
   earn_refined_ores( quest.rewards.refined_ores )
 
@@ -2462,6 +2464,7 @@ window.addEventListener('keyup', (e) => {
       Smith_Upgrades.forEach( upgrade => { upgrade.duration = 1 * SECOND })
       S.pickaxe.item.damage *= 1000
       S.refined_ores += 100
+      Quests.forEach( quest => quest.duration = 1 * SECOND )
     }
     if ( pressed.join( '' ).includes( 'qwer' ) ) {
       s( '.ore-container' ).style.visibility = 'hidden'
