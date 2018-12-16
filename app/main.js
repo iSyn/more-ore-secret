@@ -437,7 +437,8 @@ let build_buildings = () => {
   Buildings.forEach( building => {
     if ( building.hidden == 0 ) {
       str += `
-        <div 
+        <div
+          id='building-${ building.code_name }' 
           class="building" 
           onclick="Buildings[ ${ index } ].buy( event )" 
           onmouseover="play_sound( 'store_item_hover' ); TT.show( event, { name: '${ building.code_name }', type: 'building' } )" 
@@ -448,7 +449,7 @@ let build_buildings = () => {
           </div>
           <div class="middle">
             <h1>${ building.name } ${ S.buy_amount != 1 ? "x" + S.buy_amount : "" }</h1>
-            <p class='${ S.ores < get_geometric_sequence_price( building.base_price, building.price_scale, building.owned, building.current_price ).price ? "not-enough" : ""  }'><img class='ore-small' src='./app/assets/images/ore.png' /> ${ beautify_number( get_geometric_sequence_price( building.base_price, building.price_scale, building.owned, building.current_price ).price ) } </p>
+            <p class=building-price '${ S.ores < get_geometric_sequence_price( building.base_price, building.price_scale, building.owned, building.current_price ).price ? "not-enough" : ""  }'><img class='ore-small' src='./app/assets/images/ore.png' /> ${ beautify_number( get_geometric_sequence_price( building.base_price, building.price_scale, building.owned, building.current_price ).price ) } </p>
           </div>
           <div class="right">
             <h1>${ building.owned }</h1>
@@ -473,6 +474,26 @@ let build_buildings = () => {
   })
 
   return str
+}
+
+let update_building_prices = () => {
+
+  console.log( 'update building prices firing')
+  Buildings.forEach( building => {
+
+    if ( !building.hidden ) {
+
+      let building_el = s( `#building-${ building.code_name } .middle .building-price`)
+      
+      if ( S.ores < building.current_price ) {
+        building_el.classList.add( 'not-enough' )
+      } else {
+        building_el.classList.remove( 'not-enough')
+      }
+      
+    }
+
+  } )
 }
 
 let build_smith_tab = () => {
@@ -1949,6 +1970,7 @@ let game_loop = () => {
     // RUNS EVERY SECOND
     if ( O.counter % S.prefs.game_speed == 0 ) {
       S.stats.seconds_played++
+      if ( O.current_tab == 'store' ) update_building_prices()
       if ( S.ops > 0 && S.prefs.show_ops_rising_numbers ) RN.new( null, 'buildings', S.ops )
     }
 
