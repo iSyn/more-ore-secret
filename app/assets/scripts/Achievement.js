@@ -27,6 +27,8 @@ let Achievement = function( obj ) {
 
       if ( r.increase_pickaxe_hardness ) S.pickaxe.permanent_bonuses.hardness += r.increase_pickaxe_hardness
       if ( r.increase_pickaxe_sharpness ) S.pickaxe.permanent_bonuses.sharpness += r.increase_pickaxe_sharpness
+
+      if ( r.increase_boost_amount ) S.quest.boost_amount *= r.increase_boost_amount
     }
   }
 
@@ -72,6 +74,8 @@ let achievements = [
   // QUEST RELATED ACHEIVEMENTS
   { name: 'Novice Quester', desc: 'Complete the first quest', type: 'quest' },
   { name: 'Adventurer', desc: 'Complete the first 5 quests', type: 'quest' },
+  { name: 'Boosted!', desc: 'Boost a single time', type: 'quest' },
+  { name: 'Rocket Boost', desc: 'Boost 100 times', reward: { increase_boost_amount: 2 }, type: 'quest' },
 
   // SECRET ACHIEVEMENTS
   { name: 'Who am I?', desc: 'Figure out the developers name', type: 'secret' },

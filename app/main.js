@@ -1861,6 +1861,10 @@ let handle_quest_area_click = () => {
         } else {
           S.quest.current_quest_progress += S.quest.boost_amount
         }
+
+        S.stats.total_times_quest_boosted++
+        if ( S.stats.total_times_quest_boosted == 1 ) win_achievement( 'boosted!' )
+
       }
       break 
 

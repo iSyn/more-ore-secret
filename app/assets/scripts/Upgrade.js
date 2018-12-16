@@ -22,7 +22,7 @@ let Upgrade = function( obj ) {
                     let building = select_from_arr( Buildings, fn.increase_building_production.building )
 
                     building.base_production *= fn.increase_building_production.multi
-                    console.log( 'building', building)
+
                 }
                 if ( fn.gain_opc_from_ops ) {
                     
