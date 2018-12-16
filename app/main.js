@@ -1759,7 +1759,7 @@ let build_quests = () => {
           if ( S.quest.current_quest.code_name == quest.code_name ) str += `<p class='in-progress'>IN PROGRESS</p>`
         }
 
-        if ( quest.completed ) str += `<p class='completed''>COMPLETED</p>`
+        if ( quest.completed ) str += `<p class='completed ${ quest.times_completed >= 5 ? "golden" : "" }'>COMPLETED</p>`
 
         str += `
       </div>
@@ -1908,6 +1908,7 @@ let handle_quest_area_click = () => {
 let complete_quest = () => {
 
   BOOST_NOTIFIER.classList.remove( 'active' )
+  play_sound( 'quest_complete' )
   
   let quest = select_from_arr( Quests, S.quest.current_quest.code_name )
 

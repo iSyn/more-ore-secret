@@ -45,6 +45,16 @@
         border: 4px solid red;
         padding: 5px;
         font-size: 30px;
+
+        &.golden {
+          background: #f6cd44;
+          color: gold;
+          border: 5px ridge #f6cd44;
+          text-shadow: 0 0 2px black;
+          letter-spacing: 1.5px;
+          transform: translateX( -50% );
+          top: 77%;
+        }
       }
 
       .in-progress {

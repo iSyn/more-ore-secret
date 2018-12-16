@@ -2451,6 +2451,15 @@ input:checked + .slider:before {
         border: 4px solid red;
         padding: 5px;
         font-size: 30px; }
+        .wrapper > #quest-board .quest-board-quests .quest .completed.golden, .wrapper > #quest-board .quest-board-quests .quest .in-progress.golden {
+          background: #f6cd44;
+          color: gold;
+          border: 5px ridge #f6cd44;
+          text-shadow: 0 0 2px black;
+          letter-spacing: 1.5px;
+          -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+          top: 77%; }
       .wrapper > #quest-board .quest-board-quests .quest .in-progress {
         top: 30%;
         color: black;
