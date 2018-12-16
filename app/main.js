@@ -449,7 +449,7 @@ let build_buildings = () => {
           </div>
           <div class="middle">
             <h1>${ building.name } ${ S.buy_amount != 1 ? "x" + S.buy_amount : "" }</h1>
-            <p class=building-price '${ S.ores < get_geometric_sequence_price( building.base_price, building.price_scale, building.owned, building.current_price ).price ? "not-enough" : ""  }'><img class='ore-small' src='./app/assets/images/ore.png' /> ${ beautify_number( get_geometric_sequence_price( building.base_price, building.price_scale, building.owned, building.current_price ).price ) } </p>
+            <p class='building-price ${ S.ores < get_geometric_sequence_price( building.base_price, building.price_scale, building.owned, building.current_price ).price ? "not-enough" : ""  }'><img class='ore-small' src='./app/assets/images/ore.png' /> ${ beautify_number( get_geometric_sequence_price( building.base_price, building.price_scale, building.owned, building.current_price ).price ) } </p>
           </div>
           <div class="right">
             <h1>${ building.owned }</h1>
@@ -478,7 +478,6 @@ let build_buildings = () => {
 
 let update_building_prices = () => {
 
-  console.log( 'update building prices firing')
   Buildings.forEach( building => {
 
     if ( !building.hidden ) {
