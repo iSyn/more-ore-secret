@@ -24,6 +24,11 @@ let State = function( s = {} ) {
 
     buy_amount: 1,
 
+    inventory: s.inventory || {
+      max_slots: 12,
+      items: [],
+    },
+
     combo_shield: s.combo_shield || {
       active: 1,
       owned: 0,

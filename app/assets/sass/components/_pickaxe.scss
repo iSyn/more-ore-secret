@@ -155,21 +155,21 @@ $mythic-color: #c60000;
       }
     }
 
-    > .pickaxe-sprite-container {
-        height: 320px;
-        width: 320px;
-        // margin: 15px auto 7.5px auto;
-        margin: 15px auto;
-        position: relative;
+    // > .pickaxe-sprite-container {
+    //     height: 320px;
+    //     width: 320px;
+    //     // margin: 15px auto 7.5px auto;
+    //     margin: 15px auto;
+    //     position: relative;
 
-        > img {
-          position: absolute;
-          height: 100%;
-          width: 100%;
-          image-rendering: pixelated;
-          pointer-events: none;
-        }
-    }
+    //     > img {
+    //       position: absolute;
+    //       height: 100%;
+    //       width: 100%;
+    //       image-rendering: pixelated;
+    //       pointer-events: none;
+    //     }
+    // }
 
     button {
         width: 49.66%;
@@ -234,5 +234,44 @@ $mythic-color: #c60000;
   to {
     opacity: 1;
     transform: translateY( 0% );
+  }
+}
+
+.pickaxe-sprite-container {
+  height: 320px;
+  width: 320px;
+  // margin: 15px auto 7.5px auto;
+  margin: 15px auto;
+  position: relative;
+
+  > img {
+    left: 0;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    image-rendering: pixelated;
+    pointer-events: none;
+  }
+
+  .sockets-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate( -50%, -50% );
+    width: 60%;
+    height: 80%;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    z-index: 1;
+
+    .socket {
+      background: rgba( 255, 255, 255, 0.2 );
+      border-radius: 5px;
+
+      &:hover {
+        background: rgba( 255, 255, 255, 0.4 );
+      }
+    }
   }
 }

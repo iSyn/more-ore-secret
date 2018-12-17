@@ -62,7 +62,7 @@ let O = {
   quest_initialized: false,
   can_boost: true,
 
-  pickaxe_accordion_is_open: 0,
+  inventory_accordion_is_open: 0,
   
   window_blurred: false,
   counter: 0
@@ -501,7 +501,7 @@ let build_smith_tab = () => {
 
   let str = ''
 
-  str += build_pickaxe_accordion()
+  str += build_inventory_accordion()
 
   str += '<div class="smith-progress-container" onclick="SMITH.progress_click()">'
   str += build_pickaxe_update()
@@ -517,16 +517,22 @@ let build_smith_tab = () => {
   TAB_CONTENT.classList.remove( 'store', 'skills' )
 }
 
-let build_pickaxe_accordion = ( direct = false ) => {
+let build_inventory_accordion = ( direct = false ) => {
   let str = ''
 
   str += `
-    <div class='pickaxe-accordion ${ O.pickaxe_accordion_is_open && 'open' }'>
-      <header onclick='toggle_pickaxe_accordion()'>
-        <p>${ S.pickaxe.item.name }</p>
+    <div class='inventory-accordion ${ O.inventory_accordion_is_open && 'open' }'>
+      <header onclick='toggle_inventory_accordion()'>
+        <p>INVENTORY</p>
         <i class='fa fa-caret-down fa-1x'></i>
       </header>
       <div>
+        <p class='pickaxe-name ${ S.pickaxe.item.rarity.name }'>${ S.pickaxe.item.name }</p>
+        `
+
+        str += build_pickaxe_sprite( S.pickaxe.item, 192 )
+
+        str += `
         <p>Damage: ${ beautify_number( S.pickaxe.item.damage ) }</p>
         <p
           onmouseover='TT.show( event, { name: null, type: "sharpness-info" } )'
@@ -537,14 +543,38 @@ let build_pickaxe_accordion = ( direct = false ) => {
           onmouseout='TT.hide()'
           >Hardness: ${ S.pickaxe.item.hardness } <span style='opacity: .5'>( ${ beautify_number( calculate_pickaxe_hardness() ) } )</span> %</p>
       </div>
+
+      `
+
+      str += build_inventory()
+
+      str += `
+
     </div>
     <div class='horizontal-separator thin dark'></div>
   `
 
   if ( direct ) {
-    s( '.pickaxe-accordion' ).innerHTML = str
+    s( '.inventory-accordion' ).innerHTML = str
     return
   }
+
+  return str
+}
+
+
+let build_inventory = ( direct = false ) => {
+
+  let str = ''
+
+  str += `<div class='bag-container'>`
+  str += `<h2>Bag</h2>`
+
+  for ( i = 0; i < S.inventory.max_slots; i++ ) {
+    str += `<div class='bag-slot'></div>`
+  }
+
+  str += `</div>`
 
   return str
 }
@@ -659,9 +689,9 @@ let handle_smith_upgrade_hover = ( code_name ) => {
 
 }
 
-let toggle_pickaxe_accordion = () => {
-  s( '.pickaxe-accordion' ).classList.toggle( 'open' )
-  O.pickaxe_accordion_is_open = !O.pickaxe_accordion_is_open
+let toggle_inventory_accordion = () => {
+  s( '.inventory-accordion' ).classList.toggle( 'open' )
+  O.inventory_accordion_is_open = !O.inventory_accordion_is_open
 }
 
 // ==== SKILL SHIT ========================================================================
@@ -1638,7 +1668,7 @@ let build_equipped_pickaxe_popup = () => {
       <h1 class='${ p.rarity.name }'>${ p.name }</h1>
   `
 
-  str += build_pickaxe_sprite( p )
+  str += build_pickaxe_sprite( p, 192 )
 
   str += `
     <p style='padding-bottom: 7.5px; opacity: .7;' class='${ p.rarity.name }'>
@@ -1658,10 +1688,39 @@ let build_equipped_pickaxe_popup = () => {
 
 }
 
-let build_pickaxe_sprite = ( pickaxe ) => {
+let build_pickaxe_sprite = ( pickaxe, size=320 ) => {
 
   let str = `
-    <div class="pickaxe-sprite-container">
+    <div
+      class="pickaxe-sprite-container"
+      style='
+        width: ${ size }px;
+        height: ${ size }px;
+      '>
+      `
+      
+      if ( pickaxe.sockets ) {
+
+        let margin = size == 320 ? '20' : '12'
+
+        str += `<div class='sockets-container'>`
+
+        for( let i = 0; i < pickaxe.sockets; i++ ) {
+          str += `
+            <div
+              style='
+                height: ${ size / 6 }px;
+                width: ${ size / 6 }px;
+                margin: 7.5px ${ margin }px;
+              '
+              class="socket"></div>
+          `
+        }
+
+        str += `</div>`
+      }
+
+      str += `
       <img class='pickaxe-stick' src='./app/assets/images/pickaxe-bottom.png' />
       <img class='pickaxe-top' src='./app/assets/images/pickaxe-top-${ pickaxe.material.name.toLowerCase() }.png' />
     </div>
