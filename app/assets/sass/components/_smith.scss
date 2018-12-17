@@ -67,7 +67,7 @@ $inventory-accordion-header-height: 25px;
       position: absolute;
       top: -12px;
       font-size: 20px;
-      letter-spacing: .6px;
+      letter-spacing: 1px;
       padding: 0 10px;
       font-family: 'Germania One';
     }
@@ -79,6 +79,9 @@ $inventory-accordion-header-height: 25px;
       box-shadow: 0 0 10px 1px #2b2121 inset;
       margin: 5px;
       border-radius: 5px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
   }
 }

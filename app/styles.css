@@ -1296,7 +1296,7 @@
       position: absolute;
       top: -12px;
       font-size: 20px;
-      letter-spacing: .6px;
+      letter-spacing: 1px;
       padding: 0 10px;
       font-family: 'Germania One'; }
     .inventory-accordion .bag-container .bag-slot {
@@ -1306,7 +1306,16 @@
       -webkit-box-shadow: 0 0 10px 1px #2b2121 inset;
       box-shadow: 0 0 10px 1px #2b2121 inset;
       margin: 5px;
-      border-radius: 5px; }
+      border-radius: 5px;
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-pack: center;
+      -ms-flex-pack: center;
+      justify-content: center;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      align-items: center; }
 
 .smith-progress-container {
   display: -webkit-box;

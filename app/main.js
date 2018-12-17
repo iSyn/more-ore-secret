@@ -562,7 +562,6 @@ let build_inventory_accordion = ( direct = false ) => {
   return str
 }
 
-
 let build_inventory = ( direct = false ) => {
 
   let str = ''
@@ -570,8 +569,16 @@ let build_inventory = ( direct = false ) => {
   str += `<div class='bag-container'>`
   str += `<h2>Bag</h2>`
 
+  for ( let i = 0; i < S.inventory.length; i++ ) {
+
   for ( i = 0; i < S.inventory.max_slots; i++ ) {
-    str += `<div class='bag-slot'></div>`
+    str += `<div class='bag-slot'>`
+    
+    if ( S.inventory.items[ i ] ) {
+      str += `<img src='https://via.placeholder.com/40'>` 
+    }
+
+    str += `</div>`
   }
 
   str += `</div>`
@@ -783,26 +790,6 @@ let build_skills = () => {
       `
 
     })
-
-
-    //   str += `
-    //     <div 
-    //       class='skill ${ s.skill_classes } ${ s.locked ? "locked" : "" }'
-    //       id='skill-${ s.code_name }'
-    //       onclick='Skills[ ${ i } ].level_up( event )'
-    //       onmouseover='TT.show( event, { name: "${ s.code_name }", type: "skill" } ) '
-    //       onmouseout='TT.hide()'
-    //       style='
-    //         left: ${ column_pos }px; 
-    //         top: ${ row_pos }px;
-    //         height: ${ skill_height }px;
-    //         width: ${ skill_height}px;
-    //         background-image: url( "${ s.img }" );
-    //       '
-    //     ></div>
-    //   `
-
-    // } )
 
     str += '</div>'
 
@@ -1998,7 +1985,6 @@ let gain_quest_rewards = ( quest ) => {
 
   let gem = get_quest_gem( quest.rewards.gem )
   O.current_gem = gem
-  console.log( gem )
 
   let popup = document.createElement( 'div' )
   popup.classList.add( 'wrapper' )
@@ -2046,6 +2032,7 @@ let gain_quest_rewards = ( quest ) => {
   earn( quest.rewards.ores, false )
   earn_generation_xp( quest.rewards.xp )
   earn_refined_ores( quest.rewards.refined_ores )
+  add_to_inventory( gem )
 
   popup.innerHTML = str
 
@@ -2070,6 +2057,21 @@ let reset_quest_state = () => {
   S.quest.current_quest_progress = null
 
   HERO.classList.remove( 'active', 'moving', 'jumping' )
+
+}
+
+// ==== INVENTORY SHIT ===================================================================
+
+let add_to_inventory = ( item ) => {
+
+  if ( S.inventory.items.length < S.inventory.max_slots ) {
+    S.inventory.items.push( item )
+  } else {
+    notify( 'Inventory is full', 'red', 'error' )
+  }
+
+  if ( O.current_tab == 'smith' ) O.rebuild_smith_tab = 1
+  
 }
 
 // =======================================================================================
