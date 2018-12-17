@@ -167,5 +167,40 @@
       }
     }
   }
+
+  &.gem-tooltip-container {
+    width: fit-content;
+    min-width: fit-content;
+
+    .gem-tooltip {
+      text-align: center;
+
+      .gem-image-container {
+        padding: 15px;
+        border-radius: 5px;
+        background: rgba( 0, 0, 0, 0.3 );
+        box-shadow: 0 0 20px #111 inset;
+        width: fit-content;
+        // background: white;
+        margin: 0 auto;
+      }
+
+      .gem-level {
+        opacity: .7;
+      }
+
+      h1 {
+        padding-top: 5px;
+        font-family: 'Germania One';
+        font-size: 20px;
+        letter-spacing: .5px;
+      }
+
+      small:not( .gem-level ) {
+        padding-top: 20px;
+      }
+
+    }
+  }
   
 }

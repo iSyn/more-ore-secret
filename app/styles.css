@@ -954,6 +954,34 @@
         opacity: .6; }
       .tooltip.generation .generation-tooltip h1 {
         font-family: 'Germania One'; }
+  .tooltip.gem-tooltip-container {
+    width: -webkit-fit-content;
+    width: -moz-fit-content;
+    width: fit-content;
+    min-width: -webkit-fit-content;
+    min-width: -moz-fit-content;
+    min-width: fit-content; }
+    .tooltip.gem-tooltip-container .gem-tooltip {
+      text-align: center; }
+      .tooltip.gem-tooltip-container .gem-tooltip .gem-image-container {
+        padding: 15px;
+        border-radius: 5px;
+        background: rgba(0, 0, 0, 0.3);
+        -webkit-box-shadow: 0 0 20px #111 inset;
+        box-shadow: 0 0 20px #111 inset;
+        width: -webkit-fit-content;
+        width: -moz-fit-content;
+        width: fit-content;
+        margin: 0 auto; }
+      .tooltip.gem-tooltip-container .gem-tooltip .gem-level {
+        opacity: .7; }
+      .tooltip.gem-tooltip-container .gem-tooltip h1 {
+        padding-top: 5px;
+        font-family: 'Germania One';
+        font-size: 20px;
+        letter-spacing: .5px; }
+      .tooltip.gem-tooltip-container .gem-tooltip small:not(.gem-level) {
+        padding-top: 20px; }
 
 .particle {
   position: absolute;

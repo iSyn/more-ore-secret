@@ -1,32 +1,20 @@
 let Gem = function( level, gem_pool ) {
 
   this.level = level
-  this.type = _get_type( gem_pool )
-  this.stat_amount = _get_stat_amount( this )
-
-  this.name = _get_name( this )
+  this.gem_type = get_gem_type( gem_pool )
+  this.stat_amount = get_stat_amount( this )
+  this.stat_type = get_stat_type_str( this.gem_type )
+  this.name = get_name( this )
 }
 
-/*
-    Gems:
-    --------------
-    - Ruby:         Increase pickaxe damage by flat amount
-    - Citrine:      Increase pickaxe damage by percentage
-    - Sapphire:     Increase pickaxe sharpness by flat amount
-    - Alexandrite:  Increase pickaxe sharpness by percentage
-    - Turquoise:    Increase pickaxe hardness by flat amount
-    - Amethyst:     Increase pickaxe hardness by percentage
-    - Diamond:      Increase pickaxe sharpness and hardness by flat amount
-    - Vibranium:    Increase pickaxe sharpness and hardness by percentage
-    - Jade:         Increase specific building production by flat amount
-    - Morganite:    Increase specific building production by percentage
-    - Emerald:      Increase all building production by flat amount
-    - Topaz:        Increase all building production by percentage
-    - Onyx:         Increase quest completion percentage by a flat amount
-    - Tanzanite:    Increase quest completion percentage by a percentage
-*/
+var get_name = ( gem ) => {
 
-let _get_type = ( gem_pool ) => {
+  let name = to_titlecase( gem.gem_type )
+
+  return name
+}
+
+var get_gem_type = ( gem_pool ) => {
 
   let gems = {
     common_types: [ 'ruby', 'sapphire', 'turquoise' ],
@@ -46,19 +34,11 @@ let _get_type = ( gem_pool ) => {
 
 }
 
-let _get_name = ( gem ) => {
-  
-  let name = to_titlecase( gem.type )
-
-  return name
-
-}
-
-let _get_stat_amount = ( gem ) => {
+var get_stat_amount = ( gem ) => {
 
   let amount = 0
 
-  switch( gem.type ) {
+  switch( gem.gem_type ) {
 
     case 'ruby':
     case 'sapphire':
@@ -86,3 +66,66 @@ let _get_stat_amount = ( gem ) => {
   return amount
 
 }
+
+var get_stat_type_str = ( type ) => {
+
+  let str = ''
+
+  switch( type ) {
+
+    case 'ruby':
+      str = 'flat damage'
+      break
+
+    case 'citrine':
+      str = '% damage'
+      break
+    
+    case 'sapphire':
+      str = 'sharpness'
+      break
+
+    case  'alexandrite':
+      str = '% sharpness'
+      break
+
+    case 'turquoise':
+      str = 'hardness'
+      break
+
+    case 'amethyst':
+      str = '% hardness'
+      break
+
+    default:
+      str = 'not yet added into switch statement'
+      break
+
+  }
+
+  return str
+
+}
+
+
+/*
+    Gems:
+    --------------
+    - Ruby:         Increase pickaxe damage by flat amount
+    - Citrine:      Increase pickaxe damage by percentage
+    - Sapphire:     Increase pickaxe sharpness by flat amount
+    - Alexandrite:  Increase pickaxe sharpness by percentage
+    - Turquoise:    Increase pickaxe hardness by flat amount
+    - Amethyst:     Increase pickaxe hardness by percentage
+    - Diamond:      Increase pickaxe sharpness and hardness by flat amount
+    - Vibranium:    Increase pickaxe sharpness and hardness by percentage
+    - Jade:         Increase specific building production by flat amount
+    - Morganite:    Increase specific building production by percentage
+    - Emerald:      Increase all building production by flat amount
+    - Topaz:        Increase all building production by percentage
+    - Onyx:         Increase quest completion percentage by a flat amount
+    - Tanzanite:    Increase quest completion percentage by a percentage
+*/
+
+
+

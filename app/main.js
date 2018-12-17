@@ -1938,6 +1938,7 @@ let complete_quest = () => {
 let gain_quest_rewards = ( quest ) => {
 
   let gem = get_quest_gem( quest.rewards.gem )
+  O.current_gem = gem
   console.log( gem )
 
   let popup = document.createElement( 'div' )
@@ -1968,7 +1969,7 @@ let gain_quest_rewards = ( quest ) => {
           str += `
             <li
               class='quest-reward-gem'
-              onmouseover='TT.show( event, { type: 'gem', gem: ${ gem } }
+              onmouseover='TT.show( event, { type: "gem" } )'
               onmouseout='TT.hide()'
             >
               <img src="https://via.placeholder.com/40" alt="">

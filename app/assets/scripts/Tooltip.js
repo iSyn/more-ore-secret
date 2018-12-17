@@ -19,7 +19,19 @@ let Tooltip = function() {
 
       case 'gem':
 
-        let gem = obj.gem
+        let g = O.current_gem
+        TOOLTIP.classList.add( 'gem-tooltip-container' )
+
+        str += `
+          <div class='gem-tooltip'>
+            <div class='gem-image-container'>
+              <img src='https://via.placeholder.com/40' >
+            </div>
+            <small class='gem-level'>Level ${ g.level } Gem</small>
+            <h1>${ g.name }</h1>
+            <p>+${ g.stat_amount } ${ g.stat_type }</p>
+          </div>
+        `
 
         break
 

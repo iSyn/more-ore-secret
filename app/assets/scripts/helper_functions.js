@@ -224,6 +224,7 @@ let is_empty = ( obj ) => {
 }
 
 let to_titlecase = ( sentence ) => {
+  console.log( 'setnetnce', sentence )
   return sentence.toLowerCase()
     .split(' ')
     .map( ( s ) => s.charAt( 0 ).toUpperCase() + s.substring( 1 ) )
