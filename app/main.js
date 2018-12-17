@@ -1937,6 +1937,9 @@ let complete_quest = () => {
 
 let gain_quest_rewards = ( quest ) => {
 
+  let gem = get_quest_gem( quest.rewards.gem )
+  console.log( 'gem', gem )
+
   let popup = document.createElement( 'div' )
   popup.classList.add( 'wrapper' )
 
@@ -1944,13 +1947,25 @@ let gain_quest_rewards = ( quest ) => {
     <div id='quest-rewards-popup'>
       <header>
         <h1>Quest Complete</h1>
-        <i onclick='remove_wrapper()' class='fa fa-times fa-1x'></i>
       </header>
-      <p>You Earned:</p>
       <ul>
-        <li>XP +${ quest.rewards.xp }</li>
-        <li>Ores +${ quest.rewards.ores }</li>
-        <li>Refined Ores +${ quest.rewards.refined_ores }</li>
+        <p>YOU EARNED</p>
+        <li>
+          <h1>XP</h1>
+          <p>${ quest.rewards.xp }</p>
+        </li>
+        <li>
+          <img src="./app/assets/images/ore.png" alt="ore">
+          <p>${ quest.rewards.ores }</p>
+        </li>
+        <li>
+          <img src="./app/assets/images/refined-ore.png" alt="refined-ore">
+          <p>${ quest.rewards.refined_ores }</p>
+        </li>
+        <li>
+          <img src="https://via.placeholder.com/40" alt="">
+          <p>1</p>
+        </li>
       </ul>
       <button onclick='remove_wrapper()'>OK</buttom>
     </div>
@@ -1963,6 +1978,17 @@ let gain_quest_rewards = ( quest ) => {
   popup.innerHTML = str
 
   CONTAINER.append( popup )
+
+}
+
+let get_quest_gem = ( q ) => {
+
+  if ( Math.random() <= q.chance || S.stats.total_quests_completed == 1 ) {
+    return new Gem( get_random_num( q.level_range[ 0 ], q.level_range[ 1 ] ), q.gem_pool )
+  }
+
+  return null
+
 
 }
 

@@ -1,4 +1,4 @@
-let Quest = function( obj ) {
+let Quest = function( obj, gem_pool ) {
 
   this.name = obj.name
   this.id = obj.id
@@ -36,8 +36,9 @@ let quests = [
       ores: 1000,
       refined_ores: 1,
       gem: {
-        chance: 60,
-        level_range: [ 1, 3 ]
+        chance: .6,
+        level_range: [ 1, 1 ],
+        gem_pool: 0
       }
     },
     achievement_name: 'not_that_dark!'
