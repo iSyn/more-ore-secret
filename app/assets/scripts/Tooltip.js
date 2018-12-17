@@ -17,6 +17,12 @@ let Tooltip = function() {
     // build content
     switch ( obj.type ) {
 
+      case 'gem':
+
+        let gem = obj.gem
+
+        break
+
       case 'generation':
         TOOLTIP.classList.add( 'generation' )
         str += `

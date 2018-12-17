@@ -1938,7 +1938,7 @@ let complete_quest = () => {
 let gain_quest_rewards = ( quest ) => {
 
   let gem = get_quest_gem( quest.rewards.gem )
-  console.log( 'gem', gem )
+  console.log( gem )
 
   let popup = document.createElement( 'div' )
   popup.classList.add( 'wrapper' )
@@ -1950,22 +1950,34 @@ let gain_quest_rewards = ( quest ) => {
       </header>
       <ul>
         <p>YOU EARNED</p>
-        <li>
+        <li class='quest-reward-xp'>
           <h1>XP</h1>
           <p>${ quest.rewards.xp }</p>
         </li>
-        <li>
+        <li class='quest-reward-ores'>
           <img src="./app/assets/images/ore.png" alt="ore">
           <p>${ quest.rewards.ores }</p>
         </li>
-        <li>
+        <li class='quest-reward-refined-ores'>
           <img src="./app/assets/images/refined-ore.png" alt="refined-ore">
           <p>${ quest.rewards.refined_ores }</p>
         </li>
-        <li>
-          <img src="https://via.placeholder.com/40" alt="">
-          <p>1</p>
-        </li>
+        `
+
+        if ( gem ) {
+          str += `
+            <li
+              class='quest-reward-gem'
+              onmouseover='TT.show( event, { type: 'gem', gem: ${ gem } }
+              onmouseout='TT.hide()'
+            >
+              <img src="https://via.placeholder.com/40" alt="">
+              <p>1</p>
+            </li>
+          `
+        }
+
+        str += `
       </ul>
       <button onclick='remove_wrapper()'>OK</buttom>
     </div>

@@ -2623,8 +2623,15 @@ input:checked + .slider:before {
       box-shadow: 0 2px 10px black;
       border-radius: 5px;
       cursor: default; }
+      .wrapper > #quest-rewards-popup ul li.quest-reward-ores {
+        background: #222; }
+      .wrapper > #quest-rewards-popup ul li.quest-reward-xp {
+        background: #56007d; }
+      .wrapper > #quest-rewards-popup ul li.quest-reward-refined-ores {
+        background: #946000; }
       .wrapper > #quest-rewards-popup ul li h1 {
         font-family: 'Germania One';
+        text-shadow: 0 0 5px gold;
         letter-spacing: 4px; }
       .wrapper > #quest-rewards-popup ul li img {
         height: 40px; }

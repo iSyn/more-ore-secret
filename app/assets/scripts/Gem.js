@@ -68,7 +68,7 @@ let _get_stat_amount = ( gem ) => {
     case 'emerald':
     case 'onyx':
 
-      amount += gem.level * get_random_num( 1, 10 )
+      amount += gem.level * get_random_num( 1, 5 )
 
       break
 

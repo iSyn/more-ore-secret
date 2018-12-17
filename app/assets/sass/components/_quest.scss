@@ -251,8 +251,13 @@
       border-radius: 5px;
       cursor: default;
 
+      &.quest-reward-ores { background: #222; }
+      &.quest-reward-xp { background: #56007d; }
+      &.quest-reward-refined-ores { background: #946000; }
+
       h1 {
         font-family: 'Germania One';
+        text-shadow: 0 0 5px gold;
         letter-spacing: 4px;
       }
 
