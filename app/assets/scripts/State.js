@@ -26,7 +26,11 @@ let State = function( s = {} ) {
 
     inventory: s.inventory || {
       max_slots: 12,
-      items: [],
+      items: [
+        {},{},{},{},
+        {},{},{},{},
+        {},{},{},{}
+      ],
     },
 
     combo_shield: s.combo_shield || {

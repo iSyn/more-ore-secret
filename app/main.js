@@ -63,6 +63,7 @@ let O = {
   can_boost: true,
 
   inventory_accordion_is_open: 0,
+  item_popup_visible: false,
   
   window_blurred: false,
   counter: 0
@@ -84,6 +85,12 @@ let init_game = () => {
   build_automater_visibility_toggle_btn()
   build_footer()
   earn_offline_resources()
+
+  window.addEventListener( 'click', () => {
+    if ( O.item_popup_visible ) {
+      remove_el( s( '.inventory-item-click-popup' ) )
+    }
+  })
 
   if ( S.stats.total_clicks == 0 ) tutorial_click_the_rock()
 }
@@ -515,75 +522,6 @@ let build_smith_tab = () => {
   TAB_CONTENT.innerHTML = str
   TAB_CONTENT.classList.add( 'smith' )
   TAB_CONTENT.classList.remove( 'store', 'skills' )
-}
-
-let build_inventory_accordion = ( direct = false ) => {
-  let str = ''
-
-  str += `
-    <div class='inventory-accordion ${ O.inventory_accordion_is_open && 'open' }'>
-      <header onclick='toggle_inventory_accordion()'>
-        <p>INVENTORY</p>
-        <i class='fa fa-caret-down fa-1x'></i>
-      </header>
-      <div>
-        <p class='pickaxe-name ${ S.pickaxe.item.rarity.name }'>${ S.pickaxe.item.name }</p>
-        `
-
-        str += build_pickaxe_sprite( S.pickaxe.item, 192 )
-
-        str += `
-        <p>Damage: ${ beautify_number( S.pickaxe.item.damage ) }</p>
-        <p
-          onmouseover='TT.show( event, { name: null, type: "sharpness-info" } )'
-          onmouseout='TT.hide()'
-          >Sharpness: ${ S.pickaxe.item.sharpness } <span style='opacity: .5'>( ${ beautify_number( calculate_pickaxe_sharpness() ) } )</span> %</p>
-        <p
-          onmouseover='TT.show( event, { name: null, type: "hardness-info" } )'
-          onmouseout='TT.hide()'
-          >Hardness: ${ S.pickaxe.item.hardness } <span style='opacity: .5'>( ${ beautify_number( calculate_pickaxe_hardness() ) } )</span> %</p>
-      </div>
-
-      `
-
-      str += build_inventory()
-
-      str += `
-
-    </div>
-    <div class='horizontal-separator thin dark'></div>
-  `
-
-  if ( direct ) {
-    s( '.inventory-accordion' ).innerHTML = str
-    return
-  }
-
-  return str
-}
-
-let build_inventory = ( direct = false ) => {
-
-  let str = ''
-
-  str += `<div class='bag-container'>`
-  str += `<h2>Bag</h2>`
-
-  for ( let i = 0; i < S.inventory.length; i++ ) {
-
-  for ( i = 0; i < S.inventory.max_slots; i++ ) {
-    str += `<div class='bag-slot'>`
-    
-    if ( S.inventory.items[ i ] ) {
-      str += `<img src='https://via.placeholder.com/40'>` 
-    }
-
-    str += `</div>`
-  }
-
-  str += `</div>`
-
-  return str
 }
 
 let build_pickaxe_update = ( direct = false ) => {
@@ -2062,16 +2000,111 @@ let reset_quest_state = () => {
 
 // ==== INVENTORY SHIT ===================================================================
 
-let add_to_inventory = ( item ) => {
+let build_inventory_accordion = ( direct = false ) => {
+  let str = ''
 
-  if ( S.inventory.items.length < S.inventory.max_slots ) {
-    S.inventory.items.push( item )
-  } else {
-    notify( 'Inventory is full', 'red', 'error' )
+  str += `
+    <div class='inventory-accordion ${ O.inventory_accordion_is_open && 'open' }'>
+      <header onclick='toggle_inventory_accordion()'>
+        <p>INVENTORY</p>
+        <i class='fa fa-caret-down fa-1x'></i>
+      </header>
+      <div>
+        <p class='pickaxe-name ${ S.pickaxe.item.rarity.name }'>${ S.pickaxe.item.name }</p>
+        `
+
+        str += build_pickaxe_sprite( S.pickaxe.item, 192 )
+
+        str += `
+        <p>Damage: ${ beautify_number( S.pickaxe.item.damage ) }</p>
+        <p
+          onmouseover='TT.show( event, { name: null, type: "sharpness-info" } )'
+          onmouseout='TT.hide()'
+          >Sharpness: ${ S.pickaxe.item.sharpness } <span style='opacity: .5'>( ${ beautify_number( calculate_pickaxe_sharpness() ) } )</span> %</p>
+        <p
+          onmouseover='TT.show( event, { name: null, type: "hardness-info" } )'
+          onmouseout='TT.hide()'
+          >Hardness: ${ S.pickaxe.item.hardness } <span style='opacity: .5'>( ${ beautify_number( calculate_pickaxe_hardness() ) } )</span> %</p>
+      </div>
+
+      `
+
+      str += build_inventory()
+
+      str += `
+
+    </div>
+    <div class='horizontal-separator thin dark'></div>
+  `
+
+  if ( direct ) {
+    s( '.inventory-accordion' ).innerHTML = str
+    return
   }
 
-  if ( O.current_tab == 'smith' ) O.rebuild_smith_tab = 1
+  return str
+}
+
+let build_inventory = ( direct = false ) => {
+
+  let str = ''
+
+  str += '<div class="bag-container">'
+  str += '<h2>Bag</h2>'
+
+  for ( let i = 0; i < S.inventory.items.length; i++ ) {
+    str += '<div class="bag-slot">'
+
+    if ( !is_empty( S.inventory.items[ i ] ) ) {
+      str += `
+        <img
+          class='inventory-item'
+          onclick='handle_inventory_item_click( event, ${ i } )'
+          src="https://via.placeholder.com/40"/>
+      `
+    }
+
+    str += '</div>'
+  }
+
+  str += '</div>'
+
+  return str
+}
+
+let add_to_inventory = ( item ) => {
+
+  for ( let i = 0; i < S.inventory.items.length; i++ ) {
+    if ( is_empty( S.inventory.items[ i ] ) ) {
+      item.inventory_index = i
+      S.inventory.items[i] = item
+
+      if ( O.current_tab == 'smith' ) O.rebuild_smith_tab = 1
+
+      return
+    }
+  }
+
+  notify( 'Inventory is full', 'red', 'error' )
   
+}
+
+let handle_inventory_item_click = ( e, index) => {
+
+  let item = S.inventory.items[ index ]
+
+  let popup = document.createElement( 'div' )
+  popup.classList.add( 'inventory-item-click-popup' )
+  popup.innerHTML = `
+    <p><i class='fa fa-diamond fa-1x'></i> Socket Gem</p>
+    <p><i class='fa fa-trash-o fa-1x'></i>Trash Gem</p>
+  `
+
+  CONTAINER.append( popup )
+
+  popup.style.left = e.clientX + 'px'
+  popup.style.top = e.clientY + 10 + 'px'
+
 }
 
 // =======================================================================================
