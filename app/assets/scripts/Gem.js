@@ -6,6 +6,8 @@ let Gem = function( level, gem_pool ) {
   this.stat_amount = get_stat_amount( this )
   this.stat_type = get_stat_type_str( this.gem_type )
   this.name = get_name( this )
+  this.favorite = false
+  
 }
 
 var get_name = ( gem ) => {

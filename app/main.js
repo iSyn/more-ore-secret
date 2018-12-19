@@ -2112,7 +2112,7 @@ let build_inventory = ( direct = false ) => {
     str += '<div class="bag-slot">'
 
     if ( !is_empty( S.inventory.items[ i ] ) ) {
-      str += `<i class='fa fa-star ${ S.inventory.items[ i ].favorite ? "favorite" : "" }'></i>`
+      str += `<i onclick='toggle_favorite_item( ${ i } )' class='fa fa-star ${ S.inventory.items[ i ].favorite ? "favorite" : "" }'></i>`
       str += `
         <img
           onmouseover='TT.show( event, { type: "inventory-item", inventory_index: ${ i } } )'
@@ -2174,6 +2174,14 @@ let handle_inventory_item_click = ( e, index) => {
   popup.style.left = e.clientX + 'px'
   popup.style.top = e.clientY + 10 + 'px'
 
+}
+
+let toggle_favorite_item = ( index ) => {
+
+  let item = S.inventory.items[ index ]
+  item.favorite = !item.favorite
+
+  build_inventory( true )
 }
 
 let socket_gem = ( e, item_index ) => {
@@ -2240,8 +2248,15 @@ let trash_gem_confirmation = ( event, item_index ) => {
 }
 
 let trash_gem = ( event, item_index ) => {
-  S.inventory.items[ item_index ] = {}
-  build_inventory( true )
+  let item = S.inventory.items[ item_index ]
+
+  if ( item.favorite ) {
+    notify( 'Gem is favorited. Unfavorite to trash gem', 'red', 'error' )
+  } else {
+    item = {}
+    build_inventory( true )
+  }
+
 }
 
 // =======================================================================================
