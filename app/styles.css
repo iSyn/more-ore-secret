@@ -1229,6 +1229,9 @@ button {
       text-align: center; }
       .wrapper > div:not(.item-drop-popup-container).confirm-trash-socket p {
         padding: 10px 0; }
+      .wrapper > div:not(.item-drop-popup-container).confirm-trash-socket ul {
+        list-style-type: none;
+        padding-bottom: 10px; }
       .wrapper > div:not(.item-drop-popup-container).confirm-trash-socket button {
         padding: 3px;
         background: transparent;

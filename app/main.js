@@ -864,6 +864,26 @@ let get_skill_line_positions = ( from, to, base_skill, target_skill, base_skill_
 
 // ========================================================================================
 
+let calculate_pickaxe_damage = () => {
+
+  let damage = S.pickaxe.item.damage
+
+  let flat_damage = [ 'ruby' ]
+  let percent_damage = [ 'citrine' ]
+
+  if ( S.pickaxe.item.sockets ) {
+    S.pickaxe.item.sockets.socket.forEach( socket => {
+      if ( !is_empty( socket ) ) {
+        if ( flat_damage.includes( socket.gem_type ) ) damage += socket.stat_amount
+        if ( percent_damage.includes( socket.gem_type ) ) damage += damage * socket.stat_amount
+      }
+    } )
+  }
+  
+  return damage
+  
+}
+
 let calculate_pickaxe_sharpness = () => {
 
   let sharpness = 0
@@ -1237,21 +1257,28 @@ let build_combo_sign = () => {
     <div class='combo-sign'>
       <p>Current Combo</p>
       <h1 class='combo-sign-number'>${ S.current_combo }</h1>
-      <div 
-        onmouseover='TT.show( event, { type: "combo-shield-info" } )'
-        onmouseout='TT.hide()'
-        class='combo-shield-container'>
-        <p>Combo Shield: </p>
-        <div>
-        `
+      `
 
-        str += build_combo_shields()
+    if ( S.combo_shield.owned > 0 ) {
+      str += `
+        <div 
+          onmouseover='TT.show( event, { type: "combo-shield-info" } )'
+          onmouseout='TT.hide()'
+          class='combo-shield-container'>
+          <p>Combo Shield: </p>
+          <div>
+      `
 
-        str += `
+      str += build_combo_shields()
+
+      str += `
         </div>
       </div>
-    </div>
-  `
+      `
+    }
+    
+
+    str += `</div>`
 
   COMBO_SIGN_CONTAINER.innerHTML = str
 
@@ -2079,11 +2106,10 @@ let build_inventory_accordion = ( direct = false ) => {
       <div>
         <p class='pickaxe-name ${ S.pickaxe.item.rarity.name }'>${ S.pickaxe.item.name }</p>
         `
-
         str += build_pickaxe_sprite( S.pickaxe.item, 192, true )
-
         str += `
-        <p>Damage: ${ beautify_number( S.pickaxe.item.damage ) } <span style='opacity: .5'>( ${ beautify_number( calculate_opc() ) } )</span> </p>
+        <p>Level ${ S.pickaxe.item.level }</p>
+        <p>Damage: ${ beautify_number( S.pickaxe.item.damage ) } <span style='opacity: .5'>( ${ beautify_number( calculate_pickaxe_damage() ) } )</span> </p>
         <p
           onmouseover='TT.show( event, { name: null, type: "sharpness-info" } )'
           onmouseout='TT.hide()'
@@ -2215,6 +2241,9 @@ let socket_gem = ( e, item_index ) => {
   for ( let i = 0; i < S.pickaxe.item.sockets.socket.length; i++ ) {
     
     if ( is_empty( S.pickaxe.item.sockets.socket[ i ] ) ) {
+
+      play_sound( 'socket_gem' )
+
       socketed_bool = true
       S.pickaxe.item.sockets.socket[ i ] = S.inventory.items[ item_index ]
       S.inventory.items[ item_index ] = {}
@@ -2235,6 +2264,9 @@ let socket_gem = ( e, item_index ) => {
 }
 
 let unsocket_gem = ( e, socket_index ) => {
+
+  play_sound( 'socket_gem' )
+  TT.hide()
 
   add_to_inventory( S.pickaxe.item.sockets.socket[ socket_index ] )
   S.pickaxe.item.sockets.socket[ socket_index ] = {}
@@ -2287,8 +2319,19 @@ let trash_all_confirmation = () => {
       <h1>Trash All</h1>
       <p>Are you sure you want to trash your items?</p>
       <p>You will keep all your favorited items</p>
-      <button onclick='trash_all(); remove_wrapper()'>YA</button>
-      <button onclick='remove_wrapper()'>NA</button>
+      <ul>
+      `
+
+      S.inventory.items.forEach( item => {
+        if ( !is_empty( item ) && !item.favorite ) {
+          str += `<li>${ item.name } - Lv.${ item.level }</li>`
+        }
+      } )
+
+      str += `
+      </ul>
+      <button onclick='trash_all(); remove_wrapper()'>YES</button>
+      <button onclick='remove_wrapper()'>NO</button>
     </div>
   `
 
@@ -2316,7 +2359,34 @@ let trash_all = () => {
 }
 
 let sort_inventory = () => {
-  console.log( 'sorting inventory' )
+
+  let favorites = []
+  let not_favorites = []
+  
+  S.inventory.items.forEach( item => {
+    if ( !is_empty( item ) ) {
+      if ( item.favorite ) {
+        favorites.push( item )
+      } else {
+        not_favorites.push( item )
+      }
+    }
+  } )
+
+  S.inventory.items = []
+
+  favorites = favorites.sort( ( a, b ) => b.level - a.level )
+  not_favorites = not_favorites.sort( ( a, b ) => b.level - a.level ) 
+
+  S.inventory.items.push( ...favorites )
+  S.inventory.items.push( ...not_favorites )
+
+  while ( S.inventory.items.length < S.inventory.max_slots ) {
+    S.inventory.items.push( {} )
+  }
+
+  build_inventory( true )
+
 }
 
 // =======================================================================================
