@@ -68,6 +68,27 @@ $inventory-accordion-header-height: 25px;
       font-family: 'Germania One';
     }
 
+    .bag-options-container {
+      display: flex;
+      flex-flow: row nowrap;
+      align-items: center;
+      position: absolute;
+      top: -9px;
+      right: 5px;
+
+      i {
+        color: #aaa;
+        font-size: 15px;
+        padding: 0 3px;
+        cursor: pointer;
+
+        &:hover {
+          color: #fff;
+        }
+      }
+
+    }
+
     .bag-slot {
       height: 50px;
       width: 50px;

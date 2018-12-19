@@ -1004,6 +1004,18 @@ let start_smith_upgrade = ( arr, code_name  ) => {
 let calculate_opc = ( type ) => {
   
   let opc = S.pickaxe.item.damage
+
+  let flat_damage = [ 'ruby' ]
+  let percent_damage = [ 'citrine' ]
+
+  if ( S.pickaxe.item.sockets ) {
+    S.pickaxe.item.sockets.socket.forEach( socket => {
+      if ( !is_empty( socket ) ) {
+        if ( flat_damage.includes( socket.gem_type ) ) opc += socket.stat_amount
+        if ( percent_damage.includes( socket.gem_type ) ) opc += opc * socket.stat_amount
+      }
+    } )
+  }
   
   if ( O.ore_madness_active ) opc *= 666
 
@@ -2071,7 +2083,7 @@ let build_inventory_accordion = ( direct = false ) => {
         str += build_pickaxe_sprite( S.pickaxe.item, 192, true )
 
         str += `
-        <p>Damage: ${ beautify_number( S.pickaxe.item.damage ) }</p>
+        <p>Damage: ${ beautify_number( S.pickaxe.item.damage ) } <span style='opacity: .5'>( ${ beautify_number( calculate_opc() ) } )</span> </p>
         <p
           onmouseover='TT.show( event, { name: null, type: "sharpness-info" } )'
           onmouseout='TT.hide()'
@@ -2107,6 +2119,12 @@ let build_inventory = ( direct = false ) => {
   let str = ''
 
   str += '<h2>Bag</h2>'
+  str += `
+    <div class='bag-options-container'>
+      <i onclick='trash_all_confirmation()' class='fa fa-trash-o'></i>
+      <i onclick='sort_inventory()' class='fa fa-random'></i>
+    </div>
+  `
 
   for ( let i = 0; i < S.inventory.items.length; i++ ) {
     str += '<div class="bag-slot">'
@@ -2257,6 +2275,48 @@ let trash_gem = ( event, item_index ) => {
     build_inventory( true )
   }
 
+}
+
+let trash_all_confirmation = () => {
+
+  let div = document.createElement( 'div' )
+  div.classList.add( 'wrapper' )
+
+  let str = `
+    <div class='confirm-trash-socket'>
+      <h1>Trash All</h1>
+      <p>Are you sure you want to trash your items?</p>
+      <p>You will keep all your favorited items</p>
+      <button onclick='trash_all(); remove_wrapper()'>YA</button>
+      <button onclick='remove_wrapper()'>NA</button>
+    </div>
+  `
+
+  div.innerHTML = str
+
+  CONTAINER.append( div )
+
+}
+
+let trash_all = () => {
+
+  console.log( 'trash all firing' )
+
+  for ( let i = 0; i < S.inventory.items.length; i++ ) {
+
+    if ( !S.inventory.items[ i ].favorite ) {
+      S.inventory.items[ i ] = {}
+    } else {
+      console.log( S.inventory.items[ i ], 'is a favorite' )
+    }
+  }
+
+  build_inventory( true )
+
+}
+
+let sort_inventory = () => {
+  console.log( 'sorting inventory' )
 }
 
 // =======================================================================================
