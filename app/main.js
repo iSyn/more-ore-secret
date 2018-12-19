@@ -89,6 +89,7 @@ let init_game = () => {
   window.addEventListener( 'click', () => {
     if ( O.item_popup_visible ) {
       remove_el( s( '.inventory-item-click-popup' ) )
+      O.item_popup_visible = false
     }
   })
 
@@ -1970,7 +1971,8 @@ let gain_quest_rewards = ( quest ) => {
   earn( quest.rewards.ores, false )
   earn_generation_xp( quest.rewards.xp )
   earn_refined_ores( quest.rewards.refined_ores )
-  add_to_inventory( gem )
+
+  if ( !is_empty( gem ) ) add_to_inventory( gem )
 
   popup.innerHTML = str
 
@@ -2029,7 +2031,9 @@ let build_inventory_accordion = ( direct = false ) => {
 
       `
 
+      str += '<div class="bag-container">'
       str += build_inventory()
+      str += '</div>'
 
       str += `
 
@@ -2049,7 +2053,6 @@ let build_inventory = ( direct = false ) => {
 
   let str = ''
 
-  str += '<div class="bag-container">'
   str += '<h2>Bag</h2>'
 
   for ( let i = 0; i < S.inventory.items.length; i++ ) {
@@ -2067,19 +2070,25 @@ let build_inventory = ( direct = false ) => {
     str += '</div>'
   }
 
-  str += '</div>'
+  if ( direct ) {
+    s( '.bag-container' ).innerHTML = str
+    return
+  }
 
   return str
 }
 
 let add_to_inventory = ( item ) => {
 
+  console.log( 'item to add', item )
+
   for ( let i = 0; i < S.inventory.items.length; i++ ) {
     if ( is_empty( S.inventory.items[ i ] ) ) {
+      console.log( 'i=', i)
       item.inventory_index = i
       S.inventory.items[i] = item
 
-      if ( O.current_tab == 'smith' ) O.rebuild_smith_tab = 1
+      if ( O.current_tab == 'smith' ) build_inventory( true )
 
       return
     }
@@ -2091,20 +2100,52 @@ let add_to_inventory = ( item ) => {
 
 let handle_inventory_item_click = ( e, index) => {
 
+  if ( s( '.inventory-item-click-popup' ) ) return
+
   let item = S.inventory.items[ index ]
 
   let popup = document.createElement( 'div' )
   popup.classList.add( 'inventory-item-click-popup' )
   popup.innerHTML = `
-    <p><i class='fa fa-diamond fa-1x'></i> Socket Gem</p>
-    <p><i class='fa fa-trash-o fa-1x'></i>Trash Gem</p>
+    <p onclick='socket_gem( event, ${ index } )'><i class='fa fa-diamond fa-1x'></i> Socket Gem</p>
+    <p onclick='trash_gem_confirmation( event, ${ index } )'><i class='fa fa-trash-o fa-1x'></i>Trash Gem</p>
   `
 
   CONTAINER.append( popup )
 
+  setTimeout(() => { O.item_popup_visible = true }, 50)
+
   popup.style.left = e.clientX + 'px'
   popup.style.top = e.clientY + 10 + 'px'
 
+}
+
+let socket_gem = ( e, item_index ) => {
+  console.log( 'socket gem firing', e, S.inventory.items[ item_index ] )
+}
+
+let trash_gem_confirmation = ( event, item_index ) => {
+
+  let wrapper = document.createElement( 'div' )
+  wrapper.classList.add( 'wrapper' )
+
+  let str = `
+    <div class='confirm-trash-socket'>
+      <h1>Trash Socket</h1>
+      <p>Are you sure you want to trash your ${ S.inventory.items[ item_index].name }?</p>
+      <button onclick='trash_gem( event, ${ item_index } ); remove_wrapper()'>YA</button>
+      <button onclick='remove_wrapper()'>NA</button>
+    </div>
+  `
+
+  wrapper.innerHTML = str
+
+  CONTAINER.append( wrapper )
+}
+
+let trash_gem = ( event, item_index ) => {
+  S.inventory.items[ item_index ] = {}
+  build_inventory( true )
 }
 
 // =======================================================================================

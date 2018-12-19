@@ -238,5 +238,21 @@
       }
     }
 
+    &.confirm-trash-socket {
+      text-align: center;
+
+      p {
+        padding: 10px 0;
+      }
+
+      button {
+        padding: 3px;
+        background: transparent;
+        color: white;
+        border: 1px solid white;
+        margin: 3px;
+      }
+    }
+
   }
 }

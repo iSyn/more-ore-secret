@@ -11,6 +11,9 @@
   -webkit-user-drag: none;
   cursor: default; }
 
+button {
+  cursor: pointer; }
+
 .fa.fa-times {
   cursor: pointer; }
 
@@ -1222,6 +1225,16 @@
           color: white;
           margin: 0 5px;
           cursor: pointer; }
+    .wrapper > div:not(.item-drop-popup-container).confirm-trash-socket {
+      text-align: center; }
+      .wrapper > div:not(.item-drop-popup-container).confirm-trash-socket p {
+        padding: 10px 0; }
+      .wrapper > div:not(.item-drop-popup-container).confirm-trash-socket button {
+        padding: 3px;
+        background: transparent;
+        color: white;
+        border: 1px solid white;
+        margin: 3px; }
 
 .smith-progress-container {
   display: -webkit-box;
