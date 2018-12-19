@@ -1625,13 +1625,13 @@ let build_pickaxe_sprite = ( pickaxe, size=320 ) => {
       '>
       `
       
-      if ( pickaxe.sockets ) {
+      if ( !is_empty( pickaxe.sockets ) ) {
 
         let margin = size == 320 ? '20' : '12'
 
         str += `<div class='sockets-container'>`
 
-        for( let i = 0; i < pickaxe.sockets; i++ ) {
+        for( let i = 0; i < pickaxe.sockets.amount; i++ ) {
           str += `
             <div
               style='
@@ -1639,7 +1639,18 @@ let build_pickaxe_sprite = ( pickaxe, size=320 ) => {
                 width: ${ size / 6 }px;
                 margin: 7.5px ${ margin }px;
               '
-              class="socket"></div>
+              class="socket">
+              `
+              if ( !is_empty( pickaxe.sockets.socket[ i ] ) ) {
+                str += `
+                  <img 
+                    onmouseover='TT.show( event, { type: "pickaxe-socket", pickaxe_socket: ${ i } } ) '
+                    onmouseout='TT.hide()'
+                    src='https://via.placeholder.com/40'/>
+                `
+              }
+              
+              str += `</div>
           `
         }
 
@@ -2059,8 +2070,11 @@ let build_inventory = ( direct = false ) => {
     str += '<div class="bag-slot">'
 
     if ( !is_empty( S.inventory.items[ i ] ) ) {
+      str += `<i class='fa fa-star ${ S.inventory.items[ i ].favorite ? "favorite" : "" }'></i>`
       str += `
         <img
+          onmouseover='TT.show( event, { type: "inventory-item", inventory_index: ${ i } } )'
+          onmouseout='TT.hide()'
           class='inventory-item'
           onclick='handle_inventory_item_click( event, ${ i } )'
           src="https://via.placeholder.com/40"/>
@@ -2121,7 +2135,32 @@ let handle_inventory_item_click = ( e, index) => {
 }
 
 let socket_gem = ( e, item_index ) => {
-  console.log( 'socket gem firing', e, S.inventory.items[ item_index ] )
+
+  if ( !S.pickaxe.item.sockets ) {
+    notify( 'Your pickaxe doesnt contain any sockets', 'red', 'error' )
+    return
+  }
+
+
+  let socketed_bool = false
+
+  for ( let i = 0; i < S.pickaxe.item.sockets.socket.length; i++ ) {
+    
+    if ( is_empty( S.pickaxe.item.sockets.socket[ i ] ) ) {
+      socketed_bool = true
+      S.pickaxe.item.sockets.socket[ i ] = S.inventory.items[ item_index ]
+      S.inventory.items[ item_index ] = {}
+
+      O.rebuild_smith_tab = 1
+
+      return
+    }
+
+  }
+
+  if ( !socketed_bool ) {
+    notify( 'No available sockets', 'red', 'error' )
+  }
 }
 
 let trash_gem_confirmation = ( event, item_index ) => {

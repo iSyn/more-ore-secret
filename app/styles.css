@@ -2972,8 +2972,6 @@ input:checked + .slider:before {
     padding: 5px 0;
     letter-spacing: .5px;
     text-align: center; }
-    .inventory-accordion > div .pickaxe-sprite-container {
-      margin: 0 auto; }
   .inventory-accordion .bag-container {
     margin: 20px 5px 10px 5px;
     border-radius: 10px;
@@ -3016,7 +3014,19 @@ input:checked + .slider:before {
       justify-content: center;
       -webkit-box-align: center;
       -ms-flex-align: center;
-      align-items: center; }
+      align-items: center;
+      position: relative; }
+      .inventory-accordion .bag-container .bag-slot .fa-star, .inventory-accordion .bag-container .bag-slot .fa-star-o {
+        position: absolute;
+        top: 3px;
+        right: 3px;
+        font-size: 15px;
+        color: #444;
+        cursor: pointer; }
+        .inventory-accordion .bag-container .bag-slot .fa-star:hover, .inventory-accordion .bag-container .bag-slot .fa-star-o:hover {
+          color: gold; }
+        .inventory-accordion .bag-container .bag-slot .fa-star.favorite, .inventory-accordion .bag-container .bag-slot .fa-star-o.favorite {
+          color: gold; }
 
 .inventory-item-click-popup {
   position: absolute;
@@ -3041,3 +3051,22 @@ input:checked + .slider:before {
     .inventory-item-click-popup p i {
       width: 25px;
       text-align: center; }
+
+.inventory-accordion .pickaxe-sprite-container,
+.currently-equipped-popup .pickaxe-sprite-container {
+  margin: 0 auto; }
+  .inventory-accordion .pickaxe-sprite-container .sockets-container .socket,
+  .currently-equipped-popup .pickaxe-sprite-container .sockets-container .socket {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center; }
+    .inventory-accordion .pickaxe-sprite-container .sockets-container .socket img,
+    .currently-equipped-popup .pickaxe-sprite-container .sockets-container .socket img {
+      height: 30px;
+      width: 30px; }

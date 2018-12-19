@@ -17,9 +17,16 @@ let Tooltip = function() {
     // build content
     switch ( obj.type ) {
 
+      case 'pickaxe-socket':
+      case 'inventory-item':
       case 'gem':
 
-        let g = O.current_gem
+        let g = {}
+        if ( obj.type == 'gem' ) g = O.current_gem
+        if ( obj.type == 'inventory-item' ) g = S.inventory.items[ obj.inventory_index ]
+        if ( obj.type == 'pickaxe-socket' ) g = S.pickaxe.item.sockets.socket[ obj.pickaxe_socket ]
+
+
         TOOLTIP.classList.add( 'gem-tooltip-container' )
 
         str += `

@@ -74,40 +74,46 @@ _get_rarity = () => {
 
 _get_sockets = ( p ) => {
 
-    let sockets = 0
+    let sockets = {}
+    let amount = 0
 
     switch ( p.rarity.name ) {
 
         case 'Common':
-            sockets = select_random_from_arr( [ 0, 0, 0, 1 ] )
+            amount = select_random_from_arr( [ 0, 0, 0, 1 ] )
             break
 
         case 'Uncommon':
-            sockets = select_random_from_arr( [ 0, 1, 1, 1, 2 ] )
+            amount = select_random_from_arr( [ 0, 1, 1, 1, 2 ] )
             break
 
         case 'Rare':
-            sockets = select_random_from_arr( [ 1, 1, 1, 2 ] )
+            amount = select_random_from_arr( [ 1, 1, 1, 2 ] )
             break
 
         case 'Unique':
-            sockets = select_random_from_arr( [ 1, 2, 2, 2, 3 ] )
+            amount = select_random_from_arr( [ 1, 2, 2, 2, 3 ] )
             break
 
         case 'Epic':
-            sockets = select_random_from_arr( [ 2, 3, 3, 3, 4 ] )
+            amount = select_random_from_arr( [ 2, 3, 3, 3, 4 ] )
             break
 
         case 'Legendary':
-            sockets = select_random_from_arr( [ 3, 4, 4, 5 ] )
+            amount = select_random_from_arr( [ 3, 4, 4, 5 ] )
             break
         
         case 'Mythic':
-            sockets = select_random_from_arr( [ 3, 4, 4, 4, 4, 5, 5, 5, 6 ] )
+            amount = select_random_from_arr( [ 3, 4, 4, 4, 4, 5, 5, 5, 6 ] )
             break
     }
 
+    sockets.amount = amount
+    sockets.socket = []
 
+    for ( let i = 0; i < sockets.amount; i++ ) {
+        sockets.socket.push( {} )
+    }
 
     return sockets
 }

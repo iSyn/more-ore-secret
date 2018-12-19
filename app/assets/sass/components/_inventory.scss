@@ -45,10 +45,6 @@ $inventory-accordion-header-height: 25px;
     padding: 5px 0;
     letter-spacing: .5px;
     text-align: center;
-
-    .pickaxe-sprite-container {
-      margin: 0 auto;
-    }
   }
 
   .bag-container {
@@ -82,6 +78,24 @@ $inventory-accordion-header-height: 25px;
       display: flex;
       justify-content: center;
       align-items: center;
+      position: relative;
+
+      .fa-star, .fa-star-o {
+        position: absolute;
+        top: 3px;
+        right: 3px;
+        font-size: 15px;
+        color: #444;
+        cursor: pointer;
+
+        &:hover {
+          color: gold;
+        }
+
+        &.favorite {
+          color: gold;
+        }
+      }
     }
   }
 }
@@ -106,6 +120,25 @@ $inventory-accordion-header-height: 25px;
     i {
       width: 25px;
       text-align: center;
+    }
+  }
+}
+
+.inventory-accordion .pickaxe-sprite-container,
+.currently-equipped-popup .pickaxe-sprite-container {
+  margin: 0 auto;
+
+  .sockets-container {
+
+    .socket {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      img {
+        height: 30px;
+        width: 30px;
+      }
     }
   }
 }
