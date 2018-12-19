@@ -26,7 +26,6 @@ let Tooltip = function() {
         if ( obj.type == 'inventory-item' ) g = S.inventory.items[ obj.inventory_index ]
         if ( obj.type == 'pickaxe-socket' ) g = S.pickaxe.item.sockets.socket[ obj.pickaxe_socket ]
 
-
         TOOLTIP.classList.add( 'gem-tooltip-container' )
 
         str += `
@@ -280,6 +279,16 @@ let Tooltip = function() {
 
     // position tooltip
     switch ( obj.type ) {
+
+      case 'pickaxe-socket':
+      case 'inventory-item':
+      case 'gem':
+        tooltip_dimensions = TOOLTIP.getBoundingClientRect()
+        target_el_dimensions = e.target.getBoundingClientRect()
+        TOOLTIP.style.left = ( target_el_dimensions.left + target_el_dimensions.right ) / 2 - tooltip_dimensions.width / 2 + 'px'
+        TOOLTIP.style.top = e.target.getBoundingClientRect().bottom + 'px'
+        // TOOLTIP.style.top = e.target.getBoundingClientRect().top - tooltip_dimensions.height + 'px'
+        break
 
       case 'skill':
         tooltip_dimensions = TOOLTIP.getBoundingClientRect()

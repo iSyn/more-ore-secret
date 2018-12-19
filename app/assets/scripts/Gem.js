@@ -114,6 +114,7 @@ var get_stat_type_str = ( type ) => {
     --------------
     - Ruby:         Increase pickaxe damage by flat amount
     - Citrine:      Increase pickaxe damage by percentage
+    - null          Increase pickaxe damage by a percentage of your OpS
     - Sapphire:     Increase pickaxe sharpness by flat amount
     - Alexandrite:  Increase pickaxe sharpness by percentage
     - Turquoise:    Increase pickaxe hardness by flat amount

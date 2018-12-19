@@ -865,11 +865,50 @@ let get_skill_line_positions = ( from, to, base_skill, target_skill, base_skill_
 // ========================================================================================
 
 let calculate_pickaxe_sharpness = () => {
-  return S.pickaxe.item.sharpness + S.pickaxe.temporary_bonuses.sharpness + S.pickaxe.permanent_bonuses.sharpness
+
+  let sharpness = 0
+
+  sharpness += S.pickaxe.item.sharpness
+  sharpness += S.pickaxe.temporary_bonuses.sharpness
+  sharpness += S.pickaxe.permanent_bonuses.sharpness
+
+  let flat_sharpness = [ 'sapphire', 'diamond' ]
+  let percent_sharpness = [ 'alexandrite', 'vibranium' ]
+
+  if ( S.pickaxe.item.sockets ) {
+    S.pickaxe.item.sockets.socket.forEach( socket => {
+      if ( !is_empty( socket ) ) {
+        if ( flat_sharpness.includes( socket.gem_type ) ) sharpness += socket.stat_amount
+        if ( percent_sharpness.includes( socket.gem_type ) ) sharpness += sharpness * socket.stat_amount
+      }
+    } )
+  }
+
+  return sharpness
+
 }
 
 let calculate_pickaxe_hardness = () => {
-  return S.pickaxe.item.hardness + S.pickaxe.temporary_bonuses.hardness + S.pickaxe.permanent_bonuses.hardness
+
+  let hardness = 0
+
+  hardness += S.pickaxe.item.hardness
+  hardness += S.pickaxe.temporary_bonuses.hardness
+  hardness += S.pickaxe.permanent_bonuses.hardness
+
+  let flat_hardness = [ 'turquoise', 'diamond' ]
+  let percent_hardness = ['amethyst', 'vibranium' ]
+  if ( S.pickaxe.item.sockets ) {
+    S.pickaxe.item.sockets.socket.forEach( socket => {
+      if ( !is_empty( socket ) ) {
+        if ( flat_hardness.includes( socket.gem_type ) ) hardness += socket.stat_amount
+        if ( percent_hardness.includes( socket.gem_type ) ) hardness += hardness * socket.stat_amount
+      }
+    } )
+  }
+
+  return hardness
+
 }
 
 let build_automaters = () => {
@@ -1614,7 +1653,7 @@ let build_equipped_pickaxe_popup = () => {
 
 }
 
-let build_pickaxe_sprite = ( pickaxe, size=320 ) => {
+let build_pickaxe_sprite = ( pickaxe, size=320, is_inventory=false ) => {
 
   let str = `
     <div
@@ -1642,11 +1681,14 @@ let build_pickaxe_sprite = ( pickaxe, size=320 ) => {
               class="socket">
               `
               if ( !is_empty( pickaxe.sockets.socket[ i ] ) ) {
+                str += `<img`
+
+                if ( is_inventory ) str += ` onclick='unsocket_gem( event, ${ i } )'`
+
                 str += `
-                  <img 
-                    onmouseover='TT.show( event, { type: "pickaxe-socket", pickaxe_socket: ${ i } } ) '
-                    onmouseout='TT.hide()'
-                    src='https://via.placeholder.com/40'/>
+                  onmouseover='TT.show( event, { type: "pickaxe-socket", pickaxe_socket: ${ i } } ) '
+                  onmouseout='TT.hide()'
+                  src='https://via.placeholder.com/40'/>
                 `
               }
               
@@ -2026,7 +2068,7 @@ let build_inventory_accordion = ( direct = false ) => {
         <p class='pickaxe-name ${ S.pickaxe.item.rarity.name }'>${ S.pickaxe.item.name }</p>
         `
 
-        str += build_pickaxe_sprite( S.pickaxe.item, 192 )
+        str += build_pickaxe_sprite( S.pickaxe.item, 192, true )
 
         str += `
         <p>Damage: ${ beautify_number( S.pickaxe.item.damage ) }</p>
@@ -2151,7 +2193,10 @@ let socket_gem = ( e, item_index ) => {
       S.pickaxe.item.sockets.socket[ i ] = S.inventory.items[ item_index ]
       S.inventory.items[ item_index ] = {}
 
-      O.rebuild_smith_tab = 1
+      build_inventory_accordion( true )
+
+      O.recalculate_opc = 1
+      O.recalculate_ops = 1
 
       return
     }
@@ -2161,6 +2206,18 @@ let socket_gem = ( e, item_index ) => {
   if ( !socketed_bool ) {
     notify( 'No available sockets', 'red', 'error' )
   }
+}
+
+let unsocket_gem = ( e, socket_index ) => {
+
+  add_to_inventory( S.pickaxe.item.sockets.socket[ socket_index ] )
+  S.pickaxe.item.sockets.socket[ socket_index ] = {}
+
+  build_inventory_accordion( true )
+
+  O.recalculate_opc = 1
+  O.recalculate_ops = 1
+
 }
 
 let trash_gem_confirmation = ( event, item_index ) => {

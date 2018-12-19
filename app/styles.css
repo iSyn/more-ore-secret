@@ -3016,6 +3016,8 @@ input:checked + .slider:before {
       -ms-flex-align: center;
       align-items: center;
       position: relative; }
+      .inventory-accordion .bag-container .bag-slot img {
+        cursor: pointer; }
       .inventory-accordion .bag-container .bag-slot .fa-star, .inventory-accordion .bag-container .bag-slot .fa-star-o {
         position: absolute;
         top: 3px;
@@ -3069,4 +3071,5 @@ input:checked + .slider:before {
     .inventory-accordion .pickaxe-sprite-container .sockets-container .socket img,
     .currently-equipped-popup .pickaxe-sprite-container .sockets-container .socket img {
       height: 30px;
-      width: 30px; }
+      width: 30px;
+      cursor: pointer; }
