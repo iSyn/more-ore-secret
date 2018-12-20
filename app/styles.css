@@ -870,8 +870,8 @@ button {
     -ms-flex-align: center;
     align-items: center; }
     .tooltip .top img {
-      height: 32px;
-      width: 32px; }
+      height: 50px;
+      width: 50px; }
     .tooltip .top h1 {
       font-family: 'Germania One';
       padding-left: 10px;

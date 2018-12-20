@@ -453,7 +453,7 @@ let build_buildings = () => {
           onmouseout="TT.hide()"
           >
           <div class="left">
-            <img src="${ building.img }" alt="building image"/>
+            <img src="./app/assets/images/building-${ building.img }.png" alt="building image"/>
           </div>
           <div class="middle">
             <h1>${ building.name } ${ S.buy_amount != 1 ? "x" + S.buy_amount : "" }</h1>
@@ -468,7 +468,7 @@ let build_buildings = () => {
       str += `
         <div class="building hidden"">
           <div class="left">
-            <img src="${ building.img }" alt="building image"/>
+          <img src="./app/assets/images/building-${ building.img }.png" alt="building image"/>
           </div>
           <div class="middle">
             <h1>???</h1>

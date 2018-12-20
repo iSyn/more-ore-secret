@@ -2,7 +2,7 @@ let Building = function( obj ) {
     this.name = obj.name
     this.name_plural = obj.name_plural
     this.code_name = obj.name.replace(/ /g, '_').toLowerCase()
-    this.img = obj.img
+    this.img = obj.img || this.code_name
     this.desc = obj.desc
     this.flavor_text = obj.flavor_text
     this.base_production = obj.base_production
@@ -50,7 +50,6 @@ let buildings = [
     {
         name: 'School',
         name_plural: 'Schools',
-        img: 'https://via.placeholder.com/64',
         desc: 'Teach students about the wonders of ore',
         flavor_text: '"Jesus christ Marie, they\'re minerals!"',
         base_production: .3,
@@ -69,7 +68,6 @@ let buildings = [
     }, {
         name: 'Farm',
         name_plural: 'Farms',
-        img: 'https://via.placeholder.com/64',
         desc: 'Cultivate the lands for higher quality ores',
         flavor_text: 'This totally makes sense',
         base_production: 1,
@@ -88,7 +86,6 @@ let buildings = [
     }, {
         name: 'Quarry',
         name_plural: 'Quarries',
-        img: 'https://via.placeholder.com/64',
         desc: 'Designated Mining Area',
         flavor_text: 'diggy diggy hole',
         base_production: 20,
@@ -107,7 +104,6 @@ let buildings = [
     }, {
         name: 'Church',
         name_plural: 'Churches',
-        img: 'https://via.placeholder.com/64',
         desc: 'Praise to the Ore Gods',
         flavor_text: 'In Ore name we pray, Amen',
         base_production: 320,
@@ -126,7 +122,6 @@ let buildings = [
     }, {
         name: 'Factory',
         name_plural: 'Factories',
-        img: 'https://via.placeholder.com/64',
         desc: 'Manufacture your ores',
         flavor_text: 'Assembly line this SH%* up!',
         base_production: 4480,
@@ -145,7 +140,6 @@ let buildings = [
     }, {
         name: 'Crypt',
         name_plural: 'Crypts',
-        img: 'https://via.placeholder.com/64',
         desc: 'Raise dead ores from the graves',
         flavor_text: 'Spooky ores',
         base_production: 67200,
@@ -164,7 +158,6 @@ let buildings = [
     }, {
         name: 'Hospital',
         name_plural: 'Hospitals',
-        img: 'https://via.placeholder.com/64',
         desc: 'Heal your damaged ores',
         flavor_text: 'An apple a day keeps the ore cancer away',
         base_production: 1344000,
@@ -183,7 +176,6 @@ let buildings = [
     }, {
         name: 'Citadel', 
         name_plural: 'Citadels', 
-        img: 'https://via.placeholder.com/64',
         desc: 'wip', 
         flavor_text: 'wip', 
         base_production: 14784000, 
@@ -198,7 +190,6 @@ let buildings = [
     }, {
         name: 'Xeno Spaceship', 
         name_plural: 'Xeno Spaceships', 
-        img: 'https://via.placeholder.com/64',
         desc: 'wip', 
         flavor_text: 'wip', 
         base_production: 192192000, 
@@ -213,7 +204,6 @@ let buildings = [
     }, {
         name: 'Sky Castle', 
         name_plural: 'Sky Castles', 
-        img: 'https://via.placeholder.com/64',
         desc: 'Use magic beans to reach an egg based source of ore', 
         flavor_text: 'wip', 
         base_production: 3843840000, 
@@ -228,7 +218,6 @@ let buildings = [
     }, {
         name: 'Eon Portal', 
         name_plural: 'Eon Portals', 
-        img: 'https://via.placeholder.com/64',
         desc: 'Steal ore from your past and future self', 
         flavor_text: 'wip', 
         base_production: 45126080000, 
@@ -243,7 +232,6 @@ let buildings = [
     }, {
         name: 'Sacred Mine', 
         name_plural: 'Sacred Mines', 
-        img: 'https://via.placeholder.com/64',
         desc: 'wip', 
         flavor_text: 'wip', 
         base_production: 691891200000, 
@@ -258,7 +246,7 @@ let buildings = [
     }, {
         name: 'O.A.R.D.I.S.', 
         name_plural: 'O.A.R.D.I.S.s', 
-        img: 'https://via.placeholder.com/64',
+        img: 'oardis',
         desc: 'wip', 
         flavor_text: 'wip', 
         base_production: 17289780000000, 
@@ -273,7 +261,6 @@ let buildings = [
     }, {
         name: 'Final Destination', 
         name_plural: 'Final Destinations', 
-        img: 'https://via.placeholder.com/64',
         desc: 'The Final Destination', 
         flavor_text: 'wip', 
         base_production: 999999999999999999, 
