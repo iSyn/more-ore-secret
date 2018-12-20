@@ -58,7 +58,7 @@ let Upgrade = function( obj ) {
                     building.base_production *= fn.increase_building_production.multi
                 }
                 if ( fn.gain_opc_from_ops ) S.opc_from_ops += fn.gain_opc_from_ops
-                if ( fn.increase_ops_opc_multipler ) {
+                if ( fn.increase_ops_opc_multiplier ) {
                     S.ops_multiplier += fn.increase_ops_opc_multiplier
                     S.opc_multiplier += fn.increase_ops_opc_multiplier
                 }
@@ -119,7 +119,39 @@ let upgrades = JSON.parse( localStorage.getItem( 'upgrades' ) ) || [
         flavor_text: 'Just a lil\' babby',
         price: 200,
         buy_functions: {
-            increase_ops_opc_multipler: .01
+            increase_ops_opc_multiplier: .01
+        }
+    }, {
+        name: 'Adolescent Knowledge',
+        desc: 'Increase overall OpS and OpC multiplier by 2%',
+        flavor_text: 'Puberty Incoming',
+        price: 16.5 * THOUSAND,
+        buy_functions: {
+            increase_ops_opc_multiplier: .02
+        }
+    }, {
+        name: 'Adult Knowledge',
+        desc: 'Increase overall OpS and OpC multiplier by 3%',
+        flavor_text: 'I still don\'t know anything',
+        price: 1.35 * MILLION,
+        buy_functions: {
+            increase_ops_opc_multiplier: .03
+        }
+    }, {
+        name: 'Elder Knowledge',
+        desc: 'increase overall OpS and OpC multiplier by 3%',
+        flavor_text: 'Wise ol\' man.',
+        price: 521 * MILLION,
+        buy_functions: {
+            increase_ops_opc_multiplier: .03
+        }
+    }, {
+        name: 'Eldritch Knowledge',
+        desc: 'Increase overall OpS and OpC multiplier by 5%',
+        flavor_text: 'We\'ve come so far.',
+        price: 66.66666 * BILLION,
+        buy_functions: {
+            increase_ops_opc_multiplier: .05
         }
     },
 

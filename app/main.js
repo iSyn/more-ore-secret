@@ -268,6 +268,11 @@ let earn = ( amount, alter_hp = true ) => {
   if ( S.locked.refine_btn && S.stats.total_ores_earned >= 1000000 ) unlock_refine_btn()
 
   if ( S.stats.current_ores_earned >= 100 ) unlock_upgrade( 'baby_knowledge' )
+  if ( S.stats.current_ores_earned >= 7000 ) unlock_upgrade( 'adolescent_knowledge' )
+  if ( S.stats.current_ores_earned >= 500000 ) unlock_upgrade( 'adult_knowledge' )
+  if ( S.stats.current_ores_earned >= 10 * MILLION ) unlock_upgrade( 'adult_knowledge' )
+  if ( S.stats.current_ores_earned >= 1 * BILLION ) unlock_upgrade( 'eldritch_knowledge' )
+
 
 }
 
