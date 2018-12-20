@@ -13,6 +13,7 @@ let Building = function( obj ) {
     this.owned = obj.owned || 0
     this.hidden = obj.hidden
     this.buy_functions = obj.buy_functions
+    this.total_produced = 0
 
     this.buy = ( e ) => {
 
@@ -82,10 +83,15 @@ let buildings = [
         buy_functions: {
             unlock_upgrades: [
                 { code_name: 'manure_spreader', amount_needed: 1 },
-                { code_name: 'pitchfork', amount_needed: 10 },
-                { code_name: 'tractor', amount_needed: 20},
-                { code_name: 'rotary_cutter', amount_needed: 50 },
-                { code_name: 'hoe', amount_needed: 100 }
+                { code_name: 'pitchfork', amount_needed: 5 },
+                { code_name: 'tractor', amount_needed: 10},
+                { code_name: 'rotary_cutter', amount_needed: 20 },
+                { code_name: 'hoe', amount_needed: 50 },
+                { code_name: 'baler', amount_needed: 100 },
+                { code_name: 'sprayer', amount_needed: 150 },
+                { code_name: 'sickle', amount_needed: 200 },
+                { code_name: 'scythe', amount_needed: 300 },
+                { code_name: 'milking_machine', amount_needed: 500 }
             ]
         }
     }, {
@@ -100,10 +106,15 @@ let buildings = [
         buy_functions: {
             unlock_upgrades: [
                 { code_name: 'floodlights', amount_needed: 1 },
-                { code_name: 'twill_rope', amount_needed: 10 },
-                { code_name: 'wooden_compass', amount_needed: 20 },
-                { code_name: 'ore_filter', amount_needed: 50 },
-                { code_name: 'waterproof_tape', amount_needed: 100 }
+                { code_name: 'twill_rope', amount_needed: 5 },
+                { code_name: 'wooden_compass', amount_needed: 10 },
+                { code_name: 'ore_filter', amount_needed: 20 },
+                { code_name: 'waterproof_tape', amount_needed: 50 },
+                { code_name: 'metallic_compass', amount_needed: 100 },
+                { code_name: 'miners_mask', amount_needed: 150 },
+                { code_name: 'laser_drill', amount_needed: 200 },
+                { code_name: 'tbd_quarry_1', amount_needed: 300 },
+                { code_name: 'tbd_quarry_2', amount_needed: 500 },
             ]
         }
     }, {
@@ -118,10 +129,15 @@ let buildings = [
         buy_functions: {
             unlock_upgrades: [
                 { code_name: 'scripture_reading', amount_needed: 1 },
-                { code_name: 'communion', amount_needed: 10 },
-                { code_name: 'worship_session', amount_needed: 20 },
-                { code_name: '7th_day', amount_needed: 50 },
-                { code_name: 'judgement_day', amount_needed: 100 }
+                { code_name: 'communion', amount_needed: 5 },
+                { code_name: 'worship_session', amount_needed: 10 },
+                { code_name: '7th_day', amount_needed: 20 },
+                { code_name: 'judgement_day', amount_needed: 50 },
+                { code_name: 'tbd_church_1', amount_needed: 100 },
+                { code_name: 'tbd_church_2', amount_needed: 150 },
+                { code_name: 'tbd_church_3', amount_needed: 200 },
+                { code_name: 'tbd_church_4', amount_needed: 100 },
+                { code_name: 'tbd_church_5', amount_needed: 500 },
             ]
         }
     }, {
@@ -234,45 +250,48 @@ let buildings = [
                 { code_name: 'green_goop', amount_needed: 1 },
             ]
         }
-    }, {
-        name: 'Sacred Mine', 
-        name_plural: 'Sacred Mines', 
-        desc: 'wip', 
-        flavor_text: 'wip', 
-        base_production: 691891200000, 
-        base_price: 297198720000000, 
-        price_scale: 1.15,
-        hidden: 2,
-        buy_functions: {
-            unlock_upgrades: [
-                { code_name: 'sacred_mine_upgrade_i', amount_needed: 1 },
-            ]
-        }
-    }, {
-        name: 'O.A.R.D.I.S.', 
-        name_plural: 'O.A.R.D.I.S.s', 
-        img: 'oardis',
-        desc: 'wip', 
-        flavor_text: 'wip', 
-        base_production: 17289780000000, 
-        base_price: 8915961600000000, 
-        price_scale: 1.15,
-        hidden: 2,
-        buy_functions: {
-            unlock_upgrades: [
-                { code_name: 'o.a.r.d.i.s._upgrade_i', amount_needed: 1 },
-            ]
-        }
-    }, {
-        name: 'Final Destination', 
-        name_plural: 'Final Destinations', 
-        desc: 'The Final Destination', 
-        flavor_text: 'wip', 
-        base_production: 999999999999999999, 
-        base_price: 999999999999999999999999999999999, 
-        price_scale: 1.15,
-        hidden: 2,
-    }
+    },
+    // {
+    //     name: 'Sacred Mine', 
+    //     name_plural: 'Sacred Mines', 
+    //     desc: 'wip', 
+    //     flavor_text: 'wip', 
+    //     base_production: 691891200000, 
+    //     base_price: 297198720000000, 
+    //     price_scale: 1.15,
+    //     hidden: 2,
+    //     buy_functions: {
+    //         unlock_upgrades: [
+    //             { code_name: 'sacred_mine_upgrade_i', amount_needed: 1 },
+    //         ]
+    //     }
+    // },
+    // {
+    //     name: 'O.A.R.D.I.S.', 
+    //     name_plural: 'O.A.R.D.I.S.s', 
+    //     img: 'oardis',
+    //     desc: 'wip', 
+    //     flavor_text: 'wip', 
+    //     base_production: 17289780000000, 
+    //     base_price: 8915961600000000, 
+    //     price_scale: 1.15,
+    //     hidden: 2,
+    //     buy_functions: {
+    //         unlock_upgrades: [
+    //             { code_name: 'o.a.r.d.i.s._upgrade_i', amount_needed: 1 },
+    //         ]
+    //     }
+    // }, 
+    // {
+    //     name: 'Final Destination', 
+    //     name_plural: 'Final Destinations', 
+    //     desc: 'The Final Destination', 
+    //     flavor_text: 'wip', 
+    //     base_production: 999999999999999999, 
+    //     base_price: 999999999999999999999999999999999, 
+    //     price_scale: 1.15,
+    //     hidden: 2,
+    // }
 ]
 
 buildings.forEach( building => {

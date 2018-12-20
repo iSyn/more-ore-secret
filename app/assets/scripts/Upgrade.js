@@ -1,14 +1,49 @@
 let Upgrade = function( obj ) {
 
+    this.build_upgrade_desc = () => {
+    
+        let str = ''
+        let building = select_from_arr( Buildings, this.buy_functions.increase_building_production.building )
+    
+        switch( this.buy_functions.increase_building_production.multi ) {
+    
+            case 2:
+                str += 'Doubles '
+                break
+    
+            case 3:
+                str += 'Triples '
+                break
+    
+            case 4:
+                str += 'Quadruples '
+                break
+    
+            case 5:
+                str += 'Quintuples '
+                break
+    
+            default:
+                str += 'not defined'
+                break
+    
+        }
+    
+        str += `the production of ${ building.name_plural }`
+    
+        return str
+    }
+
     this.name = obj.name
     this.code_name = obj.name.replace( / /g, '_' ).toLowerCase()
     this.img = obj.img || 'https://via.placeholder.com/50'
-    this.desc = obj.desc
     this.flavor_text = obj.flavor_text || ''
     this.price = obj.price
     this.hidden = obj.hasOwnProperty( 'hidden' ) ? obj.hidden : 1
     this.owned = obj.owned || false
     this.buy_functions = obj.buy_functions
+
+    this.desc = obj.desc || this.build_upgrade_desc()
 
     this.buy = () => {
         if ( S.ores >= this.price ) {
@@ -59,7 +94,6 @@ let upgrades = JSON.parse( localStorage.getItem( 'upgrades' ) ) || [
     {
         name: 'Composition Notebooks',
         img: 'https://via.placeholder.com/50',
-        desc: 'Doubles the production of Schools',
         flavor_text: 'College Ruled!',
         price: 80,
         buy_functions: {
@@ -68,7 +102,6 @@ let upgrades = JSON.parse( localStorage.getItem( 'upgrades' ) ) || [
     }, {
         name: 'No. 2 Pencil',
         img: 'https://via.placeholder.com/50',
-        desc: 'Doubles the production of Schools',
         flavor_text: 'Test ready!',
         price: 1000,
         buy_functions: {
@@ -77,7 +110,6 @@ let upgrades = JSON.parse( localStorage.getItem( 'upgrades' ) ) || [
     }, {
         name: '3 Ring Binder',
         img: 'https://via.placeholder.com/50',
-        desc: 'Doubles the production of Schools',
         flavor_text: 'Be the Lord of the Rings with our new 2.5\" binder!',
         price: 12000,
         buy_functions: {
@@ -86,7 +118,6 @@ let upgrades = JSON.parse( localStorage.getItem( 'upgrades' ) ) || [
     }, {
         name: 'Looseleaf',
         img: 'https://via.placeholder.com/50',
-        desc: 'Doubles the production of Schools',
         flavor_text: '"Can I borrow a sheet?"',
         price: 450000,
         buy_functions: {
@@ -95,7 +126,6 @@ let upgrades = JSON.parse( localStorage.getItem( 'upgrades' ) ) || [
     }, {
         name: 'Schoolbag',
         img: 'https://via.placeholder.com/50',
-        desc: 'Triples the production of Schools',
         flavor_text: 'Break your back carrying one of these stylish bags!',
         price: 5500000,
         buy_functions: {
@@ -103,15 +133,43 @@ let upgrades = JSON.parse( localStorage.getItem( 'upgrades' ) ) || [
         }
     }, {
         name: 'Fresh Pink Eraser',
-        desc: 'Doubles the production of Schools',
         flavor_text: 'Never use this. Keep it pristine.',
-        price: 22.5 * MILLION
-    }
+        price: 22.5 * MILLION,
+        buy_functions: {
+            increase_building_production: { building: 'school', multi: 2 }
+        }
+    }, {
+        name: 'Pack of Ballpoint Pens',
+        flavor_text: 'In a week, they\'ll be all gone.',
+        price: 620 * MILLION,
+        buy_functions: {
+            increase_building_production: { building: 'school', multi: 2 }
+        }
+    }, {
+        name: 'Gum',
+        flavor_text: 'You\'ll be the most popular kid in the class',
+        price: 3 * TRILLION,
+        buy_functions: {
+            increase_building_production: { building: 'school', multi: 2 }
+        }
+    }, {
+        name: 'Hallpass',
+        flavor_text: 'Wander the halls without a care in the world',
+        price: 82 * TRILLION,
+        buy_functions: {
+            increase_building_production: { building: 'school', multi: 2 }
+        }
+    }, {
+        name: 'Report Card',
+        flavor_text: 'Decides your fate for the upcoming months',
+        price: 200 * TRILLION,
+        buy_functions: {
+            increase_building_production: { building: 'school', multi: 2 }
+        }
+    },  
     // FARM RELATED UPGRADES
     {
         name: 'Manure Spreader',
-        img: 'https://via.placeholder.com/50',
-        desc: 'Doubles the production of Farms',
         flavor_text: 'The poop helps the ore mature',
         price: 950,
         buy_functions: {
@@ -119,133 +177,210 @@ let upgrades = JSON.parse( localStorage.getItem( 'upgrades' ) ) || [
         }
     }, {
         name: 'Pitchfork',
-        img: 'https://via.placeholder.com/50',
-        desc: 'Triples the production of Farms',
         flavor_text: 'Torches not included',
-        price: 12500,
+        price: 12.5 * THOUSAND,
         buy_functions: {
-            increase_building_production: { building: 'farm', multi: 3 }
+            increase_building_production: { building: 'farm', multi: 2 }
         }
     }, {
         name: 'Tractor',
-        img: 'https://via.placeholder.com/50',
-        desc: 'Doubles the production of Farms',
         flavor_text: 'im in me mums tractor',
-        price: 265000,
+        price: 265 * THOUSAND,
         buy_functions: {
             increase_building_production: { building: 'farm', multi: 2 }
         }
     }, {
         name: 'Rotary Cutter',
-        img: 'https://via.placeholder.com/50',
-        desc: 'Triples the production of Farms',
         flavor_text: 'Not even grass can stop us now',
-        price: 3450000,
+        price: 3.45 * MILLION,
         buy_functions: {
-            increase_building_production: { building: 'farm', multi: 3 }
+            increase_building_production: { building: 'farm', multi: 2 }
         }
     }, {
         name: 'Hoe',
-        img: 'https://via.placeholder.com/50',
-        desc: 'Quintuples the production of Farms',
         flavor_text: 'Torches not included',
-        price: 69000000,
+        price: 69 * MILLION,
         buy_functions: {
-            increase_building_production: { building: 'farm', multi: 5 }
+            increase_building_production: { building: 'farm', multi: 2 }
+        }
+    }, {
+        name: 'Baler',
+        flavor_text: '"How many people a year do you think get their arms cut off in a baler?"',
+        price: 400 * MILLION,
+        buy_functions: {
+            increase_building_production: { building: 'farm', multi: 2 }
+        }
+    }, {
+        name: 'Sprayer',
+        flavor_text: 'Spray\'er?, I hardly know her.',
+        price: 2.3 * TRILLION,
+        buy_functions: {
+            increase_building_production: { building: 'farm', multi: 2 }
+        }
+    }, {
+        name: 'Sickle',
+        flavor_text: 'For easy sickle-ing of course.',
+        price: 47.3 * MILLION,
+        buy_functions: {
+            increase_building_production: { building: 'farm', multi: 2 }
+        }
+    }, {
+        name: 'Scythe',
+        flavor_text: 'Looks like an upgraded sickle.',
+        price: 700 * MILLION,
+        buy_functions: {
+            increase_building_production: { building: 'farm', multi: 2 }
+        }
+    }, {
+        name: 'Milking Machine',
+        flavor_text: 'Rich in vitamin O. O for Ore.',
+        price: 1.8 * BILLION,
+        buy_functions: {
+            increase_building_production: { building: 'farm', multi: 2 }
         }
     },
     // QUARRY RELATED UPGRADES
     {
         name: 'Floodlights',
-        img: 'https://via.placeholder.com/50',
-        desc: 'Doubles the production of Quarries',
         flavor_text: 'Staring into one of them is like staring into a billion suns',
-        price: 1900,
+        price: 1.9 * THOUSAND,
         buy_functions: {
             increase_building_production: { building: 'quarry', multi: 2 }
         }
     }, {
         name: 'Twill Rope',
-        img: 'https://via.placeholder.com/50',
-        desc: 'Triples the production of Quarries',
-        flavor_text: 'Study enuff',
-        price: 11000,
+        flavor_text: 'Sturdy enuff',
+        price: 11 * THOUSAND,
         buy_functions: {
-            increase_building_production: { building: 'quarry', multi: 3 }
+            increase_building_production: { building: 'quarry', multi: 2 }
         }
     }, {
         name: 'Wooden Compass',
-        img: 'https://via.placeholder.com/50',
-        desc: 'Doubles the production of Quarries',
-        flavor_text: 'Staring into one of them is like staring into a billion suns',
-        price: 510000,
+        flavor_text: 'Responds to ore magnetism ',
+        price: 510 * THOUSAND,
         buy_functions: {
             increase_building_production: { building: 'quarry', multi: 2 }
         }
     }, {
         name: 'Ore Filter',
-        img: 'https://via.placeholder.com/50',
-        desc: 'Triples the production of Quarries',
         flavor_text: 'Less sorting, more ore',
-        price: 7000000,
+        price: 7 * MILLION,
         buy_functions: {
-            increase_building_production: { building: 'quarry', multi: 3 }
+            increase_building_production: { building: 'quarry', multi: 2 }
         }
     }, {
         name: 'Waterproof Tape',
-        img: 'https://via.placeholder.com/50',
-        desc: 'Quintuples the production of Quarries',
         flavor_text: 'Poor mans Flex Tape®',
-        price: 80000000,
+        price: 80 * MILLION,
         buy_functions: {
-            increase_building_production: { building: 'quarry', multi: 5 }
+            increase_building_production: { building: 'quarry', multi: 2 }
+        }
+    }, {
+        name: 'Metallic Compass',
+        flavor_text: 'Looks cooler, does the same thing.',
+        price: 210.5 * MILLION,
+        buy_functions: {
+            increase_building_production: { building: 'quarry', multi: 2 }
+        }
+    }, {
+        name: 'Miners Mask',
+        flavor_text: 'Asbestos be gone!',
+        price: 5 * BILLION,
+        buy_functions: {
+            increase_building_production: { building: 'quarry', multi: 2 }
+        }
+    }, {
+        name: 'Laser Drill',
+        flavor_text: 'faster than mining!',
+        price: 27 * BILLION,
+        buy_functions: {
+            increase_building_production: { building: 'quarry', multi: 2 }
+        }
+    }, {
+        name: 'tbd quarry 1',
+        flavor_text: 'tbd',
+        price: 600 * BILLION,
+        buy_functions: {
+            increase_building_production: { building: 'quarry', multi: 2 }
+        }
+    }, {
+        name: 'tbd quarry 2',
+        flavor_text: 'tbd',
+        price: 6.3 * TRILLION,
+        buy_functions: {
+            increase_building_production: { building: 'quarry', multi: 2 }
         }
     },
     // CHURCH RELATED UPGRADES
     {
         name: 'Scripture Reading',
-        img: 'https://via.placeholder.com/50',
-        desc: 'Doubles the production of Churches',
         flavor_text: 'Read the word of our l-ore-d and savior',
-        price: 60000,
+        price: 60 * THOUSAND,
         buy_functions: {
             increase_building_production: { building: 'church', multi: 2 }
         }
     }, {
         name: 'Communion',
-        img: 'https://via.placeholder.com/50',
-        desc: 'Triples the production of Churches',
         flavor_text: 'Note: Not communism',
-        price: 740000,
+        price: 740 * THOUSAND,
         buy_functions: {
-            increase_building_production: { building: 'church', multi: 3 }
+            increase_building_production: { building: 'church', multi: 2 }
         }
     }, {
         name: 'Worship Session',
-        img: 'https://via.placeholder.com/50',
-        desc: 'Doubles the production of Churches',
         flavor_text: 'More like W-ore-ship ha.. haa...',
-        price: 2800000,
+        price: 2.8 * MILLION,
         buy_functions: {
             increase_building_production: { building: 'church', multi: 2 }
         }
     }, {
         name: '7th Day',
-        img: 'https://via.placeholder.com/50',
-        desc: 'Triples the production of Churches',
         flavor_text: 'You would think a day of worship is one less day of work but somehow it works out to more ore!',
-        price: 62000000,
+        price: 62 * MILLION,
         buy_functions: {
-            increase_building_production: { building: 'church', multi: 3 }
+            increase_building_production: { building: 'church', multi: 2 }
         }
     }, {
         name: 'Judgement Day',
-        img: 'https://via.placeholder.com/50',
-        desc: 'Quintuples the production of Churches',
         flavor_text: 'Read the word of our l-ore-d and savior',
-        price: 777000000,
+        price: 777 * MILLION,
         buy_functions: {
-            increase_building_production: { building: 'church', multi: 5 }
+            increase_building_production: { building: 'church', multi: 2 }
+        }
+    }, {
+        name: 'tbd church 1',
+        flavor_text: 'tbd',
+        price: 8.2 * BILLIOB,
+        buy_functions: {
+            increase_building_production: { building: 'church', multi: 2 }
+        }
+    }, {
+        name: 'tbd church 2',
+        flavor_text: 'tbd',
+        price: 32 * BILLIOB,
+        buy_functions: {
+            increase_building_production: { building: 'church', multi: 2 }
+        }
+    }, {
+        name: 'tbd church 3',
+        flavor_text: 'tbd',
+        price: 700 * BILLIOB,
+        buy_functions: {
+            increase_building_production: { building: 'church', multi: 2 }
+        }
+    }, {
+        name: 'tbd church 4',
+        flavor_text: 'tbd',
+        price: 2.45 * TRILLION,
+        buy_functions: {
+            increase_building_production: { building: 'church', multi: 2 }
+        }
+    }, {
+        name: 'tbd church 5',
+        flavor_text: 'tbd',
+        price: 33 * TRILLION,
+        buy_functions: {
+            increase_building_production: { building: 'church', multi: 2 }
         }
     },
     // FACTORY RELATED UPGRADES
@@ -467,3 +602,4 @@ let unlock_upgrade = ( code_name ) => {
     upgrade.hidden = false
     O.rebuild_store_tab = 1
 }
+
