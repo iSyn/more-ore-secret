@@ -236,9 +236,11 @@ button {
           .container .game-container > .left .ore-container-wrapper .ore-container .ore-hp {
             position: absolute;
             bottom: -25px;
-            color: white;
+            color: rgba(255, 255, 255, 0.6);
             width: 100%;
-            text-align: center; }
+            text-align: center;
+            font-family: 'Germania One';
+            letter-spacing: 1px; }
       .container .game-container > .left .bottom-area-tabs {
         display: -webkit-box;
         display: -ms-flexbox;

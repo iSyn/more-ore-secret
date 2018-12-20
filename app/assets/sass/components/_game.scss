@@ -162,9 +162,11 @@
           .ore-hp {
             position: absolute;
             bottom: -25px;
-            color: white;
+            color: rgba( 255, 255, 255, 0.6 );
             width: 100%;
             text-align: center;
+            font-family: 'Germania One';
+            letter-spacing: 1px;
           }
         }
       }
