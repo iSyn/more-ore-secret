@@ -2,7 +2,7 @@ let Upgrade = function( obj ) {
 
     this.name = obj.name
     this.code_name = obj.name.replace( / /g, '_' ).toLowerCase()
-    this.img = obj.img
+    this.img = obj.img || 'https://via.placeholder.com/50'
     this.desc = obj.desc
     this.flavor_text = obj.flavor_text || ''
     this.price = obj.price
@@ -24,9 +24,7 @@ let Upgrade = function( obj ) {
                     building.base_production *= fn.increase_building_production.multi
 
                 }
-                if ( fn.gain_opc_from_ops ) {
-                    
-                }
+                if ( fn.gain_opc_from_ops ) S.opc_from_ops += fn.gain_opc_from_ops
             }
 
             O.rebuild_store_tab = 1
@@ -49,6 +47,9 @@ let upgrades = JSON.parse( localStorage.getItem( 'upgrades' ) ) || [
         desc: 'Gain 3% of your OpS as OpC',
         flavor_text: 'Or a torch if you\'re so inclined.',
         price: 1000000,
+        buy_functions: {
+            gain_opc_from_ops: .03
+        }
         // DETECTS WITHIN MAIN.JS IF THIS IS OWNED SO NO BUY FUNCTION
     },
 
@@ -67,11 +68,11 @@ let upgrades = JSON.parse( localStorage.getItem( 'upgrades' ) ) || [
     }, {
         name: 'No. 2 Pencil',
         img: 'https://via.placeholder.com/50',
-        desc: 'Triples the production of Schools',
+        desc: 'Doubles the production of Schools',
         flavor_text: 'Test ready!',
         price: 1000,
         buy_functions: {
-            increase_building_production: { building: 'school', multi: 3 }
+            increase_building_production: { building: 'school', multi: 2 }
         }
     }, {
         name: '3 Ring Binder',
@@ -85,22 +86,27 @@ let upgrades = JSON.parse( localStorage.getItem( 'upgrades' ) ) || [
     }, {
         name: 'Looseleaf',
         img: 'https://via.placeholder.com/50',
-        desc: 'Triples the production of Schools',
+        desc: 'Doubles the production of Schools',
         flavor_text: '"Can I borrow a sheet?"',
         price: 450000,
         buy_functions: {
-            increase_building_production: { building: 'school', multi: 3 }
+            increase_building_production: { building: 'school', multi: 2 }
         }
     }, {
         name: 'Schoolbag',
         img: 'https://via.placeholder.com/50',
-        desc: 'Quintuples the production of Schools',
+        desc: 'Triples the production of Schools',
         flavor_text: 'Break your back carrying one of these stylish bags!',
         price: 5500000,
         buy_functions: {
-            increase_building_production: { building: 'school', multi: 5 }
+            increase_building_production: { building: 'school', multi: 3 }
         }
-    },
+    }, {
+        name: 'Fresh Pink Eraser',
+        desc: 'Doubles the production of Schools',
+        flavor_text: 'Never use this. Keep it pristine.',
+        price: 22.5 * MILLION
+    }
     // FARM RELATED UPGRADES
     {
         name: 'Manure Spreader',

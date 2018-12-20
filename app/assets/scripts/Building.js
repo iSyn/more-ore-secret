@@ -59,10 +59,15 @@ let buildings = [
         buy_functions: {
             unlock_upgrades: [
                 { code_name: 'composition_notebooks', amount_needed: 1 },
-                { code_name: 'no._2_pencil', amount_needed: 10 },
-                { code_name: '3_ring_binder', amount_needed: 20 },
-                { code_name: 'looseleaf', amount_needed: 50 },
-                { code_name: 'schoolbag', amount_needed: 100 }
+                { code_name: 'no._2_pencil', amount_needed: 5 },
+                { code_name: '3_ring_binder', amount_needed: 10 },
+                { code_name: 'looseleaf', amount_needed: 20 },
+                { code_name: 'schoolbag', amount_needed: 50 },
+                { code_name: 'fresh_pink_eraser', amount_needed: 100 },
+                { code_name: 'pack_of_ballpoint_pens', amount_needed: 150},
+                { code_name: 'gum', amount_needed: 200 },
+                { code_name: 'hallpass', amount_needed: 300 },
+                { code_name: 'report_card', amount_needed: 500 }
             ]
         }
     }, {

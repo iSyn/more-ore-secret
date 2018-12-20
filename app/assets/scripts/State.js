@@ -18,6 +18,7 @@ let State = function( s = {} ) {
 
     opc: s.opc || 0,
     opc_multiplier: 0,
+    opc_from_ops: 0,
 
     weak_hit_multi: s.weak_hit_multi || 5,
     current_combo: s.current_combo || 0,

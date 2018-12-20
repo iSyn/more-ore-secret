@@ -1026,6 +1026,8 @@ let calculate_opc = ( type ) => {
   
   let opc = S.pickaxe.item.damage
 
+  opc += S.ops * S.opc_from_ops
+
   let flat_damage = [ 'ruby' ]
   let percent_damage = [ 'citrine' ]
 
