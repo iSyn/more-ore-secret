@@ -267,6 +267,8 @@ let earn = ( amount, alter_hp = true ) => {
 
   if ( S.locked.refine_btn && S.stats.total_ores_earned >= 1000000 ) unlock_refine_btn()
 
+  if ( S.stats.current_ores_earned >= 100 ) unlock_upgrade( 'baby_knowledge' )
+
 }
 
 let earn_refined_ores = ( amount ) => {
@@ -1081,7 +1083,10 @@ let calculate_ops = () => {
 
   S.ops = ops
 
-  if ( S.ops > 100 ) unlock_upgrade( 'flashlight' )
+  if ( S.ops >= 10 ) unlock_upgrade( 'flashlight' )
+  if ( S.ops >= 500 ) unlock_upgrade( 'double_polish' )
+  if ( S.ops >= 10 * THOUSAND ) unlock_upgrade( 'metal_grips' )
+  if ( S.ops >= 5 * MILLION ) unlock_upgrade( 'miner_battery' )
 
 }
 

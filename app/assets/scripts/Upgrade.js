@@ -55,11 +55,13 @@ let Upgrade = function( obj ) {
                 let fn = this.buy_functions
                 if ( fn.increase_building_production ) {
                     let building = select_from_arr( Buildings, fn.increase_building_production.building )
-
                     building.base_production *= fn.increase_building_production.multi
-
                 }
                 if ( fn.gain_opc_from_ops ) S.opc_from_ops += fn.gain_opc_from_ops
+                if ( fn.increase_ops_opc_multipler ) {
+                    S.ops_multiplier += fn.increase_ops_opc_multiplier
+                    S.opc_multiplier += fn.increase_ops_opc_multiplier
+                }
             }
 
             O.rebuild_store_tab = 1
@@ -75,17 +77,50 @@ let Upgrade = function( obj ) {
 let Upgrades = []
 let upgrades = JSON.parse( localStorage.getItem( 'upgrades' ) ) || [
 
-    // OPS RELATED UPGRADES
+    // OPC FROM OPS RELATED UPGRADES
     {
         name: 'Flashlight',
-        img: 'https://via.placeholder.com/50',
-        desc: 'Gain 3% of your OpS as OpC',
+        desc: 'Gain 1% of your OpS as OpC',
         flavor_text: 'Or a torch if you\'re so inclined.',
-        price: 1000000,
+        price: 5 * THOUSAND,
+        buy_functions: {
+            gain_opc_from_ops: .01
+        }
+    }, {
+        name: 'Double Polish',
+        desc: 'Gain 2% of your OpS as OpC',
+        flavor_text: 'Extra sharp',
+        price: 70 * THOUSAND,
+        buy_functions: {
+            gain_opc_from_ops: .02
+        }
+    }, {
+        name: 'Metal Grips',
+        desc: 'Gain 3% of your OpS as OpC',
+        flavor_text: 'Better grip for better smashin\'.',
+        price: 500 * THOUSAND,
         buy_functions: {
             gain_opc_from_ops: .03
         }
-        // DETECTS WITHIN MAIN.JS IF THIS IS OWNED SO NO BUY FUNCTION
+    }, {
+        name: 'Miner Battery',
+        desc: 'Gain 2% of your Ops as OpC',
+        flavor_text: 'Miners are battery powered right?',
+        price: 3.5 * MILLION,
+        buy_functions: {
+            gain_opc_from_ops: .02
+        }
+    },
+
+    // INCREASE OPS AND OPC MULTIPLIER
+    {
+        name: 'Baby Knowledge',
+        desc: 'Increase overall OpS and OpC multiplier by 1%',
+        flavor_text: 'Just a lil\' babby',
+        price: 200,
+        buy_functions: {
+            increase_ops_opc_multipler: .01
+        }
     },
 
     // -----------------------------------------------------------------------------------
