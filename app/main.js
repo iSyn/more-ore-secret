@@ -3,6 +3,7 @@ const VERSION = 0.01
 const BODY = s( 'body' )
 const CONTAINER = s( '.container' )
 const GAME_CONTAINER = s( '.game-container' )
+const ORE_HP = s( '.ore-hp' )
 const ORE_SPRITE = s( '.ore-sprite' )
 const RIGHT_CONTAINER = s( '.right-container' )
 const TOPBAR_INVENTORY_CONTAINER = s( '.topbar-inventory-container' )
@@ -2104,7 +2105,7 @@ let build_inventory_accordion = ( direct = false ) => {
         <i class='fa fa-caret-down fa-1x'></i>
       </header>
       <div>
-        <p class='pickaxe-name ${ S.pickaxe.item.rarity.name }'>${ S.pickaxe.item.name }</p>
+        <h1 class='pickaxe-name ${ S.pickaxe.item.rarity.name }'>${ S.pickaxe.item.name }</h1>
         `
         str += build_pickaxe_sprite( S.pickaxe.item, 192, true )
         str += `
@@ -2463,6 +2464,24 @@ let update_ore_hp = ( amount ) => {
   } else {
     S.current_ore_hp -= amount
   }
+
+  switch ( S.prefs.show_rock_hp ) {
+    case 'percentage':
+      ORE_HP.innerHTML = ( beautify_number( S.current_ore_hp / S.current_ore_max_hp * 100 ) ) + "%"
+      break
+
+    case 'hp':
+      ORE_HP.innerHTML = `${ beautify_number( S.current_ore_hp ) } / ${ beautify_number( S.current_ore_max_hp ) }`
+      break
+
+    default:
+      ORE_HP.innerHTML = ''
+      break
+  }
+
+
+
+
 }
 
 let current_sprite = 0
@@ -2639,6 +2658,16 @@ let build_settings = () => {
       <h1>Settings</h1>
       <i onclick='remove_wrapper()' class='fa fa-times fa-1x'></i>
       <hr />
+      <h2>Game</h2>
+      <div class="select-container">
+        <p>Rock HP</p>
+        <select id="select-rock-hp" onchange='change_rock_hp_display()'>
+          <option ${ S.prefs.show_rock_hp == 0 ? "selected" : "" } value=0>none</option>
+          <option ${ S.prefs.show_rock_hp == 'percentage' ? 'selected' : '' } value="percentage">percentage</option>
+          <option ${ S.prefs.show_rock_hp == 'hp' ? 'selected' : ''} value="hp">hp</option>
+        </select>
+      </div>
+      <br/>
       <h2>Volume</h2>
       <div>
         <p>Mute BGM</p>
@@ -2722,10 +2751,14 @@ let toggle_sfx_mute = () => {
   }
 }
 
+let change_rock_hp_display = () => {
+  let select = s( '#select-rock-hp' )
+  S.prefs.show_rock_hp = select.value
+}
+
 let change_bgm_volume = () => {
   let slider = s( '#range-bgm_volume' )
   S.prefs.bgm_volume = slider.value
-  console.log( S.prefs.bgm_volume )
 }
 
 let change_sfx_volume = () => {
@@ -2735,7 +2768,6 @@ let change_sfx_volume = () => {
 
 let change_tick_rate = () => {
   let select = s( '#select-tick_rate' )
-  console.log( 'value:', select.value )
   S.prefs.game_speed = select.value
 }
 

@@ -6,6 +6,7 @@ $legendary-color: #ff7e51;
 $mythic-color: #c60000;
 
 .pickaxe-name {
+  font-family: 'Germania One';
 
   &.Common { color: white; }
   &.Uncommon{ color: $uncommon-color; }
