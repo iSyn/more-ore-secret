@@ -820,7 +820,7 @@ button {
         image-rendering: -o-pixelated;
         image-rendering: pixelated;
         margin-right: 3px; }
-      .building .middle p.not-enough {
+      .building .middle p span.not-enough {
         color: #c70000; }
   .building .right {
     position: absolute;
@@ -2394,6 +2394,11 @@ input:checked + .slider:before {
       border-top: 6px solid transparent;
       border-bottom: 6px solid transparent;
       border-right: 6px solid #969188; }
+    .tutorial-container .arrow.right {
+      border: none;
+      border-top: 6px solid transparent;
+      border-bottom: 6px solid transparent;
+      border-left: 6px solid #969188; }
 
 @-webkit-keyframes sideToSide {
   0% {
@@ -2489,7 +2494,8 @@ input:checked + .slider:before {
       color: black;
       cursor: pointer;
       text-align: center;
-      position: relative; }
+      position: relative;
+      margin-bottom: 30px; }
       .wrapper > #quest-board .quest-board-quests .quest .completed, .wrapper > #quest-board .quest-board-quests .quest .in-progress {
         font-weight: bold;
         color: red;

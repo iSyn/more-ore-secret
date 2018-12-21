@@ -75,6 +75,7 @@ let State = function( s = {} ) {
       final_destination: 0
     },
 
+    quest_speed_bonus: 0,
     quest: s.quest ||  {
       state: null,
       current_quest: null,

@@ -41,6 +41,10 @@ let Building = function( obj ) {
 
             O.rebuild_store_tab = 1
         }
+
+        if ( s( '#tutorial-buy-building' ) ) {
+            remove_el( s( '#tutorial-buy-building' ) )
+        }
     }
 
     Buildings.push( this )

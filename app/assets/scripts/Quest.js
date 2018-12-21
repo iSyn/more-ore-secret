@@ -6,7 +6,8 @@ let Quest = function( obj, id ) {
   this.desc = obj.desc
   this.flavor_text = obj.flavor_text
   this.img = obj.img
-  this.duration = obj.duration
+  this.base_duration = obj.base_duration
+  this.duration = obj.duration || this.base_duration - ( this.base_duration * S.quest_speed_bonus )
   this.completed = obj.completed || 0
   this.times_completed = obj.times_completed || 0
   this.total_xp_gained = obj.total_xp_gained || 0
@@ -27,7 +28,7 @@ let quests = [
     img: 'https://via.placeholder.com/64',
     desc: 'The gloomy Dark Forest is a mysterious place devoid of life. The ones who are enter are forever lost wandering.',
     flavor_text: 'Note: Not the forest Logan Paul went to.',
-    duration: 5 * MINUTE,
+    base_duration: 5 * MINUTE,
     locked: 0,
     rewards: {
       achievement: 'not_that_dark!',
@@ -45,7 +46,7 @@ let quests = [
     img: 'https://via.placeholder.com/64',
     desc: 'The harrowing Forgotten Cemetary houses the decomposed corpses of nobodies. It is told on nights where the moon shines bright, soft moans can be heard echoing the wasteland.',
     flavor_text: 'You\'ll end up here one day too...',
-    duration: 1 * HOUR,
+    base_duration: 1 * HOUR,
     rewards: {
       achievement: 'spooky_scary_skeletons',
       xp: 450,
@@ -62,7 +63,7 @@ let quests = [
     img: 'https://via.placeholder.com/64',
     desc: 'The vile Venal Corruption has death and decay surrounding you. Don\'t be too loud or you might awaken the Eater of Worlds.',
     flavor_text: 'Terrarias great',
-    duration: 4 * HOUR,
+    base_duration: 4 * HOUR,
     rewards: {
       achievement: 'worm_scarf',
       xp: 1000,
@@ -77,11 +78,19 @@ let quests = [
   }, {
     name: 'Crystal Mines',
     img: 'https://via.placeholder.com/64',
-    desc: 'The lustrous Crystal Mines contains gems galore. Many ambitious miners are soon invelopped and overwhelmed, spending the rest of their lives mining.',
+    desc: 'The lustrous Crystal Mines contains gems galore. Many ambitious miners are soon enveloped and overwhelmed, spending the rest of their lives mining.',
     flavor_text: 'Ooo shiny...',
-    duration: 12 * HOUR,
+    base_duration: 12 * HOUR,
     rewards: {
-      achievement:
+      achievement: 'crystallization',
+      xp: 2.8 * THOUSAND,
+      ores: 115 * THOUSAND,
+      refined_ores: 70,
+      gem: {
+        chance: .7,
+        level_range: [ 0, 20 ],
+        gem_pool: 2
+      }
     }
   }
 ]
@@ -96,9 +105,9 @@ let load_quests = () => {
       
       quests = JSON.parse( localStorage.getItem( 'quests' ) )
 
-      quests.forEach( ( q, i ) => new Quest( q, i ) )
-
     }
+
+    quests.forEach( ( q, i ) => new Quest( q, i ) )
 
     resolve()
 

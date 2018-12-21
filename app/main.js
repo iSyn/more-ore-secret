@@ -438,8 +438,8 @@ let build_buy_amount = () => {
 
 let change_buy_amount = ( amount ) => {
 
-  O.rebuild_store_tab = 1
   S.buy_amount = amount
+  O.rebuild_store_tab = 1
 
 }
 
@@ -461,7 +461,7 @@ let build_buildings = () => {
           </div>
           <div class="middle">
             <h1>${ building.name } ${ S.buy_amount != 1 ? "x" + S.buy_amount : "" }</h1>
-            <p class='building-price ${ S.ores < get_geometric_sequence_price( building.base_price, building.price_scale, building.owned, building.current_price ).price ? "not-enough" : ""  }'><img class='ore-small' src='./app/assets/images/ore.png' /> ${ beautify_number( get_geometric_sequence_price( building.base_price, building.price_scale, building.owned, building.current_price ).price ) } </p>
+            <p><img class='ore-small' src='./app/assets/images/ore.png' /> <span>${ beautify_number( get_geometric_sequence_price( building.base_price, building.price_scale, building.owned, building.current_price ).price ) }</span> </p>
           </div>
           <div class="right">
             <h1>${ building.owned }</h1>
@@ -494,12 +494,14 @@ let update_building_prices = () => {
 
     if ( !building.hidden ) {
 
-      let building_el = s( `#building-${ building.code_name } .middle .building-price`)
+      building.current_price = get_geometric_sequence_price( building.base_price, building.price_scale, building.owned, building.current_price ).price
+
+      let building_price = s( `#building-${ building.code_name } .middle p span`)
       
       if ( S.ores < building.current_price ) {
-        building_el.classList.add( 'not-enough' )
+        building_price.classList.add( 'not-enough' )
       } else {
-        building_el.classList.remove( 'not-enough')
+        building_price.classList.remove( 'not-enough')
       }
       
     }
@@ -1250,7 +1252,33 @@ let tutorial_pickaxe_description = () => {
   let tutorial_dimensions = tutorial.getBoundingClientRect()
 
   tutorial.style.left = target.left - tutorial_dimensions.width / 1.5 + 'px'
-  tutorial.style.top = target.top + 50 + 'px'
+  tutorial.style.top = target.top + 'px'
+
+}
+
+let tutorial_buy_building = () => {
+
+  let tutorial = document.createElement( 'div' )
+
+  tutorial.classList.add( 'tutorial-container' )
+  tutorial.id = 'tutorial-buy-building'
+  tutorial.innerHTML = `
+    <div class="tutorial-content">
+      <p>Use your <strong>ores</strong> to purchase buildings!</p>
+      <p>Buildings add to your Ores per Second ( OpS )</p>
+    </div>
+    <div class="arrow right"></div>
+  `
+
+  let target_location_dimensions = s( '#building-school' ).getBoundingClientRect()
+
+  CONTAINER.append( tutorial )
+
+  console.log( 'tutorial buy building firing', tutorial, tutorial.offsetHeight )
+
+  tutorial.style.left = target_location_dimensions.left - tutorial.offsetWidth - 35 + 'px'
+  tutorial.style.top = '20%'
+
 
 }
 
@@ -2194,7 +2222,6 @@ let add_to_inventory = ( item ) => {
 
   for ( let i = 0; i < S.inventory.items.length; i++ ) {
     if ( is_empty( S.inventory.items[ i ] ) ) {
-      console.log( 'i=', i)
       item.inventory_index = i
       S.inventory.items[i] = item
 
@@ -2455,7 +2482,9 @@ let update_ore_hp = ( amount ) => {
     S.stats.current_rocks_destroyed += 1
     S.stats.total_rocks_destroyed += 1
 
-    if ( S.stats.total_rocks_destroyed == 1 ) {
+    if ( S.stats.total_rocks_destroyed == 1 ) tutorial_buy_building()
+
+    if ( S.stats.total_rocks_destroyed == 2 ) {
       if ( Tabs[ 1 ].hidden == 1 ) { 
         Tabs[ 1 ].hidden = 0; build_tabs() 
       }

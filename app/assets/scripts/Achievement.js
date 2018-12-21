@@ -29,6 +29,11 @@ let Achievement = function( obj ) {
       if ( r.increase_pickaxe_sharpness ) S.pickaxe.permanent_bonuses.sharpness += r.increase_pickaxe_sharpness
 
       if ( r.increase_boost_amount ) S.quest.boost_amount *= r.increase_boost_amount
+
+      if ( r.increase_quest_speed) {
+        S.quest_speed_bonus += r.increase_quest_speed
+        Quests.forEach( q => { q.duration = q.base_duration - ( q.base_duration * S.quest_speed_bonus ) } )
+      }
     }
   }
 
@@ -75,10 +80,11 @@ let achievements = [
   { name: 'Novice Quester', desc: 'Complete the first quest', type: 'quest' },
   { name: 'Adventurer', desc: 'Complete the first 5 quests', type: 'quest' },
   { name: 'Boosted!', desc: 'Boost a single time', type: 'quest' },
-  { name: 'Rocket Boost', desc: 'Boost 100 times', reward: { increase_boost_amount: 2 }, type: 'quest' },
-  { name: 'Not That Dark!', desc: 'Complete the Dark Forest 5 times', type: 'quest' },
-  { name: 'Spooky Scary Skeletons', desc: 'Complete the Forgotten Cemetary 5 times', type: 'quest' },
-  { name: 'Worm Scarf', desc: 'Complete the Venal Corruption 5 times', type: 'quest' }
+  { name: 'Rocket Boost', desc: 'Boost 100 times', type: 'quest', reward: { increase_boost_amount: 2 } },
+  { name: 'Not That Dark!', desc: 'Complete the Dark Forest 5 times', type: 'quest', reward: { increase_quest_speed: .05 } },
+  { name: 'Spooky Scary Skeletons', desc: 'Complete the Forgotten Cemetary 5 times', type: 'quest', reward: { increase_quest_speed: .05 } },
+  { name: 'Worm Scarf', desc: 'Complete the Venal Corruption 5 times', type: 'quest', reward: { increase_quest_speed: .05 } },
+  { name: 'Crystallization', desc: 'Complete the Crystal Mines 5 times', type: 'quest', reward: { increase_quest_speed: .05 } },
 
   { name: 'Gold Rush Aficionado', desc: 'Grab all falling gold nuggets during a gold rush', type: 'gold rush' },
 

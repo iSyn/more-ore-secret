@@ -163,7 +163,7 @@ let upgrades = [
         name: 'Composition Notebooks',
         img: 'https://via.placeholder.com/50',
         flavor_text: 'College Ruled!',
-        price: 80,
+        price: 300,
         buy_functions: {
             increase_building_production: { building: 'school', multi: 2 }
         }
