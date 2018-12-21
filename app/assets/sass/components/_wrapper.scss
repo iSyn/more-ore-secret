@@ -55,57 +55,6 @@
       }
     }
 
-    &.stats-container {
-      width: 488px;
-
-      ul {
-        list-style-type: none;
-        font-size: 14px;
-
-        li {
-          letter-spacing: .5px;
-          padding: 1px 0;
-
-          span {
-            opacity: .6;
-            padding-right: 3px;
-          }
-        }
-      }
-
-      hr {
-        width: 20%;
-        margin: 10px 0;
-      }
-
-      .achievement-container {
-        display: flex;
-        flex-flow: row wrap;
-        justify-content: flex-start;
-
-        h1 {
-          width: 100%;
-        }
-
-        .achievement-square {
-          height: 64px;
-          width: 64px;
-          border: 5px ridge #222;
-          background-size: 100%;
-
-          &:hover {
-            box-shadow: 0 0 10px white inset;
-          }
-
-          &.locked {
-            opacity: 0.7;
-            filter: brightness( 70% );
-          }
-        }
-
-      }
-    }
-
     &.settings-container {
 
       h2 {

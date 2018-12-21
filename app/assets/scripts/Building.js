@@ -53,8 +53,8 @@ let buildings = [
         name_plural: 'Schools',
         desc: 'Teach students about the wonders of ore',
         flavor_text: '"Jesus christ Marie, they\'re minerals!"',
-        base_production: .3,
-        base_price: 6,
+        base_production: .5,
+        base_price: 50,
         price_scale: 1.15,
         hidden: 0,
         buy_functions: {

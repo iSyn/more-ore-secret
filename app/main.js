@@ -2562,6 +2562,7 @@ let build_achievements = () => {
     <div class='stats-container'>
       <h1>Statistics</h1>
       <hr/>
+
       <ul>
         <li><span>Highest Combo: ${ S.stats.highest_combo }</li>
         <li><span>Total Clicks:</span> ${ S.stats.total_clicks }</li>
@@ -2578,38 +2579,29 @@ let build_achievements = () => {
       </ul>
       <hr/>
       <div class='achievement-container'>
-        <h1>Won:</h1>
         `
-        let locked_achievements = []
         Achievements.forEach( achievement => {
-          if ( achievement.won == 1 ) {
-            str += `
-              <div 
-                class="achievement-square"
-                onmouseover="TT.show( event, { name: '${ achievement.code_name }', type: 'achievement-square' } )"
-                onmouseout='TT.hide()'
-                style='background-image: url( ${ achievement.img } )'
-                >
-              </div>
-            `
-          } else {
-            locked_achievements.push( achievement )
-          }
-        })
-
-        str += '<h1>Locked:</h1>'
-        locked_achievements.forEach( achievement => {
           str += `
-            <div 
-              class="achievement-square locked"
-              style='background-image: url( ${ achievement.img } )'
-              >
-            </div>
+          <div 
+            class="achievement-square ${ !achievement.won && 'locked' }"
+            `
+
+          if ( achievement.won ) {
+            str += `
+              onmouseover="TT.show( event, { name: '${ achievement.code_name }', type: 'achievement-square' } )"
+              onmouseout='TT.hide()'
+            `
+          }
+
+          str += `
+            
+            style='background-image: url( ${ achievement.img } )'
+            >
+          </div>
           `
         })
           
         str += `
-      </div>
       <i onclick='remove_wrapper()' class='fa fa-times fa-1x'></i>
     </div>
   `

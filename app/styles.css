@@ -1090,45 +1090,6 @@ button {
       align-items: center; }
       .wrapper > div:not(.item-drop-popup-container) > div p {
         padding-right: 20px; }
-    .wrapper > div:not(.item-drop-popup-container).stats-container {
-      width: 488px; }
-      .wrapper > div:not(.item-drop-popup-container).stats-container ul {
-        list-style-type: none;
-        font-size: 14px; }
-        .wrapper > div:not(.item-drop-popup-container).stats-container ul li {
-          letter-spacing: .5px;
-          padding: 1px 0; }
-          .wrapper > div:not(.item-drop-popup-container).stats-container ul li span {
-            opacity: .6;
-            padding-right: 3px; }
-      .wrapper > div:not(.item-drop-popup-container).stats-container hr {
-        width: 20%;
-        margin: 10px 0; }
-      .wrapper > div:not(.item-drop-popup-container).stats-container .achievement-container {
-        display: -webkit-box;
-        display: -ms-flexbox;
-        display: flex;
-        -webkit-box-orient: horizontal;
-        -webkit-box-direction: normal;
-        -ms-flex-flow: row wrap;
-        flex-flow: row wrap;
-        -webkit-box-pack: start;
-        -ms-flex-pack: start;
-        justify-content: flex-start; }
-        .wrapper > div:not(.item-drop-popup-container).stats-container .achievement-container h1 {
-          width: 100%; }
-        .wrapper > div:not(.item-drop-popup-container).stats-container .achievement-container .achievement-square {
-          height: 64px;
-          width: 64px;
-          border: 5px ridge #222;
-          background-size: 100%; }
-          .wrapper > div:not(.item-drop-popup-container).stats-container .achievement-container .achievement-square:hover {
-            -webkit-box-shadow: 0 0 10px white inset;
-            box-shadow: 0 0 10px white inset; }
-          .wrapper > div:not(.item-drop-popup-container).stats-container .achievement-container .achievement-square.locked {
-            opacity: 0.7;
-            -webkit-filter: brightness(70%);
-            filter: brightness(70%); }
     .wrapper > div:not(.item-drop-popup-container).settings-container h2 {
       font-family: 'Germania One';
       letter-spacing: .7px; }
@@ -1687,6 +1648,45 @@ input:checked + .slider:before {
     -webkit-transform: translateY(100%);
     transform: translateY(100%);
     opacity: 0; } }
+
+.wrapper > .stats-container {
+  width: 440px; }
+  .wrapper > .stats-container ul {
+    list-style-type: none;
+    font-size: 14px; }
+    .wrapper > .stats-container ul li {
+      letter-spacing: .5px;
+      padding: 1px 0; }
+      .wrapper > .stats-container ul li span {
+        opacity: .6;
+        padding-right: 3px; }
+  .wrapper > .stats-container hr {
+    width: 20%;
+    margin: 10px 0; }
+  .wrapper > .stats-container .achievement-container {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -ms-flex-flow: row wrap;
+    flex-flow: row wrap;
+    -webkit-box-pack: start;
+    -ms-flex-pack: start;
+    justify-content: flex-start; }
+    .wrapper > .stats-container .achievement-container h1 {
+      width: 100%; }
+    .wrapper > .stats-container .achievement-container .achievement-square {
+      height: 50px;
+      width: 50px;
+      border: 5px ridge #222;
+      background-size: 100%; }
+      .wrapper > .stats-container .achievement-container .achievement-square:hover {
+        -webkit-box-shadow: 0 0 10px white inset;
+        box-shadow: 0 0 10px white inset; }
+      .wrapper > .stats-container .achievement-container .achievement-square.locked {
+        -webkit-filter: brightness(30%);
+        filter: brightness(30%); }
 
 .gold-nugget {
   z-index: 3;

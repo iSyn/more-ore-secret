@@ -39,6 +39,12 @@ let Achievements = []
 let achievements = [
 
   // { name: 'Schoolboy', desc: 'Have 10 Schools' },
+  
+  // MINING RELATED ACHIEVEMENTS
+  { name: 'Newbie Miner', desc: 'Break your first rock', reward: { increase_pickaxe_hardness: 5, increase_pickaxe_sharpness: 5 } },
+  { name: 'Novice Miner', desc: 'Break 10 rocks' },
+  { name: 'Intermediate Miner', desc: 'Break 25 rocks', reward: { increase_pickaxe_hardness: 15, increase_pickaxe_sharpness: 15 } },
+  { name: 'Advanced Miner', desc: 'Break 100 rocks', reward: { increase_pickaxe_hardness: 30, increase_pickaxe_sharpness: 30 } },
 
   // REFINE RELATED ACHIEVEMENTS
   { name: 'Babies First Refine', desc: 'Refine for your first time' },
@@ -64,12 +70,6 @@ let achievements = [
   { name: 'Combo God', desc: 'Reach a 777 hit combo', type: 'combo', reward: { increase_weak_hit_multi: 3 } },
   { name: 'Combo Saiyan', desc: 'Read a 1000 hit combo', type: 'combo', reward: { increase_weak_hit_multi: 4 } },
   { name: 'Combo Saitama', desc: 'Reach a 10000 hit combo', type: 'combo', reward: { increase_weak_hit_multi: 5 } },
-
-  // MINING RELATED ACHIEVEMENTS
-  { name: 'Newbie Miner', desc: 'Break your first rock', reward: { increase_pickaxe_hardness: 5, increase_pickaxe_sharpness: 5 } },
-  { name: 'Novice Miner', desc: 'Break 10 rocks' },
-  { name: 'Intermediate Miner', desc: 'Break 25 rocks', reward: { increase_pickaxe_hardness: 15, increase_pickaxe_sharpness: 15 } },
-  { name: 'Advanced Miner', desc: 'Break 100 rocks', reward: { increase_pickaxe_hardness: 30, increase_pickaxe_sharpness: 30 } },
 
   // QUEST RELATED ACHEIVEMENTS
   { name: 'Novice Quester', desc: 'Complete the first quest', type: 'quest' },
