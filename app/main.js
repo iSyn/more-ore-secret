@@ -151,6 +151,8 @@ let load_game = async () => {
   await load_quests()
   console.log( 'quests loaded' )
 
+  notify( 'Save loaded successfully' )
+
   LOADING_SCREEN.addEventListener( 'transitionend', () => remove_el( LOADING_SCREEN ) )
   LOADING_SCREEN.classList.add( 'finished-loading' )
   
@@ -2452,6 +2454,13 @@ let update_ore_hp = ( amount ) => {
 
     S.stats.current_rocks_destroyed += 1
     S.stats.total_rocks_destroyed += 1
+
+    if ( S.stats.total_rocks_destroyed == 1 ) {
+      if ( Tabs[ 1 ].hidden == 1 ) { 
+        Tabs[ 1 ].hidden = 0; build_tabs() 
+      }
+    }
+
     S.current_ore_max_hp = Math.pow( S.current_ore_max_hp, 1.09 )
     S.current_ore_hp = S.current_ore_max_hp
 
@@ -2485,9 +2494,6 @@ let update_ore_hp = ( amount ) => {
       ORE_HP.innerHTML = ''
       break
   }
-
-
-
 
 }
 

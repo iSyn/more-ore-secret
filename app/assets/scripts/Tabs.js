@@ -15,6 +15,7 @@ let tabs = [
     }, {
       name: '<i class="fa fa-gavel"></i>',
       code_name: 'smith',
+      hidden: 1
     }, {
       name: '<i class="fa fa-superpowers"></i>',
       code_name: 'skills',
@@ -22,7 +23,6 @@ let tabs = [
     }
 ]
 
-// tabs.forEach( tab => {
 
 let load_tabs = () => {
 
@@ -68,10 +68,6 @@ let bottom_tabs = [
     selected: 0
   }
 ]
-
-// bottom_tabs.forEach( tab => {
-//   new Bottom_Tab( tab )
-// })
 
 let load_bottom_tabs = () => {
 

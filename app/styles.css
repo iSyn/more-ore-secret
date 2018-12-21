@@ -353,7 +353,7 @@ button {
             -webkit-box-shadow: 0 0 40px #222 inset;
             box-shadow: 0 0 40px #222 inset;
             letter-spacing: 3px;
-            width: 50%;
+            width: 100%;
             text-align: center;
             cursor: pointer;
             -webkit-transition: all .1s;
