@@ -129,7 +129,8 @@
         flex-flow: row nowrap;
 
         select {
-          flex-grow: 1;
+          // flex-grow: 1;
+          width: 100px;
         }
       }
     }

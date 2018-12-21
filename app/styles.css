@@ -1139,9 +1139,7 @@ button {
       -ms-flex-flow: row nowrap;
       flex-flow: row nowrap; }
       .wrapper > div:not(.item-drop-popup-container).settings-container .select-container select {
-        -webkit-box-flex: 1;
-        -ms-flex-positive: 1;
-        flex-grow: 1; }
+        width: 100px; }
     .wrapper > div:not(.item-drop-popup-container).offline-gain-popup {
       text-align: center;
       padding-bottom: 5px; }

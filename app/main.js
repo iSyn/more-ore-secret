@@ -2673,13 +2673,22 @@ let build_settings = () => {
       <hr />
       <h2>Game</h2>
       <div class="select-container">
-        <p>Rock HP</p>
-        <select id="select-rock-hp" onchange='change_rock_hp_display()'>
-          <option ${ S.prefs.show_rock_hp == 0 ? "selected" : "" } value=0>none</option>
-          <option ${ S.prefs.show_rock_hp == 'percentage' ? 'selected' : '' } value="percentage">percentage</option>
-          <option ${ S.prefs.show_rock_hp == 'hp' ? 'selected' : ''} value="hp">hp</option>
+        <p>Rock HP Format</p>
+        <select id="select-rock-hp" onchange='change_select_value( "select-rock-hp", "show_rock_hp" )'>
+          <option ${ S.prefs.show_rock_hp == 0 ? "selected" : "" } value=0>None</option>
+          <option ${ S.prefs.show_rock_hp == 'percentage' ? 'selected' : '' } value="percentage">Percentage</option>
+          <option ${ S.prefs.show_rock_hp == 'hp' ? 'selected' : ''} value="hp">HP</option>
         </select>
       </div>
+
+      <div class='select-container'>
+        <p>Number Format</p>
+        <select id='select-number-format' onchange='change_select_value( "select-number-format", "number_format" )'>
+          <option ${ S.prefs.number_format == 0 ? "selected" : "" } value=0>Default</option>
+          <option ${ S.prefs.number_format == 1 ? "selected" : "" } value=1>Scientific Notation</option>
+        </select>
+      </div>
+
       <br/>
       <h2>Volume</h2>
       <div>
@@ -2700,9 +2709,9 @@ let build_settings = () => {
           <option value=1 ${ S.prefs.game_speed == 1 ? "selected" : "" }>is powered by a hamster</option>
           <option value=5 ${ S.prefs.game_speed == 5 ? "selected" : "" }>runs windows 95</option>
           <option value=10 ${ S.prefs.game_speed == 10 ? "selected" : "" }>sucks</option>
-          <option value=15 ${ S.prefs.game_speed == 15 ? "selected" : "" }>okay</option>
-          <option value=30 ${ S.prefs.game_speed == 30 ? "selected" : "" }>decent</option>
-          <option value=45 ${ S.prefs.game_speed == 45 ? "selected" : "" }>godly</option>
+          <option value=15 ${ S.prefs.game_speed == 15 ? "selected" : "" }>is okay</option>
+          <option value=30 ${ S.prefs.game_speed == 30 ? "selected" : "" }>is decent</option>
+          <option value=45 ${ S.prefs.game_speed == 45 ? "selected" : "" }>is godly</option>
         </select>
       </div>
       <div>
@@ -2767,6 +2776,16 @@ let toggle_sfx_mute = () => {
 let change_rock_hp_display = () => {
   let select = s( '#select-rock-hp' )
   S.prefs.show_rock_hp = select.value
+}
+
+let change_select_value = ( name, state_key ) => {
+  
+  let select = s( `#${name}`)
+  S.prefs[ `${ state_key }` ] = select.value
+
+  if ( O.current_tab == 'store' ) O.rebuild_store_tab = 1
+  if ( O.current_tab == 'smith' ) O.rebuild_smith_tab = 1
+  
 }
 
 let change_bgm_volume = () => {

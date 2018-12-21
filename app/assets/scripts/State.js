@@ -160,7 +160,8 @@ let State = function( s = {} ) {
       bgm_volume: .5,
       show_rising_numbers: true,
       show_rock_particles: true,
-      show_rock_hp: 'percentage'
+      show_rock_hp: 'percentage',
+      number_format: 0,
     },
 
     misc: s.misc || {

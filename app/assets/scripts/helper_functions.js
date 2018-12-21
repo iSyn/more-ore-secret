@@ -105,75 +105,79 @@ let get_geometric_sequence_price = ( base_price, price_scale, owned, current_pri
   return { price, amount }
 }
 
-let beautify_number = (number) => {
+let beautify_number = ( number, type=S.prefs.number_format) => {
 
-  var SI_PREFIXES = [
-    "", // number is less than 1,000
-    "Thousand", // number is in the thousands
-    "Million",
-    "Billion",
-    "Trillion",
-    "Quadrillion",
-    "Quintillion",
-    "Sextillion",
-    "Septillion",
-    "Octillion",
-    "Nonillion",
-    "Decillion",
-    "Undecillion",
-    "Dodecillion",
-    "Tredecillion",
-    "Quattuordecillion",
-    "Quindecillion",
-    "Sexdecillion",
-    "Septendecillion",
-    "Octodecillion",
-    "Novemdecillion",
-    "Vigintillion",
-    "Unvigintillion",
-    "Dovigintillion",
-    "Trevigintillion",
-    "Quattuorvigintillion",
-    "Quinvigintillion",
-    "Sexvigintillion",
-    "Septenvigintillion",
-    "Octovigintillion",
-    "Novemvigintillion",
-    "Trigintillion",
-    "Untrigintillion",
-    "Dotrigintillion",
-    "Tretrigintillion",
-    "Quattuortrigintillion",
-    "Quintrigintillion",
-    "Sextrigintillion",
-    "Septentrigintillion",
-    "Octotrigintillion",
-    "Novemtrigintillion",
-    "F*ckloadillion",
-    "F*cktonillion"
-  ];
-
-  if (!number) return 0;
-  if (number < 10){
-      if (Math.round(number) === number) return number;
-      return number.toFixed(1);
+  if ( type == 0 ) {
+    var SI_PREFIXES = [
+      "", // number is less than 1,000
+      "Thousand", // number is in the thousands
+      "Million",
+      "Billion",
+      "Trillion",
+      "Quadrillion",
+      "Quintillion",
+      "Sextillion",
+      "Septillion",
+      "Octillion",
+      "Nonillion",
+      "Decillion",
+      "Undecillion",
+      "Dodecillion",
+      "Tredecillion",
+      "Quattuordecillion",
+      "Quindecillion",
+      "Sexdecillion",
+      "Septendecillion",
+      "Octodecillion",
+      "Novemdecillion",
+      "Vigintillion",
+      "Unvigintillion",
+      "Dovigintillion",
+      "Trevigintillion",
+      "Quattuorvigintillion",
+      "Quinvigintillion",
+      "Sexvigintillion",
+      "Septenvigintillion",
+      "Octovigintillion",
+      "Novemvigintillion",
+      "Trigintillion",
+      "Untrigintillion",
+      "Dotrigintillion",
+      "Tretrigintillion",
+      "Quattuortrigintillion",
+      "Quintrigintillion",
+      "Sextrigintillion",
+      "Septentrigintillion",
+      "Octotrigintillion",
+      "Novemtrigintillion",
+      "F*ckloadillion",
+      "F*cktonillion"
+    ];
+  
+    if (!number) return 0;
+    if (number < 10){
+        if (Math.round(number) === number) return number;
+        return number.toFixed(1);
+    }
+    // what tier? (determines SI prefix)
+    var tier = Math.log10(number) / 3 | 0;
+  
+    // if zero, we don't need a prefix
+    if (tier === 0) return Math.round(number)
+    // if (tier === 1) return Math.round(number)
+  
+    // get prefix and determine scale
+    var prefix = SI_PREFIXES[tier];
+    var scale = Math.pow(10, tier * 3);
+  
+    // scale the number
+    var scaled = number / scale;
+  
+    // format number and add prefix as suffix
+    return parseFloat(scaled.toFixed(2)) + " " + prefix;
+  } else if ( type == 1 ) {
+    return ( BigNumber( number ).toExponential( 2 ) )
   }
-  // what tier? (determines SI prefix)
-  var tier = Math.log10(number) / 3 | 0;
-
-  // if zero, we don't need a prefix
-  if (tier === 0) return Math.round(number)
-  // if (tier === 1) return Math.round(number)
-
-  // get prefix and determine scale
-  var prefix = SI_PREFIXES[tier];
-  var scale = Math.pow(10, tier * 3);
-
-  // scale the number
-  var scaled = number / scale;
-
-  // format number and add prefix as suffix
-  return parseFloat(scaled.toFixed(2)) + " " + prefix;
 }
 
 let beautify_ms = ( ms ) => {
