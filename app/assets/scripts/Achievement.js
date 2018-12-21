@@ -39,7 +39,7 @@ let Achievements = []
 let achievements = [
 
   // { name: 'Schoolboy', desc: 'Have 10 Schools' },
-  
+
   // MINING RELATED ACHIEVEMENTS
   { name: 'Newbie Miner', desc: 'Break your first rock', reward: { increase_pickaxe_hardness: 5, increase_pickaxe_sharpness: 5 } },
   { name: 'Novice Miner', desc: 'Break 10 rocks' },
@@ -78,6 +78,7 @@ let achievements = [
   { name: 'Rocket Boost', desc: 'Boost 100 times', reward: { increase_boost_amount: 2 }, type: 'quest' },
   { name: 'Not That Dark!', desc: 'Complete the Dark Forest 5 times', type: 'quest' },
   { name: 'Spooky Scary Skeletons', desc: 'Complete the Forgotten Cemetary 5 times', type: 'quest' },
+  { name: 'Worm Scarf', desc: 'Complete the Venal Corruption 5 times', type: 'quest' }
 
   { name: 'Gold Rush Aficionado', desc: 'Grab all falling gold nuggets during a gold rush', type: 'gold rush' },
 

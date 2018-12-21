@@ -40,11 +40,10 @@ let quests = [
         gem_pool: 0
       }
     },
-    achievement_name: 'not_that_dark!'
   }, {
     name: 'Forgotten Cemetary',
     img: 'https://via.placeholder.com/64',
-    desc: 'The hallowing Forgotten Cemetary houses the decomposed corpses of nobodies. It is told on nights where the moon shines bright, soft moans can be heard echoing the wasteland.',
+    desc: 'The harrowing Forgotten Cemetary houses the decomposed corpses of nobodies. It is told on nights where the moon shines bright, soft moans can be heard echoing the wasteland.',
     flavor_text: 'You\'ll end up here one day too...',
     duration: 1 * HOUR,
     rewards: {
@@ -57,6 +56,32 @@ let quests = [
         level_range: [ 1, 3 ],
         gem_pool: 1
       }
+    }
+  }, {
+    name: 'Venal Corruption',
+    img: 'https://via.placeholder.com/64',
+    desc: 'The vile Venal Corruption has death and decay surrounding you. Don\'t be too loud or you might awaken the Eater of Worlds.',
+    flavor_text: 'Terrarias great',
+    duration: 4 * HOUR,
+    rewards: {
+      achievement: 'worm_scarf',
+      xp: 1000,
+      ores: 30 * THOUSAND,
+      refined_ores: 20,
+      gem: {
+        chance: .3,
+        level_range: [ 3, 7 ],
+        gem_pool: 1
+      }
+    }
+  }, {
+    name: 'Crystal Mines',
+    img: 'https://via.placeholder.com/64',
+    desc: 'The lustrous Crystal Mines contains gems galore. Many ambitious miners are soon invelopped and overwhelmed, spending the rest of their lives mining.',
+    flavor_text: 'Ooo shiny...',
+    duration: 12 * HOUR,
+    rewards: {
+      achievement:
     }
   }
 ]
