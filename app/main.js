@@ -2487,7 +2487,14 @@ let update_ore_hp = ( amount ) => {
       break
 
     case 'hp':
-      ORE_HP.innerHTML = `${ beautify_number( S.current_ore_hp ) } / ${ beautify_number( S.current_ore_max_hp ) }`
+      let progress = beautify_number( S.current_ore_hp / S.current_ore_max_hp * 100 )
+      let str = `
+        <div class='ore-hp-bar-container'>
+          <p>${ beautify_number( S.current_ore_hp ) } / ${ beautify_number( S.current_ore_max_hp ) } </p>
+          <div style='width: ${ progress}%' class='ore-hp-bar'></div>
+        </div>
+      `
+      ORE_HP.innerHTML = str
       break
 
     default:
@@ -2785,7 +2792,7 @@ let change_select_value = ( name, state_key ) => {
 
   if ( O.current_tab == 'store' ) O.rebuild_store_tab = 1
   if ( O.current_tab == 'smith' ) O.rebuild_smith_tab = 1
-  
+
 }
 
 let change_bgm_volume = () => {

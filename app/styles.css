@@ -241,6 +241,22 @@ button {
             text-align: center;
             font-family: 'Germania One';
             letter-spacing: 1px; }
+            .container .game-container > .left .ore-container-wrapper .ore-container .ore-hp .ore-hp-bar-container {
+              top: 20px;
+              position: relative;
+              width: 100%;
+              height: 20px;
+              background: rgba(0, 0, 0, 0.2);
+              border: none; }
+              .container .game-container > .left .ore-container-wrapper .ore-container .ore-hp .ore-hp-bar-container p {
+                position: absolute;
+                width: 100%;
+                text-align: center;
+                pointer-events: none;
+                font-family: 'Germania One'; }
+              .container .game-container > .left .ore-container-wrapper .ore-container .ore-hp .ore-hp-bar-container .ore-hp-bar {
+                background: rgba(0, 0, 0, 0.5);
+                height: 100%; }
       .container .game-container > .left .bottom-area-tabs {
         display: -webkit-box;
         display: -ms-flexbox;
@@ -2416,22 +2432,24 @@ input:checked + .slider:before {
     width: 40%;
     margin: 0 auto;
     opacity: .6; }
-  .tutorial-window-container#tutorial-pickaxe-description h1 {
-    font-family: 'Germania One';
-    text-shadow: 0 0 10px gold; }
-  .tutorial-window-container#tutorial-pickaxe-description .desc {
-    padding: 10px 0;
-    color: rgba(255, 255, 255, 0.6); }
-  .tutorial-window-container#tutorial-pickaxe-description ul {
-    list-style-type: none;
-    text-align: left;
-    padding: 0 25px;
-    font-size: 14px; }
-    .tutorial-window-container#tutorial-pickaxe-description ul li {
-      padding-bottom: 5px; }
-      .tutorial-window-container#tutorial-pickaxe-description ul li strong {
-        letter-spacing: .5px;
-        text-decoration: underline; }
+  .tutorial-window-container#tutorial-pickaxe-description {
+    max-width: 155px; }
+    .tutorial-window-container#tutorial-pickaxe-description h1 {
+      font-family: 'Germania One';
+      text-shadow: 0 0 10px gold; }
+    .tutorial-window-container#tutorial-pickaxe-description .desc {
+      padding: 10px 0;
+      color: rgba(255, 255, 255, 0.6); }
+    .tutorial-window-container#tutorial-pickaxe-description ul {
+      list-style-type: none;
+      text-align: left;
+      padding: 0 5px;
+      font-size: 14px; }
+      .tutorial-window-container#tutorial-pickaxe-description ul li {
+        padding-bottom: 5px; }
+        .tutorial-window-container#tutorial-pickaxe-description ul li strong {
+          letter-spacing: .5px;
+          text-decoration: underline; }
 
 .wrapper > #quest-board {
   height: 700px;

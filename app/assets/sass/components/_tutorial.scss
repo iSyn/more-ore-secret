@@ -55,6 +55,7 @@
     }
 
     &#tutorial-pickaxe-description {
+        max-width: 155px;
 
         h1 {
             font-family: 'Germania One';
@@ -69,7 +70,7 @@
         ul {
             list-style-type: none;
             text-align: left;
-            padding: 0 25px;
+            padding: 0 5px;
             font-size: 14px;
 
             li {

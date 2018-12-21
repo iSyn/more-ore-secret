@@ -167,6 +167,28 @@
             text-align: center;
             font-family: 'Germania One';
             letter-spacing: 1px;
+
+            .ore-hp-bar-container {
+              top: 20px;
+              position: relative;
+              width: 100%;
+              height: 20px;
+              background: rgba( 0, 0, 0, 0.2 );
+              border: none;
+
+              p {
+                position: absolute;
+                width: 100%;
+                text-align: center;
+                pointer-events: none;
+                font-family: 'Germania One';
+              }
+
+              .ore-hp-bar {
+                background: rgba( 0, 0, 0, 0.5 );
+                height: 100%;
+              }
+            }
           }
         }
       }
