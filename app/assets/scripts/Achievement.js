@@ -77,12 +77,28 @@ let achievements = [
   { name: 'Boosted!', desc: 'Boost a single time', type: 'quest' },
   { name: 'Rocket Boost', desc: 'Boost 100 times', reward: { increase_boost_amount: 2 }, type: 'quest' },
   { name: 'Not That Dark!', desc: 'Complete the Dark Forest 5 times', type: 'quest' },
+  { name: 'Spooky Scary Skeletons', desc: 'Complete the Forgotten Cemetary 5 times', type: 'quest' },
+
+  { name: 'Gold Rush Aficionado', desc: 'Grab all falling gold nuggets during a gold rush', type: 'gold rush' },
 
   // SECRET ACHIEVEMENTS
   { name: 'Who am I?', desc: 'Figure out the developers name', type: 'secret' },
 
 ]
 
-achievements.forEach( achievement => {
-  new Achievement( achievement )
-})
+let load_achievements = async () => {
+
+  return new Promise( resolve => {
+
+      Achievements = []
+
+      if ( localStorage.getItem( 'achievements' ) ) {
+          achievements = JSON.parse( localStorage.getItem( 'achievements' ) )
+      }
+
+      achievements.forEach( b => new Achievement( b ) )
+
+      resolve()
+
+  } )
+}

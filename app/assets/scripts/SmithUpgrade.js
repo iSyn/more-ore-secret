@@ -373,4 +373,22 @@ let unlock_smith_upgrade = ( code_name ) => {
     build_smith_upgrades( true )
 }
 
-smith_upgrades.forEach( upgrade => new SmithUpgrade( upgrade ) )
+// smith_upgrades.forEach( upgrade => new SmithUpgrade( upgrade ) )
+
+let load_smith_upgrades = () => {
+
+    return new Promise( resolve => {
+
+        Smith_Upgrades = []
+
+        if ( localStorage.getItem( 'smith_upgrades' ) ) {
+            smith_upgrades = JSON.parse( localStorage.getItem( 'smith_upgrades' ) )
+        }
+
+        smith_upgrades.forEach( u => new SmithUpgrade( u ))
+
+        resolve()
+
+    })
+
+}

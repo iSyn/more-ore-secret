@@ -223,6 +223,23 @@ let skills = [
   }
 ]
 
+let load_skills = () => {
+
+  return new Promise( resolve => {
+
+      Skills = []
+
+      if ( localStorage.getItem( 'skills' ) ) {
+          skills = JSON.parse( localStorage.getItem( 'skills' ) )
+      }
+
+      skills.forEach( skill => new Skill( skill ))
+
+      resolve()
+
+  })
+
+}
 
 
 skills.forEach( skill => new Skill( skill ) )

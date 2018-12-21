@@ -169,3 +169,17 @@ let State = function( s = {} ) {
     }
   }
 }
+
+
+let load_state = async () => {
+
+  return new Promise( resolve => {
+
+      if ( localStorage.getItem( 'state' ) ) {
+          S = new State( JSON.parse( localStorage.getItem( 'state' ) ) ).state
+      }
+
+      resolve()
+
+  } )
+}

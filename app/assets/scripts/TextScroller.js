@@ -29,3 +29,17 @@ let TextScroller = function( texts = null ) {
   }
 
 }
+
+let load_text_scroller = () => {
+
+  return new Promise( resolve => {
+
+    if ( localStorage.getItem( 'text_scroller' ) ) {
+      TS = new TextScroller( JSON.parse( localStorage.getItem( 'text_scroller' ) ) )
+    }
+
+    resolve()
+
+  } )
+
+}

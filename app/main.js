@@ -70,8 +70,8 @@ let O = {
   counter: 0
 }
 
-let init_game = () => {
-  load_game() 
+let init_game = async () => {
+  await load_game() 
   game_loop()
   S.tabs = Tabs
   build_tabs()
@@ -116,47 +116,40 @@ let save_game = () => {
   notify( 'Saved Game' )
 }
 
-let load_game = () => {
+let load_game = async () => {
 
-  if ( localStorage.getItem( 'state' ) ) {
+  await load_state()
+  console.log( 'state loaded' )
 
-    S = new State( JSON.parse( localStorage.getItem( 'state' ) ) ).state
+  await load_buildings()
+  console.log( 'buildings loaded' )
 
-    Buildings = []
-    JSON.parse( localStorage.getItem( 'buildings' ) ).forEach( building => new Building( building ) )
+  await load_upgrades()
+  console.log( 'upgrades loaded' )
 
-    // upgrades are loaded inside upgrades file
+  await load_achievements()
+  console.log( 'achievements loaded' )
 
-    Achievements = []
-    JSON.parse( localStorage.getItem( 'achievements' ) ).forEach( achievement => new Achievement( achievement ) )
+  await load_text_scroller()
+  console.log( 'text scroller loaded' )
 
-    
-    let text_scroller = JSON.parse( localStorage.getItem( 'text_scroller' ) )
-    TS = new TextScroller( text_scroller )
+  await load_smith_upgrades()
+  console.log( 'smith upgrades loaded' )
 
-    Smith_Upgrades = []
-    JSON.parse( localStorage.getItem( 'smith_upgrades' ) ).forEach( upgrade => new SmithUpgrade( upgrade ) )
+  await load_smith()
+  console.log( 'smith loaded' )
 
-    // SMITH = new Smith( JSON.parse( localStorage.getItem( 'smith' ) ) )
-    if ( localStorage.getItem( 'smith' ) ) {
-      SMITH = new Smith( JSON.parse( localStorage.getItem( 'smith' ) ) )
-      if ( !is_empty( SMITH.upgrade_in_progress ) ) {
-        SMITH._update_progress()
-      }
-    }
+  await load_bottom_tabs()
+  console.log( 'bottom tabs loaded' )
 
-    Bottom_Tabs = []
-    JSON.parse( localStorage.getItem( 'bottom_tabs' ) ).forEach( tab => new Bottom_Tab( tab ) )
+  await load_tabs()
+  console.log( 'tabs loaded' )
 
-    Tabs = []
-    JSON.parse( localStorage.getItem( 'tabs') ).forEach( tab => new Tab( tab ) )
+  await load_skills()
+  console.log( 'skills loaded' )
 
-    Skills = []
-    JSON.parse( localStorage.getItem( 'skills' ) ).forEach( skill => new Skill( skill ) )
-
-    Quests = []
-    JSON.parse( localStorage.getItem( 'quests' ) ).forEach( quest => new Quest( quest ) )
-  }
+  await load_quests()
+  console.log( 'quests loaded' )
 
   LOADING_SCREEN.addEventListener( 'transitionend', () => remove_el( LOADING_SCREEN ) )
   LOADING_SCREEN.classList.add( 'finished-loading' )
@@ -267,12 +260,11 @@ let earn = ( amount, alter_hp = true ) => {
 
   if ( S.locked.refine_btn && S.stats.total_ores_earned >= 1000000 ) unlock_refine_btn()
 
-  if ( S.stats.current_ores_earned >= 100 ) unlock_upgrade( 'baby_knowledge' )
-  if ( S.stats.current_ores_earned >= 7000 ) unlock_upgrade( 'adolescent_knowledge' )
-  if ( S.stats.current_ores_earned >= 500000 ) unlock_upgrade( 'adult_knowledge' )
-  if ( S.stats.current_ores_earned >= 10 * MILLION ) unlock_upgrade( 'adult_knowledge' )
-  if ( S.stats.current_ores_earned >= 1 * BILLION ) unlock_upgrade( 'eldritch_knowledge' )
-
+  if ( S.stats.current_ores_earned >= 200 ) unlock_upgrade( 'baby_knowledge' )
+  if ( S.stats.current_ores_earned >= 16500 ) unlock_upgrade( 'adolescent_knowledge' )
+  if ( S.stats.current_ores_earned >= 1.35 * MILLION ) unlock_upgrade( 'adult_knowledge' )
+  if ( S.stats.current_ores_earned >= 521 * MILLION ) unlock_upgrade( 'adult_knowledge' )
+  if ( S.stats.current_ores_earned >= 66.66666 * BILLION ) unlock_upgrade( 'eldritch_knowledge' )
 
 }
 
@@ -376,6 +368,8 @@ let build_tabs = () => {
 }
 
 let build_store_tab = () => {
+  
+  console.log( 'build store tab firing')
 
   let str = ''
   str += build_upgrades()
@@ -2004,7 +1998,7 @@ let complete_quest = () => {
 
   quest.completed = 1
   quest.times_completed++
-  if ( quest.times_completed == 5 ) win_achievement( quest.achievement_name )
+  if ( quest.times_completed == 5 ) win_achievement( quest.rewards.achievement )
 
   quest.total_xp_gained += quest.rewards.xp
   S.stats.total_quests_completed++
@@ -2015,6 +2009,7 @@ let complete_quest = () => {
   if ( S.stats.total_unique_quests_completed == 5 ) win_achievement( 'adventurer' )
 
   let next_quest = Quests[ quest.id + 1 ]
+  console.log( quest )
   if ( next_quest ) {
     if ( next_quest.locked ) next_quest.locked = 0
   }
@@ -2184,16 +2179,16 @@ let build_inventory = ( direct = false ) => {
   }
 
   if ( direct ) {
-    s( '.bag-container' ).innerHTML = str
-    return
+    if ( O.current_tab == 'smith' ) {
+      s( '.bag-container' ).innerHTML = str
+      return
+    }
   }
 
   return str
 }
 
 let add_to_inventory = ( item ) => {
-
-  console.log( 'item to add', item )
 
   for ( let i = 0; i < S.inventory.items.length; i++ ) {
     if ( is_empty( S.inventory.items[ i ] ) ) {
@@ -2844,6 +2839,7 @@ let start_gold_rush = () => {
 
   let nuggets_to_spawn = 10
   let fall_speed = 5 // seconds
+  let nuggets_clicked = 0
 
   let duration = ( nuggets_to_spawn + fall_speed ) * SECOND
 
@@ -2860,8 +2856,15 @@ let start_gold_rush = () => {
 
     let nugget = document.createElement( 'div' )
     nugget.classList.add( 'gold-nugget' )
-    nugget.onclick = ( e ) => handle_gold_nugget_click( e, 'gold rush' )
-    nugget.addEventListener( 'animationend', () => remove_el( nugget ) )
+    nugget.onclick = ( e ) => {
+      nuggets_clicked++
+      handle_gold_nugget_click( e, 'gold rush' )
+    }
+    nugget.addEventListener( 'animationend', () => {
+      remove_el( nugget ) 
+      if ( nuggets_clicked == nuggets_to_spawn ) win_achievement( 'gold_rush_aficionado' )
+      nuggets_clicked = 0
+    } )
 
     s( '.gold-rush-container' ).append( nugget )
 

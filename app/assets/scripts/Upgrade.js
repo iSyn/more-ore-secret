@@ -3,6 +3,7 @@ let Upgrade = function( obj ) {
     this.build_upgrade_desc = () => {
     
         let str = ''
+        
         let building = select_from_arr( Buildings, this.buy_functions.increase_building_production.building )
     
         switch( this.buy_functions.increase_building_production.multi ) {
@@ -75,7 +76,7 @@ let Upgrade = function( obj ) {
 }
 
 let Upgrades = []
-let upgrades = JSON.parse( localStorage.getItem( 'upgrades' ) ) || [
+let upgrades = [
 
     // OPC FROM OPS RELATED UPGRADES
     {
@@ -234,6 +235,7 @@ let upgrades = JSON.parse( localStorage.getItem( 'upgrades' ) ) || [
             increase_building_production: { building: 'school', multi: 2 }
         }
     },  
+
     // FARM RELATED UPGRADES
     {
         name: 'Manure Spreader',
@@ -417,21 +419,21 @@ let upgrades = JSON.parse( localStorage.getItem( 'upgrades' ) ) || [
     }, {
         name: 'tbd church 1',
         flavor_text: 'tbd',
-        price: 8.2 * BILLIOB,
+        price: 8.2 * BILLION,
         buy_functions: {
             increase_building_production: { building: 'church', multi: 2 }
         }
     }, {
         name: 'tbd church 2',
         flavor_text: 'tbd',
-        price: 32 * BILLIOB,
+        price: 32 * BILLION,
         buy_functions: {
             increase_building_production: { building: 'church', multi: 2 }
         }
     }, {
         name: 'tbd church 3',
         flavor_text: 'tbd',
-        price: 700 * BILLIOB,
+        price: 700 * BILLION,
         buy_functions: {
             increase_building_production: { building: 'church', multi: 2 }
         }
@@ -659,14 +661,28 @@ let upgrades = JSON.parse( localStorage.getItem( 'upgrades' ) ) || [
     }
 ]
 
-
-upgrades.forEach( upgrade => {
-    new Upgrade( upgrade ) 
-})
-
 let unlock_upgrade = ( code_name ) => {
     let upgrade = select_from_arr( Upgrades, code_name )
-    upgrade.hidden = false
-    O.rebuild_store_tab = 1
+    if ( upgrade.hidden ) {
+        upgrade.hidden = false
+        O.rebuild_store_tab = 1
+    }
 }
 
+let load_upgrades = () => {
+
+    return new Promise( resolve => {
+
+        Upgrades = []
+
+        if ( localStorage.getItem( 'upgrades' ) ) {
+            upgrades = JSON.parse( localStorage.getItem( 'upgrades' ) )
+        }
+
+        upgrades.forEach( u => new Upgrade( u ))
+
+        resolve()
+
+    })
+
+}

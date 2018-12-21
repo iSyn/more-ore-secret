@@ -22,9 +22,26 @@ let tabs = [
     }
 ]
 
-tabs.forEach( tab => {
-    new Tab( tab )
-})
+// tabs.forEach( tab => {
+
+let load_tabs = () => {
+
+  return new Promise( resolve => {
+
+      Tabs = []
+
+      if ( localStorage.getItem( 'tabs' ) ) {
+          tabs = JSON.parse( localStorage.getItem( 'tabs' ) )
+      }
+
+      tabs.forEach( t => new Tab( t ))
+
+      resolve()
+
+  })
+
+}
+
 
 // ---------------------------------------------------------------
 
@@ -52,6 +69,24 @@ let bottom_tabs = [
   }
 ]
 
-bottom_tabs.forEach( tab => {
-  new Bottom_Tab( tab )
-})
+// bottom_tabs.forEach( tab => {
+//   new Bottom_Tab( tab )
+// })
+
+let load_bottom_tabs = () => {
+
+  return new Promise( resolve => {
+
+      Bottom_Tabs = []
+
+      if ( localStorage.getItem( 'bottom_tabs' ) ) {
+          bottom_tabs = JSON.parse( localStorage.getItem( 'bottom_tabs' ) )
+      }
+
+      bottom_tabs.forEach( bt => new Bottom_Tab( bt ))
+
+      resolve()
+
+  })
+
+}

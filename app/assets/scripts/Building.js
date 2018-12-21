@@ -294,9 +294,22 @@ let buildings = [
     // }
 ]
 
-buildings.forEach( building => {
-    new Building( building )
-})
+let load_buildings = async () => {
+
+    return new Promise( resolve => {
+
+        Buildings = []
+        
+        if ( localStorage.getItem( 'buildings' ) ) {
+            buildings = JSON.parse( localStorage.getItem( 'buildings' ) )
+        }
+
+        buildings.forEach( b => new Building( b ) )
+
+        resolve()
+
+    } )
+}
 
 let __update_hidden = ( code_name ) => {
     let building = select_from_arr( Buildings, code_name )

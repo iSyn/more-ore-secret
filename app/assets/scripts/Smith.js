@@ -135,3 +135,23 @@ let Smith = function( obj = {} ) {
     }
 
 }
+
+let load_smith = () => {
+
+    return new Promise( resolve => {
+
+        if ( localStorage.getItem( 'smith' ) ) {
+            
+            SMITH = new Smith( JSON.parse( localStorage.getItem( 'smith' ) ) )
+            
+            if ( !is_empty( SMITH.upgrade_in_progress ) ) {
+                SMITH._upgrade_progress()
+            }
+
+        }
+
+        resolve()
+
+    })
+
+}
