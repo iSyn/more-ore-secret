@@ -231,7 +231,7 @@ let Tooltip = function() {
 
         str += `
           <div class='top'>
-            <img src='${ item.img }' alt='upgrade image' />
+            <img src='./app/assets/images/${ item.img }.png' alt='upgrade image' />
             <h1>${ item.name }</h1>
             <p class='upgrade-price ${ S.ores < item.price && 'not-enough' }'>${ beautify_number( item.price ) } ores</p>
           </div>

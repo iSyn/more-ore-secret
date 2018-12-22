@@ -43,8 +43,8 @@ let State = function( s = {} ) {
       time_needed: 4 * HOUR
     },
 
-    current_ore_hp: s.current_ore_hp || 50,
-    current_ore_max_hp: s.current_ore_max_hp || 50,
+    current_ore_hp: s.current_ore_hp || base_ore_max_hp,
+    current_ore_max_hp: s.current_ore_max_hp || base_ore_max_hp,
 
     tabs: [],
 

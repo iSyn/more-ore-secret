@@ -37,7 +37,8 @@ let Upgrade = function( obj ) {
 
     this.name = obj.name
     this.code_name = obj.name.replace( / /g, '_' ).toLowerCase()
-    this.img = obj.img || 'https://via.placeholder.com/50'
+    this.img = obj.img || `upgrade-${ this.code_name }`
+    this.background_color = obj.background_color
     this.flavor_text = obj.flavor_text || ''
     this.price = obj.price
     this.hidden = obj.hasOwnProperty( 'hidden' ) ? obj.hidden : 1
@@ -83,6 +84,7 @@ let upgrades = [
     // OPC FROM OPS RELATED UPGRADES
     {
         name: 'Flashlight',
+        background_color: '#f3d528',
         desc: 'Gain 1% of your OpS as OpC',
         flavor_text: 'Or a torch if you\'re so inclined.',
         price: 5 * THOUSAND,
@@ -91,6 +93,7 @@ let upgrades = [
         }
     }, {
         name: 'Double Polish',
+        background_color: '#f3d528',
         desc: 'Gain 2% of your OpS as OpC',
         flavor_text: 'Extra sharp',
         price: 70 * THOUSAND,
@@ -99,6 +102,7 @@ let upgrades = [
         }
     }, {
         name: 'Metal Grips',
+        background_color: '#f3d528',
         desc: 'Gain 3% of your OpS as OpC',
         flavor_text: 'Better grip for better smashin\'.',
         price: 500 * THOUSAND,
@@ -107,6 +111,7 @@ let upgrades = [
         }
     }, {
         name: 'Miner Battery',
+        background_color: '#f3d528',
         desc: 'Gain 2% of your Ops as OpC',
         flavor_text: 'Miners are battery powered right?',
         price: 3.5 * MILLION,
@@ -118,6 +123,7 @@ let upgrades = [
     // INCREASE OPS AND OPC MULTIPLIER
     {
         name: 'Baby Knowledge',
+        background_color: '#e092a4',
         desc: 'Increase overall OpS and OpC multiplier by 1%',
         flavor_text: 'Just a lil\' babby',
         price: 200,
@@ -126,6 +132,7 @@ let upgrades = [
         }
     }, {
         name: 'Adolescent Knowledge',
+        background_color: '#e092a4',
         desc: 'Increase overall OpS and OpC multiplier by 2%',
         flavor_text: 'Puberty Incoming',
         price: 16.5 * THOUSAND,
@@ -134,6 +141,7 @@ let upgrades = [
         }
     }, {
         name: 'Adult Knowledge',
+        background_color: '#e092a4',
         desc: 'Increase overall OpS and OpC multiplier by 3%',
         flavor_text: 'I still don\'t know anything',
         price: 1.35 * MILLION,
@@ -142,6 +150,7 @@ let upgrades = [
         }
     }, {
         name: 'Elder Knowledge',
+        background_color: '#e092a4',
         desc: 'increase overall OpS and OpC multiplier by 3%',
         flavor_text: 'Wise ol\' man.',
         price: 521 * MILLION,
@@ -150,6 +159,7 @@ let upgrades = [
         }
     }, {
         name: 'Eldritch Knowledge',
+        background_color: '#e092a4',
         desc: 'Increase overall OpS and OpC multiplier by 5%',
         flavor_text: 'We\'ve come so far.',
         price: 66.66666 * BILLION,
@@ -163,7 +173,7 @@ let upgrades = [
     // SCHOOL RELATED UPGRADES
     {
         name: 'Composition Notebooks',
-        img: 'https://via.placeholder.com/50',
+        background_color: '#6c6c6c',
         flavor_text: 'College Ruled!',
         price: 300,
         buy_functions: {
@@ -171,7 +181,8 @@ let upgrades = [
         }
     }, {
         name: 'No. 2 Pencil',
-        img: 'https://via.placeholder.com/50',
+        background_color: '#6c6c6c',
+        img: 'upgrade-no_2_pencil',
         flavor_text: 'Test ready!',
         price: 1000,
         buy_functions: {
@@ -179,7 +190,7 @@ let upgrades = [
         }
     }, {
         name: '3 Ring Binder',
-        img: 'https://via.placeholder.com/50',
+        background_color: '#6c6c6c',
         flavor_text: 'Be the Lord of the Rings with our new 2.5\" binder!',
         price: 12000,
         buy_functions: {
@@ -187,7 +198,7 @@ let upgrades = [
         }
     }, {
         name: 'Looseleaf',
-        img: 'https://via.placeholder.com/50',
+        background_color: '#6c6c6c',
         flavor_text: '"Can I borrow a sheet?"',
         price: 450000,
         buy_functions: {
@@ -195,7 +206,7 @@ let upgrades = [
         }
     }, {
         name: 'Schoolbag',
-        img: 'https://via.placeholder.com/50',
+        background_color: '#6c6c6c',
         flavor_text: 'Break your back carrying one of these stylish bags!',
         price: 5500000,
         buy_functions: {
@@ -203,6 +214,7 @@ let upgrades = [
         }
     }, {
         name: 'Fresh Pink Eraser',
+        background_color: '#6c6c6c',
         flavor_text: 'Never use this. Keep it pristine.',
         price: 22.5 * MILLION,
         buy_functions: {
@@ -210,6 +222,7 @@ let upgrades = [
         }
     }, {
         name: 'Pack of Ballpoint Pens',
+        background_color: '#6c6c6c',
         flavor_text: 'In a week, they\'ll be all gone.',
         price: 620 * MILLION,
         buy_functions: {
@@ -217,6 +230,7 @@ let upgrades = [
         }
     }, {
         name: 'Gum',
+        background_color: '#6c6c6c',
         flavor_text: 'You\'ll be the most popular kid in the class',
         price: 3 * TRILLION,
         buy_functions: {
@@ -224,6 +238,7 @@ let upgrades = [
         }
     }, {
         name: 'Hallpass',
+        background_color: '#6c6c6c',
         flavor_text: 'Wander the halls without a care in the world',
         price: 82 * TRILLION,
         buy_functions: {
@@ -231,6 +246,7 @@ let upgrades = [
         }
     }, {
         name: 'Report Card',
+        background_color: '#6c6c6c',
         flavor_text: 'Decides your fate for the upcoming months',
         price: 200 * TRILLION,
         buy_functions: {

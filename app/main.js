@@ -1,5 +1,7 @@
 const VERSION = 0.01
 
+let base_ore_max_hp = 50
+
 const BODY = s( 'body' )
 const CONTAINER = s( '.container' )
 const GAME_CONTAINER = s( '.game-container' )
@@ -265,7 +267,7 @@ let earn = ( amount, alter_hp = true ) => {
   if ( S.stats.current_ores_earned >= 200 ) unlock_upgrade( 'baby_knowledge' )
   if ( S.stats.current_ores_earned >= 16500 ) unlock_upgrade( 'adolescent_knowledge' )
   if ( S.stats.current_ores_earned >= 1.35 * MILLION ) unlock_upgrade( 'adult_knowledge' )
-  if ( S.stats.current_ores_earned >= 521 * MILLION ) unlock_upgrade( 'adult_knowledge' )
+  if ( S.stats.current_ores_earned >= 521 * MILLION ) unlock_upgrade( 'elder_knowledge' )
   if ( S.stats.current_ores_earned >= 66.66666 * BILLION ) unlock_upgrade( 'eldritch_knowledge' )
 
 }
@@ -394,8 +396,19 @@ let build_upgrades = () => {
   sorted_upgrades.forEach( upgrade => {
     if ( !upgrade.hidden && !upgrade.owned ) {
       str += `
-        <div class='upgrade' onclick="Upgrades[ ${ index } ].buy( event )" onmouseover="play_sound( 'store_item_hover' ); TT.show( event, { name: '${ upgrade.code_name }', type: 'upgrade' } )" onmouseout="TT.hide()">
+        <div 
+          `
+        if ( upgrade.background_color ) {
+          str += `style='background-color: ${ upgrade.background_color }'`
+        }
 
+        str += `
+          class='upgrade' 
+          onclick="Upgrades[ ${ index } ].buy( event )" 
+          onmouseover="play_sound( 'store_item_hover' ); TT.show( event, { name: '${ upgrade.code_name }', type: 'upgrade' } )" 
+          onmouseout="TT.hide()"
+          >
+          <img src="./app/assets/images/${ upgrade.img }.png" />
         </div>
       `
     }
@@ -1532,8 +1545,8 @@ let refine_animation = () => {
 let reset_state_and_buildings = () => {
 
   S.ores = 0
-  S.current_ore_hp = 50
-  S.current_ore_max_hp = 50
+  S.current_ore_hp = base_ore_max_hp  * Math.pow( 1.5, S.stats.times_refined )
+  S.current_ore_max_hp = base_ore_max_hp  * Math.pow( 1.5, S.stats.times_refined )
   S.stats.current_rocks_destroyed = 0
   S.stats.current_ores_earned = 0
   S.stats.current_ores_mined = 0

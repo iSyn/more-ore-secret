@@ -858,13 +858,24 @@ button {
     image-rendering: -moz-crisp-edges;
     image-rendering: -o-pixelated;
     image-rendering: pixelated;
-    background-color: #a0a0a0;
-    -webkit-box-shadow: 0 0 30px #222 inset;
-    box-shadow: 0 0 30px #222 inset;
-    cursor: pointer; }
+    background-color: #a1a1a1;
+    -webkit-box-shadow: 0 0 40px black inset;
+    box-shadow: 0 0 40px black inset;
+    cursor: pointer;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center; }
+    .upgrades-container .upgrade img {
+      pointer-events: none; }
     .upgrades-container .upgrade:hover {
-      -webkit-box-shadow: 0 0 10px #fff inset, 0 0 30px #222 inset;
-      box-shadow: 0 0 10px #fff inset, 0 0 30px #222 inset; }
+      -webkit-box-shadow: 0 0 10px #fff inset, 0 0 40px #222 inset;
+      box-shadow: 0 0 10px #fff inset, 0 0 40px #222 inset; }
 
 .tooltip {
   -webkit-box-orient: vertical;
@@ -895,8 +906,11 @@ button {
     -ms-flex-align: center;
     align-items: center; }
     .tooltip .top img {
-      height: 50px;
-      width: 50px; }
+      -ms-interpolation-mode: nearest-neighbor;
+      image-rendering: -webkit-optimize-contrast;
+      image-rendering: -moz-crisp-edges;
+      image-rendering: -o-pixelated;
+      image-rendering: pixelated; }
     .tooltip .top h1 {
       font-family: 'Germania One';
       padding-left: 10px;
