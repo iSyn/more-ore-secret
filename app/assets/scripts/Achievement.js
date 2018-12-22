@@ -48,8 +48,25 @@ let achievements = [
   // MINING RELATED ACHIEVEMENTS
   { name: 'Newbie Miner', desc: 'Break your first rock', reward: { increase_pickaxe_hardness: 5, increase_pickaxe_sharpness: 5 } },
   { name: 'Novice Miner', desc: 'Break 10 rocks' },
-  { name: 'Intermediate Miner', desc: 'Break 25 rocks', reward: { increase_pickaxe_hardness: 15, increase_pickaxe_sharpness: 15 } },
-  { name: 'Advanced Miner', desc: 'Break 100 rocks', reward: { increase_pickaxe_hardness: 30, increase_pickaxe_sharpness: 30 } },
+  { name: 'Intermediate Miner', desc: 'Break 25 rocks' },
+  { name: 'Advanced Miner', desc: 'Break 50 rocks', reward: { increase_pickaxe_hardness: 15, increase_pickaxe_sharpness: 15 } },
+  { name: 'Master Miner', desc: 'Break 100 rocks', reward: { increase_pickaxe_hardness: 20, increase_pickaxe_sharpness: 20 } },
+  { name: 'Chief Miner', desc: 'Break 200 rocks', reward: { increase_pickaxe_hardness: 30, increase_pickaxe_sharpness: 30} },
+  { name: 'Exalted Miner', desc: 'Break 500 rocks', reward: { increase_pickaxe_hardness: 50, increase_pickaxe_sharpness: 50 } },
+  { name: 'God Miner', desc: 'Break 1000 rocks', reward: { increase_pickaxe_hardness: 100, increase_pickaxe_sharpness: 100 } },
+
+  // OPC RELATED ACHIEVEMENTS
+  { name: 'Not even a scratch', desc: 'Deal more than 100 damage from a hit' },
+  { name: 'Didnt even hurt', desc: 'Deal more than 1,000 damage from a hit' },
+  { name: 'That tickled', desc: 'Deal more than 100,000 damage from a hit' },
+  { name: 'I felt that', desc: 'Deal more than 1,000,000 damage from a hit' },
+
+  // OPS RELATED ACHIEVEMENTS
+  { name: 'Ore-aid Stand', desc: 'Reach 50 OpS' },
+  { name: 'Ore Store', desc: 'Reach 10,000 OpS' },
+  { name: '401k', desc: 'Reach 401,000 OpS' },
+  { name: 'Retirement Plan', desc: 'Reach 5,000,000 OpS' },
+  { name: 'Hedge Fund', desc: '1,000,000,000 OpS' },
 
   // REFINE RELATED ACHIEVEMENTS
   { name: 'Babies First Refine', desc: 'Refine for your first time' },

@@ -32,6 +32,14 @@
       padding-right: 10px;
       letter-spacing: .8px;
     }
+
+    .upgrade-price, .building-price {
+      padding-left: 20px;
+
+      &.not-enough {
+        color: #c70000;
+      }
+    }
   }
 
   hr {

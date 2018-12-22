@@ -303,12 +303,13 @@ let load_buildings = async () => {
     return new Promise( resolve => {
 
         Buildings = []
-        
+        let base_buildings = buildings
+
         if ( localStorage.getItem( 'buildings' ) ) {
-            buildings = JSON.parse( localStorage.getItem( 'buildings' ) )
+            base_buildings = JSON.parse( localStorage.getItem( 'buildings' ) )
         }
 
-        buildings.forEach( b => new Building( b ) )
+        base_buildings.forEach( b => new Building( b ) )
 
         resolve()
 

@@ -233,7 +233,7 @@ let Tooltip = function() {
           <div class='top'>
             <img src='${ item.img }' alt='upgrade image' />
             <h1>${ item.name }</h1>
-            <p>${ beautify_number( item.price ) } ores</p>
+            <p class='upgrade-price ${ S.ores < item.price && 'not-enough' }'>${ beautify_number( item.price ) } ores</p>
           </div>
           <hr />
           <div class='bottom'>
@@ -251,7 +251,7 @@ let Tooltip = function() {
           <div class='top'>
             <img src='./app/assets/images/building-${ item.img }.png' alt='building image' />
             <h1>${ item.name }</h1>
-            <p>Cost: ${ beautify_number( item.current_price ) } ores</p>
+            <p class='building-price ${ S.ores < item.current_price && 'not-enough' }'>${ beautify_number( item.current_price ) } ores</p>
           </div>
           <hr />
           <div class='bottom'>

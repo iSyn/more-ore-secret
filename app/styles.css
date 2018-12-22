@@ -240,7 +240,8 @@ button {
             width: 100%;
             text-align: center;
             font-family: 'Germania One';
-            letter-spacing: 1px; }
+            letter-spacing: 1px;
+            pointer-events: none; }
             .container .game-container > .left .ore-container-wrapper .ore-container .ore-hp .ore-hp-bar-container {
               top: 20px;
               position: relative;
@@ -905,6 +906,10 @@ button {
       font-size: 30px;
       padding-right: 10px;
       letter-spacing: .8px; }
+    .tooltip .top .upgrade-price, .tooltip .top .building-price {
+      padding-left: 20px; }
+      .tooltip .top .upgrade-price.not-enough, .tooltip .top .building-price.not-enough {
+        color: #c70000; }
   .tooltip hr {
     margin: 10px 0;
     border-color: rgba(255, 255, 255, 0.2); }

@@ -388,7 +388,10 @@ let build_store_tab = () => {
 let build_upgrades = () => {
   let str = '<div class="upgrades-container">'
   let index = 0
-  Upgrades.forEach( upgrade => {
+
+  let sorted_upgrades = Upgrades.sort( ( a, b ) => a.price - b.price )
+
+  sorted_upgrades.forEach( upgrade => {
     if ( !upgrade.hidden && !upgrade.owned ) {
       str += `
         <div class='upgrade' onclick="Upgrades[ ${ index } ].buy( event )" onmouseover="play_sound( 'store_item_hover' ); TT.show( event, { name: '${ upgrade.code_name }', type: 'upgrade' } )" onmouseout="TT.hide()">
@@ -461,7 +464,7 @@ let build_buildings = () => {
           </div>
           <div class="middle">
             <h1>${ building.name } ${ S.buy_amount != 1 ? "x" + S.buy_amount : "" }</h1>
-            <p><img class='ore-small' src='./app/assets/images/ore.png' /> <span>${ beautify_number( get_geometric_sequence_price( building.base_price, building.price_scale, building.owned, building.current_price ).price ) }</span> </p>
+            <p><img class='ore-small' src='./app/assets/images/ore.png' /> <span class='${ S.ores < get_geometric_sequence_price( building.base_price, building.price_scale, building.owned, building.current_price ).price && "not-enough" }'>${ beautify_number( get_geometric_sequence_price( building.base_price, building.price_scale, building.owned, building.current_price ).price ) }</span> </p>
           </div>
           <div class="right">
             <h1>${ building.owned }</h1>
@@ -1086,6 +1089,12 @@ let calculate_ops = () => {
 
   S.ops = ops
 
+  if ( ops >= 50 ) win_achievement( 'ore-aid_stand' )
+  if ( ops >= 10 * THOUSAND ) win_achievement( 'ore_store' )
+  if ( ops >= 401 * THOUSAND ) win_achievement( '401k' )
+  if ( ops >= 5 * MILLION ) win_achievement( 'retirement_plan' )
+  if ( ops >= 1 * BILLION ) win_achievement( 'hedge_fund' )
+
   if ( S.ops >= 10 ) unlock_upgrade( 'flashlight' )
   if ( S.ops >= 500 ) unlock_upgrade( 'double_polish' )
   if ( S.ops >= 10 * THOUSAND ) unlock_upgrade( 'metal_grips' )
@@ -1124,6 +1133,11 @@ let generate_weak_spot = () => {
 let handle_click = ( e, type ) => {
 
   let opc = calculate_opc( type )
+
+  if ( opc >= 100 ) win_achievement( 'not_even_a_scratch' )
+  if ( opc >= 1000 ) win_achievement( 'didnt_even_hurt' )
+  if ( ops >= 100 * THOUSAND ) win_achievement( 'that_tickled' )
+  if ( ops >= 1 * MILLION ) win_achievement( 'i_felt_that' )
 
   if ( type ) {
     play_sound( 'ore_weak_spot_hit' )
@@ -1518,6 +1532,8 @@ let refine_animation = () => {
 let reset_state_and_buildings = () => {
 
   S.ores = 0
+  S.current_ore_hp = 50
+  S.current_ore_max_hp = 50
   S.stats.current_rocks_destroyed = 0
   S.stats.current_ores_earned = 0
   S.stats.current_ores_mined = 0
@@ -1528,6 +1544,10 @@ let reset_state_and_buildings = () => {
 
   Upgrades = []
   upgrades.forEach( upgrade => new Upgrade( upgrade ) )
+
+  if ( s( '.item-container' ) ) {
+    document.querySelectorAll( '.item-container' ).forEach( i => remove_el( i ) )
+  }
 
   O.recalculate_opc = 1
   O.recalculate_ops = 1
@@ -2461,7 +2481,7 @@ let game_loop = () => {
     if ( O.counter % S.prefs.game_speed == 0 ) {
       S.stats.seconds_played++
       if ( O.current_tab == 'store' ) update_building_prices()
-      if ( S.ops > 0 && S.prefs.show_ops_rising_numbers ) RN.new( null, 'buildings', S.ops )
+      if ( S.ops > 0 && S.prefs.show_rising_numbers ) RN.new( null, 'buildings', S.ops )
     }
 
     // THIS RUNS EVERY --------------------------------- ↓ seconds
@@ -2504,7 +2524,11 @@ let update_ore_hp = ( amount ) => {
     if ( S.stats.total_rocks_destroyed == 1 ) win_achievement( 'newbie_miner' )
     if ( S.stats.total_rocks_destroyed == 10 ) win_achievement( 'novice_miner' )
     if ( S.stats.total_rocks_destroyed == 25 ) win_achievement( 'intermediate_miner' )
-    if ( S.stats.total_rocks_destroyed == 100 ) win_achievement( 'advanced_miner' )
+    if ( S.stats.total_rocks_destroyed == 50 ) win_achievement( 'advanced_miner' )
+    if ( S.stats.total_rocks_destroyed == 100 ) win_achievement( 'master_miner' )
+    if ( S.stats.total_rocks_destroyed == 200 ) win_achievement( 'chief_miner' )
+    if ( S.stats.total_rocks_destroyed == 500 ) win_achievement( 'exalted_miner' )
+    if ( S.stats.total_rocks_destroyed == 1000 ) win_achievement( 'god_miner' )
 
   } else {
     S.current_ore_hp -= amount
@@ -2995,4 +3019,4 @@ window.addEventListener('keyup', (e) => {
   }
 })
 
-setInterval( save_game, 1000 * 60 * 5 )
+setInterval( save_game, 1000 * 60 )

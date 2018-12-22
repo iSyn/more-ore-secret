@@ -380,12 +380,13 @@ let load_smith_upgrades = () => {
     return new Promise( resolve => {
 
         Smith_Upgrades = []
+        let base_smith_upgrades = smith_upgrades
 
         if ( localStorage.getItem( 'smith_upgrades' ) ) {
-            smith_upgrades = JSON.parse( localStorage.getItem( 'smith_upgrades' ) )
+            base_smith_upgrades = JSON.parse( localStorage.getItem( 'smith_upgrades' ) )
         }
 
-        smith_upgrades.forEach( u => new SmithUpgrade( u ))
+        base_smith_upgrades.forEach( u => new SmithUpgrade( u ))
 
         resolve()
 

@@ -69,6 +69,8 @@ let Upgrade = function( obj ) {
             O.recalculate_opc = 1
             O.recalculate_ops = 1
 
+        } else {
+            notify( 'Not enough ores', 'red', 'error' )
         }
     }
 
@@ -674,12 +676,13 @@ let load_upgrades = () => {
     return new Promise( resolve => {
 
         Upgrades = []
+        let base_upgrades = upgrades
 
         if ( localStorage.getItem( 'upgrades' ) ) {
-            upgrades = JSON.parse( localStorage.getItem( 'upgrades' ) )
+            base_upgrades = JSON.parse( localStorage.getItem( 'upgrades' ) )
         }
 
-        upgrades.forEach( u => new Upgrade( u ))
+        base_upgrades.forEach( u => new Upgrade( u ))
 
         resolve()
 
