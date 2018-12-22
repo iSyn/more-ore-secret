@@ -1655,10 +1655,22 @@ input:checked + .slider:before {
     opacity: 0; } }
 
 .wrapper > .stats-container {
-  width: 440px; }
+  width: 390px; }
   .wrapper > .stats-container ul {
     list-style-type: none;
-    font-size: 14px; }
+    font-size: 14px;
+    padding: 20px 40px;
+    background: rgba(0, 0, 0, 0.2);
+    -webkit-box-shadow: 0 0 20px #0e0e0e inset;
+    box-shadow: 0 0 20px #0e0e0e inset;
+    border-radius: 10px;
+    margin: 20px auto;
+    width: -webkit-fit-content;
+    width: -moz-fit-content;
+    width: fit-content;
+    text-align: center; }
+    .wrapper > .stats-container ul h2 {
+      font-family: 'Germania One'; }
     .wrapper > .stats-container ul li {
       letter-spacing: .5px;
       padding: 1px 0; }

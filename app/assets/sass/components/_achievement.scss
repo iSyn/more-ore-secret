@@ -92,11 +92,22 @@
 }
 
 .wrapper > .stats-container {
-  width: 440px;
+  width: 390px;
 
   ul {
     list-style-type: none;
     font-size: 14px;
+    padding: 20px 40px;
+    background: rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 20px #0e0e0e inset;
+    border-radius: 10px;
+    margin: 20px auto;
+    width: fit-content;
+    text-align: center;
+
+    h2 {
+      font-family: 'Germania One';
+    }
 
     li {
       letter-spacing: .5px;

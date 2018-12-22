@@ -2613,10 +2613,9 @@ let build_achievements = () => {
 
   let str = `
     <div class='stats-container'>
-      <h1>Statistics</h1>
-      <hr/>
-
+      <h1>Achievements</h1>
       <ul>
+        <h2>Stats</h2>
         <li><span>Highest Combo: ${ S.stats.highest_combo }</li>
         <li><span>Total Clicks:</span> ${ S.stats.total_clicks }</li>
         <li><span>Total Weak Spot Clicks:</span> ${ S.stats.total_weak_hit_clicks }</li>
@@ -2630,7 +2629,6 @@ let build_achievements = () => {
         <li><span>Total Gold Nuggets Clicked:</span> ${ S.stats.total_nuggets_clicked } </li>
         <li><span>Total Gold Nuggets Missed:</span> ${ S.stats.total_nuggets_missed }</li>
       </ul>
-      <hr/>
       <div class='achievement-container'>
         `
         Achievements.forEach( achievement => {
