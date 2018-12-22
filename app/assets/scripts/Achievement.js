@@ -103,7 +103,7 @@ let achievements = [
   { name: 'Worm Scarf', desc: 'Complete the Venal Corruption 5 times', type: 'quest', reward: { increase_quest_speed: .05 } },
   { name: 'Crystallization', desc: 'Complete the Crystal Mines 5 times', type: 'quest', reward: { increase_quest_speed: .05 } },
 
-  { name: 'Gold Rush Aficionado', desc: 'Grab all falling gold nuggets during a gold rush', type: 'gold rush' },
+  { name: 'Pinpoint Accuracy', desc: 'Grab all falling gold nuggets during a gold rush', type: 'gold rush' },
 
   // SECRET ACHIEVEMENTS
   { name: 'Who am I?', desc: 'Figure out the developers name', type: 'secret' },

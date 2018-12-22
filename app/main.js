@@ -1136,8 +1136,8 @@ let handle_click = ( e, type ) => {
 
   if ( opc >= 100 ) win_achievement( 'not_even_a_scratch' )
   if ( opc >= 1000 ) win_achievement( 'didnt_even_hurt' )
-  if ( ops >= 100 * THOUSAND ) win_achievement( 'that_tickled' )
-  if ( ops >= 1 * MILLION ) win_achievement( 'i_felt_that' )
+  if ( opc >= 100 * THOUSAND ) win_achievement( 'that_tickled' )
+  if ( opc >= 1 * MILLION ) win_achievement( 'i_felt_that' )
 
   if ( type ) {
     play_sound( 'ore_weak_spot_hit' )
@@ -2925,23 +2925,21 @@ let start_gold_rush = () => {
 
   CONTAINER.append( gold_rush_container )
 
+  let counter = 0
   let spawner = setInterval(() => {
 
-    nuggets_to_spawn--
+    counter++
 
-    if ( nuggets_to_spawn <= 0 ) clearInterval( spawner )
+    if ( counter >= nuggets_to_spawn ) clearInterval( spawner )
 
     let nugget = document.createElement( 'div' )
     nugget.classList.add( 'gold-nugget' )
     nugget.onclick = ( e ) => {
       nuggets_clicked++
       handle_gold_nugget_click( e, 'gold rush' )
+      if ( nuggets_clicked == nuggets_to_spawn ) win_achievement( 'pinpoint_accuracy')
     }
-    nugget.addEventListener( 'animationend', () => {
-      remove_el( nugget ) 
-      if ( nuggets_clicked == nuggets_to_spawn ) win_achievement( 'gold_rush_aficionado' )
-      nuggets_clicked = 0
-    } )
+    nugget.addEventListener( 'animationend', () => remove_el( nugget ) )
 
     s( '.gold-rush-container' ).append( nugget )
 
