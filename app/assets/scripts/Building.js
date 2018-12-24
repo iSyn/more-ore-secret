@@ -25,7 +25,6 @@ let Building = function( obj ) {
             play_sound( 'buy_sound' )
             this.owned += buy_info.amount
             this.current_price = this.base_price * Math.pow( this.price_scale, this.owned )
-            calculate_ops()
 
             __update_hidden( this.code_name )
 
@@ -40,6 +39,8 @@ let Building = function( obj ) {
             }
 
             O.rebuild_store_tab = 1
+            O.recalculate_opc = 1
+            O.recalculate_ops = 1
         }
 
         if ( s( '#tutorial-buy-building' ) ) {

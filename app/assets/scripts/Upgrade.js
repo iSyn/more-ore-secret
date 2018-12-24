@@ -258,6 +258,7 @@ let upgrades = [
     {
         name: 'Manure Spreader',
         flavor_text: 'The poop helps the ore mature',
+        background_color: '#beff00',
         price: 950,
         buy_functions: {
             increase_building_production: { building: 'farm', multi: 2 }
@@ -265,6 +266,7 @@ let upgrades = [
     }, {
         name: 'Pitchfork',
         flavor_text: 'Torches not included',
+        background_color: '#beff00',
         price: 12.5 * THOUSAND,
         buy_functions: {
             increase_building_production: { building: 'farm', multi: 2 }
@@ -272,6 +274,7 @@ let upgrades = [
     }, {
         name: 'Tractor',
         flavor_text: 'im in me mums tractor',
+        background_color: '#beff00',
         price: 265 * THOUSAND,
         buy_functions: {
             increase_building_production: { building: 'farm', multi: 2 }
@@ -279,6 +282,7 @@ let upgrades = [
     }, {
         name: 'Rotary Cutter',
         flavor_text: 'Not even grass can stop us now',
+        background_color: '#beff00',
         price: 3.45 * MILLION,
         buy_functions: {
             increase_building_production: { building: 'farm', multi: 2 }
@@ -286,6 +290,7 @@ let upgrades = [
     }, {
         name: 'Hoe',
         flavor_text: 'Torches not included',
+        background_color: '#beff00',
         price: 69 * MILLION,
         buy_functions: {
             increase_building_production: { building: 'farm', multi: 2 }
@@ -293,6 +298,7 @@ let upgrades = [
     }, {
         name: 'Baler',
         flavor_text: '"How many people a year do you think get their arms cut off in a baler?"',
+        background_color: '#beff00',
         price: 400 * MILLION,
         buy_functions: {
             increase_building_production: { building: 'farm', multi: 2 }
@@ -300,6 +306,7 @@ let upgrades = [
     }, {
         name: 'Sprayer',
         flavor_text: 'Spray\'er?, I hardly know her.',
+        background_color: '#beff00',
         price: 2.3 * TRILLION,
         buy_functions: {
             increase_building_production: { building: 'farm', multi: 2 }
@@ -307,6 +314,7 @@ let upgrades = [
     }, {
         name: 'Sickle',
         flavor_text: 'For easy sickle-ing of course.',
+        background_color: '#beff00',
         price: 47.3 * MILLION,
         buy_functions: {
             increase_building_production: { building: 'farm', multi: 2 }
@@ -314,6 +322,7 @@ let upgrades = [
     }, {
         name: 'Scythe',
         flavor_text: 'Looks like an upgraded sickle.',
+        background_color: '#beff00',
         price: 700 * MILLION,
         buy_functions: {
             increase_building_production: { building: 'farm', multi: 2 }
@@ -321,6 +330,7 @@ let upgrades = [
     }, {
         name: 'Milking Machine',
         flavor_text: 'Rich in vitamin O. O for Ore.',
+        background_color: '#beff00',
         price: 1.8 * BILLION,
         buy_functions: {
             increase_building_production: { building: 'farm', multi: 2 }
@@ -473,7 +483,6 @@ let upgrades = [
     // FACTORY RELATED UPGRADES
     {
         name: 'Rubber Conveyor Belt',
-        img: 'https://via.placeholder.com/50',
         desc: 'Doubles the production of Factories',
         flavor_text: 'These moves the things to there, that\'s all I know',
         price: 300000,
@@ -482,7 +491,6 @@ let upgrades = [
         }
     }, {
         name: 'Floppy Squiggle Tubes',
-        img: 'https://via.placeholder.com/50',
         desc: 'Triples the production of Factories',
         flavor_text: 'If I could tell you what these were for you\'d buy twice as many.',
         price: 300000,
@@ -491,7 +499,6 @@ let upgrades = [
         }
     }, {
         name: 'Clicky Squish Buttons',
-        img: 'https://via.placeholder.com/50',
         desc: 'Doubles the production of Factories',
         flavor_text: 'These go next to the Squishy Click Buttons',
         price: 44000000,
@@ -500,7 +507,6 @@ let upgrades = [
         }
     }, {
         name: 'Metallic Magnetic Panels',
-        img: 'https://via.placeholder.com/50',
         desc: 'Triples the production of Factories',
         flavor_text: 'These are actually for my fridge',
         price: 800000000,
@@ -509,7 +515,6 @@ let upgrades = [
         }
     }, {
         name: 'Hydroponic Auxilleration',
-        img: 'https://via.placeholder.com/50',
         desc: 'Quintuples the production of Factories',
         flavor_text: 'Aquaman is here to stay',
         price: 5300000000,
@@ -520,7 +525,6 @@ let upgrades = [
     // CRYPT RELATED UPGRADES
     {
         name: 'Metal Sarcophagus',
-        img: 'https://via.placeholder.com/50',
         desc: 'Doubles the production of Crypts',
         flavor_text: 'Sellers note: sarcophagus does not come with mummy preinstalled.',
         price: 5200000,
@@ -529,7 +533,6 @@ let upgrades = [
         }
     }, {
         name: 'Scarecrow',
-        img: 'https://via.placeholder.com/50',
         desc: 'Triples the production of Crypts',
         flavor_text: 'Scare the dead miners away',
         price: 72000000,
@@ -538,7 +541,6 @@ let upgrades = [
         }
     }, {
         name: 'Polished Shovel',
-        img: 'https://via.placeholder.com/50',
         desc: 'Doubles the production of Crypts',
         flavor_text: 'Tool of choice for a Knight or an archaeologist.',
         price: 150000000,
@@ -547,7 +549,6 @@ let upgrades = [
         }
     },  {
         name: 'Fresh Bandages',
-        img: 'https://via.placeholder.com/50',
         desc: 'Triples the production of Crypts',
         flavor_text: 'Even though used were $40 cheaper...',
         price: 2500000000,
@@ -556,7 +557,6 @@ let upgrades = [
         }
     },  {
         name: 'Oil Lanterns',
-        img: 'https://via.placeholder.com/50',
         desc: 'Triples the production of Crypts',
         flavor_text: 'Sets the mood ;)',
         price: 50000000000,
@@ -567,7 +567,6 @@ let upgrades = [
     // HOSPITAL RELATED UPGRADES
     {
         name: 'Immunization Shot',
-        img: 'https://via.placeholder.com/50',
         desc: 'Doubles the production of Hospitals',
         flavor_text: 'wip',
         price: 10000000,
@@ -576,7 +575,6 @@ let upgrades = [
         }
     }, {
         name: 'Blood Test',
-        img: 'https://via.placeholder.com/50',
         desc: 'Find out the blood type of your ores to better understand them.',
         flavor_text: 'wip',
         price: 300000000,
@@ -585,7 +583,6 @@ let upgrades = [
         }
     }, {
         name: 'Blood Transfusion',
-        img: 'https://via.placeholder.com/50',
         desc: 'Doubles the production of Hospitals',
         flavor_text: 'Give the ores what they want: blood.',
         price: 2900000000,
@@ -594,7 +591,6 @@ let upgrades = [
         }
     }, {
         name: 'CAT Scan',
-        img: 'https://via.placeholder.com/50',
         desc: 'Triples the production of Hospitals',
         flavor_text: 'Not to be confused with PET scan.',
         price: 82000000000,
@@ -603,7 +599,6 @@ let upgrades = [
         }
     }, {
         name: 'Enhancement Surgery',
-        img: 'https://via.placeholder.com/50',
         desc: 'Quintuples the production of Hospitals',
         flavor_text: 'wip',
         price: 900000000000,
@@ -614,7 +609,6 @@ let upgrades = [
     // CITADEL RELATED UPGRADES
     {
         name: 'Council of Rocks',
-        img: 'https://via.placeholder.com/50',
         desc: 'Doubles the production of Citadels',
         flavor_text: 'Council of Rocks, not the Council of Ricks',
         price: 400000000,
@@ -625,7 +619,6 @@ let upgrades = [
     // XENO SPACESHIP RELATED UPGRADES
     {
         name: 'Jet Fuel',
-        img: 'https://via.placeholder.com/50',
         desc: 'Doubles the production of Xeno Spaceships',
         flavor_text: 'Steel beams nowhere in sight',
         price: 5500000000,
@@ -636,7 +629,6 @@ let upgrades = [
     // SKY CASTLE RELATED ACHIEVEMENTS
     {
         name: 'Golden Eggs',
-        img: 'https://via.placeholder.com/50',
         desc: 'Doubles the production of Sky Castles',
         flavor_text: 'wip',
         price: 95000000000,
@@ -647,7 +639,6 @@ let upgrades = [
     // EON PORTAL RELATED ACHIEVEMENTS
     {
         name: 'Green Goop',
-        img: 'https://via.placeholder.com/50',
         desc: 'Doubles the production of Eon Portals',
         flavor_text: 'Goopy!',
         price: 150000000000,
@@ -658,7 +649,6 @@ let upgrades = [
     // SACRED MINE RELATED ACHIEVEMENTS
     {
         name: 'Sacred Mine Upgrade I',
-        img: 'https://via.placeholder.com/50',
         desc: 'Doubles the production of Sacred Mines',
         flavor_text: 'wip',
         price: 2200000000000,
@@ -669,7 +659,6 @@ let upgrades = [
     // O.A.R.D.I.S. RELATED ACHIEVEMENTS
     {
         name: 'O.A.R.D.I.S. Upgrade I',
-        img: 'https://via.placeholder.com/50',
         desc: 'Doubles the production of O.A.R.D.I.S.',
         flavor_text: 'wip',
         price: 50000000000000,

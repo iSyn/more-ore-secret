@@ -2637,7 +2637,7 @@ let build_achievements = () => {
         <li><span>Total Rocks Destroyed:</span> ${ S.stats.total_rocks_destroyed }</li>
         <li><span>Total Ores Earned:</span> ${ beautify_number( S.stats.total_ores_earned ) }</li>
         <li><span>Total Ores Mined:</span> ${ beautify_number( S.stats.total_ores_manually_mined ) }</li>
-        <li><span>Total Refined Ores Earned:</span> ${ S.stats.total_refined_ores_earned }</li>
+        <li><span>Total Refined Ores Earned:</span> ${ beautify_number( S.stats.total_refined_ores_earned ) }</li>
         <li><span>Total Gold Nuggets Spawned:</span> ${ S.stats.total_nuggets_spawned }</li>
         <li><span>Total Gold Nuggets Clicked:</span> ${ S.stats.total_nuggets_clicked } </li>
         <li><span>Total Gold Nuggets Missed:</span> ${ S.stats.total_nuggets_missed }</li>
