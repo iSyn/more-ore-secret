@@ -186,42 +186,29 @@ let Tooltip = function() {
       case 'smith_upgrade':
         item = select_from_arr( Smith_Upgrades, obj.name )
 
-        if ( item.locked ) {
+        str += `
+          <div class="top" style='padding-bottom: 10px;'>
+            <img src="${ item.img }" alt="smith upgrade image"/>
+            <h1>${ item.name } ${ item.repeatable ? "<small>[ level: " + item.level + " ]</small>" : "" }</h1>
+          </div>
+          <div class="bottom" style='display: flex; flex-flow: row nowrap; justify-content: center;'>
+            <div class="left" style='width: 20%; text-align: right; padding-right: 10px; border-right: 1px solid white;'>
+              <p style='
+                padding-bottom: 2px;
+                display: flex;
+                flex-flow: row nowrap;
+                justify-content: flex-end;
+                align-items: center;'>${ beautify_number( item.price ) } &nbsp; <img style='height: 15px;' src='./app/assets/images/refined-ore.png' /></p>
+              <p style='padding-bottom: 2px;'>${ beautify_ms( item.duration ) } &nbsp; <i class="fa fa-clock-o fa-1x"></i></p>
+            </div>
+            <div class="right" style='width: 80%; padding-left: 10px'>
+              <p>${ item.desc }</p>
+            </div>
+          </div>
+        `
 
-          str += `
-            <div class='top'>
-              <img style='filter: brightness( 0% )' src='${ item.img }'/>
-              <h1>???</h1>
-            </div>
-            <div class='bottom'>
-              <p style='color: red'>-LOCKED-</p>
-            </div>
-          `
-        } else {
-          str += `
-            <div class="top" style='padding-bottom: 10px;'>
-              <img src="${ item.img }" alt="smith upgrade image"/>
-              <h1>${ item.name }</h1>
-            </div>
-            <div class="bottom" style='display: flex; flex-flow: row nowrap; justify-content: center;'>
-              <div class="left" style='width: 20%; text-align: right; padding-right: 10px; border-right: 1px solid white;'>
-                <p style='
-                  padding-bottom: 2px;
-                  display: flex;
-                  flex-flow: row nowrap;
-                  justify-content: flex-end;
-                  align-items: center;'>${ item.price } &nbsp; <img style='height: 15px;' src='./app/assets/images/refined-ore.png' /></p>
-                <p style='padding-bottom: 2px;'>${ beautify_ms( item.duration ) } &nbsp; <i class="fa fa-clock-o fa-1x"></i></p>
-              </div>
-              <div class="right" style='width: 80%; padding-left: 10px'>
-                <p>${ item.desc }</p>
-              </div>
-            </div>
-          `
-
-          if ( item.flavor_text ) {
-            str += `<p class='flavor-text'>${ item.flavor_text }</p>`
-          }
+        if ( item.flavor_text ) {
+          str += `<p class='flavor-text'>${ item.flavor_text }</p>`
         }
         
         break

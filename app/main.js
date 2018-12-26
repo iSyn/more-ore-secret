@@ -533,14 +533,16 @@ let build_smith_tab = () => {
 
   str += build_inventory_accordion()
 
-  str += '<div class="smith-progress-container" onclick="SMITH.progress_click()">'
-  str += build_pickaxe_update()
-  str += '</div>'
-  str += "<div class='horizontal-separator thin dark'></div>"
-
+  str += '<div class="smith-upgrades-wrapper">'
+  str += '<div class="smith-upgrades-container">'
   str += '<div class="smith-upgrades">'
   str += build_smith_upgrades()
-  str += '</div>'
+  str += '</div></div>'
+
+  str += '<div class="smith-progress-container" onclick="SMITH.progress_click()">'
+  if( !is_empty( SMITH.upgrade_in_progress ) ) str += "<div class='horizontal-separator thin dark'></div>"
+  str += build_pickaxe_update()
+  str += '</div></div>'
 
   TAB_CONTENT.innerHTML = str
   TAB_CONTENT.classList.add( 'smith' )
@@ -548,19 +550,33 @@ let build_smith_tab = () => {
 }
 
 let build_pickaxe_update = ( direct = false ) => {
+
   let str = ''
 
-  is_empty( SMITH.upgrade_in_progress ) ? 
-    str += '<p style="text-align: center; width: 100%; opacity: 0.5">No upgrade in progress</p>' :
-      str += `
-        <img src="${ SMITH.upgrade_in_progress.img }" alt="smith upgrade"/>
-        <div>
-          <p>${ SMITH.upgrade_in_progress.name }</p>
-          <div class="progress-bar-container">
-            <div class="progress-bar"></div>
-          </div>
+  if ( !is_empty( SMITH.upgrade_in_progress ) ) {
+    str += `
+      <img src="${ SMITH.upgrade_in_progress.img }" alt="smith upgrade"/>
+      <div>
+        <p>${ SMITH.upgrade_in_progress.name }</p>
+        <div class="progress-bar-container">
+          <div class="progress-bar"></div>
         </div>
-      `
+      </div>
+    `
+  }
+
+  // is_empty( SMITH.upgrade_in_progress ) ? 
+  //   str += '<p style="text-align: center; width: 100%; opacity: 0.5">No upgrade in progress</p>'
+  //   :
+  //   str += `
+  //     <img src="${ SMITH.upgrade_in_progress.img }" alt="smith upgrade"/>
+  //     <div>
+  //       <p>${ SMITH.upgrade_in_progress.name }</p>
+  //       <div class="progress-bar-container">
+  //         <div class="progress-bar"></div>
+  //       </div>
+  //     </div>
+  //   `
 
   if ( direct ) {
     if ( s( '.smith-progress-container' ) ) {
@@ -574,25 +590,44 @@ let build_pickaxe_update = ( direct = false ) => {
 
 let build_smith_upgrades = ( direct = false ) => {
 
-  let locked_upgrades = []
   let owned_upgrades = []
+  let repeatables = []
+  let non_repeatables = []
+
+  Smith_Upgrades.forEach( upgrade => upgrade.repeatable ? repeatables.push( upgrade) : non_repeatables.push( upgrade ) )
 
   let str = ''
 
   str += '<p class="available-upgrade-text">Available Upgrades</p>'
 
-  Smith_Upgrades.sort( ( a, b ) => a.price - b.price )
+  str += '<div class="repeatables">'
+  repeatables.forEach( upgrade => {
+    str += `
+      <div
+        class='smith-upgrade repeatable'
+        onmouseover='TT.show( event, { name: "${ upgrade.code_name }", type: "smith_upgrade" } )'
+        onmouseout='TT.hide()'
+        onclick='start_smith_upgrade( Smith_Upgrades, "${ upgrade.code_name }" )'
+      >
+        <img src="./app/assets/images/${ upgrade.img }.png">
+      </div>
+    `
+  })
+
+  str += '</div>'
+
+  non_repeatables.sort( ( a, b ) => a.price - b.price )
     .forEach( upgrade => {
       upgrade.type = 'smith_upgrade'
       if ( !upgrade.owned && !upgrade.locked ) {
         str += `
           <div 
             class="smith-upgrade"
-            style='background: url("${ upgrade.img }")'
             onmouseover='TT.show( event, { name: "${ upgrade.code_name }", type: "smith_upgrade" }); handle_smith_upgrade_hover( "${ upgrade.code_name }" )'
             onmouseout='TT.hide()'
             onclick='start_smith_upgrade( Smith_Upgrades, "${ upgrade.code_name }")'
             >
+              <h1>${ upgrade.name }</h1>
             `
 
             if ( upgrade.new ) str += '<div class="new">New!</div>'
@@ -600,25 +635,9 @@ let build_smith_upgrades = ( direct = false ) => {
             str += `</div>`
       } else {
         if ( upgrade.owned ) owned_upgrades.push( upgrade )
-        if ( upgrade.locked ) locked_upgrades.push( upgrade )
       }
     })
 
-  if ( locked_upgrades.length > 0 ) {
-    str += '<p class="locked-upgrade-text">Locked Upgrades</p>'
-
-    locked_upgrades.forEach( upgrade => {
-      str += `
-        <div 
-          class="smith-upgrade locked"
-          style='background: url("${ upgrade.img }");'
-          onmouseover='TT.show( event, { name: "${ upgrade.code_name }", type: "smith_upgrade"})'
-          onmouseout='TT.hide()'
-          >
-        </div>
-      `
-    })
-  }
 
   if ( owned_upgrades.length > 0 ) {
     str += '<p>Owned Upgrades</p>'
@@ -889,6 +908,8 @@ let get_skill_line_positions = ( from, to, base_skill, target_skill, base_skill_
 let calculate_pickaxe_damage = () => {
 
   let damage = S.pickaxe.item.damage
+
+  damage += S.pickaxe.permanent_bonuses.damage
 
   let flat_damage = [ 'ruby' ]
   let percent_damage = [ 'citrine' ]
@@ -1208,10 +1229,14 @@ let handle_click = ( e, type ) => {
 
 let handle_text_scroller = () => {
 
+  console.log( 'handle text scroller firing', TS.queue )
+
   let animation_speed = 20
+  setTimeout( handle_text_scroller, 1000 * animation_speed )
 
   if ( !O.window_blurred ) {
-    if ( Math.random() <= .40 || TS.queue.length > 0 ) {
+    if ( Math.random() <= .60 || TS.queue.length > 0 ) {
+      console.log( 'firing' )
       let text = TS.get()
       let text_scroller = document.createElement( 'div' )
       text_scroller.innerHTML = text
@@ -1226,11 +1251,12 @@ let handle_text_scroller = () => {
       text_scroller.style.left = text_scroller_container_dimensions.right + 'px'
       text_scroller.style.transform = `translateX( -${ text_scroller_container_dimensions.width + text_scroller_dimensions.width + 100 }px )`
   
-      text_scroller.addEventListener( 'transitionend', () => {  remove_el( text_scroller )  } )
+      text_scroller.addEventListener( 'transitionend', () => {  
+        remove_el( text_scroller )  
+      } )
     }
   }
 
-  setTimeout( handle_text_scroller, 1000 * animation_speed )
 }
 
 // ==== TUTORIAL SHIT ====================================================================
@@ -2167,6 +2193,7 @@ let reset_quest_state = () => {
 
 let build_inventory_accordion = ( direct = false ) => {
   let str = ''
+  let p = S.pickaxe.item
 
   str += `
     <div class='inventory-accordion ${ O.inventory_accordion_is_open && 'open' }'>
@@ -2175,20 +2202,21 @@ let build_inventory_accordion = ( direct = false ) => {
         <i class='fa fa-caret-down fa-1x'></i>
       </header>
       <div>
-        <h1 class='pickaxe-name ${ S.pickaxe.item.rarity.name }'>${ S.pickaxe.item.name }</h1>
+        <h1 class='pickaxe-name ${ p.rarity.name }'>${ p.name }</h1>
         `
-        str += build_pickaxe_sprite( S.pickaxe.item, 192, true )
+        str += build_pickaxe_sprite( p, 192, true )
         str += `
-        <p>Level ${ S.pickaxe.item.level }</p>
-        <p>Damage: ${ beautify_number( S.pickaxe.item.damage ) } <span style='opacity: .5'>( ${ beautify_number( calculate_pickaxe_damage() ) } )</span> </p>
+        <p>Level ${ p.level }</p>
+        <p>Damage: ${ beautify_number( p.damage ) } <span style='opacity: .5'>( ${ beautify_number( calculate_pickaxe_damage() ) } )</span> </p>
         <p
           onmouseover='TT.show( event, { name: null, type: "sharpness-info" } )'
           onmouseout='TT.hide()'
-          >Sharpness: ${ S.pickaxe.item.sharpness } <span style='opacity: .5'>( ${ beautify_number( calculate_pickaxe_sharpness() ) } )</span> %</p>
+          >Sharpness: ${ p.sharpness } <span style='opacity: .5'>( ${ beautify_number( calculate_pickaxe_sharpness() ) } )</span> %</p>
         <p
           onmouseover='TT.show( event, { name: null, type: "hardness-info" } )'
           onmouseout='TT.hide()'
-          >Hardness: ${ S.pickaxe.item.hardness } <span style='opacity: .5'>( ${ beautify_number( calculate_pickaxe_hardness() ) } )</span> %</p>
+          >Hardness: ${ p.hardness } <span style='opacity: .5'>( ${ beautify_number( calculate_pickaxe_hardness() ) } )</span> %</p>
+        <p>Enhancements Available: ${ p.num_of_upgrades - p.used_upgrades}/${ p.num_of_upgrades }</p>
       </div>
 
       `

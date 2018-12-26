@@ -93,14 +93,18 @@ let State = function( s = {} ) {
         name: "Wooden Starter Pickaxe",
         material: { name: 'Wood' },
         rarity: { name: 'Common' },
+        num_of_upgrades: 3,
+        used_upgrades: 0,
       },
       
       temporary_bonuses: {
+        damage: 0,
         sharpness: 0,
         hardness: 0
       },
 
       permanent_bonuses: {
+        damage: 0,
         sharpness: 0,
         hardness: 0,
       },

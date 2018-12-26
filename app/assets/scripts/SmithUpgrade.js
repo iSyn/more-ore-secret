@@ -32,6 +32,16 @@ let SmithUpgrade = function( obj ) {
     this.unlock_functions = obj.unlock_functions
     // this.new = obj.new || true
 
+    if ( obj.repeatable ) {
+        this.repeatable = obj.repeatable
+        this.level = obj.level || 0
+        this.price_scale = obj.price_scale
+        this.base_price = obj.base_price
+        this.price = this.base_price * Math.pow( this.price_scale, this.level )
+    }
+
+    this.repeatable = obj.repeatable ? true : false
+
     obj.new == false ? this.new = false : this.new = true
 
     Smith_Upgrades.push( this )
@@ -58,7 +68,6 @@ let smith_upgrades = [
         flavor_text: 'Fetch quests are the greatest',
         duration: 4 * HOUR,
         price: 50,
-        locked: 0,
         unlock_functions: {
             unlock_quest_board: 1
         }
@@ -72,6 +81,46 @@ let smith_upgrades = [
         locked: 1,
         unlock_functions: {
             unlock_automater: 1
+        }
+    },
+
+    // REPEATABLE
+    {
+        name: 'Damage Up',
+        // img: 'smith_upgrade-damage_up',
+        img: 'https://via.placeholder.com/64',
+        desc: 'Increase pickaxe damage permanently by 1',
+        flavor_text: 'More damage, more ore',
+        duration: 30 * SECOND,
+        base_price: 2,
+        price_scale: 1.45,
+        repeatable: true,
+        unlock_functions: {
+            increase_pickaxe_damage: 1
+        }
+    }, {
+        name: 'Sharpness Up',
+        img: 'https://via.placeholder.com/64',
+        desc: 'Increase pickaxe sharpness permanently by 5%',
+        flavor_text: 'Sharpening is ez',
+        duration: 30 * SECOND,
+        base_price: 1,
+        price_scale: 1.25,
+        repeatable: true,
+        unlock_functions: {
+            increase_pickaxe_sharpness: 5
+        }
+    }, {
+        name: 'Hardness Up',
+        img: 'https://via.placeholder.com/64',
+        desc: 'Increase pickaxe hardness permanently by 5%',
+        flavor_text: 'Reinforce that shiz',
+        duration: 30 * SECOND,
+        base_price: 1,
+        price_scale: 1.25,
+        repeatable: true,
+        unlock_functions: {
+            increase_pickaxe_hardness: 5
         }
     },
 
@@ -146,156 +195,6 @@ let smith_upgrades = [
         requires: [ 'combo_shield_speed_up_ii'],
         unlock_functions: {
             combo_shield_speed_up: 1 * HOUR
-        }
-    },
-
-    // SHARPEN PICKAXE UPGRADES
-    {
-        name: 'Sharpen Pickaxe I',
-        img: 'https://via.placeholder.com/64',
-        desc: 'Increases your pickaxe sharpness by 10%',
-        duration: 10 * SECOND,
-        price: 5,
-        unlock_functions: {
-            increase_pickaxe_sharpness: 10,
-            unlock_smith_upgrades: [ 'sharpen_pickaxe_ii' ]
-        }
-    }, {
-        name: 'Sharpen Pickaxe II',
-        img: 'https://via.placeholder.com/64', 
-        desc: 'Increases your pickaxe sharpness by 10%',
-        duration: 15 * SECOND,
-        price: 10,
-        locked: 1,
-        requires: [ 'sharpen_pickaxe_i' ],
-        unlock_functions: {
-            increase_pickaxe_sharpness: 10,
-            unlock_smith_upgrades: [ 'sharpen_pickaxe_iii' ]
-        }
-    }, {
-        name: 'Sharpen Pickaxe III', img: 'https://via.placeholder.com/64', desc: 'Increases your pickaxe sharpness by 10%',
-        duration: 1 * SECOND,
-        price: 20,
-        locked: 1,
-        requires: [ 'sharpen_pickaxe_ii' ],
-        unlock_functions: {
-            increase_pickaxe_sharpness: 10,
-            unlock_smith_upgrades: [ 'sharpen_pickaxe_iv' ]
-        }
-    }, {
-        name: 'Sharpen Pickaxe IV', img: 'https://via.placeholder.com/64', desc: 'Increases your pickaxe sharpness by 10%',
-        duration: 1 * SECOND,
-        price: 25,
-        locked: 1,
-        requires: [ 'sharpen_pickaxe_iii' ],
-        unlock_functions: {
-            increase_pickaxe_sharpness: 10,
-            unlock_smith_upgrades: [ 'sharpen_pickaxe_v' ]
-        }
-    }, {
-        name: 'Sharpen Pickaxe V', img: 'https://via.placeholder.com/64', desc: 'Increases your pickaxe sharpness by 10%',
-        duration: 1 * SECOND,
-        price: 30,
-        locked: 1,
-        requires: [ 'sharpen_pickaxe_iv' ],
-        unlock_functions: {
-            increase_pickaxe_sharpness: 10
-        }
-    },
-
-    // REINFORCE PICKAXE UPGRADES
-    {
-        name: 'Reinforce Pickaxe I',
-        img: 'https://via.placeholder.com/64',
-        desc: 'Increases your pickaxe hardness by 10%',
-        duration: 10 * SECOND,
-        price: 10,
-        unlock_functions: {
-            increase_pickaxe_hardness: 10,
-            unlock_smith_upgrades: [ 'reinforce_pickaxe_ii' ]
-        }
-    }, {
-        name: 'Reinforce Pickaxe II',
-        img: 'https://via.placeholder.com/64',
-        desc: 'Increases your pickaxe hardness by 10%',
-        duration: 5 * SECOND,
-        price: 15,
-        locked: 1,
-        requires: [ 'reinforce_pickaxe_i' ],
-        unlock_functions: {
-            increase_pickaxe_hardness: 10,
-            unlock_smith_upgrades: [ 'reinforce_pickaxe_iii' ]
-        }
-    }, {
-        name: 'Reinforce Pickaxe III',
-        img: 'https://via.placeholder.com/64',
-        desc: 'Increases your pickaxe hardness by 10%',
-        duration: 5 * SECOND,
-        price: 20,
-        locked: 1,
-        requires: [ 'reinforce_pickaxe_ii' ],
-        unlock_functions: {
-            increase_pickaxe_hardness: 10,
-            unlock_smith_upgrades: [ 'reinforce_pickaxe_iv' ]
-        }
-    }, {
-        name: 'Reinforce Pickaxe IV',
-        img: 'https://via.placeholder.com/64',
-        desc: 'Increases your pickaxe hardness by 10%',
-        duration: 5 * SECOND,
-        price: 25,
-        locked: 1,
-        requires: [ 'reinforce_pickaxe_iii' ],
-        unlock_functions: {
-            increase_pickaxe_hardness: 10,
-            unlock_smith_upgrades: [ 'reinforce_pickaxe_v' ]
-        }
-    }, {
-        name: 'Reinforce Pickaxe V',
-        img: 'https://via.placeholder.com/64',
-        desc: 'Increases your pickaxe hardness by 10%',
-        duration: 5 * SECOND,
-        price: 30,
-        locked: 1,
-        requires: [ 'reinforce_pickaxe_iv' ],
-        unlock_functions: {
-            increase_pickaxe_hardness: 10
-        }
-    },
-
-    // INCREASE MAXIMUM ORE GAINED WHILE AWAY UPGRADES
-    {
-        name: 'Ore Warehouse I',
-        img: 'https://via.placeholder.com/64',
-        desc: 'Increases maximum ore gain when away by x10',
-        duration: 10 * SECOND,
-        price: 10,
-        unlock_functions: {
-            increase_maximum_ore_away_gain: 10,
-            unlock_smith_upgrades: [ 'ore_warehouse_ii' ]
-        }
-    }, {
-        name: 'Ore Warehouse II',
-        img: 'https://via.placeholder.com/64',
-        desc: 'Increases maximum ore gain when away by x10',
-        duration: 15 * SECOND,
-        price: 20,
-        locked: 1,
-        requires: [ 'ore_warehouse_i' ],
-        unlock_functions: {
-            increase_maximum_ore_away_gain: 10,
-            unlock_smith_upgrades: [ 'ore_warehouse_iii' ]
-        }
-    }, {
-        name: 'Ore Warehouse III',
-        img: 'https://via.placeholder.com/64',
-        desc: 'Increases maximum ore gain when away by x10',
-        duration: 20 * SECOND,
-        price: 30,
-        locked: 1,
-        requires: [ 'ore_warehouse_ii' ],
-        unlock_functions: {
-            increase_maximum_ore_away_gain: 10
         }
     },
 

@@ -1,5 +1,6 @@
 let TextScroller = function( texts = null ) {
 
+  this.is_scrolling = false
   this.queue = []
   this.texts = texts || [
     'What is a rocks favorite fruit? ... Pom-a-granite',

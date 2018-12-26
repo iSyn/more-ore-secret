@@ -131,7 +131,7 @@
           position: absolute;
           height: 300px;
           width: 300px;
-          top: 50%;
+          top: 45%;
           left: 50%;
           transform: translate(-50%, -50%);
           
@@ -339,8 +339,8 @@
             }
   
             &.smith {
-              background-image: url( './assets/images/bg-smith_bg.png' );
-              background-repeat: repeat;
+              // background-image: url( './assets/images/bg-smith_bg.png' );
+              // background-repeat: repeat;
               background-color: linear-gradient(to bottom, #525252, #222);
               box-shadow: 0 0 10px #222 inset;
             }

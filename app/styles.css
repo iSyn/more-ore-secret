@@ -205,7 +205,7 @@ button {
           position: absolute;
           height: 300px;
           width: 300px;
-          top: 50%;
+          top: 45%;
           left: 50%;
           -webkit-transform: translate(-50%, -50%);
           transform: translate(-50%, -50%); }
@@ -402,8 +402,6 @@ button {
               -webkit-box-shadow: 0 0 10px #331f0b inset;
               box-shadow: 0 0 10px #331f0b inset; }
             .container .game-container .right-container > .right .tab-content-container .tab-content.smith {
-              background-image: url("./assets/images/bg-smith_bg.png");
-              background-repeat: repeat;
               background-color: linear-gradient(to bottom, #525252, #222);
               -webkit-box-shadow: 0 0 10px #222 inset;
               box-shadow: 0 0 10px #222 inset; }
@@ -920,6 +918,10 @@ button {
       font-size: 30px;
       padding-right: 10px;
       letter-spacing: .8px; }
+      .tooltip .top h1 small {
+        font-size: 12px;
+        font-family: 'Abel';
+        opacity: .7; }
     .tooltip .top .upgrade-price, .tooltip .top .building-price {
       padding-left: 20px; }
       .tooltip .top .upgrade-price.not-enough, .tooltip .top .building-price.not-enough {
@@ -1249,7 +1251,6 @@ button {
   -webkit-box-direction: normal;
   -ms-flex-flow: row nowrap;
   flex-flow: row nowrap;
-  padding: 10px;
   -webkit-box-shadow: 0 0 40px #222 inset;
   box-shadow: 0 0 40px #222 inset;
   background: #989898; }
@@ -1279,63 +1280,117 @@ button {
         height: 100%;
         background: #222; }
 
-.smith-upgrades {
+.smith-upgrades-wrapper {
+  height: calc( 100% - 33px);
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: horizontal;
+  -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
-  -ms-flex-flow: row wrap;
-  flex-flow: row wrap;
-  width: 100%;
-  padding: 0 22px; }
-  .smith-upgrades > p {
-    width: 100%;
-    color: white;
-    padding: 11px 0;
-    font-family: 'Germania One';
-    letter-spacing: 1px;
-    text-shadow: 0 0 5px black; }
-    .smith-upgrades > p.available-upgrade-text {
-      text-shadow: 0 0 5px black, 0 0 10px gold;
-      font-size: 24px; }
-    .smith-upgrades > p.locked-upgrade-text {
-      opacity: .6; }
-  .smith-upgrades .smith-upgrade {
-    height: 64px;
-    width: 64px;
-    background-size: 100%;
-    -ms-interpolation-mode: nearest-neighbor;
-    image-rendering: -webkit-optimize-contrast;
-    image-rendering: -moz-crisp-edges;
-    image-rendering: -o-pixelated;
-    image-rendering: pixelated;
-    -webkit-box-shadow: 0 0 30px #222 inset;
-    box-shadow: 0 0 30px #222 inset;
-    cursor: pointer;
-    border: 5px ridge #443D52;
-    position: relative; }
-    .smith-upgrades .smith-upgrade:hover {
-      -webkit-box-shadow: 0 0 10px #fff inset, 0 0 30px #222 inset;
-      box-shadow: 0 0 10px #fff inset, 0 0 30px #222 inset; }
-    .smith-upgrades .smith-upgrade.locked {
-      cursor: not-allowed;
-      opacity: 0.2;
-      -webkit-filter: brightness(70%);
-      filter: brightness(70%); }
-    .smith-upgrades .smith-upgrade .new {
-      position: absolute;
-      font-family: 'Germania One';
-      color: red;
-      top: -5px;
-      right: -15px;
-      z-index: 1;
-      -webkit-transform: rotate(45deg);
-      transform: rotate(45deg);
-      text-shadow: 0 0 15px #222, 0 0 3px white;
-      animation: new_sign .5s infinite alternate-reverse linear; }
-    .smith-upgrades .smith-upgrade img {
-      pointer-events: none; }
+  -ms-flex-flow: column nowrap;
+  flex-flow: column nowrap;
+  background-image: url("./assets/images/bg-smith_bg.png"); }
+  .smith-upgrades-wrapper .smith-upgrades-container {
+    -webkit-box-flex: 1;
+    -ms-flex-positive: 1;
+    flex-grow: 1; }
+    .smith-upgrades-wrapper .smith-upgrades-container .smith-upgrades {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-orient: vertical;
+      -webkit-box-direction: normal;
+      -ms-flex-flow: column wrap;
+      flex-flow: column wrap;
+      width: 100%;
+      padding-bottom: 11px; }
+      .smith-upgrades-wrapper .smith-upgrades-container .smith-upgrades .repeatables {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-orient: horizontal;
+        -webkit-box-direction: normal;
+        -ms-flex-flow: row nowrap;
+        flex-flow: row nowrap; }
+        .smith-upgrades-wrapper .smith-upgrades-container .smith-upgrades .repeatables .repeatable {
+          display: -webkit-box;
+          display: -ms-flexbox;
+          display: flex;
+          -webkit-box-pack: center;
+          -ms-flex-pack: center;
+          justify-content: center;
+          -webkit-box-align: center;
+          -ms-flex-align: center;
+          align-items: center;
+          height: 100px; }
+          .smith-upgrades-wrapper .smith-upgrades-container .smith-upgrades .repeatables .repeatable img {
+            height: 64px;
+            -ms-interpolation-mode: nearest-neighbor;
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: -o-pixelated;
+            image-rendering: pixelated; }
+      .smith-upgrades-wrapper .smith-upgrades-container .smith-upgrades > p {
+        width: 100%;
+        color: white;
+        padding: 11px 0 11px 22px;
+        font-family: 'Germania One';
+        letter-spacing: 1px;
+        text-shadow: 0 0 5px black; }
+        .smith-upgrades-wrapper .smith-upgrades-container .smith-upgrades > p.available-upgrade-text {
+          text-shadow: 0 0 5px black, 0 0 10px gold;
+          font-size: 24px; }
+        .smith-upgrades-wrapper .smith-upgrades-container .smith-upgrades > p.locked-upgrade-text {
+          opacity: .6; }
+      .smith-upgrades-wrapper .smith-upgrades-container .smith-upgrades .smith-upgrade {
+        height: 64px;
+        width: 100%;
+        background-size: 100%;
+        -ms-interpolation-mode: nearest-neighbor;
+        image-rendering: -webkit-optimize-contrast;
+        image-rendering: -moz-crisp-edges;
+        image-rendering: -o-pixelated;
+        image-rendering: pixelated;
+        -webkit-box-shadow: 0 0 30px #222 inset;
+        box-shadow: 0 0 30px #222 inset;
+        cursor: pointer;
+        border: 5px ridge #443D52;
+        position: relative;
+        background: #222;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center; }
+        .smith-upgrades-wrapper .smith-upgrades-container .smith-upgrades .smith-upgrade * {
+          pointer-events: none; }
+        .smith-upgrades-wrapper .smith-upgrades-container .smith-upgrades .smith-upgrade h1 {
+          font-family: 'Germania One';
+          color: white;
+          text-shadow: 0 0 5px #222;
+          padding-left: 10px; }
+        .smith-upgrades-wrapper .smith-upgrades-container .smith-upgrades .smith-upgrade:hover {
+          -webkit-box-shadow: 0 0 10px #fff inset, 0 0 30px #222 inset;
+          box-shadow: 0 0 10px #fff inset, 0 0 30px #222 inset; }
+        .smith-upgrades-wrapper .smith-upgrades-container .smith-upgrades .smith-upgrade.locked {
+          cursor: not-allowed;
+          opacity: 0.2;
+          -webkit-filter: brightness(70%);
+          filter: brightness(70%); }
+        .smith-upgrades-wrapper .smith-upgrades-container .smith-upgrades .smith-upgrade .new {
+          position: absolute;
+          font-family: 'Germania One';
+          color: red;
+          top: -5px;
+          right: -15px;
+          z-index: 1;
+          -webkit-transform: rotate(45deg);
+          transform: rotate(45deg);
+          text-shadow: 0 0 15px #222, 0 0 3px white;
+          animation: new_sign .5s infinite alternate-reverse linear; }
+        .smith-upgrades-wrapper .smith-upgrades-container .smith-upgrades .smith-upgrade img {
+          pointer-events: none; }
 
 @-webkit-keyframes new_sign {
   0% {

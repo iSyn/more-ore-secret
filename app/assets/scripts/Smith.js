@@ -68,12 +68,13 @@ let Smith = function( obj = {} ) {
                 O.rebuild_bottom_tabs = 1
             }
 
-            if ( fn.increase_pickaxe_sharpness ) {
-                S.pickaxe.permanent_bonuses.sharpness += fn.increase_pickaxe_sharpness
-            }
+            if ( upgrade.repeatable ) {
+                if ( fn.increase_pickaxe_damage ) S.pickaxe.permanent_bonuses.damage += fn.increase_pickaxe_damage
+                if ( fn.increase_pickaxe_sharpness ) S.pickaxe.permanent_bonuses.sharpness += fn.increase_pickaxe_sharpness
+                if ( fn.increase_pickaxe_hardness ) S.pickaxe.permanent_bonuses.hardness += fn.increase_pickaxe_hardness
 
-            if ( fn.increase_pickaxe_hardness ) {
-                S.pickaxe.permanent_bonuses.hardness += fn.increase_pickaxe_hardness
+                upgrade.price = upgrade.base_price * Math.pow( upgrade.price_scale, upgrade.level )
+                upgrade.level++
             }
 
             if ( fn.unlock_combo_shield ) {
@@ -125,7 +126,7 @@ let Smith = function( obj = {} ) {
             }
         }
 
-        upgrade.owned = 1
+        if ( !upgrade.repeatable ) upgrade.owned = 1
 
         this.upgrade_in_progress = {}
         this.current_progress = 0

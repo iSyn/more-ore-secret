@@ -32,6 +32,12 @@
       font-size: 30px;
       padding-right: 10px;
       letter-spacing: .8px;
+
+      small {
+        font-size: 12px;
+        font-family: 'Abel';
+        opacity: .7;
+      }
     }
 
     .upgrade-price, .building-price {

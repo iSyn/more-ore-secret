@@ -1,7 +1,7 @@
 .smith-progress-container {
   display: flex;
   flex-flow: row nowrap;
-  padding: 10px;
+  // padding: 10px;
   box-shadow: 0 0 40px #222 inset;
   background: #989898;
 
@@ -30,67 +30,113 @@
   }
 }
 
-.smith-upgrades {
+.smith-upgrades-wrapper {
+  height: calc( 100% - 33px );
   display: flex;
-  flex-flow: row wrap;
-  width: 100%;
-  padding: 0 22px;
+  flex-flow: column nowrap;
+  background-image: url( './assets/images/bg-smith_bg.png' );
 
-  > p {
-    width: 100%;
-    color: white;
-    padding: 11px 0;
-    font-family: 'Germania One';
-    letter-spacing: 1px;
-    text-shadow: 0 0 5px black;
+  .smith-upgrades-container {
+    flex-grow: 1;
 
-    &.available-upgrade-text {
-      text-shadow: 0 0 5px black, 0 0 10px gold;
-      font-size: 24px;
-    }
+    .smith-upgrades {
+      display: flex;
+      flex-flow: column wrap;
+      width: 100%;
+      // padding: 0 22px;
+      padding-bottom: 11px;
+      // background-image: url( './assets/images/bg-smith_bg.png' );
+      // height: 100%;
 
-    &.locked-upgrade-text {
-      opacity: .6;
+      .repeatables {
+        display: flex;
+        flex-flow: row nowrap;
+
+        .repeatable {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 100px;
+
+          img {
+            height: 64px;
+            image-rendering: pixelated;
+          }
+        }
+      }
+    
+      > p {
+        width: 100%;
+        color: white;
+        padding: 11px 0 11px 22px;
+        font-family: 'Germania One';
+        letter-spacing: 1px;
+        text-shadow: 0 0 5px black;
+    
+        &.available-upgrade-text {
+          text-shadow: 0 0 5px black, 0 0 10px gold;
+          font-size: 24px;
+        }
+    
+        &.locked-upgrade-text {
+          opacity: .6;
+        }
+      }
+    
+      .smith-upgrade {
+        height: 64px;
+        width: 100%;
+        background-size: 100%;
+        image-rendering: pixelated;
+        box-shadow: 0 0 30px #222 inset;
+        cursor: pointer;
+        border: 5px ridge #443D52;
+        position: relative;
+        background: #222;
+        display: flex;
+        align-items: center;
+
+        * {
+          pointer-events: none;
+        }
+
+        h1 {
+          font-family: 'Germania One';
+          color: white;
+          text-shadow: 0 0 5px #222;
+          padding-left: 10px;
+        }
+    
+        &:hover {
+          box-shadow: 0 0 10px #fff inset, 0 0 30px #222 inset;
+        }
+    
+        &.locked {
+          cursor: not-allowed; 
+          opacity: 0.2;
+          filter: brightness( 70% );
+        }
+    
+        .new {
+          position: absolute;
+          font-family: 'Germania One';
+          color: red;
+          top: -5px;
+          right: -15px;
+          z-index: 1;
+          transform: rotate( 45deg );
+          text-shadow: 0 0 15px #222, 0 0 3px white;
+          animation: new_sign .5s infinite alternate-reverse linear;
+        }
+    
+        img {
+          pointer-events: none;
+        }
+      }
     }
   }
 
-  .smith-upgrade {
-    height: 64px;
-    width: 64px;
-    // background: url("./assets/images/upgrade-upgrade_container.png");
-    background-size: 100%;
-    image-rendering: pixelated;
-    box-shadow: 0 0 30px #222 inset;
-    cursor: pointer;
-    border: 5px ridge #443D52;
-    position: relative;
-
-    &:hover {
-      box-shadow: 0 0 10px #fff inset, 0 0 30px #222 inset;
-    }
-
-    &.locked {
-      cursor: not-allowed; 
-      opacity: 0.2;
-      filter: brightness( 70% );
-    }
-
-    .new {
-      position: absolute;
-      font-family: 'Germania One';
-      color: red;
-      top: -5px;
-      right: -15px;
-      z-index: 1;
-      transform: rotate( 45deg );
-      text-shadow: 0 0 15px #222, 0 0 3px white;
-      animation: new_sign .5s infinite alternate-reverse linear;
-    }
-
-    img {
-      pointer-events: none;
-    }
-  }
+  
 }
 
 @keyframes new_sign {

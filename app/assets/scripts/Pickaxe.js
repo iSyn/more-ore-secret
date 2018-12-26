@@ -14,6 +14,9 @@ let Pickaxe = function( item_level ) {
     this.sharpness = _get_sharpness( this )
     this.hardness = _get_hardness( this )
 
+    this.num_of_upgrades = _get_num_upgrades( this )
+    this.used_upgrades = 0
+
     this.name = _get_name( this )
     
     return this
@@ -373,5 +376,46 @@ _get_name = ( p ) => {
     }
 
     return name
+
+}
+
+_get_num_upgrades = ( p ) => {
+
+    let num = 3
+
+    switch ( p.rarity.name ) {
+
+        case 'Common':
+            num += select_random_from_arr( [ 0, 1, 2 ] )
+            break
+    
+        case 'Uncommon':
+            num += select_random_from_arr( [ 0, 1, 2, 3 ] )
+            break
+
+        case 'Rare':
+            num += select_random_from_arr( [ 1, 2, 3, 4 ] )
+            break
+
+        case 'Unique':
+            num += select_random_from_arr( [ 2, 3, 4 ] )
+            break
+
+        case 'Epic':
+            num += select_random_from_arr( [ 2, 3, 3, 5 ] )
+            break
+
+        case 'Legendary':
+            num += select_random_from_arr( [ 4, 5, 6 ] )
+            break
+
+        case 'Mythic':
+            num += select_random_from_arr( [ 5, 6, 7 ] )
+            break
+
+    }
+
+
+    return num
 
 }
