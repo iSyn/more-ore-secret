@@ -188,7 +188,7 @@ let Tooltip = function() {
 
         str += `
           <div class="top" style='padding-bottom: 10px;'>
-            <img src="${ item.img }" alt="smith upgrade image"/>
+            <img src="./app/assets/images/${ item.img }.png" alt="smith upgrade image"/>
             <h1>${ item.name } ${ item.repeatable ? "<small>[ level: " + item.level + " ]</small>" : "" }</h1>
           </div>
           <div class="bottom" style='display: flex; flex-flow: row nowrap; justify-content: center;'>

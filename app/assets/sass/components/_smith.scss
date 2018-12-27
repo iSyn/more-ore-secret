@@ -1,12 +1,15 @@
 .smith-progress-container {
   display: flex;
   flex-flow: row nowrap;
-  // padding: 10px;
+  padding: 10px;
   box-shadow: 0 0 40px #222 inset;
   background: #989898;
 
   > img {
-    border: 1px solid black;
+    // border: 1px solid black;
+    height: 64px;
+    width: 64px;
+    image-rendering: pixelated;
   }
 
   > div {
@@ -43,25 +46,124 @@
       display: flex;
       flex-flow: column wrap;
       width: 100%;
-      // padding: 0 22px;
       padding-bottom: 11px;
-      // background-image: url( './assets/images/bg-smith_bg.png' );
-      // height: 100%;
+
+      .repeatables .repeatable, .non-repeatable {
+        cursor: pointer;
+
+        * {
+          pointer-events: none;
+        }
+
+        &:hover {
+          box-shadow: 0 0 5px white inset;
+        }
+      }
 
       .repeatables {
         display: flex;
         flex-flow: row nowrap;
+        justify-content: space-evenly;
+        // background: #222;
+        padding: 10px 0;
 
         .repeatable {
           display: flex;
           justify-content: center;
           align-items: center;
-          height: 100px;
+          height: 85px;
+          width: 85px;
+          position: relative;
+          max-width: calc( 100% / 3 );
+          background: url( './assets/images/smith_upgrade-repeatables_bg.png' );
+          background-size: 100%;
+          border: none;
+          box-shadow: 0 0 0 3px black, 0 0 20px #222 inset;
+
+          p {
+            position: absolute;
+            width: 100%;
+            color: white;
+            font-family: 'Abel';
+            text-align: center;
+            text-shadow: 0 0 10px black;
+
+            &.upgrade-level {
+              top: 3px;
+              width: 100%;
+            }
+
+            &.upgrade-price {
+              display: flex;
+              flex-flow: row nowrap;
+              align-items: center;
+              justify-content: center;
+              bottom: 0;
+  
+              img {
+                height: 12px;
+                margin-right: 3px;
+              }
+            }
+
+
+          }
 
           img {
             height: 64px;
             image-rendering: pixelated;
           }
+        }
+      }
+
+      .non-repeatable, .owned {
+        display: flex;
+        flex-flow: row nowrap;
+        align-items: center;
+        background: url( './assets/images/smith_upgrade-non_repeatables_bg.png' );
+        background-size: 100%;
+        color: white;
+        height: 70px;
+        margin: 0 11px;
+        margin-bottom: 10px;
+        box-shadow: 0 0 30px #222 inset, 0 0 0 3px black;
+        position: relative;
+
+        img {
+          height: 64px;
+          image-rendering: pixelated;
+          margin-right: 5px;
+        }
+
+        > div {
+          display: flex;
+          flex-flow: column nowrap;
+
+          h1 {
+            font-family: 'Germania One';
+            text-shadow: 0 0 5px black;
+            letter-spacing: .5px;
+          }
+
+          > p {
+            display: flex;
+            flex-flow: row nowrap;
+            align-items: center;
+
+            img {
+              height: 15px;
+            }
+          }
+        }
+
+        .new {
+          position: absolute;
+          top: -5px;
+          left: -10px;
+          animation: new_sign 1s linear alternate-reverse infinite;
+          font-family: 'Germania One';
+          text-shadow: 0 0 2px black;
+          color: crimson;
         }
       }
     
@@ -82,57 +184,7 @@
           opacity: .6;
         }
       }
-    
-      .smith-upgrade {
-        height: 64px;
-        width: 100%;
-        background-size: 100%;
-        image-rendering: pixelated;
-        box-shadow: 0 0 30px #222 inset;
-        cursor: pointer;
-        border: 5px ridge #443D52;
-        position: relative;
-        background: #222;
-        display: flex;
-        align-items: center;
-
-        * {
-          pointer-events: none;
-        }
-
-        h1 {
-          font-family: 'Germania One';
-          color: white;
-          text-shadow: 0 0 5px #222;
-          padding-left: 10px;
-        }
-    
-        &:hover {
-          box-shadow: 0 0 10px #fff inset, 0 0 30px #222 inset;
-        }
-    
-        &.locked {
-          cursor: not-allowed; 
-          opacity: 0.2;
-          filter: brightness( 70% );
-        }
-    
-        .new {
-          position: absolute;
-          font-family: 'Germania One';
-          color: red;
-          top: -5px;
-          right: -15px;
-          z-index: 1;
-          transform: rotate( 45deg );
-          text-shadow: 0 0 15px #222, 0 0 3px white;
-          animation: new_sign .5s infinite alternate-reverse linear;
-        }
-    
-        img {
-          pointer-events: none;
-        }
-      }
+  
     }
   }
 
@@ -141,9 +193,9 @@
 
 @keyframes new_sign {
   0% {
-    transform: rotate( 40deg )
+    transform: rotate( -40deg )
   }
   100% {
-    transform: rotate( 50deg )
+    transform: rotate( -50deg )
   }
 }

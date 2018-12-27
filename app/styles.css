@@ -1251,11 +1251,18 @@ button {
   -webkit-box-direction: normal;
   -ms-flex-flow: row nowrap;
   flex-flow: row nowrap;
+  padding: 10px;
   -webkit-box-shadow: 0 0 40px #222 inset;
   box-shadow: 0 0 40px #222 inset;
   background: #989898; }
   .smith-progress-container > img {
-    border: 1px solid black; }
+    height: 64px;
+    width: 64px;
+    -ms-interpolation-mode: nearest-neighbor;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: -o-pixelated;
+    image-rendering: pixelated; }
   .smith-progress-container > div {
     display: -webkit-box;
     display: -ms-flexbox;
@@ -1304,6 +1311,13 @@ button {
       flex-flow: column wrap;
       width: 100%;
       padding-bottom: 11px; }
+      .smith-upgrades-wrapper .smith-upgrades-container .smith-upgrades .repeatables .repeatable, .smith-upgrades-wrapper .smith-upgrades-container .smith-upgrades .non-repeatable {
+        cursor: pointer; }
+        .smith-upgrades-wrapper .smith-upgrades-container .smith-upgrades .repeatables .repeatable *, .smith-upgrades-wrapper .smith-upgrades-container .smith-upgrades .non-repeatable * {
+          pointer-events: none; }
+        .smith-upgrades-wrapper .smith-upgrades-container .smith-upgrades .repeatables .repeatable:hover, .smith-upgrades-wrapper .smith-upgrades-container .smith-upgrades .non-repeatable:hover {
+          -webkit-box-shadow: 0 0 5px white inset;
+          box-shadow: 0 0 5px white inset; }
       .smith-upgrades-wrapper .smith-upgrades-container .smith-upgrades .repeatables {
         display: -webkit-box;
         display: -ms-flexbox;
@@ -1311,7 +1325,11 @@ button {
         -webkit-box-orient: horizontal;
         -webkit-box-direction: normal;
         -ms-flex-flow: row nowrap;
-        flex-flow: row nowrap; }
+        flex-flow: row nowrap;
+        -webkit-box-pack: space-evenly;
+        -ms-flex-pack: space-evenly;
+        justify-content: space-evenly;
+        padding: 10px 0; }
         .smith-upgrades-wrapper .smith-upgrades-container .smith-upgrades .repeatables .repeatable {
           display: -webkit-box;
           display: -ms-flexbox;
@@ -1322,7 +1340,43 @@ button {
           -webkit-box-align: center;
           -ms-flex-align: center;
           align-items: center;
-          height: 100px; }
+          height: 85px;
+          width: 85px;
+          position: relative;
+          max-width: calc( 100% / 3);
+          background: url("./assets/images/smith_upgrade-repeatables_bg.png");
+          background-size: 100%;
+          border: none;
+          -webkit-box-shadow: 0 0 0 3px black, 0 0 20px #222 inset;
+          box-shadow: 0 0 0 3px black, 0 0 20px #222 inset; }
+          .smith-upgrades-wrapper .smith-upgrades-container .smith-upgrades .repeatables .repeatable p {
+            position: absolute;
+            width: 100%;
+            color: white;
+            font-family: 'Abel';
+            text-align: center;
+            text-shadow: 0 0 10px black; }
+            .smith-upgrades-wrapper .smith-upgrades-container .smith-upgrades .repeatables .repeatable p.upgrade-level {
+              top: 3px;
+              width: 100%; }
+            .smith-upgrades-wrapper .smith-upgrades-container .smith-upgrades .repeatables .repeatable p.upgrade-price {
+              display: -webkit-box;
+              display: -ms-flexbox;
+              display: flex;
+              -webkit-box-orient: horizontal;
+              -webkit-box-direction: normal;
+              -ms-flex-flow: row nowrap;
+              flex-flow: row nowrap;
+              -webkit-box-align: center;
+              -ms-flex-align: center;
+              align-items: center;
+              -webkit-box-pack: center;
+              -ms-flex-pack: center;
+              justify-content: center;
+              bottom: 0; }
+              .smith-upgrades-wrapper .smith-upgrades-container .smith-upgrades .repeatables .repeatable p.upgrade-price img {
+                height: 12px;
+                margin-right: 3px; }
           .smith-upgrades-wrapper .smith-upgrades-container .smith-upgrades .repeatables .repeatable img {
             height: 64px;
             -ms-interpolation-mode: nearest-neighbor;
@@ -1330,6 +1384,67 @@ button {
             image-rendering: -moz-crisp-edges;
             image-rendering: -o-pixelated;
             image-rendering: pixelated; }
+      .smith-upgrades-wrapper .smith-upgrades-container .smith-upgrades .non-repeatable, .smith-upgrades-wrapper .smith-upgrades-container .smith-upgrades .owned {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-orient: horizontal;
+        -webkit-box-direction: normal;
+        -ms-flex-flow: row nowrap;
+        flex-flow: row nowrap;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        background: url("./assets/images/smith_upgrade-non_repeatables_bg.png");
+        background-size: 100%;
+        color: white;
+        height: 70px;
+        margin: 0 11px;
+        margin-bottom: 10px;
+        -webkit-box-shadow: 0 0 30px #222 inset, 0 0 0 3px black;
+        box-shadow: 0 0 30px #222 inset, 0 0 0 3px black;
+        position: relative; }
+        .smith-upgrades-wrapper .smith-upgrades-container .smith-upgrades .non-repeatable img, .smith-upgrades-wrapper .smith-upgrades-container .smith-upgrades .owned img {
+          height: 64px;
+          -ms-interpolation-mode: nearest-neighbor;
+          image-rendering: -webkit-optimize-contrast;
+          image-rendering: -moz-crisp-edges;
+          image-rendering: -o-pixelated;
+          image-rendering: pixelated;
+          margin-right: 5px; }
+        .smith-upgrades-wrapper .smith-upgrades-container .smith-upgrades .non-repeatable > div, .smith-upgrades-wrapper .smith-upgrades-container .smith-upgrades .owned > div {
+          display: -webkit-box;
+          display: -ms-flexbox;
+          display: flex;
+          -webkit-box-orient: vertical;
+          -webkit-box-direction: normal;
+          -ms-flex-flow: column nowrap;
+          flex-flow: column nowrap; }
+          .smith-upgrades-wrapper .smith-upgrades-container .smith-upgrades .non-repeatable > div h1, .smith-upgrades-wrapper .smith-upgrades-container .smith-upgrades .owned > div h1 {
+            font-family: 'Germania One';
+            text-shadow: 0 0 5px black;
+            letter-spacing: .5px; }
+          .smith-upgrades-wrapper .smith-upgrades-container .smith-upgrades .non-repeatable > div > p, .smith-upgrades-wrapper .smith-upgrades-container .smith-upgrades .owned > div > p {
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-orient: horizontal;
+            -webkit-box-direction: normal;
+            -ms-flex-flow: row nowrap;
+            flex-flow: row nowrap;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
+            align-items: center; }
+            .smith-upgrades-wrapper .smith-upgrades-container .smith-upgrades .non-repeatable > div > p img, .smith-upgrades-wrapper .smith-upgrades-container .smith-upgrades .owned > div > p img {
+              height: 15px; }
+        .smith-upgrades-wrapper .smith-upgrades-container .smith-upgrades .non-repeatable .new, .smith-upgrades-wrapper .smith-upgrades-container .smith-upgrades .owned .new {
+          position: absolute;
+          top: -5px;
+          left: -10px;
+          animation: new_sign 1s linear alternate-reverse infinite;
+          font-family: 'Germania One';
+          text-shadow: 0 0 2px black;
+          color: crimson; }
       .smith-upgrades-wrapper .smith-upgrades-container .smith-upgrades > p {
         width: 100%;
         color: white;
@@ -1342,71 +1457,22 @@ button {
           font-size: 24px; }
         .smith-upgrades-wrapper .smith-upgrades-container .smith-upgrades > p.locked-upgrade-text {
           opacity: .6; }
-      .smith-upgrades-wrapper .smith-upgrades-container .smith-upgrades .smith-upgrade {
-        height: 64px;
-        width: 100%;
-        background-size: 100%;
-        -ms-interpolation-mode: nearest-neighbor;
-        image-rendering: -webkit-optimize-contrast;
-        image-rendering: -moz-crisp-edges;
-        image-rendering: -o-pixelated;
-        image-rendering: pixelated;
-        -webkit-box-shadow: 0 0 30px #222 inset;
-        box-shadow: 0 0 30px #222 inset;
-        cursor: pointer;
-        border: 5px ridge #443D52;
-        position: relative;
-        background: #222;
-        display: -webkit-box;
-        display: -ms-flexbox;
-        display: flex;
-        -webkit-box-align: center;
-        -ms-flex-align: center;
-        align-items: center; }
-        .smith-upgrades-wrapper .smith-upgrades-container .smith-upgrades .smith-upgrade * {
-          pointer-events: none; }
-        .smith-upgrades-wrapper .smith-upgrades-container .smith-upgrades .smith-upgrade h1 {
-          font-family: 'Germania One';
-          color: white;
-          text-shadow: 0 0 5px #222;
-          padding-left: 10px; }
-        .smith-upgrades-wrapper .smith-upgrades-container .smith-upgrades .smith-upgrade:hover {
-          -webkit-box-shadow: 0 0 10px #fff inset, 0 0 30px #222 inset;
-          box-shadow: 0 0 10px #fff inset, 0 0 30px #222 inset; }
-        .smith-upgrades-wrapper .smith-upgrades-container .smith-upgrades .smith-upgrade.locked {
-          cursor: not-allowed;
-          opacity: 0.2;
-          -webkit-filter: brightness(70%);
-          filter: brightness(70%); }
-        .smith-upgrades-wrapper .smith-upgrades-container .smith-upgrades .smith-upgrade .new {
-          position: absolute;
-          font-family: 'Germania One';
-          color: red;
-          top: -5px;
-          right: -15px;
-          z-index: 1;
-          -webkit-transform: rotate(45deg);
-          transform: rotate(45deg);
-          text-shadow: 0 0 15px #222, 0 0 3px white;
-          animation: new_sign .5s infinite alternate-reverse linear; }
-        .smith-upgrades-wrapper .smith-upgrades-container .smith-upgrades .smith-upgrade img {
-          pointer-events: none; }
 
 @-webkit-keyframes new_sign {
   0% {
-    -webkit-transform: rotate(40deg);
-    transform: rotate(40deg); }
+    -webkit-transform: rotate(-40deg);
+    transform: rotate(-40deg); }
   100% {
-    -webkit-transform: rotate(50deg);
-    transform: rotate(50deg); } }
+    -webkit-transform: rotate(-50deg);
+    transform: rotate(-50deg); } }
 
 @keyframes new_sign {
   0% {
-    -webkit-transform: rotate(40deg);
-    transform: rotate(40deg); }
+    -webkit-transform: rotate(-40deg);
+    transform: rotate(-40deg); }
   100% {
-    -webkit-transform: rotate(50deg);
-    transform: rotate(50deg); } }
+    -webkit-transform: rotate(-50deg);
+    transform: rotate(-50deg); } }
 
 .automater-wrapper {
   position: absolute;

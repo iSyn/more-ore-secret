@@ -533,16 +533,18 @@ let build_smith_tab = () => {
 
   str += build_inventory_accordion()
 
+  str += '<div class="smith-progress-container" onclick="SMITH.progress_click()">'
+  str += build_pickaxe_update()
+  str += '</div>'
+  str += "<div class='horizontal-separator thin dark'></div>"
+
   str += '<div class="smith-upgrades-wrapper">'
   str += '<div class="smith-upgrades-container">'
   str += '<div class="smith-upgrades">'
   str += build_smith_upgrades()
   str += '</div></div>'
 
-  str += '<div class="smith-progress-container" onclick="SMITH.progress_click()">'
-  if( !is_empty( SMITH.upgrade_in_progress ) ) str += "<div class='horizontal-separator thin dark'></div>"
-  str += build_pickaxe_update()
-  str += '</div></div>'
+  str += '</div>'
 
   TAB_CONTENT.innerHTML = str
   TAB_CONTENT.classList.add( 'smith' )
@@ -555,7 +557,7 @@ let build_pickaxe_update = ( direct = false ) => {
 
   if ( !is_empty( SMITH.upgrade_in_progress ) ) {
     str += `
-      <img src="${ SMITH.upgrade_in_progress.img }" alt="smith upgrade"/>
+      <img src="./app/assets/images/${ SMITH.upgrade_in_progress.img }.png" alt="smith upgrade"/>
       <div>
         <p>${ SMITH.upgrade_in_progress.name }</p>
         <div class="progress-bar-container">
@@ -594,7 +596,13 @@ let build_smith_upgrades = ( direct = false ) => {
   let repeatables = []
   let non_repeatables = []
 
-  Smith_Upgrades.forEach( upgrade => upgrade.repeatable ? repeatables.push( upgrade) : non_repeatables.push( upgrade ) )
+  Smith_Upgrades.forEach( upgrade => {
+    if ( upgrade.owned ) {
+      owned_upgrades.push( upgrade )
+    } else {
+      upgrade.repeatable ? repeatables.push( upgrade) : non_repeatables.push( upgrade )
+    }
+  } )
 
   let str = ''
 
@@ -609,7 +617,9 @@ let build_smith_upgrades = ( direct = false ) => {
         onmouseout='TT.hide()'
         onclick='start_smith_upgrade( Smith_Upgrades, "${ upgrade.code_name }" )'
       >
+        <p class='upgrade-level'>Level: ${ upgrade.level }</p>
         <img src="./app/assets/images/${ upgrade.img }.png">
+        <p class="upgrade-price"><img src="./app/assets/images/refined-ore.png"> ${ beautify_number( upgrade.price ) }</p>
       </div>
     `
   })
@@ -622,12 +632,16 @@ let build_smith_upgrades = ( direct = false ) => {
       if ( !upgrade.owned && !upgrade.locked ) {
         str += `
           <div 
-            class="smith-upgrade"
+            class="smith-upgrade non-repeatable"
             onmouseover='TT.show( event, { name: "${ upgrade.code_name }", type: "smith_upgrade" }); handle_smith_upgrade_hover( "${ upgrade.code_name }" )'
             onmouseout='TT.hide()'
             onclick='start_smith_upgrade( Smith_Upgrades, "${ upgrade.code_name }")'
             >
-              <h1>${ upgrade.name }</h1>
+              <img src="./app/assets/images/${ upgrade.img }.png">
+              <div>
+                <h1>${ upgrade.name }</h1>
+                <p><img src="./app/assets/images/refined-ore.png"> ${ upgrade.price }</p>
+              </div>
             `
 
             if ( upgrade.new ) str += '<div class="new">New!</div>'
@@ -645,11 +659,16 @@ let build_smith_upgrades = ( direct = false ) => {
     owned_upgrades.forEach( upgrade => {
       str += `
         <div 
-          class="smith-upgrade"
+          class="smith-upgrade owned"
           style='background: url("${ upgrade.img }"); opacity: 0.4'
           onmouseover='TT.show( event, { name: "${ upgrade.code_name }", type: "smith_upgrade" })'
           onmouseout='TT.hide()'
           >
+          <img src="./app/assets/images/${ upgrade.img }.png">
+          <div>
+            <h1>${ upgrade.name }</h1>
+            <p><img src="./app/assets/images/refined-ore.png"> ${ upgrade.price }</p>
+          </div>
         </div>
       `
     })

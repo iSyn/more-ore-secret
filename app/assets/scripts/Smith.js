@@ -60,6 +60,7 @@ let Smith = function( obj = {} ) {
                 S.locked.fragility_spectacles = 0
                 TS.add_to_queue( 'Do these glasses make my eyes look fat' )
                 generate_weak_spot()
+                unlock_smith_upgrade( 'quest_board' )
             }
 
             if ( fn.unlock_quest_board ) {

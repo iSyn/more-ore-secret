@@ -2,7 +2,7 @@ let SmithUpgrade = function( obj ) {
 
     this.name = obj.name
     this.code_name = obj.name.replace( / /g, '_' ).toLowerCase()
-    this.img = obj.img
+    this.img = obj.img || `smith_upgrade-${this.code_name}`
     this.desc = obj.desc
 
     if ( obj.flavor_text ) this.flavor_text = obj.flavor_text
@@ -53,7 +53,6 @@ let smith_upgrades = [
     // SPECIAL UPGRADES
     {
         name: 'Fragility Spectacles',
-        img: 'https://via.placeholder.com/64',
         desc: 'Allows you to spot "weak spots" within the ore',
         flavor_text: 'I can see... I can FIGHT!',
         duration: 10 * SECOND,
@@ -63,17 +62,16 @@ let smith_upgrades = [
         }
     }, {
         name: 'Quest Board',
-        img:'https://via.placeholder.com/64',
         desc: 'Allows you to deploy Miners on quests for ancient artifacts!',
         flavor_text: 'Fetch quests are the greatest',
         duration: 4 * HOUR,
         price: 50,
+        locked: 1,
         unlock_functions: {
             unlock_quest_board: 1
         }
     }, {
         name: 'A U T O M A T E R',
-        img: 'https://via.placeholder.com/64',
         desc: 'Unlocks the A U T O M A T E R',
         flavor_text: 'Check out my other game Automate the World!',
         duration: 5 * MINUTE,
@@ -87,8 +85,6 @@ let smith_upgrades = [
     // REPEATABLE
     {
         name: 'Damage Up',
-        // img: 'smith_upgrade-damage_up',
-        img: 'https://via.placeholder.com/64',
         desc: 'Increase pickaxe damage permanently by 1',
         flavor_text: 'More damage, more ore',
         duration: 30 * SECOND,
@@ -100,7 +96,6 @@ let smith_upgrades = [
         }
     }, {
         name: 'Sharpness Up',
-        img: 'https://via.placeholder.com/64',
         desc: 'Increase pickaxe sharpness permanently by 5%',
         flavor_text: 'Sharpening is ez',
         duration: 30 * SECOND,
@@ -112,7 +107,6 @@ let smith_upgrades = [
         }
     }, {
         name: 'Hardness Up',
-        img: 'https://via.placeholder.com/64',
         desc: 'Increase pickaxe hardness permanently by 5%',
         flavor_text: 'Reinforce that shiz',
         duration: 30 * SECOND,
@@ -127,7 +121,6 @@ let smith_upgrades = [
     // COMBO SHIELD UPGRADES
     {
         name: 'Combo Shield I',
-        img: 'https://via.placeholder.com/64',
         desc: 'Unlocks a combo shield that protects your combo from a misclick',
         flavor_text: 'clink clink',
         duration: 30 * SECOND,
@@ -140,7 +133,6 @@ let smith_upgrades = [
 
     }, {
         name: 'Combo Shield II',
-        img: 'https://via.placeholder.com/64',
         desc: 'Unlocks a combo shield that protects your combo from a misclick',
         duration: 30 * SECOND,
         price: 30,
@@ -152,7 +144,6 @@ let smith_upgrades = [
         }
     }, {
         name: 'Combo Shield III',
-        img: 'https://via.placeholder.com/64',
         desc: 'Unlocks a combo shield that protects your combo from a misclick',
         duration: 30 * SECOND,
         price: 50,
@@ -163,7 +154,6 @@ let smith_upgrades = [
         }
     }, {
         name: 'Combo Shield Speed Up I',
-        img: 'https://via.placeholder.com/64',
         desc: 'Decrease the time needed for another combo shield by 1 hour',
         duration: 30 * SECOND,
         price: 50,
@@ -175,7 +165,6 @@ let smith_upgrades = [
         }
     }, {
         name: 'Combo Shield Speed Up II',
-        img: 'https://via.placeholder.com/64',
         desc: 'Decrease the time needed for another combo shield by 1 hour',
         duration: 30 * SECOND,
         price: 100,
@@ -187,7 +176,6 @@ let smith_upgrades = [
         }
     }, {
         name: 'Combo Shield Speed Up III',
-        img: 'https://via.placeholder.com/64',
         desc: 'Decrease the time needed for another combo shield by 1 hour',
         duration: 30 * SECOND,
         price: 150,
@@ -201,7 +189,6 @@ let smith_upgrades = [
     // INCREASE GOLD NUGGET FREQUENCY
     {
         name: 'Gold Nuggies Frequency I',
-        img: 'https://via.placeholder.com/64',
         desc: 'Increase the spawn rate of gold nuggets',
         duration: 10 * SECOND,
         price: 15,
@@ -211,7 +198,6 @@ let smith_upgrades = [
         }
     }, {
         name: 'Gold Nuggies Frequency II',
-        img: 'https://via.placeholder.com/64',
         desc: 'Increase the spawn rate of gold nuggets',
         duration: 10 * SECOND,
         price: 25,
@@ -221,7 +207,6 @@ let smith_upgrades = [
         }
     }, {
         name: 'Gold Nuggies Frequency III',
-        img: 'https://via.placeholder.com/64',
         desc: 'Increase the spawn rate of gold nuggets',
         duration: 10 * SECOND,
         price: 35,
@@ -234,7 +219,6 @@ let smith_upgrades = [
     // INCREASE GOLD NUGGET SPAWN RATE
     {
         name: 'Gold Nuggies Chance Up I',
-        img: 'https://via.placeholder.com/64',
         desc: 'Increases the chance of a gold nugget spawning',
         duration: 10 * SECOND,
         price: 15,
@@ -244,7 +228,6 @@ let smith_upgrades = [
         }
     }, {
         name: 'Gold Nuggies Chance Up II',
-        img: 'https://via.placeholder.com/64',
         desc: 'Increases the chance of a gold nugget spawning',
         duration: 10 * SECOND,
         price: 25,
@@ -254,7 +237,6 @@ let smith_upgrades = [
         }
     }, {
         name: 'Gold Nuggies Chance Up III',
-        img: 'https://via.placeholder.com/64',
         desc: 'Increases the chance of a gold nugget spawning',
         duration: 10 * SECOND,
         price: 35,
