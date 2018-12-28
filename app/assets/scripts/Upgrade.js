@@ -55,15 +55,17 @@ let Upgrade = function( obj ) {
 
             if ( this.buy_functions ) {
                 let fn = this.buy_functions
-                if ( fn.increase_building_production ) {
-                    let building = select_from_arr( Buildings, fn.increase_building_production.building )
-                    building.base_production *= fn.increase_building_production.multi
-                }
+                let building = select_from_arr( Buildings, fn.increase_building_production.building )
+
+                if ( fn.increase_building_production ) building.base_production *= fn.increase_building_production.multi
                 if ( fn.gain_opc_from_ops ) S.opc_from_ops += fn.gain_opc_from_ops
                 if ( fn.increase_ops_opc_multiplier ) {
                     S.ops_multiplier += fn.increase_ops_opc_multiplier
                     S.opc_multiplier += fn.increase_ops_opc_multiplier
                 }
+                if ( fn.change_building_image ) building.img = fn.change_building_image
+                if ( fn.change_building_desc ) building.desc = fn.change_building_desc
+
             }
 
             O.rebuild_store_tab = 1
@@ -339,6 +341,7 @@ let upgrades = [
     // QUARRY RELATED UPGRADES
     {
         name: 'Floodlights',
+        background_color: '#d07221',
         flavor_text: 'Staring into one of them is like staring into a billion suns',
         price: 1.9 * THOUSAND,
         buy_functions: {
@@ -346,6 +349,7 @@ let upgrades = [
         }
     }, {
         name: 'Twill Rope',
+        background_color: '#d07221',
         flavor_text: 'Sturdy enuff',
         price: 11 * THOUSAND,
         buy_functions: {
@@ -353,6 +357,7 @@ let upgrades = [
         }
     }, {
         name: 'Wooden Compass',
+        background_color: '#d07221',
         flavor_text: 'Responds to ore magnetism ',
         price: 510 * THOUSAND,
         buy_functions: {
@@ -360,6 +365,7 @@ let upgrades = [
         }
     }, {
         name: 'Ore Filter',
+        background_color: '#d07221',
         flavor_text: 'Less sorting, more ore',
         price: 7 * MILLION,
         buy_functions: {
@@ -367,6 +373,7 @@ let upgrades = [
         }
     }, {
         name: 'Waterproof Tape',
+        background_color: '#d07221',
         flavor_text: 'Poor mans Flex Tape®',
         price: 80 * MILLION,
         buy_functions: {
@@ -374,6 +381,7 @@ let upgrades = [
         }
     }, {
         name: 'Metallic Compass',
+        background_color: '#d07221',
         flavor_text: 'Looks cooler, does the same thing.',
         price: 210.5 * MILLION,
         buy_functions: {
@@ -381,27 +389,31 @@ let upgrades = [
         }
     }, {
         name: 'Miners Mask',
+        background_color: '#d07221',
         flavor_text: 'Asbestos be gone!',
         price: 5 * BILLION,
         buy_functions: {
             increase_building_production: { building: 'quarry', multi: 2 }
         }
     }, {
-        name: 'Laser Drill',
-        flavor_text: 'faster than mining!',
+        name: 'Cape Chisel',
+        background_color: '#d07221',
+        flavor_text: 'Faster than mining!',
         price: 27 * BILLION,
         buy_functions: {
             increase_building_production: { building: 'quarry', multi: 2 }
         }
     }, {
-        name: 'tbd quarry 1',
-        flavor_text: 'tbd',
+        name: 'Ore Splitter',
+        background_color: '#d07221',
+        flavor_text: 'Right down the midding',
         price: 600 * BILLION,
         buy_functions: {
             increase_building_production: { building: 'quarry', multi: 2 }
         }
     }, {
-        name: 'tbd quarry 2',
+        name: 'Laser Drill',
+        background_color: '#d07221',
         flavor_text: 'tbd',
         price: 6.3 * TRILLION,
         buy_functions: {
@@ -411,6 +423,7 @@ let upgrades = [
     // CHURCH RELATED UPGRADES
     {
         name: 'Scripture Reading',
+        background_color: '#f1be00',
         flavor_text: 'Read the word of our l-ore-d and savior',
         price: 60 * THOUSAND,
         buy_functions: {
@@ -418,6 +431,7 @@ let upgrades = [
         }
     }, {
         name: 'Communion',
+        background_color: '#f1be00',
         flavor_text: 'Note: Not communism',
         price: 740 * THOUSAND,
         buy_functions: {
@@ -425,6 +439,7 @@ let upgrades = [
         }
     }, {
         name: 'Worship Session',
+        background_color: '#f1be00',
         flavor_text: 'More like W-ore-ship ha.. haa...',
         price: 2.8 * MILLION,
         buy_functions: {
@@ -432,57 +447,67 @@ let upgrades = [
         }
     }, {
         name: '7th Day',
+        background_color: '#f1be00',
         flavor_text: 'You would think a day of worship is one less day of work but somehow it works out to more ore!',
         price: 62 * MILLION,
         buy_functions: {
             increase_building_production: { building: 'church', multi: 2 }
         }
     }, {
-        name: 'Judgement Day',
-        flavor_text: 'Read the word of our l-ore-d and savior',
+        name: 'Eden Apple',
+        background_color: '#f1be00',
+        flavor_text: 'You can\'t resist this forbidden fruit',
         price: 777 * MILLION,
         buy_functions: {
             increase_building_production: { building: 'church', multi: 2 }
         }
     }, {
-        name: 'tbd church 1',
-        flavor_text: 'tbd',
+        name: 'Apocalypse',
+        background_color: '#f1be00',
+        flavor_text: 'Hell on earth',
         price: 8.2 * BILLION,
         buy_functions: {
-            increase_building_production: { building: 'church', multi: 2 }
+            increase_building_production: { building: 'church', multi: 5 },
+            change_building_image: 'building-church-evil',
+            change_building_desc: 'Praise to the Ore Demons',
         }
     }, {
-        name: 'tbd church 2',
-        flavor_text: 'tbd',
+        name: 'Judgement Day',
+        background_color: '#f1be00',
+        flavor_text: 'It\'s the end of the world',
         price: 32 * BILLION,
         buy_functions: {
-            increase_building_production: { building: 'church', multi: 2 }
+            increase_building_production: { building: 'church', multi: 4 }
         }
     }, {
-        name: 'tbd church 3',
-        flavor_text: 'tbd',
+        name: 'Rapture',
+        background_color: '#f1be00',
+        flavor_text: 'Are you saved?',
         price: 700 * BILLION,
         buy_functions: {
-            increase_building_production: { building: 'church', multi: 2 }
+            increase_building_production: { building: 'church', multi: 4 },
         }
     }, {
-        name: 'tbd church 4',
-        flavor_text: 'tbd',
+        name: 'Chaos',
+        background_color: '#f1be00',
+        flavor_text: '...',
         price: 2.45 * TRILLION,
         buy_functions: {
-            increase_building_production: { building: 'church', multi: 2 }
+            increase_building_production: { building: 'church', multi: 3 }
         }
     }, {
-        name: 'tbd church 5',
-        flavor_text: 'tbd',
+        name: 'Satanic Ritual',
+        background_color: '#f1be00',
+        flavor_text: 'Sacrifices are the only way to appease the demons.',
         price: 33 * TRILLION,
         buy_functions: {
-            increase_building_production: { building: 'church', multi: 2 }
+            increase_building_production: { building: 'church', multi: 3 }
         }
     },
     // FACTORY RELATED UPGRADES
     {
         name: 'Rubber Conveyor Belt',
+        background_color: '#484848',
         desc: 'Doubles the production of Factories',
         flavor_text: 'These moves the things to there, that\'s all I know',
         price: 300000,
@@ -491,6 +516,7 @@ let upgrades = [
         }
     }, {
         name: 'Floppy Squiggle Tubes',
+        background_color: '#484848',
         desc: 'Triples the production of Factories',
         flavor_text: 'If I could tell you what these were for you\'d buy twice as many.',
         price: 300000,
@@ -499,6 +525,7 @@ let upgrades = [
         }
     }, {
         name: 'Clicky Squish Buttons',
+        background_color: '#484848',
         desc: 'Doubles the production of Factories',
         flavor_text: 'These go next to the Squishy Click Buttons',
         price: 44000000,
@@ -507,6 +534,7 @@ let upgrades = [
         }
     }, {
         name: 'Metallic Magnetic Panels',
+        background_color: '#484848',
         desc: 'Triples the production of Factories',
         flavor_text: 'These are actually for my fridge',
         price: 800000000,
@@ -515,6 +543,7 @@ let upgrades = [
         }
     }, {
         name: 'Hydroponic Auxilleration',
+        background_color: '#484848',
         desc: 'Quintuples the production of Factories',
         flavor_text: 'Aquaman is here to stay',
         price: 5300000000,
@@ -567,6 +596,7 @@ let upgrades = [
     // HOSPITAL RELATED UPGRADES
     {
         name: 'Immunization Shot',
+        background_color: '#d20000',
         desc: 'Doubles the production of Hospitals',
         flavor_text: 'wip',
         price: 10000000,
@@ -575,6 +605,7 @@ let upgrades = [
         }
     }, {
         name: 'Blood Test',
+        background_color: '#d20000',
         desc: 'Find out the blood type of your ores to better understand them.',
         flavor_text: 'wip',
         price: 300000000,
@@ -583,6 +614,7 @@ let upgrades = [
         }
     }, {
         name: 'Blood Transfusion',
+        background_color: '#d20000',
         desc: 'Doubles the production of Hospitals',
         flavor_text: 'Give the ores what they want: blood.',
         price: 2900000000,
@@ -591,6 +623,7 @@ let upgrades = [
         }
     }, {
         name: 'CAT Scan',
+        background_color: '#d20000',
         desc: 'Triples the production of Hospitals',
         flavor_text: 'Not to be confused with PET scan.',
         price: 82000000000,
@@ -599,6 +632,7 @@ let upgrades = [
         }
     }, {
         name: 'Enhancement Surgery',
+        background_color: '#d20000',
         desc: 'Quintuples the production of Hospitals',
         flavor_text: 'wip',
         price: 900000000000,

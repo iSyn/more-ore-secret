@@ -2,7 +2,7 @@ let Building = function( obj ) {
     this.name = obj.name
     this.name_plural = obj.name_plural
     this.code_name = obj.name.replace(/ /g, '_').toLowerCase()
-    this.img = obj.img || this.code_name
+    this.img = obj.img || `building-${ this.code_name }`
     this.desc = obj.desc
     this.flavor_text = obj.flavor_text
     this.base_production = obj.base_production
@@ -117,9 +117,9 @@ let buildings = [
                 { code_name: 'waterproof_tape', amount_needed: 50 },
                 { code_name: 'metallic_compass', amount_needed: 100 },
                 { code_name: 'miners_mask', amount_needed: 150 },
-                { code_name: 'laser_drill', amount_needed: 200 },
-                { code_name: 'tbd_quarry_1', amount_needed: 300 },
-                { code_name: 'tbd_quarry_2', amount_needed: 500 },
+                { code_name: 'cape_chisel', amount_needed: 200 },
+                { code_name: 'ore_splitter', amount_needed: 300 },
+                { code_name: 'laser_drill', amount_needed: 500 },
             ]
         }
     }, {
@@ -137,12 +137,12 @@ let buildings = [
                 { code_name: 'communion', amount_needed: 5 },
                 { code_name: 'worship_session', amount_needed: 10 },
                 { code_name: '7th_day', amount_needed: 20 },
-                { code_name: 'judgement_day', amount_needed: 50 },
-                { code_name: 'tbd_church_1', amount_needed: 100 },
-                { code_name: 'tbd_church_2', amount_needed: 150 },
-                { code_name: 'tbd_church_3', amount_needed: 200 },
-                { code_name: 'tbd_church_4', amount_needed: 100 },
-                { code_name: 'tbd_church_5', amount_needed: 500 },
+                { code_name: 'eden_apple', amount_needed: 50 },
+                { code_name: 'apocalypse', amount_needed: 100 },
+                { code_name: 'judgement_day', amount_needed: 150 },
+                { code_name: 'rapture', amount_needed: 200 },
+                { code_name: 'chaos', amount_needed: 300 },
+                { code_name: 'satanic_ritual', amount_needed: 500 },
             ]
         }
     }, {
