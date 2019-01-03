@@ -54,8 +54,11 @@ let Upgrade = function( obj ) {
             this.owned = 1
 
             if ( this.buy_functions ) {
+
                 let fn = this.buy_functions
-                let building = select_from_arr( Buildings, fn.increase_building_production.building )
+
+                let building = {}
+                if ( fn.increase_building_production ) building = select_from_arr( Buildings, fn.increase_building_production.building )
 
                 if ( fn.increase_building_production ) building.base_production *= fn.increase_building_production.multi
                 if ( fn.gain_opc_from_ops ) S.opc_from_ops += fn.gain_opc_from_ops
@@ -223,18 +226,10 @@ let upgrades = [
             increase_building_production: { building: 'school', multi: 2 }
         }
     }, {
-        name: 'Pack of Ballpoint Pens',
-        background_color: '#6c6c6c',
-        flavor_text: 'In a week, they\'ll be all gone.',
-        price: 620 * MILLION,
-        buy_functions: {
-            increase_building_production: { building: 'school', multi: 2 }
-        }
-    }, {
         name: 'Gum',
         background_color: '#6c6c6c',
         flavor_text: 'You\'ll be the most popular kid in the class',
-        price: 3 * TRILLION,
+        price: 620 * MILLION,
         buy_functions: {
             increase_building_production: { building: 'school', multi: 2 }
         }
@@ -242,7 +237,7 @@ let upgrades = [
         name: 'Hallpass',
         background_color: '#6c6c6c',
         flavor_text: 'Wander the halls without a care in the world',
-        price: 82 * TRILLION,
+        price: 3 * TRILLION,
         buy_functions: {
             increase_building_production: { building: 'school', multi: 2 }
         }
@@ -250,7 +245,7 @@ let upgrades = [
         name: 'Report Card',
         background_color: '#6c6c6c',
         flavor_text: 'Decides your fate for the upcoming months',
-        price: 200 * TRILLION,
+        price: 82 * TRILLION,
         buy_functions: {
             increase_building_production: { building: 'school', multi: 2 }
         }
@@ -306,14 +301,6 @@ let upgrades = [
             increase_building_production: { building: 'farm', multi: 2 }
         }
     }, {
-        name: 'Sprayer',
-        flavor_text: 'Spray\'er?, I hardly know her.',
-        background_color: '#beff00',
-        price: 2.3 * TRILLION,
-        buy_functions: {
-            increase_building_production: { building: 'farm', multi: 2 }
-        }
-    }, {
         name: 'Sickle',
         flavor_text: 'For easy sickle-ing of course.',
         background_color: '#beff00',
@@ -326,14 +313,6 @@ let upgrades = [
         flavor_text: 'Looks like an upgraded sickle.',
         background_color: '#beff00',
         price: 700 * MILLION,
-        buy_functions: {
-            increase_building_production: { building: 'farm', multi: 2 }
-        }
-    }, {
-        name: 'Milking Machine',
-        flavor_text: 'Rich in vitamin O. O for Ore.',
-        background_color: '#beff00',
-        price: 1.8 * BILLION,
         buy_functions: {
             increase_building_production: { building: 'farm', multi: 2 }
         }
@@ -508,91 +487,175 @@ let upgrades = [
     {
         name: 'Rubber Conveyor Belt',
         background_color: '#484848',
-        desc: 'Doubles the production of Factories',
         flavor_text: 'These moves the things to there, that\'s all I know',
-        price: 300000,
+        price: 30 * THOUSAND,
         buy_functions: {
             increase_building_production: { building: 'factory', multi: 2 }
         }
     }, {
         name: 'Floppy Squiggle Tubes',
         background_color: '#484848',
-        desc: 'Triples the production of Factories',
         flavor_text: 'If I could tell you what these were for you\'d buy twice as many.',
-        price: 300000,
+        price: 300 * THOUSAND,
         buy_functions: {
-            increase_building_production: { building: 'factory', multi: 3 }
+            increase_building_production: { building: 'factory', multi: 2 }
         }
     }, {
         name: 'Clicky Squish Buttons',
         background_color: '#484848',
-        desc: 'Doubles the production of Factories',
         flavor_text: 'These go next to the Squishy Click Buttons',
-        price: 44000000,
+        price: 44 * MILLION,
         buy_functions: {
             increase_building_production: { building: 'factory', multi: 2 }
         }
     }, {
         name: 'Metallic Magnetic Panels',
         background_color: '#484848',
-        desc: 'Triples the production of Factories',
         flavor_text: 'These are actually for my fridge',
-        price: 800000000,
+        price: 800 * MILLION,
         buy_functions: {
-            increase_building_production: { building: 'factory', multi: 3 }
+            increase_building_production: { building: 'factory', multi: 2 }
         }
     }, {
         name: 'Hydroponic Auxilleration',
         background_color: '#484848',
-        desc: 'Quintuples the production of Factories',
         flavor_text: 'Aquaman is here to stay',
-        price: 5300000000,
+        price: 5.3 * BILLION,
         buy_functions: {
-            increase_building_production: { building: 'factory', multi: 5 }
+            increase_building_production: { building: 'factory', multi: 2 }
+        }
+    }, {
+        name: 'factory tbd 6',
+        background_color: '#484848',
+        flavor_text: 'tbd',
+        price: 63 * BILLION,
+        buy_functions: {
+            increase_building_production: { building: 'factory', multi: 2 }
+        }
+    }, {
+        name: 'factory tbd 7',
+        background_color: '#484848',
+        flavor_text: 'tbd',
+        price: 700 * BILLION,
+        buy_functions: {
+            increase_building_production: { building: 'factory', multi: 2 }
+        }
+    }, {
+        name: 'factory tbd 8',
+        background_color: '#484848',
+        flavor_text: 'tbd',
+        price: 2 * TRILLION,
+        buy_functions: {
+            increase_building_production: { building: 'factory', multi: 2 }
+        }
+    }, {
+        name: 'factory tbd 9',
+        background_color: '#484848',
+        flavor_text: 'tbd',
+        price: 14 * TRILLION,
+        buy_functions: {
+            increase_building_production: { building: 'factory', multi: 2 }
+        }
+    }, {
+        name: 'factory tbd 10',
+        background_color: '#484848',
+        flavor_text: 'tbd',
+        price: 320 * TRILLION,
+        buy_functions: {
+            increase_building_production: { building: 'factory', multi: 2 }
         }
     },
     // CRYPT RELATED UPGRADES
     {
         name: 'Metal Sarcophagus',
-        desc: 'Doubles the production of Crypts',
+        background_color: '#a55d2a',
         flavor_text: 'Sellers note: sarcophagus does not come with mummy preinstalled.',
-        price: 5200000,
+        price: 5.2 * MILLION,
         buy_functions: {
             increase_building_production: { building: 'crypt', multi: 2 }
         }
     }, {
         name: 'Scarecrow',
-        desc: 'Triples the production of Crypts',
+        background_color: '#a55d2a',
         flavor_text: 'Scare the dead miners away',
-        price: 72000000,
+        price: 72 * MILLION,
         buy_functions: {
-            increase_building_production: { building: 'crypt', multi: 3 }
+            increase_building_production: { building: 'crypt', multi: 2 }
         }
     }, {
         name: 'Polished Shovel',
-        desc: 'Doubles the production of Crypts',
+        background_color: '#a55d2a',
         flavor_text: 'Tool of choice for a Knight or an archaeologist.',
-        price: 150000000,
+        price: 150 * MILLION,
         buy_functions: {
             increase_building_production: { building: 'crypt', multi: 2 }
         }
     },  {
         name: 'Fresh Bandages',
-        desc: 'Triples the production of Crypts',
-        flavor_text: 'Even though used were $40 cheaper...',
-        price: 2500000000,
+        background_color: '#a55d2a',
+        flavor_text: 'Sanitary!',
+        price: 2.5 * BILLION,
         buy_functions: {
-            increase_building_production: { building: 'crypt', multi: 3 }
+            increase_building_production: { building: 'crypt', multi: 2 }
         }
     },  {
         name: 'Oil Lanterns',
-        desc: 'Triples the production of Crypts',
+        background_color: '#a55d2a',
         flavor_text: 'Sets the mood ;)',
-        price: 50000000000,
+        price: 50 * BILLION,
         buy_functions: {
-            increase_building_production: { building: 'crypt', multi: 5 }
+            increase_building_production: { building: 'crypt', multi: 2 }
+        }
+    }, {
+        name: 'factory tbd 5',
+        background_color: '#a55d2a',
+        flavor_text: 'tbd',
+        price: 300 * BILLION,
+        buy_functions: {
+            increase_building_production: { building: 'crypt', multi: 2 }
+        }
+    }, {
+        name: 'factory tbd 6',
+        background_color: '#a55d2a',
+        flavor_text: 'tbd',
+        price: 1.2 * TRILLION,
+        buy_functions: {
+            increase_building_production: { building: 'crypt', multi: 2 }
+        }
+    }, {
+        name: 'factory tbd 7',
+        background_color: '#a55d2a',
+        flavor_text: 'tbd',
+        price: 22.5 * TRILLION,
+        buy_functions: {
+            increase_building_production: { building: 'crypt', multi: 2 }
+        }
+    }, {
+        name: 'factory tbd 8',
+        background_color: '#a55d2a',
+        flavor_text: 'tbd',
+        price: 420 * TRILLION,
+        buy_functions: {
+            increase_building_production: { building: 'crypt', multi: 2 }
+        }
+    }, {
+        name: 'factory tbd 9',
+        background_color: '#a55d2a',
+        flavor_text: 'tbd',
+        price: 3 * QUINTILLION,
+        buy_functions: {
+            increase_building_production: { building: 'crypt', multi: 2 }
+        }
+    }, {
+        name: 'factory tbd 10',
+        background_color: '#a55d2a',
+        flavor_text: 'tbd',
+        price: 25 * QUINTILLION,
+        buy_functions: {
+            increase_building_production: { building: 'crypt', multi: 2 }
         }
     },
+
     // HOSPITAL RELATED UPGRADES
     {
         name: 'Immunization Shot',

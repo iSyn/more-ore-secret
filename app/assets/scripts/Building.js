@@ -70,10 +70,8 @@ let buildings = [
                 { code_name: 'looseleaf', amount_needed: 20 },
                 { code_name: 'schoolbag', amount_needed: 50 },
                 { code_name: 'fresh_pink_eraser', amount_needed: 100 },
-                { code_name: 'pack_of_ballpoint_pens', amount_needed: 150},
                 { code_name: 'gum', amount_needed: 200 },
-                { code_name: 'hallpass', amount_needed: 300 },
-                { code_name: 'report_card', amount_needed: 500 }
+                { code_name: 'report_card', amount_needed: 400 }
             ]
         }
     }, {
@@ -93,10 +91,8 @@ let buildings = [
                 { code_name: 'rotary_cutter', amount_needed: 20 },
                 { code_name: 'hoe', amount_needed: 50 },
                 { code_name: 'baler', amount_needed: 100 },
-                { code_name: 'sprayer', amount_needed: 150 },
                 { code_name: 'sickle', amount_needed: 200 },
-                { code_name: 'scythe', amount_needed: 300 },
-                { code_name: 'milking_machine', amount_needed: 500 }
+                { code_name: 'scythe', amount_needed: 400 },
             ]
         }
     }, {
@@ -116,10 +112,8 @@ let buildings = [
                 { code_name: 'ore_filter', amount_needed: 20 },
                 { code_name: 'waterproof_tape', amount_needed: 50 },
                 { code_name: 'metallic_compass', amount_needed: 100 },
-                { code_name: 'miners_mask', amount_needed: 150 },
                 { code_name: 'cape_chisel', amount_needed: 200 },
-                { code_name: 'ore_splitter', amount_needed: 300 },
-                { code_name: 'laser_drill', amount_needed: 500 },
+                { code_name: 'laser_drill', amount_needed: 400 },
             ]
         }
     }, {
@@ -139,10 +133,8 @@ let buildings = [
                 { code_name: '7th_day', amount_needed: 20 },
                 { code_name: 'eden_apple', amount_needed: 50 },
                 { code_name: 'apocalypse', amount_needed: 100 },
-                { code_name: 'judgement_day', amount_needed: 150 },
                 { code_name: 'rapture', amount_needed: 200 },
-                { code_name: 'chaos', amount_needed: 300 },
-                { code_name: 'satanic_ritual', amount_needed: 500 },
+                { code_name: 'satanic_ritual', amount_needed: 400 },
             ]
         }
     }, {
@@ -157,10 +149,13 @@ let buildings = [
         buy_functions: {
             unlock_upgrades: [
                 { code_name: 'rubber_conveyor_belt', amount_needed: 1 },
-                { code_name: 'floppy_squiggle_tubes', amount_needed: 10 },
-                { code_name: 'clicky_squish_buttons', amount_needed: 20 },
-                { code_name: 'metallic_magnetic_panels', amount_needed: 50 },
-                { code_name: 'hydroponic_auxilleration', amount_needed: 100 },
+                { code_name: 'floppy_squiggle_tubes', amount_needed: 5 },
+                { code_name: 'clicky_squish_buttons', amount_needed: 10 },
+                { code_name: 'metallic_magnetic_panels', amount_needed: 20 },
+                { code_name: 'hydroponic_auxilleration', amount_needed: 50 },
+                { code_name: 'factory_tbd_6', amount_needed: 100 },
+                { code_name: 'factory_tbd_7', amount_needed: 200 },
+                { code_name: 'factory_tbd_8', amount_needed: 400 },
             ]
         }
     }, {
@@ -175,10 +170,14 @@ let buildings = [
         buy_functions: {
             unlock_upgrades: [
                 { code_name: 'metal_sarcophagus', amount_needed: 1},
-                { code_name: 'scarecrow', amount_needed: 10},
-                { code_name: 'polished_shovel', amount_needed: 20},
-                { code_name: 'fresh_bandages', amount_needed: 50},
-                { code_name: 'oil_lanterns', amount_needed: 100},
+                { code_name: 'scarecrow', amount_needed: 5},
+                { code_name: 'polished_shovel', amount_needed: 10},
+                { code_name: 'fresh_bandages', amount_needed: 20},
+                { code_name: 'oil_lanterns', amount_needed: 50 },
+                { code_name: 'crypt_tbd_6', amount_needed: 100 },
+                { code_name: 'crypt_tbd_7', amount_needed: 200 },
+                { code_name: 'crypt_tbd_8', amount_needed: 500 },
+
             ]
         }
     }, {
