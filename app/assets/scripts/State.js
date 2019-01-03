@@ -21,6 +21,8 @@ let State = function( s = {} ) {
     opc_from_ops: 0,
 
     weak_hit_multi: s.weak_hit_multi || 7,
+    weak_hit_crit_chance: .02,
+    weak_hit_crit_multi: 1.5,
     current_combo: s.current_combo || 0,
 
     buy_amount: 1,
@@ -108,7 +110,7 @@ let State = function( s = {} ) {
       permanent_bonuses: {
         damage: 0,
         sharpness: 0,
-        hardness: 0,
+        hardness: 0
       },
 
       item_multiplier: 0,
@@ -135,6 +137,7 @@ let State = function( s = {} ) {
       highest_combo: 0,
       total_clicks: 0,
       total_weak_hit_clicks: 0,
+      total_weak_hit_crit_clicks: 0,
       times_refined: 0,
       last_refine_time: null,
       current_rocks_destroyed: 0,

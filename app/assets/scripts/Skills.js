@@ -190,7 +190,10 @@ let skills = [
     position: { col: 5, row: -1 },
     skill_requirement_names: [ 'pickaxe_proficiency_iii' ],
     unlock_function: {
-      unlock_skills: [],
+      unlock_skills: [
+        [ 'eagle_eye_i', 'right', 'left' ],
+        [ 'stonesmithing_i', 'right', 'left' ],
+      ],
       increase_pickaxe_sharpness: .3,
       increase_pickaxe_hardness: .3
     }
@@ -234,7 +237,6 @@ let skills = [
     position: { col: 4, row: 1 }, 
     skill_requirement_names: [ 'managerial_proficiency_ii' ],
     unlock_function: {
-      unlock_skills: [],
     },
     increase_all_building_production: .05,
   }, {
@@ -277,7 +279,7 @@ let skills = [
     position: { col: 6, row: -3 },
     skill_requirement_names: [ 'more_pickaxes' ],
     unlock_function: {
-      increase_pickaxe_drop_chance: .15
+      increase_pickaxe_drop_chance: 15
     }
   }, {
     name: 'Even Better Pickaxes',
@@ -291,7 +293,120 @@ let skills = [
     unlock_function: {
       increase_pickaxe_quality_bonus: .1
     }
-  },
+  }, {
+    name: 'Eagle Eye I',
+    id: 13,
+    skill_classes: 'circle small',
+    img: 'https://via.placeholder.com/40',
+    desc: 'Increase pickaxe sharpness by 15%',
+    flavor_text: 'flavor text',
+    position: { col: 7, row: 0 },
+    skill_requirement_names: [ 'miners_knowledge' ],
+    unlock_function: {
+      unlock_skills: [
+        [ 'eagle_eye_ii', 'right', 'left' ]
+      ],
+      increase_pickaxe_sharpness: 15
+    }
+  }, {
+    name: 'Eagle Eye II',
+    id: 14,
+    skill_classes: 'circle small',
+    img: 'https://via.placeholder.com/40',
+    desc: 'Increase pickaxe sharpness by 15%',
+    flavor_text: 'flavor text',
+    position: { col: 9, row: 0 },
+    skill_requirement_names: [ 'eagle_eye_i' ],
+    unlock_function: {
+      unlock_skills: [
+        [ 'eagle_eye_iii', 'right', 'left' ]
+      ],
+      increase_pickaxe_sharpness: 15
+    }
+  }, {
+    name: 'Eagle Eye III',
+    id: 15,
+    skill_classes: 'circle small',
+    img: 'https://via.placeholder.com/40',
+    desc: 'Increase pickaxe sharpness by 15%',
+    flavor_text: 'flavor text',
+    position: { col: 11, row: 0 },
+    skill_requirement_names: [ 'eagle_eye_ii' ],
+    unlock_function: {
+      unlock_skills: [
+        [ 'hawk_sense', 'right', 'left' ]
+      ],
+      increase_pickaxe_sharpness: 15
+    }
+  }, {
+    name: 'Hawk Sense',
+    id: 16,
+    img: 'https://via.placeholder.com/40',
+    desc: 'Increase pickaxe sharpness by 50%. Greatly increase weak hit crit chance.',
+    flavor_text: 'flavor text',
+    position: { col: 13, row: 0 },
+    skill_requirement_names: [ 'eagle_eye_iii' ],
+    unlock_function: {
+      increase_pickaxe_sharpness: 50,
+      increase_weak_hit_crit_chance: .1
+    }
+  }, {
+    name: 'Stonesmithing I',
+    id: 17,
+    skill_classes: 'circle small',
+    img: 'https://via.placeholder.com/40',
+    desc: 'Increase pickaxe hardness by 15%',
+    flavor_text: 'flavor text',
+    position: { col: 7, row: 1 },
+    skill_requirement_names: [ 'miners_knowledge' ],
+    unlock_function: {
+      unlock_skills: [
+        [ 'stonesmithing_ii', 'right', 'left' ]
+      ],
+      increase_pickaxe_hardness: 15,
+    }
+  }, {
+    name: 'Stonesmithing II',
+    id: 18,
+    skill_classes: 'circle small',
+    img: 'https://via.placeholder.com/40',
+    desc: 'Increase pickaxe hardness by 15%',
+    flavor_text: 'flavor text',
+    position: { col: 9, row: 1 },
+    skill_requirement_names: [ 'stonesmithing_i' ],
+    unlock_function: {
+      unlock_skills: [
+        [ 'stonesmithing_iii', 'right', 'left' ]
+      ],
+      increase_pickaxe_hardness: 15,
+    }
+  }, {
+    name: 'Stonesmithing III',
+    id: 19,
+    skill_classes: 'circle small',
+    img: 'https://via.placeholder.com/40',
+    desc: 'Increase pickaxe hardness by 15%',
+    flavor_text: 'flavor text',
+    position: { col: 11, row: 1 },
+    skill_requirement_names: [ 'stonesmithing_ii' ],
+    unlock_function: {
+      unlock_skills: [
+        [ 'unyielding', 'right', 'left' ]
+      ],
+      increase_pickaxe_hardness: 15,
+    }
+  }, {
+    name: 'Unyielding',
+    id: 20,
+    img: 'https://via.placeholder.com/40',
+    desc: 'Increase pickaxe hardness by 50%',
+    flavor_text: 'flavor text',
+    position: { col: 13, row: 1 },
+    skill_requirement_names: [ 'stonesmithing_iii' ],
+    unlock_function: {
+      increase_pickaxe_hardness: 50,
+    }
+  }
     //skill for better gold nuggets?
 ]
 

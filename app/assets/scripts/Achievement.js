@@ -1,3 +1,10 @@
+/* 
+
+  Achievements to add:
+  - weak hit crit clicks
+
+*/
+
 let Achievement = function( obj ) {
 
   this.name = obj.name
@@ -92,6 +99,11 @@ let achievements = [
   { name: 'Combo God', desc: 'Reach a 777 hit combo', type: 'combo', reward: { increase_weak_hit_multi: 3 } },
   { name: 'Combo Saiyan', desc: 'Read a 1000 hit combo', type: 'combo', reward: { increase_weak_hit_multi: 4 } },
   { name: 'Combo Saitama', desc: 'Reach a 10000 hit combo', type: 'combo', reward: { increase_weak_hit_multi: 5 } },
+
+  // CRIT CLICK RELATED ACHIEVEMENTS
+  { name: 'Critical Strike', desc: 'Deal a critical strike', type: 'crit' },
+  { name: 'Lucky Number 7', desc: 'Deal a critical strike on combo 7', type: 'crit' },
+  
 
   // QUEST RELATED ACHEIVEMENTS
   { name: 'Novice Quester', desc: 'Complete the first quest', type: 'quest' },

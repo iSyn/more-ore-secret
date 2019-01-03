@@ -829,6 +829,8 @@ let draw_skill_lines = () => {
 
   Skills.forEach( skill => {
 
+    console.log( 'drawing lines for:', skill.name )
+
     let lines = skill.unlock_function.unlock_skills
 
     if ( lines ) {
@@ -841,7 +843,7 @@ let draw_skill_lines = () => {
         ctx.strokeStyle = skill.owned ? '#fff' : '#555'
         ctx.lineWidth = skill.owned ? 3 : 1
   
-        let p = get_skill_line_positions( line[ 1 ], line[ 2 ], skill, target_skill, base_skill_el, target_skill_el, scroll_offset )
+        let p = get_skill_line_positions( line[ 1 ], line[ 2 ], base_skill_el, target_skill_el, scroll_offset )
   
         ctx.beginPath()
         ctx.moveTo( p.base_position.x, p.base_position.y )
@@ -871,7 +873,7 @@ let draw_skill_lines = () => {
   } )
 }
 
-let get_skill_line_positions = ( from, to, base_skill, target_skill, base_skill_el, target_skill_el, scroll_offset ) => {
+let get_skill_line_positions = ( from, to, base_skill_el, target_skill_el, scroll_offset ) => {
 
   let positions = {}
 
@@ -922,6 +924,7 @@ let get_skill_line_positions = ( from, to, base_skill, target_skill, base_skill_
     }
   }
 
+  console.log( positions )
   return positions
 
 }
@@ -1197,6 +1200,10 @@ let handle_click = ( e, type ) => {
   if ( opc >= 1 * MILLION ) win_achievement( 'i_felt_that' )
 
   if ( type ) {
+
+    let crit = false
+    if ( Math.random() <= S.weak_hit_crit_chance ) crit = true
+
     play_sound( 'ore_weak_spot_hit' )
     S.stats.total_weak_hit_clicks++
     S.current_combo++
@@ -1216,7 +1223,17 @@ let handle_click = ( e, type ) => {
     if ( S.current_combo > S.stats.highest_combo ) S.stats.highest_combo = S.current_combo
     if ( S.current_combo % 5 == 0 ) RN.new( e, 'combo', S.current_combo )
 
-    RN.new( event, 'weak-hit-click', opc )
+    if ( crit ) {
+      opc += ( opc * S.weak_hit_crit_multi )
+      RN.new( event, 'weak-hit-crit-click', opc )
+      S.stats.total_weak_hit_crit_clicks++
+
+      if ( S.stats.total_weak_hit_crit_clicks == 1 ) win_achievement( 'critical_strike' )
+      if ( S.current_combo == 7 ) win_achievement( 'lucky_number_7')
+
+    } else {
+      RN.new( event, 'weak-hit-click', opc )
+    }
 
     generate_weak_spot()
 

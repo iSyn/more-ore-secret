@@ -65,6 +65,14 @@ let RisingNumber = function() {
           el.style.animationDuration = '3s'
           break;
 
+        case 'weak-hit-crit-click':
+          el.style.fontSize = '35px'
+          el.style.innerHTML = `
+            <h1>CRIT/h1>
+            <p>${ beautify_number( amount ) }</p>
+          `
+          break
+
         case 'weak-hit-click':
           el.style.fontSize = '28px'
           break;
