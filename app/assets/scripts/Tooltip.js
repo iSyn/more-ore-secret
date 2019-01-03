@@ -280,7 +280,7 @@ let Tooltip = function() {
       case 'skill':
         tooltip_dimensions = TOOLTIP.getBoundingClientRect()
         TOOLTIP.style.left = ( MIDDLE_VERTICAL_SEPARATOR.getBoundingClientRect().left - tooltip_dimensions.width ) + 'px'
-        TOOLTIP.style.top = '20%'
+        TOOLTIP.style.top = ( e.target.getBoundingClientRect().top + e.target.getBoundingClientRect().height / 2 ) - tooltip_dimensions.height / 2 + 'px'
         break
 
       case 'generation':

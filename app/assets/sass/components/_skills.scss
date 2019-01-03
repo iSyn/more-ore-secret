@@ -48,8 +48,16 @@
         cursor: pointer;
       }
 
-      &.locked {
+      &.not-owned {
         opacity: .5;
+      }
+
+      &.locked {
+        opacity: .3;
+      }
+
+      .owned {
+        opacity: 1;
       }
     }
   }

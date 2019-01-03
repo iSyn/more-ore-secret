@@ -36,7 +36,7 @@ _get_level = ( item_level ) => {
 
 _get_rarity = () => {
 
-    let chance = Math.random()
+    let chance = Math.random() + S.pickaxe_quality_bonus
 
     let rarities = [
         { 

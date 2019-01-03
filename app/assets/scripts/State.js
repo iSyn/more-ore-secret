@@ -83,6 +83,8 @@ let State = function( s = {} ) {
       boost_amount: 1 * SECOND
     },
 
+    pickaxe_drop_chance: .3,
+    pickaxe_quality_bonus: 0,
     pickaxe: s.pickaxe || {
 
       item: {
@@ -160,9 +162,9 @@ let State = function( s = {} ) {
     prefs: s.prefs || {
       game_speed: 30,
       sfx_muted: false,
-      sfx_volume: .5,
+      sfx_volume: .1,
       bgm_muted: false,
-      bgm_volume: .5,
+      bgm_volume: .1,
       show_rising_numbers: true,
       show_rock_particles: true,
       show_rock_hp: 'percentage',

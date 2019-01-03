@@ -51,6 +51,7 @@ let Skill = function( obj, index ) {
             
             S.generation.knowledge_points--
             this.owned = 1
+            e.target.classList.remove( 'not-owned' )
 
             build_skills_header( true )
             play_sound( 'skill_level_up' )
@@ -100,6 +101,12 @@ let Skill = function( obj, index ) {
     if ( fn.increase_all_building_production ) S.bonus_building_production.all += fn.increase_all_building_production
     if ( fn.increase_opc ) S.opc_multiplier += S.opc_multiplier * fn.increase_opc
 
+    if ( fn.increase_pickaxe_sharpness ) S.pickaxe.permanent_bonuses += fn.increase_pickaxe_sharpness
+    if ( fn.increase_pickaxe_hardness ) S.pickaxe.permanent_bonuses += fn.increase_pickaxe_hardness
+
+    if ( fn.increase_pickaxe_drop_chance ) S.pickaxe_drop_chance += fn.increase_pickaxe_drop_chance
+    if ( fn.increase_pickaxe_quality_bonus ) S.pickaxe_quality_bonus += fn.increase_pickaxe_quality_bonus
+
     O.recalculate_opc = 1
     O.recalculate_ops = 1
 
@@ -135,8 +142,12 @@ let skills = [
     skill_requirement_names: [ 'the_beginning' ],
     unlock_function: {
       unlock_skills: [
-        [ 'pickaxe_proficiency_ii', 'right', 'left' ]
+        [ 'pickaxe_proficiency_ii', 'right', 'left' ],
+        [ 'better_pickaxes', 'top', 'left' ],
+        [ 'more_pickaxes', 'top', 'left' ]
       ],
+      increase_pickaxe_sharpness: .05,
+      increase_pickaxe_hardness: .05
     }
   }, {
     name: 'Pickaxe Proficiency II',
@@ -151,6 +162,8 @@ let skills = [
       unlock_skills: [
         [ 'pickaxe_proficiency_iii', 'right', 'left' ],
       ],
+      increase_pickaxe_sharpness: .05,
+      increase_pickaxe_hardness: .05
     }
   }, {
     name: 'Pickaxe Proficiency III',
@@ -165,6 +178,8 @@ let skills = [
       unlock_skills: [
         [ 'miners_knowledge', 'right', 'left']
       ],
+      increase_pickaxe_sharpness: .05,
+      increase_pickaxe_hardness: .05
     }
   }, {
     name: 'Miners Knowledge',
@@ -176,6 +191,8 @@ let skills = [
     skill_requirement_names: [ 'pickaxe_proficiency_iii' ],
     unlock_function: {
       unlock_skills: [],
+      increase_pickaxe_sharpness: .3,
+      increase_pickaxe_hardness: .3
     }
   }, {
     name: 'Managerial Proficiency I',
@@ -220,7 +237,62 @@ let skills = [
       unlock_skills: [],
     },
     increase_all_building_production: .05,
-  }
+  }, {
+    name: 'Better Pickaxes',
+    id: 9,
+    skill_classes: 'circle small',
+    img: 'https://via.placeholder.com/40',
+    desc: 'Increase the chance of getting a better pickaxe!',
+    flavor_text: 'flavor text',
+    position: { col: 3, row: -2 },
+    skill_requirement_names: [ 'pickaxe_proficiency_i' ],
+    unlock_function: {
+      unlock_skills: [
+        [ 'even_better_pickaxes', 'right', 'left' ]
+      ],
+      increase_pickaxe_quality_bonus: .1
+    }
+  }, {
+    name: 'More Pickaxes',
+    id: 10,
+    skill_classes: 'circle small',
+    img: 'https://via.placeholder.com/40',
+    desc: 'Increase the chance of a pickaxe dropping!',
+    flavor_text: 'flavor text',
+    position: { col: 3, row: -3 },
+    skill_requirement_names: [ 'pickaxe_proficiency_i' ],
+    unlock_function: {
+      unlock_skills: [
+        [ 'even_more_pickaxes', 'right', 'left' ]
+      ],
+      increase_pickaxe_drop_chance: .1
+    }
+  }, {
+    name: 'Even More Pickaxes',
+    id: 11,
+    skill_classes: 'circle small',
+    img: 'https://via.placeholder.com/40',
+    desc: 'Increase the chance of a pickaxe dropping even more!',
+    flavor_text: 'flavor text',
+    position: { col: 6, row: -3 },
+    skill_requirement_names: [ 'more_pickaxes' ],
+    unlock_function: {
+      increase_pickaxe_drop_chance: .15
+    }
+  }, {
+    name: 'Even Better Pickaxes',
+    id: 12,
+    skill_classes: 'circle small',
+    img: 'https://via.placeholder.com/40',
+    desc: 'Increase the chance of getting a better pickaxe even more!',
+    flavor_text: 'flavor text',
+    position: { col: 6, row: -2 },
+    skill_requirement_names: [ 'better_pickaxes' ],
+    unlock_function: {
+      increase_pickaxe_quality_bonus: .1
+    }
+  },
+    //skill for better gold nuggets?
 ]
 
 let load_skills = () => {

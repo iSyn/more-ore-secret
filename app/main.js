@@ -773,7 +773,7 @@ let build_skills = () => {
       str += `
         <div
           id='skill-${ skill.id }'
-          class='skill ${ skill.locked ? "locked" : "" } ${ skill.skill_classes ? skill.skill_classes : "" }'
+          class='skill ${ skill.locked ? "locked" : "" } ${ skill.owned ? "owned" : "not-owned" } ${ skill.skill_classes ? skill.skill_classes : "" }'
           onclick='Skills[ ${ i } ].level_up( event )'
           onmouseover='TT.show( event, { name: "${ skill.code_name }", type: "skill" } )'
           onmouseout='TT.hide()'
@@ -831,39 +831,43 @@ let draw_skill_lines = () => {
 
     let lines = skill.unlock_function.unlock_skills
 
-    lines.forEach( line => {
+    if ( lines ) {
+      lines.forEach( line => {
 
-      let target_skill = select_from_arr( Skills, line[ 0 ] )
-      let target_skill_el = s( `#skill-${ target_skill.id }` )
-      let base_skill_el = s( `#skill-${ skill.id }` )
+        let target_skill = select_from_arr( Skills, line[ 0 ] )
+        let target_skill_el = s( `#skill-${ target_skill.id }` )
+        let base_skill_el = s( `#skill-${ skill.id }` )
+  
+        ctx.strokeStyle = skill.owned ? '#fff' : '#555'
+        ctx.lineWidth = skill.owned ? 3 : 1
+  
+        let p = get_skill_line_positions( line[ 1 ], line[ 2 ], skill, target_skill, base_skill_el, target_skill_el, scroll_offset )
+  
+        ctx.beginPath()
+        ctx.moveTo( p.base_position.x, p.base_position.y )
+  
+        if ( skill.position.row != target_skill.position.row && ( line[ 1 ] == 'right' || line[ 1 ] == 'left' ) ) {
+  
+          let middle_distance = ( target_skill_el.offsetLeft - ( base_skill_el.offsetLeft + base_skill_el.offsetWidth ) ) / 2
+  
+          ctx.lineTo( p.base_position.x + middle_distance, p.base_position.y )
+          ctx.lineTo( p.base_position.x + middle_distance, p.target_position.y )
+          ctx.lineTo( p.target_position.x, p.target_position.y )
+  
+        } else if ( skill.position.row != target_skill.position.row && ( line[ 1 ] == 'top' && line[ 2 ] == 'left' ) ) {
+          ctx.lineTo( p.base_position.x, p.target_position.y )
+          ctx.lineTo( p.target_position.x, p.target_position.y )
+        } else {
+          ctx.lineTo( p.target_position.x, p.target_position.y )
+        }
+  
+        ctx.stroke()
+        ctx.closePath()
+  
+      } )
+    } 
 
-      ctx.strokeStyle = skill.owned ? '#fff' : '#555'
-      ctx.lineWidth = skill.owned ? 3 : 1
-
-      let p = get_skill_line_positions( line[ 1 ], line[ 2 ], skill, target_skill, base_skill_el, target_skill_el, scroll_offset )
-
-      ctx.beginPath()
-      ctx.moveTo( p.base_position.x, p.base_position.y )
-
-      if ( skill.position.row != target_skill.position.row && ( line[ 1 ] == 'right' || line[ 1 ] == 'left' ) ) {
-
-        let middle_distance = ( target_skill_el.offsetLeft - ( base_skill_el.offsetLeft + base_skill_el.offsetWidth ) ) / 2
-
-        ctx.lineTo( p.base_position.x + middle_distance, p.base_position.y )
-        ctx.lineTo( p.base_position.x + middle_distance, p.target_position.y )
-        ctx.lineTo( p.target_position.x, p.target_position.y )
-
-      } else if ( skill.position.row != target_skill.position.row && ( line[ 1 ] == 'top' && line[ 2 ] == 'left' ) ) {
-        ctx.lineTo( p.base_position.x, p.target_position.y )
-        ctx.lineTo( p.target_position.x, p.target_position.y )
-      } else {
-        ctx.lineTo( p.target_position.x, p.target_position.y )
-      }
-
-      ctx.stroke()
-      ctx.closePath()
-
-    } )
+    console.log( 'COMPLETED DRAWING LINES FOR SKILL:', skill.name )
   } )
 }
 
@@ -2575,7 +2579,7 @@ let update_ore_hp = ( amount ) => {
 
     S.misc.current_ore_sprite = get_random_num( 1, S.misc.ore_sprite_amount )
 
-    if ( Math.random() <= .3 || S.stats.total_rocks_destroyed == 1 ) {
+    if ( Math.random() <= S.pickaxe_drop_chance || S.stats.total_rocks_destroyed == 1 ) {
       generate_item_drop()
     }
 
