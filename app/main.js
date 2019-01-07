@@ -1281,7 +1281,11 @@ let handle_rock_particles = ( e, amount = 2 ) => {
       let y = e.clientY
 
       particle.style.left = x + 'px'
-      particle.style.top = y + 'px'
+      particle.style.top = y + get_random_num( -10, 10 )  + 'px'
+
+      // handle transition speed
+      let transition_speed = get_random_num( 5, 10 ) * .1
+      particle.style.transition_speed = transition_speed
 
       particle.addEventListener( 'animationend', () => remove_el( particle ) )
 

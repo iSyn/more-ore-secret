@@ -7,19 +7,24 @@
   background: lightgrey;
   transition: all .7s;
   animation: particle_fall .7s forwards ease-in-out;
-
+  pointer-events: none;
 }
 
 
 
 @keyframes particle_fall {
   0% {
-    transform: translateY( 0 )
+    transform: translateY( 0 );
+    opacity: 1;
   }
   25% {
-    transform: translateY( -10px )
+    transform: translateY( -10px );
+  }
+  80% {
+    opacity: 1;
   }
   100% {
-    transform: translateY( 100px )
+    transform: translateY( 100px );
+    opacity: 0;
   }
 }
