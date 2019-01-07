@@ -44,7 +44,7 @@ let S = new State().state
 let RN = new RisingNumber()
 let TS = new TextScroller()
 let TT = new Tooltip()
-let PE = new ParticleEngine()
+// let PE = new ParticleEngine()
 let SMITH = new Smith()
 
 let O = {
@@ -958,6 +958,7 @@ let calculate_pickaxe_sharpness = () => {
   let sharpness = 0
 
   sharpness += S.pickaxe.item.sharpness
+  
   sharpness += S.pickaxe.temporary_bonuses.sharpness
   sharpness += S.pickaxe.permanent_bonuses.sharpness
 
@@ -1236,6 +1237,7 @@ let handle_click = ( e, type ) => {
     }
 
     generate_weak_spot()
+    handle_rock_particles( event, 2 )
 
     if ( S.locked.combo_sign && S.current_combo >= 5 ) {
       S.locked.combo_sign = 0
@@ -1255,6 +1257,7 @@ let handle_click = ( e, type ) => {
     play_sound( 'ore_hit' )
 
     RN.new( event, 'click', opc )
+    handle_rock_particles( event )
     
   }
 
@@ -1265,6 +1268,34 @@ let handle_click = ( e, type ) => {
   earn( opc )
 
   if ( !S.locked.combo_sign && s( '.combo-sign-number' ) ) update_combo_sign_number()
+}
+
+let handle_rock_particles = ( e, amount = 1 ) => {
+  if ( S.prefs.show_rock_particles ) {
+
+    for ( let i = 0; i < amount; i++ ) {
+      let particle = document.createElement( 'div' )
+      particle.classList.add( 'particle' )
+
+      let x = e.clientX
+      let y = e.clientY
+
+      particle.style.left = x + 'px'
+      particle.style.top = y + 'px'
+
+      particle.addEventListener( 'animationend', () => remove_el( particle ) )
+
+      CONTAINER.append( particle )
+      
+      //reflow
+      particle.getBoundingClientRect()
+      
+      let move_amount = get_random_num( 10, 30 ) * ( Math.round(Math.random()) * 2 - 1 )
+      particle.style.left = x + move_amount + 'px'
+
+    }
+
+  }
 }
 
 let handle_text_scroller = () => {
