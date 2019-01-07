@@ -1270,7 +1270,7 @@ let handle_click = ( e, type ) => {
   if ( !S.locked.combo_sign && s( '.combo-sign-number' ) ) update_combo_sign_number()
 }
 
-let handle_rock_particles = ( e, amount = 1 ) => {
+let handle_rock_particles = ( e, amount = 2 ) => {
   if ( S.prefs.show_rock_particles ) {
 
     for ( let i = 0; i < amount; i++ ) {
@@ -1739,10 +1739,11 @@ let generate_item_drop = () => {
   let transform_y = target.y - origin.y
 
   item.style.transition = 'all .4s ease-in'
-  
-  setTimeout(() => {
-    item.style.transform = `translate( ${ transform_x }px, ${ transform_y }px )`
-  }, 50)
+
+  //reflow
+  item.getBoundingClientRect()
+
+  item.style.transform = `translate( ${ transform_x }px, ${ transform_y }px )`
 
 }
 
@@ -2382,7 +2383,10 @@ let handle_inventory_item_click = ( e, index) => {
 
   CONTAINER.append( popup )
 
-  setTimeout(() => { O.item_popup_visible = true }, 50)
+  //reflow
+  popup.getBoundingClientRect()
+  
+  O.item_popup_visible = true
 
   popup.style.left = e.clientX + 'px'
   popup.style.top = e.clientY + 10 + 'px'
