@@ -1037,10 +1037,10 @@ button {
   width: 3px;
   border-radius: 50%;
   background: lightgrey;
-  -webkit-transition: all .5s;
-  transition: all .5s;
-  -webkit-animation: particle_fall .5s forwards ease-in-out;
-  animation: particle_fall .5s forwards ease-in-out; }
+  -webkit-transition: all .7s;
+  transition: all .7s;
+  -webkit-animation: particle_fall .7s forwards ease-in-out;
+  animation: particle_fall .7s forwards ease-in-out; }
 
 @-webkit-keyframes particle_fall {
   0% {

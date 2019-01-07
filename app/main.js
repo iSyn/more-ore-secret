@@ -1290,7 +1290,7 @@ let handle_rock_particles = ( e, amount = 1 ) => {
       //reflow
       particle.getBoundingClientRect()
       
-      let move_amount = get_random_num( 10, 30 ) * ( Math.round(Math.random()) * 2 - 1 )
+      let move_amount = get_random_num( 10, 40 ) * ( Math.round(Math.random()) * 2 - 1 )
       particle.style.left = x + move_amount + 'px'
 
     }
