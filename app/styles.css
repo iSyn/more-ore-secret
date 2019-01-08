@@ -1039,8 +1039,6 @@ button {
   background: lightgrey;
   -webkit-transition: all .7s;
   transition: all .7s;
-  -webkit-animation: particle_fall .7s forwards ease-in-out;
-  animation: particle_fall .7s forwards ease-in-out;
   pointer-events: none; }
 
 @-webkit-keyframes particle_fall {
@@ -1071,6 +1069,36 @@ button {
   100% {
     -webkit-transform: translateY(100px);
     transform: translateY(100px);
+    opacity: 0; } }
+
+@-webkit-keyframes particle_fall_further {
+  0% {
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+    opacity: 1; }
+  15% {
+    -webkit-transform: translateY(-10px);
+    transform: translateY(-10px); }
+  80% {
+    opacity: 1; }
+  100% {
+    -webkit-transform: translateY(300px);
+    transform: translateY(300px);
+    opacity: 0; } }
+
+@keyframes particle_fall_further {
+  0% {
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+    opacity: 1; }
+  15% {
+    -webkit-transform: translateY(-10px);
+    transform: translateY(-10px); }
+  80% {
+    opacity: 1; }
+  100% {
+    -webkit-transform: translateY(300px);
+    transform: translateY(300px);
     opacity: 0; } }
 
 .wrapper {
