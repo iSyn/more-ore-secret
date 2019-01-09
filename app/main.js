@@ -1780,13 +1780,14 @@ let generate_item_drop = ( is_hoverable = false ) => {
 
 let handle_hoverable_mouseover = ( e, item_uuid ) => {
   
+  play_sound( 'ore_hover' )
   let item = s( `#item_drop_${ item_uuid }` )
   remove_el( item )
 
   let amount = S.opc * 10 + S.ops * 10
 
   earn( amount, false )
-  RN.new( event, 'hoverable-ore', amount )
+  RN.new( e, 'hoverable-ore', amount )
 }
 
 let handle_item_drop_click = ( item_uuid ) => {
