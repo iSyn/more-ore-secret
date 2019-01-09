@@ -74,6 +74,7 @@ let O = {
 
 let init_game = async () => {
   await load_game() 
+  update_ore_sprite( true )
   game_loop()
   S.tabs = Tabs
   build_tabs()
@@ -1276,15 +1277,12 @@ let handle_rock_particles = ( e, amount = 2 ) => {
     for ( let i = 0; i < amount; i++ ) {
       let particle = document.createElement( 'div' )
       particle.classList.add( 'particle' )
-
-      // DETERMINE SIZE OF PARTICLES
-      let size = get_random_num( 2, 4 )
-      particle.style.height = size + 'px'
-      particle.style.width = size + 'px'
-
       // DETERMINE COLOR
       let color = get_random_num( 150, 200 )
       particle.style.background = `rgb( ${ color }, ${ color }, ${ color } )`
+
+      // DETERMINE SIZE OF PARTICLES
+      let size = get_random_num( 2, 4 )
 
       // DETERMINE PLACEMENT OF PARTICLES
       let x, y;
@@ -1292,17 +1290,22 @@ let handle_rock_particles = ( e, amount = 2 ) => {
         x = e.clientX
         y = e.clientY
       } else {
+        size = get_random_num( 3, 5 )
         let ore_sprite_dimensions = ORE_SPRITE.getBoundingClientRect()
         x = get_random_num( ore_sprite_dimensions.left, ore_sprite_dimensions.right )
         y = ore_sprite_dimensions.top
       }
+
+      particle.style.height = size + 'px'
+      particle.style.width = size + 'px'
+
 
       particle.style.left = x + 'px'
       particle.style.top = y + get_random_num( -10, 10 )  + 'px'
 
       particle.style.transition_duration = get_random_num( 5, 10 ) * .1
       let animation_duration = get_random_num( 5, 10 ) * .1
-      particle.style.animation = `particle_fall ${ animation_duration }s forwards ease-in-out`
+      particle.style.animation = `particle_fall ${ animation_duration }s forwards ease-in`
 
       particle.addEventListener( 'animationend', () => remove_el( particle ) )
 
@@ -2694,45 +2697,14 @@ let update_ore_hp = ( amount ) => {
 }
 
 let current_sprite = 0
-let update_ore_sprite_old = () => {
-  let current_percentage = S.current_ore_hp / S.current_ore_max_hp * 100
-
-  if ( current_percentage <= 100 && current_percentage > 80 && current_sprite != 1 ) {
-    ORE_SPRITE.src = `./app/assets/images/ore${ S.misc.current_ore_sprite }-1.png`
-    handle_rock_particles( null, 10 )
-    current_sprite = 1
-  } else if ( current_percentage <= 80 && current_percentage > 60 && current_sprite != 2 ) {
-    play_sound( 'ore_percentage_lost' )
-    ORE_SPRITE.src = `./app/assets/images/ore${ S.misc.current_ore_sprite }-2.png`
-    handle_rock_particles( null, 10 )
-    current_sprite = 2
-  } else if ( current_percentage <= 60 && current_percentage > 40 && current_sprite != 3 ) {
-    play_sound( 'ore_percentage_lost' )
-    ORE_SPRITE.src = `./app/assets/images/ore${ S.misc.current_ore_sprite }-3.png`
-    handle_rock_particles( null, 10 )
-    current_sprite = 3
-  } else if ( current_percentage <= 40 && current_percentage > 20 && current_sprite != 4 ) {
-    play_sound( 'ore_percentage_lost' )
-    ORE_SPRITE.src = `./app/assets/images/ore${ S.misc.current_ore_sprite }-4.png`
-    handle_rock_particles( null, 10 )
-    current_sprite = 4
-  } else if ( current_percentage <= 20 && current_sprite != 5 ) {
-    play_sound( 'ore_percentage_lost' )
-    ORE_SPRITE.src = `./app/assets/images/ore${ S.misc.current_ore_sprite }-5.png`
-    handle_rock_particles( null, 10 )
-    current_sprite = 5
-  }
-
-}
-
-let update_ore_sprite = () => {
+let update_ore_sprite = ( update_from_state = false) => {
   let current_percentage = S.current_ore_hp / S.current_ore_max_hp * 100
   let calc_sprite = Math.min(5, 6 - Math.ceil( current_percentage /20 ) )
   if ( current_sprite !== calc_sprite ) {
     current_sprite = calc_sprite
     ORE_SPRITE.src = `./app/assets/images/ore${ S.misc.current_ore_sprite }-${ current_sprite }.png`
-    play_sound( 'ore_percentage_lost' )
-    handle_rock_particles( null, 5 )
+    if ( !update_from_state ) play_sound( 'ore_percentage_lost' )
+    if ( !update_from_state ) handle_rock_particles( null, 5 )
   }
 }
 

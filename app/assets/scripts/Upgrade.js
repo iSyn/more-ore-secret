@@ -47,11 +47,13 @@ let Upgrade = function( obj ) {
 
     this.desc = obj.desc || this.build_upgrade_desc()
 
-    this.buy = () => {
+    this.buy = ( e ) => {
         if ( S.ores >= this.price ) {
             S.ores -= this.price
             play_sound( 'buy_sound' )
             this.owned = 1
+
+            remove_el( e.target )
 
             if ( this.buy_functions ) {
 
@@ -71,7 +73,7 @@ let Upgrade = function( obj ) {
 
             }
 
-            O.rebuild_store_tab = 1
+            // O.rebuild_store_tab = 1
             O.recalculate_opc = 1
             O.recalculate_ops = 1
 
