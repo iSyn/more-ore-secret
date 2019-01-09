@@ -2730,7 +2730,12 @@ let update_ore_sprite = ( update_from_state = false) => {
     if ( !update_from_state ) {
       play_sound( 'ore_percentage_lost' )
       handle_rock_particles( null, 5 )
-      if ( Math.random() <= .6 ) generate_item_drop( true )
+      if ( Math.random() <= .6 ) {
+        let amount = select_random_from_arr( [ 1, 1, 1, 2 ] )
+        for ( let i = 0; i < amount; i++ ) {
+          generate_item_drop( true )
+        }
+      }
     }
   }
 }
