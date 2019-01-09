@@ -1720,24 +1720,32 @@ let gain_generation_level = () => {
 
 // ==== ITEM DROP SHIT ===================================================================
 
-let generate_item_drop = () => {
+let generate_item_drop = ( is_hoverable = false ) => {
   
   let item_uuid = Math.round( Math.random() * 10000000 )
-
   let item = document.createElement( 'div' )
-  item.classList.add( 'item-container' )
 
-  item.innerHTML = `
-    <img class='item-shine' src="./app/assets/images/misc-shine.png" alt="shine">
-    <img class='item-shine' src="./app/assets/images/misc-shine.png" alt="shine">
-    <div id='item_drop_${ item_uuid }' data-item_level="${ S.stats.current_rocks_destroyed }" class="item"></div>
-  `
+  if ( is_hoverable ) {
+    item.id = `item_drop_${ item_uuid }`
+    item.classList.add( 'hoverable-item' )
+    item.addEventListener( 'mouseover', ( event ) => handle_hoverable_mouseover( event, item_uuid ) )
+    
+  } else {
+    item.classList.add( 'item-container' )
 
-  item.style.pointerEvents = 'none'
-  item.addEventListener( 'click', ( event ) => { 
-    handle_item_drop_click( item_uuid ) 
-    remove_el( event.target )
-  } )
+    item.innerHTML = `
+      <img class='item-shine' src="./app/assets/images/misc-shine.png" alt="shine">
+      <img class='item-shine' src="./app/assets/images/misc-shine.png" alt="shine">
+      <div id='item_drop_${ item_uuid }' data-item_level="${ S.stats.current_rocks_destroyed }" class="item"></div>
+    `
+
+    item.style.pointerEvents = 'none'
+
+    item.addEventListener( 'click', ( event ) => { 
+      handle_item_drop_click( item_uuid ) 
+      remove_el( event.target )
+    } )
+  }
 
   item.addEventListener( 'transitionend', () => { item.style.pointerEvents = 'all' } )
 
@@ -1770,11 +1778,25 @@ let generate_item_drop = () => {
 
 }
 
+let handle_hoverable_mouseover = ( e, item_uuid ) => {
+  
+  let item = s( `#item_drop_${ item_uuid }` )
+  remove_el( item )
+
+  let amount = S.opc * 10 + S.ops * 10
+
+  earn( amount, false )
+  RN.new( event, 'hoverable-ore', amount )
+}
+
 let handle_item_drop_click = ( item_uuid ) => {
 
   S.stats.total_items_found++
 
   let item = s( `#item_drop_${ item_uuid }` )
+
+  console.log( item.dataset )
+
   O.pickaxe = new Pickaxe( item.dataset.item_level )
 
   let wrapper = document.createElement( 'div' )
@@ -2703,8 +2725,12 @@ let update_ore_sprite = ( update_from_state = false) => {
   if ( current_sprite !== calc_sprite ) {
     current_sprite = calc_sprite
     ORE_SPRITE.src = `./app/assets/images/ore${ S.misc.current_ore_sprite }-${ current_sprite }.png`
-    if ( !update_from_state ) play_sound( 'ore_percentage_lost' )
-    if ( !update_from_state ) handle_rock_particles( null, 5 )
+
+    if ( !update_from_state ) {
+      play_sound( 'ore_percentage_lost' )
+      handle_rock_particles( null, 5 )
+      if ( Math.random() <= .6 ) generate_item_drop( true )
+    }
   }
 }
 

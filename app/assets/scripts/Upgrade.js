@@ -73,7 +73,6 @@ let Upgrade = function( obj ) {
 
             }
 
-            // O.rebuild_store_tab = 1
             O.recalculate_opc = 1
             O.recalculate_ops = 1
 

@@ -27,6 +27,9 @@ let RisingNumber = function() {
       // TYPES
       switch ( type ) {
 
+        case 'hoverable-ore':
+          break;
+
         case 'ore-madness':
           el.style.color = 'crimson'
           el.style.textShadow = '0 0 4px black, 0 2px 6px purple, 0 -2px 5px orange'
