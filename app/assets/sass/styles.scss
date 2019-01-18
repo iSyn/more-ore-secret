@@ -8,6 +8,11 @@
   cursor: default;
 }
 
+::-webkit-scrollbar {
+  width: 1px;  /* remove scrollbar space */
+  // background: transparent;  /* optional: just make scrollbar invisible */
+}
+
 button {
   cursor: pointer;
 }

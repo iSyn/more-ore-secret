@@ -11,6 +11,10 @@
   -webkit-user-drag: none;
   cursor: default; }
 
+::-webkit-scrollbar {
+  width: 1px;
+  /* remove scrollbar space */ }
+
 button {
   cursor: pointer; }
 
