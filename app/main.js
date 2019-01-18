@@ -44,7 +44,6 @@ let S = new State().state
 let RN = new RisingNumber()
 let TS = new TextScroller()
 let TT = new Tooltip()
-// let PE = new ParticleEngine()
 let SMITH = new Smith()
 
 let O = {
