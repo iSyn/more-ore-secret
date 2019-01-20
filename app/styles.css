@@ -2920,6 +2920,20 @@ input:checked + .slider:before {
   cursor: pointer; }
   .quest-area-container * {
     pointer-events: none; }
+  .quest-area-container .quest-text-log {
+    height: 120px;
+    max-height: 120px;
+    width: 600px;
+    background: rgba(0, 0, 0, 0.7);
+    position: absolute;
+    pointer-events: all;
+    opacity: 0.5;
+    padding: 5px; }
+    .quest-area-container .quest-text-log:hover {
+      opacity: 1; }
+    .quest-area-container .quest-text-log p {
+      pointer-events: none;
+      color: white; }
   .quest-area-container .boost-notifier {
     position: absolute;
     left: 0;

@@ -39,12 +39,14 @@ const LOADING_TEXT = s( '.loading-text' )
 const QUEST_AREA_CONTAINER = s( '.quest-area-container' )
 const HERO = s( '.hero' )
 const BOOST_NOTIFIER = s( '.boost-notifier' )
+const QUEST_TEXT_LOG = s( '.quest-text-log' )
 
 let S = new State().state
 let RN = new RisingNumber()
 let TS = new TextScroller()
 let TT = new Tooltip()
 let SMITH = new Smith()
+let QL = new QuestLog()
 
 let O = {
   rebuild_bottom_tabs: 1,
@@ -114,6 +116,7 @@ let save_game = () => {
   localStorage.setItem( 'tabs', JSON.stringify( Tabs ) )
   localStorage.setItem( 'skills', JSON.stringify( Skills ) )
   localStorage.setItem( 'quests', JSON.stringify( Quests ) )
+  localStorage.setItem( 'quest_log', JSON.stringify( QL.history ) )
 
   notify( 'Saved Game' )
 }
@@ -152,6 +155,9 @@ let load_game = async () => {
 
   await load_quests()
   console.log( 'quests loaded' )
+
+  await load_quest_log()
+  console.log( 'quest log loaded' )
 
   notify( 'Save loaded successfully' )
 

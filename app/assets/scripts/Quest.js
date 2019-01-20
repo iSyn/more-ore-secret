@@ -39,7 +39,7 @@ let quests = [
         chance: .4,
         level_range: [ 1, 1 ],
         gem_pool: 0
-      }
+      },
     },
   }, {
     name: 'Forgotten Cemetary',

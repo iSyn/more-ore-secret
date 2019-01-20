@@ -296,6 +296,26 @@
     pointer-events: none;
   }
 
+  .quest-text-log {
+    height: 120px;
+    max-height: 120px;
+    width: 600px;
+    background: rgba( 0, 0, 0, 0.7 );
+    position: absolute;
+    pointer-events: all;
+    opacity: 0.5;
+    padding: 5px;
+
+    &:hover {
+      opacity: 1;
+    }
+
+    p {
+      pointer-events: none;
+      color: white;
+    }
+  }
+
   .boost-notifier {
     position: absolute;
     left: 0;
