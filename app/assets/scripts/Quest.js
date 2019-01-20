@@ -11,7 +11,6 @@ let Quest = function( obj, id ) {
   this.completed = obj.completed || 0
   this.times_completed = obj.times_completed || 0
   this.total_xp_gained = obj.total_xp_gained || 0
-
   this.rewards = obj.rewards
 
   this.locked = 1
@@ -57,7 +56,7 @@ let quests = [
         level_range: [ 1, 3 ],
         gem_pool: 1
       }
-    }
+    },
   }, {
     name: 'Venal Corruption',
     img: 'https://via.placeholder.com/64',
@@ -95,7 +94,25 @@ let quests = [
   }
 ]
 
-// quests.forEach( ( quest, index ) => new Quest( quest, index ) )
+let global_quest_events = [
+  {
+    type: 'add time to quest',
+    sentences: [
+      'took a wrong turn.',
+      'stubbed their toe.',
+      'got lost.'
+    ],
+    amount: [ 30 * SECOND, 1 * MINUTE, 2 * MINUTE, 3 * MINUTE ]
+  },
+  {
+    type: 'subtract time to quest',
+    sentences: [
+      'found a shortcut.',
+      'started sprinting for no reason.',
+    ],
+    amount: [ 30 * SECOND, 1 * MINUTE, 2 * MINUTE, 3 * MINUTE ]
+  }
+]
 
 let load_quests = () => {
   

@@ -80,6 +80,7 @@ let State = function( s = {} ) {
     quest_speed_bonus: 0,
     quest: s.quest ||  {
       state: null,
+      hero: null,
       current_quest: null,
       current_quest_progress: null,
       boost_amount: 1 * SECOND

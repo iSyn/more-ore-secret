@@ -2927,10 +2927,13 @@ input:checked + .slider:before {
     background: rgba(0, 0, 0, 0.7);
     position: absolute;
     pointer-events: all;
-    opacity: 0.5;
-    padding: 5px; }
-    .quest-area-container .quest-text-log:hover {
-      opacity: 1; }
+    opacity: 0;
+    padding: 5px;
+    overflow: auto; }
+    .quest-area-container .quest-text-log.active {
+      opacity: .5; }
+      .quest-area-container .quest-text-log.active:hover {
+        opacity: 1; }
     .quest-area-container .quest-text-log p {
       pointer-events: none;
       color: white; }

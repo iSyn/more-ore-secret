@@ -2138,6 +2138,9 @@ let start_quest = ( code_name ) => {
   S.quest.state = 'in progress'
   S.quest.current_quest = quest
   S.quest.current_quest_progress = 0
+  S.quest.adventurer = new Adventurer()
+
+  QL.append( `The adventurer ${ S.quest.adventurer.name } has embarked on a quest.`)
 
   quest_initialization()
 
@@ -2167,9 +2170,26 @@ let handle_quest_progress = ( duration = 0 ) => {
 
     HERO.classList.remove( 'moving' )
     HERO.classList.add( 'jumping' )
+
+    QL.append( `${ S.quest.adventurer.name } has completed the ${ S.quest.current_quest.name } `)
     
   }
 
+}
+
+let quest_event_counter = 0
+let handle_quest_event = () => {
+  quest_event_counter++
+  
+  if ( quest_event_counter >= S.prefs.game_speed * 5 ) {
+    quest_event_counter = 0
+    
+    let event = select_random_from_arr( global_quest_events )
+    console.log( 'event:', event )
+    QL.append( `${ S.quest.adventurer.name } ${ select_random_from_arr( event.sentences) }` )
+    S.quest.current_quest_progress += select_random_from_arr( event.amount )
+
+  }
 }
 
 let handle_quest_area_click = () => {
@@ -2227,8 +2247,11 @@ let complete_quest = () => {
   }
 
   gain_quest_rewards( quest )
+  quest_event_counter = 0
 
   reset_quest_state()
+
+  QL.clear()
 
 }
 
@@ -2640,6 +2663,7 @@ let game_loop = () => {
     if ( !O.quest_initialized ) quest_initialization()
     if ( S.quest.state == 'in progress' ) {
       handle_quest_progress( tick_ms )
+      handle_quest_event()
     }
   
     earn( S.ops / S.prefs.game_speed )
@@ -3161,7 +3185,7 @@ window.addEventListener('keyup', (e) => {
       Smith_Upgrades.forEach( upgrade => { upgrade.duration = 1 * SECOND })
       S.pickaxe.item.damage *= 1000
       S.refined_ores += 100
-      Quests.forEach( quest => quest.duration = 1 * SECOND )
+      // Quests.forEach( quest => quest.duration = 1 * SECOND )
     }
     if ( pressed.join( '' ).includes( 'qwer' ) ) {
       s( '.ore-container' ).style.background = 'black'
