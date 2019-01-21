@@ -2959,7 +2959,9 @@ input:checked + .slider:before {
       bottom: 30px;
       color: #aaa;
       font-size: 40px;
-      opacity: 0; }
+      opacity: 0;
+      -webkit-transition: all .1s;
+      transition: all .1s; }
       .quest-area-container .hero-container .hero.active {
         opacity: 1; }
       .quest-area-container .hero-container .hero.moving {

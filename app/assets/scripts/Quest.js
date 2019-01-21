@@ -102,7 +102,7 @@ let global_quest_events = [
       'stubbed their toe.',
       'got lost.'
     ],
-    amount: [ 30 * SECOND, 1 * MINUTE, 2 * MINUTE, 3 * MINUTE ]
+    amount: [ -30 * SECOND, -1 * MINUTE, -2 * MINUTE ]
   },
   {
     type: 'subtract time to quest',
@@ -110,7 +110,7 @@ let global_quest_events = [
       'found a shortcut.',
       'started sprinting for no reason.',
     ],
-    amount: [ 30 * SECOND, 1 * MINUTE, 2 * MINUTE, 3 * MINUTE ]
+    amount: [ 30 * SECOND, 1 * MINUTE, 2 * MINUTE ]
   }
 ]
 

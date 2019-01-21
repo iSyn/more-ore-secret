@@ -2187,7 +2187,10 @@ let handle_quest_event = () => {
     let event = select_random_from_arr( global_quest_events )
     console.log( 'event:', event )
     QL.append( `${ S.quest.adventurer.name } ${ select_random_from_arr( event.sentences) }` )
+
     S.quest.current_quest_progress += select_random_from_arr( event.amount )
+    if ( S.quest.current_quest_progress < 0 ) S.quest.current_quest_progress = 0
+    if ( S.quest.current_quest_progress > S.quest.current_quest.duration ) S.quest.current_quest_progress = S.quest.current_quest.duration
 
   }
 }
