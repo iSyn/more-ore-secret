@@ -25,14 +25,16 @@ let QuestLog = function() {
     }
 
     this.rebuild_history = () => {
-        QUEST_TEXT_LOG.classList.add( 'active' )
-        let str = ''
-        this.history.forEach( log => {
-            str += `
-                <p>> ${ log }</p>
-            `
-        })
-        QUEST_TEXT_LOG.innerHTML = str
+        if ( S.quest.state == 'in progress' ) {
+            QUEST_TEXT_LOG.classList.add( 'active' )
+            let str = ''
+            this.history.forEach( log => {
+                str += `
+                    <p>> ${ log }</p>
+                `
+            })
+            QUEST_TEXT_LOG.innerHTML = str
+        }
     }
 }
 
