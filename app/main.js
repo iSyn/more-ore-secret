@@ -378,8 +378,6 @@ let build_tabs = () => {
 }
 
 let build_store_tab = () => {
-  
-  console.log( 'build store tab firing' )
 
   let str = ''
   str += build_upgrades()
@@ -1781,7 +1779,6 @@ let generate_item_drop = ( is_hoverable = false ) => {
   item.getBoundingClientRect()
 
   setTimeout(() => {
-    console.log( 'set timeout firing')
     if ( s( `#item_drop_${ item_uuid }` ) ) {
       item.style.animation = 'fade_out 1s linear forwards'
       item.addEventListener( 'animationedend' , () => { remove_el( item ) })
@@ -1798,7 +1795,7 @@ let handle_hoverable_mouseover = ( e, item_uuid ) => {
   let item = s( `#item_drop_${ item_uuid }` )
   remove_el( item )
 
-  let amount = S.opc * 10 + S.ops * 10
+  let amount = S.opc * 5 + S.ops * 5
 
   earn( amount, false )
   RN.new( e, 'hoverable-ore', amount )
@@ -1828,6 +1825,22 @@ let handle_item_drop_click = ( item_uuid ) => {
 
   if ( S.stats.total_items_found == 1 ) tutorial_pickaxe_description()
 
+}
+
+let check_for_gems = () => {
+
+  if ( S.pickaxe.item.sockets.amount > 0 ) {
+    let has_gems = false
+    for ( let i = 0; i < S.pickaxe.item.sockets.socket.length; i++ ) {
+      if ( !is_empty( S.pickaxe.item.sockets.socket[ i ] ) ) has_gems = true
+    }
+
+    if ( has_gems ) {
+
+    }
+  }
+
+  equip_pickaxe()
 }
 
 let equip_pickaxe = () => {
@@ -1875,7 +1888,7 @@ let build_new_pickaxe_popup = () => {
     </ul>
     <button 
       class='equip-btn'
-      onclick='equip_pickaxe()'
+      onclick='check_for_gems()'
       >EQUIP <i class="fa fa-hand-paper-o fa-1x"></i>
     </button>
     <button 
@@ -2469,11 +2482,13 @@ let handle_inventory_item_click = ( e, index) => {
   `
 
   CONTAINER.append( popup )
+  console.log( popup)
 
   //reflow
   popup.getBoundingClientRect()
   
   O.item_popup_visible = true
+  e.stopPropagation()
 
   popup.style.left = e.clientX + 'px'
   popup.style.top = e.clientY + 10 + 'px'
@@ -2494,7 +2509,6 @@ let socket_gem = ( e, item_index ) => {
     notify( 'Your pickaxe doesnt contain any sockets', 'red', 'error' )
     return
   }
-
 
   let socketed_bool = false
 
