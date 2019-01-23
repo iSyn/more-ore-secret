@@ -1780,6 +1780,14 @@ let generate_item_drop = ( is_hoverable = false ) => {
   //reflow
   item.getBoundingClientRect()
 
+  setTimeout(() => {
+    console.log( 'set timeout firing')
+    if ( s( `#item_drop_${ item_uuid }` ) ) {
+      item.style.animation = 'fade_out 1s linear forwards'
+      item.addEventListener( 'animationedend' , () => { remove_el( item ) })
+    }
+  }, 6 * SECOND)
+
   item.style.transform = `translate( ${ transform_x }px, ${ transform_y }px )`
 
 }
