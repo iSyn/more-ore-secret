@@ -770,7 +770,9 @@ let unlock_upgrade = ( code_name ) => {
     let upgrade = select_from_arr( Upgrades, code_name )
     if ( upgrade.hidden ) {
         upgrade.hidden = false
-        O.rebuild_store_tab = 1
+        if ( O.current_tab == 'store' ) {
+            O.rebuild_store_tab = 1
+        }
     }
 }
 

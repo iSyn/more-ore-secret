@@ -79,7 +79,7 @@ let init_game = async () => {
   game_loop()
   S.tabs = Tabs
   build_tabs()
-  build_store_tab()
+  // build_store_tab()
 
   if ( !S.locked.fragility_spectacles ) generate_weak_spot()
 
@@ -1689,6 +1689,7 @@ let reset_state_and_buildings = () => {
 
   O.recalculate_opc = 1
   O.recalculate_ops = 1
+  O.current_tab = 'store'
   O.rebuild_store_tab = 1
 
 }
