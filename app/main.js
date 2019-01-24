@@ -1828,7 +1828,6 @@ let handle_item_drop_click = ( item_uuid ) => {
 }
 
 let toggle_show_gem_warning = () => {
-  console.log( 'toggling warning')
   S.misc.show_gem_warning = !S.misc.show_gem_warning
 }
 
