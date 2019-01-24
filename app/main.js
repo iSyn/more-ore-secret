@@ -1827,20 +1827,46 @@ let handle_item_drop_click = ( item_uuid ) => {
 
 }
 
+let toggle_show_gem_warning = () => {
+  console.log( 'toggling warning')
+  S.misc.show_gem_warning = !S.misc.show_gem_warning
+}
+
 let check_for_gems = () => {
 
-  if ( S.pickaxe.item.sockets.amount > 0 ) {
-    let has_gems = false
-    for ( let i = 0; i < S.pickaxe.item.sockets.socket.length; i++ ) {
-      if ( !is_empty( S.pickaxe.item.sockets.socket[ i ] ) ) has_gems = true
-    }
+  if ( S.pickaxe.item.sockets ) {
+    if ( S.pickaxe.item.sockets.amount > 0 ) {
+      let has_gems = false
+      for ( let i = 0; i < S.pickaxe.item.sockets.socket.length; i++ ) {
+        if ( !is_empty( S.pickaxe.item.sockets.socket[ i ] ) ) has_gems = true
+      }
 
-    if ( has_gems ) {
+      if ( has_gems && S.misc.show_gem_warning ) {
+        let popup = document.createElement( 'div' )
+        popup.classList.add( 'wrapper' )
+        let str = `
+          <div class='gem-warning' style='text-align: center;'>
+            <h1>Warning</h1>
+            <p>Your currently socketed gems will return to your inventory.</p>
+            <p>If your inventory is full, the gem will be <span style='color: red;'>destroyed</span>.</p>
+            <button onclick='remove_wrapper()' style='padding: 3px; background: transparent; border: 1px solid white; color: white; margin-top: 3px;'>OK</button>
+            <div style='display: flex; flex-flow: row nowrap; justify-content: flex-start; opacity: .5;'>
+              <input type="checkbox" onchange='toggle_show_gem_warning'>
+              <p style='padding-left: 3px;'>Don't show again</p>
+            </div>
+          </div>
+        `
+        popup.innerHTML = str
 
+        CONTAINER.append( popup )
+      }
+
+    } else {
+      equip_pickaxe()
     }
+  } else {
+    equip_pickaxe()
   }
-
-  equip_pickaxe()
 }
 
 let equip_pickaxe = () => {
