@@ -39,6 +39,10 @@ let quests = [
         level_range: [ 1, 1 ],
         gem_pool: 0
       },
+      scrolls: {
+        chance: .3,
+        tier: [ 1 ]
+      }
     },
   }, {
     name: 'Forgotten Cemetary',
@@ -89,6 +93,23 @@ let quests = [
         chance: .7,
         level_range: [ 0, 20 ],
         gem_pool: 2
+      }
+    }
+  }, {
+    name: 'Ohara Athenaeum',
+    img: 'https://via.placeholder.com/64',
+    desc: 'The deserted Ohara Athenaeum once housed the worlds greatest archaeologists. Stacks of timeless documents lay untouched. Scrolls lay everywhere.',
+    flavor_text: 'Fear the buster call...',
+    base_duration: 12 * HOUR,
+    rewards: {
+      achievement: 'poneglyph',
+      xp: 3 * THOUSAND,
+      ores: 78 * THOUSAND,
+      refined_ores: 50,
+      gem: {
+        chance: .2,
+        level_range: [ 3, 10 ],
+        gem_pool: 1
       }
     }
   }
