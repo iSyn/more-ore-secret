@@ -59,6 +59,10 @@ let quests = [
         chance: .35,
         level_range: [ 1, 3 ],
         gem_pool: 1
+      },
+      scrolls: {
+        chance: .2,
+        tier: 1
       }
     },
   }, {
@@ -76,6 +80,10 @@ let quests = [
         chance: .3,
         level_range: [ 3, 7 ],
         gem_pool: 1
+      },
+      scrolls: {
+        chance: .3,
+        tier: 2
       }
     }
   }, {
@@ -93,6 +101,10 @@ let quests = [
         chance: .7,
         level_range: [ 0, 20 ],
         gem_pool: 2
+      },
+      scrolls: {
+        chance: .4,
+        tier: 2
       }
     }
   }, {
@@ -110,6 +122,10 @@ let quests = [
         chance: .2,
         level_range: [ 3, 10 ],
         gem_pool: 1
+      },
+      scrolls: {
+        chance: .6,
+        tier: 3
       }
     }
   }

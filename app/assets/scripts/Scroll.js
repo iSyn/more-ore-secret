@@ -24,6 +24,16 @@ let scrolls = [
             stat: 'sharpness'
         },
         {
+            name: '100% Scroll of Hardness',
+            desc: 'When used, add 20% hardness onto your pickaxe',
+            amount: 20,
+            chance: 1,
+            stat: 'hardness'
+        },
+    ],
+    [
+        // TIER 2 SCROLLS
+        {
             name: '60% Scroll of Sharpness',
             desc: 'If successful, add 50% sharpness onto your pickaxe',
             amount: 50,
@@ -36,13 +46,6 @@ let scrolls = [
             amount: 150,
             chance: .1,
             stat: 'sharpness'
-        },
-        {
-            name: '100% Scroll of Hardness',
-            desc: 'When used, add 20% hardness onto your pickaxe',
-            amount: 20,
-            chance: 1,
-            stat: 'hardness'
         },
         {
             name: '60% Scroll of Hardness',
@@ -60,7 +63,7 @@ let scrolls = [
         },
     ],
     [
-        // TIER 2 SCROLLS
+        // TIER 3 SCROLLS
         {
             name: '100% Scroll of Damage',
             desc: 'When used, add a 2% damage bonus onto your pickaxe',
