@@ -1781,7 +1781,7 @@ let generate_item_drop = ( is_hoverable = false ) => {
   setTimeout(() => {
     if ( s( `#item_drop_${ item_uuid }` ) ) {
       item.style.animation = 'fade_out 1s linear forwards'
-      item.addEventListener( 'animationedend' , () => { remove_el( item ) })
+      item.addEventListener( 'animationend' , () => { remove_el( item ) })
     }
   }, 6 * SECOND)
 
@@ -1822,16 +1822,31 @@ let handle_item_drop_click = ( item_uuid ) => {
   wrapper.innerHTML = str
 
   CONTAINER.append( wrapper )
+  gems_checked = false
 
   if ( S.stats.total_items_found == 1 ) tutorial_pickaxe_description()
 
 }
 
 let toggle_show_gem_warning = () => {
-  S.misc.show_gem_warning = !S.misc.show_gem_warning
+  let checkbox = s( '#checkbox-gem-warning' )
+  
+  if ( checkbox.checked ) {
+    S.misc.show_gem_warning = false
+  } else {
+    S.misc.show_gem_warning = true
+  }
+
+  console.log( S.misc.show_gem_warning )
 }
 
+let gems_checked = false
 let check_for_gems = () => {
+
+  if ( gems_checked ) {
+    equip_pickaxe()
+    return
+  }
 
   if ( S.pickaxe.item.sockets ) {
     if ( S.pickaxe.item.sockets.amount > 0 ) {
@@ -1848,9 +1863,9 @@ let check_for_gems = () => {
             <h1>Warning</h1>
             <p>Your currently socketed gems will return to your inventory.</p>
             <p>If your inventory is full, the gem will be <span style='color: red;'>destroyed</span>.</p>
-            <button onclick='remove_wrapper()' style='padding: 3px; background: transparent; border: 1px solid white; color: white; margin-top: 3px;'>OK</button>
+            <button onclick='remove_wrapper(); gems_checked = true' style='padding: 3px; background: transparent; border: 1px solid white; color: white; margin-top: 10px;'>OK</button>
             <div style='display: flex; flex-flow: row nowrap; justify-content: flex-start; opacity: .5;'>
-              <input type="checkbox" onchange='toggle_show_gem_warning'>
+              <input id='checkbox-gem-warning' type="checkbox" onchange='toggle_show_gem_warning()'>
               <p style='padding-left: 3px;'>Don't show again</p>
             </div>
           </div>
@@ -1858,6 +1873,8 @@ let check_for_gems = () => {
         popup.innerHTML = str
 
         CONTAINER.append( popup )
+      } else {
+        equip_pickaxe()
       }
 
     } else {
@@ -1871,6 +1888,16 @@ let check_for_gems = () => {
 let equip_pickaxe = () => {
 
   if ( s( '#tutorial-pickaxe-description' ) ) remove_el( s( '#tutorial-pickaxe-description' ) )
+  if ( O.current_tab == 'smith' ) O.rebuild_smith_tab = 1
+
+  // remove current gems on pickaxe and add to inventory
+  if ( S.pickaxe.item.sockets ) {
+    S.pickaxe.item.sockets.socket.forEach( socket => {
+      if ( !is_empty( socket ) ) {
+        add_to_inventory( socket )
+      }
+    })
+  }
 
   let pickaxe = O.pickaxe
 
