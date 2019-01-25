@@ -2319,7 +2319,6 @@ let complete_quest = () => {
   if ( S.stats.total_unique_quests_completed == 5 ) win_achievement( 'adventurer' )
 
   let next_quest = Quests[ quest.id + 1 ]
-  console.log( quest )
   if ( next_quest ) {
     if ( next_quest.locked ) next_quest.locked = 0
   }
@@ -2337,6 +2336,8 @@ let gain_quest_rewards = ( quest ) => {
 
   let gem = get_quest_gem( quest.rewards.gem )
   O.current_gem = gem
+
+  let scroll = get_quest_scroll( quest.rewards.scrolls )
 
   let popup = document.createElement( 'div' )
   popup.classList.add( 'wrapper' )
@@ -2375,6 +2376,19 @@ let gain_quest_rewards = ( quest ) => {
           `
         }
 
+        if ( scroll ) {
+          str += `
+            <li
+              class='quest-reward-scroll',
+              onmouseover='TT.show( event, { type: "scroll" } )'
+              onmouseout='TT.hide()'
+            >
+              <img src="https://via.placeholder.com/40" alt=''/>
+              <p>1</p>
+            </li>
+          `
+        }
+
         str += `
       </ul>
       <button onclick='remove_wrapper()'>OK</buttom>
@@ -2386,6 +2400,7 @@ let gain_quest_rewards = ( quest ) => {
   earn_refined_ores( quest.rewards.refined_ores )
 
   if ( !is_empty( gem ) ) add_to_inventory( gem )
+  if ( scroll ) add_to_inventory( scroll )
 
   popup.innerHTML = str
 
@@ -2401,7 +2416,16 @@ let get_quest_gem = ( q ) => {
 
   return null
 
+}
 
+let get_quest_scroll = ( q ) => {
+
+  if ( Math.random() <= q.chance ) {
+    console.log( 'you found a scroll')
+    return new Scroll( q.tier )
+  }
+  
+  return null
 }
 
 let reset_quest_state = () => {
@@ -2525,13 +2549,20 @@ let handle_inventory_item_click = ( e, index) => {
   if ( s( '.inventory-item-click-popup' ) ) return
 
   let item = S.inventory.items[ index ]
+  console.log( 'item', item )
 
   let popup = document.createElement( 'div' )
   popup.classList.add( 'inventory-item-click-popup' )
-  popup.innerHTML = `
-    <p onclick='socket_gem( event, ${ index } )'><i class='fa fa-diamond fa-1x'></i> Socket Gem</p>
-    <p onclick='trash_gem_confirmation( event, ${ index } )'><i class='fa fa-trash-o fa-1x'></i>Trash Gem</p>
-  `
+  let str = ''
+
+  if ( item.item_type == 'gem' ) {
+    str += `<p onclick='socket_gem( event, ${ index } )'><i class='fa fa-diamond fa-1x'></i> Socket Gem</p>`
+  } else if ( item.item_type == 'scroll' ) {
+    str += `<p onclick='use_scroll( event, ${ index } )'><i class='fa fa-bolt fa-1x'></i> Use Scroll</p>`
+  }
+
+  str += `<p onclick='trash_gem_confirmation( event, ${ index } )'><i class='fa fa-trash-o fa-1x'></i>Trash Gem</p>` 
+  popup.innerHTML = str
 
   CONTAINER.append( popup )
   console.log( popup)
@@ -2553,6 +2584,39 @@ let toggle_favorite_item = ( index ) => {
   item.favorite = !item.favorite
 
   build_inventory( true )
+}
+
+let use_scroll = ( e, item_index ) => {
+
+  if ( S.pickaxe.item.used_upgrades < S.pickaxe.item.num_of_upgrades ) {
+
+    S.pickaxe.item.used_upgrades++
+
+    let scroll = S.inventory.items[ item_index ]
+    S.inventory.items[ item_index ] = {}
+
+    let successful = Math.random() <= scroll.chance
+    
+    if ( successful ) {
+      notify( 'enhancement successful', 'green' )
+      play_sound( 'scroll_successful' )
+      if ( scroll.stat != 'damage' ) {
+        S.pickaxe.item[`${ scroll.stat }`] += scroll.amount
+      } else {
+        S.pickaxe.item.damage += S.pickaxe.item.damage * amount
+      }
+    } else {
+      notify( 'enhancement failed', 'red' )
+      play_sound( 'scroll_failed' )
+    }
+
+  } else {
+    notify( 'You can\'t enhance your pickaxe any further', 'red', 'error' )
+  }
+
+  O.rebuild_smith_tab = 1
+
+  
 }
 
 let socket_gem = ( e, item_index ) => {

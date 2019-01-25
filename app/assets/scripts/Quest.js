@@ -27,7 +27,7 @@ let quests = [
     img: 'https://via.placeholder.com/64',
     desc: 'The gloomy Dark Forest is a mysterious place devoid of life. The ones who are enter are forever lost wandering.',
     flavor_text: 'Note: Not the forest Logan Paul went to.',
-    base_duration: 4 * SECOND, // change back to 5
+    base_duration: 1 * SECOND, // change back to 5
     locked: 0,
     rewards: {
       achievement: 'not_that_dark!',
@@ -41,7 +41,7 @@ let quests = [
       },
       scrolls: {
         chance: .3,
-        tier: [ 1 ]
+        tier: 1
       }
     },
   }, {

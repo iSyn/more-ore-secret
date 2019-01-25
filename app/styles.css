@@ -2894,6 +2894,8 @@ input:checked + .slider:before {
         background: #56007d; }
       .wrapper > #quest-rewards-popup ul li.quest-reward-refined-ores {
         background: #946000; }
+      .wrapper > #quest-rewards-popup ul li.quest-reward-scroll {
+        background: #525252; }
       .wrapper > #quest-rewards-popup ul li h1 {
         font-family: 'Germania One';
         text-shadow: 0 0 5px gold;

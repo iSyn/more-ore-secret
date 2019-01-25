@@ -20,24 +20,24 @@ let Tooltip = function() {
       case 'pickaxe-socket':
       case 'inventory-item':
       case 'gem':
+      case 'scroll':
 
-        let g = {}
-        if ( obj.type == 'gem' ) g = O.current_gem
-        if ( obj.type == 'inventory-item' ) g = S.inventory.items[ obj.inventory_index ]
-        if ( obj.type == 'pickaxe-socket' ) g = S.pickaxe.item.sockets.socket[ obj.pickaxe_socket ]
+        if ( obj.type == 'gem' ) item = O.current_gem
+        if ( obj.type == 'inventory-item' ) item = S.inventory.items[ obj.inventory_index ]
+        if ( obj.type == 'pickaxe-socket' ) item = S.pickaxe.item.sockets.socket[ obj.pickaxe_socket ]
 
         TOOLTIP.classList.add( 'gem-tooltip-container' )
 
-        str += `
-          <div class='gem-tooltip'>
-            <div class='gem-image-container'>
-              <img src='https://via.placeholder.com/40' >
+          str += `
+            <div class='gem-tooltip'>
+              <div class='gem-image-container'>
+                <img src='https://via.placeholder.com/40' >
+              </div>
+              <small class='gem-level'>Level ${ item.level } Gem</small>
+              <h1>${ item.name }</h1>
+              <p>+${ item.stat_amount } ${ item.stat_type }</p>
             </div>
-            <small class='gem-level'>Level ${ g.level } Gem</small>
-            <h1>${ g.name }</h1>
-            <p>+${ g.stat_amount } ${ g.stat_type }</p>
-          </div>
-        `
+          `
 
         break
 

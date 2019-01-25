@@ -1,7 +1,7 @@
 let Gem = function( level, gem_pool ) {
 
   this.level = level
-  this.type = 'gem'
+  this.item_type = 'gem'
   this.gem_type = get_gem_type( gem_pool )
   this.stat_amount = get_stat_amount( this )
   this.stat_type = get_stat_type_str( this.gem_type )
