@@ -1783,7 +1783,7 @@ let generate_item_drop = ( is_hoverable = false ) => {
       item.style.animation = 'fade_out 1s linear forwards'
       item.addEventListener( 'animationend' , () => { remove_el( item ) })
     }
-  }, 6 * SECOND)
+  }, 10 * SECOND)
 
   item.style.transform = `translate( ${ transform_x }px, ${ transform_y }px )`
 

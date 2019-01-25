@@ -1872,9 +1872,9 @@ input:checked + .slider:before {
     -webkit-box-direction: normal;
     -ms-flex-flow: row wrap;
     flex-flow: row wrap;
-    -webkit-box-pack: start;
-    -ms-flex-pack: start;
-    justify-content: flex-start; }
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center; }
     .wrapper > .stats-container .achievement-container h1 {
       width: 100%; }
     .wrapper > .stats-container .achievement-container .achievement-square {
