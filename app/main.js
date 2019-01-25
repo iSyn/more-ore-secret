@@ -1501,6 +1501,7 @@ let update_combo_sign_number = () => {
 
 let use_combo_shield = () => {
 
+  play_sound( 'combo_shield_breaking' )
   S.combo_shield.available -= 1
   S.combo_shield.time_last_used = new Date().getTime()
   S.stats.total_combo_shields_used++
