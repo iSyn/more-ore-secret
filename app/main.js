@@ -2459,11 +2459,11 @@ let build_inventory_accordion = ( direct = false ) => {
         <p
           onmouseover='TT.show( event, { name: null, type: "sharpness-info" } )'
           onmouseout='TT.hide()'
-          >Sharpness: ${ p.sharpness } <span style='opacity: .5'>( ${ beautify_number( calculate_pickaxe_sharpness() ) } )</span> %</p>
+          >Sharpness: ${ beautify_number( p.sharpness) } <span style='opacity: .5'>( ${ beautify_number( calculate_pickaxe_sharpness() ) } )</span> %</p>
         <p
           onmouseover='TT.show( event, { name: null, type: "hardness-info" } )'
           onmouseout='TT.hide()'
-          >Hardness: ${ p.hardness } <span style='opacity: .5'>( ${ beautify_number( calculate_pickaxe_hardness() ) } )</span> %</p>
+          >Hardness: ${ beautify_number( p.hardness ) } <span style='opacity: .5'>( ${ beautify_number( calculate_pickaxe_hardness() ) } )</span> %</p>
         <p>Enhancements Available: ${ p.num_of_upgrades - p.used_upgrades}/${ p.num_of_upgrades }</p>
       </div>
 
