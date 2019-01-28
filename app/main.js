@@ -81,10 +81,6 @@ let init_game = async () => {
   S.tabs = Tabs
   build_tabs()
 
-  build_topbar_inventory_ores()
-  build_topbar_inventory_refined_ores()
-  build_topbar_inventory_generation()
-
   if ( !S.locked.fragility_spectacles ) generate_weak_spot()
 
   handle_text_scroller()
@@ -107,7 +103,7 @@ let init_game = async () => {
 
 let save_game = () => {
 
-  S.last_login = Date.now()
+  S.misc.last_save = Date.now()
   
   localStorage.setItem( 'state', JSON.stringify( S ) )
   localStorage.setItem( 'buildings', JSON.stringify( Buildings ) )
@@ -213,19 +209,20 @@ let on_focus = () => {
 
 let earn_offline_resources = () => {
 
-  let last_time = S.last_login
+  console.log( 'earn offline resources firing', S )
+
+  let last_time = S.misc.last_save
   let current_time = Date.now()
 
   if ( last_time ) {
     let amount_of_time_passed_ms = current_time - last_time
     let amount_of_time_passed_seconds = amount_of_time_passed_ms / 1000
-    let amount_to_gain_raw = amount_of_time_passed_seconds * S.ops
-    let amount_to_gain = amount_to_gain_raw > S.max_ore_away_gain ? S.max_ore_away_gain : amount_to_gain_raw
+    let amount_to_gain = amount_of_time_passed_seconds * S.ops
 
     SMITH.current_progress += amount_of_time_passed_ms
     if ( S.quest.state == 'in progress' ) S.quest.current_quest_progress += amount_of_time_passed_ms
 
-    if ( amount_of_time_passed_seconds > 30 && amount_to_gain > 1 ) {
+    if ( amount_to_gain > 1 ) {
 
       if ( !s( '.offline-gain-popup' ) ) {
         let wrapper = document.createElement( 'div' )
@@ -2788,6 +2785,10 @@ let game_loop = () => {
   let earn_amount = O.window_blurred ? S.ops : S.ops / S.prefs.game_speed
 
   update_ore_sprite()
+
+  build_topbar_inventory_ores()
+  build_topbar_inventory_refined_ores()
+  build_topbar_inventory_generation()
 
   if ( O.recalculate_ops ) calculate_ops()
   if ( O.recalculate_opc ) calculate_opc()

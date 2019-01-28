@@ -132,7 +132,7 @@ let State = function( s = {} ) {
       combo_sign: 1
     },
 
-    last_login: null,
+    last_save: null,
 
     stats: s.stats || {
       highest_combo: 0,
@@ -178,7 +178,8 @@ let State = function( s = {} ) {
     misc: s.misc || {
       current_ore_sprite: 1,
       ore_sprite_amount: 5,
-      show_gem_warning: true
+      show_gem_warning: true,
+      last_save: null
     }
   }
 }
