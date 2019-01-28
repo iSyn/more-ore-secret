@@ -77,9 +77,13 @@ let init_game = async () => {
   await load_game() 
   update_ore_sprite( true )
   game_loop()
+  game_loop_1s()
   S.tabs = Tabs
   build_tabs()
-  // build_store_tab()
+
+  build_topbar_inventory_ores()
+  build_topbar_inventory_refined_ores()
+  build_topbar_inventory_generation()
 
   if ( !S.locked.fragility_spectacles ) generate_weak_spot()
 
@@ -2783,49 +2787,46 @@ let sort_inventory = () => {
 // =======================================================================================
 
 let game_loop = () => {
-  
-  O.counter++
-  let tick_ms = 1000 / S.prefs.game_speed
 
-  if ( !O.window_blurred ) {
+  let tick_ms = O.window_blurred ? 1000 : 1000 / S.prefs.game_speed
+  let earn_amount = O.window_blurred ? S.ops : S.ops / S.prefs.game_speed
 
-    update_ore_sprite()
+  update_ore_sprite()
 
-    build_topbar_inventory_ores()
-    build_topbar_inventory_refined_ores()
-    build_topbar_inventory_generation()
+  if ( O.recalculate_ops ) calculate_ops()
+  if ( O.recalculate_opc ) calculate_opc()
+  if ( O.rebuild_store_tab ) build_store_tab()
+  if ( O.rebuild_smith_tab ) build_smith_tab()
+  if ( O.reposition_elements ) position_elements()
+  if ( O.rebuild_bottom_tabs ) build_bottom_tabs()
 
-    if ( O.recalculate_ops ) calculate_ops()
-    if ( O.recalculate_opc ) calculate_opc()
-    if ( O.rebuild_store_tab ) build_store_tab()
-    if ( O.rebuild_smith_tab ) build_smith_tab()
-    if ( O.reposition_elements ) position_elements()
-    if ( O.rebuild_bottom_tabs ) build_bottom_tabs()
+  if ( !is_empty( SMITH.upgrade_in_progress ) ) SMITH._update_progress()
 
-    if ( !is_empty( SMITH.upgrade_in_progress ) ) SMITH._update_progress()
-
-    if ( !O.quest_initialized ) quest_initialization()
-    if ( S.quest.state == 'in progress' ) {
-      handle_quest_progress( tick_ms )
-      handle_quest_event()
-    }
-  
-    earn( S.ops / S.prefs.game_speed )
-
-    // RUNS EVERY SECOND
-    if ( O.counter % S.prefs.game_speed == 0 ) {
-      S.stats.seconds_played++
-      if ( O.current_tab == 'store' ) update_building_prices()
-      if ( S.ops > 0 && S.prefs.show_rising_numbers ) RN.new( null, 'buildings', S.ops )
-    }
-
-    // THIS RUNS EVERY --------------------------------- ↓ seconds
-    if ( O.counter % ( S.prefs.game_speed * S.gold_nugget_spawn_rate ) == 0 ) spawn_gold_nugget()
-
-    handle_combo_shields( 1000 / tick_ms )
+  if ( !O.quest_initialized ) quest_initialization()
+  if ( S.quest.state == 'in progress' ) {
+    handle_quest_progress( tick_ms )
+    handle_quest_event()
   }
 
+  earn( earn_amount )
+
+  handle_combo_shields( 1000 / tick_ms )
+
   setTimeout( game_loop, tick_ms )
+}
+
+let game_loop_1s = () => {
+
+  O.counter++
+  S.stats.seconds_played++
+
+  if ( O.current_tab == 'store' ) update_building_prices()
+  if ( S.ops > 0 && S.prefs.show_rising_numbers ) RN.new( null, 'buildings', S.ops )
+
+  // THIS RUNS EVERY --------------------------------- ↓ seconds
+  if ( O.counter % ( S.prefs.game_speed * S.gold_nugget_spawn_rate ) == 0 ) spawn_gold_nugget()
+
+  setTimeout( game_loop_1s, 1000 )
 }
 
 let update_ore_hp = ( amount ) => {
