@@ -107,7 +107,7 @@ let init_game = async () => {
 
 let save_game = () => {
 
-  S.last_login = new Date().getTime()
+  S.last_login = Date.now()
   
   localStorage.setItem( 'state', JSON.stringify( S ) )
   localStorage.setItem( 'buildings', JSON.stringify( Buildings ) )
@@ -205,20 +205,16 @@ let build_footer = () => {
 
 }
 
-let on_blur = () => {
-  O.window_blurred = true
-  S.last_login = new Date().getTime()
-}
+let on_blur = () => { O.window_blurred = true }
 
 let on_focus = () => {
   O.window_blurred = false
-  earn_offline_resources( S.last_login )
 }
 
 let earn_offline_resources = () => {
 
   let last_time = S.last_login
-  let current_time = new Date().getTime()
+  let current_time = Date.now()
 
   if ( last_time ) {
     let amount_of_time_passed_ms = current_time - last_time
@@ -1507,7 +1503,7 @@ let use_combo_shield = () => {
 
   play_sound( 'combo_shield_break' )
   S.combo_shield.available -= 1
-  S.combo_shield.time_last_used = new Date().getTime()
+  S.combo_shield.time_last_used = Date.now()
   S.stats.total_combo_shields_used++
   S.stats.current_combo_shields_used++
 
@@ -1621,7 +1617,7 @@ let refine = async () => {
       if ( diff <= .166667 ) win_achievement( 'flash_refiner') 
     }
 
-    S.stats.last_refine_time = new Date().getTime()
+    S.stats.last_refine_time = Date.now()
 
     if ( S.stats.times_refined == 1 ) {
       win_achievement( 'babies_first_refine' )
