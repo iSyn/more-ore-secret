@@ -203,9 +203,7 @@ let build_footer = () => {
 
 let on_blur = () => { O.window_blurred = true }
 
-let on_focus = () => {
-  O.window_blurred = false
-}
+let on_focus = () => { O.window_blurred = false }
 
 let earn_offline_resources = () => {
 
