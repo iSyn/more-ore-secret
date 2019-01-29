@@ -3344,4 +3344,4 @@ window.addEventListener('keyup', (e) => {
   }
 })
 
-setInterval( save_game, 1000 * 60 )
+setInterval( save_game, 1000 * 30 )
