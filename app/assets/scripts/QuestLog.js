@@ -25,7 +25,7 @@ let QuestLog = function() {
     }
 
     this.rebuild_history = () => {
-        if ( S.quest.state == 'in progress' ) {
+        if ( S.quest.state != 'completed' ) {
             QUEST_TEXT_LOG.classList.add( 'active' )
             let str = ''
             this.history.forEach( log => {

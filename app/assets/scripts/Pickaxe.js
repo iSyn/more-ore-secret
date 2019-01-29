@@ -22,6 +22,13 @@ let Pickaxe = function( item_level ) {
     return this
 }
 
+// IDEAS
+/*
+    Rage stat - adds damage specifically in quests
+    Luck stat - Crits?
+    Endurance - quest speed?
+*/
+
 _get_level = ( item_level ) => {
 
     let level = S.generation.level

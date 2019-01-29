@@ -2255,7 +2255,7 @@ let boss_approaching = () => {
   let boss_approaching_div = document.createElement( 'div' )
   boss_approaching_div.classList.add( 'boss-approaching' )
   boss_approaching_div.innerHTML = `
-    <h1>BOSS APPROACHING!</h1>
+    <h1> BOSS APPROACHING !</h1>
   `
 
   QUEST_AREA_CONTAINER.append( boss_approaching_div )
@@ -2263,7 +2263,11 @@ let boss_approaching = () => {
 }
 
 let start_boss = () => {
+
   S.quest.state = 'boss'
+
+  let boss_approaching_div = s( '.boss-approaching' )
+  remove_el( boss_approaching_div)
 }
 
 let quest_event_counter = 0
