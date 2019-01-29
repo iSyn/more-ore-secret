@@ -2218,7 +2218,7 @@ let start_quest = ( code_name ) => {
 
 let quest_initialization = () => {
 
-  if ( S.quest.state == 'in progress' || S.quest.state == 'completed' ) {
+  if ( S.quest.state == 'in progress' || S.quest.state == 'completed' || S.quest.state == 'boss approaching' ) {
     O.quest_initialized = true
     BOOST_NOTIFIER.classList.add( 'active' )
     HERO.classList.add( 'active', 'moving' )
@@ -2236,15 +2236,34 @@ let handle_quest_progress = ( duration = 0 ) => {
 
   if ( S.quest.current_quest_progress >= S.quest.current_quest.duration ) {
 
-    S.quest.state = 'completed'
+    boss_approaching()
 
     HERO.classList.remove( 'moving' )
     HERO.classList.add( 'jumping' )
 
-    QL.append( `${ S.quest.adventurer.name } has completed the ${ S.quest.current_quest.name } `)
+    QL.append( `${ S.quest.current_quest.boss.name } has its eyes on you.` )
+
+    // QL.append( `${ S.quest.adventurer.name } has completed the ${ S.quest.current_quest.name }` )
     
   }
 
+}
+
+let boss_approaching = () => {
+  S.quest.state = 'boss approaching'
+
+  let boss_approaching_div = document.createElement( 'div' )
+  boss_approaching_div.classList.add( 'boss-approaching' )
+  boss_approaching_div.innerHTML = `
+    <h1>BOSS APPROACHING!</h1>
+  `
+
+  QUEST_AREA_CONTAINER.append( boss_approaching_div )
+
+}
+
+let start_boss = () => {
+  S.quest.state = 'boss'
 }
 
 let quest_event_counter = 0
@@ -2269,6 +2288,10 @@ let handle_quest_event = () => {
 let handle_quest_area_click = () => {
 
   switch ( S.quest.state ) {
+
+    case 'boss approaching':
+      start_boss()
+      break
 
     case 'in progress':
       if ( !BOOST_NOTIFIER.classList.contains( 'clicked' ) ) {
@@ -3322,7 +3345,7 @@ window.addEventListener('keyup', (e) => {
       win_achievement( 'who_am_i?' )
     }
     if ( pressed.join( '' ).includes( 'qq' ) ) {
-      Smith_Upgrades.forEach( upgrade => { upgrade.duration = 1 * SECOND })
+      Smith_Upgrades.forEach( upgrade => { upgrade.duration = 200 })
       S.pickaxe.item.damage *= 1000
       S.refined_ores += 100
       // Quests.forEach( quest => quest.duration = 1 * SECOND )

@@ -301,18 +301,18 @@
     height: 120px;
     max-height: 120px;
     width: 600px;
-    background: rgba( 0, 0, 0, 0.7 );
+    background: rgba( 0, 0, 0, 0.5 );
     position: absolute;
-    pointer-events: all;
+    pointer-events: none;
     opacity: 0;
     padding: 5px;
     overflow: auto;
 
     &.active {
-      opacity: .5;
+      opacity: .4;
 
       &:hover {
-        opacity: 1;
+        opacity: .5;
       }
     }
 
@@ -367,6 +367,34 @@
       
     }
   }
+
+  .boss-approaching {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    background: rgba( 0, 0, 0, 0.4 );
+    cursor: pointer;
+
+    h1 {
+      color: red;
+      border: 3px solid red;
+      letter-spacing: 2px;
+      padding: 15px;
+      position: absolute;
+      font-size: 40px;
+      top: 50%;
+      left: 50%;
+      transform: translate( -50%, -50% );
+      animation: flicker .6s linear alternate-reverse infinite;
+      pointer-events: none;
+    }
+  }
+}
+
+@keyframes flicker {
+  0% { opacity: 1 }
+  100% { opacity: .3 }
 }
 
 @keyframes boost {

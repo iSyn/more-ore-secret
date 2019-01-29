@@ -25,7 +25,6 @@ let Smith = function( obj = {} ) {
     }
 
     this.progress_click = () => {
-        console.log('fire')
         if ( !is_empty( this.upgrade_in_progress ) ) {
             this.current_progress += this.click_duration
         }

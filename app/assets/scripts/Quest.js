@@ -12,6 +12,7 @@ let Quest = function( obj, id ) {
   this.times_completed = obj.times_completed || 0
   this.total_xp_gained = obj.total_xp_gained || 0
   this.rewards = obj.rewards
+  this.boss = obj.boss || null
 
   this.locked = 1
   if ( obj.locked == 0 ) this.locked = 0
@@ -29,6 +30,10 @@ let quests = [
     flavor_text: 'Note: Not the forest Logan Paul went to.',
     base_duration: 1 * SECOND, // change back to 5
     locked: 0,
+    boss: {
+      name: 'Stumpy',
+      hp: 200
+    },
     rewards: {
       achievement: 'not_that_dark!',
       xp: 50,

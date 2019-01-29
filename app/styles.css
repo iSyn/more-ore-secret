@@ -2926,16 +2926,16 @@ input:checked + .slider:before {
     height: 120px;
     max-height: 120px;
     width: 600px;
-    background: rgba(0, 0, 0, 0.7);
+    background: rgba(0, 0, 0, 0.5);
     position: absolute;
-    pointer-events: all;
+    pointer-events: none;
     opacity: 0;
     padding: 5px;
     overflow: auto; }
     .quest-area-container .quest-text-log.active {
-      opacity: .5; }
+      opacity: .4; }
       .quest-area-container .quest-text-log.active:hover {
-        opacity: 1; }
+        opacity: .5; }
     .quest-area-container .quest-text-log p {
       pointer-events: none;
       color: white; }
@@ -2972,6 +2972,38 @@ input:checked + .slider:before {
       .quest-area-container .hero-container .hero.jumping {
         -webkit-animation: jumping 1s infinite linear;
         animation: jumping 1s infinite linear; }
+  .quest-area-container .boss-approaching {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    background: rgba(0, 0, 0, 0.4);
+    cursor: pointer; }
+    .quest-area-container .boss-approaching h1 {
+      color: red;
+      border: 3px solid red;
+      letter-spacing: 2px;
+      padding: 15px;
+      position: absolute;
+      font-size: 40px;
+      top: 50%;
+      left: 50%;
+      -webkit-transform: translate(-50%, -50%);
+      transform: translate(-50%, -50%);
+      animation: flicker .6s linear alternate-reverse infinite;
+      pointer-events: none; }
+
+@-webkit-keyframes flicker {
+  0% {
+    opacity: 1; }
+  100% {
+    opacity: .3; } }
+
+@keyframes flicker {
+  0% {
+    opacity: 1; }
+  100% {
+    opacity: .3; } }
 
 @-webkit-keyframes boost {
   0% {
