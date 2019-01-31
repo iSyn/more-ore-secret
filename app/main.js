@@ -2310,7 +2310,7 @@ let initiate_boss = () => {
   boss_el_container.classList.add( 'boss-container' )
   boss_el_container.innerHTML = `
     <p class='boss-hp'>${ beautify_number( S.quest.current_boss_hp ) } HP</p>
-    <img class='boss' src="https://via.placeholder.com/64" alt="">
+    <img class='boss' src="./app/assets/images/boss-${ S.quest.current_quest.boss.name.toLowerCase() }.png" alt="">
   `
 
   generate_manual_attack()
