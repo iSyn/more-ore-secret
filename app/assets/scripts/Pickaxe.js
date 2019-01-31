@@ -27,6 +27,8 @@ let Pickaxe = function( item_level ) {
     Rage stat - adds damage specifically in quests
     Luck stat - Crits?
     Endurance - quest speed?
+
+    After first refine, pickaxes drop with more stats. 
 */
 
 _get_level = ( item_level ) => {

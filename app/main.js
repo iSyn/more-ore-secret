@@ -2265,9 +2265,21 @@ let boss_approaching = () => {
 let start_boss = () => {
 
   S.quest.state = 'boss'
+  QL.append( 'BOSS FIGHT STARTED' )
+  HERO.classList.remove( 'active' )
 
   let boss_approaching_div = s( '.boss-approaching' )
   remove_el( boss_approaching_div)
+
+  let boss_el_container = document.createElement( 'div' )
+  boss_el_container.classList.add( 'boss-container' )
+  boss_el_container.innerHTML = `
+    <p>${ S.quest.current_quest.boss.hp } HP</p>
+    <img src="https://via.placeholder.com/64" alt="">
+  `
+
+  QUEST_AREA_CONTAINER.append( boss_el_container )
+
 }
 
 let quest_event_counter = 0

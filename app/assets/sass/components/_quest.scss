@@ -298,9 +298,8 @@
   }
 
   .quest-text-log {
-    height: 120px;
-    max-height: 120px;
-    width: 600px;
+    max-height: 80px;
+    width: 100%;
     background: rgba( 0, 0, 0, 0.5 );
     position: absolute;
     pointer-events: none;
@@ -388,6 +387,18 @@
       transform: translate( -50%, -50% );
       animation: flicker .6s linear alternate-reverse infinite;
       pointer-events: none;
+    }
+  }
+
+  .boss-container {
+    position: absolute;
+    top: 50%;
+    transform: translateY( -50% );
+    right: 1%;
+    text-align: center;
+
+    p {
+      color: white;
     }
   }
 }
