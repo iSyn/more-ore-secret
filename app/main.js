@@ -1321,8 +1321,6 @@ let handle_rock_particles = ( e, amount = 2 ) => {
 
 let handle_text_scroller = () => {
 
-  console.log( 'handle text scroller firing', TS.queue )
-
   let animation_speed = 20
   setTimeout( handle_text_scroller, 1000 * animation_speed )
 
@@ -2244,6 +2242,11 @@ let quest_initialization = () => {
     quest_failed()
   }
 
+  if ( S.quest.state == 'boss defeated' ) {
+    O.quest_initialized = true
+    boss_defeated_banner()
+  }
+
 }
 
 let handle_quest_progress = ( duration = 0 ) => {
@@ -2306,7 +2309,7 @@ let initiate_boss = () => {
   let boss_el_container = document.createElement( 'div' )
   boss_el_container.classList.add( 'boss-container' )
   boss_el_container.innerHTML = `
-    <p class='boss-hp'>${ S.quest.current_boss_hp } HP</p>
+    <p class='boss-hp'>${ beautify_number( S.quest.current_boss_hp ) } HP</p>
     <img class='boss' src="https://via.placeholder.com/64" alt="">
   `
 
@@ -2376,7 +2379,9 @@ let handle_manual_attack = ( event ) => {
   remove_el( event.target )
 
   let damage = S.pickaxe.item.damage
-  damage += Math.floor(( S.pickaxe.item.damage * select_random_from_arr( [ .1, .2, .3, .4, .5 ] ) ) * select_random_from_arr( [ -1, 1 ] ) )
+  damage += (( S.pickaxe.item.damage * select_random_from_arr( [ .1, .2, .3, .4, .5 ] ) ) * select_random_from_arr( [ -1, 1 ] ) )
+  damage = Math.round( damage )
+  if ( damage < 1 ) damage = 1
 
   S.quest.current_boss_hp -= damage
 
@@ -2394,7 +2399,7 @@ let handle_manual_attack = ( event ) => {
 
   QL.append( `${ S.quest.adventurer.name } ${ select_random_from_arr( attack_synonyms ) } ${ S.quest.current_quest.boss.name } for ${ damage } damage.` )
 
-  s( '.boss-hp' ).innerHTML = S.quest.current_boss_hp + 'HP'
+  s( '.boss-hp' ).innerHTML = beautify_number( S.quest.current_boss_hp ) + 'HP'
 
   S.quest.current_boss_hp > 0 ? generate_manual_attack() : boss_defeated()
 }
@@ -2417,15 +2422,17 @@ let boss_defeated = () => {
   boss.addEventListener( 'animationend', () => { remove_el( s( '.boss-container' ) ) } )
   boss.classList.add( 'dead' )
 
+  boss_defeated_banner()
+
+}
+
+let boss_defeated_banner = () => {
   // APPEND BOSS DEFEATED BANNER
   let banner = document.createElement( 'div' )
   banner.classList.add( 'boss-defeated' )
-  banner.innerHTML = `
-    <h1>BOSS VANQUISHED !</h1>
-  `
+  banner.innerHTML = '<h1>BOSS VANQUISHED !</h1>'
 
   QUEST_AREA_CONTAINER.append( banner )
-
 }
 
 let quest_event_counter = 0
@@ -2450,6 +2457,11 @@ let handle_quest_event = () => {
 let handle_quest_area_click = ( e ) => {
 
   switch ( S.quest.state ) {
+
+    case 'failed':
+      complete_quest( false )
+      break
+
 
     case 'boss defeated':
       complete_quest()
@@ -2484,48 +2496,85 @@ let handle_quest_area_click = ( e ) => {
 
 }
 
-let complete_quest = () => {
+let complete_quest = ( successful = true ) => {
 
-  remove_el( s( '.boss-defeated' ) )
-  remove_el( s( '.timer-container' ) )
+  let quest = select_from_arr( Quests, S.quest.current_quest.code_name )
+  console.log( S.quest )
+
+  let boss_defeated_el = s( '.boss-defeated' )
+  let quest_failed_el = s( '.quest-failed' )
+  let timer = s( '.timer-container' )
+
+  if ( boss_defeated_el ) remove_el( boss_defeated_el )
+  if ( quest_failed_el ) remove_el( quest_failed_el )
+  if ( timer ) remove_el( timer )
 
   BOOST_NOTIFIER.classList.remove( 'active' )
-  play_sound( 'quest_complete' )
-  
-  let quest = select_from_arr( Quests, S.quest.current_quest.code_name )
-
-  quest.completed = 1
-  quest.times_completed++
-  if ( quest.times_completed == 5 ) win_achievement( quest.rewards.achievement )
-
-  quest.total_xp_gained += quest.rewards.xp
-  S.stats.total_quests_completed++
-
-  if ( quest.times_completed == 1 ) S.stats.total_unique_quests_completed++
-
-  if ( S.stats.total_quests_completed == 1 ) win_achievement( 'novice_quester' )
-  if ( S.stats.total_unique_quests_completed == 5 ) win_achievement( 'adventurer' )
-
-  let next_quest = Quests[ quest.id + 1 ]
-  if ( next_quest ) {
-    if ( next_quest.locked ) next_quest.locked = 0
-  }
-
-  gain_quest_rewards( quest )
   quest_event_counter = 0
+  QL.clear()
+
+  if ( successful ) {
+    play_sound( 'quest_complete' )
+
+    quest.completed = 1
+    quest.times_completed++
+    if ( quest.times_completed == 5 ) win_achievement( quest.rewards.achievement )
+
+    quest.total_xp_gained += quest.rewards.xp
+    S.stats.total_quests_completed++
+
+    if ( quest.times_completed == 1 ) S.stats.total_unique_quests_completed++
+
+    if ( S.stats.total_quests_completed == 1 ) win_achievement( 'novice_quester' )
+    if ( S.stats.total_unique_quests_completed == 5 ) win_achievement( 'adventurer' )
+
+    let next_quest = Quests[ quest.id + 1 ]
+    if ( next_quest ) {
+      if ( next_quest.locked ) next_quest.locked = 0
+    }
+
+    gain_quest_rewards( quest )
+
+    
+  } else {
+    S.stats.total_quests_failed++
+
+    remove_el( s( '.boss-container' ) )
+
+    let percentage_defeated = 1 - ( S.quest.current_boss_hp / S.quest.current_quest.boss.hp )
+    if ( percentage_defeated > .40 ) percentage_defeated = .4
+
+    let q = S.quest.current_quest
+    q.rewards.ores *= percentage_defeated
+    q.rewards.refined_ores *= percentage_defeated
+    q.rewards.xp *= percentage_defeated
+
+    q.rewards.ores = Math.round( q.rewards.ores )
+    q.rewards.refined_ores = Math.round( q.rewards.refined_ores )
+    q.rewards.xp = Math.round( q.rewards.xp )
+
+    quest.total_xp_gained += q.rewards.xp
+
+    gain_quest_rewards( q, true )
+  }
 
   reset_quest_state()
 
-  QL.clear()
-
 }
 
-let gain_quest_rewards = ( quest ) => {
+let gain_quest_rewards = ( quest, failed = false ) => {
 
-  let gem = get_quest_gem( quest.rewards.gem )
-  O.current_gem = gem
+  // reset_quest_state()
 
-  let scroll = get_quest_scroll( quest.rewards.scrolls )
+  let gem = null
+  let scroll = null
+
+  if ( !failed ) {
+    gem = get_quest_gem( quest.rewards.gem )
+    O.current_gem = gem
+  
+    scroll = get_quest_scroll( quest.rewards.scrolls )  
+  }
 
   let popup = document.createElement( 'div' )
   popup.classList.add( 'wrapper' )
@@ -2533,7 +2582,7 @@ let gain_quest_rewards = ( quest ) => {
   let str = `
     <div id='quest-rewards-popup'>
       <header>
-        <h1>Quest Complete</h1>
+        <h1>${ failed ? "Quest Failed" : "Quest Complete" }</h1>
       </header>
       <ul>
         <p>YOU EARNED</p>
@@ -2545,11 +2594,15 @@ let gain_quest_rewards = ( quest ) => {
           <img src="./app/assets/images/ore.png" alt="ore">
           <p>${ quest.rewards.ores }</p>
         </li>
-        <li class='quest-reward-refined-ores'>
-          <img src="./app/assets/images/refined-ore.png" alt="refined-ore">
-          <p>${ quest.rewards.refined_ores }</p>
-        </li>
         `
+        if ( quest.rewards.refined_ores >= 1 ) {
+          str += `
+          <li class='quest-reward-refined-ores'>
+            <img src="./app/assets/images/refined-ore.png" alt="refined-ore">
+            <p>${ quest.rewards.refined_ores }</p>
+          </li>
+          `
+        }
 
         if ( gem ) {
           str += `

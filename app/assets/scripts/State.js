@@ -156,6 +156,7 @@ let State = function( s = {} ) {
       total_combo_shields_used: 0,
 
       total_quests_completed: 0,
+      total_quests_failed: 0,
       total_unique_quests_completed: 0,
       total_times_quest_boosted: 0,
       current_combo_shields_used: 0,
