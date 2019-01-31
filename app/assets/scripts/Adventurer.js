@@ -15,10 +15,17 @@ let adventurers = [
         'Jordan',
         'Kevin',
         'Andy',
-        'Nick'
+        'Nick',
+        'Luffy',
+        'Zoro',
+        'Saitama',
+        'Ichigo',
+        'Naruto',
+        'Sasuke'
     ],
     [
         // FEMALES
-        'Christine'
+        'Christine',
+        'Nami'
     ],
 ]

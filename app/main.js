@@ -2262,9 +2262,10 @@ let boss_approaching = () => {
 
 }
 
-let start_boss = () => {
+let initiate_boss = () => {
 
   S.quest.state = 'boss'
+  S.quest.current_boss_hp = S.quest.current_quest.boss.hp
   QL.append( 'BOSS FIGHT STARTED' )
   HERO.classList.remove( 'active' )
 
@@ -2274,11 +2275,88 @@ let start_boss = () => {
   let boss_el_container = document.createElement( 'div' )
   boss_el_container.classList.add( 'boss-container' )
   boss_el_container.innerHTML = `
-    <p>${ S.quest.current_quest.boss.hp } HP</p>
-    <img src="https://via.placeholder.com/64" alt="">
+    <p class='boss-hp'>${ S.quest.current_boss_hp } HP</p>
+    <img class='boss' src="https://via.placeholder.com/64" alt="">
   `
 
+  generate_manual_attack()
+
   QUEST_AREA_CONTAINER.append( boss_el_container )
+
+}
+
+let generate_manual_attack = () => {
+
+  let bottom_area_dimensions = QUEST_AREA_CONTAINER.getBoundingClientRect()
+  let attack = document.createElement( 'div' )
+  let padding = 50
+  attack.classList.add( 'manual-attack' )
+  attack.addEventListener( 'click', handle_manual_attack )
+
+  let y = get_random_num( bottom_area_dimensions.top + padding, bottom_area_dimensions.bottom - padding )
+  let x = get_random_num( bottom_area_dimensions.left + padding, bottom_area_dimensions.right - padding )
+
+  attack.style.left = x + 'px'
+  attack.style.top = y + 'px'
+
+  CONTAINER.append( attack )
+
+}
+
+let handle_manual_attack = ( event ) => {
+  
+  remove_el( event.target )
+
+  let damage = S.pickaxe.item.damage
+  damage += Math.floor(( S.pickaxe.item.damage * select_random_from_arr( [ .1, .2, .3, .4, .5 ] ) ) * select_random_from_arr( [ -1, 1 ] ) )
+
+  S.quest.current_boss_hp -= damage
+
+  let attack_synonyms = [
+    'sliced',
+    'attacked',
+    'cleaved',
+    'carved',
+    'slashed',
+    'pierced',
+    'punched',
+    'falcon punched',
+    'kicked'
+  ]
+
+  QL.append( `${ S.quest.adventurer.name } ${ select_random_from_arr( attack_synonyms ) } ${ S.quest.current_quest.boss.name } for ${ damage } damage.` )
+
+  s( '.boss-hp' ).innerHTML = S.quest.current_boss_hp + 'HP'
+
+  S.quest.current_boss_hp > 0 ? generate_manual_attack() : boss_defeated()
+}
+
+let boss_defeated = () => {
+
+  S.quest.state = 'boss defeated'
+
+  remove_el( s( '.boss-hp' ) )
+
+  let synonyms = [
+    'killed',
+    'slain',
+    'vanquished'
+  ]
+  
+  QL.append( `${ S.quest.adventurer.name } has ${ select_random_from_arr( synonyms ) } ${ S.quest.current_quest.boss.name } ` )
+
+  let boss = s( '.boss' )
+  boss.addEventListener( 'animationend', () => { remove_el( s( '.boss-container' ) ) } )
+  boss.classList.add( 'dead' )
+
+  // APPEND BOSS DEFEATED BANNER
+  let banner = document.createElement( 'div' )
+  banner.classList.add( 'boss-defeated' )
+  banner.innerHTML = `
+    <h1>BOSS VANQUISHED !</h1>
+  `
+
+  QUEST_AREA_CONTAINER.append( banner )
 
 }
 
@@ -2301,12 +2379,12 @@ let handle_quest_event = () => {
   }
 }
 
-let handle_quest_area_click = () => {
+let handle_quest_area_click = ( e ) => {
 
   switch ( S.quest.state ) {
 
     case 'boss approaching':
-      start_boss()
+      initiate_boss()
       break
 
     case 'in progress':
