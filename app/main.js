@@ -2225,6 +2225,25 @@ let quest_initialization = () => {
     handle_quest_progress()
   }
 
+  if ( S.quest.state == 'boss' || S.quest.state == 'failed' ) {
+
+    let manual_attack = s( '.manual-attack' )
+    if ( manual_attack ) remove_el( manual_attack )
+
+    O.quest_initialized = true
+    
+    let boss_el_container = document.createElement( 'div' )
+    boss_el_container.classList.add( 'boss-container' )
+    boss_el_container.innerHTML = `
+      <p class='boss-hp'>${ S.quest.current_boss_hp } HP</p>
+      <img class='boss' src="https://via.placeholder.com/64" alt="">
+    `
+
+    QUEST_AREA_CONTAINER.append( boss_el_container )
+    
+    quest_failed()
+  }
+
 }
 
 let handle_quest_progress = ( duration = 0 ) => {
@@ -2301,12 +2320,14 @@ let update_boss_time_limit = ( ms ) => {
 
   let progress_bar = s( '.timer-inner' )
 
-  S.quest.time_limit -= ms
+  if ( progress_bar ) {
+    S.quest.time_limit -= ms
 
-  let percentage = ( S.quest.time_limit / ( 30 * SECOND ) ) * 100
-  progress_bar.style.height = percentage + "%"
+    let percentage = ( S.quest.time_limit / ( 30 * SECOND ) ) * 100
+    progress_bar.style.height = percentage + "%"
 
-  if ( percentage <= 0 ) quest_failed()
+    if ( percentage <= 0 ) quest_failed()
+  }
 
 }
 
