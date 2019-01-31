@@ -400,7 +400,7 @@
     position: absolute;
     top: 50%;
     transform: translateY( -50% );
-    right: 1%;
+    right: 4%;
     text-align: center;
 
     p {
@@ -412,6 +412,36 @@
       &.dead {
         animation: dead_boss 1s forwards linear;
       }
+    }
+  }
+  
+  .timer-container {
+    position: absolute;
+    width: 13px;
+    height: 100%;
+    top: 0;
+    right: 0;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+
+    .timer-outer {
+      position: relative;
+      flex-grow: 1;
+      background: rgba( 255, 255, 255, 0.1 );
+      margin-bottom: 3px;
+
+      .timer-inner {
+        background: black;
+        height: 100%;
+        bottom: 0;
+        width: 100%;
+        position: absolute;
+      }
+    }
+
+    i {
+      color: rgba( 255, 255, 255, 0.3 );
     }
   }
 }

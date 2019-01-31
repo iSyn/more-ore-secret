@@ -143,7 +143,7 @@ let global_quest_events = [
       'took a wrong turn.',
       'stubbed their toe.',
       'got lost.',
-      'Hit their head.'
+      'hit their head.'
     ],
     amount: [ -30 * SECOND, -1 * MINUTE, -2 * MINUTE ]
   },
@@ -158,7 +158,7 @@ let global_quest_events = [
   {
     type: 'nothing',
     sentences: [
-      'Pondered the meaning of life.',
+      'pondered the meaning of life.',
     ],
     amount: [ 0 ]
   }

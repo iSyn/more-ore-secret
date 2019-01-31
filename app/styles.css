@@ -3006,13 +3006,44 @@ input:checked + .slider:before {
     top: 50%;
     -webkit-transform: translateY(-50%);
     transform: translateY(-50%);
-    right: 1%;
+    right: 4%;
     text-align: center; }
     .quest-area-container .boss-container p {
       color: white; }
     .quest-area-container .boss-container .boss.dead {
       -webkit-animation: dead_boss 1s forwards linear;
       animation: dead_boss 1s forwards linear; }
+  .quest-area-container .timer-container {
+    position: absolute;
+    width: 13px;
+    height: 100%;
+    top: 0;
+    right: 0;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-flow: column nowrap;
+    flex-flow: column nowrap;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center; }
+    .quest-area-container .timer-container .timer-outer {
+      position: relative;
+      -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+      flex-grow: 1;
+      background: rgba(255, 255, 255, 0.1);
+      margin-bottom: 3px; }
+      .quest-area-container .timer-container .timer-outer .timer-inner {
+        background: black;
+        height: 100%;
+        bottom: 0;
+        width: 100%;
+        position: absolute; }
+    .quest-area-container .timer-container i {
+      color: rgba(255, 255, 255, 0.3); }
 
 .manual-attack {
   position: absolute;

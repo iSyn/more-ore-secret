@@ -2265,12 +2265,24 @@ let boss_approaching = () => {
 let initiate_boss = () => {
 
   S.quest.state = 'boss'
+  S.quest.time_limit = 30 * SECOND
   S.quest.current_boss_hp = S.quest.current_quest.boss.hp
   QL.append( 'BOSS FIGHT STARTED' )
   HERO.classList.remove( 'active' )
 
   let boss_approaching_div = s( '.boss-approaching' )
   remove_el( boss_approaching_div)
+
+  let timer_container = document.createElement( 'div' )
+  timer_container.classList.add( 'timer-container' )
+  timer_container.innerHTML = `
+    <div class="timer-outer">
+      <div class="timer-inner"></div>
+    </div>
+    <i class="fa fa-clock-o fa-1x"></i>
+  `
+
+  QUEST_AREA_CONTAINER.append( timer_container )
 
   let boss_el_container = document.createElement( 'div' )
   boss_el_container.classList.add( 'boss-container' )
@@ -2282,6 +2294,26 @@ let initiate_boss = () => {
   generate_manual_attack()
 
   QUEST_AREA_CONTAINER.append( boss_el_container )
+
+}
+
+let update_boss_time_limit = ( ms ) => {
+
+  let progress_bar = s( '.timer-inner' )
+
+  S.quest.time_limit -= ms
+
+  let percentage = ( S.quest.time_limit / ( 30 * SECOND ) ) * 100
+  console.log( 'percentage', percentage )
+  progress_bar.style.height = percentage + "%"
+
+  if ( percentage <= 0 ) quest_failed()
+
+}
+
+let quest_failed = () => {
+
+  S.quest.state = 'failed'
 
 }
 
@@ -2383,6 +2415,10 @@ let handle_quest_area_click = ( e ) => {
 
   switch ( S.quest.state ) {
 
+    case 'boss defeated':
+      complete_quest()
+      break
+
     case 'boss approaching':
       initiate_boss()
       break
@@ -2413,6 +2449,8 @@ let handle_quest_area_click = ( e ) => {
 }
 
 let complete_quest = () => {
+
+  remove_el( s( '.boss-defeated' ) )
 
   BOOST_NOTIFIER.classList.remove( 'active' )
   play_sound( 'quest_complete' )
@@ -2913,6 +2951,7 @@ let game_loop = () => {
   if ( O.rebuild_bottom_tabs ) build_bottom_tabs()
 
   if ( !is_empty( SMITH.upgrade_in_progress ) ) SMITH._update_progress()
+  if ( S.quest.state == 'boss' ) update_boss_time_limit( tick_ms )
 
   if ( !O.quest_initialized ) quest_initialization()
   if ( S.quest.state == 'in progress' ) {
