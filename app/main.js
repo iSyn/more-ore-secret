@@ -2304,7 +2304,6 @@ let update_boss_time_limit = ( ms ) => {
   S.quest.time_limit -= ms
 
   let percentage = ( S.quest.time_limit / ( 30 * SECOND ) ) * 100
-  console.log( 'percentage', percentage )
   progress_bar.style.height = percentage + "%"
 
   if ( percentage <= 0 ) quest_failed()
@@ -2314,6 +2313,22 @@ let update_boss_time_limit = ( ms ) => {
 let quest_failed = () => {
 
   S.quest.state = 'failed'
+
+  QL.append( `${S.quest.adventurer.name } couldn't defeat ${ S.quest.current_quest.boss.name }.`)
+
+  let manual_attack = s( '.manual-attack' )
+  if ( manual_attack ) remove_el( manual_attack )
+
+  let banner = document.createElement( 'div' )
+  banner.classList.add( 'quest-failed' )
+  banner.innerHTML = `
+    <h1>QUEST FAILED !</h1>
+  `
+
+  remove_el( s( '.boss-hp' ) )
+  s( '.boss' ).style.animation = 'jumping 1s infinite linear'
+
+  QUEST_AREA_CONTAINER.append( banner )
 
 }
 
@@ -2451,6 +2466,7 @@ let handle_quest_area_click = ( e ) => {
 let complete_quest = () => {
 
   remove_el( s( '.boss-defeated' ) )
+  remove_el( s( '.timer-container' ) )
 
   BOOST_NOTIFIER.classList.remove( 'active' )
   play_sound( 'quest_complete' )
