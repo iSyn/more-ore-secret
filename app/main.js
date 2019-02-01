@@ -3576,9 +3576,9 @@ window.addEventListener('keyup', (e) => {
       win_achievement( 'who_am_i?' )
     }
     if ( pressed.join( '' ).includes( 'qq' ) ) {
-      Smith_Upgrades.forEach( upgrade => { upgrade.duration = 200 })
-      S.pickaxe.item.damage *= 1000
-      S.refined_ores += 100
+      // Smith_Upgrades.forEach( upgrade => { upgrade.duration = 200 })
+      // S.pickaxe.item.damage *= 1000
+      // S.refined_ores += 100
       // Quests.forEach( quest => quest.duration = 1 * SECOND )
     }
     if ( pressed.join( '' ).includes( 'qwer' ) ) {

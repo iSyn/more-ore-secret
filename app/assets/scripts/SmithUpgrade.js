@@ -65,7 +65,7 @@ let smith_upgrades = [
         desc: 'Allows you to deploy Miners on quests for ancient artifacts!',
         flavor_text: 'Fetch quests are the greatest',
         duration: 4 * HOUR,
-        price: 50,
+        price: 1, //50
         locked: 1,
         unlock_functions: {
             unlock_quest_board: 1
