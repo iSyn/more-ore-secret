@@ -3008,8 +3008,12 @@ input:checked + .slider:before {
     transform: translateY(-50%);
     right: 4%;
     text-align: center; }
-    .quest-area-container .boss-container p {
-      color: white; }
+    .quest-area-container .boss-container p.boss-hp {
+      color: white;
+      -webkit-transition: color .2s linear;
+      transition: color .2s linear; }
+      .quest-area-container .boss-container p.boss-hp .damaged {
+        color: red; }
     .quest-area-container .boss-container .boss.dead {
       -webkit-animation: dead_boss 1s forwards linear;
       animation: dead_boss 1s forwards linear; }
@@ -3173,6 +3177,22 @@ input:checked + .slider:before {
   100% {
     -webkit-transform: translateY(0);
     transform: translateY(0); } }
+
+@-webkit-keyframes damage_boss {
+  0% {
+    color: white; }
+  50% {
+    color: red; }
+  100% {
+    color: white; } }
+
+@keyframes damage_boss {
+  0% {
+    color: white; }
+  50% {
+    color: red; }
+  100% {
+    color: white; } }
 
 .ore-weak-spot {
   display: none;

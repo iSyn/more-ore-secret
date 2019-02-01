@@ -403,8 +403,13 @@
     right: 4%;
     text-align: center;
 
-    p {
+    p.boss-hp {
       color: white;
+      transition: color .2s linear;
+
+      .damaged {
+        color: red;
+      }
     }
 
     .boss {
@@ -495,4 +500,16 @@
   50% {transform: translateY(-30px);}
   80% {transform: translateY(-30px);}
   100% {transform: translateY(0);}
+}
+
+@keyframes damage_boss {
+  0% {
+    color: white;
+  }
+  50% {
+    color: red;
+  }
+  100% {
+    color: white;
+  }
 }

@@ -2375,6 +2375,8 @@ let generate_manual_attack = () => {
 }
 
 let handle_manual_attack = ( event ) => {
+
+  play_sound( `boss_hit_${ get_random_num( 1, 2 ) }` )
   
   remove_el( event.target )
 
@@ -2399,7 +2401,13 @@ let handle_manual_attack = ( event ) => {
 
   QL.append( `${ S.quest.adventurer.name } ${ select_random_from_arr( attack_synonyms ) } ${ S.quest.current_quest.boss.name } for ${ damage } damage.` )
 
+  let bossHP = s( '.boss-hp' )
   s( '.boss-hp' ).innerHTML = beautify_number( S.quest.current_boss_hp ) + 'HP'
+  // s( '.boss-hp' ).classList.add( 'damaged' )
+  // setTimeout(() => {
+  //   if ( )
+  // }, 500)
+
 
   S.quest.current_boss_hp > 0 ? generate_manual_attack() : boss_defeated()
 }
@@ -2499,7 +2507,6 @@ let handle_quest_area_click = ( e ) => {
 let complete_quest = ( successful = true ) => {
 
   let quest = select_from_arr( Quests, S.quest.current_quest.code_name )
-  console.log( S.quest )
 
   let boss_defeated_el = s( '.boss-defeated' )
   let quest_failed_el = s( '.quest-failed' )
@@ -2537,6 +2544,7 @@ let complete_quest = ( successful = true ) => {
 
     
   } else {
+    play_sound( 'quest_failed' )
     S.stats.total_quests_failed++
 
     remove_el( s( '.boss-container' ) )
