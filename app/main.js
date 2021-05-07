@@ -3369,15 +3369,17 @@ let betaAlert = () => {
         display: inline-block;
         left: 50%;
         transform: translateX(-50%);
-        padding: 10px;
+        padding: 10px 25px;
         background: lime;
         text-shadow: 0 0 5px black, 0 0 1px black;
         border-radius: 5px;
         margin-top: 10px;
         cursor: pointer;
         text-decoration: none;
+        font-weight: bold;
+        letter-spacing: .5px;
         box-shadow: -2px -2px 3px rgba(255, 255, 255, 0.3) inset, 2px 2px 3px rgba(0, 0, 0, 0.3) inset;
-      ' href='https://syns.studio/more-ore?redirected-from-secret' target='_blank'>CLICK HERE TO PLAY IN OPEN BETA</a>
+      ' href='https://syns.studio/more-ore?redirected-from-secret' target='_blank'>JOIN THE OPEN BETA</a>
     </div>
   `;
 
