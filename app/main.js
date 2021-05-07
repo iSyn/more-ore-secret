@@ -3379,7 +3379,7 @@ let betaAlert = () => {
         font-weight: bold;
         letter-spacing: .5px;
         box-shadow: -2px -2px 3px rgba(255, 255, 255, 0.3) inset, 2px 2px 3px rgba(0, 0, 0, 0.3) inset;
-      ' href='https://syns.studio/more-ore?redirected-from-secret' target='_blank'>JOIN THE OPEN BETA</a>
+      ' href='https://syns.studio/more-ore?redirected=from-secret' target='_blank'>JOIN THE OPEN BETA</a>
     </div>
   `;
 
